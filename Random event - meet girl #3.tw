@@ -1,0 +1,25 @@
+:: Random event - meet girl #3 {"position":"5742,16","size":"100,100"}
+<center>
+ [img[setup.ImagePath+'places/explore/forest_girl.webp']]
+ </center>
+ <br /><br />
+You notice a girl walking through the forest and decide to check out what she's doing.
+ <br /><br />
+
+<<link 'Go closer'>>
+	<<newgirl>>
+	<<set $tmpGirl.location = 'forest'>>
+	<<set $tmpGirl.rape to true>>
+	<<set $tmpGirlCapture to true>>
+	<<if setup.getAge($tmpGirl) < 40 && randomInteger(1,4) === 1>>
+		<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
+		<<set $tmpGirl.virgin = false>>
+	<</if>>
+	<<run delete $slaveId, delete $guestId, delete $charId>>
+	<<set $tmpGirlBack = 'Outside'>>
+	<<goto [[Girl view]]>>
+<</link>>
+
+[[Leave|Outside]]
+
+

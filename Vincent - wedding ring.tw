@@ -1,0 +1,62 @@
+:: Vincent - wedding ring {"position":"2605,1028","size":"100,100"}
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<vincent>>
+	<<=$player.name>>, please sit down. I wanted to show you something
+<</vincent>>
+<br /><br />
+While Vincent goes to the next room, you sit down in a chair by the entrance, not really understanding what he went after for. 
+<br /><br />
+After a short while, he returns holding something in his hand. It can be seen that he is visibly worried, and the old man's hands are trembling a bit even.
+<br />
+He opens his hand... <strong>wedding ring...</strong>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/farm/wedding_ring.gif']]
+</center>
+<br /><br />
+<<vincent>>
+I am very grateful to her because I know that because of me, she has sacrificed something in her own life... Blair... Just don't think that I'm forcing you. You can decide for yourself what you want, but know this - my story would be fulfilled if you both got married. She doesn't stop talking about you...
+<</vincent>>
+<br /><br />
+<div id="option1">
+  <<linkreplace 'Take the ring and say you would be honored'>>
+      <<run $('#option3, #option2').hide()>>
+	  <<run $('#option-leave').show()>>
+	  <<pickup $backpack 'wedding_ring' 1>>
+	  <<vincent>>
+		  Really!? Oh my God, I'm so happy. Being together, at least I know that she will be safe and I won't have to worry about her.
+	  <</vincent>>
+  <</linkreplace>>
+</div>
+<div id="option2">
+  <<linkreplace 'Take the ring and tell you will think about it'>>
+    	<<run $('#option1, #option3').hide()>>
+		<<run $('#option-leave').show()>>
+	  <<pickup $backpack 'wedding_ring' 1>>
+	  <<vincent>>
+		  I understand... It's a difficult decision. But if you still decide to do it, know this - I will be very happy.
+	  <</vincent>>
+  <</linkreplace>>
+</div>
+<div id="option3">
+  <<linkreplace 'Tell no'>>
+  	<<run $('#option1, #option2').hide()>>
+	<<run $('#option-leave').show()>>
+	  <<vincent>>
+		  I understand... It's a difficult decision. But if you still decide to do it, know this - I will be very happy.
+	  <</vincent>>
+  <</linkreplace>>
+</div>
+
+<div id="option-leave" style="display:none">
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Farm'>>
+	<</link>>
+</div>
+
+<<set $game.canMarry = true>>
+<<set $characters.vincent.quests.wedding_talk_day = $game.day>>
+
+

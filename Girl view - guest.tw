@@ -1,0 +1,113 @@
+:: Girl view - guest [sex no-redirect girlview] {"position":"1915,98","size":"100,100"}
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship += 3>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<goto 'Girl talk'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
+	<<link 'Fuck her'>>
+		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<set _randomGuestFuck = randomInteger(1,3)>>
+		<<if $tmpGirl.relationship < 50 || _randomGuestFuck === 3>>
+			<<goto 'Girl fuck - no'>>
+		<<else>>
+			<<goto 'Girl fuck'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if $guestId !== undefined>>
+	
+	<<if !($player.companions['guest:' + $guestId] ?? false)>>
+		<<link 'Add as companion'>>
+			<<companionAdd 'guest' $guestId>>
+			<<run delete $tmpGirl.assignedTo>>
+			<<goto 'Girl view - guest'>>
+		<</link>>
+	<</if>>
+	
+	<<link 'Move her to the basement cell'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<goto 'Guest move to basement'>>
+	<</link>>
+	
+	<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+		<<link 'Assign to'>>
+			<<dialog 'Assign to'>>
+				<<include 'Guest view assign to'>>	
+			<</dialog>>
+		<</link>>
+	<</if>>
+	
+	<<if $tmpGirl.assignedTo>>
+		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+			<<run delete $tmpGirl.assignedTo>>
+			<<goto 'Girl view - guest'>>
+		<</link>>
+	<</if>>
+	
+	<<if !$tmpGirl.workout && $player.energy >= 10>>
+		<<link 'Workout together'>>
+			<<set $tmpGirl.workout = true>>
+			<<energy -10>>
+			<<goto 'Girl - workout together'>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.gift>>
+		<<link 'Give gift'>>
+			<<script>>
+				Dialog.setup("Give gift", "Give gift");
+				Dialog.wiki(Story.get("Give gift").processText());
+				Dialog.open();
+	  		<</script>>
+		<</link>>
+	<</if>>
+	<<link 'Invite to your shower'>>
+		<<goto 'Event: Guest invite shower'>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give pregnancy potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<link 'Customize'>>
+	<<goto 'Girl customize'>>
+<</link>>
+	
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<run delete $slaveId>>
+	<<run delete $guestId>>
+	<<run delete $charId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+

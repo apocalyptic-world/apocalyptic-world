@@ -1,0 +1,21 @@
+:: Fight cage [Place bg-underground] {"position":"1938,1349","size":"100,100"}
+<h1 class="ptitle">FIGHT CAGE</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/cage_head.jpg']]
+</div>
+<br /><br />
+<<boris>>
+Each fight costs 5 caps. If you win, you get your opponent's, if he kicks your ass - he gets yours. Just don't die in there, or die. Who cares.
+<</boris>>
+<br /><br />
+<<if $player.energy >= 40 && $player.money >= 5 && timeBetween('08:00', '23:00')>>
+	[[Fight|Fight cage - fight]]
+<</if>>
+<<if $player.energy >= 20>>
+	<<link 'Exercise'>>
+		<<goto 'Fight cage - exercise'>>
+	<</link>>
+<</if>>
+[[Leave|Underground city]]
+
+

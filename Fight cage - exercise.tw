@@ -1,0 +1,29 @@
+:: Fight cage - exercise [bg-underground] {"position":"2177,1352","size":"100,100"}
+<h1 class="ptitle">FIGHT CAGE</h1>
+<center>
+	[img[setup.ImagePath+'places/fight/exercise.webp']]
+</center>
+<br /><br />
+You sparring with some random dude. You throw few unexpected punches and other guy goes down few times. You responses with few strong kicks too.<br />
+You shake your hands before getting out of the cage.
+<br /><br />
+<strong>Your strength increased by 2</strong>
+<br />
+<strong>Your endurance increased by 1</strong>
+<<set $player.endurance++>>
+<br /><br />
+
+<<link 'Back'>>
+	<<if $player.maxEnergy <= 130 && setup.percentageChance(30)>>
+		<<goto 'Fight cage - drug dealer'>>
+	<<else>>
+		<<goto 'Fight cage'>>
+	<</if>>
+<</link>>
+
+
+<<set $player.strength +=2>>
+<<energy -20>>
+<<addmins 60>>
+
+

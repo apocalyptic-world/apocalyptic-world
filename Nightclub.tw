@@ -1,0 +1,18 @@
+:: Nightclub [Place bg-underground] {"position":"1938,1464","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/nightclub_head_outside.jpg']]
+</div>
+<br /><br />
+Works from 20:00 - 04:00<br />
+<strong>You need 5 caps to get inside</strong>
+<br /><br />
+<<if $player.money >= 5 && timeBetween('20:00', '04:00')>>
+  <<link 'Go inside (5 caps)'>>
+	  <<set $player.money -=5>>
+	  <<goto 'Nightclub - inside'>>
+  <</link>>
+<</if>>
+[[Leave|Underground city]]
+
+

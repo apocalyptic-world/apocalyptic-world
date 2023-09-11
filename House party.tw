@@ -1,0 +1,190 @@
+:: House party {"position":"456,841","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/house_party_table.webp']]
+</center>
+<br /><br />
+The house party starts slowly. The table is set and guests begin to arrive slowly. There is food on the table that is not usually eaten on a daily basis, so everyone sits down at the table with an elevated mood. You open a champagne bottle and pour a glass for each guest.
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/house_party_champagne.webp']]
+</center>
+<br /><br />
+Champagne is such a rare thing in this world that only a few have ever tasted it. For most people, this is the first time and their bodies are not accustomed to it, so they get drunk very quickly.
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/house_party_champagne_mouth.webp']]
+</center>
+<br /><br />
+The e is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
+<<addhours 4>>
+<br /><br />
+
+<<for _guestI, _guest range $guests>>
+	<<if _guest.gender || setup.getAge(_guest) < 17>>
+		<<continue>>
+	<</if>>
+	<<setNpcStats 'guest' _guestI 'relationship' +10>>
+	<<=$guests[_guestI].name>> relationship increased by 10<br />
+<</for>>
+<br /><br />
+
+<<perkAdd 'drunk'>>
+<<drop $backpack 'champagne' 1>>
+<<drop $backpack 'food' 20>>
+
+<div id="girls_top_table">
+	<h4>Guests attending the party</h4>
+	<table id="slaves">
+		<<for _guestI, _guest range $guests>>
+			<<if _guest.gender || setup.getAge(_guest) < 17>>
+				<<continue>>
+			<</if>>
+			<<capture _guestI, _guest>>
+				<tr>
+				  <td style="width: 300px">
+					 	  <<=_guest.name>> 
+						  <<if _guest.pregnancy >= 7>>
+							(pregnant <<=_guest.pregnancy>> days)
+						  <</if>>
+				  </td>
+				  <td>
+						Beauty score: <<print _guest.beauty>>
+				  </td>
+				  <td>
+						Age: <<=setup.getAge(_guest)>>
+				  </td>
+				  <td>
+				  		<<link 'Invite to the bedroom'>>
+							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+								<<set $tmpGirl to _guest>>
+								<<set $guestId = _guestI>>
+								<<set $characters.blair.quests.house_party_finished = true>>
+								<<goto 'House party - threesome'>>
+							<<else>>
+								<<set $tmpGirl to _guest>>
+								<<set $tmpGirl.location = 'bedroom'>>
+								<<set $tmpGirlViewBack = 'Sleep eval'>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirl.rape to false>>
+								<<set $guestId = _guestI>>
+								<<run delete $slaveId>>
+								<<goto 'Girl fuck'>>
+							<</if>>
+						<</link>>
+				  </td>
+				</tr>
+			<</capture>>
+		<</for>>
+	</table>
+	<br /><br />
+</div>
+
+<div id="option1">
+	<<linkreplace 'Scold them'>>
+		<<run $('#option2').hide()>>
+		<<for _guestI, _guest range $guests>>
+			<<setNpcStats 'guest' _guestI 'sub' +5>>
+			<<=$guests[_guestI].name>> submission increased by 5<br />
+		<</for>>
+		<br /><br />
+	<</linkreplace>>
+	<<linkdesc>>
+		+5 submission
+	<</linkdesc>>
+</div>
+<<if $backpack.has('champagne')>>
+	<div id="option2">
+		<<linkreplace 'Offer another bottle of champagne'>>
+			<<drop $backpack 'champagne' 1>>
+			<<run $('#option1, #girls_top_table, #option2_desc').hide()>>
+			<<run $('#girls_bottom_table').show()>>
+			You bring another bottle and pour a glass for each of the guests, they thank you with a smile and flirtatiously look at you until one sits down in front of you and spreads her legs with the text "Thank you!"
+			<br /><br />
+			<center>						
+				[img[setup.ImagePath+'places/cabin/house_party_champagne_skirt.webp']]
+			</center>
+			<br /><br />
+			Meanwhile, another girl is playfully teasing with the first bottle and starts to put it in her mouth to show how deep she can take it inside.
+			<br /><br />
+			<center>						
+				[img[setup.ImagePath+'places/cabin/house_party_champagne_bj.webp']]
+			</center>
+			<br /><br />
+			The girls applaud and cheer as the girl with the empty champagne bottle approaches, until one of the girls pushes you towards her and without hesitation, she pulls down your pants and takes your hard penis into her mouth.
+			<br /><br />
+			<center>						
+				[img[setup.ImagePath+'places/cabin/house_party_champagne_bj2.webp']]
+			</center>
+			<br /><br />
+			<<for _guestI, _guest range $guests>>
+				<<if _guest.gender || setup.getAge(_guest) < 17>>
+					<<continue>>
+				<</if>>
+				<<setNpcStats 'guest' _guestI 'relationship' +10>>
+				<<=$guests[_guestI].name>> relationship increased by 10<br />
+			<</for>>
+			<br /><br />
+			
+		<</linkreplace>>
+		<div id="option2_desc">
+		  <<linkdesc>>
+			  -1 champagne; +10 relationship
+		  <</linkdesc>>
+		</div>
+	</div>		
+<</if>>
+
+<div id="girls_bottom_table" style="display:none">
+	<h4>Guests attending the party</h4>
+	<table id="slaves">
+		<<for _guestI, _guest range $guests>>
+			<<if _guest.gender || setup.getAge(_guest) < 17>>
+				<<continue>>
+			<</if>>
+			<<capture _guestI, _guest>>
+				<tr>
+				  <td style="width: 300px">
+					 	  <<=_guest.name>> 
+						  <<if _guest.pregnancy >= 7>>
+							(pregnant <<=_guest.pregnancy>> days)
+						  <</if>>
+				  </td>
+				  <td>
+						Beauty score: <<print _guest.beauty>>
+				  </td>
+				  <td>
+						Age: <<=setup.getAge(_guest)>>
+				  </td>
+				  <td>
+				  		<<link 'Invite to the bedroom'>>
+							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+								<<set $tmpGirl to _guest>>
+								<<set $guestId = _guestI>>
+								<<set $characters.blair.quests.house_party_finished = true>>
+								<<goto 'House party - threesome'>>
+							<<else>>
+								<<set $tmpGirl to _guest>>
+								<<set $tmpGirl.location = 'bedroom'>>
+								<<set $tmpGirlViewBack = 'Sleep eval'>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirl.rape to false>>
+								<<set $guestId = _guestI>>
+								<<run delete $slaveId>>
+								<<goto 'Girl fuck'>>
+							<</if>>
+						<</link>>
+				  </td>
+				</tr>
+			<</capture>>
+		<</for>>
+	</table>
+	<br /><br />
+</div>
+
+<<link 'End party'>>
+	<<goto 'Bedroom'>>
+<</link>>
+
+

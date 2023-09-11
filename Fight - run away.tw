@@ -1,0 +1,26 @@
+:: Fight - run away {"position":"3501,756","size":"100,100"}
+<h1 class="ptitle">FIGHT</h1>
+<center>
+	[img[setup.ImagePath+'places/fight/run_away.webp']]
+</center>
+<br /><br />
+You managed to run away<br /><br />
+As you run away you dropped few things.
+<br /><br />
+
+<<set $foodMissing = ($backpack.count('food') - 5 > 0 ? 5 : $backpack.count('food'))>>
+<<set $capsMissing = ($player.money - 20 > 0 ? 20 : $player.money)>>
+
+<<if $capsMissing > 0>>
+	<strong>You dropped <<=$capsMissing>> caps</strong><br />
+<</if>>
+<<if $foodMissing > 0>>
+	<strong>You dropped <<=$foodMissing>> food</strong><br />
+<</if>>
+
+<br /><br />
+<<link 'Leave'>>
+	<<fightEnd false>>
+<</link>>
+
+

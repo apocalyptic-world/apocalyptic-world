@@ -1,0 +1,50 @@
+:: Rodger - horse lost {"position":"3205,2444","size":"100,100"}
+<h1 class="ptitle">WORLD</h1>
+<br /><br />
+
+<<if $characters.rodger.quests.horse_get === 'no_fight'>>
+	<center>
+		[img[setup.ImagePath+'places/settlement/harper_shotgun.gif']]
+	</center>
+	<strong>Harper points at your leg and shoots!</strong>
+	<<perkAdd 'bleeding'>>
+	<br /><br />
+	<strong class="iitem">You started to bleed</strong>
+	<br /><br />
+<<else>>
+	<<harper>>
+		Well, your loss.
+	<</harper>>
+	<br /><br />
+<</if>>
+
+<center>
+	[img[setup.ImagePath+'places/settlement/harper_horse_no.jpg']]
+</center>
+<br /><br />
+He slowly mounts his horse while your leg is seriously bleeding, and swiftly rides away.
+<br /><br />
+<<linkreplace 'Continue'>>
+  <<if $characters.rodger.quests.horse_get === 'no_fight'>>
+  	<<addhours 8>>
+	Limping and slowly, you return to Rodger's camp where he is already waiting for you with wide-open eyes and shock.
+	<br /><br />
+	<<rodger>>
+		Oh my God! What happened? Are you alright?
+	<</rodger>>
+	<br /><br />
+  <<else>>
+  	<<addhours 6>>
+	You quickly return to Rodger's camp, where he is already waiting for you.
+	<br /><br />
+	<<rodger>>
+		Seeing that you have returned without the horse, you have bad news, it seems...
+	<</rodger>>
+	<br /><br />
+  <</if>>
+  	<<link 'Tell him that he was too stubborn'>>
+		<<goto 'Settlement'>>
+	<</link>>
+<</linkreplace>>
+
+

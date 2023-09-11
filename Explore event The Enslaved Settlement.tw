@@ -1,0 +1,90 @@
+:: Explore event: The Enslaved Settlement {"position":"6653,17","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+
+<center>
+[img[setup.ImagePath+'places/explore/event_enslaved_huts.jpg']]
+</center>
+<br /><br />
+You decide to turn off the main road of the city and walk along the place where there used to be a beautiful park with a forest in the middle. As you walk, unexpectedly, you see two self-made huts in front of you with bonfires next to them and some sounds coming from behind them.
+<br /><br />
+<<linkreplace 'Explore them'>>
+	<<video 'explore/event_enslaved_village1'>>
+	<br /><br />
+	You slowly walk along the edge of one of the huts until you notice a woman tied to a hook behind the planks.
+	<br /><br />
+	<<linkreplace 'Continue to explore'>>
+		<<video 'explore/event_enslaved_village2'>>
+		<br /><br />
+		You leave the woman hanging and approach the other hut. As you walk around the corner, the sight is horrifying. Another woman is tied up, her legs spread apart, and only her lower body is visible, protruding through a hole in the wall.
+		<br /><br />
+		<<anongirl>>
+			Hello? Is someone there? Please help us! Please! They soon will be back
+		<</anongirl>>
+		<br /><br />
+		<<linkreplace 'Help them'>>
+			<<set $player.goodwill++>>
+			<<run $('#option1').hide()>>
+			<<video 'explore/event_enslaved_village4'>>
+			<br /><br />
+			<<anongirl>>
+				Thank you so much mister! How we can repay to you?
+			<</anongirl>>
+			<br /><br />
+			<<linkreplace 'Tell her to suck you'>>
+				<<video 'explore/event_enslaved_village3'>>
+				<br /><br />
+				Without hesitation, she throws herself on her knees. It seems that your offer has been much better than what they have experienced in this place.
+				<br /><br />
+				<<if ($slaves.length + 2) <= $basementLimit && ($game.location.basement ?? false)>>
+					<<link 'Capture both of them as slaves'>>
+						<<newgirl>>
+						<<set 
+							$tmpGirl.relationship = 12,
+							$tmpGirl.birthDate = setup.getBirthDate(21),
+							$tmpGirl.beauty = randomInteger(50,70)
+						>>						
+						<<run $slaves.push($tmpGirl)>>
+						<<newgirl>>
+						<<set 
+							$tmpGirl.relationship = 10,
+							$tmpGirl.birthDate = setup.getBirthDate(21),
+							$tmpGirl.beauty = randomInteger(50,70)
+						>>						
+						<<run $slaves.push($tmpGirl)>>
+						<<goto 'Basement'>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+			<<if ($guests.length + 2) <= $guesthouseLimit && ($game.location.guesthouse ?? false)>>
+					<<link 'Invite them both as guests'>>
+						<<newgirl>>
+						<<set 
+							$tmpGirl.relationship = 60,
+							$tmpGirl.birthDate = setup.getBirthDate(19),
+							$tmpGirl.beauty = randomInteger(50,70)
+						>>
+						<<run $guests.push($tmpGirl)>>
+						<<newgirl>>
+						<<set 
+							$tmpGirl.relationship = 55,
+							$tmpGirl.birthDate = setup.getBirthDate(21),
+							$tmpGirl.beauty = randomInteger(50,70)
+						>>
+						<<run $guests.push($tmpGirl)>>
+						<<goto 'Guest house'>>
+					<</link>>
+				<</if>>
+				<<link 'Leave'>>
+					<<goto 'Outside'>>
+				<</link>>
+		<</linkreplace>>
+	<</linkreplace>>	
+<</linkreplace>>
+<div id="option1">
+	<<link 'Leave'>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
+
+

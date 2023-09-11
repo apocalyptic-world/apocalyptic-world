@@ -1,0 +1,36 @@
+:: Vincent quest - settlement start [bg-farm] {"position":"2959,1028","size":"100,100"}
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<vincent>>
+	<strong><<=$player.name>></strong>! Right when I wanted to talk to you. Listen up kid; I need your help with something. It must be discreet and you can tell noone about it.
+<</vincent>>
+<br />
+You nod as approve and listen to him carefully.<br />
+He starts to tell you what he needs you for while putting a lot of his building stuff in his wheelbarrow.
+<br /><br />
+<<vincent>>
+	I'll need you to get some items for me.<br />
+	You'll need to get <strong class="iitem">5 solar panels</strong> and <strong class="iitem">100 wood</strong>.
+	<br />
+	Don't ask why, just get it, please. I hope your building skills are good too. 
+<</vincent>>
+<br /><br />
+<<if $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >=5>>
+	<<linkreplace 'Tell him you already got them'>>
+		You told him that you already got those items and you're ready go go even now.
+		<br /><br />
+		<<vincent>>
+			Really? Didn't expect that. Meet me here tomorrow in the morning. We need to get going as early as we can
+		<</vincent>>
+		<br /><br />
+		<<set $characters.vincent.relationship += 5>>
+		<strong class="stats-changed-inc">Relationship with Vincent increased by 5</strong>
+		<br /><br />
+	<</linkreplace>>
+<</if>>
+<<link "Continue">>
+	<<goto 'Farm'>>
+<</link>>
+<<set $characters.vincent.quests.new_settlement_day = $game.day>>
+
+

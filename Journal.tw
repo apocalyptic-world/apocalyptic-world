@@ -1,0 +1,184 @@
+:: Journal {"position":"1009,12","size":"100,100"}
+<h2>WORLD</h2>
+	You're on your own. Explore, survive, etc.<br />
+	Journal is only for unique characters.
+<br /><br />
+<<if Object.keys($characters.vincent).length > 0>>
+	<h2>Vincent</h2>
+	<div>Relationship: <<=$characters.vincent.relationship>></div>
+	<<if !isMetChar('blair')>>
+		Increase relationship with Vincent (buy from his shop)
+	<<elseif ($characters.blair.quests ?? false) && !$characters.vincent.quests.new_settlement>>
+		<<if !$characters.blair.quests.bj>>
+			Progress with Blair
+		<<else>>
+			Go to farm after few days
+		<</if>>
+	<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false)>>
+		Collect <strong class="iitem">100 wood</strong>  and <strong class="iitem">5 solar panels</strong>
+	<<elseif !$characters.vincent.quests.car_talk && $game.cabinName>>
+		Talk with Vincent
+	<<elseif !$characters.vincent.quests.wedding_talk>>
+		<<if $game.day < 150 || $characters.blair.relationship < 90>>
+			Reach 150 days and increase the Blair relationship to 90
+		<<else>>
+			Meet Vincent in farm
+		<</if>>
+	<<elseif !$characters.vincent.quests.sanctuary_talk>>
+		<<if $game.day < 160 || ($characters.vincent.quests.wedding_talk_day + 10) > $game.day>>
+			Wait a few days
+		<<else>>
+			Meet Vincent in farm
+		<</if>>
+	<<elseif $characters.vincent.quests.sanctuary_talk && !$characters.vincent.quests.sanctuary_done>>
+		Prepare yourself and meet Vincent at farm (two companions with strength 40+)
+	<<elseif !($game.location.shop ?? false) && $characters.vincent.quests.sanctuary_done && !$characters.vincent.quests.shop_talk>>
+		Talk with Vincent in the farm
+	<<else>>
+		That's all for now
+	<</if>>
+<</if>>
+
+<<if ($characters.blair.quests ?? false)>>
+	<h2>Blair</h2>
+	<div>Relationship: <<=$characters.blair.relationship>></div>
+	<<if !($game.location.streets ?? false)>>
+		After few days try to go to Underground city<br />
+	<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
+		Talk with Vicent about wanted poster<br />
+	<<elseif $characters.blair.relationship < 15>>
+		Increase relationship by talking with her in kitchen or bedroom (15)<br />
+	<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
+		Talk with Vicent about wanted poster<br />
+	<<elseif $characters.blair.relationship < 20 && !($game.location.bar ?? false)>>
+		Increase relationship by talking with her in kitchen or bedroom (20)<br />
+	<<elseif !($game.location.bar ?? false)>>
+		Talk with her in the kitchen<br />
+	<<elseif !$characters.blair.quests.missing_friend_talked>>
+		Go to the bar and talk with bartender
+		<br />
+	<<elseif $characters.blair.quests.missing_friend_talked && !$characters.blair.quests.missing_friend_found>>
+		Try to find her friend Ashley (On streets in underground city)
+		<br />
+	<<elseif $characters.blair.quests.missing_friend_found && !$characters.blair.quests.missing_friend_found_finished>>
+		Talk to Blair in the morning about Ashley
+		<br />
+	<<elseif $characters.blair.quests.missing_friend_found_finished && !$characters.blair.quests.missing_friend_found_finished_thanked>>
+		Talk to Blair in the evening
+		<br />
+	<<elseif !$characters.blair.quests.bj>>
+		Wait till she makes a move on you
+		<br />
+	<<elseif !($characters.rodger.quests.champagne ?? false)>>
+		Progress with Rodger
+	<<elseif ($characters.rodger.quests.champagne ?? false) && !$characters.blair.quests.house_party>>	
+		Talk with her in the morning
+	<<elseif $characters.blair.quests.house_party && !$characters.blair.quests.house_party_finished>>	
+		Make a house party at fire place at 20:00 and invite any guest to your bedroom
+	<<elseif !$game.gate && !$characters.blair.quests.gate>>
+		Talk with Blair in the kitchen
+	<<elseif !$game.cabinName>>
+		Build gate for your settlement
+	<<elseif !$characters.blair.quests.nursery>>
+		Talk with Blair in the kitchen
+	<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement>>
+		<<if $characters.blair.relationship >= 80>>
+			Talk with her in the bedroom
+		<<else>>
+			Increase relationship
+		<</if>>
+	<<else>>
+		That's all for now
+	<</if>>
+	<br /><br />
+<</if>>
+
+<<if ($game.location.settlement ?? false) && isMetChar('rodger')>>
+	<h2>Rodger</h2>
+	<<if !($game.location.settlement_church ?? false)>>
+		Help him finish the church
+	<<elseif !$characters.rodger.quests.book>>
+		Talk with him in the church
+	<<elseif !$characters.rodger.quests.champagne>>
+		Talk with him in the church
+	<<elseif $characters.rodger.quests.champagne && !$characters.eve.quests.sex>>
+		<<if $game.cabinName>>
+			Talk with him in the church
+		<<else>>
+			Progress with Blair
+		<</if>>
+	<<elseif !($game.location.settlement_shop ?? false)>>
+		<<if !$characters.rodger.quests.shop_talk>>
+			Talk with him in the church
+		<<else>>
+			Help him build shop
+		<</if>>
+	<<elseif ($game.location.settlement_shop ?? false) && !$characters.rodger.quests.horse>>
+		Talk with him in the church
+	<<else>>
+		That's all for now
+	<</if>>
+	<br /><br />
+<</if>>
+
+<h2>Dom</h2>
+<<if isMetChar('dom') && !$characters.dom.quests.invite>>
+	<<if $game.day < 100 || $player.reputation < 100 || setup.getPersonsForLocation($slaves, 'streets').length < 4>>
+		Keep living your life. Increase reputation and need more girls working on the street and reach 100 days
+	<<else>>
+		Got to the underground streets
+	<</if>>
+<<elseif $characters.dom.quests.accepted_deal>>
+	<<if !$characters.dom.quests.quest1>>
+		Wait for a few days until some of Dom's men find you.	
+	<<elseif $characters.dom.quests.quest1 && !$characters.dom.quests.quest1_done>>
+		Get 10 bottles of champagne for Dom
+	<<elseif !$characters.dom.quests.quest2>>
+		<<if $player.strength < 100>>
+			Increase your strength (100+)
+		<<else>>
+			Meet Dom in streets
+		<</if>>
+	<<elseif !$characters.dom.quests.quest3>>
+		<<if $characters.dom.quests.quest3_start_day >= $game.day>>
+			Wait few days
+		<<else>>
+			Meet Dom in streets
+		<</if>>
+	<<else>>
+		That's all for now
+	<</if>>
+<<else>>
+	That's all for now
+<</if>>
+
+<<if ($game.location.settlement ?? false) && isMetChar('rodger') && isMetChar('octavia')>>
+	<h2>Octavia</h2>
+	<<if !$characters.octavia.quests.burned_settlement>>
+		<<if $game.day < 80>>
+			Reach 80 ingame days
+		<<else>>
+			Visit Rodger's settlement
+		<</if>>
+	<<elseif $characters.octavia.quests.burned_settlement && !$characters.octavia.quests.eve_kidnapped>>
+			After few days travel to Rodger's settlement
+	<<else>>
+		That's all for now
+	<</if>>
+	<br /><br />
+<</if>>
+
+<h2>Laura (Dr. Finch)</h2>
+<<if isMetChar('laura')>>
+	<<if !$characters.laura.quests.successful_test>>
+		Wait few days
+	<<elseif !$characters.laura.quests.first_vials>>
+		Wait few days
+	<<else>>
+		That's all for now
+	<</if>>
+<<else>>
+	Get to day 200
+<</if>>
+
+

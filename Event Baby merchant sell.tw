@@ -1,0 +1,119 @@
+:: Event: Baby merchant sell {"position":"996,954","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/old_merchant.jpg']]
+</center>
+<br /><br />
+<<anonguy>>
+Let me take a look... I am ready to pay 20 caps for one.
+<</anonguy>>
+
+<<set _hasBabies = false>>
+<table id="slaves">
+<<for _nurseryI, _nursery range ($nursery ?? [])>>
+	<<set _hasBabies = true>>
+	<<capture _nurseryI, _nursery>>
+		<tr>
+			<td style="width: 300px">
+				<span class="name-no-click"><<=_nursery.name>></span>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_nursery)>>
+			</td>
+			<td>
+				<<link 'Sell'>>
+				  <<dialog 'Throw out'>>
+					  Are you sure you want to sell <<=(_nursery.gender ? 'him' : 'her')>>?
+					  <br />
+					  <<link 'Yes' 'Event: Baby merchant sell'>>
+						  <<run $nursery.splice(_nurseryI, 1)>>
+						  <<dialogclose>>
+						  <<set $player.goodwill -= 2>>
+						  <<set $player.money += 20>>
+					  <</link>>	
+				  <</dialog>>
+				<</link>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+
+<table id="slaves">
+<<for _slaveI, _slave range $slaves>>
+	<<if setup.getAge(_slave) > 17>>
+		<<continue>>
+	<</if>>
+	<<set _hasBabies = true>>
+	<<capture _slaveI, _slave>>
+		<tr>
+			<td style="width: 300px">
+				<span class="name-no-click"><<=_slave.name>></span>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_slave)>>
+			</td>
+			<td>
+				<<link 'Sell'>>
+				  <<dialog 'Throw out'>>
+					  Are you sure you want to sell <<=(_slave.gender ? 'him' : 'her')>>?
+					  <br />
+					  <<link 'Yes' 'Event: Baby merchant sell'>>
+						  <<run $slaves.splice(_slaveI, 1)>>
+						  <<dialogclose>>
+						  <<set $player.goodwill -= 2>>
+						  <<set $player.money += 20>>
+					  <</link>>	
+				  <</dialog>>
+				<</link>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+
+<table id="slaves">
+<<for _guestI, _guest range $guests>>
+	<<if setup.getAge(_guest) > 17>>
+		<<continue>>
+	<</if>>
+	<<set _hasBabies = true>>
+	<<capture _guestI, _guest>>
+		<tr>
+			<td style="width: 300px">
+				<span class="name-no-click"><<=_guest.name>></span>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_guest)>>
+			</td>
+			<td>
+				<<link 'Sell'>>
+				  <<dialog 'Throw out'>>
+					  Are you sure you want to sell <<=(_guest.gender ? 'him' : 'her')>>?
+					  <br />
+					  <<link 'Yes' 'Event: Baby merchant sell'>>
+					  	  <<companionRearange _guestI>>
+						  <<run $guests.splice(_guestI, 1)>>
+						  <<dialogclose>>
+						  <<set $player.goodwill -= 2>>
+						  <<set $player.money += 20>>
+					  <</link>>	
+				  <</dialog>>
+				<</link>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+
+<<if !_hasBabies>>
+	<strong>You have nothing to sell...</strong>
+<</if>>
+
+<br /><br />
+<<link 'Finish trading'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

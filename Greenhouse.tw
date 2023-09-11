@@ -1,0 +1,102 @@
+:: Greenhouse [Place] {"position":"1319,407","size":"100,100"}
+<h1 class="ptitle">GREENHOUSE</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/greenhouse_head.jpg']]
+</div>
+<h3>Workers</h3>
+<<set $assignedToGreenhouse = false>>
+<<set _girlsCompetition = []>>
+<table id="slaves">
+	<<for _i to 0; _i lt $slaves.length; _i++>>
+		<<capture _i>>
+		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined'>>
+			<<continue>>
+		<</if>>
+		<<if !$slaves[_i].gender>>
+			<<run _girlsCompetition.push('slave:' + _i)>>
+		<</if>>
+		<<set $assignedToGreenhouse = true>>
+        <<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<tr>
+			<td style="width: 300px">
+           		 <span @class="''+_genderClass+''">
+                      <<link $slaves[_i].name>>
+                        <<set $tmpGirl to $slaves[_i]>>
+                        <<set $tmpGirl.location = 'garden'>>
+                        <<set $tmpGirlBack = 'Greenhouse'>>
+                        <<set $tmpGirlCapture to false>>
+                        <<set $tmpGirl.rape to false>>
+                        <<run delete $guestId>>
+                        <<set $slaveId = _i>>
+                        <<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<goto `$tmpGirlViewBack`>>
+                      <</link>>
+                  </span>
+			</td>
+			<td>
+				<<if !$slaves[_i].gender>>
+					Beauty score: <<print $slaves[_i].beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge($slaves[_i])>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>> 
+	<<for _gardenGuestI, _gardenGuest range ($guests ?? [])>>
+		<<capture _gardenGuestI, _gardenGuest>>
+		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00')>>
+			<<continue>>
+		<</if>>
+		<<set $assignedToGreenhouse = true>>
+		<<if !_gardenGuest.gender>>
+			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
+		<</if>>
+        <<set _genderClass = 'gender-' + (!_gardenGuest.gender ? 'girl' : 'guy')>>
+		<tr>
+			<td style="width: 300px">
+            		<span @class="''+_genderClass+''">
+                          <<link _gardenGuest.name>>
+                          <<set $tmpGirlViewBack = 'Girl view'>>
+                          <<set $tmpGirl to _gardenGuest>>
+                          <<set $tmpGirl.location = 'garden'>>
+                          <<set $tmpGirlBack = 'Greenhouse'>>
+                          <<set $tmpGirlCapture to false>>
+                          <<set $tmpGirl.rape to false>>
+                          <<run delete $slaveId>>
+                          <<set $guestId to _gardenGuestI>>
+                          <<set $tmpGirlViewBack = (!_gardenGuest.gender ? 'Girl' : 'Guy') + ' view'>>
+                          <<goto `$tmpGirlViewBack`>>
+				  <</link>>
+                  </span>
+			</td>
+			<td>
+				<<if !_gardenGuest.gender>>
+					Beauty score: <<print _gardenGuest.beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_gardenGuest)>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+</table>
+
+<<if !$assignedToGreenhouse>>
+	No girls are working at the moment...
+<</if>>
+<<if !($locationEvents.greenhouse ?? false)>>
+	<<if _girlsCompetition.length >= 2 && setup.percentageChance(5)>>
+		<<set $locationEvents.greenhouse = true>>
+		<<set $game.greenhouseCompetition = _girlsCompetition>>
+		<<goto 'Greenhouse - competition'>>
+	<</if>>
+<</if>>
+
+<br /><br />
+
+[[Back|Wood cabin]]
+
+

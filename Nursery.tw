@@ -1,0 +1,51 @@
+:: Nursery [Place] {"position":"1346,773","size":"100,100"}
+<h1 class="ptitle">NURSERY</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/guesthouse_head.jpg']]
+</div>
+<h3>Kids</h3>
+
+<<if ($nursery ?? []).length < 1>>
+	<div style="margin-top: 20px;">
+		Noone is living here...
+	</div>
+<<else>>
+	<table id="slaves">
+	<<for _nurseryI, _nursery range $nursery>>
+		<<capture _nurseryI, _nursery>>
+			<<set _genderClass = 'gender-' + (!_nursery.gender ? 'girl' : 'guy')>>
+			<tr>
+				<td style="width: 300px">
+					<span @class="''+_genderClass+''">
+						<<link _nursery.name>>
+							 <<set $childId = _nurseryI>>
+							 <<set $tmpGirl = _nursery>>
+							 <<goto 'Child view'>>
+						<</link>>
+					</span>
+				</td>
+				<td>
+					Age: <<=setup.getAge(_nursery)>>
+				</td>
+				<td>
+					<<link 'Throw out'>>
+					  <<dialog 'Throw out'>>
+						  Are you sure you want to throw <<=(_nursery.gender ? 'him' : 'her')>> out?
+						  <br />
+						  <<link 'Yes' 'Nursery'>>
+							  <<run $nursery.splice(_nurseryI, 1)>>
+							  <<dialogclose>>
+							  <<set $player.goodwill -= 2>>
+						  <</link>>	
+					  <</dialog>>
+					<</link>>
+				</td>
+			</tr>
+		<</capture>>
+	<</for>>
+	</table>
+<</if>>
+
+[[Back|Wood cabin]]
+
+

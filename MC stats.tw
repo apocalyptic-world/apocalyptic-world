@@ -1,0 +1,49 @@
+:: MC stats {"position":"1561,422","size":"100,100"}
+<h2>Your stats</h2>
+<h4>Reputation (<<=$player.reputation>>)</h4>
+<<if $player.reputation < 10>>
+	Nobody knows you. When you go around, everyone will try to take advantage of you.
+<<elseif $player.reputation < 20>>
+	Your name is whispered occasionally, though not with much significance.
+<<elseif $player.reputation < 30>>
+	Your deeds have started to catch the attention of the local communities.
+<<elseif $player.reputation < 50>>
+	You're gaining a following of supporters who admire your achievements.
+<<elseif $player.reputation < 100>>
+	You're a well-known figure in multiple regions, often recognized on your travels.
+<<else>>
+	Your actions have earned you respect and recognition from various communities. People speak of your achievements with admiration and respect.
+<</if>>
+<h4>Bounty hunter reputation (<<=$player.reputation_bounty_hunter>>)</h4>
+<<if $player.reputation_bounty_hunter < 1>>
+	You are nobody.
+<<elseif $player.reputation_bounty_hunter < 10>>
+	Few people have seen you but they still laugh at you
+<<elseif $player.reputation_bounty_hunter < 20>>
+	Your deeds have started to catch the attention of the bounty hunter community.
+<<else>>
+	People are starting to avoid you and be scared of you.
+<</if>>
+<br /><br />
+
+<table id="mc-stats">
+	<tr><td>People captured:</td><td><<=$player.stats.people_captured ?? 0>></td></tr>
+	<tr><td>People killed:</td><td><<=$player.stats.people_killed ?? 0>></td></tr>
+	<tr><td>Girls impregnated:</td><td><<=$player.stats.girls_impregnated ?? 0>></td></tr>
+	<tr><td>Slaves sold:</td><td><<=$player.stats.slaves_sold ?? 0>></td></tr>
+	<tr><td>Slaves killed:</td><td><<=$player.stats.slaves_killed ?? 0>></td></tr>
+	<tr><td>Slaves released:</td><td><<=$player.stats.slaves_released ?? 0>></td></tr>
+</table>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Bedroom'>>
+	<<dialogclose>>
+<</link>>
+
+<style>
+	#mc-stats td {
+		padding: 10px;
+	}
+</style>
+
+

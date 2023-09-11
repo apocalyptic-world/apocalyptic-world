@@ -1,0 +1,26 @@
+:: Shower-room [Place] {"position":"966,507","size":"100,100"}
+<h1 class="ptitle">SHOWER</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/shower_head.jpg']]
+</div>
+<br /><br />
+<center>
+<<if $player.showered is false && hasTime(0, 30)>>
+	<<link 'Take a shower'>>
+		<<addmins 30>>
+		<<set _energy = $game.hotShower ? 20 : 10>>
+		<<energy _energy>>
+		<<goto 'Shower-action'>>
+	<</link>>
+<</if>>
+<<if $player.mast is false && hasTime(0, 30)>>
+	<<link 'Masturbate'>>
+		<<addmins 30>>
+		<<goto 'Shower-action-mast'>>
+	<</link>>
+<</if>>
+
+[[Back|Wood cabin]]
+</center>
+
+

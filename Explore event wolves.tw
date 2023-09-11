@@ -1,0 +1,63 @@
+:: Explore event: wolves {"position":"6986,18","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+As you roamed through the desolate ruins of the city, its once vibrant streets now reduced to debris and decay, a chilling silence hung heavy in the air. 
+<br />
+Every step echoed, reminding you of the world that was lost. Amidst the broken buildings and crumbling structures, you became acutely aware of your solitude.
+<br /><br />
+But then, a distant howl pierced through the stillness. It was haunting, yet strangely alluring. You turned your gaze towards the source of the sound and saw a pack of wolves emerge from the shadows, their eyes gleaming with a fierce hunger. They moved gracefully, their presence a stark reminder of the tenacity of life in this barren wasteland.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore/wolves.jpg']]
+</center>
+<br /><br />
+For a moment, time stood still as you locked eyes, neither predator nor prey. There was a primal understanding between you, an unspoken acknowledgment of survival in a world stripped bare.
+<br /><br />
+	<<linkreplace 'Attack them'>>
+		<<run $('#option2').hide()>>
+		<<set _wolvesKilled = 0>>
+		<<if $player.strength > 100 && setup.percentageChance(60)>>
+			<<set _wolvesKilled = 3>>
+		<<elseif $player.strength > 50 && setup.percentageChance(30)>>
+			<<set _wolvesKilled = 1>>
+		<</if>>
+		
+		But your bravado was short-lived. The wolves, sensing my aggression, quickly circled and closed in on me with a ferocity that left me paralyzed with fear. Their fangs gleamed under the pale sunlight, and their eyes burned with an intensity that matched their predatory instincts.
+		<br /><br />
+		With a swift and coordinated attack, they lunged at me, tearing through my feeble defenses.
+		
+		They left you bleeding in the middle of the streets...
+		<br /><br />
+		<<if _wolvesKilled>>
+			You managed to kill _wolvesKilled of them.
+			<br /><br />
+			<<pickup $backpack 'pelt_wolf' _wolvesKilled>>
+			<strong class="iitem">You collected <<=_wolvesKilled>> wolf pelt<<=(_wolvesKilled > 1 ? 's' : '')>></strong>
+			<br /><br />
+		<</if>>
+		<<perkAdd 'bleeding'>>
+		
+		
+		<<if setup.percentageChance(40) && Object.keys($player.companions ?? {}).length > 0>>
+			<<set _eventCompanionKey = Object.keys($player.companions)[0]>>
+			<<set _companionFirst = _eventCompanionKey.split(':')[1]>>
+			As you bleed out you notice that few of the wolves have torn apart <strong><<=$guests[_companionFirst].name>></strong> body and are dragging her away while leaving a trail of blood behind them.
+			<<companionRemove `_eventCompanionKey`>>
+			<<companionRearange _companionFirst>>
+			<<run $guests.splice(_companionFirst, 1)>>
+			<br /><br />
+		<</if>>
+		
+		
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+
+<div id="option2">
+	<<link 'Leave them'>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
+
+

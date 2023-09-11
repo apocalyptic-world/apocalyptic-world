@@ -1,0 +1,88 @@
+:: NPC schedule {"position":"8,154","size":"100,100"}
+<<set _bathSchedule = {
+	garden: {
+		from: '16:00',
+		to: '20:00',
+		p: 10
+	},
+	forest: {
+		from: '16:00',
+		to: '08:00',
+		p: 20
+	},
+	kitchen: {
+		from: '12:00',
+		to: '20:00',
+		p: 10
+	},
+	scavenger: {
+		from: '20:00',
+		to: '23:00',
+		p: 30
+	},
+	mistress: {
+		from: '23:00',
+		to: '24:00',
+		p: 70
+	},
+	streets: {
+		from: '10:00',
+		to: '12:00',
+		p: 20
+	}
+}
+>>
+
+<<for _scheduleGuestI, _scheduleGuest range $guests>>
+	<<capture _scheduleGuestI, _scheduleGuest>>
+		<<set $guests[_scheduleGuestI].location = ''>>
+		<<if _scheduleGuest.gender || setup.getAge(_scheduleGuest) < 18>>
+			<<continue>>
+		<</if>> 
+
+		<<if (!_scheduleGuest.washedBathhouse &&
+			(((!_scheduleGuest.assignedTo || typeof _bathSchedule[_scheduleGuest.assignedTo] === 'undefined') && setup.percentageChance(5)) || 
+			(typeof _bathSchedule[_scheduleGuest.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleGuest.assignedTo].from, _bathSchedule[_scheduleGuest.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleGuest.assignedTo].p))))
+			)>>
+				<<set $guests[_scheduleGuestI].washedBathhouse = true>>
+				<<set _beautyInc = randomInteger(1, 2)>>
+				<<if !($guests[_scheduleGuestI].washDays ?? false)>>
+					<<set $guests[_scheduleGuestI].washBeauty = _beautyInc>>
+					<<set $guests[_scheduleGuestI].beauty = Math.min($guests[_scheduleGuestI].beauty + (_beautyInc * 2), 100)>>
+				<<else>>
+					<<set $guests[_scheduleGuestI].beauty -= $guests[_scheduleGuestI].washBeauty * $guests[_scheduleGuestI].washDays>>
+					<<set $guests[_scheduleGuestI].beauty = Math.min($guests[_scheduleGuestI].beauty + ($guests[_scheduleGuestI].washBeauty * 2), 100)>>
+				<</if>>
+				<<set $guests[_scheduleGuestI].washDays = 2>>
+				<<set $guests[_scheduleGuestI].location = 'bathhouse'>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+<<for _scheduleSlaveI, _scheduleSlave range $slaves>>
+	<<capture _scheduleSlaveI, _scheduleSlave>>
+		<<set $slaves[_scheduleSlaveI].location = ''>>
+		<<if _scheduleSlave.gender || setup.getAge(_scheduleSlave) < 18>>
+			<<continue>>
+		<</if>>
+
+		<<if (!_scheduleSlave.washedBathhouse &&
+			(((!_scheduleSlave.assignedTo || typeof _bathSchedule[_scheduleSlave.assignedTo] === 'undefined') && setup.percentageChance(5)) || 
+			(typeof _bathSchedule[_scheduleSlave.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleSlave.assignedTo].from, _bathSchedule[_scheduleSlave.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleSlave.assignedTo].p))))
+			)>>
+				<<set $slaves[_scheduleSlaveI].washedBathhouse = true>>
+				<<set _beautyInc = randomInteger(1, 2)>>
+				<<if !($slaves[_scheduleSlaveI].washDays ?? false)>>
+					<<set $slaves[_scheduleSlaveI].washBeauty = _beautyInc>>
+					<<set $slaves[_scheduleSlaveI].beauty = Math.min($slaves[_scheduleSlaveI].beauty + (_beautyInc * 2), 100)>>
+				<<else>>
+					<<set $slaves[_scheduleSlaveI].beauty -= $slaves[_scheduleSlaveI].washBeauty * $slaves[_scheduleSlaveI].washDays>>
+					<<set $slaves[_scheduleSlaveI].beauty = Math.min($slaves[_scheduleSlaveI].beauty + ($slaves[_scheduleSlaveI].washBeauty * 2), 100)>>
+				<</if>>
+				<<set $slaves[_scheduleSlaveI].washDays = 2>>
+				<<set $slaves[_scheduleSlaveI].location = 'bathhouse'>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+

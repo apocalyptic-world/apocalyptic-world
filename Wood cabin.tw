@@ -1,0 +1,92 @@
+:: Wood cabin [Place] {"position":"953,626","size":"200,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<div class="menu-grid">   
+  <<grid cabin bedroom Bedroom 'Your room'>>
+  <<if hasTime(0, 30)>>
+  	<<grid cabin shower Shower-room Shower>>
+  <</if>>
+  <<if (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
+  	<<grid cabin kitchen Kitchen-room Kitchen>>
+  <</if>>
+  <<if ($game.location.workbench ?? false) && hasTime(0, 30)>>
+    <<grid cabin workbench Workbench Workbench false 1>>
+  <</if>>
+  <<if ($game.location.basement ?? false) && hasTime(0, 30)>>
+    <<grid cabin basement Basement Basement false 1>>
+  <</if>>
+  <<if ($game.location.greenhouse ?? false) && hasTime(0, 30)>>
+    <<grid cabin greenhouse Greenhouse Greenhouse false 1>>
+  <</if>>
+  <<if ($game.location.guesthouse ?? false) && hasTime(0, 30)>>
+    <<grid cabin guesthouse 'Guest house' 'Guest house' false 1>>
+  <</if>>
+  <<if ($game.location.bathhouse ?? false) && hasTime(0, 30)>>
+    <<grid cabin bathhouse 'Bathhouse' 'Bathhouse' false 1>>
+  <</if>>
+  <<if ($game.location.nursery ?? false) && hasTime(0, 30)>>
+    <<grid cabin nursery 'Nursery' 'Nursery' false 1>>
+  <</if>>
+  <<if ($game.location.shop ?? false) && hasTime(0, 30)>>
+    <<grid cabin shop 'Shop' 'Shop' false 1>>
+  <</if>>
+   <<grid cabin fireplace 'Fire place' 'Fire place'>>
+   <<grid cabin outside Outside Outside>>
+</div>
+
+
+<<set _percentageUninvitedCouple = 5>>
+<<set _percentageFoodForager = 2>>
+<<if setup.getPersonsForLocation($guests, 'guard')>>
+	<<set _percentageUninvitedCouple = 1>>
+	<<set _percentageFoodForager = 1>>
+<</if>>
+<<if !($locationEvents.cabin ?? false)>>
+	<<if $game.lone_survivor>>
+		<<set $game.lone_survivor = false>>
+		<<set $locationEvents.cabin = true>>
+		<<if setup.percentageChance(20)>>
+			<<goto 'Event: A lone survivor: steal'>>
+		<<else>>
+			<<goto 'Event: A lone survivor: gift'>>
+		<</if>> 
+	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 4 && setup.percentageChance(30) && !$player.quests.bathhouse_talk && $game.day > 80>>
+		<<set $player.quests.bathhouse_talk = true>>
+		<<goto 'Event: Bathhouse talk'>>
+	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 4 && setup.percentageChance(5) && $backpack.count('food') > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Rotten Rations'>>
+	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 2 && setup.percentageChance(1)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Common capital'>>
+	<<elseif $game.cabinName && setup.percentageChance(5)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: A lone survivor'>>
+	<<elseif $game.cabinName && setup.percentageChance(2) && (!$game.baby_merchant_day || ($game.baby_merchant_day + 60) < $game.day)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Baby merchant'>>
+	<<elseif $game.cabinName && setup.percentageChance(1)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Base attack'>>
+	<<elseif $game.cabinName && isMetChar('rodger') && ($characters.rodger.quests.horse ?? false) && !$player.horse && setup.percentageChance(1)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Horse merchant'>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Food forager'>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: The uninvited couple'>>
+	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(5) && timeBetween('08:00', '12:00')>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: guard caught intruder'>>
+	<<elseif isMetChar('laura') && !$characters.laura.quests.successful_test && $characters.laura.quests.metOnDay < ($game.day - 3)>>
+		<<goto 'Laura - successful test'>>
+	<<elseif isMetChar('laura') && $characters.laura.quests.successful_test && !$characters.laura.quests.first_vials && $characters.laura.quests.lastTestDay < ($game.day - 5)>>
+		<<goto 'Laura - first vials'>>
+	<<else>>
+		
+	<</if>>
+	
+<</if>>
+
+

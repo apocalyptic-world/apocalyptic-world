@@ -1,0 +1,60 @@
+:: Event: Kitchen stuck {"position":"286,1625","size":"100,100"}
+<h1 class="ptitle">KITCHEN</h1>
+<br /><br />
+<<video 'kitchen/stuck1'>>
+<br /><br />
+Entering the kitchen, you see <<=setup.displayName($tmpGirl)>>. She's pulling something by the sink. You decide to ask if everything is okay, to which she replies that her hand is stuck while cleaning the drain.
+<br /><br />
+<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+	Could you help me please?
+<</say>>
+<br /><br />
+<div id="option_help">
+  <<link 'Help her'>>
+	<<run $('#option_fun, #option_help').hide()>>
+	<<run $('#option_end').show()>>
+	<<set $player.godwill++>>
+  <</link>>
+</div>
+<div id="option_fun">
+	<<linkreplace 'Have some fun'>>
+		<<set _hadFun = true>>
+		<<addmins 30>>
+		<<set $guests[$guestId].horny = 0>>
+		<<run $('#option_help').hide()>>
+		<<video 'kitchen/stuck2'>>
+		<br /><br />
+		<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+			Really? You think this is the right time? Ohh... god...
+		<</say>>
+		<br /><br />
+		<<video 'kitchen/stuck3'>>
+		<br /><br />
+		As you grab her top and pull it, one of her breasts falls out swings as you fuck her tight pussy. She's clearly enjoying it as she doesn't resist in any way.
+		<br /><br />
+		<<linkreplace 'Cum'>>
+			<<video 'kitchen/stuck4'>>
+			<br /><br />
+			You pull out and cum all over her back as she still manages to get her hand out of the drain. Cum drops from her back on the ground.
+			<<horny_reset>>
+			<<run $('#option_end').show()>>
+		<</linkreplace>>
+	<</linkreplace>>
+</div>
+<div id="option_end" style="display:none;">
+	<center>
+		[img[setup.ImagePath+'places/kitchen/stuck.jpg']]
+	</center>
+	<br /><br />
+	<<=setup.displayName($tmpGirl)>> manages to pull out the trapped arm, and she sighs in relief.
+	<br /><br />
+	<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+		Thank you so much!
+	<</say>>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Kitchen-room'>>
+	<</link>>
+</div>
+
+

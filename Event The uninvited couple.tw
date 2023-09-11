@@ -1,0 +1,132 @@
+:: Event: The uninvited couple {"position":"457,1223","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+On the first floor, you hear some murmuring and knocking noises. There are also voices audible. One is a woman's, the other a man's. You are almost certain that they are not any of your fellow guests.
+<br /><br />
+You decide to check first floor.
+<br />
+<br />
+As you reached the lower level, the faint sound of clinking caught your attention. Your heart raced as you crept towards the source of the noise, my worn-out boots barely making a sound on the debris-strewn floor. Through a cracked doorway, you glimpsed a flicker of movement.
+<br /><br />
+<<video 'cabin/uninvited_couple1'>>
+<br /><br />
+Peering around the corner, your eyes widened at the sight: a couple, their tattered clothing and gaunt faces reflecting the harshness of their lives. They were rifling through the stash of canned food you had managed to scavenge over time. Your fists clenched instinctively, anger and desperation surging within you. <br />
+The sound was enough to alert the couple.
+<br /><br />
+<strong>
+They tried to explain that they hadn't eaten for several days and they had no choice but to try to find some food here. They are so desperately hungry that they can't think properly or stand on their feet anymore.
+</strong>
+<br /><br />
+<<set _foodOptions = [$storage.count('food'), $backpack.count('food'), 20]>>
+<<set _foodGive = Math.min.apply(null, _foodOptions.filter(Boolean))>>
+
+<div id="option1">
+	<<linkreplace 'Offer the food if you can fuck the girl'>>
+		<<set $player.godwill-->>
+		<<run $('#option1_desc, #option2, #option3').hide()>>
+		<<if $backpack.count('food') >= _foodGive>>
+			<<drop $backpack 'food' _foodGive>>
+		<<else>>
+			<<drop $storage 'food' _foodGive>>
+		<</if>>
+		<<run $('#option2').hide()>>
+		<<anongirl>>
+			Fuck you! Who do you think you are!
+		<</anongirl>>
+		<br /><br />
+		<<anonguy>>
+			Babe...
+		<</anonguy>>
+		<br /><br />
+			<<video 'cabin/uninvited_couple2'>>
+		<br /><br />
+		<<anongirl>>
+			Okey... I'll do it. But don't expect me to be happy about it...
+		<</anongirl>>
+		<br /><br />
+		<<linkreplace 'Tell her to undress'>>
+			<<video 'cabin/uninvited_couple3'>>
+			<br /><br />
+			She starts undressing while her man has knelt down and is gathering all the food cans, not even attempting to look at her.
+			<br /><br />
+			<div id="option3">
+				<<linkreplace 'Tell her to suck you'>>
+					<<set _sucked = true>>
+					<<video 'cabin/uninvited_couple4'>>
+					<br /><br />
+					You sit down in the chair, and the girl kneels down. She looks at her man one last time, who with a broad smile on his face, can't stop watching the cans of food he's gathered. The girl's gaze becomes mocking, and she seems intent on making him feel uncomfortable, starting to enthusiastically suck on your dick while looking at you.
+					<br /><br />
+				<</linkreplace>>
+			</div>
+			<<linkreplace 'Fuck her'>>
+				<<if !_sucked>>
+					<<run $('#option3').hide()>>
+				<</if>>
+				<<video 'cabin/uninvited_couple5'>>
+				<br /><br />
+				She reclines on her side on the carpet, facing her man who still hasn't even looked in your direction. You slowly slide your dick into her, and she unexpectedly tenses up and then relaxes. She's no longer concerned about what her man is doing; she's completely surrendered to you.
+				<br /><br />
+				<<linkreplace 'Cum'>>
+					<<horny_reset>>
+					<<video 'cabin/uninvited_couple6'>>
+					<br /><br />
+					You cum right inside her and she enjoys every drip of you as she continues to moan while your sperm is leaking out of her wet pussy.
+					<br /><br />
+					<<anonguy>>
+						Hey! What the hell! Babe! How could you allow that? We should leave.
+					<</anonguy>>
+					<br /><br />
+					<<link 'Escort them outside'>>
+						<<goto 'Wood cabin'>>
+					<</link>>
+				<</linkreplace>>
+			<</linkreplace>>
+		<</linkreplace>>
+	<</linkreplace>>
+	<<linkdesc 'option1_desc'>>
+		-<<=_foodGive>> food
+	<</linkdesc>>
+</div>
+
+<div id="option2">
+	<<linkreplace 'Give them food and tell them to get lost'>>
+		<<set $player.godwill++>>
+		<<run $('#option2_desc, #option1, #option3').hide()>>
+		<<if $backpack.count('food') >= _foodGive>>
+			<<drop $backpack 'food' _foodGive>>
+		<<else>>
+			<<drop $storage 'food' _foodGive>>
+		<</if>>
+		<center>
+			[img[setup.ImagePath+'places/cabin/uninvited_couple.jpg']]
+		</center>
+		<br /><br />
+			<<anongirl>>
+				Really? Thank you so much!!
+			<</anongirl>>
+			<br /><br />
+			Both the man and the woman wear a grateful smile on their faces. They quickly pack the food into their bags as if fearing you might change your mind.
+			<br /><br />
+			<<link 'Escort them outside'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+	<</linkreplace>>
+	<<linkdesc 'option2_desc'>>
+		-<<=_foodGive>> food
+	<</linkdesc>>
+</div>
+
+<div id="option3">
+	<<link 'Fight them'>>
+		<<set $enemies = []>>
+		<<newgirl>>
+		<<set $tmpGirl.strength += 10>>
+		<<run $enemies.push($tmpGirl)>>
+		<<newguy>>
+		<<set $tmpGuy.strength += 10>>
+		<<run $enemies.push($tmpGuy)>>
+		<<fight $enemies 'Wood cabin' 'Wood cabin' true>>
+	<</link>>
+</div>
+
+

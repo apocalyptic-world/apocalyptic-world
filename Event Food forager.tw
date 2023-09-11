@@ -1,0 +1,45 @@
+:: Event: Food forager {"position":"679,1083","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/kid_stealing_food.jpg']]
+</center>
+<br /><br />
+You hear a sound coming from a place where food is stored and decide to go check what the sound is. The door to the room is open and the sound keeps getting louder and louder. To your surprise, as you open the door, you see a small child in front of you, who with fearful eyes looks into your eyes, holding a few pieces of food in their hands.
+Amongst rooms, you pursued a faint noise to a storage room. Its door revealed a small, wary figure clutching stolen food.
+<br /><br />
+
+<<set _foodOptions = [$storage.count('food'), $backpack.count('food'), 5]>>
+<<set _foodGive = Math.min.apply(null, _foodOptions.filter(Boolean))>>
+<<if _foodGive && ($storage.count('food') || $backpack.count('food'))>>
+	<<linkreplace 'Tell him to take as much as he like'>>
+		<<run $('#option1_desc, #option2').hide()>>
+		<<if $storage.count('food') >= _foodGive>>
+			<<drop $storage 'food' _foodGive>>
+		<<else>>
+			<<drop $backpack 'food' _foodGive>>
+		<</if>>
+		<strong>You lost <<=_foodGive>> food</strong>
+		<br /><br />
+		A child with a wide smile on his face leans over and says <strong>"Thank you so much mister!"</strong> before taking a few more  food and quickly walking out of the building and disappearing into the nearby forest.
+		<br /><br />
+		<<link 'Leave'>>
+			<<set $player.godwilll++>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+		
+	<</linkreplace>>
+	<div id="option1_desc">
+		<<linkdesc>>
+		-<<=_foodGive>> food
+		<</linkdesc>>
+	</div>
+<</if>>
+<div id="option2">
+	<<link 'Throw him out'>>
+		<<set $player.godwill -= 5>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+</div>
+
+

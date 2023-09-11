@@ -1,0 +1,152 @@
+:: Girl view [sex no-redirect girlview] {"position":"2504,96","size":"100,100"}
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship += 3>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<goto 'Girl talk'>>
+	<</link>>
+<</if>>
+<<if $player.energy >= 30 && $tmpGirl.location !== 'garden'>>
+  <<if $tmpGirl.rape>>
+	  <<link 'Try to rape her'>>
+		  <<if $player.strength < $tmpGirl.strength>>
+			  <<goto 'Girl escape'>>
+		  <<else>>
+			  <<goto 'Girl fuck'>>
+		  <</if>>
+	  <</link>>
+  <<else>>
+	  <<link 'Fuck her'>>
+		  <<goto 'Girl fuck'>>
+	  <</link>>
+  <</if>>
+<</if>>
+<<if $game.location.basement && $tmpGirlCapture && $slaves.length < $basementLimit && $player.energy >= 30>>
+	<<link 'Try to capture her'>>
+		<<if $player.strength > $tmpGirl.strength>>
+			<<set $tmpGirl.capture = false>>
+			<<set $slaves.push($tmpGirl)>>
+			<<addhours 2>>
+			<<energy -30>>
+			<<goto 'Basement'>>
+			<<statsAdd 'people_captured'>>
+		<<else>>
+			<<goto 'Girl escape'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.location === 'garden'>>
+	<<if $player.energy >= 20>>
+		[[Grope|Grope]]
+	<</if>>
+<</if>>
+
+<<if $tmpGirl.location === 'basement'>>
+	<<if !$tmpGirl.milked && $player.energy > 30 && $backpack.has('breast_pump')>>
+	  <<link 'Milk her'>>
+		  <<goto 'Girl milk'>> 
+	  <</link>>
+	<</if>>
+	<<if $player.energy >= 10 && hasTime(1)>>
+		<<link 'Punish her'>>
+			<<if $backpack.has('paddle')>>
+				<<set $punishType = 'paddle'>>
+			<</if>>
+			<<goto 'Girl punish'>>
+		<</link>>
+	<</if>>
+<</if>>
+<<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
+	<<link 'Assign to garden'>>
+		<<set $tmpGirl.assignedTo = 'garden'>>
+		<<set $tmpGirl.gardenDay = 0>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'Girl view'>>
+		<</if>>
+	<</link>>
+<</if>>
+<<if $tmpGirl.relationship >= 50 && $slaveId !== undefined && !$tmpGirl.assignedTo>>
+	<<link 'Assign to streets'>>
+		<<set $tmpGirl.assignedTo = 'streets'>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'Girl view'>>
+		<</if>>
+	<</link>>
+<</if>>
+<<if typeof $slaveId !== 'undefined'>>
+	<<if $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+		<<if $backpack.has('pregnancy_potion')>>
+			<<link 'Give pregnancy potion'>>
+				<<goto 'Girl - pregnancy potion'>>
+			<</link>>
+		<</if>>
+		<<if $backpack.has('pregnancy_speed_potion')>>
+			<<link 'Give pregnancy speed potion'>>
+				<<goto 'Girl - pregnancy speed potion'>>
+			<</link>>
+		<</if>>
+	<</if>>
+	<<if $tmpGirl.assignedTo>>
+		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+			<<run delete $tmpGirl.assignedTo>>
+			<<goto 'Girl view'>>
+		<</link>>
+	<</if>>
+	<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
+	  <<link 'Wash her'>>
+	  		<<energy -10>>
+		  <<goto 'Slave - wash'>>
+	  <</link>>
+	<</if>>
+	<<if !$tmpGirl.gift>>
+		<<link 'Give gift'>>
+			<<script>>
+				Dialog.setup("Give gift", "Give gift");
+				Dialog.wiki(Story.get("Give gift").processText());
+				Dialog.open();
+	  		<</script>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.workout && $player.energy >= 10>>
+		<<link 'Workout together'>>
+			<<set $tmpGirl.workout = true>>
+			<<energy -10>>
+			<<goto 'Girl - workout together'>>
+		<</link>>
+	<</if>>
+	<<link 'Customize'>>
+		<<goto 'Girl customize'>>
+	<</link>>
+<</if>>
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<run delete $slaveId>>
+	<<run delete $charId>>
+	<<run delete $guestId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+

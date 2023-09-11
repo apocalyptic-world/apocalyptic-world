@@ -1,0 +1,46 @@
+:: Eve champagne home {"position":"2701,2664","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/rodger_bottles_dressup.webp']]
+</center>
+<br /><br />
+The next morning, as you wake up, you see that Eve is getting dressed.<br />
+She looks at you with a smile on her face.
+<br /><br />
+<<eve>>
+Good morning. We should get back
+<</eve>>
+<br /><br />
+The journey back goes without any problems. After a couple of hours, you have already arrived back in the village, and Roger is waiting for you with open arms.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/intro_tents.jpg']]
+</center>
+<br /><br />
+<<rodger>>
+	My heroes! I don't know what I would do without both of you. Thank you once again.
+<</rodger>>
+<<addhours 4>>
+<br /><br />
+<<if $characters.eve.corruption < 40>>
+	<<set $characters.eve.corruption +=5>>
+	<strong>Corruption with Eve increased by 5</strong>
+<<else>>
+	<strong>Can't increase corruption anymore with this action</strong>
+<</if>>
+<br />
+<<if $characters.eve.relationship < 35>>
+	<<set $characters.eve.relationship++>>
+	<strong>Relationship with Eve increased by 1</strong>
+<<else>>
+	<strong>Can't increase relationship anymore with this action</strong>
+<</if>>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Settlement'>>
+<</link>>
+
+<<set $characters.rodger.quests.champagne_day = $game.day>>
+
+

@@ -1,0 +1,100 @@
+:: Event: guard caught intruder {"position":"688,1226","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<<newgirl>>
+<<set _randomGuests = setup.getAvailablePersons18yo($guests)>>
+As you come out of your room in the morning, one of your daughters comes running towards you, loudly saying that one of your guards managed to catch a woman in the morning light who was trying to enter the resource room. He was able to apprehend her, and she is currently tied up behind the house. You decide to go and see what is really happening there.
+<br /><br />
+<<video 'cabin/intruder_caught1'>>
+<br /><br />
+Just as you have circled around the house and come into her line of sight, she starts screaming hysterically. Fear is visible in her eyes, but you can't understand what she's saying because there's something dirty shoved into her mouth. Her screams are so loud that you're starting to get annoyed. 
+<br /><br />
+<div id="option-slap">
+	<<linkreplace 'Slap her'>>
+		<<video 'cabin/intruder_caught2'>>
+		<br /><br />
+		You havedown and slapped her across the face. Instantly, she falls silent and just quietly watches you, waiting to see what you will do next.
+		<br /><br />
+		<<if recall($suppCode)>>
+			<<linkreplace 'Fuck her'>>
+				<<set _intruderFucked = true>>
+				<<run $('#option-slave, #option-release').hide()>>
+				<<video 'cabin/intruder_caught4'>>
+				<br /><br />
+				You lean in to look into her eyes and remove the dirty cloth from her mouth. Meanwhile, <<=setup.displayName($guests[_randomGuests[0][0]])>> notices you and decides to approach. Upon arrival, she starts laughing and flirtatiously says to you that she also wants to join in or at least watch and that you should start with her delicious mouth.
+				<br /><br />
+				<<linkreplace 'Fuck her mouth'>>
+					<<video 'cabin/intruder_caught3'>>
+					<br /><br />
+					While you untie your pants, <<=setup.displayName($guests[_randomGuests[0][0]])>> rips open girl's blouse and giggles as she stand behind her, holding her hair so she can't move her head.
+					<br />
+					You shove your dick inside the helpless girl and make her gag on your cock. 
+					<br /><br />
+					<<say $guests[_randomGuests[0][0]].name setup.ImagePath+'/people/anongirl.png'>>
+						I got an idea. Tie me too. I want to feel like her. Helpless. I want to watch as close as I can.
+					<</say>>
+					<br />
+					<<linkreplace 'Tie them both and bring them inside'>>
+						At <<=setup.displayName($guests[_randomGuests[0][0]])>>'s request, you tie her up as well, and you lead them into your room. <<=setup.displayName($guests[_randomGuests[0][0]])>> lies down next to the girl with a wide smile, as she watchines other girl being thrown into the bed in the doggy position.
+						<br /><br />
+						<<video 'cabin/intruder_caught5'>>
+						<br /><br />
+						You gently slide your dick inside intruders pussy but instead of taking it slow, you just start to pound her already wet pussy as fast and deep as you can. <<=setup.displayName($guests[_randomGuests[0][0]])>> just watches and moans together with the girl as she fantasies being in her place.
+						<br /><br />
+						<<video 'cabin/intruder_caught6'>>
+						<br /><br />
+						<<linkreplace 'Cum'>>
+							<<horny_reset>>
+							<<run $('#option-slave, #option-release').show()>>
+							<center>
+								[img[setup.ImagePath+'places/cabin/intruder_cum.webp']]
+							</center>
+							<br /><br />
+							Her legs start trembling, and after a moment, you pull out and cum your warm cum all over her back as her hands are tied behind her back and she tries to push you away from her.
+							<br /><br />
+						<</linkreplace>>
+					<</linkreplace>>
+				<</linkreplace>>
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc">
+				Fuck her
+				<<notPatreonIcon>>
+			</div>
+		<</if>>
+	<</linkreplace>>
+</div>
+
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="option-slave">
+		<<link 'Enslave her'>>
+			<<set $tmpGirl.capture = false>>
+			<<set $slaves.push($tmpGirl)>>
+			<<goto 'Basement'>>
+			<<statsAdd 'people_captured'>>
+		<</link>>
+	</div>
+<</if>>
+<div id="option-release">
+	<<linkreplace 'Release her'>>
+		<<if !_intruderFucked>>
+			<<run $('#option-slap').hide()>>
+			<<set $player.reputation++>>
+			<<set $player.godwill-->>
+		<</if>>
+		<<run $('#option-slave').hide()>>
+		
+		<center>
+			[img[setup.ImagePath+'places/cabin/intruder_release.gif']]
+		</center>
+		<br /><br />
+		You untie the girl and with tears in her eyes, she quietly mouths a thank you. She hesitates, saying that you will never see her again and she's very sorry. 
+		<br /><br />
+							
+		<<link 'Leave'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+

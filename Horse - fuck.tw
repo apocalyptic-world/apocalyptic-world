@@ -1,0 +1,54 @@
+:: Horse - fuck {"position":"290,1486","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+
+<<set _horseRideMapping = {
+	2: 'You instantly pull down her tank top and put her breast right into your mouth.<br />She tries to unbutton your shirt but instead you pull down her pants',
+	3: 'As her pants are down, you push her onto stack of hay and lick her juicy and wet pussy',
+	4: 'She struggles with your dick but after you decide to help her a bit she manages to get it all into her mouth',
+	5: 'You lay her on her back and pull her pants up a little and slowly slide into her.',
+	6: 'She drops on her knees and is ready to swallow your dick but instead of that you cum all over her face without a chance to warn her',
+}>>
+
+<<set _videoName = '/cabin/horse_fuck' + ($horseRideAction ?? 2)>>
+<<video `_videoName`>>
+<<if $horseRideAction !== 6>>
+	<<horny 20>>
+<</if>>
+<br /><br />
+<<= _horseRideMapping[($horseRideAction ?? 2)]>>
+<br /><br />
+<<if $horseRideAction !== 6>>
+	<<link 'Lick her'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 3>>
+	  <<goto `passage()`>> 
+  	<</link>>
+  <<link 'Blowjob'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 4>>
+	  <<goto `passage()`>> 
+  <</link>>
+  <<link 'Fuck her'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 5>>
+	  <<goto `passage()`>> 
+  <</link>>
+  
+  <<if $player.horny >= 100>>
+	<<link 'Cum'>>
+		<<addmins 5>>
+		<<set $horseRideAction = 6>>
+		<<horny_reset>>
+		<<goto `passage()`>> 
+	<</link>>
+  <</if>>
+<</if>>
+
+<<if $horseRideAction === 6>>
+	<<link 'Leave'>>
+		<<goto 'Fire place'>>
+	<</link>>
+<</if>>
+
+

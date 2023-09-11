@@ -1,0 +1,49 @@
+:: Octavia - burn settlement {"position":"2382,3010","size":"100,100"}
+<h1 class="ptitle">SETTLEMENT</h1>
+<br /><br />
+
+Your path is peaceful, paying no attention to anything along the roadside, you count the bees you see undisturbed. Already quite close, you lift your head to look at how far yet, and ahead you spot something terrifying - white smoke where the village of Rodger's is located...
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/octavia_burn.jpg']]
+</center>
+<br /><br />
+<<linkreplace 'Rush to the settlement'>>
+	<center>
+		[img[setup.ImagePath+'places/settlement/octavia_burn2.jpg']]
+	</center>
+	<br /><br />
+	When you have gotten very close, you notice that the grass around the church is on fire and the flames are very close. Chaos reigns all around, and people are rushing in all directions. Some are fleeing, while others are 	trying to get water to extinguish the flames that are increasingly nearing the church.
+	<br /><br />
+	<<linkreplace 'Help them put out fire'>>
+		As soon as you're ready to grab the bucket and run after water, you hear loud scream behind you and turn around to see who was that
+		<br /><br />
+		<center>
+			[img[setup.ImagePath+'places/settlement/finish_church_attack1.webp']]
+		</center>
+		<br /><br />
+		<<octavia>>
+			I had a feeling that we will met again.. KILL HIM!
+		<</octavia>>
+		<br /><br />
+		<center>
+			[img[setup.ImagePath+'places/settlement/octavia_burn3.jpg']]
+		</center>
+		<br /><br />
+		At that very moment, 3 grounders with loud shouts rush towards you. There is no retreat. You have to fight against them.
+		<br /><br />
+		<<link 'Fight them'>>
+			<<set $enemies = []>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<fight $enemies 'Octavia - burn settlement - won' 'Octavia - burn settlement - lost' true>>
+	<<set $fight.skipEnding = true>>
+		<</link>>
+	<</linkreplace>>
+<</linkreplace>>
+
+

@@ -1,0 +1,53 @@
+:: Random event - bikes #14 won {"position":"6451,242","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<<newgirl>>
+
+<br /><br />
+ <center>
+ [img[setup.ImagePath+'places/explore/random_event_motorcycle.webp']]
+ </center>
+<br /><br />
+As you finish off guys around the girl you're prepared to fight other 4 but they just drive off without looking back.
+<br /><br />
+<<set $player.reputation++>>
+<strong>Your reputation increased by 1</strong>
+<br /><br />
+ <center>
+ [img[setup.ImagePath+'places/explore/random_event_motorcycle_hug.webp']]
+ </center>
+ <br /><br />
+ Girl instantly jumps on you and hugs you with "Thank you! Thank you!"
+ <br />
+ She tells you that she's going to a place called <strong class="iitem">The Sanctuary</strong> before they jump us. She tells you that she really doesn't have a plan what to do...
+ <br /><br />
+ <<set 
+ 	$tmpGirlCapture = false,
+ 	$slaveId = null,
+	$charId = null
+ >>
+ <<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 30, 100)>>
+ <<run delete $slaveId>>
+ <<run delete $charId>>
+ <<run delete $guestId>>
+ <<include 'NPC info'>>
+
+<<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
+	<<link 'Capture her'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship - 30, 100)>>
+		<<run $slaves.push($tmpGirl)>>
+		<<goto 'Basement'>>
+	<</link>>
+<</if>>
+<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+	<<link 'Tell her that she can live at your place'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>
+		<<run $guests.push($tmpGirl)>>
+		<<goto 'Guest house'>>
+	<</link>>
+<</if>>
+
+<<link 'Leave her'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

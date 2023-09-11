@@ -1,0 +1,37 @@
+:: Fight cage - fight [bg-underground] {"position":"2061,1352","size":"100,100"}
+<h1 class="ptitle">FIGHT CAGE</h1>
+<<energy -40>>
+<<set $player.fight_today = true>>
+<<if typeof $player.fighter_rank === 'undefined'>>
+	<<set $player.fighter_rank to 100>>
+<</if>>
+<<set $randomEnemy = {
+	strength: 100 - $player.fighter_rank + random(25, 50)
+}>>
+<<if $player.strength > $randomEnemy.strength>>
+	<center>[img[setup.ImagePath+'places/underground/fight_win.webp']]</center>
+	<br /><br />
+	<<set $player.strength++>>
+	<<set $player.money += 5>>
+	<<set $player.fighter_rank-->>
+	<<if !$player.fighter_rank>>
+		<<set $player.fighter_rank = 1>>
+	<</if>>
+	<<set $player.reputation++>>
+	You <strong>WON</strong> the fight. 
+<<else>>
+	<center>[img[setup.ImagePath+'places/underground/fight_lost.webp']]</center>
+	<br /><br />
+	<<set $player.money -= 5>>
+	<<set $player.fighter_rank++>>
+	You <strong>LOST</strong> the fight. 
+<</if>>
+
+
+<br /><br />
+Your current fight rank is: #<strong><<print $player.fighter_rank>></strong>
+<br /><br />
+<<addmins 60>>
+[[Back|Fight cage]]
+
+

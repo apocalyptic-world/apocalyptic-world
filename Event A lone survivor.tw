@@ -1,0 +1,30 @@
+:: Event: A lone survivor {"position":"570,954","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/gate_lone_survivor.png']]
+</center>
+<br /><br />
+A lone survivor approaches the gate, claiming to be a doctor who can provide valuable medical assistance to your settlement. However, you also know that they have a history of stealing from other settlements. 
+<br /><br />
+<<anonguy>>
+	Please, sir. Can I stay here for one night? I'm hungry and I don't have the strength to continue my journey. I beg you. I could offer you something in return for it.. 
+<</anonguy>>
+<br /><br />
+<<if $backpack.has('food')>>
+	<<link 'Let him in'>>
+		<<drop $backpack 'food' 2>>
+		<<set $game.lone_survivor = true>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+<</if>>
+<<linkdesc>>
+	-2 food.
+<</linkdesc>>
+<<link 'Tell him to go away'>>
+	<<set $player.goodwill-->>
+	<<set $player.reputation-->>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

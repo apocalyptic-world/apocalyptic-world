@@ -1,0 +1,82 @@
+:: Guy view - guest [sex noredirect girlview] {"position":"5010,145","size":"100,100"}
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship += 3>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'Guy view - guest'>>
+		<<goto 'Girl talk'>>
+	<</link>>
+<</if>>
+
+	<<if !($player.companions['guest:' + $guestId] ?? false)>>
+		<<link 'Add as companion'>>
+			<<companionAdd 'guest' $guestId>>
+			<<run delete $tmpGirl.assignedTo>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
+	
+	<<link 'Move him to the basement cell'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<goto 'Guest move to basement'>>
+	<</link>>
+	
+	<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+		<<link 'Assign to'>>
+			<<dialog 'Assign to'>>
+				<<include 'Guest view assign to'>>	
+			<</dialog>>
+		<</link>>
+	<</if>>
+	
+	<<if $tmpGirl.assignedTo>>
+		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+			<<run delete $tmpGirl.assignedTo>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
+	
+	<<if !$tmpGirl.gift>>
+		<<link 'Give gift'>>
+			<<script>>
+				Dialog.setup("Give gift", "Give gift");
+				Dialog.wiki(Story.get("Give gift").processText());
+				Dialog.open();
+	  		<</script>>
+		<</link>>
+	<</if>>
+
+<<link 'Change name'>>
+		<<dialog 'Change name'>>	
+			What you will call your guest? <<textbox "_tmpGirlName" $tmpGirl.name>>
+			<<link 'OK'>>
+				<<set $tmpGirl.name = _tmpGirlName>>
+				<<dialogclose>>	
+				<<goto `passage()`>>
+			<</link>>
+		<</dialog>>	
+<</link>>
+	
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<run delete $charId>>
+	<<run delete $guestId>>
+	<<run delete $slaveId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+

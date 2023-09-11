@@ -1,0 +1,30 @@
+:: Slave market [Place bg-underground] {"position":"1943,1691","size":"100,100"}
+<h1 class="ptitle">SLAVE MARKET</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/slave_market_head.jpg']]
+</div>
+<br /><br />
+Works from 14:00 till 19:00<br /><br />
+
+You can buy new slaves or sell your old ones.
+<br />
+Easy way to get some extra caps but at what cost? 
+<br /><br />
+<<if timeBetween('14:00', '19:00')>>
+  <<link 'Buy'>>
+	  <<goto 'Slave market - buy'>>
+  <</link>>
+  <<if $slaves.length > 0>>
+	<<link 'Sell'>>
+	  <<goto 'Slave market - sell'>>
+	<</link>>
+  <</if>>
+<</if>>
+
+<<if ($player.stats.slaves_sold ?? 0) >= 30 && !$player.quests.slave_market_vip>>
+	<<set $player.quests.slave_market_vip = true>>
+	<<goto 'Slave market - VIP introduction'>>
+<</if>>
+[[Leave|Underground city]]
+
+

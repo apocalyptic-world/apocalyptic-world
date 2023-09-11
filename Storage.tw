@@ -1,0 +1,97 @@
+:: Storage {"position":"974,766","size":"100,100"}
+<<if typeof $storage === 'undefined'>>
+  <<newinv $storage>>
+  <<set $storage to Inventory.create()>>
+<</if>>
+<<set 
+	_qtyTransferBackpack = {},
+	_qtyTransferStorage = {}
+>>
+<<set _backpackItems = $backpack.table>>
+<<set _storageItems = $storage.table>>
+<div id="storage-transfer">
+	<div id="storage-transfer-left">
+		<fieldset>
+  			<legend>Backpack</legend>
+			<table>
+				<<for _itemStorageBackpack, _amountStorageTransfer range _backpackItems>>
+					<<capture _itemStorageBackpack, _qtyTransferBackpack>>
+						<<if Item.get(_itemStorageBackpack).unique>>
+							<<continue>>
+						<</if>>
+						<<set $icon = _itemStorageBackpack>>
+						<tr>
+							<td class="icon">
+								[img[setup.ImagePath+'game/inventory/' + $icon + '.png']]
+							</td>
+							<td class="name"><<=Item.get(_itemStorageBackpack).name>></td> 
+							<td class="qty">  
+								<<numberbox `"_qtyTransferBackpack[_itemStorageBackpack]"` _amountStorageTransfer>>
+							</td> 
+							<td class="transfer">
+								<<link '>>'>>
+									<<if parseInt(_qtyTransferBackpack[_itemStorageBackpack]) < 0 || $backpack.count(_itemStorageBackpack) < parseInt(_qtyTransferBackpack[_itemStorageBackpack])>>
+										<<notify 6s>>
+											Error. Not enough stock
+										<</notify>>
+									<<else>>
+										<<transfer $backpack $storage _itemStorageBackpack `parseInt(_qtyTransferBackpack[_itemStorageBackpack])`>>
+										<<script>>
+											Dialog.setup("Storage", "Storage");
+											Dialog.wiki(Story.get("Storage").processText());
+											Dialog.open();
+										<</script>>
+										<<goto `passage()`>>
+									<</if>>
+								<</link>>
+							</td>
+						</tr>
+					<</capture>>
+				<</for>>
+			</table>
+		</fieldset>
+	</div>
+	<div id="storage-transfer-right">
+		<fieldset>
+  			<legend>Storage</legend>
+			<table>
+				<<for _itemStorageBackpack, _amountStorageTransfer range _storageItems>>
+					<<capture _itemStorageBackpack, _qtyTransferStorage>>
+						<<if Item.get(_itemStorageBackpack).unique>>
+							<<continue>>
+						<</if>>
+						<<set $icon = _itemStorageBackpack>>
+						<tr>
+							<td class="transfer">
+								<<link '<<'>>
+									<<if parseInt(_qtyTransferStorage[_itemStorageBackpack]) < 0 || $storage.count(_itemStorageBackpack) < parseInt(_qtyTransferStorage[_itemStorageBackpack])>>
+										<<notify 6s>>
+											Error! Not enough stock
+										<</notify>>
+									<<else>>
+									<<transfer $storage $backpack _itemStorageBackpack `parseInt(_qtyTransferStorage[_itemStorageBackpack])`>>
+										<<script>>
+											Dialog.setup("Storage", "Storage");
+											Dialog.wiki(Story.get("Storage").processText());
+											Dialog.open();
+										<</script>>
+										<<goto `passage()`>>
+									<</if>>
+								<</link>>
+							</td>
+							<td class="qty">  
+								<<numberbox `"_qtyTransferStorage[_itemStorageBackpack]"` _amountStorageTransfer>>
+							</td> 
+							<td class="icon">
+								[img[setup.ImagePath+'game/inventory/' + $icon + '.png']]
+							</td>
+							<td class="name"><<=Item.get(_itemStorageBackpack).name>></td> 
+						</tr>
+					<</capture>>
+				<</for>>
+			</table>
+		</fieldset>
+	</div>
+</div>
+
+

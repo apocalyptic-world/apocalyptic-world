@@ -1,0 +1,23 @@
+:: Guy fuck [sex] {"position":"5137,29","size":"100,100"}
+[[Blowjob|Guy fuck - blowjob]]
+[[Anal|Guy fuck - anal]]
+
+<<link 'End'>>
+  	<<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('girlview')>>
+		<<if typeof $slaveId !== 'undefined'>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<run delete $slaveId>>
+		<<elseif typeof $guestId !== 'undefined'>>
+			<<set $guests[$guestId] = $tmpGirl>>
+			<<run delete $guestId>>
+		<<elseif typeof $charId !== 'undefined'>>
+			<<set $characters[$charId] = $tmpGirl>>
+			<<run delete $charId>>
+		<</if>>
+		<<goto $tmpGirlViewBack>>
+	<<else>>
+		<<goto [[Guy view]]>>
+	<</if>>
+<</link>>
+
+

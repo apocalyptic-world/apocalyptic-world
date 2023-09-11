@@ -1,0 +1,25 @@
+:: Horse {"position":"58,1480","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/horse_black.jpg']]
+</center>
+<br /><br />
+<<link 'Groom him'>>
+	<<goto 'Horse - pet'>>
+<</link>>
+<<link 'Change name'>>
+	<<dialog 'Change name'>>	
+		What you will call your horse? <<textbox "_tmpHorseName" $player.horse>>
+		<<link 'OK'>>
+			<<set $player.horse = _tmpHorseName>>
+			<<dialogclose>>	
+			<<goto 'Horse'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
+<<link 'Leave'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

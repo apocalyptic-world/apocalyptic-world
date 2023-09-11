@@ -1,0 +1,47 @@
+:: Vincent - sanctuary go #2 {"position":"3056,1146","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/farm/sanctuary_intro_run.jpg']]
+</center>
+<br /><br />
+From around the corner, Vincent suddenly appears, running as fast as possible while shouting something from a distance. You realize that the situation is not good and start running as fast as your legs can carry you, as there are at least 10 people chasing after him.
+<br /><br />
+<<vincent>>
+	RUN, RUN! RUUUUUUN
+<</vincent>>
+<br /><br />
+<<linkreplace 'Run'>>
+	<<if $game.vincentSanctuaryGirlFun>>
+		<<set _companionKeys = Object.keys($player.companions)>>
+		<<set _firstCompanion = _companionKeys[0].split(':')[1]>>
+		
+		<strong class="gender-girl"><<=$guests[_firstCompanion].name>></strong> is still on the ground, on her knees, and she believe that you are chasing after the girl so that she doesn't escape. However, suddenly, the girl who was peering at you through the hole in the wall comes running from the corner with a knife in her hand and stabs <strong class="gender-girl"><<=$guests[_firstCompanion].name>></strong> in the neck.
+		<br /><br />
+		<center>
+			[img[setup.ImagePath+'places/farm/sanctuary_intro_stab.gif']]
+		</center>
+		<br /><br />
+		She instantly drops on the ground and there isn't anything you can do to help her.
+		<br /><br />
+		
+		<<companionRemove _companionKeys[0]>>
+		<<companionRearange _firstCompanion>>
+		<<run $guests.splice(_firstCompanion, 1)>>
+	<</if>>	
+			
+		At some point, you manage to break away and hide in one of the collapsed buildings nearby. You are tired and frightened, realizing that things probably won't go as planned.
+		<br /><br />
+		<<vincent>>
+			Fuck, fuck, fuck! I'm sorry! I don't know what got into me... This is a suicide mission... It's impossible. There were so many more of them than I had thought, and the guards are practically on every corner. Unfortunately, I'll have to abandon this idea. It's better to go back home. I am sorry...
+		<</vincent>>
+		<br /><br />
+		<<link 'Go home'>>
+			<<run delete $game.vincentSanctuaryGirlFun>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+<</linkreplace>>
+
+<<set $characters.vincent.quests.sanctuary_done = true>>
+
+

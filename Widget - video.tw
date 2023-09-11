@@ -1,0 +1,11 @@
+:: Widget - video [widget] {"position":"134,757","size":"100,100"}
+<<widget video>>
+	<<set _extension = ($args[1] ?? 'mp4')>>
+	<<set _videoType = 'video/' + _extension>>
+	<<set $url to setup.videoPath+'/'+$args[0]+'.' + _extension>>
+	<video controls autoplay loop onloadstart="this.volume=0.0">
+  		<source @src="$url">
+	</video>
+<</widget>>
+
+

@@ -1,0 +1,40 @@
+:: Basement event - try escape {"position":"7445,25","size":"100,100"}
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/basement/try_escape.webp']]
+</center>
+<br /><br />
+Your hear some noise and decide to check it out. You catch  <strong><<=$slaves[$eventSlaveId].name>></strong> by surprise as she's trying to escape.
+<br />
+She notices you and stares at you with fear in her eyes.
+<br /><br />
+
+<div id="basement-event-button">
+   <<link 'Punish her'>>
+	  <<addmins 15>>
+	  <<run $('#basement-event-button').slideToggle()>>
+	  <<run $('#basement-event-action').slideToggle()>>
+  	<</link>>
+</div>
+
+<div id="basement-event-action" style="display:none;">
+	<center>
+		[img[setup.ImagePath+'places/basement/try_escape_punish.webp']]
+</center>
+<br /><br />
+You tie her against the wall and thrash her back as hard as you can with your whip.
+<br /><br />
+
+<<set $slaves[$eventSlaveId].sub++>>
+
+<strong><<=$slaves[$eventSlaveId].name>> submission increased by 1</strong>
+
+<br /><br />
+</div>
+
+<<link 'Leave'>>
+	<<goto 'Basement'>>
+<</link>>
+
+

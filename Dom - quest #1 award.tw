@@ -1,0 +1,61 @@
+:: Dom - quest #1 award {"position":"3674,1458","size":"100,100"}
+<h1 class="ptitle">DOM'S HOUSE</h1>
+<br /><br />
+
+<<set _actionsMapping = {
+	1: 'Without saying a word she undresses fully and stands shyly in front of you',
+	2: 'Shyly and quietly she drops on her knees and pulls your dick out. You can see in her eyes that she is amazed by it. She starts to suck it cold but after a moment warms up and smiles at you',
+	3: 'She climbs on top of you and jerks you off while you suck her hard nipples inside your mouth',
+	4: 'You lay her on her back and pull her pants up a little and slowly slide into her.',
+	5: 'She spreads her legs wide open as you fuck her wet pussy. You feel that she is enjoying it but tries to be quiet. Probably because of others in next room.',
+	6: 'Without warning her you cum right inside her. She tries to break free but you hold her down as your cum starts dripping out of her pussy'
+}>>
+
+<<set _videoName = '/streets/dom_quest1_award' + ($game.domSexAction ?? 1)>>
+<<video `_videoName`>>
+<<if $game.domSexAction !== 6 && $game.domSexAction !== 3>>
+	<<horny 20>>
+<</if>>
+<br /><br />
+<<= _actionsMapping[($game.domSexAction ?? 1)]>>
+<br /><br />
+<<if $game.domSexAction !== 6>>
+	<<link 'Lick her breasts'>>
+	  <<addmins 10>>
+	  <<set $game.domSexAction = 3>>
+	  <<goto `passage()`>> 
+  	<</link>>
+  <<link 'Blowjob'>>
+	  <<addmins 10>>
+	  <<set $game.domSexAction = 2>>
+	  <<goto `passage()`>> 
+  <</link>>
+  <<link 'Missionary'>>
+	  <<addmins 10>>
+	  <<set $game.domSexAction = 4>>
+	  <<goto `passage()`>> 
+  <</link>>
+  <<link 'Reverse cowgirl'>>
+	  <<addmins 10>>
+	  <<set $game.domSexAction = 5>>
+	  <<goto `passage()`>> 
+  <</link>>
+  
+  <<if $player.horny >= 100>>
+	<<link 'Cum'>>
+		<<addmins 5>>
+		<<set $game.domSexAction = 6>>
+		<<horny_reset>>
+		<<goto `passage()`>> 
+	<</link>>
+  <</if>>
+<</if>>
+
+<<if $game.domSexAction === 6>>
+	<<link 'Leave'>>
+		<<run delete $game.domSexAction>>
+		<<goto 'Underground city'>>
+	<</link>>
+<</if>>
+
+

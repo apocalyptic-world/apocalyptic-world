@@ -1,0 +1,31 @@
+:: Guest move to basement {"position":"1335,279","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+<center>
+	[img[setup.ImagePath+'places/guesthouse/move_to_basement.webp']]
+</center>
+<br /><br />
+You tell <<=$tmpGirl.name>> that you will take her basement cell. <br />
+She starts to resist and scream and tries to escape your grab and fails as you throw
+<br /><br />
+
+<center>
+	[img[setup.ImagePath+'places/guesthouse/move_to_basement2.webp']]
+</center>
+<br /><br />
+She starts to cry while laying on the ground.
+<br /><br />
+<<set $tmpGirl.relationship -= 30>>
+<strong><<=$tmpGirl.name>> relationship decreased by 30</strong>
+<br /><br />
+
+<<link 'Continue'>>
+	<<companionRemove 'guest:' + $guestId>>
+	<<companionRearange $guestId>>
+	<<set $tmpGirl.assignedTo = null>>
+	<<run $guests.splice($guestId, 1)>>		
+	<<set $slaves.push($tmpGirl)>>
+	<<run delete $guestId>>
+	<<goto 'Basement'>>
+<</link>>
+
+

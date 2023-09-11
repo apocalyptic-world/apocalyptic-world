@@ -1,0 +1,64 @@
+:: Settlement - build church [bg-settlement] {"position":"2577,2227","size":"100,100"}
+<h1 class="ptitle">CHURCH</h1>
+<<if typeof $locationData === 'undefined'>>
+	<<set $locationData = {
+		settlement: {
+			church_level: 0
+		}
+	}>>
+<</if>>
+<center>
+	[img[setup.ImagePath+'places/settlement/intro_foundation.png']]
+</center>
+<br /><br />
+Church done: (<<=$locationData.settlement.church_level * 20>>%)
+<br /><br />
+<<if $locationData.settlement.church_level === 0>>
+	You need <strong class="iitem">50 wood</strong> to help with the building<br /><br />
+	<<if $backpack.count('wood') >= 50 && $player.energy >= 80>>
+		<<link 'Help build church'>>
+			<<drop $backpack 'wood' 50>>
+			<<set $locationData.settlement.church_level++>>
+			<<addhours 8>>
+			<<energy -80>>
+			<<goto 'Settlement - build church #1'>>
+		<</link>>
+	<</if>>
+<<elseif $locationData.settlement.church_level === 1>>
+	You need <strong class="iitem">50 wood</strong> to help with the building<br /><br />
+	<<if $backpack.count('wood') >= 50 && $player.energy >= 80>>
+		<<link 'Help build church'>>
+			<<drop $backpack 'wood' 50>>
+			<<addhours 8>>
+			<<energy -80>>
+			<<set $locationData.settlement.church_level++>>
+			<<goto 'Settlement - build church #2'>>
+		<</link>>
+	<</if>>
+<<elseif $locationData.settlement.church_level === 2 || $locationData.settlement.church_level === 3>>
+	<<if $player.energy >= 80>>
+	  <<link 'Help build church'>>
+		  <<addhours 8>>
+		  <<energy -80>>
+		  <<set $locationData.settlement.church_level++>>
+		  <<goto 'Settlement - build church #2'>>
+	  <</link>>
+	<</if>>
+<<else>>
+	You need <strong class="iitem">5 ropes</strong> to help finish the building<br /><br />
+	<<if $backpack.count('rope') >= 5 && $player.energy >= 80>>
+		<<link 'Finish church church'>>
+			<<drop $backpack 'rope' 5>>
+			<<addhours 8>>
+			<<energy -80>>
+			<<set $game.location.settlement_church = true>>
+			<<goto 'Settlement - church finished'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<link 'Leave'>>
+	<<goto 'Main square'>>
+<</link>>
+
+

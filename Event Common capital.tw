@@ -1,0 +1,83 @@
+:: Event: Common capital {"position":"336,1079","size":"100,100"}
+<h1 class="ptitle">GUESTHOUSE</h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_common_capital.webp']]
+</center>
+<br /><br />
+
+<<set _persons = setup.getPersonsForLocation($guests, 'garden')>>
+<<set _randomPersons = setup.getRandomPersons(_persons, 2)>>
+<<set 
+	_randomPerson1Id = _randomPersons[0],
+	_randomPerson2Id = _randomPersons[1]
+>>
+<<set _money = randomInteger(50, 75)>>
+<<set _splitMoneyPerPerson = Math.round(_money / 3, 0)>>
+<<set _splitMoney = _money - _splitMoneyPerPerson * 2>>
+<strong><<=$guests[_randomPerson1Id].name>></strong> and <strong><<=$guests[_randomPerson2Id].name>></strong> are arguing and fighting over a rusty metal box which lays on the ground between them.<br />
+They both claim ownership over the coins inside; one for finding the box, and the other for getting the lock open.
+There are <strong class="iitem"><<=_money>></strong> caps inside, enough to considerably help the entire colony if needed.
+<br /><br />
+
+<div id="option1">
+	<<set _linkName = 'Interview ' + $guests[_randomPerson1Id].name>>
+	<<linkreplace `_linkName`>>
+		<<set $guestId = _randomPerson1Id>>
+		<<set $tmpGirl = $guests[_randomPerson1Id]>>
+		<<capture $tmpGirl>>
+			<<include 'NPC info'>>
+		<</capture>>
+	<</linkreplace>>
+</div>
+<div id="option2">
+	<<set _linkName = 'Interview ' + $guests[_randomPerson2Id].name>>
+	<<linkreplace `_linkName`>>
+		<<set $guestId = _randomPerson2Id>>
+		<<set $tmpGirl = $guests[_randomPerson2Id]>>
+		<<capture $tmpGirl>>
+			<<include 'NPC info'>>
+		<</capture>>
+	<</linkreplace>>
+</div>
+<<linkreplace 'Render judgment'>>
+	<br />
+	You've decided.
+	<br /><br />
+	<<set _linkName = 'Give box to ' + $guests[_randomPerson1Id].name>>
+	<<link `_linkName`>>
+		<<set $guests[_randomPerson1Id].relationship = Math.min($guests[_randomPerson1Id].relationship + 10, 100)>>
+		<<set $guests[_randomPerson2Id].relationship -= 20>>
+		<<goto 'Guest house'>>
+	<</link>>
+	<<linkdesc>>
+		+10 relationship <<=$guests[_randomPerson1Id].name>>; -20 relationship <<=$guests[_randomPerson2Id].name>>
+	<</linkdesc>>
+	<<set _linkName = 'Give box to ' + $guests[_randomPerson2Id].name>>
+	<<link `_linkName`>>
+		<<set $guests[_randomPerson2Id].relationship = Math.min($guests[_randomPerson2Id].relationship + 10, 100)>>
+		<<set $guests[_randomPerson1Id].relationship -= 20>>
+		<<goto 'Guest house'>>
+	<</link>>
+	<<linkdesc>>
+		+10 relationship <<=$guests[_randomPerson2Id].name>>; -20 relationship <<=$guests[_randomPerson1Id].name>>
+	<</linkdesc>>
+	<<link 'Split between you three'>>
+		<<set $guests[_randomPerson2Id].relationship -= 10>>
+		<<set $guests[_randomPerson1Id].relationship -= 10>>
+		<<set $player.money += _splitMoney>>
+		<<goto 'Guest house'>>
+	<</link>>
+	<<linkdesc>>
+		+<<=_splitMoney>> caps; -10 relationship
+	<</linkdesc>>
+	<<link 'Keep them to yourself'>>
+		<<set $guests[_randomPerson2Id].relationship -= 20>>
+		<<set $guests[_randomPerson1Id].relationship -= 20>>
+		<<set $player.money += _money>>
+		<<goto 'Guest house'>>
+	<</link>>
+	<<linkdesc>>+<<=_money>> caps; -20 relationship<</linkdesc>>
+<</linkreplace>>
+
+

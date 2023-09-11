@@ -1,0 +1,544 @@
+:: Widget - sleep [widget] {"position":"20,634","size":"100,100"}
+<<widget sleep>>
+	<<set $morningMessages = {
+		main: [],
+		shop: [],
+		slaves: []
+	}>>
+	<<set $game.sickPeople = []>>
+	<<run delete $tmpGirlViewBack>>
+	<<run delete $tmpGirlBack>>
+	<<set $pregnancyHappening = null>>
+	<<set $scavengingDidntReturn = null>>
+	<<set $energyPenalty = 0>>
+	<<if $gameDate.getHours() < 8>>
+		<<set $addDay = 0>>
+		<<set $energyPenalty = 8 - $gameDate.getHours()>>
+	<<else>>
+		<<set $addDay = 1>>
+	<</if>>
+	
+	<<run 
+		$gameDate.setDate($gameDate.getDate() + $addDay);
+		$gameDate.setHours(8);
+		$gameDate.setMinutes(0);
+	>>
+	
+	<<if typeof $storage === 'undefined'>>
+  		<<newinv $storage>>
+  		<<set $storage to Inventory.create()>>
+	<</if>>
+	<<set _isStorageAvailable = ($game.location.shop ?? false)>>
+
+  <<set $player.energy = $player.maxEnergy>>
+  <<if $storage.has('food')>>
+  		<<drop $storage 'food' 1>>
+		<<set $player.hunger = 100>>
+  <<elseif $backpack.has('food')>>
+  		<<drop $backpack 'food' 1>>
+		<<set $player.hunger = 100>>
+  <<else>>
+  	  <<set $player.hunger -= 30>>
+  <</if>>
+  <<set $player.mast to false>>
+  <<set $player.showered to false>>
+  <<set $player.fight_today to false>>
+  <<set $player.drunk = 0>>
+  <<set $player.nap = false>>
+  <<horny 5>>
+  <<set $game.day += 1>>
+  
+  <<for _locationEventI, _locationEvent range ($locationEvents ?? {})>>
+  	<<set $locationEvents[_locationEventI] = false>>
+  <</for>>
+  
+<<set $giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
+
+// Horse
+<<if ($player.horse ?? false)>>
+	<<if typeof $characters.horse === 'undefined'>>
+		<<set $characters.horse = {
+			name: $player.horse,
+			food: 100
+		}>>
+	<</if>>
+	<<set $characters.horse.food -= 40>>
+	<<if $storage.has('hay')>>
+		<<drop $storage 'hay' 1>>
+		<<set $characters.horse.food = 100>>
+	<<elseif $backpack.has('hay')>>
+		<<drop $backpack 'hay' 1>>
+		<<set $characters.horse.food = 100>>
+	<<elseif $characters.horse.food >0>>
+		<<set $morningMessages.main.push('Your horse is starving')>>
+	<</if>>
+	
+	<<if $characters.horse.food <= 0>>
+		<<run delete $player.horse>>
+		<<run delete $characters.horse>>
+		<<set $morningMessages.main.push('Your horse died of starvation')>>
+	<</if>>
+<</if>>
+
+<<for _i to 0; _i lt $slaves.length; _i++>>
+	<<capture _i>>
+		<<set $slaves[_i].talked to false>>
+		<<set $slaves[_i].milked to false>>
+		<<set $slaves[_i].groped to false>>
+		<<set $slaves[_i].washed = false>>
+		<<set $slaves[_i].workout to false>>
+		<<set $slaves[_i].gift = false>>
+		<<set $slaves[_i].offerSlave = false>>
+		<<if $slaves[_i].horny < 80>>
+			<<set $slaves[_i].horny++>>
+		<</if>>
+		
+		// Wash beauty
+		<<if typeof $slaves[_i].washDays !== 'undefined'>>
+			<<set $slaves[_i].washDays-->>
+			<<set $slaves[_i].beauty -= $slaves[_i].washBeauty>>
+			<<if $slaves[_i].washDays>>
+				<<run delete $slaves[_i].washDays>>
+			<</if>>
+		<</if>>
+		
+		// Pregnancy
+		<<if typeof $slaves[_i].pregnancy !== 'undefined'>>
+			<<set $slaves[_i].pregnancy++>>
+			<<if ($slaves[_i].traits ?? []).includes('breeder')>>
+				<<set $slaves[_i].pregnancy++>>
+			<</if>>
+			<<if $slaves[_i].pregnancy == 8>>
+				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' told you that <strong>she is pregnant</strong>')>>
+				<<set $characters.vincent.quests.pregnancy = true>>
+			<</if>>
+			
+			<<if $slaves[_i].pregnancy > 30 && $slaves[_i].assignedTo === 'streets' && setup.percentageChance(10)>>
+				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<run delete $slaves[_i].pregnancy>>
+			<</if>>
+			
+			<<if !$pregnancyHappening && $slaves[_i].pregnancy > 260 && ($slaves[_i].pregnancy > 280 || randomInteger(1,3) === 3)>>
+				<<set $tmpGirl = $slaves[_i]>>
+				<<set $pregnancyHappening = {
+					type: 'slave',
+					id: _i
+				}>>
+			<</if>>
+		<</if>>
+		
+		// Assigned jobs
+		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<if $slaves[_i].assignedTo === 'garden' && !_isSick>>
+			<<set $slaves[_i].gardenDay++>>
+			<<set _foodGive = $giveFood>>
+			<<if ($slaves[_i].traits ?? []).includes('gardener')>>
+				<<set _foodGive++>>
+			<</if>>
+			<<if $slaves[_i].gardenDay == 3>>
+				<<set $slaves[_i].gardenDay = 0>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'food' _foodGive>>
+				<<else>>
+					<<pickup $backpack 'food' _foodGive>>
+				<</if>>
+				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
+			<</if>>
+		<</if>>
+		<<if $slaves[_i].assignedTo === 'streets' && !_isSick>>
+			<<set _girlChanceToDie = 5>>
+			<<if ($slaves[_i].endurace ?? 0) > 10>>
+				<<set _girlChanceToDie = 4>>
+			<<elseif ($slaves[_i].endurace ?? 0) > 20>>
+				<<set _girlChanceToDie = 3>>
+			<</if>>
+			
+			<<if $characters.dom.quests.accepted_deal>>
+				<<set _girlChanceToDie = 1>>
+			<</if>>
+			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
+				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
+				<<set $slaves.splice(_i, 1)>>
+				<<set _i-->>
+				<<continue>>
+			<<else>>
+				<<if randomInteger(0, 1) === 0>>
+					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<set _moneyEarnedTax = 80>>
+					<<if $characters.dom.quests.accepted_deal>>
+						<<set _moneyEarnedTax = 40>>
+					<</if>>
+					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
+					<<set _moneyEarned += Math.round($slaves[_i].sub / 25, 0)>>
+					<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
+					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
+					<<set $player.money += _moneyEarned>>
+					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+				<</if>>
+			<</if>>
+		<</if>>
+		
+		// Starvation
+		<<if $slaves[_i].food <= 10>>
+			<<if $storage.has('food')>>
+				<<drop $storage 'food' 1>> 
+				<<set $slaves[_i].food to 100>>
+			<<elseif $backpack.has('food')>>
+				<<drop $backpack 'food' 1>> 
+				<<set $slaves[_i].food to 100>>
+			<<else>>
+				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' died of hunger. You dont have enough food')>>
+				<<set $slaves.splice(_i, 1)>>
+				<<set _i-->>
+				<<continue>>
+			<</if>>
+		<</if>>
+		<<if setup.getAge($slaves[_i]) > 3>>
+			<<set $slaves[_i].food -= 30>>
+		<</if>>
+		
+		// Sick
+		<<if _isSick>>
+			<<set $slaves[_i].sick.days-->>
+			<<if $slaves[_i].sick.days <= 0>>
+				<<run delete $slaves[_i].sick>>
+			<</if>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+<<run $slaves.filter(n=>n)>>
+<<set $scavengingDidntReturn = null>>
+<<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
+	<<capture _guestI>>
+		<<set $guests[_guestI].talked to false>>
+		<<set $guests[_guestI].milked to false>>
+		<<set $guests[_guestI].groped to false>>
+		<<set $guests[_guestI].workout to false>>
+		<<set $guests[_guestI].washed = false>>
+		<<set $guests[_guestI].gift = false>>
+		<<set $guests[_guestI].washedBathhouse = false>>
+		<<if $guests[_guestI].horny < 80>>
+			<<set $guests[_guestI].horny++>>
+		<</if>>
+		
+		// Wash beauty
+		<<if typeof $guests[_guestI].washDays !== 'undefined'>>
+			<<set $guests[_guestI].washDays-->>
+			<<set $guests[_guestI].beauty -= $guests[_guestI].washBeauty>>
+			<<if $guests[_guestI].washDays>>
+				<<run delete $guests[_guestI].washDays>>
+			<</if>>
+		<</if>>
+		
+		// Leave
+		<<if $guests[_guestI].relationship < 0>>
+			<<companionRemove 'guest:' + _guestI>>
+			<<companionRearange _guestI>>
+			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning. She probably decided to leave this place')>>
+			<<set $guests.splice(_guestI, 1)>>
+			<<set _guestI-->>
+			<<continue>>
+		<</if>>
+		
+		// Pregnancy
+		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
+			<<set $guests[_guestI].pregnancy++>>
+			<<if ($guests[_guestI].traits ?? []).includes('breeder')>>
+				<<set $guests[_guestI].pregnancy++>>
+			<</if>>
+			<<if $guests[_guestI].pregnancy == 8>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>')>>
+				<<set $characters.vincent.quests.pregnancy = true>>
+			<</if>>
+			
+			<<if $guests[_guestI].pregnancy > 30 && $guests[_guestI].assignedTo === 'streets' && setup.percentageChance(1)>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<run delete $guests[_guestI].pregnancy>>
+			<</if>>
+			
+			<<if !$pregnancyHappening && $guests[_guestI].pregnancy > 260 && ($guests[_guestI].pregnancy > 280 || randomInteger(1,3) === 3)>>
+				<<set $tmpGirl = $guests[_guestI]>>
+				<<set $pregnancyHappening = {
+					type: 'guest',
+					id: _guestI
+				}>>
+			<</if>>
+		<</if>>
+		
+		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
+		// Assigned jobs
+		<<if $guests[_guestI].assignedTo === 'garden' && !_isSick>>
+			<<set $guests[_guestI].gardenDay++>>
+			<<set _foodGive = $giveFood>>
+			<<if ($guests[_guestI].traits ?? []).includes('gardener')>>
+				<<set _foodGive++>>
+			<</if>>
+			<<if $guests[_guestI].gardenDay == 3>>
+				<<set $guests[_guestI].gardenDay = 0>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'food' _foodGive>>
+				<<else>>
+					<<pickup $backpack 'food' _foodGive>>
+				<</if>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
+			<</if>>
+		<</if>>
+		
+		
+		<<if $guests[_guestI].assignedTo === 'streets' && !_isSick>>
+			<<set _girlChanceToDie = 5>>
+			<<if ($guests[_guestI].endurace ?? 0) > 10>>
+				<<set _girlChanceToDie = 4>>
+			<<elseif ($guests[_guestI].endurace ?? 0) > 20>>
+				<<set _girlChanceToDie = 3>>
+			<</if>>
+			
+			<<if $characters.dom.quests.accepted_deal>>
+				<<set _girlChanceToDie = 1>>
+			<</if>>
+			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
+				<<set _compKeyRemove = 'guest:' + _guestI>>
+				<<companionRemove `_compKeyRemove`>>
+				<<companionRearange _guestI>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
+				<<set $guests.splice(_i, 1)>>
+				<<set _i-->>
+				<<continue>>
+			<<else>>
+				<<if randomInteger(0, 1) === 0>>
+					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<set _moneyEarnedTax = 80>>
+					<<if $characters.dom.quests.accepted_deal>>
+						<<set _moneyEarnedTax = 40>>
+					<</if>>
+					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
+					<<set _moneyEarned += Math.round($guests[_guestI].sub / 25, 0)>>
+					<<set _moneyEarned += Math.round($guests[_guestI].pussy / 25, 0)>>
+					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
+					<<set $player.money += _moneyEarned>>
+					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+				<</if>>
+			<</if>>
+		<</if>>
+		
+		
+		<<if $guests[_guestI].assignedTo === 'forest' && !_isSick>>
+			<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
+			<<if ($guests[_guestI].traits ?? []).includes('woodcraft')>>
+				<<set _giveWood++>>
+			<</if>>
+			<<if _isStorageAvailable>>
+				<<pickup $storage 'wood' _giveWood>>
+			<<else>>
+				<<pickup $backpack 'wood' _giveWood>>
+			<</if>>
+			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest')>>
+			<<if setup.percentageChance(10)>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'food' 1>>
+				<<else>>
+					<<pickup $backpack 'food' 1>>
+				<</if>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>')>>
+			<</if>>
+		<</if>>
+		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick>>
+			<<set _chanceOfNotComingHome = 10>>
+			<<if $guests[_guestI].strength >= 30>>
+				<<set _changeOfNotComingHome -=5>>
+			<</if>>
+			<<if ($guests[_guestI].traits ?? []).includes('scavanger')>>
+				<<set _chanceOfNotComingHome -=4>>
+			<</if>>
+			<<if $guests[_guestI].gender>>
+				<<set _chanceOfNotComingHome = 0>>
+			<</if>>
+			<<if setup.percentageChance(_chanceOfNotComingHome) && !$scavengingDidntReturn && !$pregnancyHappening>>
+				<<set $scavengingDidntReturn = _guestI>>
+			<<else>>
+			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap')>>
+			  <<set _giveCount = 1>>
+			  <<if ($guests[_guestI].traits ?? []).includes('scavanger') && setup.percentageChance(50)>>
+				<<set _giveCount++>>
+			  <</if>>
+			  <<if _isStorageAvailable>>
+			  	<<pickup $storage _randomItem _giveCount>>
+			  <<else>>
+			  	<<pickup $backpack _randomItem _giveCount>>
+			  <</if>>
+			  <<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to collect <strong>' + _giveCount + ' ' + _randomItem + '</strong> while scavenging')>>
+			<</if>>
+		<</if>>
+		
+		<<if $guests[_guestI].assignedTo === 'mistress' && !_isSick>>
+			<<for _mistressSlaveI, _mistressSlave range $slaves>>
+				<<if setup.getAge(_mistressSlave) < 18>>
+					<<continue>>
+				<</if>>
+				<<if setup.percentageChance(30) && _mistressSlave.sub < 100>>
+					<<set $morningMessages.slaves.push('Mistress ' + $guests[_guestI].name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
+					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
+				<</if>>
+			<</for>>
+		<</if>>
+		
+		// Starvation
+		<<if $guests[_guestI].food <= 10>>
+			<<if $storage.has('food')>>
+				<<drop $storage 'food' 1>> 
+				<<set $guests[_guestI].food to 100>>
+			<<elseif $backpack.has('food')>>
+				<<drop $backpack 'food' 1>> 
+				<<set $guests[_guestI].food to 100>>
+			<<else>>
+				<<set _compKeyRemove = 'guest:' + _guestI>>
+				<<companionRemove `_compKeyRemove`>>
+				<<companionRearange _guestI>>
+				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' left because you have not enough food')>>
+				<<set $guests.splice(_guestI, 1)>>
+				<<set _guestI-->>
+				<<continue>>
+			<</if>>
+		<</if>>
+		<<if setup.getAge($guests[_guestI]) > 3>>
+			<<set $guests[_guestI].food -= 30>>
+		<</if>>
+		
+		// Sick
+		<<if _isSick>>
+			<<set $guests[_guestI].sick.days-->>
+			<<if $guests[_guestI].sick.days <= 0>>
+				<<run delete $guests[_guestI].sick>>
+			<</if>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+<<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
+	<<capture _nurseryI>>
+		// Starvation
+		<<if $nursery[_nurseryI].food <= 10>>
+			<<if $storage.has('food')>>
+				<<drop $storage 'food' 1>> 
+				<<set $nursery[_nurseryI].food to 100>>
+			<<elseif $backpack.has('food')>>
+				<<drop $backpack 'food' 1>> 
+				<<set $nursery[_nurseryI].food to 100>>
+			<<else>>
+				<<set $morningMessages.main.push('Kid ' + $nursery[_nurseryI].name + ' died because do not have enough food')>>
+				<<set $nursery.splice(_nurseryI, 1)>>
+				<<set _nurseryI-->>
+				<<continue>>
+			<</if>>
+		<</if>>
+		<<if setup.getAge($nursery[_nurseryI]) > 3>>
+			<<set $nursery[_nurseryI].food -= 30>>
+		<</if>>
+		
+		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
+			<<set $morningMessages.main.push('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house')>>
+			<<run $guests.push($nursery[_nurseryI])>>
+			<<set $nursery.splice(_nurseryI, 1)>>
+			<<set _nurseryI-->>
+		<</if>>
+	<</capture>>
+<</for>>
+
+<<for _charI, _char range $characters>>
+	<<if typeof $characters[_charI].quests !== 'undefined'>>
+		<<set $characters[_charI].talked = false>>
+	<</if>>
+<</for>>
+
+<<set $sleepDead = null>>
+
+// Perks
+<<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
+	<<capture _playerPerkDay, _playerPerk>>
+		<<if _playerPerkDay < $game.day>>
+			<<if _playerPerk === 'bleeding'>>
+				<<set $sleepDead = 'bleed out'>>
+			<</if>>
+			<<run delete $player.perks[_playerPerk]>>
+			<<continue>>
+		<</if>>
+		
+		<<if _playerPerk === 'beaten'>>
+			<<set $player.energy -= 50>>
+			<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+// Sick (Rotten food)
+<<if $game.foodRotten>>
+	<<set _foodRottenGuests = setup.getRandomPersonIds($guests, randomInteger(1,3))>>
+	<<for _rottenFoodKey, _rottenFoodId range _foodRottenGuests>>
+		<<set $guests[_rottenFoodId].sick = {
+			days: 2,
+			desc: 'Food poisoning',
+			id: 'food_poisoning'
+		}>>
+		<<set $morningMessages.main.push('Guest ' + $guests[_rottenFoodId].name + ' got sick with food poisoning')>>
+	<</for>>
+	<<set _foodRottenSlaves = setup.getRandomPersonIds($slaves, randomInteger(1,3))>>
+	<<for _rottenFoodKey, _rottenFoodId range _foodRottenSlaves>>
+		<<set $slaves[_rottenFoodId].sick = {
+			days: 2,
+			desc: 'Food poisoning',
+			id: 'food_poisoning'
+		}>>
+		<<set $morningMessages.main.push('Slave ' + $slaves[_rottenFoodId].name + ' got sick with food poisoning')>>
+	<</for>>
+	<<run delete $game.foodRotten>>
+<</if>>
+
+// Manage goods
+<<set _shopKeeperId = setup.getPersonsForLocation($guests, 'shop')>>
+<<if _shopKeeperId.length>>
+	<<set _shopKeeper = $guests[_shopKeeperId[0]]>>
+	<<for _manageGoodsName, _manageGoods range ($player.manageGoods ?? {})>>
+		<<if _manageGoods.min && $storage.count(_manageGoodsName) < _manageGoods.min>>
+			<<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
+				<<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
+				<<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+				<<if $player.money >= _totalPrice>>
+					<<pickup $storage _manageGoodsName _amount>>
+					<<set $player.money -= _totalPrice>>
+					<<set $morningMessages.shop.push('Shopkeper ' + setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+				<</if>>
+			<</if>>
+		<</if>>
+		<<if _manageGoods.max && $storage.count(_manageGoodsName) > _manageGoods.max>>
+			<<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
+				<<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
+				<<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+				<<set $player.money += _totalPrice>>
+				<<set $morningMessages.shop.push('Shopkeper ' + setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+			<</if>>
+		<</if>>
+	<</for>>
+<</if>>
+
+<<if $player.hunger <= 0 && !$sleepDead>>
+	<<set $sleepDead = 'hunger'>>
+<</if>>
+<<if !$sleepDead>>
+<<set $player.showered to false>>
+	<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+	<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
+	<<if $args[0]>>
+		<<set $morningMessages = []>>
+		<<goto $args[0]>>
+	<<else>>
+		<<goto "Bedroom-sleep">>
+	<</if>>
+<<else>>
+	<<set $game.death_reason = $sleepDead>>
+	<<goto "Dead">>
+<</if>>
+
+<</widget>>
+
+

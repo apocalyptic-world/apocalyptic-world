@@ -1,0 +1,107 @@
+:: Childbirth {"position":"3277,470","size":"100,100"}
+<h1 class="ptitle">BEDROOM</h1>
+
+<center>
+	[img[setup.ImagePath+'game/misc/childbirth1.webp']]
+</center>
+
+You hear screams and you rush toward the source. As you get to your destination you realize it's <<=$tmpGirl.name>>.
+
+Her contractions grew stronger, <<=$tmpGirl.name>> knew that she didn't have much time left. She asks you to create a makeshift birthing area.
+
+<br /><br />
+<<if $backpack.count('towel') >= 5 || true>>
+	<<linkreplace 'Grab towels and make a birthing area'>>
+		<<drop $backpack 'towel' 5>>
+	  <center>
+		  [img[setup.ImagePath+'game/misc/childbirth2.jpg']]
+	  </center>
+	  <br /><br />
+	  You lay down towels on the ground and hope that will do. 
+	  <br /><br />
+	<</linkreplace>>
+<<else>>
+	You look around but see nothing that could work (missing towels)
+	<br /><br />
+<</if>>
+	
+<<linkreplace 'Continue'>>
+	<center>
+		[img[setup.ImagePath+'game/misc/childbirth3.webp']]
+	</center>
+	<br /><br />
+	<<addhours 7>>
+	<<energy -70>>
+	The labor was long and painful, but <<=$tmpGirl.name>> was determined to bring her child into the world. Finally, after hours of pushing, she heard the sound of a baby's cry.<br />
+	<<=$tmpGirl.name>> held her newborn child close, tears streaming down her face. She knew that they were still in a dangerous situation, but for the moment, all that mattered was the new life in her arms.
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'game/misc/childbirth4.jpg']]
+	</center>
+	<br /><br />
+	<<set _childGender = randomInteger(0,1)>>
+	Congratulation, it's a <<if !_childGender>><span style="color:pink">girl</span><<else>> <span style="color:blue">boy</span><</if>>
+	<br /><br />
+	What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" ''>>
+	<br /><br />
+	<<link 'Continue'>>
+		<<set _mother = $tmpGirl>>
+		
+		<<newgirl>>
+		<<newguy>>
+		<<set _child = (!_childGender ? $tmpGirl : $tmpGuy)>>
+		<<set 
+		  	_child.birthDate = $gameDate,
+		  	_child.anal = 0,
+			_child.bj = 0,
+			_child.food = 100,
+			_child.pussy = 0,
+			_child.relationship = 0,
+			_child.virgin = true,
+			_child.strength = 0,
+			_child.orgasms = 0,
+			_child.name = _childName,
+			_child.birthDate = $gameDate,
+			_child.beauty = _mother.beauty,
+			_child.race = _mother.race,
+			_child.breasts = _mother.breasts,
+			_child.hair = _mother.hair,
+			_child.strength = Math.round(_mother.strength / 2, 0),
+			_child.virgin = true
+		>>
+		
+		<<set _child.family = {}>>
+		<<set _child.family.mother = _mother.id>>
+		<<if _mother.pregnancy_father>>
+			<<set _child.family.father = _mother.pregnancy_father>>
+		<</if>>
+		
+		
+		<<if typeof _mother.family === 'undefined'>>
+			<<set _mother.family = {
+				kids: []
+			}>>
+		<</if>>
+		<<run _mother.family.kids.push(_child.id)>>
+		<<run delete _mother.pregnancy>>
+		<<if $pregnancyHappening.type === 'slave'>>
+			<<set $slaves[$pregnancyHappening.id] = _mother>>
+		<<else>>
+			<<set $guests[$pregnancyHappening.id] = _mother>>
+		<</if>>
+		
+		
+		<<if ($game.location.nursery ?? false)>>
+			<<run $nursery.push(_child)>>
+		<<elseif ($game.location.guesthouse ?? false)>>
+			<<run $guests.push(_child)>>
+		<<else>>
+			<<run $slaves.push(_child)>>
+		<</if>>
+		
+		<<run delete $pregnancyHappening>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<</linkreplace>>
+
+

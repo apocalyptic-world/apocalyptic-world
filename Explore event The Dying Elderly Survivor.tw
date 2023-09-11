@@ -1,0 +1,82 @@
+:: Explore event: The Dying Elderly Survivor {"position":"6534,20","size":"100,100"}
+<h1 class="ptitle">OUTSIDE OF THE CITY</h1>
+<br /><br />
+While you were walking a few kilometers outside the city limits, you noticed a partially abandoned farmhouse where it seemed like you saw a head looking at you from one of the windows.
+<br /><br />
+You decided to cautiously enter and expected someone to attack you from a corner. As you walked into the next room, you started thinking that perhaps you were experiencing hallucinations, until you reached one of the end rooms...
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/explore/event_old_ill_man.jpg']]
+</center>
+<br /><br />
+In the corner of the room, near the window, there lies an old man... He appears to be barely breathing, and his skin looks like he has been exposed to a significant amount of radiation. He exhales quietly, beckoning you to come closer.
+<br /><br />
+You sat down next to him, and he spoke quietly but clearly, explaining that his grandson went out over a week ago to find something to eat. He understood what had likely happened after a few days. His grandson was most likely dead... And he saw no reason to live anymore, neither before nor now... But his grandson insisted and was too weak to end his life... That's why he's asking for your help.
+<br /><br />
+<div id="option1">
+	<<linkreplace 'Kill him with pillow'>>
+		<<statsAdd 'people_killed'>>
+		<<set $player.goodwill -=5>>
+		<<run $('#option2, #option3').hide()>>
+		<center>
+			[img[setup.ImagePath+'places/explore/event_old_ill_man_pillow.gif']]
+		</center>
+		<br /><br />
+		You took the pillow that was standing on the chair next to the bed, raised your legs, and placed it on the old man's head. He didn't resist, but after a moment, reflexes kicked in, and he weakly struck your hands a few times. After a while, he had passed away.
+		<br /><br />
+		<<linkreplace 'Search the house'>>
+			<<if setup.percentageChance(40)>>
+				<strong class="iitem">You found 4 .38 bullets</strong>
+				<<pickup $backpack 'bullet_revolver' 4>>
+			<<else>>
+				You found nothing...
+			<</if>>
+			<br /><br />
+		<</linkreplace>>
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+	<div id="option3">
+		<<linkreplace 'Shoot him'>>
+			<<drop $backpack 'bullet_revolver' 1>>
+			<<statsAdd 'people_killed'>>
+			<<set $player.goodwill -=5>>
+			<<run $('#option1, #option2').hide()>>
+			<center>
+				[img[setup.ImagePath+'places/explore/eldery_man_gun.gif']]
+			</center>
+			<br /><br />
+			You take out your revolver from the pocket and with trembling hands aim at the old man. You fire... Silence... The entire pillow suddenly gets stained in red.
+			<br /><br />
+			<<linkreplace 'Search the house'>>
+				<<if setup.percentageChance(40)>>
+					<strong class="iitem">You found 4 .38 bullets</strong>
+					<<pickup $backpack 'bullet_revolver' 4>>
+				<<else>>
+					You found nothing...
+				<</if>>
+				<br /><br />
+			<</linkreplace>>
+			<<link 'Leave'>>
+				<<goto 'Outside'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="option2">
+	<<linkreplace 'Say no and leave'>>
+		<<run $('#option1, #option3').hide()>>
+		He barely manages to sit up from the bed and starts shouting at you.
+		<br /><br />
+		<strong>"YOU ARE ALL THE SAME! COWARDS! JUST LIKE JOHN! GET OUT!"</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+

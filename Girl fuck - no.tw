@@ -1,0 +1,41 @@
+:: Girl fuck - no [sex] {"position":"3000,223","size":"100,100"}
+<center>
+	[img[setup.ImagePath+'game/misc/no_fuck.webp']]
+</center>
+<br /><br />
+She tells you that she's not in the mood right now and just wants to be alone.
+<br /><br />
+<strong>Not enough relationship or she's not in the mood</strong>
+<br /><br />
+<<if setup.percentageChance(40) && $tmpGirl.relationship >= 30>>
+	<<=setup.displayName($tmpGirl)>> notices your boner and suggestions that maybe you want a quick blowjob to calm it down. 
+	<br /><br />
+	<<say tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+		I am really not in the mood right now but how about I just give you a quick head? 
+	<</say>>
+	<br /><br />
+	<<linkreplace 'Accept blowjob'>>
+		<<run $('#option2').hide()>>
+		<center>
+			[img[setup.ImagePath+'places/cabin/fuck_no_blowjob.webp']]
+		</center>
+		Without taking of her clothes, <<=setup.displayName($tmpGirl)>> drops on her knees, unzips your pants and pulls out your already hard dick. As she wants to end it fast, she immediately starts sucking and jerking together. After few minutes you cum and she gets up and continues to do whatever she did before that. 
+		<br /><br />
+		<<horny_reset>>
+	<</linkreplace>>
+<</if>>
+<div id="option2">
+  <<link 'Force her'>>
+	  <<set $tmpGirl.relationship -=30>>
+	  <<goto 'Girl fuck'>>
+  <</link>>
+</div>
+<<link 'Leave'>>
+  	<<if $tmpGirlViewBack>>
+		<<goto $tmpGirlViewBack>>
+	<<else>>
+		<<goto [[Girl view]]>>
+	<</if>>
+<</link>>
+
+

@@ -1,0 +1,39 @@
+:: Wanted - fight {"position":"3215,1789","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/wanted_trap.webp']]
+</center>
+<br /><br />
+Chasing after <<=$wantedPron2>>, <<=$wantedPron2>> runs around the corner into a dark alley. 
+<br /> 
+Following closely behind and catching up to <<=$wantedPron2>>, to your surprise, you are met by a gang consisting of <strong>4 people</strong>, all ready to defend <<=$wantedPron2>>.
+<br /><br />
+
+<<link 'Fight them'>>
+	<<set $enemies = []>>
+ 	<<newguy>>
+	<<if setup.percentageChance(10)>>
+		<<set 
+			$tmpGuy.inventory = [],
+			$tmpGuy.inventory.push('knife')
+		>>
+	<</if>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+	<<newgirl>>
+	<<run $enemies.push($tmpGirl)>>
+  	<<fight $enemies 'Wanted - catched' 'Streets'>>
+<</link>>
+
+<<set _linkName = 'Leave ' + $wantedPron2 + ' alone'>>
+<<link `_linkName`>>
+	<<set $player.reputation_bounty_hunter-->>
+	<<set $wanted.splice($wantedId, 1)>>
+	<<goto 'Bar'>>
+<</link>>
+
+

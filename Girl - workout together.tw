@@ -1,0 +1,57 @@
+:: Girl - workout together {"position":"3081,583","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<<addmins 60>>
+<center>
+	[img[setup.ImagePath+'places/cabin/workout_guest1_' + randomInteger(1,2) + '.webp']]
+</center>
+<br /><br />
+You start with some light stretches to warm up your muscles and prevent injury. You chat and catch up as you do some arm circles, shoulder rolls, and leg stretches.
+<br /><br />
+<<set $tmpGirl.strength++>>
+<strong><<=$tmpGirl.name>> strength increased by 1</strong>
+<br /><br />
+
+<<set _wantToHaveFunWorkoutTogether = $tmpGirl.horny > 50 || setup.percentageChance(70)>>
+<<linkreplace 'Pull down her shorts'>>
+	<center>
+		[img[setup.ImagePath+'places/cabin/workout_guest2_' + randomInteger(1,2) + '.webp']]
+  	</center>
+	<br /><br />
+	<<if _wantToHaveFunWorkoutTogether>>
+		She giggles and smiles at you as you pull down her shorts.
+		<br /><br />
+		<<set $tmpGirl.relationship++>>
+		<strong><<=$tmpGirl.name>> relationship increased by 1</strong>
+	<<else>>
+		She flinches and asks you to stop. She's not in the mood right now. 
+	<</if>>
+	<br /><br />
+	<<linkreplace 'Fuck her'>>
+		<center>
+			[img[setup.ImagePath+'places/cabin/workout_guest3_' + randomInteger(1,2) + '.webp']]
+  		</center>
+		<br /><br />
+		You shove your hard dick inside her sweaty pussy and fuck her as she moans.
+		<br /><br />
+		<<if _wantToHaveFunWorkoutTogether>>
+			<<set $tmpGirl.horny = 0>>
+			<<set $tmpGirl.relationship += 3>>
+			<<set $tmpGirl.strength++>>
+			<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
+			<br />
+			<strong><<=$tmpGirl.name>> strength increased by 1</strong>
+			<<horny_reset>>
+		<<else>>
+			<<set $tmpGirl.horny = 0>>
+			<<set $tmpGirl.relationship -= 10>>
+			<strong><<=$tmpGirl.name>> relationship decreased by 10</strong>
+			<<horny_reset>>
+		<</if>>
+		<br /><br />
+	<</linkreplace>>
+<</linkreplace>>
+<<link 'Finish'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>
+
+

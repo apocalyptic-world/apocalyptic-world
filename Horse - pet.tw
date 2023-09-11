@@ -1,0 +1,31 @@
+:: Horse - pet {"position":"175,1482","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/horse_pet.webp']]
+</center>
+<br /><br />
+You ensure that the horse is well-groomed by brushing him multiple times. 
+<br />
+As you do so, he lifts his head up and emits a gentle nicker, clearly expressing his enjoyment of the grooming session.
+<br /><br />
+<<if $guests.length > 0>>
+	<<set _randomPerson = setup.getRandomPersonIds($guests, 1)>>
+	<<if !$guests[_randomPerson[0]].gender && setup.getAge($guests[_randomPerson[0]]) >= 18>>
+		<<set $guestId = _randomPerson[0]>>
+		<<video '/cabin/horse_fuck1'>>
+		<br /><br />
+		While you are grooming the horse and brushing it, <<=$guests[$guestId].name>> approaches you from behind and flirtatiously asks if maybe she could go for a ride with him or you...
+		<br /><br />
+	
+		<<link 'Undress her'>>
+			<<set $horseRideAction = null>>
+			<<goto 'Horse - fuck'>>
+		<</link>>
+	<</if>>
+<</if>>
+<<link 'Leave'>>
+	<<goto 'Fire place'>>
+<</link>>
+
+

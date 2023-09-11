@@ -1,0 +1,37 @@
+:: Explore event: The Elderly Refugee {"position":"6743,188","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+As you navigate through the desolate wasteland, you spot a weary group of survivors trudging forward. Among them, you notice an elderly man struggling to keep up, leaning heavily on a makeshift cane. Their face reflects both exhaustion and determination.
+<br /><br />
+<center> 
+	[img[setup.ImagePath+'places/explore/event_elderly_man.jpg']]
+</center>
+<br /><br />
+Approaching the group, you inquire about the elderly refugee's condition and the reasons behind their struggle to keep pace. The group reluctantly admits that they are considering leaving the elderly man behind, as their slow pace threatens the group's chances of survival.
+<br /><br />
+
+<<if $guests.length < $guesthouseLimit && ($game.location.guesthouse ?? false)>>
+	<<linkreplace 'Offer him to come live with you'>>
+		<<run $('#option1').hide()>>
+		<<newguy>>
+		<<set $tmpGuy.birthDate = setup.getBirthDate(55)>>
+		<<run $guests.push($tmpGuy)>>
+		Overwhelmed with gratitude, the elderly refugee's eyes well up with tears. They offer a frail yet appreciative smile, reaching out to you for support.
+		<br /><br />
+		<<anonguy>>
+			Thank you, kind soul. Your compassion gives me hope in these dark times. I will do my best to keep up and not burden you. Please, lead the way, and I will follow with all the strength I have left
+		<</anonguy>>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+<</if>>
+
+<div id="option1">
+	<<link 'Leave'>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
+
+

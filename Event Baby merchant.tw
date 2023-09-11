@@ -1,0 +1,44 @@
+:: Event: Baby merchant {"position":"888,949","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/old_merchant.jpg']]
+</center>
+<br /><br />
+<<anonguy>>
+What kind of place is this? It doesn't really matter. I have a generous offer for you. Do you have small children or newborns? I'm ready to buy them from you.
+<</anonguy>>
+<br /><br />
+<div id="options">
+	<<linkreplace 'What he will do with them'>>
+		<<anonguy>>
+			Why do you care? Have you ever eaten them? Get ready for a delicious soup. Mmm...
+		<</anonguy>>
+		<br /><br />
+	<</linkreplace>>
+	<<link 'Yes'>>
+		<<goto 'Event: Baby merchant sell'>>
+	<</link>>
+	<<link 'Maybe some other time'>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+</div>
+<<linkreplace 'Kill him'>>
+	<<run $('#options').hide()>>
+	<center>						
+		[img[setup.ImagePath+'places/cabin/baby_merchant_killed.jpg']]
+	</center>
+	<br /><br />
+	Looking into his eyes, you find an old, rusted pipe within arm's reach, and you strike him in the head with it. He wasn't prepared for it and falls dead to the ground. Within seconds, the ground around him turns red.
+	<br />
+	<br />
+	<strong>People like him will leave you alone for a while.</strong>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+	<<set $player.godwill++>>
+	<<set $game.baby_merchant_day = $game.day>>
+<</linkreplace>>
+
+

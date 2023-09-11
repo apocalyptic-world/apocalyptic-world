@@ -1,0 +1,134 @@
+:: Bathhouse [Place] {"position":"1507,773","size":"100,100"}
+<<set _bathSchedule = {
+	garden: {
+		from: '16:00',
+		to: '20:00',
+		p: 30
+	},
+	forest: {
+		from: '16:00',
+		to: '08:00',
+		p: 30
+	},
+	kitchen: {
+		from: '12:00',
+		to: '20:00',
+		p: 10
+	},
+	scavenger: {
+		from: '20:00',
+		to: '23:00',
+		p: 50
+	},
+	mistress: {
+		from: '23:00',
+		to: '24:00',
+		p: 100
+	},
+	streets: {
+		from: '08:00',
+		to: '12:00',
+		p: 50
+	}
+}>>
+
+<h1 class="ptitle">BATHHOUSE</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/bathhouse_head.jpg']]
+</div>
+<br /><br />
+
+<table id="slaves">
+	<<for _bathGuestI, _bathGuest range $guests>>
+		<<capture _bathGuestI, _bathGuest>>
+		<<if _bathGuest.location !== 'bathhouse'>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + (!_bathGuest.gender ? 'girl' : 'guy')>>
+		<tr>
+			<td style="width: 300px">
+           		 <span @class="''+_genderClass+''">
+                      <<link _bathGuest.name>>
+                        <<set $tmpGirl to $guests[_bathGuestI]>>
+                        <<set $tmpGirl.location = 'bathhouse'>>
+                        <<set $tmpGirlBack = 'Bathhouse'>>
+                        <<set $tmpGirlCapture to false>>
+                        <<set $tmpGirl.rape to false>>
+                        <<run delete $slaveId>>
+						<<run delete $charId>>
+                        <<set $guestId = _bathGuestI>>
+                        <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<goto `$tmpGirlViewBack`>>
+                      <</link>>
+                  </span>
+			</td>
+			<td>
+				<<if !_bathGuest.gender>>
+					Beauty score: <<=_bathGuest.beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_bathGuest)>>
+			</td>
+			<td>
+				<<if _bathGuest.assignedTo>>
+					(<<=_bathGuest.assignedTo>>)
+				<</if>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+	
+	<<for _bathSlaveI, _bathSlave range $slaves>>
+		<<capture _bathSlaveI, _bathSlave>>
+		<<if _bathSlave.location !== 'bathhouse'>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + (!_bathSlave.gender ? 'girl' : 'guy')>>
+		<tr>
+			<td style="width: 300px">
+           		 <span @class="''+_genderClass+''">
+                      <<link _bathSlave.name>>
+                        <<set $tmpGirl to $slaves[_bathSlaveI]>>
+                        <<set $tmpGirl.location = 'bathhouse'>>
+                        <<set $tmpGirlBack = 'Bathhouse'>>
+                        <<set $tmpGirlCapture to false>>
+                        <<set $tmpGirl.rape to false>>
+                        <<run delete $guestId>>
+						<<run delete $charId>>
+                        <<set $slaveId = _bathSlaveI>>
+                        <<set $tmpGirlViewBack = (!_bathSlave.gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<goto `$tmpGirlViewBack`>>
+                      <</link>>
+                  </span>
+			</td>
+			<td>
+				<<if !_bathSlave.gender>>
+					Beauty score: <<=_bathSlave.beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_bathSlave)>>
+			</td>
+			<td>
+				<<if _bathSlave.assignedTo>>
+					(<<=_bathSlave.assignedTo>>)
+				<</if>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>> 
+</table>
+
+<br /><br />
+<<if hasTime(1)>>
+	<<link 'Wait 30 minutes'>>
+		<<addmins 30>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+<<link 'Leave'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

@@ -1,0 +1,47 @@
+:: Forest - hunt {"position":"2402,746","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+
+<<run console.log($shooter)>>
+<<if $shooter.score >= 10>>
+	<<if $shooter.target === 'deer'>>
+		<center>
+			[img[setup.ImagePath+'places/forest/deer_dead.webp']]
+		</center>
+		<br /><br />
+		You managed to kill the deer. You slowly approach it and notice it's taking its last breath.
+		<br /><br/>
+		<strong class="iitem">You collected 10 food</strong>
+		<<pickup $backpack 'food' 10>>
+	<<elseif $shooter.target === 'wolf'>>
+		<center>
+			[img[setup.ImagePath+'places/forest/hunting_wolf.jpg']]
+		</center>
+		<br /><br />
+		You managed to kill the wolf. You approach it and slowly skin it.
+		<br /><br/>
+		<<pickup $backpack 'pelt_wolf' 1>>
+		<strong class="iitem">You collected 1 wolf pelt</strong>
+        <br />
+        <<pickup $backpack 'food' 5>>
+        <strong class="iitem">You collected 5 food</strong>
+	<</if>>
+<<else>>
+	<center>
+		[img[setup.ImagePath+'places/forest/' + $shooter.target + '_runaway.webp']]
+	</center>
+	<<if $shooter.target === 'deer'>>
+		<br /><br />
+		Deer managed to run away as you missed almost all of your arrows.
+	<<elseif $shooter.target === 'wolf'>>
+		<br /><br />
+		Wolf managed to run away as you missed almost all of your arrows.
+	<</if>>
+<</if>>
+
+<br /><br />
+<<link 'Continue'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

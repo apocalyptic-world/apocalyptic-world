@@ -1,0 +1,33 @@
+:: Event: Base attack - lost {"position":"458,1083","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_base_attack_capture.jpg']]
+</center>
+<br /><br />
+
+<<set _eventBaseAttackCapturedGirls = 1>>
+<<if Object.keys($prevFight).length && setup.percentageChance(50) && $slaves.length > 1>>
+	<<set _eventBaseAttackCapturedGirls++>>
+<</if>>
+
+As you look outside your gates in the distance you see group of attackers walking away with <strong class="iitem"><<=_eventBaseAttackCapturedGirls>></strong> of your slaves.
+<br /><br />
+
+<<set _eventBaseAttackSlaveListIds = setup.getRandomPersonIds($slaves, _eventBaseAttackCapturedGirls).sort().reverse()>>
+They took: 
+<br />
+<<set _beforeSlaves = clone($slaves)>>
+<<for _eventBaseAttackSlaveListId, _eventBaseAttackSlaveList range _eventBaseAttackSlaveListIds>>
+	<<capture _eventBaseAttackSlaveListId>>
+		<strong class="iitem"><<=$slaves[_eventBaseAttackSlaveList].name>></strong><br />
+		<<set $slaves.splice(_eventBaseAttackSlaveList, 1)>>
+	<</capture>>
+<</for>>
+	
+<br /><br />
+<<link 'Get up'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

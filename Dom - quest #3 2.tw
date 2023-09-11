@@ -1,0 +1,48 @@
+:: Dom - quest #3 2 {"position":"3896,1571","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/streets/dom_quest3_attack_done.jpg']]
+</center>
+<br /><br />
+After you have dealt with the people who attacked you, you look around. Almost everyone lies on the floor, except for two who are fighting Dom. All your other allies have been killed. Dom successfully deals with the last two, and with a face covered in blood, looks at you.
+<br /><br />
+<<dom>>
+	Good job! We should look for that diplomat..
+<</dom>>
+<br /><br />
+<<linkreplace 'Help him search'>>
+  <strong>Suddenly, one of the opponents rises from the ground and heads towards Dom. You notice that he has a knife in his hands.</strong>
+  <br /><br />
+  <div id="options">
+  	<<link 'Warn him'>>
+		<<run $('#ending').show()>>
+		<<run $('#options').hide()>>
+		<<set $player.godwill++>>
+		<<set $player.reputation += 10>>
+		<<set $characters.dom.quests.quest3_warned = true>>
+	<</link>>
+	<<link 'Do not warn him'>>
+		<<run $('#ending').show()>>
+		<<set $player.godwill -= 5>>
+		<<run $('#options').hide()>>
+	<</link>>
+  </div>
+  <div id="ending" style="display:none">
+  	  <center>
+	  	[img[setup.ImagePath+'places/streets/dom_quest3_stab.gif']]
+  	  </center>
+	  <br /><br />
+	  In the last moment, Dom manages to spin around and sees the opponent coming at him with a knife, but it's already too late. The opponent grabs Dom by the neck and, with a determined force, thrusts the knife towards him.
+		<br />
+		Before you can do anything, a few more of Dom's people burst through the door, but in the meantime, the opponent has inflicted a few more stabs, and Dom simply slumps against the wall.
+		<br /><br />
+		Dom's men shouts that we need to get him back to the city
+		<br /><br />
+		<<link 'Help them get him to Underground city'>>
+			<<goto 'Dom - quest #3 3'>>
+		<</link>>
+  </div>
+<</linkreplace>>
+
+

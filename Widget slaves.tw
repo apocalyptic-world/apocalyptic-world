@@ -1,0 +1,44 @@
+:: Widget slaves [widget] {"position":"251,632","size":"100,100"}
+<<widget slaveValue>>
+	<<set _age = setup.getAge($args[0])>>
+	<<set $slaveValue = 
+		($args[0].beauty / 2) + 
+		($args[0].sub / 5) +
+		((100 - _age) / 5)
+	>>
+	<<if $args[0].virgin>>
+		<<set $slaveValue = $slaveValue * 2>>
+	<</if>>
+	
+	<<if $args[1]>>
+		<<set $slaveValue = $slaveValue * $args[1]>>
+	<</if>>
+	<<set $slaveValue = Math.round($slaveValue / 2, 0)>>
+	
+	<<set $args[0].value = $slaveValue>>
+<</widget>>
+
+<<widget slaveInfo>>
+	<<set _age = setup.getAge($args[0])>>
+	<<if (_age < 20)>>
+		<<set $ageDescription = 'teenage girl'>>
+	<<elseif (_age < 25)>>
+		<<set $ageDescription = 'girl'>>
+	<<elseif (_age < 50)>>
+		<<set $ageDescription = 'woman'>>
+	<<else>>
+		<<set $ageDescription = 'mature woman'>>
+	<</if>>
+	
+	<strong><<=$args[0].name>> - <<=_age>></strong> year old, 
+	<<=$ageDescription>> with <strong><<=$args[0].hair>></strong> hair.
+	<br />
+	Beauty score: <<=$args[0].beauty>>
+	<br />
+	<<if $args[0].virgin>>
+	She is <strong>virgin</strong>!
+	<</if>>
+
+<</widget>>
+
+

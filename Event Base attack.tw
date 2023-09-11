@@ -1,0 +1,93 @@
+:: Event: Base attack {"position":"343,959","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_base_attack.jpg']]
+</center>
+<br /><br />
+As you stroll through your village, enjoying the warm sunshine on your face, a sudden commotion catches your attention. One of your girls, sprints towards you, her face contorted with fear and her eyes wide with panic. She screams at the top of her lungs, "Help! Help! They're attacking our base!"
+<br /><br />
+Between gasps for breath, the girl manages to respond, her voice trembling, "A group of bandits! They stormed our gates and managed to break through! They're wreaking havoc inside!"
+<br /><br />
+As you arrive at the gate, the sight that greets you is one of chaos. Gates lie broken and splintered, remnants of a violent struggle and in front of you are standing 4 guys and one girl.
+<br /><br />
+<<set $prevFight = {}>>
+<div id="option1">
+	<<link 'Attack them'>>
+		<<set $enemies = []>>
+		<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
+			<<newguy>>
+			<<set $tmpGuy.strength = randomInteger(40, 70)>>
+			<<if setup.percentageChance(20)>>
+				<<set 
+					$tmpGuy.inventory = [],
+					$tmpGuy.inventory.push('knife')
+				>>
+			<</if>>
+			<<run $enemies.push($tmpGuy)>>
+		<</for>>
+		<<newgirl>>
+		<<run $enemies.push($tmpGirl)>>
+		<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
+	<</link>>
+</div>
+<<linkreplace 'Try to negotiate'>>
+	<<run $('#option1').hide()>>
+	<<if $player.int < 30>>
+		<center>						
+			[img[setup.ImagePath+'places/cabin/event_base_attack_laugh.jpg']]
+		</center>
+		<br /><br />
+		They all start laughing in your face. One of them spits on your face.
+		<br /><br />
+		<strong class="iitem">Your intelligence  failed</strong>
+		<br /><br />
+		<<link 'Attack them'>>
+			<<set $enemies = []>>
+			<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
+				<<newguy>>
+				<<set $tmpGuy.strength = randomInteger(40, 70)>>
+				<<if setup.percentageChance(20)>>
+					<<set 
+						$tmpGuy.inventory = [],
+						$tmpGuy.inventory.push('knife')
+					>>
+				<</if>>
+				<<run $enemies.push($tmpGuy)>>
+			<</for>>
+			<<newgirl>>
+			<<run $enemies.push($tmpGirl)>>
+			<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
+		<</link>>
+	<<else>>
+		They mockingly look at each other and nods their heads.
+		<br /><br />
+		"<strong>You have a deal! But we'll take on of your slaves with us</strong>"
+		<br /><br />
+		<<link 'Accept the offer'>>
+			<<goto 'Event: Base attack - lost'>>
+		<</link>>
+		<<linkdesc>>
+			Will take one of your slaves.
+		<</linkdesc>>
+		<<link 'Attack them'>>
+			<<set $enemies = []>>
+			<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
+				<<newguy>>
+				<<set $tmpGuy.strength = randomInteger(40, 70)>>
+				<<if setup.percentageChance(20)>>
+					<<set 
+						$tmpGuy.inventory = [],
+						$tmpGuy.inventory.push('knife')
+					>>
+				<</if>>
+				<<run $enemies.push($tmpGuy)>>
+			<</for>>
+			<<newgirl>>
+			<<run $enemies.push($tmpGirl)>>
+			<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
+		<</link>>
+	<</if>>
+<</linkreplace>>
+
+

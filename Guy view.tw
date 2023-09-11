@@ -1,0 +1,100 @@
+:: Guy view [sex noredirect girlview] {"position":"5012,30","size":"100,100"}
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship += 3>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<goto 'Girl talk'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy >= 30 && $tmpGirl.location !== 'garden'>>
+	<<link 'Fuck him'>>
+		<<goto 'Guy fuck'>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
+	<<link 'Assign to garden'>>
+		<<set $tmpGirl.assignedTo = 'garden'>>
+		<<set $tmpGirl.gardenDay = 0>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'Guy view'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if (_availableGirlSlaves[0] ?? []).length && !$tmpGirl.offerSlave>>
+	<<link 'Offer him one of your slave girls'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave girl to slave guy: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.assignedTo>>
+	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+		<<run delete $tmpGirl.assignedTo>>
+		<<goto 'Guy view'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gift>>
+	<<link 'Give gift'>>
+		<<script>>
+			Dialog.setup("Give gift", "Give gift");
+			Dialog.wiki(Story.get("Give gift").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<if $player.energy >= 10 && hasTime(1)>>
+	<<link 'Punish him'>>
+		<<if $backpack.has('paddle')>>
+			<<set $punishType = ''>>
+		<</if>>
+		<<goto 'Guy punish'>>
+	<</link>>
+<</if>>
+	
+<<link 'Change name'>>
+	<<dialog 'Change name'>>	
+		What you will call your slave? <<textbox "_tmpGirlName" $tmpGirl.name>>
+		<<link 'OK'>>
+			<<set $tmpGirl.name = _tmpGirlName>>
+			<<dialogclose>>	
+			<<goto 'Guy view'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
+
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<run delete $charId>>
+	<<run delete $guestId>>
+	<<run delete $slaveId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+

@@ -1,0 +1,31 @@
+:: Wanted - unique #1 {"position":"3317,1896","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+Under the cover of ruins, you make your way to the warehouse, your senses heightened and your equipment ready. The dilapidated building stands as a haunting testament to its former purpose. The creaking doors and broken windows are reminders of its neglected state.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/wanted_unique1_1.webp']]
+</center>
+<br /><br />
+As you cautiously enter the warehouse, the only source of light emanates from the weak light filtering through the cracks. The sound of your footsteps echoes ominously in the empty space, adding to the tension that fills the air. You stay alert, every sense attuned to the surroundings.
+<br /><br />
+Suddenly, you detect a faint sound coming from a nearby room. Following the noise, you inch closer, your pulse quickening with anticipation. Peering through a partially open door, you catch a glimpse of The Ghost, meticulously examining an item on a table.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/wanted_unique1_2.webp']]
+</center>
+<br /><br />
+
+<<if $player.int > 10>>
+	<<link 'Attack him from behind in stealth mode'>>
+		<<goto 'Wanted - unique #1 end'>>
+	<</link>>
+<</if>>
+<<link 'Fight'>>
+	<<set $enemies = []>>
+	<<set $wanted[$wantedId].strength = randomInteger(30, 50)>>
+  	<<run $enemies.push($wanted[$wantedId])>>
+  	<<fight $enemies 'Wanted - unique #1 end' 'Wanted - unique #1 lost'>>
+<</link>>
+
+

@@ -1,0 +1,250 @@
+:: Widget - player [widget] {"position":"141,639","size":"100,100"}
+<<widget energy>>
+  <<set $player.energy += $args[0]>>
+  <<if $player.energy > $player.maxEnergy >>
+	  <<set $player.energy = $player.maxEnergy>>
+  <</if>>
+  <<if variables().player.energy < 0>> 
+  	<<set $player.energy = 0>>
+  <</if>>
+  <<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+<</widget>>
+
+<<widget money>>
+<<set $player.money += $args[0]>>
+<<if $player.money < 0 >>
+	<<set $player.money = 0>>
+<</if>>
+<</widget>>
+
+<<widget horny>>
+	<<set $addHorny = $args[0]>>
+	<<if setup.perkHas('drunk')>>
+		<<set $addHorny = Math.round($addHorny / 2, 0)>>
+	<</if>>
+	<<set $player.horny += $addHorny>>
+	<<if $player.horny > 100>>
+		<<set $player.horny = 100>>
+	<</if>>
+	
+	<<updatemeter '$hornyBar' `$player.horny / 100`>>
+<</widget>>
+
+<<widget horny_reset>>
+	<<set $player.horny = 0>>
+	<<updatemeter '$hornyBar' `$player.horny / 100`>>
+<</widget>>
+
+<<widget addPerk>>
+	<<if typeof $player.perks === 'undefined'>>
+		<<set $player.perks = {}>>
+	<</if>>
+	
+	<<if $args[0] === 'drunk'>>
+		<<set $player.perks['drunk'] = true>>
+	<<elseif $args[0] === 'bleeding'>>
+		<<set $player.perks['bleeding'] = {
+			day: $game.day
+		}>>
+	<</if>>
+	
+	
+<</widget>>
+
+<<widget perkAdd>>
+	<<if typeof $player.perks === 'undefined'>>
+		<<set $player.perks = {}>>
+	<</if>>
+	<<if typeof $player.perks[$args[0]] === 'undefined'>>
+		<<set $player.perks[$args[0]] = $game.day + setup.perkList[$args[0]].days>>
+	<</if>>
+<</widget>>
+
+<<widget perkList>>
+	<<if Object.keys(($player.perks ?? {})).length > 0>>
+		<br /><br />
+	<</if>>
+	<<for _perkItem, _perkI range ($player.perks ?? {})>>
+		<<capture _perkItem>>
+			<div class="perk-item tooltip">
+				<div class='perk-img'>
+					[img[setup.ImagePath+'game/perks/' + _perkItem + '.png']]
+		    	</div>
+				<span class="tooltiptext"><<=setup.perkList[_perkItem].title>></span>
+			</div>
+		<</capture>>
+	<</for>>
+<</widget>>
+
+<<widget companionAdd>>
+	<<if typeof $player.companions === 'undefined'>>
+		<<set $player.companions = {}>>
+	<</if>>
+	<<set $player.companions[$args[0] + ':' + $args[1]] = true>>
+<</widget>>
+
+<<widget companionRemove>>
+	<<run delete $player.companions[$args[0]]>>
+<</widget>>
+
+<<widget companionList>>
+	<<for _comp, _compI range $player.companions>>
+		<<set _compKey = _comp.split(':')>>
+		<<capture _comp, _compKey>>
+			<<set _girlVisual = $guests[_compKey[1]]>>
+			<div class="companion tooltip" @title="'' + $guests[_compKey[1]].name + ''">
+				<div class="girl_info_picture">
+					<<include 'Girl visual'>>
+				</div>
+			</div>
+			<<link 'x'>>
+					<<dialog 'Remove companion'>>
+						Remove <<=$guests[_compKey[1]].name>> from companions?
+						<br />
+						<<link 'Yes'>>
+							<<companionRemove _comp>>
+							<<goto `passage()`>>
+							<<dialogclose>>
+						<</link>>	
+					<</dialog>>
+				<</link>>
+		<</capture>>
+	<</for>>
+<</widget>>
+
+<<widget companionRearange>>
+	<<for _compR, _compIR range $player.companions>>
+		<<set _compKeyR = _compR.split(':')>>
+		<<if _compKeyR[1] > $args[0]>>
+			<<run delete $player.companions[_compR]>>
+			<<set _compKeyR[1]-->>
+			<<set $player.companions[_compKeyR.join(':')] = true>>
+		<</if>>
+	<</for>>
+<</widget>>
+
+<<widget setPlayerStats>>
+	<<if typeof $player[$args[0]] === 'undefined'>>
+		<<set $player[$args[0]] = 0>>
+	<</if>>
+	
+	<<set $player[$args[0]] += $args[1]>>
+<</widget>>	
+
+<<widget linkdesc container>>
+	<<set _linkDescId = ($args[0] ?? '')>>
+	<<run console.log(_linkDescId)>>
+	<div @id="'' + _linkDescId + ''" class="link-desc">
+		<<=_contents>>
+	</div>
+<</widget>>
+
+<<widget setNpcStats>>
+	<<if $args[0] === 'guest'>>
+		<<if $args[3] > 0>>
+			<<set $guests[$args[1]][$args[2]] = Math.min(100, $guests[$args[1]][$args[2]] + $args[3])>>
+		<<else>>
+			<<set _maxMin = ($args[2] === 'relationship' ? -100 : 0)>>
+			<<set $guests[$args[1]][$args[2]] = Math.max(_maxMin, ($guests[$args[1]][$args[2]] - Math.abs($args[3])))>>
+		<</if>>
+	<<elseif $args[0] === 'slave'>>
+		<<if $args[3] > 0>>
+			<<set $slaves[$args[1]][$args[2]] = Math.min(100, $slaves[$args[1]][$args[2]] + $args[3])>>
+		<<else>>
+			<<set _maxMin = ($args[2] === 'relationship' ? -100 : 0)>>
+			<<set $slaves[$args[1]][$args[2]] = Math.max(_maxMin, ($slaves[$args[1]][$args[2]] - Math.abs($args[3])))>>
+		<</if>>
+	<</if>>
+<</widget>>
+
+<<widget flag>>
+	<div class="flag-bg" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/flag/bg_' + $game.flagBg + '.png\')'">
+		[img[setup.ImagePath+'game/misc/flag/icon_' + $game.flagIcon + '.png']]
+	</div>
+<</widget>>
+
+<<widget cabinName>>
+	<<=$game.cabinName ?? 'Cabin'>>
+<</widget>>
+ 
+<<widget gameDay>>
+	<<set _start = clone(variables().startDate)>>
+	<<set _end = clone(variables().gameDate)>>
+	
+	<<run _start.setHours(0,0,0,0)>>
+	<<set _diff = _start.getTimezoneOffset() - _end.getTimezoneOffset()>>
+	<<if _diff>>
+		<<run _end.setMinutes(_end.getMinutes() + _diff)>>
+	<</if>>
+	
+	<<set _days = setup.calculateDaysBetween(_start, _end)>>
+	<<= _days>>
+<</widget>>
+
+<<widget showFamilyTree>>
+	<<if $args[0].mother>>
+		<<set _motherNpc = setup.getNpcById($args[0].mother)>>
+		Mother: <<=(_motherNpc ? _motherNpc.name : 'dead')>>
+		<br />
+	<</if>>
+	<<if $args[0].father>>
+		<<if $args[0].father === 'mc'>>
+			Father: You
+		<<else>>
+			Father: <<=setup.getNpcById($args[0].father)name ?? 'dead'>>
+		<</if>>
+		<br />
+	<</if>>
+	<<if $args[0].husband>>
+		Husband: 
+		<<if $args[0].husband === 'mc'>>
+			You
+		<<else>>
+			<<=setup.getNpcById($args[0].father)>>
+		<</if>>
+	<</if>>
+	<<if $args[0].kids>>
+		Childs: <br />
+		<<for _familyTreeChildI, _familyTreeChild range $args[0].kids>>
+			<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+			<<if _familyMember>>
+				<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
+			<</if>>
+		<</for>>
+	<</if>>
+<</widget>>
+
+<<widget statsAdd>>
+	<<if typeof $player.stats[$args[0]] === 'undefined'>>
+		<<set $player.stats[$args[0]] = 0>>
+	<</if>>
+	<<set $player.stats[$args[0]]++>>
+<</widget>>
+
+<<widget notPatreon>>
+	<div class="caut-bar"></div>
+	<div id="patreon-content">
+	Patreon content! To get access to this even you need to be <<link 'supporter'>>
+		 <<script>>
+		Dialog.setup("Support", "Support");
+		Dialog.wiki(Story.get("Support").processText());
+		Dialog.open();
+	  <</script>>
+	<</link>>
+	</div>
+	<div class="caut-bar"></div>
+<</widget>>
+<<widget notPatreonIcon>>
+	<span class="glyph" data-balloon-length="small" aria-label="Patreon content" data-balloon-pos="up-left">
+		[img[setup.ImagePath+'game/misc/support.png']]
+	</span>
+<</widget>>
+<<widget warning>>
+	<div class="caut-bar"></div>
+	<div id="patreon-content">
+		<<=$args[0]>>
+	</div>
+	<div class="caut-bar"></div>
+<</widget>>
+
+

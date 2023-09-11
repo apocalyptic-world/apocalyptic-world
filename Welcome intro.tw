@@ -1,0 +1,72 @@
+:: Welcome intro {"position":"17,288","size":"100,100"}
+<div id="welcome">
+[img[setup.ImagePath+'intro/start.jpg']]
+<h1>Version 0.23</h1>
+<div id="versionCheck" style="display:none">
+	<div class="caut-bar"></div>
+	<div id="versionCheckInner"></div>
+	<div class="caut-bar"></div>
+</div>
+<br />
+A few things from the developer before you start. You can skip them if you want by clicking below.
+<br /><br />
+This project is and will be absolutely free. For now, if you want to support my work, just leave a comment in F95zone. My ears are all yours.<br />
+I need suggestions, criticism and your true opinion<br />
+This is my first game ever.
+<br /><br />
+Game idea is that it will be a fully open world, rpg game where you can be who ever you want. You want to be a farmer, slave merchant, just a random good/evil guy, bounty hunter, cage figher, <strong>Cannibal</strong>? You can be whatever you want!
+<br /><br />
+
+<h2>Reputation system</h2>
+There will be reputation system like in RDR2 where you can decide how people will look at you.<br />
+If you help strangers and other people, you get it; if you kill innocent people/slave - you lose it.<br />
+<br />
+
+<h2>Slaves</h2>
+You can capture girls and make them your slaves.<br />
+When you have good relationship with them you can assign them to work for you (Right now only garden)
+<br /><br />
+
+<h2>Story</h2>
+There will be some story elements but it will be optional and I'll try to leave as minimal as possible. The main goal is this game to be a not-story driven. <br /><br />
+
+
+</div>
+<br /><br />
+[[Continue (I am 18+)|Intro]]
+ 
+<<done>>
+	<<script>>
+	
+		function showVersion(mainVersion, subVersion)
+		{
+			return mainVersion.toFixed(2) + subVersion;
+		}
+		
+		$.get("http://apocalyptic-world.com/version.php", function(data, status){
+			if (!data) {
+				return;
+			}
+			var currentVersion = $('#version').text().replace('v.','');
+			const pattern = /^(\d+(\.\d+)?)([a-zA-Z]*)$/;
+			const matches = currentVersion.match(pattern);
+			if (matches) {
+			  const currentMainVersion = parseFloat(matches[1]);
+			  const currentSubVersion = matches[3];
+			  
+			  const liveMatches = data.match(pattern);
+			  if (liveMatches) {
+			  	const liveMainVersion = parseFloat(liveMatches[1]);
+				const liveSubVersion = liveMatches[3];
+ 				
+					if (liveMainVersion > currentMainVersion || (liveMainVersion === currentMainVersion && liveSubVersion > currentSubVersion)) {
+						$('#versionCheckInner').html('You are playing older version (' + showVersion(currentMainVersion, currentSubVersion) + '). Newer version is available (' + showVersion(liveMainVersion, liveSubVersion) + ') <br />Play it on <a href="http://apocalyptic-world.com" target="_blank">http://apocalyptic-world.com</a> or join discord and download it there.');
+					$('#versionCheck').show();
+				}
+			  }
+			}
+  		});
+	<</script>>
+<</done>>
+
+

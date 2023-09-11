@@ -1,0 +1,77 @@
+:: Random event - dig grave #12 {"position":"6328,21","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+As you walk down the path near the forest it gets dark and starts to rain.
+<br />
+Just off the trail you notice two guys.  It looks like one is trying to comfort the other.
+<br /><br />
+
+<center>
+[img[setup.ImagePath+'places/explore/dig_grave1.webp']]
+</center>
+
+<br /><br />
+One of them seems to be crying as he looks behind the tree.<br /><br />
+
+<div id="random-event-dig-grave-button">
+	<<link 'Get closer'>>
+		<<run $('#random-event-dig-grave-button').slideToggle()>>
+		<<run $('#random-event-dig-grave1').slideToggle()>>
+	<</link>>
+</div>
+<div id="random-event-dig-grave1" style="display:none">
+	<center>
+		[img[setup.ImagePath+'places/explore/dig_grave2.webp']]
+	</center>
+	<br /><br />
+	You slowly walk toward them.  They notice you but look away almost immediately. You get closer and behind the tree you see a guy with a shovel in his hand screaming furiously, "<strong>WHY! WHY!</strong>"
+	<br /><br />
+	<div id="random-event-dig-grave-button1">
+	  <<link 'Approach them'>>
+		  <<run $('#random-event-dig-grave-button1').slideToggle()>>
+		  <<run $('#random-event-dig-grave2').slideToggle()>>
+	  <</link>>
+	</div>
+	
+	<div id="random-event-dig-grave2" style="display: none;">
+		<center>
+			[img[setup.ImagePath+'places/explore/dig_grave3.webp']]
+		</center>
+		<br /><br />
+		You notice another guy sitting by the grave who completely ignores you. He just stares into the shallow grave as it's getting deeper.
+		<br /><br />
+		
+		<div id="random-event-dig-grave-button2">
+		  <<link 'Offer to help'>>
+			  <<run $('#random-event-dig-grave-button2').slideToggle()>>
+			  <<run $('#random-event-dig-grave3').slideToggle()>>
+		  <</link>>
+		</div>
+		
+		<div id="random-event-dig-grave3" style="display: none;">
+			<center>
+				[img[setup.ImagePath+'places/explore/dig_grave4.webp']]
+			</center>
+			<br /><br />
+			The guy digging the grave thanks you as he gives you a shovel so you can take turns.<br />
+			A few times you look at the guy sitting next to you, but he still doesn't talk.<br />
+			The other guy tells that it's his <<=either('father', 'brother', 'sister')>>.<br />
+			They all came from <strong>The Sanctuary</strong>.<br />
+			They were working different jobs but mainly building armor, knives, and other weapons.
+<br /><br />
+			<strong>
+				Your intelligence increased by 1
+			</strong>
+			<<set $player.int++>>
+  			<br /><br />
+		</div>
+		
+	</div>
+</div>
+
+
+<<link 'Leave'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

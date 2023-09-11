@@ -1,0 +1,85 @@
+:: Slave market - VIP introduction {"position":"2295,1691","size":"100,100"}
+<h1 class="ptitle">SLAVE MARKET</h1>
+<br /><br />
+Suddenly, a woman emerges from the adjacent room, all dressed in black with a large scar on her face. She is dressed too elegantly for such a place. Well, she points at you and says...
+<br /><br />
+
+<<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+	Could you follow me?
+<</say>>
+<br /><br />
+<<linkreplace 'Follow her'>>
+	You decide to follow her into the adjacent room. Behind the first set of doors, a dark corridor follows that you walk through. She doesn't speak to you, but simply leads you deeper. After a moment, you notice a set of large wooden doors that are already partially open, and light from that room shines faintly through the gap.
+	<br /><br />
+	<<linkreplace 'Go inside'>>
+		Upon entering through the doors, a large room unfolds in front of you with at least 4 meters high ceilings. A small stage has been set up by one of the walls, and quite a few people are sitting around it. It looks like some sort of auction, but not for the regular audience. After a while, you notice that a couple of girls are being brought in from the adjacent room, in chains.
+		<<video 'slave_market/vip1'>>
+		<br /><br />
+		The girls are brought to the stage and undressed in front of everyone. A person who loudly shouts over everyone is calling out prices for which the girls can be bought. It's mentioned that all the girls are innocent and none of them have ever been beaten with whips.
+		<br /><br />
+		<<video 'slave_market/vip2'>>
+		<br /><br />
+		Suddenly, another girl is brought in from the adjacent room. She looks a bit different from the others and seems to be new to this. She's placed in the middle of the floor, and she gets branded with a hot metal onto her back.
+		<br /><br />
+		<<video 'slave_market/vip3'>>
+		<br /><br />
+		<<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+			Interested in her? I wanted to talk about something else. We have noticed you. The slaves you have provided to us have been very valuable, so we wanted to thank you in our own way.
+		<</say>>
+		<br /><br />
+		The girl who was just branded looks at you with tearful eyes, and at some point, your gazes meet.
+		<br /><br />
+		<<newgirl>>
+		<<set 
+			$tmpGirl.traits = setup.getRandomTraits(3),
+			$tmpGirl.birthDate = setup.getBirthDate(19),
+			$tmpGirl.race = 'white',
+			$tmpGirl.beauty = 90,
+			$tmpGirl.hair = 'blonde',
+			$tmpGirl.breasts = 'big',
+			$tmpGirl.virgin = true,
+			$tmpGirl.orgasms = 0
+		>>
+		<<set _forceKnown = true>>
+		<<include 'NPC info'>>
+		<br /><br />
+		<<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+			As a thank you, we would like to offer you some slightly more exceptional girls. This means that in the future, the girls we provide will be somewhat more beautiful and intelligent than the others in the market. We hope you will appreciate this.
+		<</say>>
+		<br /><br />
+		<<linkreplace 'Ask about girl who was just branded'>>
+			<<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+				Are you sure? We know nothing about her yet. But if you desire her so much, you can have her for 300 caps.
+			<</say>>
+			<br /><br />
+			<<if $player.money >= 300>>
+				<<if $slaves.length < $basementLimit>>
+					<<linkreplace 'Buy her'>>
+						<<run $slaves.push($tmpGirl)>>
+						<<set _bought = true>>
+						<<run $('#option_buy').hide()>>
+						<<set $player.money -= 300>>
+						<center>
+							[img[setup.ImagePath+'places/slave_market/vip_bought.webp']]
+						</center>
+						<br /><br />
+						She collects your money and meanwhile one of her colleagues puts a collar around the girl you just bought
+						<br /><br />
+					<</linkreplace>>
+					<<linkdesc 'option_buy'>>
+						-300 caps
+					<</linkdesc>>
+				<</if>>
+			<</if>>
+		<</linkreplace>>
+		<<link 'Leave'>>
+			<<if _bought>>
+			  	<<goto 'Basement'>>
+			<<else>>
+				<<goto 'Slave market'>>
+			<</if>>
+		<</link>>
+	<</linkreplace>>
+<</linkreplace>>
+
+

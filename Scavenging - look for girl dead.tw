@@ -1,0 +1,20 @@
+:: Scavenging - look for girl dead {"position":"4739,1104","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<center>
+  [img[setup.ImagePath+'places/outside/scavenging_dead.jpg']]
+</center>
+<br /><br />
+You kept walking for few hours and suddently you noticed someone in the distance on the ground. Your rushed toward her and found that it's her.
+<br />
+Her clothes were ripped apart and she was left laying on the ground with a knife wound. She's dead. 
+<br /><br />
+<<link 'Return home'>>
+	<<set _eventCompanionKey = 'guest:' + $scavengingDidntReturn>>
+	<<companionRemove `_eventCompanionKey`>>
+	<<companionRearange $scavengingDidntReturn>>
+	<<run $guests.splice($scavengingDidntReturn, 1)>>
+	<<goto 'Outside'>>
+<</link>>
+
+

@@ -1,0 +1,66 @@
+:: Streets - Blair quest missing friend - alive {"position":"904,2052","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+
+As you walk down the street you hear some noises and decide to investigate. It's not far from the place where the bartender told you she was usually seen.<br />
+You notice a rusty unlocked door and slowly open it to check what's inside.
+
+<br /><br />
+<<video '/streets/lost_friend1'>>
+<br /><br />
+
+You manage to find a light switch and turn it on...<br />
+There's a red headed girl locked in a cage.<br />
+You carefully move forward while checking your surroundings.<br />
+
+<br />
+You slowly open the cage but get no response from her. First thought that comes to your mind is that she's already dead but you decide to drag her out of the cage to check closer.
+<br /><br />
+<<video '/streets/lost_friend2'>>
+<br /><br />
+<<you>>Ashley? ASHLEY! WAKE UP!<</you>>
+<br /><br />
+No response.. You give her a squeeze then slap her while expecting her to get her shit together. You even splash water on her - still nothing
+<br /><br />
+<<video '/streets/lost_friend3'>>
+<br /><br />
+
+<div id="lost-friend-buttons">
+	<<link 'Fuck her mouth'>>
+		<<run $('#lost-friend-buttons').slideToggle()>>
+		<<run $('#lost-friend-use').slideToggle()>>
+		<<if typeof $characters.blair.quests !== 'undefined'>>
+			<<set $characters.blair.quests.lost_friend_used = true>>
+		<</if>>
+		<<run setTimeout(function() {
+			$('#lost-friend-fight').slideToggle();
+		}, 3000)>>
+	<</link>>
+ 	<<link 'Try to help her'>>
+   		You grab her by the hair and pull her toward your hard dick. She seems lost and confused but you decide to continue.
+		<<run $('#lost-friend-fight').slideToggle()>>
+	<</link>>
+</div>
+
+<div id="lost-friend-use" style="display: none;">
+	You grab her by hair and instantly pull her up toward your hard dick. She seems lost and doesn't understand what's even happening but you decide to continue.
+	<br /><br />
+	<<video '/streets/lost_friend4'>>
+</div>
+
+<div id="lost-friend-fight" style="display:none">
+  <br /><br />
+Suddenly you hear a noise behind you and as you turn around you notice a guy running toward you as he screams his lungs out.
+<br /><br />
+  <<link 'Fight'>>
+	  <<newguy>>
+	  <<set 
+	  	$enemies = [],
+		$tmpGuy.strength = 30
+	  >>
+	  <<run $enemies.push($tmpGuy)>>
+	  <<fight $enemies 'Streets - Blair quest missing friend home' 'Streets'>>
+  <</link>>
+</div>
+
+

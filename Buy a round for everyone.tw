@@ -1,0 +1,54 @@
+:: Buy a round for everyone [bg-underground] {"position":"2612,1939","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+<br /><br />
+<<you>>Next round is on me!!!<</you>>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/buy_round1.webp']]
+</center>
+<br /><br />
+Everyone cheers and nods at you as you increased they mood drasticly.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/buy_round2.webp']]
+</center>
+<br /><br />
+<<if $player.reputation < 50>>
+	<<set $player.reputation++>>
+	<strong>Your reputation increased by 1</strong>
+<<else>>
+	<strong>You can't increase your reputation anymore with this action</strong>
+<</if>>
+
+<<addmins 60>>
+<<if randomInteger(0, 1) === 0>>
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/bar/buy_round_girl' + randomInteger(1,2) + '.webp']]
+	</center>
+	<br /><br />
+	Some girl winks at you as she drinks the beer you bought to her and comes to you.<br />
+	<strong>"Thanks for the drink. How about I repay you for it?"</strong>
+	<br /><br />
+	<<link 'Go to the bathroom'>>
+		<<newgirl>>
+		<<run delete $slaveId>>
+		<<run delete $guestId>>
+		<<run delete $charId>>
+		<<set $tmpGirlCapture to false>>
+		<<set $tmpGirl.rape to false>>
+		<<run delete $slaveId, $charId, $guestId>>
+		<<set $tmpGirl.location = 'nightclub'>>
+		<<set $tmpGirlBack = 'Bar'>>
+		<<set $tmpGirlViewBack = 'Bar'>>
+		<<goto 'Girl fuck'>>
+	<</link>>
+	<<link 'No thanks'>>
+		<<goto 'Bar'>>
+	<</link>>
+<<else>>
+<br /><br />
+<</if>>
+[[Leave|Bar]]
+
+

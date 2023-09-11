@@ -1,0 +1,36 @@
+:: Rodger - champagne [bg-settlement] {"position":"2373,2447","size":"100,100"}
+<h1 class="ptitle">CHURCH</h1>
+<br /><br />
+<<rodger>>
+Glad you're here <<=$player.name>>! Listen, as we finished the church and our group anual celebration is coming I wanted to ask if you could help me.<br />
+I know a place to an old tavern in the city. Maybe you could go there and check if there's some wine left? 
+<br /><br />
+Our community would really appreciate it.
+<</rodger>>
+<br /><br />
+<div id="option1">
+	<<link 'Go to the city alone'>>
+		<<goto 'Rodger - champagne #2'>>
+	<</link>>
+</div>
+<<linkreplace 'Ask if Eve will come too'>>
+	<<run $('#option1').hide()>>
+	<center>
+	[img[setup.ImagePath+'places/settlement/rodger_book3.webp']]
+</center>
+	<br /><br />
+		<<eve>>
+			I don't know if I should. I need to do some chores around her.<br />
+			But if you think it would be better I can go. 
+		<</eve>>
+	<br /><br />
+	<<link 'Go to the city with Eve'>>
+		<<set $characters.rodger.quests.champagne_eve = true>>
+		<<goto 'Rodger - champagne #2'>>
+	<</link>>
+	<<link 'Go to the city without Eve'>>
+		<<goto 'Rodger - champagne #2'>>
+	<</link>>
+<</linkreplace>>
+
+

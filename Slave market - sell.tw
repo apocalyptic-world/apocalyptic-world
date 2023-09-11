@@ -1,0 +1,59 @@
+:: Slave market - sell [bg-underground] {"position":"2063,1690","size":"100,100"}
+<h1 class="ptitle">SLAVE MARKET</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/slave_market_head.jpg']]
+</div>
+<br /><br />
+
+<<if $slaves.length > 0>>
+Choose a slave you want to sell
+<<else>>
+You don't have any slaves
+<</if>>
+
+<br />
+<table id="slaves">
+	<<for _i to 0; _i lt $slaves.length; _i++>>
+		<<capture _i>>
+		<<if $slaves[_i].gender>>
+			<<continue>>
+		<</if>>
+		<<slaveValue $slaves[_i]>>
+		<tr>
+			<td style="width: 300px">
+				<<=$slaves[_i].name>>
+			</td>
+			<td>
+				Beauty score: <<print $slaves[_i].beauty>>
+			</td>
+			<td>
+				Age: <<=setup.getAge($slaves[_i])>>
+			</td>
+			<td>
+				Value: <strong><<=$slaveValue>></strong>
+			</td>
+			<td>
+				<<link 'Sell'>>
+					<<dialog 'Release'>>
+						Are you sure you want to sell her?
+						<br />
+						<<link 'Yes' 'Slave market - sell'>>
+							<<set $player.reputation++>>
+							<<set $player.goodwill-=5>>
+							<<set $player.money += $slaves[_i].value>>
+							<<run $slaves.splice(_i, 1)>>
+							<<statsAdd 'slaves_sold'>>
+							<<addmins 60>>
+							<<dialogclose>>
+						<</link>>	
+					<</dialog>>
+				<</link>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+</table>
+<br /><br />
+[[Leave|Slave market]]
+
+

@@ -1,0 +1,40 @@
+:: Event: Rotten Rations {"position":"457,961","size":"100,100"}
+<h1 class="ptitle">KITCHEN</h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_rotten_food.png']]
+</center>
+
+<<set _persons = setup.getPersonsForLocation($guests, 'garden')>>
+<<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
+
+<br /><br />
+A weary <strong><<=$guests[_randomPerson.name]>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
+<br /><br />
+
+<<set _amountFood = Math.round($backpack.count('food') - ((20 / 100) * $backpack.count('food')), 0)>>
+
+
+<<set _foodOut = $backpack.count('food') - Math.min(_amountFood, $backpack.count('food'))>>
+Bickering about whose fault the situation quickly evolves into a different discussion, as the hungry guests begin to argue if they can afford to throw away precious food, even if a little past its prime.
+<br /><br />
+
+<<link 'Throw the food out'>>
+	<<drop $backpack 'food' _foodOut>>
+	<<goto 'Kitchen-room'>>
+<</link>>
+<<linkdesc>>
+	Throw <<=_foodOut>> food out
+<</linkdesc>>
+<<link 'Keep the food'>>
+	<<if setup.percentageChance(50)>>
+		<<set $game.foodRotten = true>>
+	<</if>>
+	<<goto 'Kitchen-room'>>
+<</link>>
+<<linkdesc>>
+	Chance that your guests or slaves will get ill from food poisoning
+<</linkdesc>>
+<<set $game.rotten_rations_day = $game.day>>
+
+

@@ -1,0 +1,70 @@
+:: Game clock [widget] {"position":"900,12","size":"100,100"}
+<<set
+	window.GameDays to [
+		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+	];
+	window.GameMonths to [
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+	];
+	
+	$gameDate to new Date(2022, 11, 4, 8, 0);
+	$startDate to new Date(2022, 11, 4, 8, 0);
+>>
+
+<<widget "addmins">>
+<<run $gameDate.setMinutes($gameDate.getMinutes() + $args[0])>>
+<</widget>>
+
+<<widget "addhours">>
+<<run $gameDate.setHours($gameDate.getHours() + $args[0])>>
+<</widget>>
+
+<<widget "adddays">>
+<<run $gameDate.setHours($gameDate.getHours() + $args[0] * 24)>>
+<</widget>>
+
+<<widget "date">>
+<<print String.format("{0} {1} {2}, {3}",
+	GameDays[$gameDate.getDay()],
+	GameMonths[$gameDate.getMonth()],
+	$gameDate.getDate(),
+	$gameDate.getFullYear()
+)>>
+<</widget>>
+
+<<widget "timeDay">>
+<<print String.format("{0}",
+	GameDays[$gameDate.getDay()]
+)>><</widget>>
+
+<<widget "time12hr">>
+<<if $gameDate.getHours() eq 0>>
+12
+<<elseif $gameDate.getHours() gt 12>>
+<<print $gameDate.getHours() - 12>>
+<<else>>
+<<print $gameDate.getHours()>>
+<</if>>:
+<<if $gameDate.getMinutes() lt 10>>0<</if>><<print $gameDate.getMinutes()>> 
+<<if $gameDate.getHours() gte 12>>PM<<else>>AM<</if>>
+<</widget>>
+
+<<widget "timeCycle">>
+	<<if $gameDate.getHours() > 6 && $gameDate.getHours() < 12>>
+		<<set $timeCycle = 'morning'>>
+	<<elseif $gameDate.getHours() > 6 && $gameDate.getHours() < 18>>
+		<<set $timeCycle = 'afternoon'>>
+	<<elseif $gameDate.getHours() > 6 && $gameDate.getHours() < 22>>
+		<<set $timeCycle = 'evening'>>
+	<<else>>
+		<<set $timeCycle = 'night'>>
+	<</if>>
+<</widget>>
+<<widget "time24hr">>
+<<if $gameDate.getHours() lt 10>>0<</if>><<print $gameDate.getHours()>>:<<if $gameDate.getMinutes() lt 10>>0<</if>><<print $gameDate.getMinutes()>>
+<</widget>>
+
+<<widget "datetime">><<date>> <<time12hr>> (<<time24hr>>)<</widget>>
+
+

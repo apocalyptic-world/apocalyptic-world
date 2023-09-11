@@ -1,0 +1,52 @@
+:: Event: Horse merchant {"position":"573,1083","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/horse_merchant.jpg']]
+</center>
+<br /><br />
+As you approach the village gate, you encounter a stranger standing next to a colorful caravan filled with beautiful horses. He introduces himself as Barnaby, the Horse Traveling Merchant. Barnaby explains that he's passing through the area and offers a selection of horses for sale. He also mentions that he's a skilled horse trainer and takes great care of his animals...<br /><br />
+<<anonguy>>
+	Would you want to buy a horse?
+<</anonguy>>
+<br /><br />
+<div id="option1">
+	<<linkreplace 'Yes'>>
+		With excitement, Barnaby shows the traveler various horses and tells that one horse costs <strong class="iitem">400 caps</strong>
+		<br /><br />
+		<<if $player.money >= 400>>
+			<<linkreplace 'Buy horse'>>
+				<<run $('#option2').hide()>>
+				<<run $('#option1_desc').hide()>>
+				<<set $player.money -= 400>>
+				What you will call your horse? <<textbox "_tmpHorseName" 'Bullet'>>
+				<br /><br />
+				<<link 'Leave'>>
+					<<set $player.horse = _tmpHorseName>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+			<div id="option1_desc">
+				<<linkdesc>>-400 caps<</linkdesc>>
+			</div>
+		<</if>>
+	<</linkreplace>>
+</div>
+<div id="option2">
+	<<linkreplace 'No'>>
+		<<run $('#option1').hide()>>
+		With a gracious smile, Barnaby nodded understandingly, accepting the traveler's decision.
+		<br /><br />
+		<<anonguy>>
+			No worries at all. If you ever change your mind I'll probably come and check on you again
+		<</anonguy>>
+		<br /><br />
+		With that, the traveler continued on his way, leaving you and your beautiful horses behind.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+

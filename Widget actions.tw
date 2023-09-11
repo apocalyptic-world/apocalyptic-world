@@ -1,0 +1,81 @@
+:: Widget actions [widget] {"position":"2998,95","size":"100,100"}
+<<widget actionText>>
+	<<print $args[1]>>
+<</widget>>
+
+<<widget actionImage>>
+	<div class="action-image">
+		<<if $args[0].virgin && $args[1] === 'pussy'>>
+			[img[setup.ImagePath+'game/misc/deflower.webp']]
+		<<else>>
+		  <<if typeof setup.actions[$args[0].name] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location][$args[1]] !== 'undefined'>>
+			  	<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].name + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[$args[0].name][$args[0].location][$args[1]])`>>
+		  <<elseif typeof setup.actions[$args[0].name] !== 'undefined' && typeof setup.actions[$args[0].name]['bedroom'] !== 'undefined' && typeof setup.actions[$args[0].name]['bedroom'][$args[1]] !== 'undefined'>>
+		  		<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].name + '/bedroom/'+ $args[1] + '/' + either(setup.actions[$args[0].name]['bedroom'][$args[1]])`>>
+		  <<elseif !$args[0].gender && typeof setup.actions[$args[0].race] !== 'undefined' && typeof setup.actions[$args[0].race][$args[0].location] !== 'undefined' && typeof setup.actions[$args[0].race][$args[0].location][$args[1]] !== 'undefined'>>
+		  		<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].race + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[$args[0].race][$args[0].location][$args[1]])`>>
+		  <<elseif !$args[0].gender && setup.getAge($args[0]) >= 55 && typeof setup.actions['gilf'][$args[0].location] !== 'undefined' && typeof setup.actions['gilf'][$args[0].location][$args[1]] !== 'undefined'>>
+		  	 	<<actionImageOutput `setup.ImagePath+'actions/gilf/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['gilf'][$args[0].location][$args[1]])`>>
+		  <<elseif ($args[0].pregnancy ?? 0) > 100 && typeof setup.actions['pregnant'][$args[0].location] !== 'undefined' && typeof setup.actions['pregnant'][$args[0].location][$args[1]] !== 'undefined'>>
+		  		<<actionImageOutput `setup.ImagePath+'actions/pregnant/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['pregnant'][$args[0].location][$args[1]])`>>
+		  <<elseif $args[0].gender === 1>>
+		  		<<actionImageOutput `setup.ImagePath+'actions/male/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.male[$args[0].location][$args[1]])`>>
+		  <<else>>
+			  <<if typeof setup.actions['default'][$args[0].location][$args[1]] !== 'undefined'>>
+			  		<<actionImageOutput `setup.ImagePath+'actions/default/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.default[$args[0].location][$args[1]])`>>
+			  <<else>>
+			  		<<actionImageOutput `setup.ImagePath+'actions/default/bedroom/'+ $args[1] + '/' + either(setup.actions.default.bedroom[$args[1]])`>>
+			  <</if>>
+		  <</if>>
+		<</if>>
+	</div>
+	<br />
+	<div class="action-text">
+		<<if $args[0].virgin && typeof $actionText[$args[1]] !== 'undefined' && typeof $actionText[$args[1]]['v'] !== 'undefined'>>
+			 <<print $actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
+		<<else>>
+			<<if $args[0].gender === 1>>
+				<<if $actionText['male'][$args[1]] !== undefined>>
+					<<print $actionText['male'][$args[1]][0].replace('%name%', $args[0].name)>>
+				<</if>>
+			<<else>>
+				<<if $actionText[$args[1]] !== undefined>>
+					<<if ($actionText[$args[1]] ?? false) && ($actionText[$args[1]]['stats'] ?? false)>>
+						<<for _sortedTextsStat, _sortedTextsData range $actionText[$args[1]]['stats']>>
+							<<if typeof $tmpGirl[$args[1]] !== 'undefined' && $tmpGirl[$args[1]] >= _sortedTextsData.s>>
+								<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
+							<</if>>
+						<</for>>
+						<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
+					<<else>>
+						<<print $actionText[$args[1]][0].replace('%name%', $args[0].name)>>
+					<</if>>
+				<</if>>
+			<</if>>
+		<</if>>
+	</div>
+<</widget>>
+
+<<widget actionDream>>
+	<<set $sleepAction = {
+		place: either(Object.keys(setup.actions.default)),
+		type: either('pussy', 'anal', 'bj', 'dp')
+	}>>
+	
+	[img[setup.ImagePath+'actions/default/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.default[$sleepAction.place][$sleepAction.type])]]	
+<</widget>>
+
+<<widget actionImageOutput>>
+	<<set _extension = $args[0].split('.').pop()>>
+	<<if ['mp4', 'webm'].includes(_extension)>>
+		<<set _videoType = 'video/' + _extension>>
+		<<set $url to $args[0]>>
+		<video controls autoplay loop>
+  			<source @src="$url" @type="_videoType">
+		</video>
+	<<else>>
+		[img[$args[0]]]
+	<</if>>
+<</widget>>
+
+

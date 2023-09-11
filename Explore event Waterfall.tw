@@ -1,0 +1,135 @@
+:: Explore event: Waterfall {"position":"6102,579","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+
+<center>
+[img[setup.ImagePath+'places/explore/waterfall_girl.jpg']]
+</center>
+<br /><br />
+As you make your way through a area of the wilderness you hear the faint sounds of
+flowing water. Moving closer you come upon a waterfall. 
+<br /><br />
+
+<center>
+[img[setup.ImagePath+'places/explore/waterfall_girl.webp']]
+</center>
+<br /><br />
+Continue to walking closer you notice beautiful woman bathing in a small waterfall. Her
+remarkably smooth skin and toned body suggest that she is healthy and has been eating well,
+unlike the starving wretches you have previously seen.
+<br />
+Either she's horny or the water is a bit cold, because her nipples are hard and her face is
+flushed. With great difficulty you take your eyes off her and carefully survey the area. Nobody
+else is visible. Female clothes are drying on a nearby rock. The woman appears to be bathing
+alone.
+<br />
+Your swelling cock is making wearing pants increasingly uncomfortable.
+<<horny 100>>
+<br /><br />
+
+<<if recall($suppCode)>>
+
+<div id="option1">
+<<linkreplace 'Strip and join her in the waterfall'>>
+	<<run $('#option2, #option3, #option1_desc').hide()>>
+		  Who needs a better invitation than a naked soon-to-be slave? You walk towards the waterfall
+while shedding your gear and clothes. The woman finally notices you when you step into the
+water a few feet away from her.
+Half expecting her to make a run for it, you flex and pose so she can see that neither fight nor
+flight would be successful. Instead she smiles coyly, arches her back, and bites her lower lip
+before speaking. She purrs gazing at your fully
+erect cock.
+<br /><br />
+<<anongirl>>
+I'm cold and my clothes are all wet. Could you warm me up?
+<</anongirl>>
+	  <br /><br />
+	<<if $player.int < 50>>
+	  <center>
+		  [img[setup.ImagePath+'places/explore/waterfall_handjob.webp']]
+	  </center>
+		<br /><br />
+		  You walk forward and embrace this water goddess, eager to fuck the daylights out of her.
+  Tracing your calloused hands over her full tits and perky ass produces sultry moans and playful
+  giggles. She absolutely feels as delicious as she looked. Her delicate fingers wrap around your
+  painfully hard erection and she uses your cock like a joystick to guide you over towards the flat
+  grassy bank. All your attention is focused on her as she slides onto all fours and wriggles her
+  ass at you in unmistakeable invitation to fuck her.
+		<br /><br />
+		<<linkreplace 'Fuck her'>>
+			<<run setup.blinkScreen()>>
+			<center>
+		  		[img[setup.ImagePath+'places/explore/waterfall_wakeup.gif']]
+	 		</center>
+		  <br /><br />
+		  <strong>Intelligence failed!</strong>
+		  <br /><br />
+		  Next thing you know the world spins violently and the ground rushes up to meet your face.
+		  Consciousness returns slowly. It brings with it a splitting headache and a litany of pain as your
+		  naked body is covered in scrapes and bruises. The beautiful woman and her hidden compatriots
+		  are long gone and have taken what they wanted from your pack. Thankfully they didn't bother
+		  stealing your clothes
+		  <br /><br />
+		  	<<if $backpack.has('knife')>>
+				<<drop $backpack 'knife' 1>>
+				You lost <strong class="iitem">1 knife</strong><br />
+			<</if>>
+			<<set _lostFood = Math.min($backpack.count('food'), 100)>>
+			<<if _lostFood>>
+				<<drop $backpack 'food' _lostFood>>
+				You lost <strong class="iitem"><<=_lostFood>> food</strong><br />
+			<</if>>
+			<<set _lostPlastic = Math.min($backpack.count('plastic'), 100)>>
+			<<if _lostPlastic>>
+				<<drop $backpack 'plastic' _lostPlastic>>
+				You lost <strong class="iitem"><<=_lostPlastic>> plastic</strong><br />
+			<</if>>
+			<<set _lostMoney = Math.min($player.money, 200)>>
+			<<if _lostMoney>>
+				You lost <strong class="iitem"><<=_lostMoney>> caps</strong>
+			<</if>>
+		  	<br /><br />
+		  	<<link 'Leave'>>
+		  		<<goto 'Outside'>>
+		  	<</link>>
+		<</linkreplace>>
+	<<else>>
+		You walk forward and embrace this water goddess, eager to fuck the daylights out of her.
+		<br />
+		Suddenly she screams <strong>"NOW"</strong>! When you turn around you see 2 big guys rushing at you.
+		<br /><br />
+		You leap away from the naked woman and snatch up your weapon. You may be naked, but at
+		least you had time to arm yourself. Seeing that the charade is over several men spring from
+		their concealment and attack you.
+		<br /><br />
+		<<link 'Fight'>>
+			<<set $enemies = []>>
+			<<newguy>>
+			<<set $tmpGuy.strength = randomInteger(50,100)>>
+			<<run $enemies.push($tmpGuy)>>
+			<<newguy>>
+			<<set $tmpGuy.strength = randomInteger(50,100)>>
+			<<run $enemies.push($tmpGuy)>>
+			
+			<<fight $enemies 'Explore event: Waterfall won' 'Explore event: Waterfall lost'>>
+			<<set $fight.skipEnding = true>>
+		<</link>>
+	<</if>>
+<</linkreplace>>
+<div id="option1_desc">
+  <<linkdesc>>
+	  Send your companions away
+  <</linkdesc>>
+</div>
+</div>
+<<else>>
+	<<notPatreon>>
+	<br /><br />
+<</if>>
+<div id="option3">
+<<link 'Leave'>>
+	<<goto 'Outside'>>
+<</link>>
+</div>
+
+

@@ -1,0 +1,73 @@
+:: Blackjack - play {"position":"3593,1031","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/bar/blackjack_head.jpg']]
+</div>
+<br /><br />
+
+<<if $blackjack.first>>
+	<<run blackjackGiveCard($blackjack.house)>>
+	<<run blackjackGiveCard($blackjack.house)>>
+	
+	<<run blackjackGiveCard($blackjack.you)>>
+	<<run blackjackGiveCard($blackjack.you)>>
+	<<set $blackjack.first = false>>
+<<else>>
+	<<if $blackjack.stand>>
+		<<if blackjackCountCards($blackjack.house) < 17>>
+			<<run blackjackGiveCard($blackjack.house)>>
+		<</if>>
+		
+		<<set $blackjack.finished = true>>
+		<<if (blackjackCountCards($blackjack.you) > blackjackCountCards($blackjack.house) || blackjackCountCards($blackjack.house) > 21) && blackjackCountCards($blackjack.you) <= 21>>
+			<<set $blackjack.won = true>>
+		<</if>>
+	<<else>>
+		<<if blackjackCountCards($blackjack.you) > 21>>
+			<<set $blackjack.finished = true>>
+		<</if>>
+	<</if>>
+<</if>>
+
+<strong>You have <<=blackjackCountCards($blackjack.you)>></strong>
+	
+<<if !$blackjack.finished>>
+	<br /><br />
+	<<link 'Hit'>>
+		<<run blackjackGiveCard($blackjack.you)>>
+		<<goto 'Blackjack - play'>>
+	<</link>>
+	<<link 'Stand'>>
+		<<set $blackjack.stand = true>>
+		<<goto 'Blackjack - play'>>
+	<</link>>
+<<else>>
+	<br />
+	<strong>House has <<=blackjackCountCards($blackjack.house)>></strong>
+	<br /><br />
+	
+	<<if $blackjack.won>>
+		<strong>You WON! You won <<=$blackjack.bet>> caps</strong>
+		<<set $player.money += ($blackjack.bet * 2)>>
+	<<else>>
+		<strong>You LOST!</strong>
+	<</if>>
+	<br /><br />
+	<<link 'Play again'>>
+		<<goto 'Blackjack'>>
+	<</link>>
+	<<link 'Leave'>>
+		<<if $blackjack.bj>>
+			<<goto 'Blackjack - bj end'>>
+		<<else>>
+			<<goto 'Bar'>>
+		<</if>>
+		<<run delete $blackjack>>
+	<</link>>
+<</if>>
+
+<<if ($blackjack.bj)>>
+	<<include 'Blackjack bj'>>		
+<</if>>
+
+

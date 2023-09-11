@@ -1,0 +1,38 @@
+:: Nightclub - dance [nightclub bg-underground] {"position":"2314,1466","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br />
+You dance for an hour on the dance floor.
+<br />
+<<set $tmpGirl = null, $slaveId = null>>
+<<if (random(0,1) === 0)>>
+	<<newgirl>>
+	<<set _age = setup.getAge($tmpGirl, true)>>
+	<<set $tmpGirl.location = 'nightclub'>>
+	<<set $tmpGirl.drunk = random(0,1)>>
+	<br /><br />
+	<<actionImage $tmpGirl dance>>
+	<br />
+	Girl is dancing next to you... <<=_age>> year old. (beauty score: <<=$tmpGirl.beauty>>)		
+	<br />
+	<<if $tmpGirl.drunk == 2>>
+		She's drunk
+	<</if>>
+	<<if $tmpGirl.drunk == 1>>
+		She's a little drunk
+	<</if>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
+<<else>>
+	Guy is dancing next to you...
+<</if>>
+
+<br /><br />
+<<if $tmpGirl>>
+	<<link 'Dance together'>>
+		<<horny 10>>
+		<<goto 'Nightclub - dance together'>>
+	<</link>>
+<</if>>
+[[Continue|Nightclub - inside]] 
+<<addmins 15>>
+
+

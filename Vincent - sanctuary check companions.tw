@@ -1,0 +1,34 @@
+:: Vincent - sanctuary check companions {"position":"2831,1147","size":"100,100"}
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<set _questSuccess = false>>
+<<if Object.keys($player.companions).length > 2>>
+	<<vincent>>
+		<<=$player.name>>, you can only take two companions with you.
+	<</vincent>>
+<<elseif Object.keys($player.companions).length < 2>>
+	<<vincent>>
+		<<=$player.name>>, you need to take two companions with you.
+	<</vincent>>
+<<else>>
+	<<set _isStrengthMet = true>>
+	<<for _companionQuestI, _companionQuest range ($player.companions ?? {})>>
+		<<if $guests[_companionQuestI].strength < 40>>
+			<<set _isStrengthMet = false>>
+		<</if>>
+	<</for>>
+	<<if _isStrengthMet>>
+		<<set _questSuccess = true>>
+	<</if>>
+<</if>>
+
+<<if _questSuccess>>
+	<<goto 'Vincent - sanctuary go'>>
+<<else>>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Farm'>>
+	<</link>>
+<</if>>
+
+

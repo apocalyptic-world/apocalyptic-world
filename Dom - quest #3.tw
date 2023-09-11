@@ -1,0 +1,72 @@
+:: Dom - quest #3 {"position":"3895,1461","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/streets/dom_invite1.jpg']]
+</center>
+<br /><br />
+You turn around the corner where your girls are standing and you see that Dom and some of his people are already waiting for you.
+<br /><br />
+<<dom>>
+	Very good that you're here! Quickly! We don't have much time! Let's hit the road. I'll explain everything on the way.
+<</dom>>
+<br /><br />
+<<linkreplace 'Follow him'>>
+	Instead of going to his place as usual, you turn in the other direction. It seems like you're heading overseas. On the way there, a few more people join Dom. As you walk briskly, Dom starts telling what really happened.
+	<br /><br />
+	<<dom>>
+		There's a problem. Underground city might soon face issues with fuel generators because we're running out of fuel. It was arranged for a diplomat from another city to come, and we would discuss the deal details, but he was supposed to be here the day before yesterday... This morning, another person from the same city arrived and said that the diplomat was supposed to be here.
+	<</dom>>
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/streets/dom_quest3_people.jpg']]
+	</center>
+	<br /><br />
+	While he's talking, more people have joined you, and you all emerge above ground. Dom points to the west, and you all start heading in that direction at a brisk pace.
+	<br /><br />
+	You continue on the road for several hours when suddenly, out of nowhere, a sandstorm appears. It's evident that panic sets in among the people, and those who were moving slowly suddenly collapse on the ground, and the rest don't even attempt to gather them. They are left to fate's mercy. After a while, however, in the distance, you spot something - it looks like an abandoned hotel by the side of the road.
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/streets/dom_quest3_hotel.jpg']]
+	</center>
+	<br /><br />
+	<<dom>>
+		Let's go there. Need to wait till storm calms down. 
+	<</dom>>
+	<br /><br />
+	<<linkreplace 'Go inside'>>
+		The sandstorm is so fierce that you can barely manage to open the doors. After a moment, you are inside, and the wind forcefully slams the doors shut behind you. All around, you can hear murmurs and whispers, but you don't see anyone...
+		<br /><br />
+		<<linkreplace 'Tear the curtains from the window'>>
+			<center>
+				[img[setup.ImagePath+'places/streets/dom_quest3_attack.jpg']]
+			</center>
+			<br /><br />
+			Tearing the curtains from the windows lets in light, illuminating the room ever so slightly. Suddenly, from behind, you hear a shout, and as you turn around, you see that many people have emerged from the previously dark corners of the room, now bathed in light. They all rush towards you all, and a fight ensues. Some of them have knives, while others wield metal pipes. A couple of them decide to attack you as well.
+			<br /><br />
+			<<link 'Fight'>>
+				<<set $enemies = []>>
+				<<newguy>>
+				<<if setup.percentageChance(10)>>
+					<<set 
+						$tmpGuy.inventory = [],
+						$tmpGuy.inventory.push('knife')
+					>>
+				<</if>>
+				<<run $enemies.push($tmpGuy)>>
+				<<newguy>>
+				<<run $enemies.push($tmpGuy)>>
+				<<newguy>>
+				<<run $enemies.push($tmpGuy)>>
+				<<set $game.death_reason = 'stab wounds'>>
+  				<<fight $enemies 'Dom - quest #3 2' 'Dead'>>
+				<<set 
+					$fight.canRunAway = false,
+					$fight.skipEnding = true
+				>>
+			<</link>>
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
+
+

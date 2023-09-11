@@ -1,0 +1,29 @@
+:: Random event - hospital #13 {"position":"6331,128","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+ <center>
+ [img[setup.ImagePath+'places/explore/hospital_outside.jpg']]
+ </center>
+ <br /><br />
+ You explore around the city borders and stumble upon a hospital.<br />
+ From outside it look like it has been robbed numerous times.<br />
+ All windows are broken and by the look nothing should be left inside to grab.
+ 
+ <br /><br />
+ <<linkreplace 'Go inside hospital'>>
+  <center>
+ [img[setup.ImagePath+'places/explore/hospital_inside.jpg']]
+ </center><br /><br />
+ 	<<if randomInteger(1,2) === 1>>
+		<<pickup $backpack 'antibiotics' 2>>
+		You found <strong class="iitem">2</strong> bottles of <strong class="iitem">antibiotics</strong>
+	<<else>>
+		You found nothing and decided to leave
+	<</if>>
+	<br /><br />
+ <</linkreplace>>
+ <<link 'Leave'>>
+ 	<<goto 'Outside'>>
+ <</link>>
+
+

@@ -1,0 +1,57 @@
+:: Random event - ambush #2 {"position":"5627,14","size":"100,100"}
+<<set $ambushWeapon = either('gun', 'knife')>>
+<center>[img[setup.ImagePath+'places/explore/ambush.webp']]</center>
+<br /><br />
+
+<<set _isGirl = false>>
+<<if setup.percentageChance(30)>>
+	<<set _isGirl = true>>
+<</if>>
+
+
+While walking close to the city border <strong>two</strong> attackers jump out of the corner while holding <strong><<print $ambushWeapon>></strong> in their hand.
+They yell at you and asks where you're going before demanding do give something to them so they do not kill you. 
+<br /><br />
+<<if $backpack.has('food')>>
+	<<link 'Give them food (1)'>>
+		<<drop $backpack 'food' 1>>
+		<<goto 'Outside'>>
+	<</link>>
+<</if>>
+
+<<if $player.money >= 2>>
+	<<link 'Give them bottle caps (2)'>>
+		<<set $player.money -= 2>>
+		<<goto 'Outside'>>
+	<</link>>
+<</if>>
+<<link 'Fight them'>>
+	<<set $enemies = []>>
+  	<<newguy>>
+	<<if randomInteger(0, 10) === 0>>
+		<<set 
+			$tmpGuy.inventory = [],
+			$tmpGuy.inventory.push('knife')
+		>>
+	<</if>>
+  	<<run $enemies.push($tmpGuy)>>
+	
+	<<if _isGirl>>
+		<<newgirl>>
+		<<run $enemies.push($tmpGirl)>>
+	<<else>>
+		<<newguy>>
+  		<<run $enemies.push($tmpGuy)>>
+	<</if>>
+  	<<fight $enemies 'Outside' 'Outside'>>
+<</link>>
+<<link 'Try to run away'>>
+	<<if $player.strength < 30>>
+		<<set $game.death_reason = 'bullets in your back'>>
+		<<goto 'Dead'>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+

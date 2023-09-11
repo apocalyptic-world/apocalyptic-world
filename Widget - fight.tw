@@ -1,0 +1,195 @@
+:: Widget - fight [widget] {"position":"3261,753","size":"100,100"}
+<<widget fight>>
+	<<set $fightStart = true>>
+	<<set $fight = {
+		enemies: [],
+		allies: [],
+		defeatedEnemies: [],
+		defeatedAllies: [],
+		defeatedEnemies: [],
+		hp: 100,
+		messages: [],
+		reward: false,
+		passageWon: $args[1] ?? null,
+		passageLost: $args[2] ?? null,
+		public: ($args[3] ?? false)
+	}>>
+	
+	<<for _i to 0; _i lt $args[0].length; _i++>>
+		<<set $args[0][_i].hp = 100>>
+		<<run $fight.enemies.push($args[0][_i])>>
+	<</for>>
+	
+	<<for _ally, _allyId range $player.companions>>
+		<<set _allyKey = _ally.split(':')>>
+		<<set _tmpAlly = $guests[_allyKey[1]]>>
+		<<set _tmpAlly.key = _allyKey>>
+		<<set _tmpAlly.hp = 100>>
+		<<run $fight.allies.push(_tmpAlly)>>
+	<</for>>
+	
+	<<goto 'Fight'>>
+<</widget>>
+
+<<widget fightAction>>
+	<<if (typeof $args[1] === 'undefined')>>
+		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 3, 0)>>
+		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
+			<<set $fight.enemies[$args[0]].attacks = []>>
+		<</if>>
+		<<set $fight.enemies[$args[0]].attacks.push('hit')>>
+		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (- ' + Math.round($player.strength / 3, 0) + ')')>>
+	<<elseif $args[1] === 'knife'>>
+		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 2, 0)>>
+		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
+			<<set $fight.enemies[$args[0]].attacks = []>>
+		<</if>>
+		<<set $fight.enemies[$args[0]].attacks.push('knife')>>
+		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in chest (- ' + Math.round($player.strength / 2, 0) + ')')>>
+	<<elseif $args[1] === 'revolver'>>
+		<<drop $backpack 'bullet_revolver' 1>>
+		<<set $fight.enemies[$args[0]].hp = 0>>
+		<<set $fight.enemies[$args[0]].killed = true>>
+		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
+			<<set $fight.enemies[$args[0]].attacks = []>>
+		<</if>>
+		<<set $fight.enemies[$args[0]].attacks.push('revolver')>>
+		<<set $fight.messages.push('You shot ' + $fight.enemies[$args[0]].name + ' in the ' + either('chest', 'face'))>>
+	<</if>>
+	
+	<<if $fight.enemies[$args[0]].hp <= 0>>
+		<<if (typeof $args[1] === 'undefined')>>
+			<<set $fight.messages.push($fight.enemies[$args[0]].name + ' fall to the ground knocked out')>>
+		<</if>>
+		<<run $fight.defeatedEnemies.push($fight.enemies[$args[0]])>>
+		<<run $fight.enemies.splice(_i, 1)>>
+	<</if>>
+	
+	
+		<<for _i to 0; _i lt $fight.allies.length; _i++>>
+			<<if !$fight.enemies.length>>
+				<<continue>>
+			<</if>>
+			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
+			<<set _allyStrength = Math.round($fight.allies[_i].strength / 3, 0)>>
+			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
+				<<set $fight.enemies[_randomEnemyKey].attacks = []>>
+			<</if>>
+			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
+			<<set $fight.enemies[_randomEnemyKey].attacks.push('hit')>>
+			<<set $fight.messages.push($fight.allies[_i].name + ' punched ' + $fight.enemies[_randomEnemyKey].name + ' in the face (- ' + _allyStrength + ')')>>
+
+			<<if $fight.enemies[_randomEnemyKey].hp <= 0>>
+				<<run $fight.defeatedEnemies.push($fight.enemies[_randomEnemyKey])>>
+				<<run $fight.enemies.splice(_randomEnemyKey, 1)>>
+			<</if>>
+		<</for>>
+
+	<<for _i to 0; _i lt $fight.enemies.length; _i++>>
+		<<set _randomEnemyTargetArray = Object.keys($fight.allies)>>
+		<<run _randomEnemyTargetArray.push('you')>>
+		<<set _randomEnemyTarget = _randomEnemyTargetArray[Math.floor(Math.random() * _randomEnemyTargetArray.length)]>>
+		<<set _isPlayerTarget = (_randomEnemyTarget === 'you')>>
+		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
+
+		<<if $fight.enemies[_i].inventory>>
+			<<if $fight.enemies[_i].inventory.includes('knife')>>
+				<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 2, 0) + 20>>
+				<<if _isPlayerTarget>>
+					<<if $player.endurance > 0>>
+						<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+					<</if>>
+					<<perkAdd 'bleeding'>>
+				<</if>>
+				<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (- ' + $enemyStrength + ')')>>
+			<</if>>
+		<<else>>
+			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 3, 0) + randomInteger(0, 10)>>
+			<<if _isPlayerTarget>>
+				<<if $player.endurance > 0>>
+					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+				<</if>>
+			<</if>>
+			<<run $fight.messages.push($fight.enemies[_i].name + ' ' + either(
+			  'punched ' + _targetName + ' in the head', 
+			  'kicked ' + _targetName + ' in the stomach', 
+			  'hit ' + _targetName + ' with elbow'
+			) + ' (- ' + $enemyStrength + ')')>>
+		<</if>>
+		
+		<<if _isPlayerTarget>>
+			<<set $fight.hp -= $enemyStrength>>
+		<<else>>
+			<<set $fight.allies[_randomEnemyTarget].hp -= $enemyStrength>>
+		<</if>>
+		
+		<<if !_isPlayerTarget>>
+			<<if $fight.allies[_randomEnemyTarget].hp <= 0>>
+				<<run $fight.defeatedAllies.push($fight.allies[_randomEnemyTarget])>>
+				<<run $fight.allies.splice(_randomEnemyTarget, 1)>>
+			<</if>>
+		<</if>>
+	<</for>>
+	
+	<<unset $enemyStrength>>
+	
+	<<if !$fight.enemies.length>>
+		<<if $fight.skipEnding>>
+			<<goto $fight.passageWon>>
+		<<else>>
+			<<goto 'Fight - won'>>
+		<</if>>
+	<<elseif $fight.hp <= 0>>
+		<<if $fight.skipEnding>>
+			<<goto $fight.passageLost>>
+		<<else>>
+			<<goto 'Fight - lost'>>
+		<</if>>
+	<<else>>
+		<<goto 'Fight'>>
+	<</if>>
+<</widget>>
+
+<<widget fightEnd>>
+	<<if typeof $fight === 'undefined'>>
+		<<set $fight = {
+			defeatedEnemies: [],
+			defeatedAllies: [],
+			killedEnemies: []
+		}>>
+	<</if>>
+	<<set $fight.killedEnemies = $fight.killedEnemies ?? []>>
+	<<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
+		<<capture _i>>
+			<<if $fight.defeatedEnemies[_i].killed>>
+				<<statsAdd 'people_killed'>>
+				<<run $fight.killedEnemies.push($fight.defeatedEnemies[_i])>>
+			<</if>>
+			<<if $fight.defeatedEnemies[_i].captured>>
+				<<run delete $fight.defeatedEnemies[_i].captured>>
+				<<run delete $fight.defeatedEnemies[_i].hp>>
+				<<set $fight.defeatedEnemies[_i].relationship = -100>>
+				<<run $slaves.push($fight.defeatedEnemies[_i])>>
+				<<statsAdd 'people_captured'>>
+			<</if>>
+			
+			<<if !$fight.defeatedEnemies[_i].captured && !$fight.defeatedEnemies[_i].killed>>
+				<<set $player.reputation++>>
+				<<set $player.goodwill++>>
+			<</if>>
+		<</capture>>
+	<</for>>
+	
+	<<set $fight.won = ($args[0] ?? false)>>
+	<<set $prevFight = $fight>>
+	<<if (!$fight.won)>>
+		<<perkAdd 'beaten'>>
+		<<goto $fight.passageLost>>
+	<<else>>
+		<<goto $fight.passageWon>>
+	<</if>>
+	<<unset $fight>>
+	
+<</widget>>
+
+

@@ -1,0 +1,99 @@
+:: Farm [Place bg-farm] {"position":"1821,903","size":"100,100"}
+<<if (typeof $characters.vincent.relationship === 'undefined')>>
+	<<set $characters.vincent.relationship = 15>>
+<</if>>
+<h1 class="ptitle">FARM</h1>
+<<if $characters.vincent.relationship >= 15 && !isMetChar('blair')>>
+	<<goto 'Farm - meet Blair'>>
+<<elseif isMetChar('blair') && $characters.blair.quests.bj && ($characters.blair.quests.bj_day + 3) < $game.day && !$characters.vincent.quests.new_settlement>>
+	<<set $characters.vincent.quests.new_settlement = true>>
+	<<goto 'Vincent quest - settlement start'>>
+<</if>>
+<<if (!$game.location.slave_market && isMetChar('blair'))>>
+	<<set $game.location.slave_market = true>>
+	<<goto 'Farm - slave market'>>
+<</if>>
+
+<<if !$characters.vincent.first_time>>
+<<vincent>>Hey!  It's you from the other day.  Keep your hands off my girls or I'll shoot you.  What do you want?<</vincent>>
+	<<set $characters.vincent.first_time to true>>
+<<else>>
+<<vincent>>Hey! How can I help you?<</vincent>>
+<</if>>
+
+<br /><br />
+<<if $player.money >= 30 && $characters.vincent.delivery_done && !$backpack.has('breast_pump')>>
+	<<link 'Buy pump milk'>>
+		<<set $characters.vincent.relationship+=5>>
+		<<set $player.money -=30>>
+		<<pickup $backpack 'breast_pump' 1>>
+		<<goto 'Farm'>>
+	<</link>>
+<<elseif $game.day >= 10 && !$characters.vincent.delivery>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk' 'Farm - quest delivery'>>
+	<</link>>
+<<elseif $characters.vincent.delivery && !$characters.vincent.delivery_done>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk' 'Farm - quest delivery done'>>
+	<</link>>
+<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
+	<<link 'Talk' 'Settlement - intro'>><</link>>
+<<elseif $game.day > 5 && !$characters.vincent.talked_about_girl>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk about girl' 'Farm - talk about girl'>>
+		<<set $characters.vincent.talked_about_girl = true>>
+		<<set $characters.vincent.can_use_girl = true>>
+	<</link>>
+<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
+	<<link 'Talk about wanted poster' 'Farm - wanted poster'>>
+		<<set $characters.vincent.wanted_poster = true>>
+	<</link>>
+<<elseif $characters.vincent.quests.pregnancy && !$characters.vincent.quests.pregnancy_talked>>
+	<<link 'Talk about pregnant slave'>>
+		<<set $characters.vincent.quests.pregnancy_talked = true>>
+		<<goto 'Vincent quest - pregnancy'>>
+	<</link>>
+<<elseif !$characters.vincent.quests.car_talk && $game.cabinName>>
+	<<link 'Talk'>>
+		<<set $characters.vincent.quests.car_talk = true>>
+		<<goto 'Vincent - car talk'>>
+	<</link>>
+<<elseif $game.day >= 150 && $characters.blair.relationship >= 90 && !$characters.vincent.quests.wedding_talk>>
+	<<set $characters.vincent.quests.wedding_talk = true>>
+	<<goto 'Vincent - wedding ring'>>
+<<elseif $game.day >= 160 && $characters.vincent.quests.wedding_talk && !$characters.vincent.quests.sanctuary_talk && ($characters.vincent.quests.wedding_talk_day + 10) <= $game.day>>
+	<<set $characters.vincent.quests.sanctuary_talk = true>>
+	<<goto 'Vincent - sanctuary talk'>>
+<<elseif $characters.vincent.quests.sanctuary_talk && !$characters.vincent.quests.sanctuary_done>>
+	<<link 'Tell Vincent you are ready'>>
+		<<goto 'Vincent - sanctuary check companions'>>
+	<</link>>
+<<elseif !($game.location.shop ?? false) && $characters.vincent.quests.sanctuary_done && !$characters.vincent.quests.shop_talk>>
+	<<link 'Talk with Vincent'>>
+		<<set $characters.vincent.quests.shop_talk = true>>
+		<<goto 'Vincent - shop talk'>>
+	<</link>>
+<</if>>
+
+
+[[Shop|Farm - shop]]
+<<if $characters.vincent.can_use_girl && $player.energy > 30 && $player.money >=3>>
+	<<link 'Use girl' 'Farm - use girl'>>
+		<<set $characters.vincent.girl_fucked_times++>>
+	<</link>>
+<</if>>
+
+
+<<if isMetChar('blair') && $characters.blair.quests.cabinType === 1 && $characters.blair.quests.sex>>
+  <<if timeBetween('12:00', '14:00')>>
+	  <<link 'Go to barn'>>
+	  	<<goto 'Farm - blair barn'>>
+	  <</link>>
+  <</if>>
+  
+<</if>>
+
+[[Leave|Outside]]
+
+

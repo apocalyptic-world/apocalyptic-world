@@ -1,0 +1,68 @@
+:: Rodger - champagne #3 {"position":"2596,2449","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+You cautiously enter and slowly begin to look around.
+<br />
+<br />
+<<addhours 2>>
+Roger mentioned some secret doors to the basement, but you couldn't find them. As you continued to wander around the first floor, your foot sank into the floor. As a precaution, you tapped your foot on the floor a few more times, and the hole became even bigger. It was big enough for a person to climb through. Nearby, you found some old metal stairs, which you placed in the hole leading down to the basement.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/settlement/rodger_bottles_basement.jpg']]
+</center>
+<br /><br />
+
+Downstairs was dark and damp. Mold was everywhere and you had trouble seeing where you were even walking. After a moment, you heard the sound of a glass bottle breaking. Looking down next to you, you noticed many champagne bottles and two wine bottles.
+<br /><br />
+
+<<pickup $backpack 'champagne' 10>>
+<strong>You picked up <span class="iitem">10 champagne</span> bottles</strong>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/settlement/rodger_bottles_basement_storage.jpg']]
+</center>
+<br /><br />
+A moment after collecting the bottles, suddenly you hear the sound of many people upstairs. They are making a lot of noise and causing a commotion, and one of them shouts, "I saw someone come in here!
+<br /><br />
+<<if $characters.rodger.quests.champagne_eve>>
+  <<eve>>
+  	<<=$player.name>>...
+  <</eve>>
+  <br /><br />
+  	Eve also hears something upstairs. And just as she tries to tell you, you forcefully put your hand over her mouth and press her against the wall.
+	<br /><br />
+	  <center>
+	  [img[setup.ImagePath+'places/cabin/rodger_bottles_hand_over_mouth.webp']]
+	  </center>
+ 
+<br /><br />
+<</if>>
+The sound of people from upstairs continues for a while, and after some time, when they give up their search, it can be heard that they have decided to stay overnight on the first floor.
+<br /><br />
+<<linkreplace 'Carefully check how many of them there are'>>
+	Cautiously and quietly climbing up the stairs, you see at least 2 men and 1 woman.
+	<br /><br />
+	<<link 'Ambush them'>>
+		<<set $enemies = []>>
+		<<for _fightRange = 0; _fightRange < 3; _fightRange++>>
+			<<newguy>>
+			<<if setup.percentageChance(10)>>
+					<<set 
+						$tmpGuy.inventory = [],
+						$tmpGuy.inventory.push('knife')
+					>>
+			<</if>>
+			<<run $enemies.push($tmpGuy)>>
+		<</for>>
+		<<for _fightRange = 0; _fightRange < 1; _fightRange++>>
+			<<newgirl>>
+			<<run $enemies.push($tmpGirl)>>
+		<</for>>
+  		<<fight $enemies 'Rodger - champagne #5' 'Rodger - champagne #5'>>
+	<</link>>
+<</linkreplace>>
+<<link 'Sleep in the basement overnight'>>
+	<<goto 'Rodger - tavern - sleep'>>
+<</link>>
+
+

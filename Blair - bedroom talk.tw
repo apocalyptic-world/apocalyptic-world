@@ -1,0 +1,62 @@
+:: Blair - bedroom talk {"position":"334,2176","size":"100,100"}
+<h1 class="ptitle">BEDROOM</h1>
+
+<<if $characters.blair.quests.missing_friend_found_finished && !$characters.blair.quests.missing_friend_found_finished_thanked>>
+	<<set $characters.blair.quests.missing_friend_found_finished_thanked = true>>
+	<<goto 'Blair - quest missing friend thanks'>>
+<<elseif ($game.location.settlement ?? false) && !$characters.blair.quests.sex>>
+	<<set $characters.blair.quests.sex = true>>
+	<<goto 'Blair quest - first sex'>>
+<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement && $characters.blair.relationship >= 80>>
+	<<set $characters.blair.quests.basement =  true>>
+	<<goto 'Blair event - basement'>>
+<</if>>
+
+<<addmins 30>>
+
+<<video '/bedroom/blair_talk'>>
+<br /><br />
+<<set $talkedAbout = either('her cold room in farm', 'your warm bed', 'comfortable sheets')>>
+You talked about <<=$talkedAbout>>.
+<br /><br />
+
+<<if $characters.blair.relationship < 20>>
+  <<set $characters.blair.relationship +=2>>
+  <strong>Blair relationship increased by 2</strong>
+<<else>>
+	<strong>You can't increase relationship with Blair with this action anymore</strong>
+<</if>>
+<br /><br />
+<<if $characters.blair.quests.sex>>
+  <<link 'Fuck'>>
+	  <<set $tmpGirl = $characters.blair>>
+	  <<set $tmpGirl.location = 'bedroom'>>
+	  <<set $tmpGirlCapture to false>>
+	  <<set $tmpGirl.rape to false>>
+	  <<run delete $slaveId>>
+	  <<run delete $guestId>>
+	  <<set $charId = 'blair'>>
+	  <<set $tmpGirlViewBack = 'Sleep eval'>>
+	  <<set $tmpGirlBack = 'Sleep eval'>>
+	  <<goto 'Girl fuck'>>
+  <</link>>
+<</if>>
+<<if $characters.blair.quests.basement>>
+	<<link 'Take her to the basement'>>
+		<<set $tmpGirl = $characters.blair>>
+	  	<<set $tmpGirl.location = 'basement'>>
+	  	<<set $tmpGirlCapture to false>>
+	  	<<set $tmpGirl.rape to false>>
+	  	<<run delete $slaveId>>
+	  	<<run delete $guestId>>
+	  	<<set $charId = 'blair'>>
+	  	<<set $tmpGirlViewBack = 'Sleep eval'>>
+	  	<<set $tmpGirlBack = 'Sleep eval'>>
+	  	<<goto 'Girl fuck'>>
+	<</link>>
+<</if>>
+<<link 'Sleep'>>
+	<<sleep>>
+<</link>>
+
+

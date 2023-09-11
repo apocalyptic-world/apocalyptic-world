@@ -1,0 +1,56 @@
+:: Event: Settlement - horse ride {"position":"1958,2779","size":"100,100"}
+<h1 class="ptitle">SETTLEMENT</h1>
+<br /><br />
+
+<<set _horseRideMapping = {
+	1: 'The girl turned around on the back of the horse, facing you, and sensually began to kiss you and pull off her blouse.',
+	2: 'Girl kisses our chest and in a matter of seconds your dick is already in her mouth',
+	3: 'You slowly pull her on you and push her wet pussy onto your hard dick',
+	4: 'She spreads her legs and takes the lead',
+	5: 'She turns around and you cum in her firm ass as she keeps rubbing it against your dick',
+}>>
+
+<<set _videoName = '/settlement/horse_ride' + ($horseRideAction ?? 1)>>
+<<video `_videoName`>>
+<<if $horseRideAction !== 5>>
+	<<horny 15>>
+<</if>>
+<br /><br />
+<<= _horseRideMapping[($horseRideAction ?? 1)]>>
+<br /><br />
+<<if $horseRideAction !== 5>>
+  <<link 'Blowjob'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 2>>
+	  <<goto `passage()`>> 
+  <</link>>
+
+  <<link 'Fuck her'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 3>>
+	  <<goto `passage()`>> 
+  <</link>>
+
+  <<link 'Let her ride you'>>
+	  <<addmins 10>>
+	  <<set $horseRideAction = 4>>
+	  <<goto `passage()`>> 
+  <</link>>
+  
+  <<if $player.horny >= 100>>
+	<<link 'Cum'>>
+		<<addmins 5>>
+		<<set $horseRideAction = 5>>
+		<<horny_reset>>
+		<<goto `passage()`>> 
+	<</link>>
+  <</if>>
+<</if>>
+
+<<if $horseRideAction === 5>>
+	<<link 'Leave'>>
+		<<goto 'Settlement'>>
+	<</link>>
+<</if>>
+
+

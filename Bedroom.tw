@@ -1,0 +1,55 @@
+:: Bedroom [Place] {"position":"1084,512","size":"100,100"}
+<h1 class="ptitle">BEDROOM</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/bedroom_head.jpg']]
+</div>
+<br /><br />
+<center>
+
+<<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
+	<<link 'Talk with Blair'>>
+		<<goto 'Blair - bedroom talk'>>
+	<</link>>
+<</if>>
+
+<<link "Sleep">><<sleep>><</link>>
+
+<<if timeBetween('08:00','23:00') && !$player.nap>>
+	<<link 'Take a nap'>>
+		<<set $player.nap = true>>
+		<<addhours 1>>
+		<<energy 20>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<</if>>
+
+<<if timeBetween('08:00','23:00')>>
+	<<link 'Wait an hour'>>
+		<<addhours 1>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<</if>>
+
+<<link 'STATS'>>
+	<<script>>
+		Dialog.setup("Stats", "Stats");
+		Dialog.wiki(Story.get("MC stats").processText());
+		Dialog.open();
+	  <</script>>
+<</link>>
+
+[[Back|Wood cabin]]
+</center>
+
+<<if !($locationEvents.bedroom ?? false)>>
+	<<if timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
+		<<set _hornyGuests = setup.getHornyPersons($guests)>>
+		<<if (_hornyGuests[0] ?? false)>>
+			<<set $guestId = _hornyGuests[0][Math.floor(Math.random()*_hornyGuests[0].length)]>>
+			<<set $locationEvents.bedroom = true>>
+			<<goto 'Bedroom: horny guest'>>
+		<</if>>
+	<</if>>
+<</if>>
+
+

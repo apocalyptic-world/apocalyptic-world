@@ -1,0 +1,174 @@
+:: Basement [Place] {"position":"1202,389","size":"100,100"}
+<<set $workingInGarden = 0>>
+<<set $workingOnStreets = 0>>
+<<set $showSlavesCount = 0>>
+
+<h1 class="ptitle">BASEMENT</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/basement_head.jpg']]
+</div>
+<h3>Slaves</h3>
+<<set _basementLimitShow = ($basementLimit - $slaves.length)>>
+<<if _basementLimitShow < 0>>
+	<<set _basementLimitShow = 0>>
+<</if>>
+Free rooms left: <strong><<=_basementLimitShow>></strong>
+
+<<set $cellSlaveIds = []>>
+<<set _hornySlaveId = null>>
+<<if $slaves.length < 1>>
+	<div style="margin-top: 20px;">
+		You have no slaves...
+	</div>
+<<else>>
+	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+		<<set $tmpGirl = $guests[_girlGuest[0]]>>
+		<<set $tmpGirl.location = 'basement'>>
+		<center>
+			<<actionImage $tmpGirl mistress>>
+		</center> 
+		<<=$tmpGirl.name>> is whipping one of your slaves<br /><br />
+		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
+		<<link `_girlGuestLink`>>
+			<<set $tmpGirlViewBack = 'Girl view - guest'>>
+			<<set $tmpGirlBack = 'Basement'>>
+			<<set $tmpGirlCapture to false>>
+			<<set $tmpGirl.rape to false>>
+			<<set $guestId = _girlGuest[0]>>
+			<<run delete $slaveId>>
+			<<run delete $charId>>
+			<<goto 'Girl view - guest'>>
+		<</link>>
+	<</if>>
+
+	<table id="slaves">
+	<<for _i to 0; _i lt $slaves.length; _i++>>
+		<<capture _i>>
+		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
+			<<set $workingInGarden++>>
+			<<continue>>
+		<</if>>
+		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+			<<set $workingOnStreets++>>
+			<<continue>>
+		<</if>>
+		<<if $slaves[_i].horny > 70 && !_hornySlaveId>>
+			<<set _hornySlaveId = _i>>
+		<</if>>
+		<<set $showSlavesCount++>>
+		<<set $cellSlaveIds.push(_i)>>
+		<tr>
+			<td style="width: 300px">
+				<<if setup.getAge($slaves[_i]) < 18>>
+						<span class="name-no-click"><<=$slaves[_i].name>></span>
+				<<else>>
+					<span @class="''+_genderClass+''">
+					  <<link $slaves[_i].name>>
+						<<set $tmpGirl to $slaves[_i]>>
+						<<set $tmpGirl.location = 'basement'>>
+						<<set $tmpGirlBack = 'Basement'>>
+						<<set $tmpGirlCapture to false>>
+						<<set $tmpGirl.rape to false>>
+						<<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+						<<set $slaveId = _i>>
+						
+						<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>
+							<<if typeof $slaves[_i].quests === 'undefined'>>
+								<<set $slaves[_i].quests = {}>>
+							<</if>>
+							<<set $slaves[_i].quests.firstBasementVisit = true>>
+							<<goto 'Basement - first girl visit'>>
+						<<else>>
+							<<goto `$tmpGirlViewBack`>>
+						<</if>>
+					  <</link>>
+					</span>
+				  <</if>>
+				  
+				  <<if $slaves[_i].pregnancy >= 7>>
+					(pregnant <<=$slaves[_i].pregnancy>> days)
+				  <</if>>
+				  
+				  <<if _isSick>>
+				  	(sick)
+				  <</if>>
+			</td>
+			<td>
+				<<if !$slaves[_i].gender && setup.getAge($slaves[_i]) >= 17>>
+						Beauty score: <<=$slaves[_i].beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge($slaves[_i])>>
+			</td>
+			<td>
+				<<if $slaves[_i].assignedTo>>
+					(<<=$slaves[_i].assignedTo>>)
+				<</if>>
+			</td>
+			<td>
+				<<link 'Release'>>
+					  <<dialog 'Release'>>
+						  Are you sure you want to release <<=setup.pronounceWho($slaves[_i])>>?
+						  <br />
+						  <<link 'Yes'>>
+							  <<set $tmpGirl = $slaves[_i]>>
+							  <<set $slaveId = _i>>
+							  <<dialogclose>>
+							  <<goto 'Basement - release slave'>>
+						  <</link>>	
+					  <</dialog>>
+				  <</link>>
+			</td>
+			<td>
+				<<link 'Kill'>>
+					<<dialog 'Kill'>>
+						Are you sure you want to kill <<=setup.pronounceWho($slaves[_i])>>?
+						<br />
+						<<link 'Yes' 'Basement'>>
+							<<run $slaves.splice(_i, 1)>>
+							<<dialogclose>>
+							<<set $player.reputation++>>
+							<<set $player.goodwill-->>
+							<<statsAdd 'slaves_killed'>>
+							<<statsAdd 'people_killed'>>
+						<</link>>	
+					<</dialog>>
+				<</link>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+	</table>
+<</if>>
+
+<<if !$showSlavesCount && $workingInGarden>>
+	<<if($game.location.greenhouse ?? false)>>
+		<<set $workingPlace = 'greenhouse'>>
+	<<else>>
+		<<set $workingPlace = 'garden'>>
+	<</if>>
+	All your slaves are at assigned jobs...
+<</if>>
+<br /><br />
+
+<<if $showSlavesCount &&  !$locationEvents.basement>>
+	<<set $randomNumber = randomInteger(1, 10)>>
+	<<if $randomNumber === 0>>
+		<<set $eventSlaveId = Math.floor(Math.random()*$cellSlaveIds.length);>>
+		<<if $slaves[$eventSlaveId].sub < 50 && setup.getAge($slaves[$eventSlaveId]) > 17 && !$slaves[$eventSlaveId].gender>>
+			<<set $locationEvents.basement = true>>
+			<<goto 'Basement event - try escape'>>
+		<</if>>
+	<<elseif $randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender>>
+		<<set $hornySlaveId = _hornySlaveId>>
+		<<set $locationEvents.basement = true>>
+		<<goto 'Basement event - horny slave'>>
+	<</if>>
+<</if>>
+[[Back|Wood cabin]]
+
+

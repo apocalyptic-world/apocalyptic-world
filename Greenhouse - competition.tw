@@ -1,0 +1,88 @@
+:: Greenhouse - competition {"position":"334,1222","size":"100,100"}
+<h1 class="ptitle">GREENHOUSE</h1>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/greenhouse/competition.jpg']]
+</center>
+<br /><br />
+
+<<set _randomPersons = setup.getRandomPersonIds($game.greenhouseCompetition, 2)>>
+<<set _npc1 = setup.getNpcByKey($game.greenhouseCompetition[_randomPersons[0]])>>
+<<set _npc1SplitKey = $game.greenhouseCompetition[_randomPersons[0]].split(':')>>
+<<set _npc2 = setup.getNpcByKey($game.greenhouseCompetition[_randomPersons[1]])>>
+<<set _npc2SplitKey = $game.greenhouseCompetition[_randomPersons[1]].split(':')>>
+
+Just as you entered through the door, both <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> call you from the middle of the room. A small discussion has arisen between them, and they believe that each of the vegetables they have grown is more beautiful than the others. They want you to determine the winner. Both giggling, they try to grab your attention so that you choose their vegetables specifically.
+<br /><br />
+<<linkreplace 'Decide'>>
+	<<run $('#option1').hide()>>
+	You approach closer, and both girls extend their hands with the vegetables they have grown in them. You carefully examine both, one and then the other.
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/greenhouse/competition_flash.webp']]
+	</center>
+	<br /><br />
+	Since you don't respond immediately and seem to be genuinely giving an honest assessment, <<=setup.displayName(_npc1)>> takes advantage of the moment without the <<=setup.displayName(_npc2)>> noticing. She unbuttons her blouse with a broad smile on her face and winks at you.
+	<br /><br />
+	<div id="option2">
+		<<linkreplace _npc1.name>>
+			<<run $('#option3').hide()>>
+		  <strong>Relationship with <<=_npc1.name>> increased by 5</strong>
+		  <br />
+		  <strong>Relationship with <<=_npc2.name>> decreased by 4</strong>
+		  
+		  <<setNpcStats _npc2SplitKey[0] _npc2SplitKey[1] 'relationship' -4>>
+		  <<setNpcStats _npc1SplitKey[0] _npc1SplitKey[1] 'relationship' +5>>
+		  	<br /><br />
+			<<=setup.displayName(_npc1)>> flashes a smile without taking her eyes off you. When <<=setup.displayName(_npc2)>> turns away a bit disappointed, <<=setup.displayName(_npc1)>> points to a spot behind the tall plants.
+			<br /><br />
+			
+			<<linkreplace 'Follow her'>>
+				<<video 'greenhouse/competition1'>>
+				<br /><br />
+				As soon as you both get behind plants, she grabs your hand and pulls you deeper behind and drops on her knees. She unbuttons her top, unzips your pants and takes your cock inside her mouth.
+				<br /><br />
+				<<linkreplace 'Cum'>>
+					<center>
+						[img[setup.ImagePath+'places/greenhouse/competition_cum.webp']]
+					</center>
+					<br /><br />
+					<<horny_reset>>
+					Playfully she opens her mouth wide open and with tongue movements tries to catch each drop of your warm cum...
+					<br /><br />
+				<</linkreplace>>
+			<</linkreplace>>
+			<<link 'Leave'>>
+				<<goto 'Greenhouse'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="option3">
+		<<linkreplace _npc2.name>>
+			<<run $('#option2').hide()>>
+		  <center>
+			[img[setup.ImagePath+'places/greenhouse/competition_happy.gif']]
+		  </center>
+		  <br /><br />
+		  <<=setup.displayName(_npc2)>> Starts to jump from happiness and is very pleased with your decision.
+		  <br /><br />
+		  <strong>Relationship with <<=_npc2.name>> increased by 5</strong>
+		  <br />
+		  <strong>Relationship with <<=_npc1.name>> decreased by 4</strong>
+		  
+		  <<setNpcStats _npc1SplitKey[0] _npc1SplitKey[1] 'relationship' -4>>
+		  <<setNpcStats _npc2SplitKey[0] _npc2SplitKey[1] 'relationship' +5>>
+		  <br /><br />
+		  <<link 'Leave'>>
+			<<goto 'Greenhouse'>>
+		  <</link>>
+		<</linkreplace>>
+	</div>
+<</linkreplace>>
+<div id="option1">
+	<<link 'Let them sort it out on their own'>>
+		<<goto 'Greenhouse'>>
+	<</link>>
+</div>
+
+

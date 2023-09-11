@@ -1,0 +1,143 @@
+:: Settlement - intro {"position":"2838,1026","size":"100,100"}
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<vincent>>
+	You're ready? Good! Lets hit the road.
+<</vincent>>
+<<blair>>
+	Morning <<=$player.name>>!
+	<br />
+	Dad, where are we going? Why the secrecy?
+<</blair>>
+<br /><br />
+You pack your bags and go straight toward the underground city maybe to do some business.  The thought crosses your mind that going to the city seems a bit strange as Blair is going with you, and is wanted there. Can't be right...
+<br /><br />
+Suddenly you take a sharp turn into the forest. No roads, only thick forest.
+<br /><br />
+
+<center>
+	[img[setup.ImagePath+'places/settlement/intro_forest.webp']]
+</center>
+
+<br /><br />
+You keep walking for a while when finally Blair can't take it anymore and asks again.
+<br /><br />
+<<blair>>
+	Dad! Where are we going?
+<</blair>>
+<br />
+<<vincent>>
+	Shhhh!  Keep it quiet! We're going to help some of my old friends.  We're close so just wait.
+<</vincent>>
+<br /><br />
+The sun has already started to shine brightly when suddenly, as you go through the thickest branches, there appear some big white tents in the middle of nowhere.
+<br /><br />
+
+<center>
+	[img[setup.ImagePath+'places/settlement/intro_tents.jpg']]
+</center>
+<br /><br />
+You turn to Vincent and ask him curiously...
+<br /><br />
+<<you>>
+	Where are we? Who are they? and Are they hostile?
+<</you>>
+<br /><br />
+<<vincent>>
+	Haha, no, not really. Just follow me, you'll see with your own eyes.
+<</vincent>>
+
+<br /><br />
+<<linkreplace 'Continue'>>
+	<<set $game.location.settlement = true>>
+	You slowly walk toward the camp and see some friendly looking people.  
+	<br />
+	As you are following Vincent you look around and notice a few more people. By the looks of it they moved here recently and are hoping to be settled so are preparing this place to be their new home.
+	<br />
+	A girl notices you but immediately looks away and continues chopping wood.
+	<br /><br />
+	<center>
+	[img[setup.ImagePath+'places/settlement/intro_chop_wood.webp']]
+	</center>
+	<br /><br />
+	You continue to walk toward the first white tent unsure if someone is waiting for Vincent.
+	<br />
+	Blair grabs your hand and walks as close to you as she can. You keep looking around and notice a cow that a young girl is milking.
+	<br /><br />
+	<center>
+	[img[setup.ImagePath+'places/settlement/intro_cow.webp']]
+	</center>
+	<br /><br />
+	Finally you reach the tent and a couple comes out greeting you all..
+	<br /><br />
+	<<linkreplace 'Greet them'>>
+		<<eve>>
+			Thank you so much, Vincent! Who are you friends? You can just leave those items by the tent.
+		<</eve>>
+		<<rodger>>
+			Welcome, old friend! I Haven't seen you in what, Vincent, 5 years? Feels like an eternity. I really appreciate that you could get these things for us and help us with the building. God is watching.
+		<</rodger>>
+		<br /><br />
+		They talk for a while before Vincent remembers to introduce you to them.
+		<<vincent>>
+			Oh, sorry! This is <<=$player.name>>. He's actually the one who got all that you need and he's willing to help out.
+		<</vincent>>
+		<br />
+		<<eve>>
+			Oh thank you! We don't even know how to say thank you!<br />
+			You're really a blessing.
+		<</eve>>
+		<br /><br />
+		As Eve wraps her arms around you and hugs you firmly Vincent turns around and tells you about his friend.
+		<<vincent>>
+			<<=$player.name>>, This is Rodger. He's a priest as long as I remember him. The thing they're building here is a closed society because they couldn't take any more of the underground city. The murders, kidnappings, and violence.
+		<</vincent>>
+		<br /><br />
+		<<rodger>>
+			Thank you, Vincent! See, <<=$player.name>> the Lord told me that this would be the right place where we could settle down and build our own village. <br />
+			The first thing that we want to build is a church. After that - God will tell us. Anyway, the sun is already up so we should get to work.
+		<</rodger>>
+		<br /><br />
+		<<linkreplace 'Help them'>>
+			All day you chopped wood, sawed wood, and dug big holes for the church foundation.
+			<br /><br />
+			<center>
+		[img[setup.ImagePath+'places/settlement/intro_foundation.png']]
+			</center>
+			<br /><br />
+			Sunset was coming and the three of you decided to pack your things and go back home.
+			<br /><br />
+			<<rodger>>
+				Thank you all very much! We'll intercede for you to God. If by any chance you have some spare time and want to help us more - our doors will always be open to you!
+			<</rodger>>
+			<br /><br />
+			
+			<<newguy>>
+			<<set $tmpGuy = {
+				relationship: 5,
+				quests: {},
+				birthDate: setup.getBirthDate(52)
+			}>>
+			<<set $characters.rodger = $tmpGuy>>
+			<<newgirl>>
+			<<set
+				$tmpGirl.name = 'Eve',
+				$tmpGirl.corruption = 0,
+				$tmpGirl.hair = 'black',
+				$tmpGirl.race = 'white',
+				$tmpGirl.quests = {},
+				$tmpGirl.relationship = 5,
+				$tmpGirl.birthDate =  setup.getBirthDate(32)
+			>>
+			<<set $characters.eve = $tmpGirl>>
+			<<drop $backpack 'wood' 100>>
+			<<drop $backpack 'solar_panel' 5>>
+			<<link 'Go home'>>
+				<<set $gameDate.setHours(22)>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
+
+

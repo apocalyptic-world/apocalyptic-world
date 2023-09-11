@@ -1,0 +1,77 @@
+:: Cheat menu {"position":"29,1203","size":"100,100"}
+<div id="ingame-ui-buttons-side" class="cheatmenu">
+  <<link 'Add 100 caps'>>
+	  <<set $player.money += 100>>
+	  <<goto `passage()`>>
+  <</link>>
+  <<link 'Add slave'>>
+	  <<newgirl>>
+	  <<run $slaves.push($tmpGirl)>>
+	  <<goto 'Wood cabin'>>
+  <</link>>
+  <<link 'Set all guest relationship to max'>>
+  		<<for _cheatGuestI, _cheatGuest range $guests>>
+			<<set $guests[_cheatGuestI].relationship = 100>>
+		<</for>>
+		<<if typeof $guestId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.relationship = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  <</link>>
+  <<if recall($suppCode)>>
+    <<link 'Set all slave relationship to max'>>
+  		<<for _cheatslaveI, _cheatSlave range $slaves>>
+			<<set $slaves[_cheatslaveI].relationship = 100>>
+		<</for>>
+		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.relationship = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  	<</link>>
+  <</if>>
+  <<link 'Add champagne bottle'>>
+  	<<pickup $backpack 'champagne' 1>>
+  	<<goto `passage()`>> 
+  <</link>>
+  <<link 'Add antibiotics'>>
+  	<<pickup $backpack 'antibiotics' 1>>
+	<<goto `passage()`>>
+  <</link>>
+  <<link 'Clear companion list'>>
+  	<<set $player.companions = {}>>
+  	<<goto `passage()`>>
+  <</link>>
+  <<link 'Increase guest house limit'>>
+  	<<set $guesthouseLimit++>>
+	<<goto `passage()`>>
+  <</link>>
+  <<link 'Increase MC strength'>>
+  	<<set $player.strength++>>
+	<<goto `passage()`>>
+  <</link>>
+  <<link 'Increase MC intelligence'>>
+  	<<set $player.int++>>
+	<<goto `passage()`>>
+  <</link>>
+  <<if recall($suppCode)>>
+  	<<link 'Skip time (1 week)'>>
+		<<sleep>>
+		<<sleep>>
+		<<sleep>>
+		<<sleep>>
+		<<sleep>>
+		<<sleep>>
+		<<sleep>>
+		<<goto `passage()`>>
+	<</link>>
+  <</if>>
+</div>
+
+<style>
+ .cheatmenu .link-internal.macro-link {
+ 	display:block;
+	padding-left: 20px;
+ }
+</style>
+
+

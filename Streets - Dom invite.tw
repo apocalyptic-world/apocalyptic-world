@@ -1,0 +1,98 @@
+:: Streets - Dom invite {"position":"3338,1460","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+
+<center>
+	[img[setup.ImagePath+'places/streets/dom_invite_harass.webp']]
+</center>
+<br /><br />
+As you turn around the corner where your girls are standing you see that three big guys are harassing one of your girl.
+<br /><br />
+<<linkreplace 'Attack them'>>
+	<<run $('#option1').hide()>>
+	When you are ready to jump on them suddenly from behind, you hear someone shouting.
+	<br /><br />
+	<<dom>>
+		STOP! 
+		<br />
+		We need to talk.
+	<</dom>>
+	<br /><br />
+	<<linkreplace 'Approach him'>>
+		You slowly begin to approach him. Meanwhile, he orders his men who harrased the girl to leave her alone. They step back and scornfully glare at you.
+		<br /><br />
+		<<dom>>
+			Everything is clear with you. And I thought you were just worthless trash like everyone else who comes here. It's evident that your girls work properly, and people in the city cringe at the mention of your name.
+Your current deal is not the best, so I am ready to offer you a new one.
+		<</dom>>
+		<br /><br />
+		<<linkreplace 'Listen to him'>>
+			<<dom>>
+				Not here. There are enough ears around, so for safety reasons, it's better if we go to my place.
+			<</dom>>
+			<br /><br />
+			<<linkreplace 'Follow him'>>
+				You slowly follow him, and his henchmen walk alongside. At some point, you turn into a small side path that you had never noticed before, and you continue your way in darkness for a while. After a moment, light starts to appear in the distance again, and you see thick metal doors where two of his henchmen stay behind while you, Dom, and one other person continue upstairs, climbing the stairs.
+				<br /><br />
+					<center>
+						[img[setup.ImagePath+'places/streets/dom_invite2.jpg']]
+					</center>
+					<br /><br />
+					As you climb up and open the doors, an incredible sight unfolds before you - the place looks as if a war had never taken place. The living area resembles something out of a movie, with vintage furniture and paintings on the walls. Continuing further, you notice a woman sitting in a chair.
+					<br /><br />
+						<<video '/streets/dom_wife1'>>
+					<br /><br />
+					<<dom>>
+						Bored? Please leave the room darling.
+					<</dom>>
+					<br /><br />
+					She gets up and slowly walks outside the room while taking a good look at you. 
+					<br /><br />
+					<center>
+						[img[setup.ImagePath+'places/streets/dom_invite_walk_away.webp']]
+					</center>
+					<br /><br />
+					<<dom>>
+						And now listen carefully. I am ready to offer you 60% profit instead of 20%. Additionally, I will pay more attention to the protection of your girls. How does that sound?
+I have heard about your reputation and know that I can rely on you. Occasionally, one of my men will approach you, and you will need to accompany him without any objections or questions to get something done.
+What do you say?
+					<</dom>>
+					<br /><br />
+					<div id="option_accept_yes">
+						<<linkreplace 'Accept his deal'>>
+							<<run $('#option_accept_no').hide()>>
+							<<set $characters.dom.quests.accepted_deal = true>>
+							<<set $characters.dom.quests.day = $game.day>>
+							<<dom>>
+								I knew I could rely on you. You can trust that your girls will be safe. As safe as they can be in this cursed city, at least.
+							<</dom>>
+							<br /><br />
+							<<link 'Leave'>>
+								<<goto 'Underground city'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_accept_no">
+						<<linkreplace 'Say no'>>
+							<<run $('#option_accept_yes').hide()>>
+							<<set $characters.dom.quests.accepted_deal = false>>
+							<<dom>>
+								What? Do you even understand what you missed? Well, fine. I'm sure our paths will cross again. Escort him away, guys.
+							<</dom>>
+							<br /><br />
+							<<link 'Leave'>>
+								<<goto 'Underground city'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+			<</linkreplace>>
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
+<div id="option1">
+	<<link 'Leave'>>
+		<<goto 'Underground city'>>
+	<</link>>
+</div>
+
+

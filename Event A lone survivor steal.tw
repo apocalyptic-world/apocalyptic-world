@@ -1,0 +1,21 @@
+:: Event: A lone survivor: steal {"position":"783,948","size":"100,100"}
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/gate_lone_survivor_steal.png']]
+</center>
+<br /><br />
+The lone survivor that you let stay overnight and feed at your camp yesterday is nowhere to be found. The gate is left half-open and it appears that food has been taken from the storage.
+<br /><br />
+
+<<set _food = Math.min(20, $backpack.count('food'))>>
+
+<<drop $backpack 'food' _food>>
+
+<strong>You lost <strong class="iitem"><<=_food>> food</strong></strong> 
+<br /><br />
+<<link 'Continue'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

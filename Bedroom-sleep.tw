@@ -1,0 +1,55 @@
+:: Bedroom-sleep [autosave] {"position":"1083,396","size":"100,100"}
+<h1 class="ptitle">BEDROOM</h1>
+<<if $game.day > 5 && !($game.location.basement ?? false)>>
+	<<goto 'Basement find'>>
+<<else>>
+	<center>
+	<<if $player.horny >= 40>>
+		<<actionDream>>
+	  	<br /><br />
+	  	You went to bed horny and dream about fucking another girl.
+	<<else>>
+	  [img[setup.ImagePath+'places/cabin/wake_up.webp']]
+	  <br /><br />
+	  You wake up tired and exhausted but ready to explore the world some more.
+	<</if>>
+	<br /><br />
+	<<if $morningMessages.main.length > 0 || $morningMessages.shop.length > 0>>
+		<h3>Some things have been happened</h3>
+		<br />
+		<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
+			<<if _morningMessages.length>>
+			  <div @class="'morning-messages ' + _morningMessagesType + ''">
+			  	<fieldset>
+					<legend><<=_morningMessageType>> (<<=_morningMessages.length>>)</legend>
+				  <<for _i to 0; _i lt _morningMessages.length; _i++>>
+					  <div class="morning-message">
+						  <<print _morningMessages[_i]>>
+					  </div>
+				  <</for>>
+				</fieldset>
+			  </div>
+			<</if>>
+		<</for>>
+	<</if>>
+	
+	<br /><br />
+	<<link 'Wake up'>>
+		<<set _randomSleepEventInteger = randomInteger(0,2)>>		
+		<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0>>
+			<<goto 'Blair quest - morning bj'>>
+			<<set $characters.blair.quests.bj = true>>
+		<<elseif $pregnancyHappening>>
+			<<goto 'Childbirth'>>
+		<<elseif $scavengingDidntReturn !== null>>
+			<<goto 'Scavenging - didnt came home'>>
+		<<elseif setup.getRandomPersonIdsGirls($guests, 1) && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5)>>
+			<<goto 'Blair - morning surprise'>>
+		<<else>>
+			<<goto 'Wood cabin'>>
+		<</if>>
+	<</link>>
+	</center>
+<</if>>
+
+

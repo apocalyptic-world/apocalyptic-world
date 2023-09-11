@@ -1,0 +1,46 @@
+:: Basement - release slave {"position":"1449,279","size":"100,100"}
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+<<set _image = 'release'>>
+<<if $tmpGirl.gender>>
+	<<set _image = _image + '_male'>>
+<</if>>
+<center>
+	[img[setup.ImagePath+'places/basement/' + _image + '.webp']]
+</center>
+ 
+You look at <strong><<=$tmpGirl.name>></strong> and open <<=setup.pronounceWhos($tmpGirl)>> cell door.
+<br /><br />
+<<=ucfirst(setup.pronounceWhat($tmpGirl))>> gets on <<=setup.pronounceWhos($tmpGirl)>> knees like <<=setup.pronounceWhat($tmpGirl)>> usually does when you come to visit <<=setup.pronounceWho($tmpGirl)>>, but you catch <<=setup.pronounceWho($tmpGirl)>> by surprise when you tell <<=setup.pronounceWho($tmpGirl)>> that you are going to release <<=setup.pronounceWho($tmpGirl)>>.
+<br /><br />
+
+<<if $tmpGirl.relationship >= 30 && ($game.location.guesthouse ?? false)>>
+	"<strong>Are you sure?</strong>" <<=ucfirst(setup.pronounceWhat($tmpGirl))>> asks. <br />
+	"<strong>I really like it here with you. Is there any way I can stay?</strong>"
+<</if>>
+<br /><br />
+
+<<set _linkMove = 'Move ' + setup.pronounceWho($tmpGirl) + ' to the guest house'>>
+<<set _linkLeave = 'Leave ' + setup.pronounceWho($tmpGirl) + ' in cell'>>
+<<set _linkRelease = 'Release ' + setup.pronounceWho($tmpGirl)>>
+<<if $tmpGirl.relationship >= 30 && ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
+	<<link `_linkMove`>>
+		<<if typeof $guests === 'undefined'>>
+			<<set $guests = []>>
+		<</if>>
+		<<set $tmpGirl.assignedTo = null>>
+		<<set $guests.push($tmpGirl)>>
+		<<run $slaves.splice($slaveId, 1)>>		
+		<<goto 'Guest house'>>
+	<</link>>
+<</if>>
+<<link `_linkLeave`>>
+	<<goto 'Basement'>>
+<</link>>
+<<link `_linkRelease`>>
+	<<run $slaves.splice($slaveId, 1)>>
+	<<statsAdd 'slaves_released'>>
+	<<goto 'Basement'>>
+<</link>>
+
+

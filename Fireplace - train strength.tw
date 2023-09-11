@@ -1,0 +1,34 @@
+:: Fireplace - train strength {"position":"749,448","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<center>
+[img[setup.ImagePath+'places/cabin/workout_strength.webp']]
+</center>
+<br /><br />
+Get walk to the open space and start doing some push-ups and sit-ups.
+<br />Just enough to keep everything running as it should.
+<br /><br />
+<strong>Your strength increased by 1</strong>
+<br /><br />
+
+<<if setup.percentageChance(10)>>
+	<<set _persons = setup.getPersonsForLocation($guests, 'garden')>>
+	<<if _persons.length > 0>>
+		<<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
+		<<if $guests[_randomPerson].relationship > 50>>
+			<center>
+				[img[setup.ImagePath+'places/cabin/workout_look.webp']]
+			</center>
+			<br /><br />
+			While working in the greenhouse <strong><<=$guests[_randomPerson].name>></strong> takes a break and walks near you.
+			<br /> She stops and checks you out as you do push ups.
+			<br /><br />
+			<<link 'Ask if she would like to join'>>
+				<<set $randomPerson = _randomPerson>>
+				<<goto 'Train strength event #1'>>
+			<</link>>
+		<</if>>
+	<</if>>
+<</if>>
+[[Back|Fire place]]
+
+

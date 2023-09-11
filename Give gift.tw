@@ -1,0 +1,48 @@
+:: Give gift {"position":"1719,36","size":"100,100"}
+<div id="inventory">
+    <<for _item, _amount range $backpack.table>>
+		<<if typeof setup.gifts[_item] === 'undefined'>>
+			<<continue>>
+		<</if>>
+		<<capture _item>>
+		  <<set $icon = _item>>
+		  <div class='inventory-item tooltip'>
+			  <div class='inventory-img'>
+				  [img[setup.ImagePath+'game/inventory/' + $icon + '.png']]
+			  </div>
+			  <div class='inventory-title'>
+				  <<= Item.get(_item).name>> 
+				  <<if !Item.get(_item).unique>>
+					  <span class='inventory-amount'>x_amount</span>
+				  <</if>>
+			  </div>
+			  <<if Item.get(_item).description>>
+				<span class="tooltiptext"><<=Item.get(_item).description>></span>
+			  <</if>>
+
+			 	<<link 'Gift'>>
+					<<drop $backpack _item 1>>
+					<<set $tmpGirl.gift = true>>
+					<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + setup.gifts[_item].rel)>>
+					<<script>>Dialog.close();<</script>>
+					<<script>>state.display(state.active.title, null, "back")<</script>>
+				<</link>>
+		  </div>
+		<</capture>>
+    <</for>>
+</div>
+
+<style>
+#inventory {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+}
+
+.inventory-item {
+	 flex: 0 0 33.3333%;
+}
+</style>
+
+

@@ -1,0 +1,78 @@
+:: Rodger - horse get {"position":"3313,2445","size":"100,100"}
+<<if $characters.rodger.quests.horse_get === 'companions'>>
+	<<set _eventCompanions = setup.objectSortReverse(clone($player.companions ?? []))>>
+	<<for _eventCompanionI, _eventCompanion range _eventCompanions>>
+		<<companionRemove `_eventCompanionI`>>
+		<<set _eventCompanionId = _eventCompanionI.split(':')>>
+		<<set $guests.splice(_eventCompanionId[1], 1)>>
+	<</for>>
+<</if>>
+<<addhours 4>>
+
+<h1 class="ptitle">WORLD</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/harper_horse_get.jpg']]
+</center>
+<br /><br />
+At a fast pace, you ride on horseback through the forest and soon reach Roger's settlement. How comfortable it is to have a horse...
+<br /><br />
+<<rodger>>
+	<<= $player.name>>! You got it! I never doubted you.
+<</rodger>>
+<br /><br />
+You slowly dismount from the horse and tell him thanks.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/harper_horse_pat.webp']]
+</center>
+<br /><br />
+You tell Roger that Harper wanted more than you gave him, and Rodger will remain indebted to you.
+<br /><br />
+<div id="option1">
+  <<linkreplace 'Give horse to Rodger'>>
+		<<run $('#option2').hide()>>
+		<<rodger>>
+			You are worth your weight in gold! God truly watches over us. He will help us a lot.
+		<</rodger>>
+		<br /><br />
+		
+		<<set $characters.rodger.relationship += 10>>
+		<strong class="iitem">Relationship with Rodger increased by 10</strong>
+		<<set $player.goodwill += 5>>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Settlement'>>
+		<</link>>
+  <</linkreplace>>
+</div>
+<div id="option2">
+  <<linkreplace 'Keep the horse'>>
+  		<<set $characters.rodger.quests.horse_kept = true>>
+		<<run $('#option1').hide()>>
+		<<rodger>>
+			What? Why? Well, we can't blame you... Everything happens as it must. Eve and the settlers will be somewhat disappointed to hear this.
+		<</rodger>>
+		<br /><br />
+		Roger turns around and slowly walks away while you turn towards the horse and look at him with a smile on your face. In that moment, you realize that you don't even know his name and decide to come up with a name for him yourself.
+		<br /><br />
+		What you will call your horse? <<textbox "_tmpHorseName" 'Bullet'>>
+		<br /><br />
+		While you're patting a horse a settlement girl comes to you from behind and taps on your shoulder.
+		<br /><br />
+		<<anongirl>>
+			Oh my god! A horse! Please, please take me for a ride.
+		<</anongirl>>
+		<br /><br />
+		<<link 'Accept'>>
+			<<set $player.horse = _tmpHorseName>>
+			<<goto 'Event: Settlement - horse ride'>>
+		<</link>>
+		<<link 'Maybe some other time'>>
+			<<set $player.horse = _tmpHorseName>>
+			<<goto 'Settlement'>>
+		<</link>>
+  <</linkreplace>>
+</div>
+
+

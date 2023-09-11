@@ -1,0 +1,60 @@
+:: Blackjack {"position":"3486,1027","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/bar/blackjack_head.jpg']]
+</div>
+<br /><br />
+
+Underground city has it's own rules. House always goes last. If you don't like that - you know where doors are. 
+<br /><br />
+<<set $blackjack to {
+	bet: 0,
+	deck: {},
+	first: true,
+	you: [],
+	house: [],
+	won: false,
+	stand: false,
+	bj: (typeof $blackjack !== 'undefined' ? $blackjack.bj : false)
+}>>
+Bet: <<textbox "$blackjack.bet" 1>>
+<div id="blackjack-error" style="color:red"></div>
+<br /><br />
+<<link 'Bet'>>
+	<<addmins 15>>
+	<<if typeof $player.gambler === 'undefined'>>
+		<<set $player.gambler = 0>>
+	<</if>>
+	<<set $player.gambler++>>
+	<<set $blackjack.bet = parseInt($blackjack.bet)>>
+	<<if !Number.isInteger($blackjack.bet) || $blackjack.bet < 1>>
+		<<replace "#blackjack-error" style="color:red">>Invalid value<</replace>>
+	<<elseif $player.money < $blackjack.bet>>
+		<<replace "#blackjack-error">>You don't have enough caps<</replace>>
+	<<elseif $blackjack.bet > 100>>
+		<<replace "#blackjack-error">>Bet is too big. Max: 100<</replace>>
+	<<else>>
+	  <<set $blackjack.deck = blackjackDeck()>>
+	  <<set $player.money -= $blackjack.bet>>
+	  <<if (randomInteger(1, 2) === 1) && !$blackjack.bj>>
+	  	<<goto 'Blackjack - bj'>>
+	  <<else>>
+	  	 <<goto 'Blackjack - play'>>
+	  <</if>>
+	<</if>>
+<</link>>
+<<link 'Leave'>>
+	<<if $blackjack.bj>>
+		<<goto 'Blackjack - bj end'>>
+	<<else>>
+		<<goto 'Bar'>>
+	<</if>>
+	<<run delete $blackjack>>
+<</link>>
+
+<<if ($blackjack.bj)>>
+	<<include 'Blackjack bj'>>		
+	<br /><br />
+<</if>>
+
+

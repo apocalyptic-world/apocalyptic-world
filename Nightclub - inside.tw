@@ -1,0 +1,27 @@
+:: Nightclub - inside [Places nightclub bg-underground] {"position":"2060,1463","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/nightclub_head.jpg']]
+</div>
+<br /><br />
+
+<<if $player.money >=3 && $player.energy >= 10>>
+	<<link 'Enjoy drink'>>
+		<<set $player.money -=3>>
+		<<energy -10>>
+		<<addmins 30>>
+		<<goto 'Nightclub - drink'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy >= 10>>
+  <<link 'Dance'>>
+  	  <<addmins 30>>
+	  <<energy -10>>
+	  <<goto 'Nightclub - dance'>>
+  <</link>>
+<</if>>
+
+[[Leave|Underground city]]
+
+

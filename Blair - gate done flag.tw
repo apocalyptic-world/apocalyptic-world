@@ -1,0 +1,78 @@
+:: Blair - gate done flag {"position":"1138,2178","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<div id="flag_choose" style="display: flex; justify-content: center">
+	<div class="flag_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/bg_red.png']]
+		<<link 'Choose'>>
+			<<set $game.flagBg = 'red'>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+	<div class="flag_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/bg_blue.png']]
+		<<link 'Choose'>>
+			<<set $game.flagBg = 'blue'>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+	<div class="flag_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/bg_green.png']]
+		<<link 'Choose'>>
+			<<set $game.flagBg = 'green'>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+</div>
+
+<div id="icon_choose" style="display: flex; justify-content: center">
+	<div class="flag_icon_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/icon_1.png']]
+		<<link 'Choose'>>
+			<<set $game.flagIcon = 1>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+	<div class="flag_icon_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/icon_2.png']]
+		<<link 'Choose'>>
+			<<set $game.flagIcon = 2>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+	<div class="flag_icon_choose_item">
+		[img[setup.ImagePath+'game/misc/flag/icon_3.png']]
+		<<link 'Choose'>>
+			<<set $game.flagIcon = 3>>
+			<<goto 'Blair - gate done flag'>>
+		<</link>>
+	</div>
+</div>
+
+<<if $game.flagIcon && $game.flagBg>>
+	<div style="display: flex; justify-content: center; text-align: center;">
+	<div>
+	  Result
+	  <br />
+	  <<flag>>
+	</div>
+	</div>
+	<br /><br />
+	<<link 'Continue'>>
+		<<goto 'Blair - gate done finish'>>
+	<</link>>
+<</if>>
+
+
+<style>
+.flag_choose_item {
+	margin: 0px 30px;
+}
+.flag_icon_choose_item {
+    width: 102px;
+    margin: 0 53px;
+}
+</style>
+
+

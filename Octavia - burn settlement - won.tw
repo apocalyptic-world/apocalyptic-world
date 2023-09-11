@@ -1,0 +1,92 @@
+:: Octavia - burn settlement - won {"position":"2598,3015","size":"100,100"}
+<h1 class="ptitle">SETTLEMENT</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/octavia_run.webp']]
+</center>
+<br /><br />
+The girl, upon seeing that you have dealt with her one of the biggest guys, shouts at the others to back off, but she herself runs into the other side of the forest. She casts a quick glance at you and disappears so far that she is no longer noticeable.
+<br /><br />
+<<linkreplace 'Follow her'>>
+	Suddenly, after a moment, quite close by, you hear a loud scream. It sounded like a woman. Coming precisely from the same direction where Octavia ran off a moment ago.
+	<br /><br />
+	<<linkreplace 'Run towards that place'>>
+		<center>
+			[img[setup.ImagePath+'places/settlement/octavia_run2.webp']]
+		</center>
+		<br /><br />	
+		You run about 100 meters at most, and in front of you, you witness a horrifying sight. Octavia, her face filled with pain, is struggling to crawl away slowly, but she can't... Her leg is trapped between the bear's jaws, and everything around her is covered in her blood.
+		<br /><br />
+		<center>
+			[img[setup.ImagePath+'places/settlement/octavia_burn4.jpg']]
+		</center>
+		<br /><br />
+		<<linkreplace 'Help her'>>
+			With all your strength, you manage to pry the bear's jaws apart, and Octavia, whimpering, manages to escape to the nearest tree. Leaning against the tree trunk, she doesn't divert her gaze from you. In her eyes, you see anger.
+			<br /><br />
+			<center>
+			[img[setup.ImagePath+'places/settlement/octavia_run3.webp']]
+		</center>
+			<br /><br />
+			<<octavia>>
+				What you're doing!? KILL ME YOU COWARD! 
+			<</octavia>>
+			<br /><br />
+			<<warning 'WARNING! YOUR NEXT CHOICES WILL DETERMINE IF YOU TAKE DOM OR SUB ROUTE WITH HER'>>
+			<br /><br />
+			<div id="option1">
+				<<linkreplace 'Release her (SUB)'>>
+					<<run $('#option2').hide()>>
+					<<you>>
+						You are free to go! GO!
+					<</you>>
+					<br /><br />
+					<<octavia>>
+						Are you serious? You weak pathetic looser!
+					<</octavia>>
+					<br />
+					<<octavia>>
+						You intrigue me.. So strong from the outside but on inside... Pathetic..
+					<</octavia>>
+					<br /><br />
+					<<linkreplace 'Continue'>>
+						<<run $('#ending').show()>>
+					<</linkreplace>>
+				<</linkreplace>>
+			</div>
+			<div id="option2">
+				<<linkreplace 'Enslave her (DOM)'>>
+					<<run $('#option1').hide()>>
+					<<set $characters.octavia.isSub = true>>
+					<<set $characters.octavia.sub += 5>>
+					<center>
+						[img[setup.ImagePath+'places/settlement/octavia_dick_face.webp']]
+					</center>
+					<br /><br />
+					You stand right in front of her and pull out your dick. She tries to back away from you, but she realizes there's a tree behind her, and she's unable to resist on her own. You put your dick on her face and rub it while she grimaces and tries to avoid it.
+					<br /><br />
+					<<linkreplace 'Fuck her mouth'>>
+						<<run $('#ending').show()>>
+					<</linkreplace>>
+				<</linkreplace>>
+			</div>
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
+
+<div id="ending" style="display:none;">
+	<center>
+		[img[setup.ImagePath+'places/settlement/octavia_ending.gif']]
+	</center>
+	<br /><br />
+	At that moment, another loud shout echoes from behind. You glance in that direction and see at least 20 grounders, one of whom has already aimed a bow at you and is ready to shoot. You have no choice but to flee.
+	<br /><br />
+	<<link 'Flee'>>
+		<<addhours 2>>
+		<<set $characters.octavia.quests.burned_settlement = true>>
+		<<set $characters.octavia.quests.burn_day = $game.day>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
+
+

@@ -1,0 +1,44 @@
+:: Bar - random event #1 [bg-underground] {"position":"2505,1833","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+<center>
+	[img[setup.ImagePath+'places/bar/drunk_guy.webp']]
+</center>
+<br /><br />
+The city drunk, stumbles by, bumping into you. If doesn't say sorry or even notice you as he continues to drink and dance alone.  
+<br /><br />
+
+<<addmins 15>>
+
+<div id="bar-event-drunk-button">
+  <<link 'Demand an apology'>>
+  	  <<run $('#bar-event-drunk-button').slideToggle()>>
+	  <<if randomInteger(1,3) === 1>>
+		  <<run $('#bar-event-drunk-fight').slideToggle()>>
+	  <<else>>
+		 <<run $('#bar-event-drunk-no-fight').slideToggle()>>
+	  <</if>>
+  <</link>>
+</div>
+<div id="bar-event-drunk-fight" style="display:none;">
+	He looks at you and yells <strong>"What the fuck you're looking at. Want to get your head smashed?"</strong>
+<br /><br />
+<<link 'Fight him'>>
+	<<newguy>>
+	<<set $enemies = []>>
+	<<run $enemies.push($tmpGuy)>>
+	<<fight $enemies 'Bar' 'Bar' true>>
+<</link>>
+</div>
+
+<div id="bar-event-drunk-no-fight" style="display:none;">
+	He looks at you while barelly standing on his feet as he yells "sorry" and continues to dance.
+<br /><br />
+</div>
+
+<div id="bar-event-drunk-button-ignore">
+  <<link 'Ignore him'>>
+	  <<goto 'Bar'>>
+  <</link>>
+</div>
+
+

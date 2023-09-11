@@ -1,0 +1,23 @@
+:: Random event - quicksand #4 helped {"position":"5857,124","size":"100,100"}
+<center>
+	[img[setup.ImagePath+'places/explore/quicksand_helped.webp']]
+</center>
+<br /><br />
+You manage to pull him out as you both drop on the ground exhausted.
+<br />
+<<set $player.strength++>>
+<<if random(0, 5) == 0>>
+	He quickly gets up, kicks you in the head with leg searches you while you're laying on the ground.
+	<<set $capsMissing = ($player.money - 3 > 0 ? 3 : $player.money)>>
+	<<if $capsMissing>>
+	  <<set $player.money -= $capsMissing>>
+	  <strong>He managed to find <<=$capsMissing>> caps on you</strong>
+	<</if>>
+<<else>>
+	In gratitude he thanks you and offers his rope as a gift to you.
+	<<pickup $backpack 'rope' 1>>
+<</if>>
+<br /><br />
+[[Leave|Outside]]
+
+

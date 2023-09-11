@@ -1,0 +1,50 @@
+:: Nightclub - outside fight [bg-underground] {"position":"2888,1461","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/nightclub/attack_outside.webp']]
+</center>
+<br />
+As soon as you step outside the nightclub and turn around the corner, <strong>2</strong> big guys surround you and ask you to give them some caps. You look around - there's nowhere to run.
+<br /><br />
+<<if $player.money > 10>>
+	<<link 'Give them 10 caps'>>
+		<<addmins 10>>
+		<<set $player.money -= 10>>
+		<<goto 'Underground city'>>
+	<</link>>
+<</if>>
+
+<<link 'Fight them'>>
+	<<if $player.fighter_rank <= 40>> <<set _nightclubPercentageTheyRecognize = 60>>
+	<<elseif $player.fighter_rank <= 50>> <<set _nightclubPercentageTheyRecognize = 50>>
+	<<elseif $player.fighter_rank <= 60>> <<set _nightclubPercentageTheyRecognize = 40>>
+	<<elseif $player.fighter_rank <= 70>> <<set _nightclubPercentageTheyRecognize = 30>>
+	<<elseif $player.fighter_rank <= 80>> <<set _nightclubPercentageTheyRecognize = 20>>
+	<<elseif $player.fighter_rank <= 90>> <<set _nightclubPercentageTheyRecognize = 10>>
+	<<else>> <<set _nightclubPercentageTheyRecognize = 0>>
+	<</if>>
+
+	<<run console.log(_nightclubPercentageTheyRecognize)>>
+	<<if setup.percentageChance(_nightclubPercentageTheyRecognize)>>
+		<<goto 'Nightclub - outside fight recognize'>>
+	<<else>>
+		<<set $enemies = []>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<run $enemies.push($tmpGirl)>>
+		<<fight $enemies 'Underground city' 'Underground city' true>>
+	<</if>>
+<</link>>
+
+<<link 'Try to run away'>>
+	<<set $fight = {
+		defeatedEnemies: [],
+		passageLost: 'Underground city'
+	}>>
+	<<goto 'Fight - run away'>>
+<</link>>
+
+

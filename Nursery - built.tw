@@ -1,0 +1,58 @@
+:: Nursery - built {"position":"1553,281","size":"100,100"}
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+
+<center>
+	[img[setup.ImagePath+'places/cabin/nursery_built.jpg']]
+</center>
+<br /><br />
+<<blair>>
+Well, not exactly what I had imagined, but having a roof over their head will definitely be suitable. Maybe in the future, you could consider making it more colorful and appealing to children's eyes.
+<</blair>>
+<br /><br />
+
+<<set _newGuests = []>>
+<<set _newSlaves = []>>
+<<set _tempCompanions = []>>
+<<for _nursCompI, _nursComp range $player.companions ?? []>>
+	<<set _nursCompKey = _nursCompI.split(':')>>
+	<<run _tempCompanions.push($guests[_nursCompKey[1]].name + ':' + $guests[_nursCompKey[1]].birthDate.getTime())>>
+<</for>>
+
+<<set $nursery = []>>
+<<for _nurGuestI to 0; _nurGuestI lt ($guests ?? []).length; _nurGuestI++>>
+	<<capture _nurGuestI>>
+		<<if setup.getAge($guests[_nurGuestI]) < 17>>
+		  	<<run $nursery.push($guests[_nurGuestI])>>
+	  	<<else>>
+			<<run _newGuests.push($guests[_nurGuestI])>>
+		<</if>>
+	<</capture>>
+<</for>>
+<<for _nurSlaveI to 0; _nurSlaveI lt ($slaves ?? []).length; _nurSlaveI++>>
+	<<capture _nurSlaveI>>
+		<<if setup.getAge($slaves[_nurSlaveI]) < 17>>
+		  	<<run $nursery.push($slaves[_nurSlaveI])>>
+	  	<<else>>
+			<<run _newSlaves.push($slaves[_nurSlaveI])>>
+		<</if>>
+	<</capture>>
+<</for>>
+
+<<set _tempCompanionsNew = {}>>
+<<for _newGuestI, _newGuest range _newGuests>>
+	<<if _tempCompanions.includes(_newGuest.name + ':' + _newGuest.birthDate.getTime())>>
+		<<set _tempCompanionsNew['guest:' + _newGuestI] = true>>
+	<</if>>
+<</for>>
+
+<<set $guests = _newGuests>>
+<<set $slaves = _newSlaves>>
+<<set $player.companions = _tempCompanionsNew>>
+
+<<set $game.location.nursery = true>>
+<<link 'Leave'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

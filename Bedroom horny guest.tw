@@ -1,0 +1,51 @@
+:: Bedroom: horny guest {"position":"49,1616","size":"100,100"}
+<h1 class="ptitle">BEDROOM</h1>
+<br /><br />
+<<set _guest = $guests[$guestId]>>
+You sit down on  your bed when suddenly your doors open and <<=setup.displayName(_guest)>> stands in the doors with only her nightshirt. 
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/bedroom/guest_visit.gif']]
+</center>
+<<set $tmpGirl = _guest>>
+<<include 'NPC info'>>
+<br />
+<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+	Hey! What you're doing? Maybe want to have some fun?
+<</say>>
+<br /><br />
+<<set _linkName = 'Fuck ' + $tmpGirl.name>>
+<<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && $characters.blair.relationship >= 90>>
+	<<blair>>
+		Don't leave me out. Can I join?
+	<</blair>>
+	<<set _blairJoin = true>>
+	<br /><br />
+<</if>>
+<<link _linkName>>
+	<<run delete $charId>>
+	<<run delete $slaveId>>
+	<<set $tmpGirl.location = 'bedroom'>>
+	<<set $tmpGirlCapture to false>>
+	<<set $tmpGirl.rape to false>>
+	<<set $tmpGirlViewBack = 'Sleep eval'>>
+	<<set $tmpGirlBack = 'Sleep eval'>>
+	<<goto 'Girl fuck'>>
+<</link>>
+<<if _blairJoin>>
+	<<if recall($suppCode)>>
+		<<link 'Fuck them both'>>
+			<<goto 'Bedroom: horny guest - threesome Blair'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal disabled" style="background: #ccc">
+			Fuck them both
+			<<notPatreonIcon>>
+		</div>
+	<</if>>
+<</if>>
+<<link 'Maybe some other time'>>
+	<<goto 'Bedroom'>>
+<</link>>
+
+

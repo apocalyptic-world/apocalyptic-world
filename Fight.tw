@@ -1,0 +1,178 @@
+:: Fight {"position":"3381,755","size":"100,100"}
+<h1 class="ptitle">FIGHT</h1>
+<h2>Enemies</h2>
+<div id="fight-enemies">
+	<<for _i to 0; _i lt $fight.enemies.length; _i++>>
+		<<capture _i>>
+			<div class="enemy-div">
+				<div class="enemy-img">
+					[img[setup.ImagePath+'places/fight/enemy_' + $fight.enemies[_i].gender + '.png']]
+				</div>
+				<<=$fight.enemies[_i].name>>
+				<div class="enemy-hp">
+				<div class="enemy-hp-border">
+					<div class="enemy-hp-bar" @style="'width:' + $fight.enemies[_i].hp + '%'"></div>
+					<div class="enemy-hp-count"><<=$fight.enemies[_i].hp>></div>
+				</div>
+				</div>
+				<div class="enemy-weapons">
+					<<for _enemyWeaponI, _enemyWeapon range ($fight.enemies[_i].inventory ?? [])>>
+						<div class="fight-weapon-icon">
+							[img[setup.ImagePath+'/game/inventory/' + _enemyWeapon + '.png']]
+						</div>
+					<</for>>
+				</div> 
+				<div class="enemy-actions">
+					<<link 'Hit'>>
+						<<fightAction _i>>
+					<</link>>
+					<<if $backpack.has('knife')>>
+						<<link 'Knife'>>
+							<<fightAction _i 'knife'>>
+						<</link>>
+					<</if>>
+					<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+						<<link 'Revolver'>>
+							<<fightAction _i 'revolver'>>
+						<</link>>
+					<</if>>
+				</div>
+			</div>
+		<</capture>>
+	<</for>>
+</div>
+<<if $fight.allies.length > 0>>
+	<h2 style="margin-top: 30px;">Allies</h2>
+	<div id="fight-allies">
+	<<for _i to 0; _i lt $fight.allies.length; _i++>>
+		<<capture _i>>
+			<div class="enemy-div">
+				<div class="girl_info_picture enemy-img">
+					<<set _girlVisual = $fight.allies[_i]>>
+					<<include 'Girl visual'>>
+				</div>
+				<<=$fight.allies[_i].name>>
+				<div class="enemy-hp">
+				<div class="enemy-hp-border">
+					<div class="enemy-hp-bar" @style="'width:' + $fight.allies[_i].hp + '%'"></div>
+					<div class="enemy-hp-count"><<=$fight.allies[_i].hp>></div>
+				</div>
+				</div>
+			</div>
+		<</capture>>
+	<</for>>
+	</div>
+<</if>>
+<<if $fight.messages.length > 0>>	
+	<br /><br />
+	 <<for _i to 0; _i lt $fight.messages.length; _i++>>
+		<<print $fight.messages[_i]>>
+		<br />
+	  <</for>>
+	<hr />
+	<<set $fight.messages = []>>
+<</if>>
+<br /><br />
+<div id="fight-your-hp">
+	<div id="fight-your-hp-label">
+		Your HP:
+	</div>
+	<div id="fight-your-hp-border">
+		<div id="fight-your-hp-bar" @style="'width:' + $fight.hp + '%'"></div>
+		<div id="fight-your-hp-count"><<=$fight.hp>></div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<br /><br />
+<<if ($fight.canRunAway ?? true)>>
+  <<link 'Run away'>>
+	  <<goto 'Fight - run away'>>
+  <</link>>
+<</if>>
+
+
+<style>
+	#fight-your-hp-label {
+		float: left;
+    	width: 9%;
+	}
+	#fight-your-hp-count {
+	  position: absolute;
+	  top: -5px;
+	  left: 45%;
+	}
+	#fight-your-hp-border {
+		float:left;
+		border: 1px solid #4CAF50!important;
+		width: 90%;
+		position: relative;
+	}
+	
+	#fight-your-hp-bar {
+    	color: #000!important;
+    	background-color: #4CAF50!important;
+		height: 17px;
+	}
+	
+	.enemy-actions {
+		margin-top: 30px;
+	}
+	.enemy-hp-border {
+		border: 1px solid #4CAF50!important;
+		width: 100%;
+		position: relative;
+	}
+	
+	.enemy-hp-bar {
+    	color: #000!important;
+    	background-color: #4CAF50!important;
+		height: 17px;
+	}	
+	
+	.enemy-img {
+		text-align:center;
+	}
+	.enemy-img img {
+	  max-width: 100%;
+	  height: auto;
+	  width: auto;
+	  max-height: 121px;
+	}
+	.enemy-hp-count {
+	    position: absolute;
+    	top: -5px;
+    	left: 44%;
+	}
+	
+	.fight-weapon-icon {
+	  border: 1px solid orange;
+	  border-radius: 6px;
+	  width: 20px;
+	  height: 20px;
+	  padding: 2px;
+	}
+	
+	.enemy-weapons {
+	  height: 11px;
+	  margin-top: 3px;
+	  display: flex;
+	  justify-content: space-evenly;
+	}
+	
+	#fight-allies {
+	    display: flex;
+    	justify-content: space-evenly;
+	}
+	
+	.girl_info_picture.enemy-img {
+    	zoom: 100%;
+   	 	margin: 0 auto;
+	}
+	
+	#fight-your-hp {
+		margin-top: 20px;
+	}
+	
+</style>
+
+

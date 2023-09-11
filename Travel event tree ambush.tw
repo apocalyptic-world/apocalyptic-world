@@ -1,0 +1,47 @@
+:: Travel event: tree ambush {"position":"7790,33","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+As the sun cast its feeble rays across the barren land, you trudged onward, your senses sharp and alert for any sign of danger. You had learned to be cautious, for in this new world, survival was a constant battle.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/travel/tree_ambush.jpg']]
+</center>
+<br /><br />
+With each step you took, the unease grew stronger. Suddenly, a rustle in the tree to your right jolted you to a halt. You heart raced as I instinctively dropped into a defensive crouch, your eyes scanning the surroundings. That's when You saw them – three men, clad in makeshift armor, emerging from behind the colossal tree.
+<br /><br />
+Their faces were etched with determination, and their eyes bore a hardness that spoke of survival at any cost. They carried crude weapons, each one a stark reminder of the brutality that defined this new world.
+<br /><br />
+<div id="option1">
+	<<link 'Fight them'>>
+		<<set $enemies = []>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<fight $enemies 'Settlement' 'Settlement'>>
+	<</link>>
+</div>
+<<linkreplace 'Run away'>>
+	<<run $('#option1').hide()>>
+	<<if $player.strength > 50 && setup.percentageChance(50)>>
+		<<goto 'Settlement'>>
+	<<else>>
+		<br />
+		<strong>You failed!</strong>
+		<br /><br />
+		<<link 'Fight them'>>
+			<<set $enemies = []>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<fight $enemies 'Settlement' 'Settlement'>>
+		<</link>>
+	<</if>>
+<</linkreplace>>
+
+

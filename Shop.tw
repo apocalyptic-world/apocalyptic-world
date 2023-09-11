@@ -1,0 +1,90 @@
+:: Shop [Place] {"position":"1098,766","size":"100,100"}
+<h1 class="ptitle">SHOP</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/shop_head.jpg']]
+</div>
+<br /><br />
+
+<<if typeof $storage === 'undefined'>>
+  <<newinv $storage>>
+  <<set $storage to Inventory.create()>>
+<</if>>
+<<if typeof $player.manageGoods === 'undefined'>>
+	<<set $player.manageGoods = {}>>
+<</if>>
+
+<<for _shopInventoryItemId, _shopInventoryItem range setup.inventoryManageable>>
+	<<if typeof $player.manageGoods[_shopInventoryItemId] === 'undefined'>>
+		<<set $player.manageGoods[_shopInventoryItemId] = {
+			min: 0,
+			max: 0
+		}>>
+	<</if>>
+<</for>>
+
+<<if setup.getPersonsForLocation($guests, 'shop').length>>
+	<table id="manage-goods">
+		<tr>
+			<td></td>
+			<td></td>
+			<td>Storage</td>
+			<td>Min</td>
+			<td>Max</td>
+		</tr>
+		<<for _shopInventoryItemId, _shopInventoryItem range setup.inventoryManageable>>
+			<<capture _shopInventoryItemId>>
+			<tr>
+				<td class="icon">
+					[img[setup.ImagePath+'game/inventory/' + _shopInventoryItemId + '.png']]
+				</td>
+				<td class="name">
+					<<=Item.get(_shopInventoryItemId).name>>
+				</td>
+				<td class="qty">
+					<<=$storage.count(_shopInventoryItemId)>>
+				</td>
+				<td class="qty-input">
+					<<numberbox `"$player.manageGoods[_shopInventoryItemId].min"` `setup.shopGetDefaultInput(_shopInventoryItemId, 'min')`>>
+				</td>
+				<td>
+					<<numberbox `"$player.manageGoods[_shopInventoryItemId].max"` `setup.shopGetDefaultInput(_shopInventoryItemId, 'max')`>>
+				</td>
+			</tr>
+			<</capture>>
+		<</for>>
+	</table>
+	<br /><br />
+	
+	<div id="goods-managament-description">
+		<div class="icon">
+		⁈
+		</div>
+		
+		The shopkeeper's task will be to try to bargain goods for which you have set minimum or maximum values. This means that as soon as the goods go beyond the specified numbers, the seller will either try to buy or sell the particular product.
+
+It should be noted that not every item is in demand, which means that some goods may be sold very slowly while others sell faster.
+		<br />
+		<div>
+			* min - minimal amount of item you want to have in your storage.
+		</div>
+		<div>
+			* max - maximum amount of item you want to have in your storage.
+		</div>
+	</div>
+<<else>>
+	You need to assign someone with <strong>shopkeeper</strong> trait to this job.
+<</if>>
+<br /><br />
+<<link 'Storage'>>
+	<<script>>
+		Dialog.setup("Storage", "Storage");
+		Dialog.wiki(Story.get("Storage").processText());
+		Dialog.open();
+	  <</script>>
+<</link>>
+
+<<link 'Leave'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+

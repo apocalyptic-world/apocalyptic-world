@@ -1,0 +1,58 @@
+:: Slave - wash [sex no-redirect] {"position":"3232,102","size":"100,100"}
+<h1 class="ptitle">SHOWER</h1>
+<br /><br />
+ <center>
+ 	[img[setup.ImagePath+'places/shower/wash_slave'+ randomInteger(1,2) +'.webp']]
+</center>
+ <br /><br />
+ You bring <strong><<=$tmpGirl.name>></strong> upstairs and let the hot water run in the shower.<br />She starts to wash and you can't take your eyes off her.
+ <br /><br />
+ 
+ <<addmins 60>>
+ <<set $tmpGirl.washed = true>>
+ <<if !($tmpGirl.washDays ?? false)>>
+ 	<<set _beautyInc = randomInteger(1, 2)>>
+	<<set $tmpGirl.washBeauty = _beautyInc>>
+	<strong><<=$tmpGirl.name>></strong> beauty temporary increased by <<=_beautyInc * 7>><br />
+	<strong><<=$tmpGirl.name>></strong> releationship increased by 5
+	
+	<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100)>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + (_beautyInc * 7), 100)>>
+	<br /><br />
+<<else>>
+	<<set $tmpGirl.beauty -= $tmpGirl.washBeauty * $tmpGirl.washDays>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + ($tmpGirl.washBeauty * 7), 100)>>
+<</if>>
+<<set $tmpGirl.washDays = 7>>
+
+<<linkreplace 'Help her'>>
+	 <center>
+ 		[img[setup.ImagePath+'places/shower/wash_slave_help'+ randomInteger(1,2) +'.webp']]
+	</center>
+	<br /><br />
+	You walk behind her and slowly massage her body as she quietly gasps. 
+	<br />
+	She presses her body against yours and you think that she's really enjoying the moment. 
+	<br /><br />
+	<<linkreplace 'Fuck her'>>
+		<<horny_reset>>
+		<center>
+			[img[setup.ImagePath+'places/shower/wash_slave_fuck'+ randomInteger(1,2) +'.webp']]
+		</center>
+		<br /><br />
+		You slide your hard dick inside her nice clean pussy and pound her really hard.
+		<br />
+		<<if $tmpGirl.relationship > 30>>
+			She begs you to keep going but cum outside.
+		<<else>>
+			She screams at you to STOP as you keep going and cum right on her.  
+		<</if>>
+		<br /><br />
+	<</linkreplace>>
+
+<</linkreplace>>
+<<link 'Take her back to the cell'>>
+	<<goto 'Girl view'>>
+<</link>>
+
+

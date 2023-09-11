@@ -1,0 +1,72 @@
+:: Explore event: The Lost Child {"position":"6636,189","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+
+
+As you venture through the desolate forest, you suddenly hear a sound—a cry emanating from the nearby bushes. You cautiously scan your surroundings, but you see no one. However, this absence of visible presence does not necessarily guarantee that it is not an ambush.
+<br /><br />
+<<linkreplace 'Investigate'>>
+	<<run $('#option1').hide()>>
+	You slowly approach the bushes and gently push them aside to see what hides behind them.
+	<br /><br />
+	 <center>
+ 		[img[setup.ImagePath+'places/explore/lost_child1.jpg']]
+ 	</center>
+ 	<br /><br />
+	You see frightened and disheveled child. He appear to be lost and hungry. His eyes widen with hope as they spot you.
+	<br />
+	<strong>Child: "Excuse me, sir/madam. Are you here to help me? I'm lost, and I can't find my parents. I'm really hungry too. Do you have any food?"</strong>
+	<br /><br />
+	You notice the child's ragged clothes and unkempt appearance, his vulnerability tugging at your heartstrings
+	<br /><br />
+	<<if $backpack.has('food')>>
+		<<linkreplace 'Give him food'>>
+			<<run $('#option2_desc').hide()>>
+			<<drop $backpack 'food' 1>>
+		   <center>
+			  [img[setup.ImagePath+'places/explore/lost_child2.jpg']]
+		  </center>
+		  	<br /><br />
+			You take out a piece of food and hand it to him. You notice joy in his eyes, and he immediately lunges at the food as if he had never eaten before.
+			<br /><br />
+		<</linkreplace>>
+		<div id="option2_desc">
+			<<linkdesc>>-1 food<</linkdesc>>
+		</div>
+	<</if>>
+	<div id="option_yes">
+		<<linkreplace 'Help him find his parents'>>
+			<<addhours 4>>
+			<<run $('#option_no').hide()>>
+				 <center>
+					[img[setup.ImagePath+'places/explore/lost_child3.jpg']]
+				</center>
+			<br /><br />
+			You spend a couple of hours walking together through the quiet forest, trying to coax any information from him about where his parents might be or at least the last place they were all together. After a while, you finally notice a couple in the distance, and he simply rushes towards them, calling out, <strong>"Mom, Dad..."</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<set $player.godwill++>>
+				<<goto 'Outside'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="option_no">
+		<<linkreplace "Do not help him find his family">>
+			<<set $player.godwill -= 5>>
+			<<run $('#option_yes').hide()>>
+			He starts crying but doesn't say a word to you. After a moment, he collapses back onto the ground, tears streaming down his face, and closes his eyes tightly.
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Outside'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+
+<</linkreplace>>
+<div id="option1">
+  <<link 'Leave'>>
+	  <<goto 'Outside'>>
+  <</link>>
+</div>
+
+

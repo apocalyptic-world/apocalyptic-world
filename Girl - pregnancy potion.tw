@@ -1,0 +1,51 @@
+:: Girl - pregnancy potion {"position":"3114,220","size":"100,100"}
+<<addmins 15>>
+<<drop $backpack 'pregnancy_potion' 1>>
+<center>
+	[img[setup.ImagePath+'places/basement/drink_pregnancy_potion.webp']]
+</center>
+<br /><br />
+<<=$tmpGirl.name>> drinks the pregnancy potion and lays down to wait and see what will happen...
+<br /><br />
+
+<<set $pregnancyDied = (randomInteger(0, 5) === 0)>>
+<<if $pregnancyDied>>
+	<center>
+		[img[setup.ImagePath+'places/basement/pregnancy_potion_died.webp']]
+	</center>
+	<br /><br />
+	She instantly feels a sharp pain in her stomach as she yells out that it hurts..
+	<br />
+	Pain continues for some time and then she suddenly dies.
+	<br /><br />
+	<strong><<=$tmpGirl.name>> died</strong>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves.splice($slaveId, 1)>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests.splice($guestId, 1)>>
+	<</if>>
+<<else>>
+	She feels pain in her stomach but after a few minutes it goes away and she feels fine.
+	<br /><br />
+	<strong>Pregnancy terminated</strong>
+	<<run delete $tmpGirl.pregnancy>>
+<</if>>
+
+<br /><br />
+<<link 'Continue'>>
+	<<if $pregnancyDied>>
+		<<if $tmpGirlBack>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'Outside'>>
+		<</if>>
+	<<else>>
+		<<if $tmpGirlViewBack>>
+			<<goto $tmpGirlViewBack>>
+		<<else>>
+			<<goto [[Girl view]]>>
+		<</if>>
+	<</if>>
+<</link>>
+
+

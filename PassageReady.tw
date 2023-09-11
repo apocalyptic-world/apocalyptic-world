@@ -1,0 +1,56 @@
+:: PassageReady {"position":"671,12","size":"100,100"}
+<<set $suppCode = 'Patreon0.22'>>
+<<if $player.energy > $player.maxEnergy>>
+	<<set $player.energy = $player.maxEnergy>>
+<</if>>
+<<if $player.hunger > $player.maxHunger>>
+	<<set $player.hunger = $player.maxHunger>>
+<</if>>
+<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
+<<updatemeter '$hornyBar' `$player.horny / 100`>>
+  
+<<include "actionText">>
+
+<<set $charactersInLocation = {
+	kitchen: [],
+	bedroom: [],
+	church: [],
+	farm: []
+}>>
+<<set 
+	$game.avatars = {},
+	$game.avatars.blair = 'people/blair/avatar.png'
+	$game.avatars.rodger = 'people/rodger/avatar.png'
+>>
+
+<<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
+  <<if timeBetween('08:00', '09:00')>>
+	  <<run $charactersInLocation['kitchen'].push('blair')>>
+  <</if>>
+  <<if timeBetween('22:00', '08:00')>>
+	  <<run $charactersInLocation['bedroom'].push('blair')>>
+  <</if>>
+  
+  <<if timeBetween('12:00', '14:00')>>
+	  <<run $charactersInLocation['farm'].push('blair')>>
+  <</if>>
+  
+<</if>>
+
+<<if isMetChar('rodger')>>
+	<<run $charactersInLocation['church'].push('rodger')>>
+<</if>>
+
+<<if isMetChar('blair') && !$game.debugBlair>>
+	<<set $game.debugBlair = $characters.blair.quests.metOnDay>>
+<</if>>
+<<if $game.debugBlair && (typeof $characters.blair.quests === 'undefined' || typeof $characters.blair.quests.metOnDay === 'undefined' || $game.debugBlair !== $characters.blair.quests.metOnDay)>>
+	<<script>>
+		Dialog.setup("Blair bug warning", "Blair bug warning");
+		Dialog.wiki(Story.get("Blair bug warning").processText());
+		Dialog.open();
+	<</script>>
+<</if>>
+
+

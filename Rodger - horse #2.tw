@@ -1,0 +1,61 @@
+:: Rodger - horse #2 {"position":"3091,2446","size":"100,100"}
+<h1 class="ptitle">WORLD</h1>
+<br /><br />
+As you trudged through the desolate wasteland on foot, exhaustion weighing heavy on your weary legs, you noticed an abandoned house in the distance. A lone horse stood outside, a silent sentinel in this ravaged world. Intrigued and desperate for shelter, I cautiously approached the house, hoping that would be Harper who mentioned Rodger.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/harper_house.jpg']]
+</center>
+	
+<br /><br />
+<<linkreplace 'Go closer'>>
+	As you approach the horse old guy jumps out of the abandoned house and aims at you with his gun
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/settlement/harper_meet.jpg']]
+	</center>
+	<br /><br />
+	<<harper>>
+		Looking for trouble kid? You can find them here..
+	<</harper>>
+	<br /><br />
+	<<linkreplace 'Tell him about Rodger and his horse'>>
+		Just as you finished telling about Roger and his offer about horse, you take out a small sac from your pocket with the 100 caps, given by Roger and reach out your hand towards Harper's direction.
+		<br /><br />
+		<strong>Harper laughs while looking at the small sac you're holding in your hand.</strong>
+		<br /><br />
+		<<harper>>
+			I don't know how much you got there but that won't be enough... I want 300 for it! 
+		<</harper>>
+		<br /><br />
+		<<if Object.keys($player.companions).length >= 2>>
+			He looks at your companions with an creepy smile..
+			<br /><br />
+			<<harper>>
+				Actually I might even trade him for these two beauties...
+			<</harper>>
+			<br /><br />
+			<<link 'Trade for your companions'>>
+				<<set $characters.rodger.quests.horse_get = 'companions'>>
+				<<goto 'Rodger - horse get'>>
+			<</link>>
+		<</if>>
+		<<if $player.money >= 300>>
+			<<link 'Pay him 300 caps'>>
+				<<set $characters.rodger.quests.horse_get = 'pay'>>
+				<<set $player.money -= 300>>
+				<<goto 'Rodger - horse get'>>
+			<</link>>
+		<</if>>
+		<<link 'Try to attack him'>>
+			<<set $characters.rodger.quests.horse_get = 'no_fight'>>
+			<<goto 'Rodger - horse lost'>>
+		<</link>>
+		<<link 'No deal'>>
+			<<set $characters.rodger.quests.horse_get = 'no_deal'>>
+			<<goto 'Rodger - horse lost'>>
+		<</link>>
+	<</linkreplace>>
+<</linkreplace>>
+
+

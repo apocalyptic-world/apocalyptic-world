@@ -1,0 +1,66 @@
+:: Octavia - eve kidnapped #2 {"position":"2495,3121","size":"100,100"}
+<h1 class="ptitle">FOREST NEAR SETTLEMENT</h1>
+<br /><br />
+<<set _walkImage = 'eve_kidnapped_' + ($characters.octavia.quests.eve_kidnapped_rodger ? 'rodger' : 'alone')>>
+<center>
+	[img[setup.ImagePath+'places/settlement/' + _walkImage + '.jpg']]
+</center>
+<br /><br />
+You started walking in the direction indicated by Rodger. Along the edge of the path, there were visible traces of blood, but they didn't look fresh. 
+<br />
+Perhaps they were from other times when grounders went away, trying to destroy Roger's settlement.
+<br />
+Suddenly, in the middle of the forest, a river began, and the sounds of people could be heard nearby. It was decided to head in that direction.
+<br /><br />
+<<linkreplace 'Go along the river'>>
+	<<video 'settlement/eve_kidnapped1'>>
+	<br /><br />
+	The sounds become louder, and then, at one moment, on the other side of the river, you notice Grounders. It's suspicious that there are only women and they all are half-naked.
+	<br /><br />
+	<div id="option1">
+		<<linkreplace 'Quietly investigate them'>>
+			<<run $('#option2').hide()>>
+			<<video 'settlement/eve_kidnapped2'>>
+			<br /><br />
+			<<if $characters.octavia.quests.eve_kidnapped_rodger>>
+				<<rodger>>
+					There she is! My Eve!
+				<</rodger>>
+				<br />
+				Rodger tries to yell so she can hear him but you manage to stop him in time.
+				<br /><br />
+			<</if>>
+				You see that they are carrying <strong>Eve</strong> closer to the rest of the group, while she's trying to resist and break free from them. You decide to get closer to check what they will do next
+			<br /><br />
+			<<video 'settlement/eve_kidnapped4'>>
+			<br /><br />
+			To your surprise, they tie Eve to a tree and rip her upper garment. It appears they are attempting to humiliate her or are very intrigued by Eve. They smear her with mud, but at the same time, one of them decides to lick her breasts
+			<br /><br />
+			<<linkreplace 'Get closer'>>
+				<<run $('#ending').show()>>
+			<</linkreplace>>
+		<</linkreplace>>
+	</div>
+	<div id="option2">
+		<<linkreplace 'Go straight to them'>>
+			<<run $('#option1').hide()>>
+			<<run $('#ending').show()>>
+		<</linkreplace>>
+	</div>
+<</linkreplace>>
+
+<div id="ending" style="display:none">
+	<<video 'settlement/eve_kidnapped5'>>
+	<br /><br />
+	One of the girls notices you and grabs you by the arm. She leads you towards Eve and places you right in front of her. Suddenly, a shout is heard from the side. You look behind, and it's Octavia.
+	<br /><br />
+	<<octavia>>
+		Leave him alone! He's mine! Bring them all to my tent.
+	<</octavia>>
+	<br /><br />
+	<<link 'Follow her into a tent'>>
+		<<goto 'Octavia - eve kidnapped #3'>>
+	<</link>>
+</div>
+
+

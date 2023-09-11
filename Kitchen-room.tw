@@ -1,0 +1,60 @@
+:: Kitchen-room [Place] {"position":"1204,521","size":"100,100"}
+<h1 class="ptitle">KITCHEN</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/kitchen_head.jpg']]
+</div>
+<br /><br />
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'kitchen')>>
+<<if _girlGuest.length > 0 && timeBetween('08:00', '22:00')>>
+	<<set _isKitchenGirlAssigned = true>>
+	<<if $player.hunger <= 50 && $backpack.has('food')>>
+		<<set $player.hunger = 100>>
+		<<drop $backpack 'food' 1>>
+		<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
+	<</if>>
+	<<set $tmpGirl = $guests[_girlGuest[0]]>>
+	<<set $tmpGirl.location = 'kitchen'>>
+	<center>
+		<<actionImage $tmpGirl cooking>>
+	</center> 
+	<<=$tmpGirl.name>> is cooking in the kitchen. She notices you and gives you a warm smile<br /><br />
+	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
+	<<link `_girlGuestLink`>>
+		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<set $tmpGirlBack = 'Kitchen-room'>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirl.rape to false>>
+		<<set $guestId = _girlGuest[0]>>
+		<<run delete $slaveId>>
+		<<run delete $charId>>
+		<<goto 'Girl view - guest'>>
+	<</link>>
+<</if>>
+<<if $backpack.has('food') && (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
+  <<link "Eat">>
+	  <<set $player.hunger to 100>>
+	  <<addmins 30>>
+	  <<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
+	  <<drop $backpack 'food' 1>>
+	  <<goto 'Kitchen-room'>>
+  <</link>>
+<</if>>
+
+<<if $charactersInLocation['kitchen'].includes('blair')>>
+	<<link 'Talk with Blair'>>
+		<<goto 'Blair - kitchen talk'>>
+	<</link>>
+<</if>>
+
+[[Back|Wood cabin]]
+
+
+<<if !($locationEvents.kitchen ?? false)>>
+	<<if _isKitchenGirlAssigned && setup.percentageChance(5)>>
+		<<set $locationEvents.kitchen = true>>
+		<<set $guestId = _girlGuest[0]>>
+		<<goto 'Event: Kitchen stuck'>>
+	<</if>>
+<</if>>
+
+

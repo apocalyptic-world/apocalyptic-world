@@ -1,0 +1,157 @@
+:: Shooter game {"position":"4561,1001","size":"100,100"}
+<h1 class="ptitle"><<=$shooter.title ?? 'Hunting'>></h1>
+
+<div id="shooter-game">
+	
+	<div id="shooter-game-time-left">
+      <h3>Time left <span id="time">00:00</span></h3>
+	</div>
+      <div class="board" id="board">
+	  	<div class="screen" id="start-screen">
+			<a href="#" class="start passage link-internal" id="start">Start</a>
+			<div id="shooter-start-info">Tip: Just press on the targets</div>
+		</div>
+		<div class="screen" id="shooter-game-finished">
+			<div id="shooter-game-finished-score"></div>
+			<<link 'Continue'>>
+				<<goto `$shooter.passageWon`>>
+			<</link>>
+		</div>
+	  </div>
+</div>
+<<script>>
+$(document).one(':passagedisplay', function (eventObject) {	
+	var startBtn = document.querySelector("#start"),
+		timeEl = document.querySelector("#time"),
+  		board = document.querySelector("#board"),
+		time = 10,
+		score = 0,
+		decreaseTimeInterval = false,
+		finished = false;
+		
+	board.style.backgroundImage = "url('" + setup.ImagePath + "places/shooter/" + variables().shooter.place + ".jpg')";
+		
+	startBtn.addEventListener("click", function(e) {
+		e.preventDefault();
+		startGame();
+	});
+	
+	board.addEventListener("click", (e) => {
+		if (e.target.classList.contains("target")) {
+		  	score++;
+		 	e.target.remove();
+			if (!finished) {
+		  		createTarget();
+			}
+		}
+	});
+	
+	function startGame() {
+  		decreaseTimeInterval = setInterval(decreaseTime, 1000);
+		document.querySelector('#shooter-game-time-left').style.visibility = "visible";
+		document.querySelector('#start-screen').style.display = "none";
+  		createTarget();
+  		setTime(time);
+  	}
+	
+	function finishGame() {
+		finished = true;
+ 		clearInterval(decreaseTimeInterval);
+		timeEl.parentNode.classList.add("hide");
+		document.querySelector("#shooter-game-finished").style.display = "block";
+		
+  		document.querySelector("#shooter-game-finished-score").innerHTML = "<h1>Your Score: <span class = 'primary'>" + score 		+ "</span></h1>";
+		variables().shooter.score = score;
+	}
+
+	function decreaseTime() {
+		if (time === 0) {
+		  finishGame();
+		} else {
+		  let current = --time;
+		  if (current < 10) {
+			current = `0${current}`;
+		  }
+		  setTime(current);
+		}
+	}
+	
+	function createTarget() {
+	  var target = document.createElement("div"),
+		size = randomInteger(40, 100),
+		{ width, height } = board.getBoundingClientRect(),
+		x = randomInteger(0, width - size),
+		y = randomInteger(0, height - size);
+
+	  target.classList.add("target");
+	  target.style.width = `${size}px`;
+	  target.style.height = `${size}px`;
+	  target.style.top = `${y}px`;
+	  target.style.left = `${x}px`;
+	  target.style.backgroundImage = "url('" + setup.ImagePath + "places/shooter/" + variables().shooter.target + ".png')";
+	  target.style.backgroundSize = "contain";
+	  target.style.backgroundRepeat = "no-repeat";
+
+	  board.append(target);
+	}
+	
+	function setTime(value) {
+  		timeEl.innerHTML = `00:${value}`;
+	}
+});
+<</script>>
+<style>
+#shooter-game {
+	cursor: crosshair;
+}
+
+#shooter-game-finished {
+	display: none;
+}
+
+a.link-external:after {
+    content: '' !important;
+}
+
+#start-screen {
+	background: #666;
+    opacity: 0.9;
+    border-radius: 20px;
+    width: 220px;
+    text-align: center;
+    padding: 15px;
+    padding-right: 25px;
+    padding-top: 20px;
+}
+.board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: linear-gradient(118.38deg, #29323c -4.6%, #485563 200.44%);
+  box-shadow: -8px -8px 20px #2a333d, 10px 7px 20px #475462;
+  border-radius: 30px;
+  overflow: hidden;
+  background-size: contain;
+}
+.target {
+  position: absolute;
+  cursor: crosshair;
+}
+
+#shooter-game .screen {
+	padding: 20px;
+    background: #666;
+    opacity: 0.9;
+    border-radius: 20px;
+}
+#shooter-game-time-left {
+	text-align: center;
+	visibility: hidden;
+}
+
+</style>
+
+

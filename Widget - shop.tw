@@ -1,0 +1,71 @@
+:: Widget - shop [widget] {"position":"132,862","size":"100,100"}
+<<widget shop>>
+	<table id="farm-shop" class="shop-table">
+		<<for _i, _shopItem range $args[0]>>
+		  <<capture _i, _shopItem>>
+			<tr>
+				<td class="shop-img">
+					[img[setup.ImagePath+'game/inventory/' + _shopItem.name + '.png']] 
+				</td>
+				<td>
+					<<print Item.get(_shopItem.name).name>>
+				</td>
+				<td>
+					<<numberbox "$shopItems[_i].qty" 1>>
+				</td>
+				<td style="text-align: center;">
+					<<if (typeof _shopItem.sell === 'undefined' || _shopItem.sell)>>
+						$<<print _shopItem.price>>
+					<</if>>
+				</td>
+				<td>
+					<<if $backpack.has(_shopItem.name) && (typeof _shopItem.sell === 'undefined' || _shopItem.sell)>> 
+						<<link 'Sell'>> 
+							<<if $backpack.count(_shopItem.name) < $shopItems[_i].qty>>
+								<<replace `'#shop-error-'+_i`>>You don't have enough items<</replace>>
+							<<elseif $shopItems[_i].qty < 1>>
+								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
+							<<else>>
+								<<set $player.money += ((_shopItem.price * ($args[1].ratio ?? 1)) * $shopItems[_i].qty)>>
+								<<drop $backpack _shopItem.name $shopItems[_i].qty>>
+								<<goto $args[1]>>
+							<</if>>
+
+						<</link>>
+					<</if>>
+				</td>
+				<td style="text-align: center;">
+					$<<=(_shopItem.price * ($args[1].ratio ?? 1))>>
+				</td>
+				<td>
+					<<link 'Buy'>> 
+						<<if $player.money < ((_shopItem.price * ($args[1].ratio ?? 1)) * $shopItems[_i].qty)>> 
+							<<replace `'#shop-error-'+_i`>>You don't have enough caps<</replace>>
+						<<elseif $shopItems[_i].qty < 1>>
+							<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
+						<<else>>
+							<<if $args[2]>>
+								<<run $.wiki($args[2])>>
+							<</if>>
+							<<set $player.money -= ((_shopItem.price * ($args[1].ratio ?? 1)) * $shopItems[_i].qty)>>
+							<<pickup $backpack _shopItem.name $shopItems[_i].qty>>
+							<<goto $args[1]>>
+						<</if>>
+					<</link>>
+				</td>
+				<td>
+					<div @id="'shop-error-' +_i + ''" style="color: red; font-weight: bold"></div>
+				</td>
+			</tr>
+	  	<</capture>>		
+	  <</for>>
+	</table>
+	
+	<style>
+		.shop-table td {
+			padding: 10px;
+		}
+	</style>
+<</widget>>
+
+

@@ -1,0 +1,28 @@
+:: Main square [Place bg-settlement] {"position":"1943,2339","size":"100,100"}
+<h1 class="ptitle">MAIN SQUARE</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/settlement/square_head.jpg']]
+</div>
+<br /><br />
+<<if !($game.location.settlement_church ?? false)>>
+	<<link 'Help to build church'>>
+		<<goto 'Settlement - build church'>>
+	<</link>>
+<</if>>
+
+<<if $characters.rodger.quests.shop_talk && !($game.location.settlement_shop ?? false)>>
+	<<link 'Help to build shop'>>
+		<<goto 'Settlement - build shop'>>
+	<</link>>
+<</if>>
+
+<<if ($player.horse ?? false)>>
+	<<link 'Horse ride with a girl'>>
+		<<run delete $horseRideAction>>
+		<<goto 'Event: Settlement - horse ride'>>
+	<</link>>
+<</if>>
+
+[[Leave|Settlement]]
+
+

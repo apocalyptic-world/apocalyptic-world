@@ -1,0 +1,39 @@
+:: Scavenging - look for girl fight {"position":"4955,996","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<center>
+  [img[setup.ImagePath+'places/outside/scavenging_fuck.webp']]
+</center>
+<br /><br />
+You took the route through the forest and after some time you heard a scream in the distance. Someone screamed for help. You rushed toward the sound and noticed your girl, tied up to the tree as two guys fucked her and she couldn't do anything.
+<br /><br />
+<<linkreplace 'Keep watching'>>
+<center>
+  [img[setup.ImagePath+'places/outside/scavenging_cum.webp']]
+</center>
+<br /><br />
+She begged them to stop while she still tried to scream for help. After few rough minutes they untied her and punched her few times as one of them hold her by hair and second one started to cum all over her face
+<br /><br />
+<</linkreplace>>
+
+<<link 'Fight them'>>
+	<<set $enemies = []>>
+  	<<newguy>>
+	<<if randomInteger(0, 10) === 0>>
+		<<set 
+			$tmpGuy.inventory = [],
+			$tmpGuy.inventory.push('knife')
+		>>
+	<</if>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<fight $enemies 'Scavenging - look for girl fight won' 'Scavenging - look for girl fight lost'>>
+<</link>>
+
+<<link 'Leave her'>>
+	<<run $guests.splice($scavengingDidntReturn, 1)>>
+	<<goto 'Outside'>>
+<</link>>
+
+

@@ -1,0 +1,52 @@
+:: Slave market - buy [bg-underground] {"position":"2179,1690","size":"100,100"}
+<h1 class="ptitle">SLAVE MARKET</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/slave_market_head.jpg']]
+</div>
+<br /><br />
+
+<<run delete $charId>>
+<<run delete $slaveId>>
+<<run delete $guestId>>
+<<newgirl>>
+<<if ($player.quests.slave_market_vip ?? false)>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + randomInteger(10, 15), 100)>>
+	<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(18, 30))>>
+	<<if setup.percentageChance(50)>>
+		<<set $tmpGirl.traits = setup.getRandomTraits(2)>>
+	<</if>>
+<</if>>
+<<slaveValue $tmpGirl 2>>
+<<set _isSlaveMarket = true>>
+<<include 'NPC info'>>
+<<if $tmpGirl.virgin>>
+	<div>
+		<strong>She's a virgin!</strong>
+	</div>
+<</if>>
+<br /><br />
+Slave cost <strong><<=$tmpGirl.value>></strong> caps
+<br /><br />
+
+<<if timeBetween('14:00', '19:00')>>
+  <<if $slaves.length < $basementLimit && $player.money >= $tmpGirl.value>>
+	  <br /><br />
+	<<link 'Buy'>>
+		<<set $tmpGirl.capture = false>>
+		<<set $slaves.push($tmpGirl)>>
+		<<set $player.money -= $slaveValue>>
+		<<goto 'Slave market - buy'>>
+	<</link>>
+  <<else>>
+	  <<if $slaves.length >= $basementLimit>>
+		  <strong>You don't have free room in basement</strong>
+	  <</if>>
+	  <br /><br />
+  <</if>>
+  [[Watch another slave|Slave market - buy]]
+<</if>>
+[[Leave|Slave market]]
+
+<<addmins 30>>
+
+

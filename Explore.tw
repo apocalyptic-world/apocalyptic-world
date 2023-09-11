@@ -1,0 +1,81 @@
+:: Explore [Place] {"position":"1809,629","size":"200,100"}
+<<set $randomNumber to Math.floor(Math.random() * 100) + 1>>
+<<run console.log('Explore', $randomNumber)>>
+<<energy -60>>
+<<if (!$game.location.forest)>>
+	<<goto "Explore forest first time">>
+<<elseif (!$game.location.farm)>>
+	<<goto "Explore farm first time">>
+<<elseif ($game.day > 5 && !$game.location.workbench && $randomNumber <= 50)>>
+	<<goto "Explore workbench">>
+<<elseif $game.day >= 200 && !isMetChar('laura')>>
+	<<goto 'Laura - toxic rain'>>
+<<elseif ($game.day > 6 && $randomNumber <= 25)>>
+    <<goto "Random event - meet girl #3">>
+<<elseif ($game.day > 4 && $randomNumber <= 35)>>
+	<<goto "Random event - ambush #2">>
+<<elseif ($game.day > 10 && !$randomNumber <= 40 && !$backpack.has('blueprint_hot_shower'))>>
+	<<goto "Random event - find hot shower blueprint #7">>
+<<elseif $randomNumber <= 38>>
+	<<goto 'Random event #15 ammo box'>>
+<<elseif $randomNumber <= 40>>
+	<<goto 'Explore event: The Lost Child'>>
+<<elseif $randomNumber <= 41>>
+	<<goto 'Explore event: The Elderly Refugee'>>
+<<elseif ($randomNumber <= 42)>>
+    <<goto "Random event - quicksand #4">>
+<<elseif ($randomNumber <= 45)>>
+	<<goto 'Random event - bikes #14'>>
+<<elseif ($randomNumber < 52)>>
+	<<goto 'Explore event: wolves'>>
+<<elseif ($randomNumber <= 55)>>
+    <<goto "Random event - dead guy #1">>
+<<elseif ($randomNumber <= 60)>>
+    <<goto "Random event - teacher #6">>
+<<elseif $randomNumber <= 65>>
+	<<goto "Random event - dig grave #12">>
+<<elseif $randomNumber <= 68>>
+	<<goto 'Explore event: The Dying Elderly Survivor'>>
+<<elseif $randomNumber <= 69 && Object.keys($player.companions ?? {}).length > 0>>
+	<<goto 'Explore event: toxic waste'>>
+<<elseif $randomNumber <= 70>>
+	<<goto 'Explore event: The Enslaved Settlement'>>
+<<elseif $randomNumber <= 71>>
+	<<goto 'Explore event: mysterious illness settlement'>>
+<<elseif $randomNumber <= 72>>
+	<<goto 'Explore event: Waterfall'>>
+<<elseif $randomNumber <= 73>>
+	<<goto 'Explore event: Old couple'>>
+<<elseif $randomNumber <= 74>>
+	<<goto "Random event - food #8">>
+<<elseif $randomNumber <= 75>>
+	<<goto 'Explore event: Tits bar'>>
+<<elseif $randomNumber <= 76>>
+	<<goto "Random event - solar panel #5">>
+<<elseif $randomNumber <= 77>>
+	<<goto 'Explore event: Abandoned mall'>>
+<<elseif $randomNumber <= 88>>
+	<<goto "Random event - no face #10">>
+<<elseif $randomNumber <= 93>>
+	<<run console.log('#1')>>
+	<<goto "Random event - hospital #13">>
+<<elseif $randomNumber <= 98>>
+	<<run console.log('#2')>>
+	<<goto "Random event - beak humans #11">>
+<<elseif $randomNumber <= 100>>
+	<<run console.log('#3')>>
+	<<goto "Random event - wood #9">>
+<<else>>
+	<center>
+	[img[setup.ImagePath+'places/explore/forest_walk.webp']]
+	</center>
+	<br /><br />
+	You found nothing wondering around
+<</if>>
+
+<br /><br />
+<center>
+[[Back|Outside]]
+</center>
+
+

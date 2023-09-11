@@ -1,0 +1,65 @@
+:: Inventory {"position":"563,9","size":"100,100"}
+<div id="inventory">
+    <<for _item, _amount range $backpack.table>>
+		<<capture _item, _amount>>
+		  <<set $icon = _item>>
+		  <<if $icon.indexOf("blueprint") !== -1>>
+			  <<set $icon = 'blueprint'>>
+		  <</if>>
+		  <div class='inventory-item tooltip'>
+			  <div class='inventory-img'>
+				  [img[setup.ImagePath+'game/inventory/' + $icon + '.png']]
+			  </div>
+			  <div class='inventory-title'>
+				  <<= Item.get(_item).name>> 
+				  <<if !Item.get(_item).unique>>
+					  <span class='inventory-amount'>x_amount</span>
+				  <</if>>
+			  </div>
+			  <<if Item.get(_item).description>>
+				<span class="tooltiptext"><<=Item.get(_item).description>></span>
+			  <</if>>
+
+			  <<if Item.get(_item).consumable>>
+			  	  <div>
+					<<link 'Use'>>
+					  <<run $backpack.use(_item)>>
+					  <<script>>Dialog.close();<</script>>
+					  <<script>>state.display(state.active.title, null, "back")<</script>>
+					<</link>>
+				  </div>
+			  <</if>>
+			  <div>
+				<<link 'Drop'>>
+					<<dialog 'Drop'>>	
+						How much do you want to drop <<=Item.get(_item).name>>? <<textbox "_dropAmount" _amount>>
+						<<link 'OK'>>
+							<<drop $backpack _item _dropAmount>>
+							<<script>>
+									Dialog.setup("Inventory", "Inventory");
+									Dialog.wiki(Story.get("Inventory").processText());
+									Dialog.open();
+							<</script>>
+						<</link>>
+					<</dialog>>	
+				<</link>>
+			  </div>
+		  </div>
+		<</capture>>
+    <</for>>
+</div>
+
+<style>
+#inventory {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+}
+
+.inventory-item {
+	 flex: 0 0 33.3333%;
+}
+</style>
+
+

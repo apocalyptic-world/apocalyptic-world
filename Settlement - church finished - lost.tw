@@ -1,0 +1,38 @@
+:: Settlement - church finished - lost [bg-settlement] {"position":"3148,2232","size":"100,100"}
+<h1 class="ptitle">MAIN SQUARE</h1>
+<br /><br />
+<<perkAdd 'beaten'>> 
+<<perkAdd 'bleeding'>>
+<center>
+	[img[setup.ImagePath+'places/settlement/finish_church_lost.webp']]
+</center>
+<br /><br />
+As you open your eyes girl is looking straight at you with smile on her face
+<br /><br />
+<<octavia>>
+You're one stupid mother fucker, I give you that. I'll let you live, for now. Maybe one day you will decide to join us.  
+<</octavia>>
+
+<<set _moneyTaken = Math.min($player.money, 100)>>
+<<set $player.money -= _moneyTaken>>
+<br /><br />
+She checks your pockets and manages to finds <strong class="iitem"><<=_moneyTaken>></strong> caps.
+<br /><br />
+You keep laying on the ground as you see them leaving the settlement.
+<br /><br />
+<<eve>>
+Are you okey <<=$player.name>>? Thank you for trying! 
+<</eve>>
+<br /><br />
+<<set $characters.eve.relationship += 5>>
+<strong>Eve relationship increased by 5</strong>
+<br /><br />
+<<rodger>>
+That was stupid! Please go home <<=$player.name>>. Please!
+<</rodger>>
+<br /><br />
+<<link 'Continue'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

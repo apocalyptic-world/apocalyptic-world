@@ -1,0 +1,79 @@
+:: Guest view assign to {"position":"2149,98","size":"100,100"}
+Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
+<br /><br />
+<<if $tmpGirl.relationship > 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
+	<div>
+	  <<link 'Assign to garden'>>
+		  <<set $tmpGirl.assignedTo = 'garden'>>
+		  <<set $tmpGirl.gardenDay = 0>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Provides you with food)
+	</div>
+<</if>>
+
+<<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'kitchen').length && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign to kitchen'>>
+		  <<set $tmpGirl.assignedTo = 'kitchen'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>>
+	</div>
+<</if>>
+
+<<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.traits ?? []).includes('shopkeeper')>>
+	<div>
+	  <<link 'Assign to shop'>>
+		  <<set $tmpGirl.assignedTo = 'shop'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Will work in shop and sell/buy items for you automatically)
+	</div>
+<</if>>
+
+<<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
+	<div>
+	  <<link 'Assign as mistress'>>
+		  <<set $tmpGirl.assignedTo = 'mistress'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Keeps slaves in order. Increases submission for them)
+	</div>
+<</if>>
+
+<div>
+  <<link 'Assign to forest'>>
+	  <<set $tmpGirl.assignedTo = 'forest'>>
+	  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+  <</link>> (Provides you with wood)
+</div>
+
+<div>
+  <<link 'Assign to scavenging'>>
+	  <<set $tmpGirl.assignedTo = 'scavenging'>>
+	  <<dialogclose>>
+	  <<goto `$tmpGirlViewBack`>>
+  <</link>> (Provides you with plastic, glass, rope, etc)
+</div>
+
+<<if $tmpGirl.relationship >= 50 && !$tmpGirl.gender && !$tmpGirl.assignedTo>>
+	<<link 'Assign to streets'>>
+		<<set $tmpGirl.assignedTo = 'streets'>>
+		<<dialogclose>>
+		<<goto `$tmpGirlViewBack`>>
+	<</link>> (Earns you money as hooker)
+<</if>>
+
+<<if $tmpGirl.strength >= 30>>
+	<div>
+	  <<link 'Assign as guard'>>
+		  <<set $tmpGirl.assignedTo = 'guard'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Decreases the chance of someone breaking in and stealing, and sometimes might catch intruders)
+	</div>
+<</if>>
+
+

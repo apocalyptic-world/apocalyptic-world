@@ -1,0 +1,63 @@
+:: Wanted - parent {"position":"3207,1894","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/wanted_parent.webp']]
+</center>
+<br /><br />
+<<set $wanted[$wantedId].birthDate = setup.getBirthDate(randomInteger(19,25))>>
+Chasing after <<=$wantedPron2>>, <<=$wantedPron>> runs into a tent district.
+<br />
+Following closely behind and catching up to <<=$wantedPron2>>, to your surprise, you see that she has run to her mother and hugged her deeply as she cries her eyes out.
+<br /><br />
+<strong>"They found me mother! I am scared! Please no!!"</strong>
+<br /><br />
+The mother notices you and pushes the girl behind her, falling to her knees with tear-filled eyes, begging you to leave her daughter alone, as the only thing she did wrong was stealing a couple of food so her younger brother could eat.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/bar/wanted_parent2.webp']]
+</center>
+<br /><br />
+
+<<anongirl>>
+	Please leave her alone! Take me instead! Just leave her out of it. Forget that you even saw her. I BEG YOU!
+<</anongirl>>
+<br /><br />
+
+<<linkreplace 'Tell her that they both need to suck you off'>>
+		<<video '/bar/wanted_parent1'>>
+		<br /><br />
+		The mother immediately drops to her knees and understands what she needs to do. The daughter is still in shock, but after a moment, she realizes what her mother is doing and asks her to stop because she can no longer watch and takes over the control.
+		<br /><br />
+		<<video '/bar/wanted_parent2'>>
+		<br /><br />
+		Both of their faces show disgust and dislike, but they continue to do it.
+		<br /><br />
+<</linkreplace>>
+
+<<link 'Push her away from the daughter'>>
+	<<set $player.goodwill-->>
+	<<goto 'Wanted - catched'>>
+<</link>>
+
+<<if $game.location.basement && $slaves.length < $basementLimit && $player.energy >= 30>>
+	<<link 'Take mother as slave'>>
+		<<newgirl>>
+		<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(38, 44))>>
+		<<set $tmpGirl.race = $wanted[$wantedId].race ?? 'white'>>
+		<<run $slaves.push($tmpGirl)>>
+		<<set $player.reputation_bounty_hunter-->>
+		<<set $wanted.splice($wantedId, 1)>>
+		<<goto 'Bar'>>
+	<</link>>
+<</if>>
+
+<<link 'Forget about them'>>
+	<<set $player.reputation_bounty_hunter-->>
+	<<set $player.reputation++>>
+	<<set $player.goodwill++>>
+	<<set $wanted.splice($wantedId, 1)>>
+	<<goto 'Bar'>>
+<</link>>
+
+

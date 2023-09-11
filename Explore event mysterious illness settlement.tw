@@ -1,0 +1,29 @@
+:: Explore event: mysterious illness settlement {"position":"6877,20","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/explore/event_mysterious_illness_settlement.jpg']]
+</center>
+<br /><br />
+While walking through a place where a small village used to be, you come across a small group of people. Some of them have homemade face masks on, while others appear to have their skin peeling off their faces. You approach them, maintaining a safe distance, and they tell you that they have all been affected by some kind of illness over the past month. There is not a single healthy person among them...
+<br /><br />
+
+<<if $backpack.has('antibiotics')>>
+	<<linkreplace 'Give them bottle of antibiotics'>>
+		<<drop $backpack 'antibiotics' 1>>
+		<<set $player.goodwill++>>
+		<center>
+			[img[setup.ImagePath+'places/explore/event_mysterious_illness_settlement_thanks.jpg']]
+		</center>
+		<br /><br />
+		A woman, upon seeing you giving the bottle of antibiotics to them, suddenly rush towards you, hugging you and praising you, mentioning that you are the reason why her children will be able to live a few more days.
+		<br /><br />
+	<</linkreplace>>
+<</if>>
+
+<<link 'Leave'>>
+	<<goto 'Outside'>>
+	<<set $player.goodwill-->>
+<</link>>
+
+

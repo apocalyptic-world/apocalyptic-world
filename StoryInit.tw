@@ -1,0 +1,163 @@
+:: StoryInit {"position":"4,12","size":"100,100"}
+<<script>>
+if (document.location.href.toLowerCase().includes("/maris/appdata/local")) {
+	setup.Path = "C:/Users/maris/Desktop/Game - Twine/";
+	if (navigator.userAgent.match(/firefox/i)) {
+		setup.Path = 'file:///' + setup.Path;
+	}
+} else { 
+	setup.Path = "";
+}
+setup.ImagePath = setup.Path + "images/";
+setup.videoPath = setup.Path + "videos/";
+setup.audioPath = setup.Path + "sounds/";
+
+importScripts(setup.Path + "js/actions.js")
+	.then(function() {
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'actions.js'.");
+	}
+);
+
+importStyles(setup.Path + "custom.css")
+	.then(function() {
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'custom.css'.");
+	}
+);
+
+importScripts("https://www.googletagmanager.com/gtag/js?id=G-XVQJZNSBZ6")
+     .then(function() {
+         window.dataLayer = window.dataLayer || [];
+         window.gtag = function (){ dataLayer.push(arguments); };
+         gtag('js', new Date());
+         gtag('config', 'G-XVQJZNSBZ6');  
+     }).catch(function(error) {
+         console.log("Error: Could not load 'gtag.js'.");
+     }
+ );
+
+<</script>>
+<<set $game to {}, $game.cycle to {}>>
+<<set $game.location to {
+  forest: false,
+  farm: false,
+  basement: false,
+  underground: false,
+  workbench: false,
+  greenhouse: false,
+  streets: false,
+  slave_market: false,
+  bar: false,
+  guesthouse: false,
+  settlement: false,
+  bathhouse: false
+}>>
+<<set
+  $player to {},
+  $player.name to "",
+  $player.money to 0, 
+  $player.strength to 0, 
+  $player.int to 0, 
+  $player.cannibal to 0, 
+  $player.reputation = 0, 
+  $player.reputation_bounty_hunter = 0,
+  $player.goodwill = 0,
+  $player.sexp = 0,
+  $player.showered to false,
+  $player.mast to false,
+  $player.drunk = 0,
+  $player.gambler = 0,
+  $player.endurance = 0,
+  $player.companions = {},
+  $player.quests = {},
+  $player.stats = {}
+>>
+
+
+<<set $game.day = 0>>
+<<set $slaves to []>>
+<<set $tmpGirl to {}>>
+<<set $tmpGirlkey to 0>>
+<<set $morningMessages to []>>
+<<set $charactersInLocation to {}>>
+<<set $charsInGrid = []>>
+<<set $basementLimit = 3>>
+<<set $guesthouseLimit = 3>>
+<<set $workersLimitGarden = 8>>
+<<set $undergroundEvent = false>>
+<<set $guests = []>>
+<<set 
+$characters to {
+	vincent: {
+		quests: {},
+		relationship: 0
+	}, 
+	blair: {},
+	rose: {},
+	eve: {
+		relationship: 0,
+		quests: {}	
+	},
+	rodger: {
+		relationship: 0,
+		quests: {}
+	},
+	dom: {
+		relationship: 0,
+		quests: {}
+	},
+	isabel: {
+		relationship: 0,
+		quests: {}
+	},
+	octavia: {
+		relationship: 0,
+		quests: {}
+	}
+}>>
+<<set $locationEvents = {}>>
+<<character 'grandfather' setup.ImagePath+'/people/grandfather/avatar.png'>>
+<<character 'you' "$player.name" setup.ImagePath+'/people/you/avatar.png'>>
+<<character 'vincent' setup.ImagePath+'/people/vincent/avatar.png'>>
+<<character 'boris' setup.ImagePath+'/people/boris/avatar.png'>>
+<<character 'blair' setup.ImagePath+'/people/blair/avatar.png'>>
+<<character 'dom' setup.ImagePath+'/people/dom/avatar.png'>>
+<<character 'eve' setup.ImagePath+'/people/eve/avatar.png'>>
+<<character 'rodger' setup.ImagePath+'/people/rodger/avatar.png'>>
+<<character 'octavia' setup.ImagePath+'/people/octavia/avatar.png'>>
+
+<<character 'anonguy' 'Guy' setup.ImagePath+'/people/anonguy.png'>>
+<<character 'anongirl' 'Girl' setup.ImagePath+'/people/anongirl.png'>>
+
+<<character 'harper' setup.ImagePath+'/people/harper/avatar.png'>>
+<<character 'isabel' setup.ImagePath+'/people/isabel.png'>>
+<<character 'laura' setup.ImagePath+'/people/laura/avatar.jpg'>>
+
+<<set $player.energy to 100, $player.maxEnergy to 100>>
+<<newmeter '$energyBar' '$player.energy / $player.maxEnergy'>>
+	<<sizing '100%'>>
+    <<label '$player.energy'>>
+<</newmeter>>
+<<set $player.hunger to 100, $player.maxHunger to 100>>
+<<newmeter '$hungerBar' 1>>
+	<<sizing '100%'>>
+    <<label '$player.hunger'>>
+	<<colors 'yellow' 'red' 'black'>>
+<</newmeter>>
+<<set $player.horny to 100>>
+<<newmeter '$hornyBar' 1>>
+	<<sizing '100%'>>
+    <<label '$player.horny'>>
+	<<colors '#ff00ee' '#ff00ee' 'black'>>
+<</newmeter>>
+
+<<newinv $backpack>>
+<<newinv $storage>>
+<<set $backpack to Inventory.create()>>
+<<set $storage to Inventory.create()>>
+<<include "Inventory items">>
+
+<<cacheaudio "bg" setup.audioPath+'bg1.mp3'>>
+
+

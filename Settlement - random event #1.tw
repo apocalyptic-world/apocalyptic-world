@@ -1,0 +1,89 @@
+:: Settlement - random event #1 [bg-settlement] {"position":"1848,2779","size":"100,100"}
+<h1 class="ptitle">SETTLEMENT</h1>
+<br /><br />
+ 
+<center>
+[img[setup.ImagePath+'places/settlement/random_event1_girl.jpg']]
+</center>
+<br /><br />
+Some girl you've seen around comes over to you.
+<br />
+"Excuse me? Could you help me with the cow. She doesn't want to get up and I need to move her to another stockyard."
+<br /><br />
+
+<<linkreplace 'Offer your help'>>
+	<<replace "#settlement-event1-no">><</replace>>
+	<center>
+		[img[setup.ImagePath+'places/settlement/random_event1.webp']]
+	</center>
+	<br /><br />
+	As she approaches the cow laying on the ground to show you what she has tried, the cow suddenly kicks her and knocks her out.
+	<br />
+	You look around but nobody saw it or is around to help.
+	<br /><br />
+	You decide to carry her over to the closest pile of straw.
+	<br /><br />
+		
+	<div id="settlement-event1-help">
+	  <<linkreplace 'Look for help'>>
+			<<replace "#settlement-event1-use">><</replace>>
+				<center>
+					[img[setup.ImagePath+'places/settlement/random_event1_help.webp']]
+				</center>
+				<br /><br />
+				You yell for help and Eve hears you and comes running.
+				<br /><br />
+				<<eve>>
+					Thank you so much <<=$player.name>>. We will take care of her.
+				<</eve>>
+				<br /><br />
+				<<if $characters.eve.relationship < 20>>
+					<<set $characters.eve.relationship++>>
+					<strong>Relationship with Eve increased by 1</strong>
+				<<else>>
+					You can't increase relationship with Eve with this action anymore
+				<</if>>
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto 'Settlement'>>
+				<</link>>
+	  <</linkreplace>>
+	</div>
+	
+	<div id="settlement-event1-use">
+	  <<linkreplace 'Use her'>>
+	  		<<replace "#settlement-event1-help">><</replace>>
+		  	<<set $player.goodwill-->>
+			<center>
+				[img[setup.ImagePath+'places/settlement/random_event1_fucked0.webp']]
+			</center>
+			<br /><br />
+			You pull her behind the pile of straw and take off her clothes.
+			<br /><br />
+			<center>
+				[img[setup.ImagePath+'places/settlement/random_event1_fucked1.webp']]
+			</center>
+			<br /><br />
+			As she lays unconscious you shove your dick inside her pussy and fuck her as hard has you can while keeping your head up to see if someone is coming.
+			<br /><br />
+			<center>
+				[img[setup.ImagePath+'places/settlement/random_event1_fucked2.webp']]
+			</center>
+			<br /><br />
+			You pull your throbbing dick out and cum all over her face. While your cum is still shooting out of your dick she slowly starts to wake up.
+			<br /><br />
+			<<link 'Run'>>
+				<<goto 'Settlement'>>
+			<</link>>
+	  <</linkreplace>>
+	</div>
+	
+<</linkreplace>>
+
+<div id="settlement-event1-no">
+  <<link 'Say no'>>
+	  <<goto 'Settlement'>>
+  <</link>>
+</div>
+
+

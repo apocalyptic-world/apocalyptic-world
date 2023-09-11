@@ -1,0 +1,20 @@
+:: Scavenging - didnt came home {"position":"4732,996","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+<center>
+  [img[setup.ImagePath+'places/outside/scavenging_empty_bed.png']]
+</center>
+You went to the guest house and noticed that
+<strong><<=$guests[$scavengingDidntReturn].name>></strong> didn't came home from the scavenging last night
+<br /><br />
+<<link 'Go look for her'>>
+	<<goto 'Scavenging - look for girl'>>
+<</link>>
+<<link 'Ignore'>>
+	<<if randomInteger(0,1) === 1>>
+		<<run $guests.splice($scavengingDidntReturn, 1)>>
+	<</if>>
+	<<goto 'Bedroom'>>
+<</link>>
+
+

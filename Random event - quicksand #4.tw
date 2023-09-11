@@ -1,0 +1,22 @@
+:: Random event - quicksand #4 {"position":"5861,16","size":"100,100"}
+<center>
+ [img[setup.ImagePath+'places/explore/quicksand.webp']]
+ </center>
+ <br /><br />
+In the distance you see a guy who's drowning in quicksand.  He begs for help as he reaches out his hand.
+ <br /><br />
+
+<<link 'Help him'>>
+	<<if $player.strength < 10>>
+		<<set $game.death_reason = 'drowning in quicksand'>>
+		<<goto 'Dead'>>
+	<<else>>
+		<<goto 'Random event - quicksand #4 helped'>>
+	<</if>>
+<</link>>
+<<link 'Watch him drown and leave'>>
+	<<set $player.goodwill-->>
+	<<goto 'Outside'>>
+<</link>>
+
+

@@ -1,0 +1,61 @@
+:: Girl fuck - anal [sex] {"position":"2651,337","size":"100,100"}
+<<if $tmpGirl.anal < 20>> 
+	<center>
+	[img[setup.ImagePath+'game/misc/no_anal.webp']]
+	</center>
+	<br /><br />
+	You tried to fuck her in the ass but your dick is too big for her and she can't relax. 
+	<br />
+	She can't take it in her ass and begs you to stop.
+	<br /><br />
+	<strong><<=$tmpGirl.name>> submission increased by 1</strong>
+	<<set $tmpGirl.sub = Math.min($tmpGirl.sub+1, 100)>>
+<<else>>
+	<<actionImage $tmpGirl anal>>
+	
+	<<if ($tmpGirl.traits ?? []).includes('analslut')>>
+	  <<if $tmpGirl.relationship > 10>>
+		  <<set $tmpGirl.horny += 20>>
+	  <</if>>
+	  <<if $tmpGirl.horny >= 100>>
+	  		<<if ($tmpGirl.traits ?? []).includes('squirter')>>
+	  			<br /><br />
+				<<actionImage $tmpGirl squirt_anal>>
+			<</if>>
+			<br /><br />
+		  <strong><<=$tmpGirl.name>> has an orgasm!</strong>
+		  <<set 
+			  $tmpGirl.horny = 0,
+			  $tmpGirl.orgasms++
+		  >>
+		  <<set $tmpGirl.relationship = Math.min($tmpGirl.relationship+1, 100)>>
+	  <</if>>
+  	<</if>>
+
+	<<horny 20>>
+<</if>>
+
+<<set $tmpGirl.anal++>>
+<<if $tmpGirl.anal > 100>>
+	<<set $tmpGirl.anal = 100>>
+<</if>>
+
+<<addmins 5>>
+<<energy -5>>
+<<set $tmpGirl.relationship++>>
+<<if $tmpGirl.relationship > 100>>
+  	<<set $tmpGirl.relationship = 100>>
+  <</if>>
+<br /><br />
+<<if $player.horny >= 100>>
+	[[Withdraw|Girl fuck - cum on back]]
+	[[Cum in ass|Girl fuck - cum in ass]]
+<<else>>
+	  [[Blowjob|Girl fuck - blowjob]]
+	  [[Lick her|Girl fuck - lick pussy]]
+	  [[Pussy|Girl fuck - pussy]]
+	  [[Anal|Girl fuck - anal]]
+	[[Back|Girl fuck]]
+<</if>>
+
+

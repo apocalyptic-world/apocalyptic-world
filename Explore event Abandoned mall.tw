@@ -1,0 +1,74 @@
+:: Explore event: Abandoned mall {"position":"6098,690","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<<run delete $slaveId>>
+<<run delete $guestId>>
+<<run delete $charId>>
+<<set $tmpGirlCapture = true>>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore/abandoned_mall.jpg']]
+</center>
+<br /><br />
+Exploring through the city you stumble upon a burnt out shopping center. While not filled with anything of day to day importance perhaps you will find something of use inside.
+<br /><br />
+<<linkreplace 'Explore'>>
+	You root around in the dim light cast from the broken atrium windows for some time before stumbling upon a an old drugstore.
+	<br />
+	While most of its contents are long looted amidst the back you find a small stash of makeup. While not useful to you, perhaps someone at your settlement could use it. 
+	<br /><br />
+	<strong>You collected <strong class="iitem">1 cosmetics</strong></strong>
+	<<pickup $backpack 'cosmetics' 1>>
+	<br /><br />
+	<<if $player.int >= 50>>
+		<<linkreplace 'Listen'>>
+			<center>
+				[img[setup.ImagePath+'places/explore/abandoned_mall2.jpg']]
+			</center>
+			<br /><br />
+			You take a moment to observe before diving into the decrepit building. At the edge fo your hearing you only just barely make out a sniffling sound to your side in the old parking garage. Check out the noise tucked away in the corner hiding you spot a girl
+			<br /><br />
+			<<newgirl>>
+			<<include 'NPC info'>>
+			<br /><br />
+			<<say 'Unknown girl' setup.ImagePath+'/people/anongirl.png'>>
+				Please leave me alone! I am just looking for food
+			<</say>>
+			<br /><br />
+			<<if $backpack.count('food') >= 5>>
+				<<linkreplace 'Offer her food'>>
+					<<set _gaveFood = true>>
+					<<run $('#option_food').hide()>>
+					<<set $player.godwill++>>
+					<<set $player.reputation++>>
+					<<drop $backpack 'food' 5>>
+					<<say 'Unknown girl' setup.ImagePath+'/people/anongirl.png'>>
+						Thank you so much sir!
+					<</say>>
+					<br /><br />
+				<</linkreplace>>
+				<<linkdesc 'option_food'>>
+					-5 food
+				<</linkdesc>>
+			<</if>>
+			<<if $game.location.basement && $tmpGirlCapture && $slaves.length < $basementLimit && $player.energy >= 30>>
+				<<link 'Capture her'>>
+					<<if _gaveFood>>
+						<<set $player.reputation-->>
+					<</if>>
+					<<set $tmpGirl.capture = false>>
+					<<set $slaves.push($tmpGirl)>>
+					<<addhours 1>>
+					<<energy -30>>
+					<<goto 'Basement'>>
+					<<statsAdd 'people_captured'>>
+				<</link>>
+			<</if>>
+		<</linkreplace>>
+	<</if>>
+<</linkreplace>>
+<<link 'Leave'>>
+	<<run delete $tmpGirlCapture>>
+	<<goto 'Outside'>>
+<</link>>
+
+

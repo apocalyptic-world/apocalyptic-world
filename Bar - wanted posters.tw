@@ -1,0 +1,85 @@
+:: Bar - wanted posters [bg-underground] {"position":"2173,1941","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+<<if typeof $wanted === 'undefined'>>
+	<<set $wanted to []>>
+<</if>>
+<br /><br />
+<<set $currentWanted = $wanted.length>>
+<<set $player.quests = $player.quests ?? {}>>
+<<set $player.quests.wanted = $player.quests.wanted ?? {}>>
+<<for _i to 0; _i lt (3 - $currentWanted); _i++>>
+	<<set _additionalAward = 0>>
+	<<if $player.reputation_bounty_hunter >= 10 && typeof $player.quests.wanted.u1 === 'undefined'>>
+		<<newguy>>
+		<<set 
+			$tmpGuy.unique = true,
+			$tmpGuy.uniqueKey = 1,
+			$tmpGuy.cantKill = true
+		>>
+		<<set $player.quests.wanted.u1 = true>>
+		<<set _additionalAward = 200>>
+		<<set $wantedPerson = $tmpGuy>>
+	<<elseif random(0,2) == 2>>
+		<<newgirl>>
+		<<set $wantedPerson = $tmpGirl>>	
+	<<else>>
+		<<newguy>>
+		<<set $wantedPerson = $tmpGuy>>
+	<</if>>
+	
+	<<set $wantedPerson.wanted = {
+		value: randomInteger(20, 70) + ($player.hunterRating ?? 0) + _additionalAward,
+		progress: 0
+	}>>
+	<<set $wantedPerson.strength += 50>>
+	<<run $wanted.push($wantedPerson)>>
+<</for>>
+
+<div id="wanted-list">
+  <<for _i to 0; _i lt $wanted.length; _i++>>
+	  <<capture _i>>
+		  <div class="wanted-div">
+		  	  <<if $wanted[_i].unique>>
+			  	<div class="wanted-unique" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/star.png\')'"></div>
+			  <</if>>
+			  <div class="wanted-bg">
+				  [img[setup.ImagePath+'places/bar/wanted_layer.jpg']]
+			  </div>
+			  <div class="wanted-type">
+			  	<<if $wanted[_i].unique>>
+					ALIVE
+				<<else>>
+			  		DEAD OR ALIVE
+				<</if>>
+			  </div>
+			  <div class="wanted-img">
+				<<if !$wanted[_i].gender>>
+					[img[setup.ImagePath+'places/bar/wanted_woman.jpg']]
+				<<else>>
+					[img[setup.ImagePath+'places/bar/wanted_man.jpg']]
+				<</if>>
+			  </div>
+			  <div class="wanted-name">
+				  <<=$wanted[_i].name>>
+			  </div>
+			  <div class="wanted-value">
+				  <<=$wanted[_i].wanted.value>> $$
+			  </div>
+			  <div class="wanted-link">
+			  	<<link 'Look around'>>
+					<<set $wantedId = _i>>
+					<<addhours 3>>
+					<<goto 'Wanted - look around'>>
+				<</link>>
+			  </div>
+		  </div>
+	  <</capture>>
+  <</for>>
+</div>
+<br /><br />
+Your bounty hunter reputation: <<=$player.reputation_bounty_hunter>>
+
+<br /><br />
+[[Leave|Bar]]
+
+

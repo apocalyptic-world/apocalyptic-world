@@ -1,0 +1,83 @@
+:: Forest [Place] {"position":"1811,749","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+	<table id="slaves">
+	<<for _guestI, _guest range $guests>>
+		<<capture _guestI, _guest>>
+			<<if _guest.assignedTo !== 'forest' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
+				<<continue>>
+			<</if>>		
+			<tr>
+				<td style="width: 300px">
+					<<if _guest.gender || setup.getAge(_guest) < 17>>
+						<span class="name-no-click"><<=_guest.name>></span>
+					<<else>>
+						<<link _guest.name>>
+						  <<set $tmpGirl to _guest>>
+						  <<set $tmpGirl.location = 'forest'>>
+						  <<set $tmpGirlBack = 'Forest'>>
+						  <<set $tmpGirlCapture to false>>
+						  <<set $tmpGirl.rape to false>>
+						  <<set $tmpGirlViewBack = 'Girl view - guest' >>
+						  <<set $guestId = _guestI>>
+						  <<run delete $slaveId>>
+						  <<goto 'Girl view - guest'>>
+					  	<</link>>
+						
+						<<if _guest.pregnancy >= 7>>
+						  (pregnant <<=_guest.pregnancy>> days)
+						<</if>>
+					<</if>>
+				</td>
+				<td>
+					<<if !_guest.gender && setup.getAge(_guest) >= 17>>
+						Beauty score: <<=_guest.beauty>>
+					<</if>>
+				</td>
+				<td>
+					Age: <<=setup.getAge(_guest)>>
+				</td>
+			</tr>
+		<</capture>>
+	<</for>>
+	</table>
+<br /><br />
+<center>
+<<if $player.energy >= 40 && hasTime(2)>>
+  <<link 'Get wood'>>
+	  <<addhours 2>>
+	  <<goto 'Forest-action-chop-wood'>>
+  <</link>>
+<</if>>
+
+<<if $player.energy >= 40 && hasTime(1)>>
+	<<link 'Pick up berries'>>
+		<<addhours 1>>
+		<<goto 'Forest-action-berries'>>
+	<</link>>
+<</if>>
+
+<<if $characters.vincent.quests.pregnancy_talked && $player.energy >= 30 && hasTime(1)>>
+	<<link 'Search for glowing mushrooms'>>
+		<<addhours 1>>
+		<<goto 'Forest - mushrooms'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy >= 20 && hasTime(10) && $backpack.has('bow')>>
+	<<link 'Go hunt'>>
+    	<<if setup.percentageChance(70)>>
+        		<<set _huntEnemy = 'deer'>>
+        <<else>>
+        		<<set _huntEnemy = 'wolf'>>
+        <</if>>
+		<<energy -20>>
+		<<addhours 10>>
+		<<shooterGame null _huntEnemy null 'Forest - hunt' 'Forest - hunt'>>
+	<</link>>
+<</if>>
+
+[[Back|Outside]]
+</center>
+
+

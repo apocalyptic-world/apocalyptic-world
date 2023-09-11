@@ -1,0 +1,28 @@
+:: Nightclub - drink together [nightclub bg-underground] {"position":"2545,1468","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<center>
+	[img[setup.ImagePath+'places/nightclub/club-drink-together.webp']]
+</center>
+<br /><br />
+<<=$tmpGirl.name>> and you go to the bar, where you purchase two drinks and sit down together drinking them.
+<<if $tmpGirl.drunk >= 4>>
+	<br /><br />
+	<strong>The girl is very drunk and barely stays on her feet...</strong>
+<</if>>
+<br /><br />
+<<if $tmpGirl.drunk < 4 && $player.money >= 5>>
+	<<link 'Offer another drink (5 caps)'>>
+		<<set $player.money -=5>>
+		<<set $tmpGirl.relationship += 10>>
+		<<set $tmpGirl.drunk++>>
+		<<goto 'Nightclub - drink together'>>
+	<</link>>
+<</if>>
+
+<<nightclub_suggest_bathroom_link>>
+
+[[Leave|Nightclub - inside]] 
+
+<<addmins 15>>
+
+

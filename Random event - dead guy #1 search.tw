@@ -1,0 +1,20 @@
+:: Random event - dead guy #1 search {"position":"5514,236","size":"100,100"}
+<center>
+[img[setup.ImagePath+'places/explore/search_dead.webp']]
+</center>
+<br /><br />
+You search the dead guy's pockets with hope that attackers missed something.
+<br /><br />
+<<if setup.percentageChance(50)>>
+	<<set $foundItem = either('rope', 'bullet_revolver', 'necklace_cheap', 'champagne')>>
+	<<pickup $backpack $foundItem 1>>
+	You found <strong><<print Item.get($foundItem).name>></strong>.
+<<else>>
+<strong>You found nothing.</strong>
+<</if>>
+<br /><br />
+As you finish the search you hear some noise and decide to leave. 
+ <br /><br />
+[[Leave|Outside]]
+
+

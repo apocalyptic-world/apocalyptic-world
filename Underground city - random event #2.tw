@@ -1,0 +1,86 @@
+:: Underground city - random event #2 {"position":"7318,134","size":"100,100"}
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/underground/old_lady.webp']]
+</center>
+<br /><br />
+A woman screams at the top of her lungs. It is a terrible scream that echoes throughout the city.<br />
+It came from an old woman who was evicted from her home due to unpaid rent. She's an annoying old crone and she has been living in the streets ever since.
+<br /><br />
+
+<<if $player.money >= 10 || ($game.location.guesthouse ?? false)>>
+  <div id="ug-event-old-lady-buttons">
+	  <<link 'Go closer'>>
+		  <<run $('#ug-event-old-lady-buttons').slideToggle()>>
+		  <<run $('#ug-event-old-lady-help').slideToggle()>>
+	  <</link>>
+  </div>
+<</if>> 
+
+<div id="ug-event-old-lady-help" style="display:none;">
+	You approach her and ask what happened. She tells you her story with teary eyes.
+<br /><br />
+	"<strong>Can you help me somehow?</strong>"
+	<br /><br />
+	
+	<div id="ug-event-old-lady-help-buttons">
+		  <<link 'Offer her help'>>
+			  <<run $('#ug-event-old-lady-help-buttons').slideToggle()>>
+			  <<run $('#ug-event-old-lady-help-options').slideToggle()>>
+		  <</link>>
+	  </div>
+</div>
+
+<div id="ug-event-old-lady-help-options" style="display:none;">
+	<div id="ug-event-old-lady-help-options-buttons">
+		<<if $player.money >= 10>>
+			<<link 'Give her 10 caps'>>
+			  <<run $('#ug-event-old-lady-help-options-buttons').slideToggle()>>
+			  <<run $('#ug-event-old-lady-help-reward').slideToggle()>>
+			  <<set $player.money -=10>>
+		  <</link>>
+		<</if>>
+		<<if ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
+			<<link 'Offer her place in your guest house'>>
+			  <<run $('#ug-event-old-lady-help-options-buttons').slideToggle()>>
+			  <<run $('#ug-event-old-lady-help-reward').slideToggle()>>
+			  <<newgirl>>
+			  <<set 
+			  	$tmpGirl.birthDate = setup.getBirthDate(80),
+				$tmpGirl.relationship = 30,
+				$tmpGirl.virgin = false
+			  >>
+			  <<set $guests.push($tmpGirl)>>
+		  <</link>>
+		<</if>>
+	  </div>
+</div>
+
+<div id="ug-event-old-lady-help-reward" style="display:none;">
+	"<strong>Thank you so much! I don't know how to even begin to thank you!
+</strong>"
+	<br /><br />
+		<div id="ug-event-old-lady-help-reward-buttons">
+		  <<link 'Tell her to get on her knees'>>
+			  <<run $('#ug-event-old-lady-help-reward-buttons').slideToggle()>>
+			  <<run $('#ug-event-old-lady-help-reward-yes').slideToggle()>>
+		  <</link>>
+	  </div>
+</div>
+
+<div id="ug-event-old-lady-help-reward-yes" style="display:none;">
+	<center>
+		[img[setup.ImagePath+'places/underground/old_lady_bj.webp']]
+	</center>
+	<br /><br />
+	She looks disappointed and angry at the same time but does what you tell her. . <br />
+She gets down and with a disgusted look on her face grabs your dick and puts it in her mouth. <br />This feels different... You feel like she's missing most of her teeth.
+	<br /><br />
+</div>
+
+
+
+<<link 'Leave' 'Underground city'>><</link>>
+
+

@@ -1,0 +1,40 @@
+:: Blair - kitchen kiss {"position":"443,2060","size":"100,100"}
+<h1 class="ptitle">KITCHEN</h1>
+<<video '/kitchen/blair_kiss'>>
+<br /><br />
+Gently you push her against the kitchen counter tenderly pressing your lips against hers. You wrap your hands around her waist and spin her around, leaning her back a bit while still making out...
+<br />
+Rubbing your hands over her body you then start sliding a hand between her legs...
+<br /><br />
+<<if !$characters.blair.quests.sex>>
+	<<blair>>We shouldn't...<</blair>>
+	<br /><br />
+<</if>>
+
+<<if $characters.blair.relationship < 30>>
+  <<set $characters.blair.relationship +=1>>
+  <strong>Blair relationship increased by 1</strong>
+<<else>>
+	<strong>You can't increase your relationship with Blair any more with this action.</strong>
+<</if>>
+
+<<addmins 30>>
+<br /><br />
+<<if $characters.blair.quests.sex>>
+	<<link 'Fuck'>>
+		  <<set $tmpGirl = $characters.blair>>
+		  <<set $tmpGirl.location = 'kitchen'>>
+		  <<set $tmpGirlCapture to false>>
+		  <<set $tmpGirl.rape to false>>
+		  <<run delete $slaveId>>
+		  <<run delete $guestId>>
+		  <<set $charId = 'blair'>>
+		  <<set $tmpGirlViewBack = 'Kitchen-room'>>
+		  <<set $tmpGirlBack = 'Kitchen-room'>>
+		  <<goto 'Girl fuck'>>
+	  <</link>>
+<</if>>
+
+[[Let her go|Kitchen-room]]
+
+

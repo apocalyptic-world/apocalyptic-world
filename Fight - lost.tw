@@ -1,0 +1,36 @@
+:: Fight - lost {"position":"3263,860","size":"100,100"}
+<h1 class="ptitle">FIGHT</h1>
+<center>
+	[img[setup.ImagePath+'places/nightclub/attack_outside_lost.webp']]
+</center>
+<br />
+You wake up after some time.<br />
+You feel dizzy and blood is all over your face and clothes. You were knocked out pretty hard.
+<br />
+<<set $capsMissing = ($player.money - 20 > 0 ? 20 : $player.money)>>
+<<if $capsMissing>>
+  <<set $player.money -= $capsMissing>>
+  You check pockets and some caps are also missing.
+  <br />
+  <strong>You lost <<=$capsMissing>> caps</strong>
+  <br /><br />
+<</if>>
+<br /><br />
+
+<<if $fight.defeatedAllies.length > 0>>
+	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
+		<<if setup.percentageChance(10)>>
+			<<companionRemove _fightAlly.key.join(':')>>
+			<<set _guestKey = _fightAlly.key[1]>>
+			<strong><<=_fightAlly.name>> was taken by enemies</strong>
+			<<run $guests.splice(_fightAlly.key[1], 1)>>
+			<br />
+		<</if>>
+	<</for>>
+	<br /><br />
+<</if>>
+<<link 'Leave'>>
+	<<fightEnd false>>
+<</link>>
+
+

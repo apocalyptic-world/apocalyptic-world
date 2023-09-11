@@ -1,0 +1,27 @@
+:: Fight cage - drug dealer [bg-underground] {"position":"2295,1349","size":"100,100"}
+<h1 class="ptitle">FIGHT CAGE</h1>
+<center>
+	[img[setup.ImagePath+'places/fight/drug_dealer.webp']]
+</center>
+<br /><br />
+Some dirty guy who's scratching his neck all the time comes to you while nervously looking around.
+<br /><br />
+<strong>"You want some drugs? They give you energy! Trust me</strong>
+<br /><br />
+You look at one drug in his hand, looks shady as fuck and looks more like some C vitamin.
+<br /><br />
+
+<<if $player.money >= 30>>
+	<<linkreplace 'Buy for 30 caps'>>
+		<<set $player.money -= 30>>
+		<<set $player.maxEnergy += 10>>
+		<strong>Your max energy increased to <<=$player.maxEnergy>></strong>
+		<br /><br />
+	<</linkreplace>>
+<</if>>
+<<link 'Leave'>>
+	<<goto 'Fight cage'>>
+<</link>>
+<<addmins 30>>
+
+

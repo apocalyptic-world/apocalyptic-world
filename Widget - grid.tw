@@ -1,0 +1,52 @@
+:: Widget - grid  [widget] {"position":"23,748","size":"100,100"}
+<<widget grid>>
+
+<div class="menu-col"> 
+	<<if (($args[4] && $args[4] > 0 && $player.energy < $args[4]) || (typeof $args[5] !== 'undefined' && !hasTime($args[5]))) && (typeof $args[6] === 'undefined' && $args[5] > 24)>>
+		<div class="menucont no-energy">
+  			[img[setup.ImagePath+'places/'+$args[0]+'/'+$args[1]+'.jpg']]
+	  		<span class="o-text">$args[3]</span> 
+		</div>
+	<<else>>
+		<<if typeof $charactersInLocation[$args[1]] !== 'undefined'>>
+			<div class="grid-chars">
+			  <<for _i to 0; _i lt $charactersInLocation[$args[1]].length; _i++>>
+					[img[setup.ImagePath + $game.avatars[$charactersInLocation[$args[1]][_i]]]]	
+			  <</for>>
+			</div>
+		<</if>>
+	  <<link '<div class="menucont">[img[setup.ImagePath+"places/"+$args[0]+"/"+$args[1]+".jpg"]]<span class="o-text">$args[3]</span></div>'>>
+	  	<<if $args[5]>>
+			<<if ($player.horse ?? false) && $args[0] !== 'cabin'>>
+				<<set $args[5] = $args[5] / 2>>
+			<</if>>
+			<<if $args[0] === 'cabin'>>
+				<<set $args[5] = $args[5] / 6>>
+			<</if>>
+			<<if $args[5] < 1>>
+				<<set _travelMins = ($args[5] * 60)>>
+				<<addmins `_travelMins`>>
+			<<else>>
+				<<addhours $args[5]>>
+			<</if>>
+		<</if>>
+		<<if typeof setup.randomEvents['travel'][$args[2]] !== 'undefined'>>
+			<<for _randomEventI, _randomEvent range setup.randomEvents['travel'][$args[2]]>>
+				<<if _randomEvent.enabled && setup.percentageChance(_randomEvent.percentage)>>
+					<<set _randomTravelEvent = _randomEvent.passage>>
+					<<break>>
+				<</if>>
+			<</for>>
+		<</if>>
+		
+		<<if _randomTravelEvent>>
+			<<goto `_randomTravelEvent`>>
+		<<else>>
+	  		<<goto $args[2]>>
+		<</if>>
+	  <</link>>
+	<</if>>
+  </div>
+<</widget>>
+
+

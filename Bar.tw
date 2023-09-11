@@ -1,0 +1,54 @@
+:: Bar [Place bg-underground] {"position":"1941,1937","size":"100,100"}
+<<if !($bar_first_time ?? false)>>
+	<<goto 'Bar - first time'>>
+<</if>>
+<h1 class="ptitle">BAR</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/bar_head.jpg']]
+</div>
+<br /><br />
+
+<strong>Blackjack games happen from 18:00 till 23:00</strong>
+<br /><br />
+<<if $characters.blair.quests && !($characters.blair.quests.missing_friend_talked ?? false)>>
+	<<link 'Talk with bartender about Blair friend'>>
+		<<goto 'Bar - quest missing friend'>>
+	<</link>>
+<</if>>
+<<if $characters.blair.quests && $characters.blair.quests.missing_friend_found_finished && $player.reputation > 20>>
+	<<link 'Talk to bartender'>>
+		<<goto 'Bar - bartender talk'>>
+	<</link>>
+<</if>>
+
+<<if $player.money >= 5>>
+  <<link 'Get a drink (5 caps)'>>
+	  <<set $player.money -=5>>
+	  <<goto 'Bar - drink'>>
+  <</link>>
+<</if>>
+
+<<if $player.money >= 100>>
+	<<link 'Buy a round for everyone (100 caps)'>>
+		<<set $player.money -= 100>>
+		<<goto 'Buy a round for everyone'>>
+	<</link>>
+<</if>>
+
+<<if timeBetween('18:00', '23:00')>>
+  <<link 'Play blackjack'>>
+	  <<addmins 15>>
+	  <<goto 'Blackjack'>>
+  <</link>>
+<</if>>
+
+<<if timeBetween('12:00', '00:00')>>
+  <<link 'Check wanted posters'>>
+	  <<addmins 15>>
+	  <<goto 'Bar - wanted posters'>>
+  <</link>>
+<</if>>
+
+[[Leave|Underground city]]
+
+

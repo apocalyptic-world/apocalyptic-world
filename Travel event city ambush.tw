@@ -1,0 +1,53 @@
+:: Travel event: city ambush {"position":"7897,33","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+As the sun dipped below the decaying skyscrapers, casting an eerie orange glow across the desolate landscape, you cautiously made your way through the ruins of what was once a bustling city. The air was thick with the scent of rust and dampness, a stark reminder of the world that had crumbled into chaos. Broken glass and twisted metal crunched underfoot as you navigated the debris-filled streets, your steps echoing in the silence.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/travel/city_ambush.jpg']]
+</center>
+<br /><br />
+Suddenly, three figures emerged from the darkness of the alley, their silhouettes sharp against the fading light. Adorned in makeshift armor and wielding a mix of scavenged weapons, they exuded an air of predatory confidence. You swallowed hard, your heart pounding in your chest as you assessed the situation.
+<br /><br />
+<<anonguy>>
+Looks like we've got ourselves a wanderer.
+<</anonguy>>
+<br /><br />
+<<anonguy>>
+	What's in your backpack? How about you give it to us.
+<</anonguy>>
+<br /><br />
+<div id="option1">
+	<<link 'Fight them'>>
+		<<set $enemies = []>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<newguy>>
+		<<run $enemies.push($tmpGuy)>>
+		<<fight $enemies 'Underground city' 'Underground city'>>
+	<</link>>
+</div>
+<<linkreplace 'Run away'>>
+	<<run $('#option1').hide()>>
+	<<if $player.strength > 50 && setup.percentageChance(50)>>
+		<<goto 'Underground city'>>
+	<<else>>
+		<br />
+		<strong>You failed!</strong>
+		<br /><br />
+		<<link 'Fight them'>>
+			<<set $enemies = []>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<newguy>>
+			<<run $enemies.push($tmpGuy)>>
+			<<fight $enemies 'Underground city' 'Underground city'>>
+		<</link>>
+	<</if>>
+<</linkreplace>>
+
+

@@ -1,0 +1,63 @@
+:: Blair - kitchen talk {"position":"336,2061","size":"100,100"}
+<<if $characters.blair.relationship >= 20 && !$characters.blair.quests.missing_friend>>
+	<<set $characters.blair.quests.missing_friend = true>>
+	<<goto 'Blair - quest missing friend'>>
+<<elseif $characters.blair.quests.missing_friend_found && !$characters.blair.quests.missing_friend_found_finished>>
+	<<set $characters.blair.quests.missing_friend_found_finished = true>>
+	<<goto 'Blair - quest missing friend found'>>
+<<elseif isMetChar('rodger') && $characters.rodger.quests.champagne && !$characters.blair.quests.house_party>>
+	<<set $characters.blair.quests.house_party = true>>
+	<<goto 'Blair - house party'>>
+<<elseif $characters.blair.quests.house_party_finished && !$characters.blair.quests.gate>>
+	<<set $characters.blair.quests.gate = true>>
+	<<goto 'Blair - gate'>>
+<<elseif $game.cabinName && !$characters.blair.quests.nursery>>
+	<<set $characters.blair.quests.nursery = true>>
+	<<goto 'Blair - nursery'>>
+<</if>>
+<h1 class="ptitle">KITCHEN</h1>
+<<addmins 30>>
+
+<<video '/kitchen/blair_talk'>>
+<br /><br />
+<<set $talkedAbout = either('her dad', 'her wanting to go into adventures', 'her accident in underground city')>>
+You talked about <<=$talkedAbout>>.
+<br /><br />
+
+<<if $characters.blair.relationship < 20>>
+  <<set $characters.blair.relationship +=1>>
+  <strong>Blair relationship increased by 1</strong>
+<<else>>
+	<strong>You can't increase relationship with Blair with this action anymore</strong>
+<</if>>
+
+<br /><br />
+<<if ($characters.blair.relationship > 15)>>
+	<<if $characters.blair.relationship > 40>>
+		<<linkreplace 'Date'>>
+			<<if setup.percentageChance(50)>>
+				<<goto 'Blair - date'>>
+			<<else>>
+				<<blair>>
+					Sorry, I can't today. I need to help my dad.
+				<</blair>>
+			<</if>>
+			<br /><br />
+		<</linkreplace>>
+	<</if>>
+	<<link 'Kiss her'>>
+		<<goto 'Blair - kitchen kiss'>>
+	<</link>>
+	
+	<<if $game.canMarry && !$characters.blair.quests.married && $backpack.has('wedding_ring')>>
+		<<link 'Marry her'>>
+			<<goto 'Blair - marry #1'>>
+		<</link>>
+	<</if>>
+<<else>>
+	<<addmins 30>>
+<</if>>
+
+[[Leave|Kitchen-room]]
+
+

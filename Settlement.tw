@@ -1,0 +1,31 @@
+:: Settlement [Place bg-settlement] {"position":"1831,2224","size":"100,100"}
+<h1 class="ptitle">SETTLEMENT</h1>
+<div class="menu-grid">
+   <<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  <<grid settlement square 'Main square' 'Main square' 0 $isDisabled>>
+  <<if ($game.location.settlement_church ?? false)>>
+   	<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  	<<grid settlement church 'Church' 'Church' 0 $isDisabled>>
+  <</if>>
+  <<if ($game.location.settlement_shop ?? false)>>
+   	<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  	<<grid settlement settlement_shop 'Settlement - shop' 'Shop' 0 $isDisabled>>
+  <</if>>
+</div> 
+<br /><br />
+[[Leave|Outside]]
+
+<<if isMetChar('octavia') && !$characters.octavia.quests.burned_settlement && $game.day > 80 && setup.percentageChance(40)>>
+	<<goto 'Octavia - burn settlement'>>
+<<elseif isMetChar('octavia') && $characters.octavia.quests.burned_settlement && !$characters.octavia.quests.eve_kidnapped && ($characters.octavia.quests.burn_day + 5) < $game.day>>
+	<<goto 'Octavia - eve kidnapped'>>
+<<else>>
+	<<if !$locationEvents.settlement>>
+	  <<if randomInteger(0, 100) <= 5>>
+		  <<set $locationEvents.settlement = true>>
+		  <<goto 'Settlement - random event #1'>>
+	  <</if>>
+	<</if>>
+<</if>>
+
+

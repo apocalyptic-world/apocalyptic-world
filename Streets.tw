@@ -1,0 +1,132 @@
+:: Streets [Place bg-underground] {"position":"1938,1577","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/underground/streets_head.jpg']]
+</div>
+<br /><br />
+
+You see some hookers standing against the wall..
+<br /><br />
+
+<h3>Your hookers</h3>
+<<set $assignedToStreets = false>>
+<table id="slaves">
+	<<for _i to 0; _i lt $slaves.length; _i++>>
+		<<capture _i>>
+		<<if $slaves[_i].assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
+			<<continue>>
+		<</if>>
+		<<set $assignedToStreets = true>>
+		<<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<tr>
+			<td style="width: 300px">
+				<span @class="''+_genderClass+''">
+				  <<link $slaves[_i].name>>
+					<<set $tmpGirl to $slaves[_i]>>
+					<<set $tmpGirl.location = 'streets'>>
+					<<set $tmpGirlBack = 'Streets'>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirl.rape to false>>
+					<<set $slaveId = _i>>
+					<<run delete $charId>>
+					<<run delete $guestId>>
+					<<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+					<<goto $tmpGirlViewBack>>
+				  <</link>>
+				</span>
+			</td>
+			<td>
+				Beauty score: <<print $slaves[_i].beauty>>
+			</td>
+			<td>
+				Age: <<=setup.getAge($slaves[_i])>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
+		<<capture _streetGuestI>>
+		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + (!_streetGuest.gender ? 'girl' : 'guy')>>
+		<<set $assignedToStreets = true>>
+		<tr>
+			<td style="width: 300px">
+				<span @class="''+_genderClass+''">
+				  <<link _streetGuest.name>>
+					<<set $tmpGirl to _streetGuest>>
+					<<set $tmpGirl.location = 'streets'>>
+					<<set $tmpGirlBack = 'Streets'>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirl.rape to false>>
+					<<set $guestId = _streetGuestI>>
+					<<run delete $charId>>
+					<<run delete $slaveId>>
+					<<set $tmpGirlViewBack = (!_streetGuest.gender ? 'Girl' : 'Guy') + ' view - guest'>>
+					<<goto $tmpGirlViewBack>>
+				  <</link>>
+				</span>
+			</td>
+			<td>
+				Beauty score: <<print _streetGuest.beauty>>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_streetGuest)>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+</table>
+
+<<if !$assignedToStreets>>
+	No girl is working right now
+<</if>>
+
+<br /><br />
+<<if $player.money >= 10 && $player.energy >= 20>>
+	<<link 'Find hooker for 10 caps'>>
+		<<set $player.money -= 10>>
+		<<energy -20>>
+		<<goto 'Streets - fuck hooker'>>
+	<</link>>
+<</if>>
+
+<<if $characters.dom.quests.quest1 && !$characters.dom.quests.quest1_done && $backpack.count('champagne') >= 10>>
+	<<link 'Bring champagne to Dom'>>
+		<<goto 'Dom - quest #1 done'>>
+	<</link>>
+<</if>>
+[[Leave|Underground city]] 
+
+
+<<if $assignedToStreets && !$warnedAboutStreetHookers>>
+	<<set $warnedAboutStreetHookers = true>>
+	<<goto 'Streets - warning tax'>>
+<<elseif $characters.blair.quests.missing_friend_talked && !$characters.blair.quests.missing_friend_found>>
+	<<if ($characters.blair.quests.missing_friend_talked_day + 2) < $game.day>>
+		<<set $characters.blair.quests.missing_friend_found = true>>
+		<<set $characters.blair.quests.missing_friend_found_dead = true>>
+		<<goto 'Streets - Blair quest missing friend - dead'>>
+	<<else>>
+		<<if timeBetween('22:00', '00:00') && !$characters.blair.quests.missing_friend_basement>>
+			<<set $characters.blair.quests.missing_friend_basement = true>>
+			<<goto 'Streets - Blair quest missing friend - alive'>>
+		<</if>>
+	<</if>>
+
+<<elseif !$characters.dom.quests.invite && $game.day >= 100 && $player.reputation >= 100 && (setup.getPersonsForLocation($slaves, 'streets').length >= 4 || setup.getPersonsForLocation($guests, 'streets').length >= 4)>>
+	<<set $characters.dom.quests.invite = true>>
+	<<goto 'Streets - Dom invite'>>
+<<elseif $characters.dom.quests.accepted_deal && !$characters.dom.quests.quest1 && ($characters.dom.quests.day + 10) < $game.day>>
+	<<set $characters.dom.quests.quest1 = true>>
+	<<goto 'Dom - quest #1'>>
+<<elseif $characters.dom.quests.accepted_deal && $characters.dom.quests.quest1_done && !$characters.dom.quests.quest2 && $player.strength >= 100>>
+	<<set $characters.dom.quests.quest2 = true>>
+	<<goto 'Dom - quest #2'>>
+<<elseif $characters.dom.quests.quest2_done && !$characters.dom.quests.quest3 && $characters.dom.quests.quest3_start_day < $game.day>>
+	<<set $characters.dom.quests.quest3 = true>>
+	<<goto 'Dom - quest #3'>>
+<</if>>
+
+

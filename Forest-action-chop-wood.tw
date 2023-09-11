@@ -1,0 +1,26 @@
+:: Forest-action-chop-wood {"position":"2044,747","size":"100,100"}
+<h1 class="ptitle">FOREST</h1>
+
+<<if $backpack.has('axe')>>
+	<<set _getWood = Math.min(Math.round(6 * ($player.strength / 10), 0), 30)>>
+	<<set _getWood = Math.max(_getWood, 6)>>
+    <<energy -40>>
+	<<pickup $backpack "wood" _getWood>>
+ <center>[img[setup.ImagePath+'places/forest/chop_wood'+ Math.floor(Math.random() * 2)+'.webp']]</center>
+ <br /><br />
+ <strong>You managed to get <<=_getWood>> wood because you used axe.</strong>
+<<else>>
+	<<set _getWood = Math.min(Math.round(2 * ($player.strength / 10), 0), 10)>>
+	<<set _getWood = Math.max(_getWood, 2)>>
+	<<energy -40>>
+	<<pickup $backpack "wood" _getWood>>
+ <center>[img[setup.ImagePath+'places/forest/get_branches.webp']]</center>
+ <br /><br />
+ <strong>You managed to get <<=_getWood>> wood.</strong>
+<</if>>
+<br /><br />
+[[Back|Outside]]
+
+<<addmins 180>>
+
+

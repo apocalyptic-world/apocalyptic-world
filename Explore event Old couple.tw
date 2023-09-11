@@ -1,0 +1,66 @@
+:: Explore event: Old couple {"position":"6639,301","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/explore/old_couple_traveling.jpg']]
+</center>
+<br /><br />
+As you move along the ruins of the buildings, in the distance you spot an elderly couple. They appear to be very weak and are barely moving forward, seemingly famished.
+<br /><br />
+
+<<linkreplace 'Approach them'>>
+	Upon seeing that you are approaching them, they come to a complete stop and huddle together. The old woman presses herself against the side of the old man.
+	<br /><br />
+	<<anonguy>>
+		Please! Don't harm us
+	<</anonguy>>
+	<br /><br />
+	<div id="option1">
+		<<linkreplace 'Rob them'>>
+			<center>
+				[img[setup.ImagePath+'places/explore/old_couple_hand.jpg']]
+			</center>
+			<br /><br />
+			The old man puts his hand in his pocket and after a moment, pulls something out. With trembling hands, he reaches forward and opens his hand. In his hand, there's only a bottle cap...
+			<br /><br />
+			<div id="option3">
+				<<linkreplace 'Take it'>>
+					<<run $('#option2').hide()>>
+					<<set $player.godwill -=5>>
+					<<set $player.money++>>
+					<center>
+						[img[setup.ImagePath+'places/explore/old_couple_cry.jpg']]
+					</center>
+					<br /><br />
+					After you have taken everything they had and walked a few steps away, the old woman starts crying, and both of them fall to their knees, holding each other's hands..
+					"<strong>That was everything we got...</strong>"
+					<br /><br />
+				<</linkreplace>>
+			</div>
+		<</linkreplace>>
+	</div>
+	<div id="option2">
+	  <<if $backpack.count('food') >= 5>>
+			<<linkreplace 'Offer them food'>>
+				<<run $('#option1, #option2_desc').hide()>>
+				<<drop $backpack 'food' 5>>
+				<<set $player.godwill++>>
+				<center>
+						[img[setup.ImagePath+'places/explore/old_couple_cry.jpg']]
+				</center>
+				<br /><br />
+				The woman dissolves into tears and can't stop thanking you. They both hold the food to their chests as tightly as possible, until they fall to their knees and touch foreheads, leaning on each other.
+				<br />
+				"<strong>Thank you! Thank you!</strong>"
+			<</linkreplace>>
+			<<linkdesc 'option2_desc'>>
+				-5 food
+			<</linkdesc>>
+	  <</if>>
+	</div>
+<</linkreplace>>
+<<link 'Leave'>>
+	<<goto 'Outside'>>
+<</link>>
+
+

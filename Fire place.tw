@@ -1,0 +1,68 @@
+:: Fire place [Place] {"position":"630,446","size":"100,100"}
+<h1 class="ptitle">FIRE PLACE</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/fireplace_head.jpg']]
+</div>
+<br /><br />
+
+<<if $player.energy >= 20 && hasTime(1) && timeBetween('08:00','22:00')>>
+	<<link 'Train your strength'>>
+		<<addhours 1>>
+		<<set $player.strength +=1>>
+		<<energy -20>>
+		<<goto 'Fireplace - train strength'>>
+	<</link>>
+	<<link 'Train your endurance'>>
+		<<addhours 1>>
+		<<if typeof $player.endurance === 'undefined'>>
+			<<set $player.endurance = 0>>
+		<</if>>
+		<<set $player.endurance +=1>>
+		<<energy -20>>
+		<<goto 'Fireplace - train endurance'>>
+	<</link>>
+<</if>>
+<<if isMetChar('blair') && $characters.blair.quests.house_party>>
+	<<if $backpack.count('food') >= 20 && $backpack.count('champagne') >= 1 && timeBetween('19:00', '21:00')>>
+		<<link 'Throw a party'>>
+			<<goto 'House party'>>
+		<</link>>
+		<<linkdesc>>
+		 -20 food, -1 champagne
+		<</linkdesc>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Throw a party
+		</div>
+		<<linkdesc>>
+			20 food, 1 champagne and time between 19:00 - 21:00
+		<</linkdesc>>
+	<</if>>
+<</if>>
+
+<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 3>>
+	<<if timeBetween('19:00','20:30')>>
+		<<link 'Group workout with guests'>>
+			<<energy 40>>
+			<<addmins 90>>
+			<<goto 'Group workout - guests'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Group workout with guests
+		</div>
+		<<linkdesc>>
+			Time between 19:00 - 20:30. Energy 40
+		<</linkdesc>>
+	<</if>>
+<</if>>
+
+<<if ($player.horse ?? false)>>
+	<<link 'Go to your horse'>>
+		<<goto 'Horse'>>
+	<</link>>
+<</if>>
+
+[[Leave|Wood cabin]]
+
+

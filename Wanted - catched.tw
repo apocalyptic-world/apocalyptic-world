@@ -1,0 +1,46 @@
+:: Wanted - catched {"position":"2995,1901","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<<set $wantedPron2 = ($wanted[$wantedId].gender ? 'him' : 'her')>>
+<<set $wantedGender = ($wanted[$wantedId].gender ? 'guy' : 'girl')>>
+<center>
+[img[setup.ImagePath+'places/bar/catch_' + $wantedGender + '.webp']]
+</center>
+<br /><br />
+<<if !$wanted[$wantedId].gender>>
+You put cuffs around her and push her against the wall
+<<else>>
+You beat his ass and cuff him as he lies on the ground
+<</if>>
+
+<<if !$wanted[$wantedId].gender>>
+	<table>
+		<tr>
+			<td>Beauty:</td><td><<=$wanted[$wantedId].beauty>></td>
+			<td>Age:</td><td><<=setup.getAge($wanted[$wantedId], true)>></td>
+		</tr>
+	</table>
+<</if>>
+<br /><br />
+<<set $wantedLink = 'Bring ' + $wantedPron2 + ' in'>>
+<<link `$wantedLink`>>
+	<<goto 'Wanted - collect reward'>>
+<</link>>
+
+<<if !$wanted[$wantedId].gender>>
+	<<link 'Use her'>>
+		<<addmins 30>>
+		<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
+		<<goto `$wantedPsg`>>
+	<</link>>
+	<<if $slaves.length < $basementLimit>>
+		<<link 'Capture her and bring her home as slave'>>
+			<<set $wanted[$wantedId].capture = false>>
+			<<set $slaves.push($wanted[$wantedId])>>
+			<<set $wanted.splice($wantedId, 1)>>
+			<<addhours 2>>
+			<<goto 'Basement'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+

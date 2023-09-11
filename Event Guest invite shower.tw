@@ -1,0 +1,35 @@
+:: Event: Guest invite shower [sex no-redirect] {"position":"288,1735","size":"100,100"}
+<br />
+<<if $tmpGirl.relationship > 30>>
+	<<if $tmpGirl.washedBathhouse>>
+		<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+			Sorry, I will have to decline. I already was in bathhouse today. Maybe some other time
+		<</say>>
+	<<else>>
+		<<set _isOk = true>>
+		<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+			Oh, I like where this is going. Lead the way. 
+		<</say>>
+	<</if>>
+<<else>>
+	<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+		Sorry, I wouldn't be comfortable there together with you.
+	<</say>>
+<</if>>
+<br /><br />
+<<if _isOk>>
+	<<link 'Go to the shower'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<set $tmpGirl.location = 'shower'>>
+		<<goto 'Girl fuck'>>
+	<</link>>
+<</if>>
+<<link 'Back'>>
+  	<<if $tmpGirlViewBack>>
+		<<goto $tmpGirlViewBack>>
+	<<else>>
+		<<goto [[Girl view]]>>
+	<</if>>
+<</link>>
+
+

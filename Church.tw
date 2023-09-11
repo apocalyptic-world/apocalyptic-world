@@ -1,0 +1,22 @@
+:: Church [Place bg-settlement] {"position":"1943,2446","size":"100,100"}
+<h1 class="ptitle">CHURCH</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/settlement/church_head.jpg']]
+</div>
+<br /><br />
+<<if $charactersInLocation['church'].includes('rodger') && !$characters.rodger.talked>>
+	<<link 'Talk with Rodger'>>
+		<<set $characters.rodger.talked = true>>
+		<<goto 'Rodger - church talk'>>
+	<</link>>
+<</if>>
+
+<<if $characters.rodger.quests.book && timeBetween('08:00', '16:00')>>
+  <<link 'Read book'>>
+	  <<goto 'Church - read book'>>
+  <</link>>
+<</if>>
+
+[[Leave|Settlement]]
+
+

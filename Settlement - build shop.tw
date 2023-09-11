@@ -1,0 +1,22 @@
+:: Settlement - build shop {"position":"2482,2776","size":"100,100"}
+<h1 class="ptitle">SHOP</h1>
+<br />
+<br />
+You need <strong class="iitem">5 ropes</strong> and <strong class="iitem">20 wood</strong> to build the shop
+<br />
+<br />
+<<if $backpack.count('rope') >= 5 && $player.energy >= 80>>
+	<<link 'Build shop'>>
+		<<drop $backpack 'rope' 5>>
+		<<drop $backpack 'wood' 20>>
+		<<addhours 8>>
+		<<energy -80>>
+		<<set $game.location.settlement_shop = true>>
+		<<goto 'Settlement - shop'>>
+	<</link>>
+<</if>>
+<<link 'Leave'>>
+	<<goto 'Main square'>>
+<</link>>
+
+

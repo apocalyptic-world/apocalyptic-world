@@ -1,0 +1,76 @@
+:: Settlement - church finished #2 [bg-settlement] {"position":"3034,2229","size":"100,100"}
+<h1 class="ptitle">MAIN SQUARE</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/settlement/finish_church_attack1.webp']]
+</center>
+<br /><br />
+You look behind Rodger and notice at least 5 people, all geared up with leather jackets, with their faces covered with dirt or blood and they're coming closer and closer
+<br /><br />
+Rodger repeats himself that everyone should stay calm and not resist as he's trying to hide Eve behind a few other people.
+<br /><br />
+
+<<octavia>>
+	Who we got here? Who are you? Answer!
+<</octavia>>
+<br />
+<<rodger>>
+Please! We mean no harm! We're just small group of people who're trying to live quietly and we won't disturb you
+<</rodger>>
+<br /><br />
+Your group slowly steps back, but not one of the biggest guys from the settlement. He stands his ground
+<br /><br />
+<<octavia>>
+This is our land! And we've come to take what's ours!
+<</octavia>>
+<br /><br />
+Suddenly the big guy who stood on the ground yells at her that she can go fuck herself and this place is theirs
+<br /><br />
+Without hesitation she acts...
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/settlement/finish_church_attack2.webp']]
+</center>
+<br /><br />
+She slices big guy guts open and he drops down and bleeds in seconds as she stands up and looks at Rodger
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/settlement/finish_church_attack3.webp']]
+</center>
+<br /><br />
+<<octavia>>
+Now listen carefully everyone. Noone has to die; we just need a few things from you as you use your land. And don't worry, we'll come each week to collect.
+<</octavia>>
+<br /><br />
+You look behind you and see noone willing to fight back with you...
+<br /><br />
+
+<<link 'Fight them anyway'>>
+	<<set $enemies = []>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<fight $enemies 'Settlement - church finished - won' 'Settlement - church finished - lost' true>>
+<</link>>
+<<link 'Keep quiet'>>
+	<<goto 'Settlement - church finished - done'>>
+<</link>>
+
+<<newgirl>>
+<<set 
+	$tmpGirl.hair = 'black',
+	$tmpGirl.strength = 100,
+	$tmpGirl.name = 'Octavia',
+	$tmpGirl.beauty = 95,
+	$tmpGirl.birthDate = setup.getBirthDate(19),
+	$tmpGirl.race = 'white',
+	$tmpGirl.quests = {}
+>>
+<<set $characters.octavia = $tmpGirl>>
+
+

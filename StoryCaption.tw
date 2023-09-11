@@ -1,0 +1,96 @@
+:: StoryCaption {"position":"456,11","size":"100,100"}
+<div id="blink-screen"></div>
+<link href='https://css.gg/css' rel='stylesheet'>
+<div id="sidebar-wrapper" @class="'' + settings.sidebarBackground + ''"> 
+<<if $game.introFinished>>
+<center><div style="position: relative;" id="sidebar-content">
+	<<if $game.showFlag>><<flag>><</if>>
+	<<if ($player.horse ?? false)>>
+		<div id="horse-avatar"></div>
+	<</if>>
+	</div></center>
+<br />
+<<set _uiBarGameDate = $gameDate.getDate() + ' ' + $gameDate.toLocaleString('default', { month: 'long' }) + ', ' + $gameDate.getFullYear()>>
+<div id="t1" class="grid-s-def">
+	<span class="grid-i-cs4 caut-bar"></span>
+	<span class="grid-i-rs3"><<timeCycle>>[img[setup.ImagePath+'game/' + variables().timeCycle + '.png']]<<timeCycle>></span>
+	<span class="grid-i-rs3 grid-i-pos-hc"><hr class="vdark"></span>
+	<span class="glyph">&#57414;</span><span><<timeDay>></span>
+	<span class="glyph">&#57429;</span><span><<time24hr>></span>
+	<span class="glyph" data-balloon-length="medium" @aria-label="'' + _uiBarGameDate + ''" data-balloon-pos="left">&#57425;</span>
+	<span class="glyph" data-balloon-length="medium" @aria-label="'' + _uiBarGameDate + ''" data-balloon-pos="left"> Day <<gameDay>></span>
+	<span class="grid-i-cs4 caut-bar"></span>
+</div>
+
+
+<div id="companions-list">
+	<<companionList>>
+</div>
+<br />
+<div id="t2">
+<span class="glyph" data-balloon-length="medium" aria-label="Energy" data-balloon-pos="right">&#59667;</span><<showmeter '$energyBar' '$player.energy / $player.maxEnergy'>>
+<span class="glyph" data-balloon-length="medium" aria-label="Satiety" data-balloon-pos="right">&#57976;</span><<showmeter '$hungerBar' '$player.hunger / $player.maxHunger'>>
+<span class="glyph" data-balloon-length="medium" aria-label="Horny" data-balloon-pos="right">&#59448;</span><<showmeter '$hornyBar' '$player.horny / $player.maxHorny'>>
+</div>
+<br /><br />
+
+
+<div id="t3" class="grid-s-def">
+<span class="grid-i-cs5 caut-bar"></span>
+<span class="money">$player.money</span>
+<span class="glyph" data-balloon-length="medium" aria-label="Bottle caps" data-balloon-pos="up-left">&#57888;</span>
+<span class="grid-i-pos-hc"><hr class="vdark"></span>
+<span class="glyph" data-balloon-length="medium" aria-label="Food amount" data-balloon-pos="up-right">&#57975;</span>
+<span class="food"><<=($backpack.count('food') + $storage.count('food'))>></span>
+<span class="grid-i-cs5 grid-i-pos-vc"><hr class="dark"></span>
+</div>
+<div id="t3s" class="grid-s-def">
+	<!--//##Later can be hidden in tooltip##//-->
+	<span>STR</span>
+	<span>END</span>
+	<span>INT</span>
+	<!--//##########################//-->
+	<span class="glyph" data-balloon-length="medium" aria-label="Determines your luck capturing girl or hiting power in fights" data-balloon-pos="right">&#58260;</span>
+	<span class="glyph" data-balloon-length="medium" aria-label="Determines how much defense you have in fights" data-balloon-pos="up-left">&#59506;</span>
+	<span class="glyph" data-balloon-length="medium" aria-label="For high-end crafting you need more intelegence" data-balloon-pos="up-right">&#57448;</span>
+	<span>$player.strength</span>
+	<span><<=($player.endurance ?? 0)>></span>
+	<span>$player.int</span>
+</div>
+<div id="t3m" class="grid-s-def">
+<span class="grid-i-cs5 grid-i-pos-vc"><hr class="dark"></span>
+<span class="glyph" data-balloon-length="small" aria-label="Journal" data-balloon-pos="up-left">
+<<link "&#58760;">><<script>>Dialog.setup("Journal", "Journal"); Dialog.wiki(Story.get("Journal").processText()); Dialog.open();<</script>><</link>>
+</span>
+<span class="glyph" data-balloon-length="small" aria-label="Inventory" data-balloon-pos="up-right">
+<<link "&#58705;">><<script>>Dialog.setup("Inventory", "Inventory"); Dialog.wiki(Story.get("Inventory").processText()); Dialog.open();<</script>><</link>>
+</span>
+<span class="glyph" data-balloon-length="small" aria-label="Cheats" data-balloon-pos="up-right">
+<<link "&#58949;">><<script>>Dialog.setup("Cheat menu", "Cheat menu"); Dialog.wiki(Story.get("Cheat menu").processText()); Dialog.open();<</script>><</link>>
+</span>
+<span class="grid-i-cs5 caut-bar"></span>
+</div>
+<<perkList>>
+<</if>>
+<br /><br />
+<div id="support">
+  <<link "SUPPORT [img[setup.ImagePath+'game/misc/support.png']]
+">>
+	  <<script>>
+		Dialog.setup("Support", "Support");
+		Dialog.wiki(Story.get("Support").processText());
+		Dialog.open();
+	  <</script>>
+  <</link>>
+  
+  <<link "CHANGELOG">>
+	  <<script>>
+		Dialog.setup("Changelog", "Changelog");
+		Dialog.wiki(Story.get("Changelog").processText());
+		Dialog.open();
+	  <</script>>
+  <</link>>
+</div>
+</div>
+
+
