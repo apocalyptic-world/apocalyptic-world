@@ -54,6 +54,7 @@
   
 <<set $giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 
+<<set _hasDoctor = setup.hasDoctor()>>
 // Horse
 <<if ($player.horse ?? false)>>
 	<<if typeof $characters.horse === 'undefined'>>
@@ -113,7 +114,8 @@
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
-			<<if $slaves[_i].pregnancy > 30 && $slaves[_i].assignedTo === 'streets' && setup.percentageChance(10)>>
+			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<if $slaves[_i].pregnancy > 30 && $slaves[_i].assignedTo === 'streets' && setup.percentageChance(_miscarrieageChance)>>
 				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
 				<<run delete $slaves[_i].pregnancy>>
 			<</if>>
@@ -200,6 +202,9 @@
 		// Sick
 		<<if _isSick>>
 			<<set $slaves[_i].sick.days-->>
+			<<if _hasDoctor>>
+				<<set $slaves[_i].sick.days-->>
+			<</if>>
 			<<if $slaves[_i].sick.days <= 0>>
 				<<run delete $slaves[_i].sick>>
 			<</if>>
@@ -252,7 +257,8 @@
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
-			<<if $guests[_guestI].pregnancy > 30 && $guests[_guestI].assignedTo === 'streets' && setup.percentageChance(1)>>
+			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<if $guests[_guestI].pregnancy > 30 && $guests[_guestI].assignedTo === 'streets' && setup.percentageChance(_miscarrieageChance)>>
 				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
 				<<run delete $guests[_guestI].pregnancy>>
 			<</if>>
@@ -408,6 +414,9 @@
 		// Sick
 		<<if _isSick>>
 			<<set $guests[_guestI].sick.days-->>
+			<<if _hasDoctor>>
+				<<set $guests[_guestI].sick.days-->>
+			<</if>>
 			<<if $guests[_guestI].sick.days <= 0>>
 				<<run delete $guests[_guestI].sick>>
 			<</if>>

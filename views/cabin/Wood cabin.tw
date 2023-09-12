@@ -53,8 +53,15 @@
 		<<set $player.quests.bathhouse_talk = true>>
 		<<goto 'Event: Bathhouse talk'>>
 	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 4 && setup.percentageChance(5) && $backpack.count('food') > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
-		<<set $locationEvents.cabin = true>>
-		<<goto 'Event: Rotten Rations'>>
+		<<set _kitchenAssigned = setup.getPersonsForLocation($guests, 'kitchen')>>
+		<<set _rottenFoodChance = 100>>
+		<<if _kitchenAssigned && ($guests[_kitchenAssigned[0]].skills ?? []).includes('cook')>>
+			<<set _rottenFoodChance = 50>>
+		<</if>>
+		<<if setup.percentageChance(_rottenFoodChance)>>
+			<<set $locationEvents.cabin = true>>
+			<<goto 'Event: Rotten Rations'>>
+		<</if>>
 	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 2 && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Common capital'>>

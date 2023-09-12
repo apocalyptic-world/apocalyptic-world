@@ -28,7 +28,7 @@ Bet: <<textbox "$blackjack.bet" 1>>
 	<<set $player.gambler++>>
 	<<set $blackjack.bet = parseInt($blackjack.bet)>>
 	<<if !Number.isInteger($blackjack.bet) || $blackjack.bet < 1>>
-		<<replace "#blackjack-error" style="color:red">>Invalid value<</replace>>
+		<<replace "#blackjack-error">>Invalid value<</replace>>
 	<<elseif $player.money < $blackjack.bet>>
 		<<replace "#blackjack-error">>You don't have enough caps<</replace>>
 	<<elseif $blackjack.bet > 100>>

@@ -7,10 +7,19 @@
 You sparring with some random dude. You throw few unexpected punches and other guy goes down few times. You responses with few strong kicks too.<br />
 You shake your hands before getting out of the cage.
 <br /><br />
-<strong>Your strength increased by 2</strong>
+<<if $player.strength < 100>>
+	<strong>Your strength increased by 2</strong>
+	<<set $player.strength +=2>>
+<<else>>
+	<strong>You can't increase your strength with this action anymore.</strong>
+<</if>>
 <br />
-<strong>Your endurance increased by 1</strong>
-<<set $player.endurance++>>
+<<if $player.endurace < 50>>
+	<strong>Your endurance increased by 1</strong>
+	<<set $player.endurance++>>
+<<else>>
+	<strong>You can't increase your endurace with this action anymore.</strong>
+<</if>>
 <br /><br />
 
 <<link 'Back'>>
@@ -22,7 +31,6 @@ You shake your hands before getting out of the cage.
 <</link>>
 
 
-<<set $player.strength +=2>>
 <<energy -20>>
 <<addmins 60>>
 

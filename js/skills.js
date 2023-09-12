@@ -30,3 +30,13 @@ setup.getRandomSkills = function (count = 1) {
 
     return shuffledSkills.slice(0, count);
 };
+
+setup.hasDoctor = function() {
+    for (var i = 0; i < guests.length; i++) {
+        if ((guests[i].skills ?? []).includes('doctor')) {
+            return true;
+        }
+    }
+
+    return false;
+}
