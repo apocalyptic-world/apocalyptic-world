@@ -1,0 +1,119 @@
+:: Widget newgirl [widget]
+<<widget newgirl>>
+	<<include 'Girl names'>>
+
+	<<set _ageRoll = random(1, 100)>>
+	<<if _ageRoll < 70>>
+		<<set _ageRange = [18,27]>>
+	<<elseif _ageRoll < 85>>
+		<<set _ageRange = [28,37]>>
+	<<elseif _ageRoll < 95>>
+		<<set _ageRange = [38,47]>>
+	<<else>>
+		<<set _ageRange = [48,60]>>
+	<</if>>
+	<<set _age = random(_ageRange[0], _ageRange[1])>>
+
+	<<set _raceRoll = random(1, 100)>>
+	<<if _raceRoll <= 40>>
+		<<set _race = 'white'>>
+	<<elseif _raceRoll <= 60>>
+		<<set _race = 'latina'>>
+	<<elseif _raceRoll <= 80>>
+		<<set _race = 'black'>>
+	<<else>>
+		<<set _race = 'asian'>>
+	<</if>>
+
+	<<set _hairRoll = random(1, 100)>>
+	<<if ['asian', 'black'].includes(_race) || _hairRoll <= 25>>
+		<<set _hair = 'black'>>
+	<<elseif $tmpGirl.race === 'asian'>>
+		<<set _hair = either('black', 'red')>>
+	<<elseif _hairRoll <= 65>>
+		<<set _hair = 'brown'>>
+	<<elseif _hairRoll <= 75>>
+		<<set _hair = 'ginger'>>
+	<<else>>
+		<<set _hair = 'blonde'>>
+	<</if>>
+
+	<<if setup.percentageChance(30)>>
+		<<set _dyeRoll = random(1,100)>>
+		<<if _dyeRoll <= 25>>
+			<<set _hair = either('red', 'green', 'blue', 'pink', 'purple', 'white')>>
+		<<elseif _dyeRoll <= 50>>
+			<<set _hair = either('ginger', 'blonde')>>
+		<</if>>
+	<</if>>
+
+	<<set $tmpGirl = {
+		name: either(_names),
+		beauty: random(20, 70),
+		birthDate: setup.getBirthDate(_age),
+		relationship: 0,
+		corruption: random(0, 10),
+		sub: random(0, 30),
+		hair: _hair,
+		breasts: either('small', 'medium', 'big'),
+		race: _race,
+		location: 'forest',
+		anal: random(10, 30),
+		dp: random(10, 30),
+		bj: random(0, 30),
+		pussy: random(0, 30),
+		talked: false,
+		food: random(10, 90),
+		strength: random(5, 15),
+		assignedTo: null,
+		virgin: false,
+		gender: 0,
+		horny: random(0, 30),
+		orgasms: 0,
+		guys: random(3, 20),
+		traits: [],
+		endurance: 0,
+	}>>
+
+<<if setup.getAge($tmpGirl) < 18>>
+	<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
+<</if>>
+
+<<if setup.getAge($tmpGirl) <= 20>>
+	<<if setup.percentageChance(50)>>
+		<<set 
+			$tmpGirl.virgin = true,
+			$tmpGirl.guys = 0,
+			$tmpGirl.pussy = 0,
+			$tmpGirl.bj = 0,
+			$tmpGirl.anal = 0
+		>>
+	<</if>>
+<</if>>
+
+<<if setup.getAge($tmpGirl) <= 30>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 10, 100)>>
+<</if>>
+<<if setup.getAge($tmpGirl) >= 50>>
+	<<set $tmpGirl.beauty = Math.max($tmpGirl.beauty - 10, 0)>>
+<</if>>
+
+<<if $tmpGirl.race === 'black' || $tmpGirl.race === 'latina'>>
+	<<set $tmpGirl.hair = 'black'>>
+<<elseif $tmpGirl.race === 'asian'>>
+	<<set $tmpGirl.hair = either('black', 'red')>>
+<</if>>
+
+<<set $tmpGirl.id = setup.generateUniqueKey($tmpGirl)>>
+<<if setup.percentageChance(50)>>
+	<<set _npcTraits = 1>>
+	<<if setup.percentageChance(30)>>
+		<<set _npcTraits = 2>>
+	<</if>>
+	<<set $tmpGirl.traits = setup.getRandomTraits(_npcTraits)>>
+<</if>>
+<</widget>>
+
+
+
+
