@@ -42,7 +42,12 @@ Her contractions grew stronger, <<=$tmpGirl.name>> knew that she didn't have muc
 	<<set _childGender = randomInteger(0,1)>>
 	Congratulation, it's a <<if !_childGender>><span style="color:pink">girl</span><<else>> <span style="color:blue">boy</span><</if>>
 	<br /><br />
-	What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" ''>>
+	<<if !_childGender>>
+		<<include 'Girl names'>>
+	<<else>>
+		<<include 'Guy names'>>
+	<</if>>
+	What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" either(_names)>>
 	<br /><br />
 	<<link 'Continue'>>
 		<<set _mother = $tmpGirl>>
