@@ -37,7 +37,22 @@ Save.onLoad.add(function (save) {
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null) && !Array.isArray(save.state.history[save.state.index].variables.tmpGirl.traits ?? [])) {
         save.state.history[save.state.index].variables.tmpGirl.traits = [];
     }
+    if ((save.state.history[save.state.index].variables.tmpGirl ?? null) && !Array.isArray(save.state.history[save.state.index].variables.tmpGirl.skills ?? [])) {
+        save.state.history[save.state.index].variables.tmpGirl.skills = [];
+    }
 
+    if ((save.state.history[save.state.index].variables.tmpGirl ?? null)) {
+        for (var saveTmpGirlTraitI = 0; saveTmpGirlTraitI < (save.state.history[save.state.index].variables.tmpGirl.traits ?? []).length; saveTmpGirlTraitI++) {
+            if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI])) {
+                if (typeof save.state.history[save.state.index].variables.tmpGirl.skills === 'undefined') {
+                    save.state.history[save.state.index].variables.tmpGirl.skills = [];
+                }
+                save.state.history[save.state.index].variables.tmpGirl.skills.push(save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI]);
+                save.state.history[save.state.index].variables.tmpGirl.traits.splice(saveTmpGirlTraitI, 1);
+                saveTmpGirlTraitI--;
+            }
+        }
+    }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
     save.state.history[save.state.index].variables.characters.eve = (save.state.history[save.state.index].variables.characters.eve ?? {});
@@ -89,6 +104,17 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].race = 'white';
             save.state.history[save.state.index].variables.slaves[varsSlaveI].breasts = 'medium';
         }
+
+        for (var saveSlaveTraitI = 0; saveSlaveTraitI < (save.state.history[save.state.index].variables.slaves[varsSlaveI].traits ?? []).length; saveSlaveTraitI++) {
+            if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.slaves[varsSlaveI].traits[saveSlaveTraitI])) {
+                if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.slaves[varsSlaveI].skills = [];
+                }
+                save.state.history[save.state.index].variables.slaves[varsSlaveI].skills.push(save.state.history[save.state.index].variables.slaves[varsSlaveI].traits[saveSlaveTraitI]);
+                save.state.history[save.state.index].variables.slaves[varsSlaveI].traits.splice(saveSlaveTraitI, 1);
+                saveSlaveTraitI--;
+            }
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair.quests !== 'undefined' && typeof save.state.history[save.state.index].variables.characters.blair.quests.missing_friend_talked_day === 'undefined') {
@@ -118,6 +144,17 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.guests[saveGuestI].endurace = 0;
         }
 
+        for (var saveGuestTraitI = 0; saveGuestTraitI < (save.state.history[save.state.index].variables.guests[saveGuestI].traits ?? []).length; saveGuestTraitI++) {
+            if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.guests[saveGuestI].traits[saveGuestTraitI])) {
+                if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.guests[saveGuestI].skills = [];
+                }
+                save.state.history[save.state.index].variables.guests[saveGuestI].skills.push(save.state.history[save.state.index].variables.guests[saveGuestI].traits[saveGuestTraitI]);
+                save.state.history[save.state.index].variables.guests[saveGuestI].traits.splice(saveGuestTraitI, 1);
+                saveGuestTraitI--;
+            }
+        }
+
     }
 
     for(var saveCharI in save.state.history[save.state.index].variables.characters) {
@@ -132,6 +169,9 @@ Save.onLoad.add(function (save) {
 
         if (!Array.isArray(save.state.history[save.state.index].variables.characters[saveCharI].traits ?? [])) {
             save.state.history[save.state.index].variables.characters[saveCharI].traits = [];
+        }
+        if (!Array.isArray(save.state.history[save.state.index].variables.characters[saveCharI].skills ?? [])) {
+            save.state.history[save.state.index].variables.characters[saveCharI].skills = [];
         }
     }
 

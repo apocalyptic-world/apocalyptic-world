@@ -185,56 +185,6 @@ setup.perkList = {
     }
 };
 
-setup.traits = {
-    analslut: {
-        title: 'Anal slut',
-        description: 'Gets orgasm only from anal sex',
-        gender: [0]
-    },
-    gardener: {
-        title: 'Gardener',
-        description: 'Gives additional bonus while assigned to garden'
-    },
-    cumslut: {
-        title: 'Cumslut',
-        description: 'Loves cum in mouth',
-        gender: [0]
-    },
-    masochist: {
-        title: 'Masochist',
-        description: 'Likes to be punished',
-    },
-    deepthroat: {
-        title: 'Deepthroat',
-        description: 'Likes to get deepthroated'
-    },
-    woodcraft: {
-        title: 'Woodcraft',
-        description: 'Can gather more wood'
-    },
-    scavanger: {
-        title: 'Scavanger',
-        description: 'More likely to find stuff, and less likely to get into trouble'
-    },
-    breeder: {
-        title: 'Breeder',
-        description: '100% chance to get pregnant and pregnancy goes x2'
-    },
-    shopkeeper: {
-        title: 'Shopkeeper',
-        description: 'Can work in shop and manage your goods'
-    },
-    sadistic: {
-        title: 'Sadistic',
-        description: 'Display recurrent cruel behavior and aggression. Can be assigned as mistress if woman'
-    },
-    squirter: {
-        title: 'Squirter',
-        description: 'Ejaculates when gets orgasm',
-        gender: [0]
-    }
-};
-
 setup.gifts = {
     necklace_cheap: {
         rel: 5
@@ -545,12 +495,6 @@ setup.getNpcByKey = function (key) {
     }
 
     return '???';
-};
-
-setup.getRandomTraits = function (count = 1) {
-    var shuffledTraits = Object.keys(setup.traits).sort((a, b) => 0.5 - Math.random());
-
-    return shuffledTraits.slice(0, count);
 };
 
 setup.sortObjectKeysDescending = function(obj) {

@@ -132,7 +132,7 @@
 		<<if $slaves[_i].assignedTo === 'garden' && !_isSick>>
 			<<set $slaves[_i].gardenDay++>>
 			<<set _foodGive = $giveFood>>
-			<<if ($slaves[_i].traits ?? []).includes('gardener')>>
+			<<if ($slaves[_i].skills ?? []).includes('gardener')>>
 				<<set _foodGive++>>
 			<</if>>
 			<<if $slaves[_i].gardenDay == 3>>
@@ -271,7 +271,7 @@
 		<<if $guests[_guestI].assignedTo === 'garden' && !_isSick>>
 			<<set $guests[_guestI].gardenDay++>>
 			<<set _foodGive = $giveFood>>
-			<<if ($guests[_guestI].traits ?? []).includes('gardener')>>
+			<<if ($guests[_guestI].skills ?? []).includes('gardener')>>
 				<<set _foodGive++>>
 			<</if>>
 			<<if $guests[_guestI].gardenDay == 3>>
@@ -325,7 +325,7 @@
 		
 		<<if $guests[_guestI].assignedTo === 'forest' && !_isSick>>
 			<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
-			<<if ($guests[_guestI].traits ?? []).includes('woodcraft')>>
+			<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
 				<<set _giveWood++>>
 			<</if>>
 			<<if _isStorageAvailable>>
@@ -348,7 +348,7 @@
 			<<if $guests[_guestI].strength >= 30>>
 				<<set _changeOfNotComingHome -=5>>
 			<</if>>
-			<<if ($guests[_guestI].traits ?? []).includes('scavanger')>>
+			<<if ($guests[_guestI].skills ?? []).includes('scavenger')>>
 				<<set _chanceOfNotComingHome -=4>>
 			<</if>>
 			<<if $guests[_guestI].gender>>
@@ -359,7 +359,7 @@
 			<<else>>
 			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap')>>
 			  <<set _giveCount = 1>>
-			  <<if ($guests[_guestI].traits ?? []).includes('scavanger') && setup.percentageChance(50)>>
+			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
 			  <</if>>
 			  <<if _isStorageAvailable>>

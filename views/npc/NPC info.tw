@@ -49,18 +49,31 @@
 				Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
 			</div>
 		<</if>>
-	  <div id="girl-traits">
-			Traits: 
-			<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
-			  <<for _trait range $tmpGirl.traits ?? {}>>
-				  <div class="trait tooltip">
-					  <<=setup.traits[_trait].title>>
-					  <span class="tooltiptext"><<=setup.traits[_trait].description>></span>
-				  </div>
-			  <</for>>
-			<<else>>
-				none
-			<</if>>
+		<div id="girl-traits">
+				Traits: 
+				<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
+				<<for _trait range $tmpGirl.traits ?? {}>>
+					<div class="trait tooltip">
+						<<=setup.traits[_trait].title>>
+						<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
+					</div>
+				<</for>>
+				<<else>>
+					none
+				<</if>>
+		</div>
+		<div id="npc-skills">
+		Skills: 
+		<<if Object.keys($tmpGirl.skills ?? {}).length > 0>>
+		  <<for _skill range ($tmpGirl.skills ?? [])>>
+			  <div class="trait tooltip">
+				  <<=setup.skills[_skill].title>>
+				  <span class="tooltiptext"><<=setup.skills[_skill].description>></span>
+			  </div>
+		  <</for>>
+		<<else>>
+			none
+		<</if>>
 	  </div>
   <</if>>
 </div>
