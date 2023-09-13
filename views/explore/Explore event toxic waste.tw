@@ -14,34 +14,47 @@
 	<</if>>
 <</for>>
 
+<<set _pronounceWhat = setup.pronounceWhat($guests[_companionFirst])>>
+<<set _pronounceWhos = setup.pronounceWhos($guests[_companionFirst])>>
+<<set _pronounceWho = setup.pronounceWho($guests[_companionFirst])>>
+
 Together with <strong><<=_companionNames.join(', ')>></strong> you decide to walk past a chemical factory.
 <br />
 As you approach, you smell a strong and sharp odor, but it's unclear what it really is.
 <br />
-A moment later, you decide not to get any closer, but unexpectedly <strong><<=$guests[_companionFirst].name>></strong> slips and falls into a nearby ditch. <strong><<=$guests[_companionFirst].name>></strong> is completely wet because she fell face-first into some yellow liquid. Strange-looking barrels are everywhere around.
+A moment later, you decide not to get any closer, but unexpectedly <strong><<=setup.displayName($guests[_companionFirst])>></strong> slips and falls into a nearby ditch. 
+<br />
+<strong><<=setup.displayName($guests[_companionFirst])>></strong> is completely wet because <<=_pronounceWhat>> fell face-first into some yellow liquid. Strange-looking barrels are everywhere around.
 <br /><br />
 
-<<linkreplace 'Ask if she is okey'>>
-	She wiped her face off from the unknown liquid and said that she was fine. However, after a while, she started to feel nauseous and began to vomit.
+
+
+<<set _linkName = 'Ask if ' + _pronounceWhat + ' is okey'>>
+<<linkreplace _linkName>>
+	<<=_pronounceWhat.toUpperFirst()>> wiped <<=_pronounceWhos>> face off from 
+	the unknown liquid and said that <<=_pronounceWhat>> was fine. However, after a while, <<=_pronounceWhat>> started to feel nauseous and began to vomit.
 	<br /><br />
 	<center>
-		[img[setup.ImagePath+'places/explore/event_girl_vomit.gif']]
+		[img[setup.ImagePath+'places/explore/event_' + ($guests[_companionFirst].gender === 1 ? 'guy' : 'girl') + '_vomit.gif']]
 	</center>
 	<br /><br />
 	<<if $backpack.has('antibiotics')>>
 		You start to look into your backpack and lucky you find <strong>antibiotics</strong>.
 		<br /><br />
-		<<linkreplace 'Give it to her'>>
+		<<set _linkName = 'Give it to ' + _pronounceWho>>
+		<<linkreplace _linkName>>
 			<<drop $backpack 'antibiotics' 1>>
 			<<run $('#option1').hide()>>
-			She took antibiotics, but the vomiting persisted... After approximately 20 minutes, however, everything calmed down, and she started to feel better. You decided to return home.
+			<<=_pronounceWhat.toUpperFirst()>> took antibiotics, but the vomiting persisted... After approximately 20 minutes, however, everything calmed down, 
+			and <<=_pronounceWhat>> started to feel better. You decided to return home.
 			<br /><br />
 			<<link 'Go back home'>>
 				<<goto 'Outside'>>
 			<</link>>
 		<</linkreplace>>
 		<div id="option1">
-			<<link 'Leave her to die'>>
+			<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
+			<<link _linkName>>
 				<<set _eventCompanionKey = 'guest:' + _companionFirst>>
 				<<companionRemove `_eventCompanionKey`>>
 				<<companionRearange _companionFirst>>
@@ -50,11 +63,12 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=$g
 			<</link>>
 		</div>
 	<<else>>
-		You start to look into your backpack but you can't find anything that could help her...
+		You start to look into your backpack but you can't find anything that could help <<=_pronounceWhos>>...
 		<br />
-		<strong>The only choice is to leave her to die here alone</strong>
+		<strong>The only choice is to leave <<=_pronounceWho>> to die here alone</strong>
 		<br /><br />
-		<<link 'Leave her to die'>>
+		<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
+		<<link _linkName>>
 			<<set _eventCompanionKey = 'guest:' + _companionFirst>>
 			<<companionRemove `_eventCompanionKey`>>
 			<<companionRearange _companionFirst>>
