@@ -6,6 +6,30 @@
 <br /><br />
 <center>
 
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'maid')>>
+<<if _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
+	<<set $tmpGirl = $guests[_girlGuest[0]]>>
+	<<set $tmpGirl.location = 'maid'>>
+	<center>
+		<<actionImage $tmpGirl cleaning>>
+	</center> 
+	<<=$tmpGirl.name>> is in your room cleaning. She doesn't notice you as she bends down to pick up something from the floor.
+	<br /><br />
+	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
+	<<link `_girlGuestLink`>>
+		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<set $tmpGirlBack = 'Bedroom'>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirl.rape to false>>
+		<<set $guestId = _girlGuest[0]>>
+		<<run delete $slaveId>>
+		<<run delete $charId>>
+		<<goto 'Girl view - guest'>>
+	<</link>>
+	<br /><br />
+<</if>>
+
+
 <<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 	<<link 'Talk with Blair'>>
 		<<goto 'Blair - bedroom talk'>>
@@ -19,6 +43,9 @@
 		<<set $player.nap = true>>
 		<<addhours 1>>
 		<<energy 20>>
+		<<if setup.getPersonsForLocation($guests, 'maid').length>>
+			<<energy 20>>
+		<</if>>
 		<<goto 'Bedroom'>>
 	<</link>>
 <</if>>

@@ -22,6 +22,16 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
+<<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign as maid'>>
+		  <<set $tmpGirl.assignedTo = 'maid'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Gives additional energy while taking a nap)
+	</div>
+<</if>> 
+
 <<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.traits ?? []).includes('shopkeeper')>>
 	<div>
 	  <<link 'Assign to shop'>>
