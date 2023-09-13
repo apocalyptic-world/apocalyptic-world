@@ -1,26 +1,28 @@
 :: PassageHeader {"position":"793,17","size":"100,100"}
-<<if tags().includes('sex')>>
+<<if tags().includes('sex') || tags().includes('girlview')>>
 	<<include 'NPC info'>>
 
-	<<if !tags().includes('no-redirect') && $player.energy < 5>>
-		<<set $tiredNoTime = false>>
-		<<goto 'Girl fuck - tired'>>
-	<<elseif !timeBetween('08:00', '04:00') && $tmpGirlBack>>
-		<<set $tiredNoTime = false>>
-		<<if passage().includes('Girl fuck')>>
-			<<set $tiredNoTime = true>>
+	<<if tags().includes('sex')>>
+		<<if !tags().includes('no-redirect') && $player.energy < 5>>
+			<<set $tiredNoTime = false>>
 			<<goto 'Girl fuck - tired'>>
-		<<else>>
+		<<elseif !timeBetween('08:00', '04:00') && $tmpGirlBack>>
+			<<set $tiredNoTime = false>>
+			<<if passage().includes('Girl fuck')>>
+				<<set $tiredNoTime = true>>
+				<<goto 'Girl fuck - tired'>>
+			<<else>>
+			
+			<<if typeof $slaveId !== 'undefined'>>
+				<<set $slaves[$slaveId] = $tmpGirl>>
+			<<elseif typeof $guestId !== 'undefined'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+			<<elseif typeof $charId !== 'undefined'>>
+				<<set $characters[$charId] = $tmpGirl>>
+			<</if>>
 		
-		<<if typeof $slaveId !== 'undefined'>>
-			<<set $slaves[$slaveId] = $tmpGirl>>
-		<<elseif typeof $guestId !== 'undefined'>>
-			<<set $guests[$guestId] = $tmpGirl>>
-		<<elseif typeof $charId !== 'undefined'>>
-			<<set $characters[$charId] = $tmpGirl>>
-		<</if>>
-	
-			<<goto $tmpGirlBack>>
+				<<goto $tmpGirlBack>>
+			<</if>>
 		<</if>>
 	<</if>>
 <</if>>

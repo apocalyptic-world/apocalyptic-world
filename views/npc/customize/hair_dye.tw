@@ -1,0 +1,44 @@
+:: Girl customize - hair dye [girlview no-redirect]
+<h1 class="ptitle">HAIR DYE</h1>
+<br /><br />
+
+
+<<set _colorOptions = [
+    'black',
+    'blonde',
+    'red',
+    'ginger',
+    'green',
+    'blue',
+    'pink',
+    'purple',
+    'white'
+]>>
+<div id="options">
+    Choose color:
+    <<for _hairColor range _colorOptions>>
+        <<capture _hairColor>>
+            <<link _hairColor>>
+                <<drop $backpack 'hair_dye_kit' 1>>
+                <<run $('#options').hide()>>
+                <<run $('#done').show()>>
+                <<set $tmpGirl.hair = _hairColor>>
+            <</link>>
+        <</capture>>
+    <</for>>
+</div>
+
+<div id="done" style="display:none">
+    <center>
+        [img[setup.ImagePath+'places/cabin/customize_hair_dye.jpg']]
+    </center>
+    <br /><br />
+    <<=setup.displayName($tmpGirl)>>  puts on gloves and mix up the colarant and develops it according to the instructions. She makes sure not to miss a spot.
+</div>
+
+<br /><br />
+<<link 'Back'>>
+	<<goto 'Girl customize'>>
+<</link>>
+
+

@@ -50,6 +50,13 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.tmpGirl.skills.push(save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI]);
                 save.state.history[save.state.index].variables.tmpGirl.traits.splice(saveTmpGirlTraitI, 1);
                 saveTmpGirlTraitI--;
+            } else if (save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI] === 'scavanger') {
+                if (typeof save.state.history[save.state.index].variables.tmpGirl.skills === 'undefined') {
+                    save.state.history[save.state.index].variables.tmpGirl.skills = [];
+                }
+                save.state.history[save.state.index].variables.tmpGirl.skills.push('scavenger');
+                save.state.history[save.state.index].variables.tmpGirl.traits.splice(saveTmpGirlTraitI, 1);
+                saveTmpGirlTraitI--;
             }
         }
     }
@@ -113,6 +120,13 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.slaves[varsSlaveI].skills.push(save.state.history[save.state.index].variables.slaves[varsSlaveI].traits[saveSlaveTraitI]);
                 save.state.history[save.state.index].variables.slaves[varsSlaveI].traits.splice(saveSlaveTraitI, 1);
                 saveSlaveTraitI--;
+            } else if (save.state.history[save.state.index].variables.slaves[varsSlaveI].traits[saveSlaveTraitI] === 'scavanger') {
+                if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.slaves[varsSlaveI].skills = [];
+                }
+                save.state.history[save.state.index].variables.slaves[varsSlaveI].skills.push('scavenger');
+                save.state.history[save.state.index].variables.slaves[varsSlaveI].traits.splice(saveSlaveTraitI, 1);
+                saveSlaveTraitI--;
             }
         }
     }
@@ -150,6 +164,13 @@ Save.onLoad.add(function (save) {
                     save.state.history[save.state.index].variables.guests[saveGuestI].skills = [];
                 }
                 save.state.history[save.state.index].variables.guests[saveGuestI].skills.push(save.state.history[save.state.index].variables.guests[saveGuestI].traits[saveGuestTraitI]);
+                save.state.history[save.state.index].variables.guests[saveGuestI].traits.splice(saveGuestTraitI, 1);
+                saveGuestTraitI--;
+            } else if (save.state.history[save.state.index].variables.guests[saveGuestI].traits[saveGuestTraitI] === 'scavanger') {
+                if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.guests[saveGuestI].skills = [];
+                }
+                save.state.history[save.state.index].variables.guests[saveGuestI].skills.push('scavenger');
                 save.state.history[save.state.index].variables.guests[saveGuestI].traits.splice(saveGuestTraitI, 1);
                 saveGuestTraitI--;
             }

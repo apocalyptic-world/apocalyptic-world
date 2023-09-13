@@ -1,0 +1,26 @@
+:: Girl customize - cosmetics [girlview no-redirect]
+<h1 class="ptitle">COSMETICS</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/customize_cosmetics.jpg']]
+</center>
+<br /><br />
+<<drop $backpack 'cosmetics' 1>>
+<<=setup.displayName($tmpGirl)>>  opens the jar of cream and applies a small layer to their face, carefully spreading it all over.
+<br /><br />
+After a few minutes, she rinses off the cream.
+<br /><br />
+<<if $tmpGirl.beauty < 80>>
+    <strong><<=setup.displayName($tmpGirl)>>  beauty increased by 1</strong>
+    <<set $tmpGirl.beauty++>>
+<<else>>
+    <strong>Can't increase her beauty with cosmetics any more.</strong>
+<</if>> 
+
+<<addmins 15>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'Girl customize'>>
+<</link>>
+
+
