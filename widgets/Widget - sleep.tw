@@ -188,12 +188,16 @@
 			<<elseif $backpack.has('food')>>
 				<<drop $backpack 'food' 1>> 
 				<<set $slaves[_i].food to 100>>
-			<<else>>
-				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' died of hunger. You dont have enough food')>>
+			<</if>>
+
+			<<if $slaves[_i].food <= -20>>
+				<<set $morningMessages.main.push('<span class="dead">Slave ' + $slaves[_i].name + ' died of hunger. You dont have enough food</span>')>>
 				<<set $slaves.splice(_i, 1)>>
 				<<set _i-->>
 				<<continue>>
-			<</if>>
+			<<elseif $slaves[_i].food <= 10>>
+				<<set $morningMessages.main.push('<span class="starving">Slave ' + $slaves[_i].name + ' is starving</span>')>>
+			<</if>>	
 		<</if>>
 		<<if setup.getAge($slaves[_i]) > 3>>
 			<<set $slaves[_i].food -= 30>>
@@ -397,14 +401,18 @@
 			<<elseif $backpack.has('food')>>
 				<<drop $backpack 'food' 1>> 
 				<<set $guests[_guestI].food to 100>>
-			<<else>>
+			<</if>>
+
+			<<if $guests[_guestI].food <= -20>>
 				<<set _compKeyRemove = 'guest:' + _guestI>>
 				<<companionRemove `_compKeyRemove`>>
 				<<companionRearange _guestI>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' left because you have not enough food')>>
+				<<set $morningMessages.main.push('<span class="left">Guest ' + $guests[_guestI].name + ' left because you have not enough food</span>')>>
 				<<set $guests.splice(_guestI, 1)>>
 				<<set _guestI-->>
 				<<continue>>
+			<<elseif $guests[_guestI].food <= 10>>
+				<<set $morningMessages.main.push('<span class="starving">Guest ' + $guests[_guestI].name + ' is starving</span>')>>		
 			<</if>>
 		<</if>>
 		<<if setup.getAge($guests[_guestI]) > 3>>

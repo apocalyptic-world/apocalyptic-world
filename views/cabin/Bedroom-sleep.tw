@@ -11,9 +11,16 @@
 	<<else>>
 	  [img[setup.ImagePath+'places/cabin/wake_up.webp']]
 	  <br /><br />
-	  You wake up tired and exhausted but ready to explore the world some more.
+	<</if>>
+	<<if $player.energy < 80>>
+		You wake up tired and exhausted but ready to explore the world some more.
+	<<else>>
+		You wake up fully rested and ready to conquer the world.
 	<</if>>
 	<br /><br />
+	<<link 'Wake up'>>
+		<<wakeUp>>
+	<</link>>
 	<<if $morningMessages.main.length > 0 || $morningMessages.shop.length > 0>>
 		<h3>Some things have been happened</h3>
 		<br />
@@ -35,21 +42,26 @@
 	
 	<br /><br />
 	<<link 'Wake up'>>
-		<<set _randomSleepEventInteger = randomInteger(0,2)>>		
-		<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0>>
-			<<goto 'Blair quest - morning bj'>>
-			<<set $characters.blair.quests.bj = true>>
-		<<elseif $pregnancyHappening>>
-			<<goto 'Childbirth'>>
-		<<elseif $scavengingDidntReturn !== null>>
-			<<goto 'Scavenging - didnt came home'>>
-		<<elseif setup.getRandomPersonIdsGirls($guests, 1) && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5)>>
-			<<goto 'Blair - morning surprise'>>
-		<<else>>
-			<<goto 'Wood cabin'>>
-		<</if>>
+		<<wakeUp>>
 	<</link>>
 	</center>
 <</if>>
 
+
+<<widget wakeUp>>
+	<<run console.log('gg')>>
+	<<set _randomSleepEventInteger = randomInteger(0,2)>>
+	<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0>>
+		<<goto 'Blair quest - morning bj'>>
+		<<set $characters.blair.quests.bj = true>>
+	<<elseif $pregnancyHappening>>
+		<<goto 'Childbirth'>>
+	<<elseif $scavengingDidntReturn !== null>>
+		<<goto 'Scavenging - didnt came home'>>
+	<<elseif setup.getRandomPersonIdsGirls($guests, 1) && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5)>>
+		<<goto 'Blair - morning surprise'>>
+	<<else>>
+		<<goto 'Wood cabin'>>
+	<</if>>
+<</widget>>
 
