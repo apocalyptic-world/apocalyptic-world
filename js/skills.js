@@ -32,8 +32,8 @@ setup.getRandomSkills = function (count = 1) {
 };
 
 setup.hasDoctor = function() {
-    for (var i = 0; i < guests.length; i++) {
-        if ((guests[i].skills ?? []).includes('doctor')) {
+    for (var i = 0; i < variables().guests.length; i++) {
+        if ((variables().guests[i].skills ?? []).includes('doctor')) {
             return true;
         }
     }
