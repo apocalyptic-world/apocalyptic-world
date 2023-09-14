@@ -20,10 +20,9 @@ You feel dizzy and blood is all over your face and clothes. You were knocked out
 <<if $fight.defeatedAllies.length > 0>>
 	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
 		<<if setup.percentageChance(10)>>
-			<<companionRemove _fightAlly.key.join(':')>>
 			<<set _guestKey = _fightAlly.key[1]>>
 			<strong><<=_fightAlly.name>> was taken by enemies</strong>
-			<<run $guests.splice(_fightAlly.key[1], 1)>>
+			<<guestRemove _guestKey>>
 			<br />
 		<</if>>
 	<</for>>

@@ -85,9 +85,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						  Are you sure you want to throw <<=(_guest.gender ? 'him' : 'her')>> out?
 						  <br />
 						  <<link 'Yes' 'Guest house'>>
-						  		<<companionRemove 'guest:' + _guestI>>
-								<<companionRearange _guestI>>
-							  <<run $guests.splice(_guestI, 1)>>
+							  <<guestRemove _guestI>>
 							  <<dialogclose>>
 							  <<set $player.reputation-->>
 							  <<set $player.goodwill-->>
