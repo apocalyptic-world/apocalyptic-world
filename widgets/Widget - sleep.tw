@@ -1,5 +1,6 @@
 :: Widget - sleep [widget] {"position":"20,634","size":"100,100"}
 <<widget sleep>>
+	<<set _t0 = performance.now()>>
 	<<set $morningMessages = {
 		main: [],
 		shop: [],
@@ -94,6 +95,10 @@
 			<<set $slaves[_i].horny++>>
 		<</if>>
 		
+		<<if typeof $slaves[_i].stats  === 'undefined'>>
+			<<set $slaves[_i].stats = {}>>
+		<</if>>
+
 		// Wash beauty
 		<<if typeof $slaves[_i].washDays !== 'undefined'>>
 			<<set $slaves[_i].washDays-->>
@@ -132,6 +137,17 @@
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<if $slaves[_i].assignedTo === 'garden' && !_isSick>>
+			<<if typeof $slaves[_i].stats['garden'] === 'undefined'>>
+				<<set $slaves[_i].stats['garden'] = 0>>
+			<</if>>
+			<<set $slaves[_i].stats['garden']++>>
+			
+			// Learn skill
+			<<if $slaves[_i].stats['garden'] > 100 && !$slaves[_i].skills.includes('gardener')>>
+				<<run $slaves[_i].skills.push('gardener')>>
+				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned gardener skill</span>')>>
+			<</if>>
+
 			<<set $slaves[_i].gardenDay++>>
 			<<set _foodGive = $giveFood>>
 			<<if ($slaves[_i].skills ?? []).includes('gardener')>>
@@ -230,7 +246,9 @@
 		<<if $guests[_guestI].horny < 80>>
 			<<set $guests[_guestI].horny++>>
 		<</if>>
-		
+		<<if typeof $guests[_guestI].stats  === 'undefined'>>
+			<<set $guests[_guestI].stats = {}>>
+		<</if>>
 		// Wash beauty
 		<<if typeof $guests[_guestI].washDays !== 'undefined'>>
 			<<set $guests[_guestI].washDays-->>
@@ -277,6 +295,17 @@
 		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
 		// Assigned jobs
 		<<if $guests[_guestI].assignedTo === 'garden' && !_isSick>>
+			<<if typeof $guests[_guestI].stats['garden'] === 'undefined'>>
+				<<set $guests[_guestI].stats['garden'] = 0>>
+			<</if>>
+			<<set $guests[_guestI].stats['garden']++>>
+
+			// Learn skill
+			<<if $guests[_guestI].stats['garden'] > 100 && !$guests[_guestI].skills.includes('gardener')>>
+				<<run $guests[_guestI].skills.push('gardener')>>
+				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned gardening skill</span>')>>
+			<</if>>
+
 			<<set $guests[_guestI].gardenDay++>>
 			<<set _foodGive = $giveFood>>
 			<<if ($guests[_guestI].skills ?? []).includes('gardener')>>
@@ -329,6 +358,17 @@
 		
 		
 		<<if $guests[_guestI].assignedTo === 'forest' && !_isSick>>
+			<<if typeof $guests[_guestI].stats['forest'] === 'undefined'>>
+				<<set $guests[_guestI].stats['forest'] = 0>>
+			<</if>>
+			<<set $guests[_guestI].stats['forest']++>>
+			
+			// Learn skill
+			<<if $guests[_guestI].stats['forest'] > 100 && !$guests[_guestI].skills.includes('woodcraft')>>
+				<<run $guests[_guestI].skills.push('woodcraft')>>
+				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned woodcraft skill</span>')>>
+			<</if>>
+
 			<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
 			<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
 				<<set _giveWood++>>
@@ -349,6 +389,17 @@
 			<</if>>
 		<</if>>
 		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick>>
+			<<if typeof $guests[_guestI].stats['scavenging'] === 'undefined'>>
+				<<set $guests[_guestI].stats['scavenging'] = 0>>
+			<</if>>
+			<<set $guests[_guestI].stats['scavenging']++>>
+			
+			// Learn skill
+			<<if $guests[_guestI].stats['scavenging'] > 100 && !$guests[_guestI].skills.includes('scavenger')>>
+				<<run $guests[_guestI].skills.push('scavenger')>>
+				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned scavenger skill</span>')>>
+			<</if>>
+
 			<<set _chanceOfNotComingHome = 10>>
 			<<if $guests[_guestI].strength >= 30>>
 				<<set _changeOfNotComingHome -=5>>
@@ -548,6 +599,8 @@
 	<<goto "Dead">>
 <</if>>
 
+<<set _t1 = performance.now()>>
+<<run console.log(`Call to doSomething took ${_t1 - _t0} milliseconds.`)>>
 <</widget>>
 
 

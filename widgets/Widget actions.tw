@@ -57,8 +57,10 @@
 <</widget>>
 
 <<widget actionDream>>
+	<<set _dreamPlaces = clone(setup.actions.default)>>
+	<<run delete _dreamPlaces['workout']>>
 	<<set $sleepAction = {
-		place: either(Object.keys(setup.actions.default)),
+		place: either(Object.keys(_dreamPlaces)),
 		type: either('pussy', 'anal', 'bj', 'dp')
 	}>>
 	
