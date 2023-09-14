@@ -1,8 +1,55 @@
-:: Give growth potion [WIP] {"position":"4011,208","size":"100,100"}
-<<warning 'End of content. Growth mechanics will be added in 0.23 or 0.24 release'>>
+:: Give growth potion [girlview] {"position":"4011,208","size":"100,100"}
+
+<<set _ageStart = setup.getAge($tmpGirl)>>
+<<if _ageStart < 4>>
+	<<set _startImg = 'baby'>>
+<<elseif _ageStart <  18>>
+	<<set _startImg = 'kid'>>
+<<else>>
+	<<set _startImg = ($tmpGirl.gender === 1 ? 'guy' : 'girl')>>
+<</if>>
+<center>
+	[img[setup.ImagePath+'places/cabin/growth_potion_' + _startImg + '.jpg']]
+</center>
 <br /><br />
+The moment the liquid touched <<=setup.displayName($tmpGirl)>>'s lips, a shiver ran through <<=setup.pronounceWho($tmpGirl)>>. <<=setup.pronounceWho($tmpGirl).toUpperCase()>> eyes widened, 
+and <<=setup.pronounceWhat($tmpGirl)>> looked up at you in astonishment. For a heartbeat, the room held its breath.
+<br /><br />
+Then, it began.
+<br /><br />
+<<=setup.displayName($tmpGirl)>>'s body seemed to pulse with newfound energy. <<=setup.pronounceWhos($tmpGirl).toUpperCase()>> limbs stretched, <<=setup.pronounceWhos($tmpGirl)>>
+ clothing strained against the sudden growth. You watched in awe as <<=setup.pronounceWhat($tmpGirl)>> transformed before your eyes. In a matter of moments, the room seemed to shrink around the figure now standing taller and stronger.
+<br /><br />
+
+<<set _randomGrowthYears = randomInteger(8, 10)>>
+<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - _randomGrowthYears)>>
+<<set _ageEnd = setup.getAge($tmpGirl)>>
+<<if _ageEnd <  18>>
+	<<set _endImg = 'kid'>>
+<<else>>
+	<<set _endImg = ($tmpGirl.gender === 1 ? 'guy' : 'girl')>>
+<</if>>
+<center>
+	[img[setup.ImagePath+'places/cabin/growth_potion_' + _endImg + '.jpg']]
+</center>
+<br /><br />
+<strong><<=setup.displayName($tmpGirl)>> grew <<=_randomGrowthYears>> years.</strong>
+<br /><br />
+<<if _ageStart < 18 && _ageEnd >= 18>>
+	<<set _isAdult = true>>
+	<strong><<=setup.displayName($tmpGirl)>> is now adult and moved into the guest house.</strong>
+	<br /><br />
+<</if>>
 <<link 'Leave'>>
-	<<goto 'Child view'>>
+	<<if _isAdult>>
+		<<run $guests.push($tmpGirl)>>
+		<<run $nursery.splice($childId, 1)>>
+		<<goto 'Guest house'>>
+	<<else>>
+		<<goto 'Child view'>>
+	<</if>>
 <</link>>
 
+<<drop $backpack 'growth_potion' 1>>
+<<addmins 30>>
 

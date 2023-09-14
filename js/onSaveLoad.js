@@ -200,6 +200,27 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].id === 'undefined') {
             save.state.history[save.state.index].variables.nursery[saveNurseryI].id = setup.generateUniqueKey(save.state.history[save.state.index].variables.nursery[saveNurseryI]);
         }
+
+        for (var saveNurseryTraitI = 0; saveNurseryTraitI < (save.state.history[save.state.index].variables.nursery[saveNurseryI].traits ?? []).length; saveNurseryTraitI++) {
+            if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.nursery[saveNurseryI].traits[saveNurseryTraitI])) {
+                if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.nursery[saveNurseryI].skills = [];
+                }
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].skills.push(save.state.history[save.state.index].variables.nursery[saveNurseryI].traits[saveNurseryTraitI]);
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
+                saveNurseryTraitI--;
+            } else if (save.state.history[save.state.index].variables.nursery[saveNurseryI].traits[saveNurseryTraitI] === 'scavanger') {
+                if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].skills === 'undefined') {
+                    save.state.history[save.state.index].variables.nursery[saveNurseryI].skills = [];
+                }
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].skills.push('scavenger');
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
+                saveNurseryTraitI--;
+            } else {
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
+                saveNurseryTraitI--;
+            }
+        }
     }
 
     for(var saveWantedI = 0; saveWantedI < (save.state.history[save.state.index].variables.wanted ?? []).length; saveWantedI++) {
