@@ -2,9 +2,8 @@
 <<if $characters.rodger.quests.horse_get === 'companions'>>
 	<<set _eventCompanions = setup.objectSortReverse(clone($player.companions ?? []))>>
 	<<for _eventCompanionI, _eventCompanion range _eventCompanions>>
-		<<companionRemove `_eventCompanionI`>>
 		<<set _eventCompanionId = _eventCompanionI.split(':')>>
-		<<set $guests.splice(_eventCompanionId[1], 1)>>
+		<<guestRemove _eventCompanionId[1] >>
 	<</for>>
 <</if>>
 <<addhours 4>>

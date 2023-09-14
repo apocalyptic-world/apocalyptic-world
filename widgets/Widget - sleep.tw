@@ -242,10 +242,8 @@
 		
 		// Leave
 		<<if $guests[_guestI].relationship < 0>>
-			<<companionRemove 'guest:' + _guestI>>
-			<<companionRearange _guestI>>
 			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning. She probably decided to leave this place')>>
-			<<set $guests.splice(_guestI, 1)>>
+			<<guestRemove _guestI >>
 			<<set _guestI-->>
 			<<continue>>
 		<</if>>
@@ -308,12 +306,9 @@
 				<<set _girlChanceToDie = 1>>
 			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
-				<<set _compKeyRemove = 'guest:' + _guestI>>
-				<<companionRemove `_compKeyRemove`>>
-				<<companionRearange _guestI>>
 				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
-				<<set $guests.splice(_i, 1)>>
-				<<set _i-->>
+				<<guestRemove _guestI >>
+				<<set _guestI-->> 
 				<<continue>>
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
@@ -404,11 +399,8 @@
 			<</if>>
 
 			<<if $guests[_guestI].food <= -20>>
-				<<set _compKeyRemove = 'guest:' + _guestI>>
-				<<companionRemove `_compKeyRemove`>>
-				<<companionRearange _guestI>>
 				<<set $morningMessages.main.push('<span class="left">Guest ' + $guests[_guestI].name + ' left because you have not enough food</span>')>>
-				<<set $guests.splice(_guestI, 1)>>
+				<<companionRemove guestI>>
 				<<set _guestI-->>
 				<<continue>>
 			<<elseif $guests[_guestI].food <= 10>>

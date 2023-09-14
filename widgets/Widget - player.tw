@@ -84,7 +84,10 @@
 <</widget>>
 
 <<widget companionRemove>>
-	<<run delete $player.companions[$args[0]]>>
+	/* args[0] = list name:index in that array */
+	<<if (typeof $player.companions[$args[0]] !== "undefined" ) >>
+		<<run delete $player.companions[$args[0]]>>
+	<</if>>
 <</widget>>
 
 <<widget companionList>>
@@ -121,6 +124,24 @@
 			<<set $player.companions[_compKeyR.join(':')] = true>>
 		<</if>>
 	<</for>>
+<</widget>>
+
+<<widget guestRemove>>
+    /* does guests.splice and companion rearrange, must use at every guest.splice
+       args[0] = index in guests list */
+    <<set _guestI = $args[0]>>
+    <<set _compI = 'guest:' + _guestI>>
+
+    /* I wanted  to do "companionRemove 'guest:' + _guestI" but it semms that
+       widgets can't call widgets - they share the same variables args[0]
+    */
+    <<if (typeof $player.companions[_compI] !== "undefined" ) >>
+		<<run delete $player.companions[_compI]>>
+    <</if>>
+
+    /* but companionRearange _guestI works because the arg[0] is the same */
+    <<companionRearange _guestI>>
+    <<run $guests.splice(_guestI, 1)>>
 <</widget>>
 
 <<widget setPlayerStats>>
