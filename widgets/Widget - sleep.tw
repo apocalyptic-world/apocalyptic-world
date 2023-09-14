@@ -1,5 +1,6 @@
 :: Widget - sleep [widget] {"position":"20,634","size":"100,100"}
 <<widget sleep>>
+	<<set _t0 = performance.now()>>
 	<<set $morningMessages = {
 		main: [],
 		shop: [],
@@ -144,7 +145,7 @@
 			// Learn skill
 			<<if $slaves[_i].stats['garden'] > 100 && !$slaves[_i].skills.includes('gardener')>>
 				<<run $slaves[_i].skills.push('gardener')>>
-				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned scavenger skill</span>')>>
+				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned gardener skill</span>')>>
 			<</if>>
 
 			<<set $slaves[_i].gardenDay++>>
@@ -598,6 +599,8 @@
 	<<goto "Dead">>
 <</if>>
 
+<<set _t1 = performance.now()>>
+<<run console.log(`Call to doSomething took ${_t1 - _t0} milliseconds.`)>>
 <</widget>>
 
 
