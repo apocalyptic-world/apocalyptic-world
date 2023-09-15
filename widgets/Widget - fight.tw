@@ -169,6 +169,9 @@
 				<<run delete $fight.defeatedEnemies[_i].captured>>
 				<<run delete $fight.defeatedEnemies[_i].hp>>
 				<<set $fight.defeatedEnemies[_i].relationship = -100>>
+				<<if setup.percentageChance(5) && !$fight.defeatedEnemies[_i].traits.includes('sadistic')>>
+					<<run $fight.defeatedEnemies[_i].traits.push('sadistic')>>
+				<</if>>
 				<<run $slaves.push($fight.defeatedEnemies[_i])>>
 				<<statsAdd 'people_captured'>>
 			<</if>>
