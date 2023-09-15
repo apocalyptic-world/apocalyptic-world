@@ -182,6 +182,9 @@
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
 					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<if $slaves[_i].traits.includes('nymphomaniac')>>
+						<<set _moneyEarned = _moneyEarned * 2>>
+					<</if>>
 					<<set _moneyEarnedTax = 80>>
 					<<if $characters.dom.quests.accepted_deal>>
 						<<set _moneyEarnedTax = 40>>
@@ -342,6 +345,9 @@
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
 					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<if $guests[_guestI].traits.includes('nymphomaniac')>>
+						<<set _moneyEarned = _moneyEarned * 2>>
+					<</if>>
 					<<set _moneyEarnedTax = 80>>
 					<<if $characters.dom.quests.accepted_deal>>
 						<<set _moneyEarnedTax = 40>>

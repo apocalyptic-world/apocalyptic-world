@@ -29,6 +29,11 @@ setup.traits = {
         title: 'Squirter',
         description: 'Ejaculates when gets orgasm',
         gender: [0]
+    },
+    nymphomaniac: {
+        title: 'Nymphomaniac',
+        description: 'Never says no, and earn double on street',
+        gender: [0]
     }
 };
 

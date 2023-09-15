@@ -16,7 +16,7 @@
 	<<link 'Fuck her'>>
 		<<set $tmpGirlViewBack = 'Girl view - guest'>>
 		<<set _randomGuestFuck = randomInteger(1,3)>>
-		<<if $tmpGirl.relationship < 50 || _randomGuestFuck === 3>>
+		<<if ($tmpGirl.relationship < 50 || _randomGuestFuck === 3) && !$tmpGirl.traits.includes('nymphomaniac')>>
 			<<goto 'Girl fuck - no'>>
 		<<else>>
 			<<goto 'Girl fuck'>>
