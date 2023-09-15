@@ -34,6 +34,15 @@
 
 	<<horny 20>>
 <</if>>
+<<if $tmpGirl.anal >= 100 && !$tmpGirl.traits.includes('analslut') && setup.percentageChance(5)>>
+	<<if typeof $tmpGirl.traitsLocked === 'undefined'>>
+		<<set $tmpGirl.traitsLocked = setup.getRandomTraits(3)>>
+	<</if>>
+	<<if !$tmpGirl.traitsLocked.includes('analslut')>>
+		<<run $tmpGirl.traits.push('analslut')>>
+		<strong><<= setup.displayName($tmpGirl)>> got anal slut trait!</strong>
+	<</if>>
+<</if>>
 
 <<set $tmpGirl.anal++>>
 <<if $tmpGirl.anal > 100>>
