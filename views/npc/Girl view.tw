@@ -47,6 +47,7 @@
 <</if>>
 
 <<if $tmpGirl.location === 'basement'>>
+	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
 	<<if !$tmpGirl.milked && $player.energy > 30 && $backpack.has('breast_pump')>>
 	  <<link 'Milk her'>>
 		  <<goto 'Girl milk'>> 
@@ -60,6 +61,23 @@
 			<<goto 'Girl punish'>>
 		<</link>>
 	<</if>>
+	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+		<<if $player.energy >= 5 && hasTime(1)>>
+			<<link 'Mistress punishes her'>>
+				<<if $backpack.has('paddle')>>
+					<<set $punishType = 'paddle'>>
+				<</if>>
+				<<goto 'Mistress - Girl punish'>>
+			<</link>>
+		<</if>>		
+		<<if $player.energy >= 15 && hasTime(1)>>
+			<<link 'Mistress fucks her'>>
+				<<goto 'Mistress - Girl fuck'>>
+			<</link>>
+		<</if>>			
+	<</if>>
+	
+	
 <</if>>
 <<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<<link 'Assign to garden'>>
