@@ -1,0 +1,28 @@
+:: Nightclub - drink [nightclub bg-underground] {"position":"2193,1464","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+<center>
+	[img[setup.ImagePath+'places/nightclub/club-drink.webp']]
+</center>
+<br /><br />
+You order a beer at the bar and start drinking it.
+<br /><br />
+<<if $player.reputation > 70 && setup.percentageChance(40)>>
+	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. You turn around and in front of you, you see a girl dressed all in pink. She asks if you'd like to dance in a quieter corner.
+	<br /><br />
+	<center>
+		[img[setup.ImagePath+'places/nightclub/girl1.jpg']]
+	</center>
+	<br /><br />
+	<<link 'Accept her offer'>>
+		<<goto 'Nightclub - girl 1'>>
+	<</link>>
+<</if>>
+[[Continue|Nightclub - inside]] 
+<<addmins 15>>
+
+<<set $player.drunk++>>
+<<if $player.drunk > 3>>
+	<<perkAdd 'drunk'>>
+<</if>>
+
+
