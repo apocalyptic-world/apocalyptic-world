@@ -1,27 +1,125 @@
 :: Widget- newguy [widget]
 <<widget newguy>>
 	<<include 'Guy names'>>
-	<<set _age = random(18,60)>>
+
+	<<set _ageRoll = random(1, 100)>>
+	<<if _ageRoll < 70>>
+		<<set _ageRange = [18,27]>>
+	<<elseif _ageRoll < 85>>
+		<<set _ageRange = [28,37]>>
+	<<elseif _ageRoll < 95>>
+		<<set _ageRange = [38,47]>>
+	<<else>>
+		<<set _ageRange = [48,60]>>
+	<</if>>
+	<<set _age = random(_ageRange[0], _ageRange[1])>>
+	
+	<<set _orientationRoll = random(1, 100)>>
+	<<if _orientationRoll <= 70>>
+		<<set _orientation = 'straight'>>
+	<<elseif _orientationRoll <= 75>>
+		<<set _orientation = 'gay'>>
+	<<elseif _orientationRoll <= 95>>
+		<<set _orientation = 'bisexual'>>
+	<<else>>
+		<<set _orientation = 'asexual'>>
+	<</if>>
+	
 	<<set $tmpGuy = {
+		gender: 1,	
 		name: either(_names),
+		beauty: random(20, 70),
 		birthDate: setup.getBirthDate(_age),
 		relationship: 0,
-		beauty: random(20, 70),
 		corruption: random(0, 10),
+		sub: random(5, 13),	
 		hair: either('blonde', 'black', 'gray', 'bald'),
+		dick: either('small', 'medium', 'big'),
 		race: either('white', 'black', 'asian', 'latina'),
 		location: null,
 		talked: false,
 		food: random(10, 90),
 		strength: random(20, 40),
-		sub: random(5, 13),
+		assignedTo: null,	
+		horny: random(0, 30),
+		orientation: _orientation,
+		likesGuys: false,
+		likesGirls: false,
+		likesTGuys: false,
+		likesTGirls: false,
+		guys: 0,
+		girls: 0,
+		tguys: 0,
+		tgirls: 0,
 		anal: 0,
 		bj: 0,
-		dp: 0,	
-		assignedTo: null,
-		gender: 1,
-		endurance: 0,
+		dp: 0,
+		traits: [],
 		skills: setup.percentageChance(30) ? [either(['scavanger', 'gardener', 'shopkeeper'])] : [],
+		endurance: 0,
 	}>>
+	
+<<if $tmpGuy.orientation == 'bisexual' >>
+	<<set 
+		likesGuys: true,
+		likesGirls: true,
+		likesTGuys: setup.percentageChance(60),
+		likesTGirls: setup.percentageChance(60)
+	>>
+<<elseif $tmpGuy.orientation == 'gay' >>
+	<<set 
+		likesGuys: true,
+		likesTGuys: setup.percentageChance(30),
+		likesTGirls: setup.percentageChance(15)
+	>>
+<<elseif $tmpGuy.orientation == 'straight' >>
+	<<set 
+		likesGirls: true,
+		likesTGirls: setup.percentageChance(10),
+	>>	
+<</if>>
+
+<<if $tmpGuy.likesGuys >>
+	<<set 
+		guys: random(3, 20)
+	>>
+<</if>>
+<<if $tmpGuy.likesGirls >>
+	<<set 
+		girls: random(3, 20)
+	>>
+<</if>>
+<<if $tmpGuy.likesTGuys >>
+	<<set 
+		guys: random(1, 10)
+	>>
+<</if>>
+<<if $tmpGuy.likesTGirls >>
+	<<set 
+		guys: random(1, 10)
+	>>
+<</if>>
+
+<<if setup.percentageChance(50) && ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) >>
+	<<set 
+		anal: random(10, 30),
+		bj: random(10, 30),
+		dp: random(0, 20),
+		traits: setup.percentageChance(30) ? [either(['analslut', 'cumslut', 'deepthroat'])] : [],
+	>>
+<</if>>
+
+<<if (setup.getAge($tmpGuy) <= 20 && setup.percentageChance(50)) || $tmpGuy.orientation == 'asexual' >>
+	<<set 
+		$tmpGuy.guys = 0,
+		$tmpGuy.girls = 0,
+		$tmpGuy.tguys = 0,
+		$tmpGuy.tgirls = 0,
+		$tmpGuy.anal = 0,
+		$tmpGuy.bj = 0,
+		$tmpGuy.dp = 0
+	>>
+<</if>>
+
 	<<set $tmpGuy.id = setup.generateUniqueKey($tmpGuy)>>
 <</widget>>

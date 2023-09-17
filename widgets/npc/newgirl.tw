@@ -26,10 +26,8 @@
 	<</if>>
 
 	<<set _hairRoll = random(1, 100)>>
-	<<if ['asian', 'black'].includes(_race) || _hairRoll <= 25>>
+	<<if ['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25>>
 		<<set _hair = 'black'>>
-	<<elseif $tmpGirl.race === 'asian'>>
-		<<set _hair = either('black', 'red')>>
 	<<elseif _hairRoll <= 65>>
 		<<set _hair = 'brown'>>
 	<<elseif _hairRoll <= 75>>
@@ -38,16 +36,26 @@
 		<<set _hair = 'blonde'>>
 	<</if>>
 
-	<<if setup.percentageChance(30)>>
-		<<set _dyeRoll = random(1,100)>>
-		<<if _dyeRoll <= 25>>
-			<<set _hair = either('red', 'green', 'blue', 'pink', 'purple', 'white')>>
-		<<elseif _dyeRoll <= 50>>
-			<<set _hair = either('ginger', 'blonde')>>
-		<</if>>
+	<<set _dyeRoll = random(1,100)>>
+	<<if _dyeRoll <= 25>>
+		<<set _hair = either('red', 'green', 'blue', 'pink', 'purple', 'white')>>
+	<<elseif _dyeRoll <= 50>>
+		<<set _hair = either('ginger', 'blonde')>>
+	<</if>>
+
+	<<set _orientationRoll = random(1, 100)>>
+	<<if _orientationRoll <= 70>>
+		<<set _orientation = 'straight'>>
+	<<elseif _orientationRoll <= 75>>
+		<<set _orientation = 'lesbian'>>
+	<<elseif _orientationRoll <= 95>>
+		<<set _orientation = 'bisexual'>>
+	<<else>>
+		<<set _orientation = 'asexual'>>
 	<</if>>
 
 	<<set $tmpGirl = {
+		gender: 0,
 		name: either(_names),
 		beauty: random(20, 70),
 		birthDate: setup.getBirthDate(_age),
@@ -58,39 +66,95 @@
 		breasts: either('small', 'medium', 'big'),
 		race: _race,
 		location: 'forest',
-		anal: random(10, 30),
-		bj: random(10, 30),
-		dp: random(0, 30),
-		pussy: random(0, 30),
 		talked: false,
 		food: random(10, 90),
 		strength: random(5, 15),
 		assignedTo: null,
 		virgin: false,
-		gender: 0,
 		horny: random(0, 30),
 		orgasms: 0,
-		guys: random(3, 20),
+		orientation: _orientation,
+		likesGuys: false,
+		likesGirls: false,
+		likesTGuys: false,
+		likesTGirls: false,
+		guys: 0,
+		girls: 0,
+		tguys: 0,
+		tgirls: 0,
+		anal: random(0, 30),
+		bj: 0,
+		dp: 0,
+		pussy: random(10, 30),
 		traits: [],
 		skills: [],
 		endurance: 0,
 	}>>
 
+<<if $tmpGirl.orientation == 'bisexual' >>
+	<<set 
+		likesGuys: true,
+		likesGirls: true,
+		likesTGuys: setup.percentageChance(60),
+		likesTGirls: setup.percentageChance(60)
+	>>
+<<elseif $tmpGirl.orientation == 'lesbian' >>
+	<<set 
+		likesGirls: true,
+		likesTGuys: setup.percentageChance(15),
+		likesTGirls: setup.percentageChance(30)
+	>>
+<<elseif $tmpGirl.orientation == 'straight' >>
+	<<set 
+		likesGuys: true,
+		likesTGuys: setup.percentageChance(10)
+	>>	
+<</if>>
+
+<<if $tmpGirl.likesGuys >>
+	<<set 
+		guys: random(3, 20)
+	>>
+<</if>>
+<<if $tmpGirl.likesGirls >>
+	<<set 
+		girls: random(3, 20)
+	>>
+<</if>>
+<<if $tmpGirl.likesTGuys >>
+	<<set 
+		guys: random(1, 10)
+	>>
+<</if>>
+<<if $tmpGirl.likesTGirls >>
+	<<set 
+		guys: random(1, 10)
+	>>
+<</if>>
+
+<<if $tmpGirl.likesGuys || $tmpGirl.likesTGirls >>
+	<<set 
+		bj: random(10, 30),
+		dp: random(0, 20)
+	>>
+<</if>>
+
 <<if setup.getAge($tmpGirl) < 18>>
 	<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
 <</if>>
 
-<<if setup.getAge($tmpGirl) <= 20>>
-	<<if setup.percentageChance(50)>>
-		<<set 
-			$tmpGirl.virgin = true,
-			$tmpGirl.guys = 0,
-			$tmpGirl.pussy = 0,
-			$tmpGirl.bj = 0,
-			$tmpGirl.dp = 0,
-			$tmpGirl.anal = 0
-		>>
-	<</if>>
+<<if (setup.getAge($tmpGirl) <= 20 && setup.percentageChance(50)) || $tmpGirl.orientation == 'asexual' >>
+	<<set 
+		$tmpGirl.virgin = true,
+		$tmpGirl.guys = 0,
+		$tmpGirl.girls = 0,
+		$tmpGirl.tguys = 0,
+		$tmpGirl.tgirls = 0,
+		$tmpGirl.anal = 0,
+		$tmpGirl.pussy = 0,
+		$tmpGirl.bj = 0,
+		$tmpGirl.dp = 0
+	>>
 <</if>>
 
 <<if setup.getAge($tmpGirl) <= 30>>
