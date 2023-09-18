@@ -565,3 +565,74 @@ setup.decrypt = function(encryptedText) {
     }
     return decrypted;
 };
+
+setup.ageRoll = function() {
+	var _ageRoll = Math.floor(Math.random() * 100 + 1);
+	var _ageRange = new Array();
+	if (_ageRoll <= 55) {
+		_ageRange = [18,27];
+	} else if (_ageRoll <= 75) {
+		_ageRange = [28,37];
+	} else if (_ageRoll <= 90) {
+		_ageRange = [38,47];
+	} else {
+		_ageRange = [48,60];
+	}
+	return Math.floor(Math.random() * (_ageRange[1] - _ageRange[0] + 1)) + _ageRange[0];
+};
+
+setup.raceRoll = function() {
+	var _raceRoll = Math.floor(Math.random() * 100 + 1);
+	var _race = '';
+	if (_raceRoll <= 40) {
+		_race = 'white';
+	} else if (_raceRoll <= 65) {
+		_race = 'latina';
+	} else if (_raceRoll <= 85) {
+		_race = 'black';
+	} else {
+		_race = 'asian';
+	}
+	return _race;
+};
+
+setup.hairRoll = function(_race) {
+	var _hairRoll = Math.floor(Math.random() * 100 + 1);
+	var _hair = '';
+	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25) {
+		_hair = 'black';
+	} else if (_hairRoll <= 65) {
+		_hair = 'brown';
+	} else if (_hairRoll <= 75) {
+		_hair = 'ginger';
+	} else {
+		_hair = 'blonde';
+	}
+	return _hair;
+};
+
+setup.dyeRoll = function(hair) {
+	var _dyeRoll = Math.floor(Math.random() * 100 + 1);
+	var _hairList = [hair];
+	if (_dyeRoll <= 25) {
+		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white'];
+	} else if (_dyeRoll <= 50) {
+		_hairList = ['ginger', 'blonde'];
+	}
+	return _hairList[Math.floor(Math.random() * _hairList.length)];
+};
+
+setup.orientationRoll = function(gender) {
+	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
+	var _orientation = '';
+	if (_orientationRoll <= 70) {
+		_orientation = 'straight';
+	} else if (_orientationRoll <= 75) {
+		_orientation = ['lesbian','gay'][gender];
+	} else if (_orientationRoll <= 95) {
+		_orientation = 'bisexual';
+	} else {
+		_orientation = 'asexual';
+	}
+	return _orientation;
+};
