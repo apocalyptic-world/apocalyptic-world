@@ -1,29 +1,9 @@
 :: Widget- newguy [widget]
 <<widget newguy>>
 	<<include 'Guy names'>>
-
-	<<set _ageRoll = random(1, 100)>>
-	<<if _ageRoll < 70>>
-		<<set _ageRange = [18,27]>>
-	<<elseif _ageRoll < 85>>
-		<<set _ageRange = [28,37]>>
-	<<elseif _ageRoll < 95>>
-		<<set _ageRange = [38,47]>>
-	<<else>>
-		<<set _ageRange = [48,60]>>
-	<</if>>
-	<<set _age = random(_ageRange[0], _ageRange[1])>>
-	
-	<<set _orientationRoll = random(1, 100)>>
-	<<if _orientationRoll <= 70>>
-		<<set _orientation = 'straight'>>
-	<<elseif _orientationRoll <= 75>>
-		<<set _orientation = 'gay'>>
-	<<elseif _orientationRoll <= 95>>
-		<<set _orientation = 'bisexual'>>
-	<<else>>
-		<<set _orientation = 'asexual'>>
-	<</if>>
+	<<set _age = setup.ageRoll()>>
+	<<set _race = setup.raceRoll()>>
+	<<set _orientation = setup.orientationRoll(1)>>
 	
 	<<set $tmpGuy = {
 		gender: 1,	
@@ -35,7 +15,7 @@
 		sub: random(5, 13),	
 		hair: either('blonde', 'black', 'gray', 'bald'),
 		dick: either('small', 'medium', 'big'),
-		race: either('white', 'black', 'asian', 'latina'),
+		race: _race,
 		location: null,
 		talked: false,
 		food: random(10, 90),
