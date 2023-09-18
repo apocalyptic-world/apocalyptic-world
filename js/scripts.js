@@ -190,6 +190,9 @@ setup.gifts = {
         rel: 5
     },
     flower: {
+        rel: 1
+    },
+    cosmetics: {
         rel: 3
     }
 };

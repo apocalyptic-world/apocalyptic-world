@@ -1,0 +1,45 @@
+:: Blair - date \[scavenging\]
+<h1 class="ptitle">OUTSIDE</h1>
+<<addhours 4>>
+<br /><br />
+In the harsh and desolate post-apocalyptic world, Blair and you decided to embark on a perilous scavenging mission. 
+The sun hung low in the ashy sky, casting eerie shadows across the barren landscape as you made your way toward an old, decrepit house with hope to find something useful there. 
+<br /><br />
+<center>
+	[img[setup.ImagePath+'people/blair/scavenger1.jpg']]
+</center>
+<br /><br />
+The house was a crumbling relic of a bygone era, its walls sagging and windows long shattered. 
+The creaking of the warped floorboards beneath your feet echoed through the stillness of the wasteland. As you cautiously searched the rooms, your eyes scanned for anything of value—food, medicine, or even a glimpse of the past.
+<br /><br />
+<<blair>>
+    You ever wonder who lived here before all of this, before the world fell apart? I imagine that maybe a young couple was living here.
+<</blair>>
+<br /><br />
+<<linkreplace 'Look around'>>
+    <<if setup.percentageChance(40)>>
+        Suddenly, the silence was shattered by the sound of a twig snapping behind you. You turned, hearts pounding, to find a shadowy figure emerging from the shadows. Desperation and hunger had driven them to ambush you, their eyes wild with desperation. Without hesitation, Blair and you fought back, defending yourselves against the threat. It was a brutal struggle, but you managed to overpower the attacker and secure your safety.
+        <br /><br />
+        <<link 'Fight'>>
+            <<set $enemies = []>>
+            <<newguy>>
+            <<run $enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<run $enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<run $enemies.push($tmpGuy)>>
+            <<fight $enemies 'Blair - date [scavenging] fuck' 'Blair - date [scavenging] lost' true>>
+        <</link>>
+    <<else>>
+        <<set _randomItem = either('cosmetics', 'piercing', 'buttplug')>>
+        <<set _randomCount = randomInteger(2, 5)>>
+        <<pickup $backpack _randomItem _randomCount>>
+        <strong>You found <strong class="iitem"><<=_randomCount>> <<=Item.get(_randomItem).name>>'s</strong></strong>
+        <br /><br />
+        <<link 'Continue'>>
+            <<goto 'Blair - date [scavenging] fuck'>>
+        <</link>>
+    <</if>>
+<</linkreplace>>
+
+
