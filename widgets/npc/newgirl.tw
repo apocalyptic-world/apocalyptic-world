@@ -1,58 +1,11 @@
 :: Widget newgirl [widget]
 <<widget newgirl>>
 	<<include 'Girl names'>>
-
-	<<set _ageRoll = random(1, 100)>>
-	<<if _ageRoll < 70>>
-		<<set _ageRange = [18,27]>>
-	<<elseif _ageRoll < 85>>
-		<<set _ageRange = [28,37]>>
-	<<elseif _ageRoll < 95>>
-		<<set _ageRange = [38,47]>>
-	<<else>>
-		<<set _ageRange = [48,60]>>
-	<</if>>
-	<<set _age = random(_ageRange[0], _ageRange[1])>>
-
-	<<set _raceRoll = random(1, 100)>>
-	<<if _raceRoll <= 40>>
-		<<set _race = 'white'>>
-	<<elseif _raceRoll <= 60>>
-		<<set _race = 'latina'>>
-	<<elseif _raceRoll <= 80>>
-		<<set _race = 'black'>>
-	<<else>>
-		<<set _race = 'asian'>>
-	<</if>>
-
-	<<set _hairRoll = random(1, 100)>>
-	<<if ['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25>>
-		<<set _hair = 'black'>>
-	<<elseif _hairRoll <= 65>>
-		<<set _hair = 'brown'>>
-	<<elseif _hairRoll <= 75>>
-		<<set _hair = 'ginger'>>
-	<<else>>
-		<<set _hair = 'blonde'>>
-	<</if>>
-
-	<<set _dyeRoll = random(1,100)>>
-	<<if _dyeRoll <= 25>>
-		<<set _hair = either('red', 'green', 'blue', 'pink', 'purple', 'white')>>
-	<<elseif _dyeRoll <= 50>>
-		<<set _hair = either('ginger', 'blonde')>>
-	<</if>>
-
-	<<set _orientationRoll = random(1, 100)>>
-	<<if _orientationRoll <= 70>>
-		<<set _orientation = 'straight'>>
-	<<elseif _orientationRoll <= 75>>
-		<<set _orientation = 'lesbian'>>
-	<<elseif _orientationRoll <= 95>>
-		<<set _orientation = 'bisexual'>>
-	<<else>>
-		<<set _orientation = 'asexual'>>
-	<</if>>
+	<<set _age = setup.ageRoll()>>
+	<<set _race = setup.raceRoll()>>
+	<<set _hair = setup.hairRoll(_race)>>
+	<<set _hair = setup.dyeRoll(_hair)>>
+	<<set _orientation = setup.orientationRoll(0)>>
 
 	<<set $tmpGirl = {
 		gender: 0,
