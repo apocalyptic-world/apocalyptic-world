@@ -22,24 +22,12 @@
 		strength: random(20, 40),
 		assignedTo: null,	
 		horny: random(0, 30),
-		orientation: _orientation,
-		likesGuys: false,
-		likesGirls: false,
-		likesTGuys: false,
-		likesTGirls: false,
-		guys: 0,
-		girls: 0,
-		tguys: 0,
-		tgirls: 0,
-		anal: 0,
-		bj: 0,
-		dp: 0,
 		traits: [],
 		skills: setup.percentageChance(30) ? [either(['scavanger', 'gardener', 'shopkeeper'])] : [],
 		endurance: 0,
 	}>>
 	
-<<set $tmpGuy = setup.setSexuality($tmpGirl, _orientation)>>
+<<set $tmpGuy = setup.setSexuality($tmpGuy, _orientation)>>
 <<if setup.percentageChance(50) && ($tmpGuy.likesGuys || $tmpGuy.likesTGirls)>>
 	<<set 
 		$tmpGuy.traits = setup.percentageChance(30) ? [either(['analslut', 'cumslut', 'deepthroat'])] : [],
