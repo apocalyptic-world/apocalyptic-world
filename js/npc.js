@@ -1,0 +1,153 @@
+setup.ageRoll = function() {
+	var _ageRoll = Math.floor(Math.random() * 100 + 1);
+	var _ageRange = new Array();
+	if (_ageRoll <= 55) {
+		_ageRange = [18,27];
+	} else if (_ageRoll <= 75) {
+		_ageRange = [28,37];
+	} else if (_ageRoll <= 90) {
+		_ageRange = [38,47];
+	} else {
+		_ageRange = [48,60];
+	}
+	return Math.floor(Math.random() * (_ageRange[1] - _ageRange[0] + 1)) + _ageRange[0];
+};
+
+setup.raceRoll = function() {
+	var _raceRoll = Math.floor(Math.random() * 100 + 1);
+	var _race = '';
+	if (_raceRoll <= 40) {
+		_race = 'white';
+	} else if (_raceRoll <= 65) {
+		_race = 'latina';
+	} else if (_raceRoll <= 85) {
+		_race = 'black';
+	} else {
+		_race = 'asian';
+	}
+	return _race;
+};
+
+setup.hairRoll = function(_race) {
+	var _hairRoll = Math.floor(Math.random() * 100 + 1);
+	var _hair = '';
+	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25) {
+		_hair = 'black';
+	} else if (_hairRoll <= 65) {
+		_hair = 'brown';
+	} else if (_hairRoll <= 75) {
+		_hair = 'ginger';
+	} else {
+		_hair = 'blonde';
+	}
+	return _hair;
+};
+
+setup.dyeRoll = function(hair) {
+	var _dyeRoll = Math.floor(Math.random() * 100 + 1);
+	var _hairList = [hair];
+	if (_dyeRoll <= 25) {
+		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white'];
+	} else if (_dyeRoll <= 50) {
+		_hairList = ['ginger', 'blonde'];
+	}
+	return _hairList[Math.floor(Math.random() * _hairList.length)];
+};
+
+setup.orientationRoll = function(gender) {
+	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
+	var _orientation = '';
+	if (_orientationRoll <= 70) {
+		_orientation = 'straight';
+	} else if (_orientationRoll <= 75) {
+		_orientation = ['lesbian','gay'][gender];
+	} else if (_orientationRoll <= 95) {
+		_orientation = 'bisexual';
+	} else {
+		_orientation = 'asexual';
+	}
+	return _orientation;
+};
+
+setup.setSexuality = function(person, orientation) {
+	person.orientation = orientation;
+	person.likesGuys = false;
+	person.likesGirls = false;
+	person.likesTGuys = false;
+	person.likesTGirls = false;
+	person.guys = 0;
+	person.girls = 0;
+	person.tguys = 0;
+	person.tgirls = 0;
+	person.anal = 0;
+	person.bj = 0;
+	person.dp = 0;
+
+	if (!person.gender) {
+			person.pussy = 0;
+	}	
+
+	if (orientation == 'bisexual') {
+			person.likesGuys = true;
+			person.likesGirls = true;
+			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 60;
+			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 60;
+	}
+	else if (orientation == 'lesbian') {
+			person.likesGirls = true;
+			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 15;
+			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 30;
+	}
+	else if (orientation == 'gay') {
+			person.likesGuys = true;
+			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 30;
+			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 15;
+	}
+	else if (!person.gender && orientation == 'straight') {
+			person.likesGuys = true;
+			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 10;
+	}
+	else if (person.gender && orientation == 'straight') {
+			person.likesGirls = true;
+			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 10;
+	}
+
+	if (person.likesGuys) {
+			person.guys = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+	}
+
+	if (person.likesGirls) {
+			person.girls = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+	}
+
+	if (person.likesTGuys && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+			person.tguys = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+	}
+
+	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+			person.tgirls = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+	}
+
+	if (person.likesGuys) {
+			person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+			person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+	}
+	
+	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+			person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+			person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+	}
+
+	if (!person.gender && orientation !== 'asexual') {
+			person.pussy = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+	}
+
+	if (!person.gender && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	}
+
+	if (person.gender && (orientation == 'bisexual' || orientation == 'gay') && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	}
+	return person;
+};
