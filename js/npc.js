@@ -157,3 +157,15 @@ setup.setSexuality = function(person, orientation) {
 	}
 	return person;
 };
+
+setup.genderDescriptor = function(person) {
+	if (person.gender == 0) {
+		return 'girl';
+	} else if (person.gender == 1) {
+		return 'guy';
+	} else if (person.gender == 2) {
+		return 'tgirl';
+	} else if (person.gender == 3) {
+		return 'tguy';
+	}
+};
