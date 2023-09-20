@@ -33,9 +33,9 @@ setup.hairRoll = function(_race, _age, _gender) {
 	var _hair = '';
 	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25) {
 		_hair = 'black';
-	} else if (_hairRoll &lt;= 65) {
+	} else if (_hairRoll <= 65) {
 		_hair = 'brown';
-	} else if (_hairRoll &lt;= 75) {
+	} else if (_hairRoll <= 75) {
 		_hair = 'ginger';
 	} else {
 		_hair = 'blonde';
