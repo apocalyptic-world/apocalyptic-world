@@ -28,18 +28,24 @@ setup.raceRoll = function() {
 	return _race;
 };
 
-setup.hairRoll = function(_race) {
+setup.hairRoll = function(_race, _age, _gender) {
 	var _hairRoll = Math.floor(Math.random() * 100 + 1);
 	var _hair = '';
 	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25) {
 		_hair = 'black';
-	} else if (_hairRoll <= 65) {
+	} else if (_hairRoll &lt;= 65) {
 		_hair = 'brown';
-	} else if (_hairRoll <= 75) {
+	} else if (_hairRoll &lt;= 75) {
 		_hair = 'ginger';
 	} else {
 		_hair = 'blonde';
 	}
+	if (_age >= 50) {
+		_hair = 'gray';
+	}
+	if (_gender && (Math.floor(Math.random() * 100) + 1 <= (_age - 10))) {
+		_hair = 'bald';
+	}	
 	return _hair;
 };
 
