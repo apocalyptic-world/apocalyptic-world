@@ -3,6 +3,7 @@
 	<<include 'Guy names'>>
 	<<set _age = setup.ageRoll()>>
 	<<set _race = setup.raceRoll()>>
+	<<set _hair = setup.hairRoll(_race, _age, 1)>>
 	<<set _orientation = setup.orientationRoll(1)>>
 	
 	<<set $tmpGuy = {
@@ -13,7 +14,7 @@
 		relationship: 0,
 		corruption: random(0, 10),
 		sub: random(5, 13),	
-		hair: either('blonde', 'black', 'gray', 'bald'),
+		hair: _hair,
 		dick: either('small', 'medium', 'big'),
 		race: _race,
 		location: null,
@@ -28,9 +29,9 @@
 	}>>
 	
 <<set $tmpGuy = setup.setSexuality($tmpGuy, _orientation)>>
-<<if setup.percentageChance(50) && ($tmpGuy.likesGuys || $tmpGuy.likesTGirls)>>
+<<if ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) && setup.percentageChance(50)>>
 	<<set 
-		$tmpGuy.traits = setup.percentageChance(30) ? [either(['analslut', 'cumslut', 'deepthroat'])] : [],
+		$tmpGuy.traits = setup.percentageChance(30) ? [either(['analslut', 'cumslut', 'deepthroat'])] : []
 	>>
 <</if>>
 
