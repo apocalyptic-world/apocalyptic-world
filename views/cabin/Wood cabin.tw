@@ -33,13 +33,13 @@
    <<grid cabin outside Outside Outside>>
 </div>
 
-
 <<set _percentageUninvitedCouple = 5>>
 <<set _percentageFoodForager = 2>>
 <<if setup.getPersonsForLocation($guests, 'guard')>>
 	<<set _percentageUninvitedCouple = 1>>
 	<<set _percentageFoodForager = 1>>
 <</if>>
+
 <<if !($locationEvents.cabin ?? false)>>
 	<<if $game.lone_survivor>>
 		<<set $game.lone_survivor = false>>
@@ -52,7 +52,7 @@
 	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 4 && setup.percentageChance(30) && !$player.quests.bathhouse_talk && $game.day > 80>>
 		<<set $player.quests.bathhouse_talk = true>>
 		<<goto 'Event: Bathhouse talk'>>
-	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 4 && setup.percentageChance(5) && $backpack.count('food') > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
+	<<elseif setup.assignedToCount('garden') >= 4 && setup.percentageChance(5) && ($backpack.count('food') + $storage.count('food') ) > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
 		<<set _kitchenAssigned = setup.getPersonsForLocation($guests, 'kitchen')>>
 		<<set _rottenFoodChance = 100>>
 		<<if _kitchenAssigned && ($guests[_kitchenAssigned[0]].skills ?? []).includes('cook')>>

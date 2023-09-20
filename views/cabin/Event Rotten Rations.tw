@@ -6,21 +6,35 @@
 </center>
 
 <<set _persons = setup.getPersonsForLocation($guests, 'garden')>>
-<<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
+<<if _persons.length>>
+  <<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
+  <<set _name = $guests[_randomPerson.name]>>
+<<else>>
+  <<set _persons = setup.getPersonsForLocation($slaves, 'garden')>>
+  <<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
+  <<set _name = $slaves[_randomPerson.name]>>
+<</if>>
 
 <br /><br />
-A weary <strong><<=$guests[_randomPerson.name]>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
+A weary <strong><<=_name>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
 <br /><br />
 
-<<set _amountFood = Math.round($backpack.count('food') - ((20 / 100) * $backpack.count('food')), 0)>>
+<<set _rottenPercentage = 20>>
 
+<<set _countFood = $backpack.count('food')>>
+<<set _foodOutBackpack = Math.round( (1.0 * _rottenPercentage / 100) * _countFood, 0)>> 
 
-<<set _foodOut = $backpack.count('food') - Math.min(_amountFood, $backpack.count('food'))>>
+<<set _countFood = $storage.count('food')>>
+<<set _foodOutStorage = Math.round( (1.0 * _rottenPercentage / 100) * _countFood, 0)>> 
+
+<<set _foodOut = _foodOutBackpack + _foodOutStorage>>
+
 Bickering about whose fault the situation quickly evolves into a different discussion, as the hungry guests begin to argue if they can afford to throw away precious food, even if a little past its prime.
 <br /><br />
 
 <<link 'Throw the food out'>>
-	<<drop $backpack 'food' _foodOut>>
+	<<drop $backpack 'food' _foodOutBackpack>>
+	<<drop $storage  'food' _foodOutStorage>>
 	<<goto 'Kitchen-room'>>
 <</link>>
 <<linkdesc>>
