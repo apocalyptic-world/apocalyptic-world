@@ -59,15 +59,33 @@
 	<</link>>
 <</if>>
 
-<<if $player.energy >= 10 && hasTime(1)>>
-	<<link 'Punish him'>>
-		<<if $backpack.has('paddle')>>
-			<<set $punishType = ''>>
-		<</if>>
-		<<goto 'Guy punish'>>
-	<</link>>
+<<if $tmpGirl.location === 'basement'>>
+	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+	<<if $player.energy >= 10 && hasTime(1)>>
+		<<link 'Punish him'>>
+			<<if $backpack.has('paddle')>>
+				<<set $punishType = 'paddle'>>
+			<</if>>
+			<<goto 'Guy punish'>>
+		<</link>>
+	<</if>>
+	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+		<<if $player.energy >= 5 && hasTime(1)>>
+			<<link 'Mistress punishes him'>>
+				<<if $backpack.has('paddle')>>
+					<<set $punishType = 'paddle'>>
+				<</if>>
+				<<goto 'Mistress - Guy punish'>>
+			<</link>>
+		<</if>>		
+		<<if $player.energy >= 15 && hasTime(1)>>
+			<<link 'Mistress fucks him'>>
+				<<goto 'Mistress - Guy fuck'>>
+			<</link>>
+		<</if>>			
+	<</if>>
 <</if>>
-	
+
 <<link 'Change name'>>
 	<<dialog 'Change name'>>	
 		What you will call your slave? <<textbox "_tmpGirlName" $tmpGirl.name>>

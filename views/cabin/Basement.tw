@@ -14,6 +14,18 @@
 <</if>>
 Free rooms left: <strong><<=_basementLimitShow>></strong>
 
+<<set _isSlaveInBasement = false>>
+<<for _i to 0; _i lt $slaves.length; _i++>>
+	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
+		<<set $workingInGarden++>>
+		<<continue>>
+	<</if>>
+	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+		<<set $workingOnStreets++>>
+		<<continue>>
+	<</if>>
+	<<set _isSlaveInBasement = true>>
+<</for>>
 <<set $cellSlaveIds = []>>
 <<set _hornySlaveId = null>>
 <<if $slaves.length < 1>>
@@ -22,7 +34,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	</div>
 <<else>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
-	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined' && _isSlaveInBasement>>
 		<<set $tmpGirl = $guests[_girlGuest[0]]>>
 		<<set $tmpGirl.location = 'basement'>>
 		<center>

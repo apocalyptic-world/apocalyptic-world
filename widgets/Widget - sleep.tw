@@ -99,6 +99,11 @@
 			<<set $slaves[_i].stats = {}>>
 		<</if>>
 
+		// buttplug
+		<<if $slaves[_i].buttplug && $slaves[_i].anal < 20>>
+			<<set $slaves[_i].anal++>>
+		<</if>>
+
 		// Wash beauty
 		<<if typeof $slaves[_i].washDays !== 'undefined'>>
 			<<set $slaves[_i].washDays-->>
@@ -252,6 +257,12 @@
 		<<if typeof $guests[_guestI].stats  === 'undefined'>>
 			<<set $guests[_guestI].stats = {}>>
 		<</if>>
+
+		// buttplug
+		<<if $guests[_guestI].buttplug && $guests[_guestI].anal < 20>>
+			<<set $guests[_guestI].anal++>>
+		<</if>>
+
 		// Wash beauty
 		<<if typeof $guests[_guestI].washDays !== 'undefined'>>
 			<<set $guests[_guestI].washDays-->>
@@ -416,7 +427,7 @@
 			<<if $guests[_guestI].gender>>
 				<<set _chanceOfNotComingHome = 0>>
 			<</if>>
-			<<if setup.percentageChance(_chanceOfNotComingHome) && !$scavengingDidntReturn && !$pregnancyHappening>>
+			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
 			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap')>>
@@ -606,7 +617,9 @@
 <</if>>
 
 <<set _t1 = performance.now()>>
+<!-- 
 <<run console.log(`Call to doSomething took ${_t1 - _t0} milliseconds.`)>>
+-->
 <</widget>>
 
 

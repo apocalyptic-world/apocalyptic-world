@@ -75,9 +75,11 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					Age: <<=setup.getAge(_guest)>>
 				</td>
 				<td>
-				  <<if _guest.assignedTo>>
-					  (<<=_guest.assignedTo>>)
-				  <</if>>
+					<<if _guest.assignedTo>>
+						(<<=_guest.assignedTo>>)
+				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
+						(companion)
+				 	 <</if>>
 				</td>
 				<td>
 					<<link 'Throw out'>>

@@ -31,6 +31,11 @@
 	</div>
 	<br />
 	<div class="action-text">
+		<<set _StatsMapping = {
+			mistress_anal: 'anal'
+		}>>
+		<<set _npcStat = _StatsMapping[$args[1]] ?? $args[1]>>
+
 		<<if $args[0].virgin && typeof $actionText[$args[1]] !== 'undefined' && typeof $actionText[$args[1]]['v'] !== 'undefined'>>
 			 <<print $actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
 		<<else>>
@@ -42,7 +47,7 @@
 				<<if $actionText[$args[1]] !== undefined>>
 					<<if ($actionText[$args[1]] ?? false) && ($actionText[$args[1]]['stats'] ?? false)>>
 						<<for _sortedTextsStat, _sortedTextsData range $actionText[$args[1]]['stats']>>
-							<<if typeof $tmpGirl[$args[1]] !== 'undefined' && $tmpGirl[$args[1]] >= _sortedTextsData.s>>
+							<<if typeof $tmpGirl[_npcStat] !== 'undefined' && $tmpGirl[_npcStat] >= _sortedTextsData.s>>
 								<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
 							<</if>>
 						<</for>>
@@ -58,7 +63,7 @@
 
 <<widget actionDream>>
 	<<set _dreamPlaces = clone(setup.actions.default)>>
-	<<run delete _dreamPlaces['workout']>>
+	<<run delete _dreamPlaces['workout', 'wash']>>
 	<<set $sleepAction = {
 		place: either(Object.keys(_dreamPlaces)),
 		type: either('pussy', 'anal', 'bj', 'dp')
