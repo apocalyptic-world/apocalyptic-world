@@ -6,19 +6,24 @@
 </div>
 <br /><br />
 
+<<set _isStorageAvailable = ($game.location.shop ?? false)>>
 <<set _items to Object.keys($workbenchItems)>>
 <<for _i to 0; _i lt _items.length; _i++>>
 	<<set _item = $workbenchItems[_items[_i]]>>
 	<<capture _i, _item>>
-	  <<if !$workbenchItems[_items[_i]].show>>
+	  <<if !_item.show>>
 		  <<continue>>
 	  <</if>>
+	  
 	  <<set _workEnergy = clone(_item.energy)>>
 	  <<if $player.int > 30>>
 	  		<<set _workEnergy -= 20>>
 	  <<elseif $player.int > 20>>
 	  		<<set _workEnergy -= 10>>
 	  <</if>>
+	  
+	  <<set _required to Object.keys(_item.required)>>
+	  
 	  <<set _itemHasResources to true>>
 	  <div class="workbench-item">
 		  <table>
@@ -30,12 +35,11 @@
 				  <td>
 					  <div class="workbench-required">
 						  Required:<br />
-						  <<set _required to Object.keys(_item.required)>>
 						  <<for _r to 0; _r lt _required.length; _r++>>
-							  <<if $backpack.count(_required[_r]) < _item.required[_required[_r]]>>
+							  <<if $backpack.count(_required[_r]) + $storage.count(_required[_r]) < _item.required[_required[_r]]>>
 								  <<set _itemHasResources = false>>
 							  <</if>>
-							  <span><<=$workbenchItems[_items[_i]].required[_required[_r]]>> <<=Item.get(_required[_r]).name>></span><br />
+							  <span><<=_item.required[_required[_r]]>> <<=Item.get(_required[_r]).name>></span><br />
 						  <</for>>
 						  <span><<=_workEnergy>> energy</span>
 						  <<if $player.energy < _workEnergyy>>
@@ -46,17 +50,15 @@
 				  <td>
 					  <<if _itemHasResources>>
 						<<link 'Build'>>
-							<<set _required to Object.keys(_item.required)>>
-							<<set _energyTake = clone($workbenchItems[_items[_i]].energy)>>
-							<<if $player.int > 30>>
-								<<set _energyTake -=20>>
-							<<elseif $player.int > 20>>
-								<<set _energyTake -=10>>
-							<</if>>
-							<<energy `-_energyTake`>>
+
+							<<energy `-_workEnergy`>>
+							
 							<<set $player.debug = $workbenchItems[_items[_i]].energy>>
 							<<for _r to 0; _r lt _required.length; _r++>>
 								<<capture _r>>
+									<<if _isStorageAvailable>>
+									    <<transfer $storage $backpack _required[_r] _item.required[_required[_r]]>>
+									<</if>>
 									<<drop $backpack _required[_r] _item.required[_required[_r]]>>
 								<</capture>>
 							<</for>>
