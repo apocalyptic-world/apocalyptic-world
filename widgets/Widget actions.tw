@@ -62,14 +62,16 @@
 <</widget>>
 
 <<widget actionDream>>
-	<<set _dreamPlaces = clone(setup.actions.default)>>
-	<<run delete _dreamPlaces['workout', 'wash']>>
 	<<set $sleepAction = {
-		place: either(Object.keys(_dreamPlaces)),
+		place: either(['bedroom', 'basement', 'streets', 'forest']),
 		type: either('pussy', 'anal', 'bj', 'dp')
 	}>>
-	
-	[img[setup.ImagePath+'actions/default/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.default[$sleepAction.place][$sleepAction.type])]]	
+	<<if typeof setup.actions === 'undefined'>>
+		[img['images/actions/default/bedroom/pussy/7771836.webp']]
+	<<else>>
+		<<set _dreamImg = setup.ImagePath+'actions/default/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.default[$sleepAction.place][$sleepAction.type])>>
+		[img[_dreamImg]]	
+	<</if>>
 <</widget>>
 
 <<widget actionImageOutput>>
