@@ -14,6 +14,7 @@ setup.audioPath = setup.Path + "sounds/";
 
 importScripts(setup.Path + "js/actions.js")
 	.then(function() {
+        memorize('actions', setup.actions);
 	}).catch(function(error) {  // eslint-disable-line
 		alert("Error: Could not find file 'actions.js'.");
 	}
@@ -150,7 +151,4 @@ $characters to {
 <<set $backpack to Inventory.create()>>
 <<set $storage to Inventory.create()>>
 <<include "Inventory items">>
-
-<<cacheaudio "bg" setup.audioPath+'bg1.mp3'>>
-
 
