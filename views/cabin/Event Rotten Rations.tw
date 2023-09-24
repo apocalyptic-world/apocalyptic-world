@@ -8,15 +8,15 @@
 <<set _persons = setup.getPersonsForLocation($guests, 'garden')>>
 <<if _persons.length>>
   <<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
-  <<set _name = $guests[_randomPerson.name]>>
+  <<set _person = $guests[_randomPerson]>>
 <<else>>
   <<set _persons = setup.getPersonsForLocation($slaves, 'garden')>>
   <<set _randomPerson = _persons[Math.floor(Math.random()*_persons.length)]>>
-  <<set _name = $slaves[_randomPerson.name]>>
+  <<set _person = $slaves[_randomPerson]>>
 <</if>>
 
 <br /><br />
-A weary <strong><<=_name>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
+A weary <strong><<=setup.displayName(_person)>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
 <br /><br />
 
 <<set _rottenPercentage = 20>>
