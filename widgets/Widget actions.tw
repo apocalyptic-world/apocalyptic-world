@@ -4,8 +4,15 @@
 <</widget>>
 
 <<widget actionImage>>
+	<<if typeof setup.actions === 'undefined'>>
+		<<set _actionsFallback = recall('actions')>>
+		<<if _actionsFallback>>
+			<<set setup.actions = _actionsFallback>>
+		<</if>>
+	<</if>>
 	<div class="action-image">
-		<<if $args[0].virgin && $args[1] === 'pussy'>>
+		<<if typeof setup.actions === 'undefined'>>
+		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
 			[img[setup.ImagePath+'game/misc/deflower.webp']]
 		<<else>>
 		  <<if typeof setup.actions[$args[0].name] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location][$args[1]] !== 'undefined'>>

@@ -84,11 +84,13 @@ Her contractions grew stronger, <<=$tmpGirl.name>> knew that she didn't have muc
 			<<set _child.family.father = _mother.pregnancy_father>>
 		<</if>>
 		
-		
 		<<if typeof _mother.family === 'undefined'>>
 			<<set _mother.family = {
 				kids: []
 			}>>
+		<</if>>
+		<<if typeof _mother.family.kids === 'undefined'>>
+			<<set _mother.family.kids = []>>
 		<</if>>
 		<<run _mother.family.kids.push(_child.id)>>
 		<<run delete _mother.pregnancy>>

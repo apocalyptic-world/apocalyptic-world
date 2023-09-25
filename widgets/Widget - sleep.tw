@@ -148,7 +148,7 @@
 			<<set $slaves[_i].stats['garden']++>>
 			
 			// Learn skill
-			<<if $slaves[_i].stats['garden'] > 100 && !$slaves[_i].skills.includes('gardener')>>
+			<<if $slaves[_i].stats['garden'] > 100 && !($slaves[_i].skills ?? []).includes('gardener')>>
 				<<run $slaves[_i].skills.push('gardener')>>
 				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned gardener skill</span>')>>
 			<</if>>
@@ -187,7 +187,7 @@
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
 					<<set _moneyEarned = randomInteger(4, 8)>>
-					<<if $slaves[_i].traits.includes('nymphomaniac')>>
+					<<if ($slaves[_i].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
 					<</if>>
 					<<set _moneyEarnedTax = 80>>
@@ -315,7 +315,7 @@
 			<<set $guests[_guestI].stats['garden']++>>
 
 			// Learn skill
-			<<if $guests[_guestI].stats['garden'] > 100 && !$guests[_guestI].skills.includes('gardener')>>
+			<<if $guests[_guestI].stats['garden'] > 100 && !($guests[_guestI].skills ?? []).includes('gardener')>>
 				<<run $guests[_guestI].skills.push('gardener')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned gardening skill</span>')>>
 			<</if>>
@@ -356,7 +356,7 @@
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
 					<<set _moneyEarned = randomInteger(4, 8)>>
-					<<if $guests[_guestI].traits.includes('nymphomaniac')>>
+					<<if ($guests[_guestI].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
 					<</if>>
 					<<set _moneyEarnedTax = 80>>
@@ -381,7 +381,7 @@
 			<<set $guests[_guestI].stats['forest']++>>
 			
 			// Learn skill
-			<<if $guests[_guestI].stats['forest'] > 100 && !$guests[_guestI].skills.includes('woodcraft')>>
+			<<if $guests[_guestI].stats['forest'] > 100 && !($guests[_guestI].skills ?? []).includes('woodcraft')>>
 				<<run $guests[_guestI].skills.push('woodcraft')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned woodcraft skill</span>')>>
 			<</if>>
@@ -412,7 +412,7 @@
 			<<set $guests[_guestI].stats['scavenging']++>>
 			
 			// Learn skill
-			<<if $guests[_guestI].stats['scavenging'] > 100 && !$guests[_guestI].skills.includes('scavenger')>>
+			<<if $guests[_guestI].stats['scavenging'] > 100 && !($guests[_guestI].skills ?? []).includes('scavenger')>>
 				<<run $guests[_guestI].skills.push('scavenger')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned scavenger skill</span>')>>
 			<</if>>
