@@ -11,6 +11,10 @@
    	<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
   	<<grid settlement settlement_shop 'Settlement - shop' 'Shop' 0 $isDisabled>>
   <</if>>
+	<<if isMetChar('octavia') && $characters.octavia.quests.eve_kidnapped>>
+		<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+		<<grid settlement octavia 'Settlement - Octavia' 'Octavia' 0 $isDisabled>>
+	<</if>>
 </div> 
 <br /><br />
 [[Leave|Outside]]
