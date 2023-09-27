@@ -184,6 +184,22 @@
 		after: function() {
 			variables().game.location.bathhouse = true;
 		}
+	},
+	lab: {
+		show: (isMetChar('laura') && $characters.laura.quests.lab_workbench && !$game.location.lab),
+		title: 'Lab',
+		description: 'Lab. An extension to guest house',
+		required: {
+			glass: 20,
+			wood: 100,
+			rope: 10,
+			solar_panel: 5
+		},
+		goto: 'Workbench',
+		energy: 100,
+		after: function() {
+			variables().game.location.lab = true;
+		}
 	}
 	
 }>>

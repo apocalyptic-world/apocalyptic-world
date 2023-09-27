@@ -90,10 +90,18 @@
 		<<goto 'Laura - successful test'>>
 	<<elseif isMetChar('laura') && $characters.laura.quests.successful_test && !$characters.laura.quests.first_vials && $characters.laura.quests.lastTestDay < ($game.day - 5)>>
 		<<goto 'Laura - first vials'>>
+	<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && !$characters.laura.quests.lab_workbench && $characters.laura.quests.lastTestDay < ($game.day - 7)>>
+		<<goto 'Laura story - The shattered lab'>>
+	<<elseif isMetChar('laura') && ($game.location.lab ?? false) && !$characters.laura.quests.living>>
+		<<goto 'Laura story - New home'>>
 	<<else>>
 		
 	<</if>>
-	
+
+	<<run console.log(isMetChar('laura'))>>
+	<<run console.log($characters.laura.quests.first_vials)>>
+	<<run console.log(!$characters.laura.quests.lab_talk)>>
+	<<run console.log($characters.laura.quests.lastTestDay < ($game.day - 7))>>
 <</if>>
 
 

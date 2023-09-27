@@ -38,12 +38,17 @@
 </div>
 <br /><br />
 
+<<set _peopleInBathhouse = {}>>
 <table id="slaves">
 	<<for _bathGuestI, _bathGuest range $guests>>
 		<<capture _bathGuestI, _bathGuest>>
 		<<if _bathGuest.location !== 'bathhouse'>>
 			<<continue>>
 		<</if>>
+		<<if typeof _peopleInBathhouse[_bathGuest.gender] === 'undefined'>>
+			<<set _peopleInBathhouse[_bathGuest.gender] = {}>>
+		<</if>>
+		<<run _peopleInBathhouse[_bathGuest.gender].push('guest:' + _bathGuestI)>>
 		<<set _genderClass = 'gender-' + (!_bathGuest.gender ? 'girl' : 'guy')>>
 		<tr>
 			<td style="width: 300px">
@@ -84,6 +89,10 @@
 		<<if _bathSlave.location !== 'bathhouse'>>
 			<<continue>>
 		<</if>>
+		<<if typeof _peopleInBathhouse[_bathGuest.gender] === 'undefined'>>
+			<<set _peopleInBathhouse[_bathGuest.gender] = {}>>
+		<</if>>
+		<<run _peopleInBathhouse[_bathGuest.gender].push('slave:' + _bathGuestI)>>
 		<<set _genderClass = 'gender-' + (!_bathSlave.gender ? 'girl' : 'guy')>>
 		<tr>
 			<td style="width: 300px">

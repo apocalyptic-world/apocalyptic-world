@@ -528,6 +528,16 @@
 	<</if>>
 <</for>>
 
+<<if isMetChar('laura')>>
+	<<set $characters.laura.quests.sampleToday = false>>
+	<<if $characters.laura.quests.productionSamples >= 3 && $characters.laura.quests.living && $characters.laura.quests.productionLastDay < ($game.day - $characters.laura.quests.productionDaysPerPotion)>>
+		<<set $characters.laura.quests.productionSamples -= 3>>
+		<<pickup $backpack 'growth_potion' 1>>
+		<<set $characters.laura.quests.productionLastDay = $game.day>>
+		<<set $morningMessages.main.push('Laura crafted new <strong class="iitem">growth potion</strong>')>>
+	<</if>>
+<</if>>
+
 <<set $sleepDead = null>>
 
 // Perks

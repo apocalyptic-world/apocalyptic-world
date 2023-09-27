@@ -1,0 +1,63 @@
+:: Laura story - The shattered lab
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+The morning sun cast feeble rays across the village, painting a bleak landscape with its pale light. As you stepped outside, the sight that greeted you sent a shiver down your spine. 
+There stood Laura, her once vibrant spirit now eclipsed by shadows of pain and weariness. Bruises painted her skin, and her coat, once a symbol of her resilience, hung tattered and torn.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'people/laura/shattered_lab.jpg']]
+</center>
+<br /><br />
+<<laura>>
+Raiders... They came for the lab. There's nothing left. My other research.. My lab... It's all gone..
+<</laura>>
+<br /><br />
+Your heart sank. The lab, the culmination of years of research, now reduced to ashes and rubble. It was a devastating blow, not just for Laura, but for the hope it held for your village's future.
+<br /><br />
+<div id="option_comfort">
+	<<linkreplace 'Comfort her'>>
+		<<set _comfort = true>>
+		<<you>>
+			I'm so sorry, Laura
+		<</you>>
+		<br /><br />
+		<center>
+			[img[setup.ImagePath+'places/cabin/hug.gif']]
+		</center>
+		<br /><br />
+		As you extended your arms in an attempt to comfort Laura, she didn't hesitate. With a sudden, desperate motion, she leapt into your embrace, her body trembling with a mixture of exhaustion, relief, and lingering fear. Her arms wrapped tightly around you, seeking solace in the warmth of your presence.
+		<br /><br />
+		<<set $characters.laura.relationship += 5>>
+		<strong>Relationship increased by 5</strong>
+		<br /><br />
+	<</linkreplace>>
+</div>
+<<linkreplace 'Ask her how you can help'>>
+	<<if !_comfort>>
+		<<run $('#option_comfort').hide()>>
+	<</if>>
+	<<laura>>
+		I need to go back, salvage what I can. But... I can do it alone but I need a new space, a place to continue my work.
+	<</laura>>
+	<br />
+	<<laura>>
+		I need a place to work, a space where I can focus without interruption. I was wondering if it would be possible to build a lab, an extension to your guest house, perhaps. It would mean the world to me.
+	<</laura>>
+	<br /><br />
+	<<linkreplace 'Tell her you will do it'>>
+			<<notify 6s>>
+				Lab available in workbench!
+			<</notify>>
+			<<set $characters.laura.quests.lab_workbench = true>>
+			<center>
+				[img[setup.ImagePath+'places/cabin/hug.gif']]
+			</center>
+			<br /><br />
+			As you agreed to build the lab for Laura, a surge of gratitude and relief washed over her. Without a word, she stepped forward and wrapped her arms around you in a tight embrace. Her body pressed against yours, the warmth of her presence a tangible reassurance.
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+	<</linkreplace>>
+<</linkreplace>>
+
