@@ -25,8 +25,10 @@
 		  	 	<<actionImageOutput `setup.ImagePath+'actions/gilf/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['gilf'][$args[0].location][$args[1]])`>>
 		  <<elseif ($args[0].pregnancy ?? 0) > 100 && typeof setup.actions['pregnant'][$args[0].location] !== 'undefined' && typeof setup.actions['pregnant'][$args[0].location][$args[1]] !== 'undefined'>>
 		  		<<actionImageOutput `setup.ImagePath+'actions/pregnant/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['pregnant'][$args[0].location][$args[1]])`>>
-		  <<elseif $args[0].gender === 1>>
+		  <<elseif $args[0].gender === 1 && typeof setup.actions['male'][$args[0].location] !== 'undefined' && typeof setup.actions['male'][$args[0].location][$args[1]] !== 'undefined'>>
 		  		<<actionImageOutput `setup.ImagePath+'actions/male/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.male[$args[0].location][$args[1]])`>>
+		  <<elseif $args[0].gender === 1>>
+			  		<<actionImageOutput `setup.ImagePath+'actions/male/default/'+ $args[1] + '/' + either(setup.actions.male.default[$args[1]])`>>
 		  <<else>>
 			  <<if typeof setup.actions['default'][$args[0].location][$args[1]] !== 'undefined'>>
 			  		<<actionImageOutput `setup.ImagePath+'actions/default/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.default[$args[0].location][$args[1]])`>>

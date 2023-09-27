@@ -1,10 +1,17 @@
 :: Nightclub - girl decline [nightclub bg-underground] {"position":"2663,1464","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
-<center>
+<<if !$tmpGirl.gender>>
+	<center>
 	[img[setup.ImagePath+'places/nightclub/club-drink-together.webp']]
-</center>
+	</center>
+<<else>>
+	<center>
+	[img[setup.ImagePath+'places/nightclub/club-drink-together_guy.gif']]
+	</center>
+<</if>>
 <br /><br />
-Girl declined the offer and goes back to her friends.
+
+The <<=setup.genderDescriptor($tmpGirl)>> declines the offer and goes back to <<=setup.pronounceWhos($tmpGirl)>> friends...
 <br /><br />
 [[Leave|Nightclub - inside]] 
 

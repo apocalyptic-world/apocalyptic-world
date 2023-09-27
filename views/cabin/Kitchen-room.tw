@@ -17,7 +17,7 @@
 	<center>
 		<<actionImage $tmpGirl cooking>>
 	</center> 
-	<<=$tmpGirl.name>> is cooking in the kitchen. She notices you and gives you a warm smile<br /><br />
+	<<=$tmpGirl.name>> is cooking in the kitchen, <<=setup.pronounceWhat($tmpGirl)>> notices you and gives you a warm smile<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
 		<<set $tmpGirlViewBack = 'Girl view - guest'>>
@@ -27,7 +27,11 @@
 		<<set $guestId = _girlGuest[0]>>
 		<<run delete $slaveId>>
 		<<run delete $charId>>
-		<<goto 'Girl view - guest'>>
+		<<if !$tmpGirl.gender>>
+			<<goto 'Girl view - guest'>>
+		<<else>>
+			<<goto 'Guy view - guest'>>		
+		<</if>>	
 	<</link>>
 <</if>>
 <<if $backpack.has('food') && (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
@@ -50,7 +54,7 @@
 
 
 <<if !($locationEvents.kitchen ?? false)>>
-	<<if _isKitchenGirlAssigned && setup.percentageChance(5)>>
+	<<if _isKitchenGirlAssigned && !$tmpGirl.gender && setup.percentageChance(5)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $guestId = _girlGuest[0]>>
 		<<goto 'Event: Kitchen stuck'>>
