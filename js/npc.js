@@ -193,7 +193,7 @@ setup.agePeriod = function(age) {
 	}
 };
 
-setup.beautyDescriptor = function(beauty) {
+setup.beautyDescription = function(beauty) {
 	if (beauty <= 10) {
 		return 'repulsive looking';
 	} else if (beauty <= 20) {
