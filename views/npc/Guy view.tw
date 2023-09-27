@@ -49,6 +49,13 @@
 	<</link>>
 <</if>>
 
+<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
+	<<link 'Wash him'>>
+		<<energy -10>>
+		<<goto 'Slave - wash'>>
+	<</link>>
+<</if>>
+
 <<if !$tmpGirl.gift>>
 	<<link 'Give gift'>>
 		<<script>>
