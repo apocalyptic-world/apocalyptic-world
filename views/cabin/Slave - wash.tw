@@ -1,13 +1,16 @@
 :: Slave - wash [sex no-redirect] {"position":"3232,102","size":"100,100"}
 <h1 class="ptitle">SHOWER</h1>
+<<set $oldTmpGirlLocation = $tmpGirl.location>>
+<<set $tmpGirl.location = 'shower'>>
 <br /><br />
-<<set $tmpGirl.location = 'wash'>>
-<<actionImage $tmpGirl wash>>
+ <center>
+ 	<<actionImage $tmpGirl wash>>
+</center>
  <br /><br />
- You bring <strong><<=$tmpGirl.name>></strong> upstairs and let the hot water run in the shower.<br />She starts to wash and you can't take your eyes off her.
+ You bring <strong><<=$tmpGirl.name>></strong> upstairs and let the hot water run in the shower.<br />You stand guard as <<=setup.pronounceWhat($tmpGirl)>> starts to wash <<=setup.pronounceWho($tmpGirl)>>self.
  <br /><br />
  
- <<addmins 60>>
+ <<addmins 15>>
  <<set $tmpGirl.washed = true>>
  <<if !($tmpGirl.washDays ?? false)>>
  	<<set _beautyInc = randomInteger(1, 2)>>
@@ -24,31 +27,43 @@
 <</if>>
 <<set $tmpGirl.washDays = 7>>
 
-<<linkreplace 'Help her'>>
-	<<actionImage $tmpGirl help>>
+<<linkreplace 'Help wash'>>
+	<center>
+		<<actionImage $tmpGirl help>>
+	</center>
 	<br /><br />
-	You walk behind her and slowly massage her body as she quietly gasps. 
-	<br />
-	She presses her body against yours and you think that she's really enjoying the moment. 
-	<br /><br />
-	<<linkreplace 'Fuck her'>>
-		<<horny_reset>>
-		<<actionImage $tmpGirl fuck>>
-		<<set $tmpGirl.virgin = false>>
-		<br /><br />
-		You slide your hard dick inside her nice clean pussy and pound her really hard.
-		<br />
-		<<if $tmpGirl.relationship > 30>>
-			She begs you to keep going but cum outside.
-		<<else>>
-			She screams at you to STOP as you keep going and cum right on her.  
-		<</if>>
-		<br /><br />
-	<</linkreplace>>
+	You walk behind <<=setup.pronounceWho($tmpGirl)>> and slowly massage <<=setup.pronounceWhos($tmpGirl)>> body as <<=setup.pronounceWhat($tmpGirl)>> quietly gasps,  
 
+	<<if $tmpGirl.likesGuys && $tmpGirl.relationship > 30>>
+		<<=setup.pronounceWhat($tmpGirl)>> presses <<=setup.pronounceWhos($tmpGirl)>> body against yours and you think that <<=setup.pronounceWhat($tmpGirl)>>'s really enjoying the moment.
+	<<else>>
+		<<=setup.pronounceWhat($tmpGirl)>> looks a bit unconfortable and says <<=setup.pronounceWhat($tmpGirl)>> is finished washing.
+	<</if>>
+	<br /><br />
+		
+	<<if $player.energy >= 30>>
+		<<if !$tmpGirl.gender>>
+			<<linkreplace 'Fuck her'>>
+				<<goto 'Girl fuck'>>
+			<</linkreplace>>
+		<<else>>
+			<<linkreplace 'Fuck him'>>
+				<<goto 'Guy fuck'>>
+			<</linkreplace>>
+		<</if>>
+	<</if>>
 <</linkreplace>>
-<<link 'Take her back to the cell'>>
-	<<goto 'Girl view'>>
+
+<<link 'Take <<=setup.pronounceWho($tmpGirl)>> back to the cell'>>
+	<<if $oldTmpGirlLocation>>
+		<<set $tmpGirl.location = $oldTmpGirlLocation>>
+		<<run delete $oldTmpGirlLocation>>
+	<</if>>
+	<<if !$tmpGirl.gender>>
+		<<goto 'Girl view'>>
+	<<else>>
+		<<goto 'Guy view'>>
+	<</if>>
 <</link>>
 
 
