@@ -1,38 +1,51 @@
 :: Nightclub - dance [nightclub bg-underground] {"position":"2314,1466","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
-<br />
-You dance for an hour on the dance floor.
-<br />
 <<set $tmpGirl = null, $slaveId = null>>
-<<if (random(0,1) === 0)>>
+<<if (setup.percentageChance(80))>>
 	<<newgirl>>
-	<<set _age = setup.getAge($tmpGirl, true)>>
-	<<set $tmpGirl.location = 'nightclub'>>
-	<<set $tmpGirl.drunk = random(0,1)>>
-	<br /><br />
-	<<actionImage $tmpGirl dance>>
-	<br />
-	Girl is dancing next to you... <<=_age>> year old. (beauty score: <<=$tmpGirl.beauty>>)		
-	<br />
-	<<if $tmpGirl.drunk == 2>>
-		She's drunk
-	<</if>>
-	<<if $tmpGirl.drunk == 1>>
-		She's a little drunk
-	<</if>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
+	<<if (setup.percentageChance(75))>>
+		<<set _orientation = 'straight'>>
+	<<else>>	
+		<<set _orientation = 'bisexual'>>
+	<</if>>	
+	<<set $tmpGirl = setup.setSexuality($tmpGirl, _orientation)>>
 <<else>>
-	Guy is dancing next to you...
+	<<newguy>>
+	<<if (setup.percentageChance(80))>>
+		<<set _orientation = 'bisexual'>>
+	<<else>>
+		<<set _orientation = 'gay'>>
+	<</if>>
+	<<set $tmpGirl = setup.setSexuality($tmpGuy, _orientation)>>
 <</if>>
 
-<br /><br />
-<<if $tmpGirl>>
-	<<link 'Dance together'>>
-		<<horny 10>>
-		<<goto 'Nightclub - dance together'>>
-	<</link>>
+<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
+<<set _age = setup.getAge($tmpGirl)>>
+<<set $tmpGirl.location = 'nightclub'>>
+<<set $tmpGirl.drunk = random(0,2)>>
+<<actionImage $tmpGirl dance>>
+<br />
+After an hour on the dancefloor, a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in <<=setup.pronounceWhos($tmpGirl)>> <strong class="iitem"><<=setup.agePeriod(_age)>></strong> starts dancing close to you,<br /><<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescriptor($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair
+<<if !$tmpGirl.gender>>
+ and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts
 <</if>>
-[[Continue|Nightclub - inside]] 
+<<if $tmpGirl.drunk == 2>>
+ - <<=setup.pronounceWhat($tmpGirl)>>'s drunk.
+<<elseif $tmpGirl.drunk == 1>>
+ - <<=setup.pronounceWhat($tmpGirl)>>'s a little drunk.
+<<else>>
+
+<</if>>
+<br /><br />
 <<addmins 15>>
+[[Dance together|Nightclub - dance together]]
+<<if $player.energy >= 10>>
+  <<link 'Dance alone'>>
+  	  <<addmins 30>>
+	  <<energy -10>>
+	  <<goto 'Nightclub - dance'>>
+  <</link>>
+<</if>>
+[[Leave the dancefloor|Nightclub - inside]]
 
 
