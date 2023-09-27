@@ -8,47 +8,65 @@
 		<<set $tmpGirl.talked = true>>
 		<<addmins 15>>
 		<<set $tmpGirlViewBack = 'Guy view - guest'>>
-		<<goto 'Girl talk'>>
+		<<goto 'Guy talk'>>
 	<</link>>
 <</if>>
 
-	<<if !($player.companions['guest:' + $guestId] ?? false)>>
-		<<link 'Add as companion'>>
-			<<companionAdd 'guest' $guestId>>
-			<<run delete $tmpGirl.assignedTo>>
-			<<goto `passage()`>>
-		<</link>>
-	<</if>>
-	
-	<<link 'Move him to the basement cell'>>
-		<<set $guests[$guestId] = $tmpGirl>>
-		<<goto 'Guest move to basement'>>
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
+	<<link 'Fuck him'>>
+		<<set $tmpGirlViewBack = 'Guy view - guest'>>
+		<<set _randomGuestFuck = randomInteger(1,3)>>
+		<<if !$tmpGirl.likesGuys || $tmpGirl.relationship < 50 || _randomGuestFuck === 3>>
+			<<goto 'Guy fuck - no'>>
+		<<else>>
+			<<goto 'Guy fuck'>>
+		<</if>>
 	<</link>>
+<</if>>
+
+<<if !($player.companions['guest:' + $guestId] ?? false)>>
+	<<link 'Add as companion'>>
+		<<companionAdd 'guest' $guestId>>
+		<<run delete $tmpGirl.assignedTo>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
+<<link 'Move him to the basement cell'>>
+	<<set $guests[$guestId] = $tmpGirl>>
+	<<goto 'Guest move to basement'>>
+<</link>>
+
+<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+	<<link 'Assign to'>>
+		<<dialog 'Assign to'>>
+			<<include 'Guest view assign to'>>	
+		<</dialog>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.assignedTo>>
+	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+		<<run delete $tmpGirl.assignedTo>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
+<<if ($game.hotShower ?? false) && $player.energy >= 10>>
+	<<link 'Invite to your shower'>>
+		<<goto 'Event: Guest invite shower'>>
+	<</link>>
+<</if>>
 	
-	<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
-		<<link 'Assign to'>>
-			<<dialog 'Assign to'>>
-				<<include 'Guest view assign to'>>	
-			<</dialog>>
-		<</link>>
-	<</if>>
-	
-	<<if $tmpGirl.assignedTo>>
-		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
-			<<run delete $tmpGirl.assignedTo>>
-			<<goto `passage()`>>
-		<</link>>
-	<</if>>
-	
-	<<if !$tmpGirl.gift>>
-		<<link 'Give gift'>>
-			<<script>>
-				Dialog.setup("Give gift", "Give gift");
-				Dialog.wiki(Story.get("Give gift").processText());
-				Dialog.open();
-	  		<</script>>
-		<</link>>
-	<</if>>
+<<if !$tmpGirl.gift>>
+	<<link 'Give gift'>>
+		<<script>>
+			Dialog.setup("Give gift", "Give gift");
+			Dialog.wiki(Story.get("Give gift").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
 
 <<link 'Change name'>>
 		<<dialog 'Change name'>>	
