@@ -48,7 +48,7 @@
 		<<if typeof _peopleInBathhouse[_bathGuest.gender] === 'undefined'>>
 			<<set _peopleInBathhouse[_bathGuest.gender] = {}>>
 		<</if>>
-		<<run _peopleInBathhouse[_bathGuest.gender].push('guest:' + _bathGuestI)>>
+		<<run _peopleInBathhouse[_bathGuest.gender]['guest:' + _bathGuestI] = true>>
 		<<set _genderClass = 'gender-' + (!_bathGuest.gender ? 'girl' : 'guy')>>
 		<tr>
 			<td style="width: 300px">
@@ -63,7 +63,17 @@
 						<<run delete $charId>>
                         <<set $guestId = _bathGuestI>>
                         <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
-                        <<goto `$tmpGirlViewBack`>>
+						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender]).length >= 2 && setup.percentageChance(10)>>
+							<<set $tmpEvent = {
+								bathhouseThreesome: [
+									Object.keys(_peopleInBathhouse[_bathGuest.gender])[0],
+									Object.keys(_peopleInBathhouse[_bathGuest.gender])[1]
+								]
+							}>>
+							<<goto 'Bathhouse - threesome'>>
+						<<else>>
+							<<goto `$tmpGirlViewBack`>>
+						<</if>>
                       <</link>>
                   </span>
 			</td>
@@ -89,10 +99,6 @@
 		<<if _bathSlave.location !== 'bathhouse'>>
 			<<continue>>
 		<</if>>
-		<<if typeof _peopleInBathhouse[_bathGuest.gender] === 'undefined'>>
-			<<set _peopleInBathhouse[_bathGuest.gender] = {}>>
-		<</if>>
-		<<run _peopleInBathhouse[_bathGuest.gender].push('slave:' + _bathGuestI)>>
 		<<set _genderClass = 'gender-' + (!_bathSlave.gender ? 'girl' : 'guy')>>
 		<tr>
 			<td style="width: 300px">
@@ -128,7 +134,6 @@
 		<</capture>>
 	<</for>> 
 </table>
-
 <br /><br />
 <<if hasTime(1)>>
 	<<link 'Wait 30 minutes'>>
