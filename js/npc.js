@@ -194,25 +194,7 @@ setup.agePeriod = function(age) {
 };
 
 setup.beautyDescription = function(beauty) {
-	if (beauty <= 10) {
-		return 'repulsive looking';
-	} else if (beauty <= 20) {
-		return 'hideous';
-	} else if (beauty <= 30) {
-		return 'ugly';
-	} else if (beauty <= 40) {
-		return 'unattractive';
-	} else if (beauty <= 50) {
-		return 'plain looking';
-	} else if (beauty <= 60) {
-		return 'average looking'
-	} else if (beauty <= 70) {
-		return 'attractive'
-	} else if (beauty <= 80) {
-		return 'beautiful'
-	} else if (beauty <= 90) {
-		return 'gorgeous'
-	} else if (beauty <= 100) {
-		return 'stunning'
-	}
+	const categories = ['repulsive looking', 'hideous', 'ugly', 'unattractive', 'plain looking', 'average looking', 'attractive', 'beautiful', 'gorgeous', 'stunning'];
+    const categoryIndex = Math.ceil(beauty / 10) - 1;
+    return categories[Math.min(categoryIndex, 9)];
 };
