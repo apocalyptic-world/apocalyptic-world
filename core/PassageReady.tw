@@ -16,12 +16,15 @@
 	kitchen: [],
 	bedroom: [],
 	church: [],
-	farm: []
+	farm: [],
+	lab: [],
+	guesthouse: []
 }>>
 <<set 
 	$game.avatars = {},
-	$game.avatars.blair = 'people/blair/avatar.png'
-	$game.avatars.rodger = 'people/rodger/avatar.png'
+	$game.avatars.blair = 'people/blair/avatar.png',
+	$game.avatars.rodger = 'people/rodger/avatar.png',
+	$game.avatars.laura = 'people/laura/avatar.jpg'
 >>
 
 <<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
@@ -40,6 +43,13 @@
 
 <<if isMetChar('rodger')>>
 	<<run $charactersInLocation['church'].push('rodger')>>
+<</if>>
+
+<<if isMetChar('laura') && $characters.laura.quests.living>>
+	<<if timeBetween('08:00', '11:00') || timeBetween('14:00', '20:00')>>
+		<<run $charactersInLocation['lab'].push('laura')>>
+		<<run $charactersInLocation['guesthouse'].push('laura')>>
+	<</if>>
 <</if>>
 
 <<if isMetChar('blair') && !$game.debugBlair>>

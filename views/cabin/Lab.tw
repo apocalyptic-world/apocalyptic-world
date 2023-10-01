@@ -1,0 +1,21 @@
+:: Lab [Place]
+
+<h1 class="ptitle">LAB</h1>
+<div id="place-head">
+[img[setup.ImagePath+'places/cabin/lab_head.jpg']]
+</div>
+<br /><br />
+Samples: <strong><<=$characters.laura.quests.productionSamples>></strong>
+<br /><br />
+<<if ($charactersInLocation['lab'] ?? []).includes('laura')>>
+	<<link 'Talk to Laura'>>
+		<<goto 'Laura - lab talk'>>
+	<</link>>
+<<else>>
+    Laura isn't here...
+	<br /><br />
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Guest house'>>
+<</link>>
+

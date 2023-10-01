@@ -1,0 +1,47 @@
+:: Guy fuck - no [sex] {"position":"3000,223","size":"100,100"}
+<center>
+	[img[setup.ImagePath+'game/misc/no_fuck_guy.webp']]
+</center>
+<br /><br />
+<<if $tmpGirl.likesGuys>>
+He tells you that he's not in the mood right now and just wants to be alone.
+<br /><br />
+<strong>Not enough relationship or he's not in the mood</strong>
+<<else>>
+He tells you that you are not his type and hopes you understand.
+<br /><br />
+<strong>He is not attracted to men</strong>
+<</if>>
+<br /><br />
+<<if $tmpGirl.likesGuys && setup.percentageChance(40) && $tmpGirl.relationship >= 30>>
+	<<=setup.displayName($tmpGirl)>> notices your boner and suggestions that maybe you want a quick blowjob to calm it down. 
+	<br /><br />
+	<<say $tmpGirl.name setup.ImagePath+'/people/anonguy.png'>>
+		I am really not in the mood right now but how about I just give you a quick head? 
+	<</say>>
+	<br /><br />
+	<<linkreplace 'Accept blowjob'>>
+		<<run $('#option2').hide()>>
+		<center>
+			[img[setup.ImagePath+'places/cabin/fuck_no_blowjob_guy.webp']]
+		</center>
+		Without taking of his clothes, <<=setup.displayName($tmpGirl)>> drops on his knees, unzips your pants and pulls out your already hard dick. As he wants to end it fast, he immediately starts sucking and jerking together. After few minutes you cum and he gets up and continues to do whatever he did before that. 
+		<br /><br />
+		<<horny_reset>>
+	<</linkreplace>>
+<</if>>
+<div id="option2">
+  <<link 'Force him'>>
+	  <<set $tmpGirl.relationship -=30>>
+	  <<goto 'Guy fuck'>>
+  <</link>>
+</div>
+<<link 'Leave'>>
+  	<<if $tmpGirlViewBack>>
+		<<goto $tmpGirlViewBack>>
+	<<else>>
+		<<goto [[Guy view]]>>
+	<</if>>
+<</link>>
+
+

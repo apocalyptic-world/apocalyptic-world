@@ -169,3 +169,32 @@ setup.genderDescriptor = function(person) {
 		return 'tguy';
 	}
 };
+
+setup.agePeriod = function(age) {
+	var _unit = age.toString()[1];
+	var _tens = age.toString()[0];
+
+	if (age <= 8) {
+		return 'childhood years';
+	} else if (age <= 12) {
+		return 'tween years';
+	} else if (age <= 14) {
+		return 'early teens';
+	} else if (age <= 17) {
+		return 'mid teens';
+	} else if (age <= 19) {
+		return 'late teens';
+	} else if (age >= 100) {
+		return '100s';
+	} else if (_unit <= 4) {
+		return 'early '+_tens+'0s';
+	} else if (_unit <= 9) {
+		return 'late '+_tens+'0s';
+	}
+};
+
+setup.beautyDescription = function(beauty) {
+	const categories = ['repulsive looking', 'hideous', 'ugly', 'unattractive', 'plain looking', 'average looking', 'attractive', 'beautiful', 'gorgeous', 'stunning'];
+    const categoryIndex = Math.ceil(beauty / 10) - 1;
+    return categories[Math.min(categoryIndex, 9)];
+};

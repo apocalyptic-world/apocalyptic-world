@@ -16,7 +16,7 @@
 	<<link 'Fuck her'>>
 		<<set $tmpGirlViewBack = 'Girl view - guest'>>
 		<<set _randomGuestFuck = randomInteger(1,3)>>
-		<<if ($tmpGirl.relationship < 50 || _randomGuestFuck === 3) && !$tmpGirl.traits.includes('nymphomaniac')>>
+		<<if (!$tmpGirl.likesGuys || $tmpGirl.relationship < 50 || _randomGuestFuck === 3) && !$tmpGirl.traits.includes('nymphomaniac')>>
 			<<goto 'Girl fuck - no'>>
 		<<else>>
 			<<goto 'Girl fuck'>>
@@ -61,6 +61,7 @@
 			<<goto 'Girl - workout together'>>
 		<</link>>
 	<</if>>
+	
 	<<if !$tmpGirl.gift>>
 		<<link 'Give gift'>>
 			<<script>>
@@ -70,9 +71,12 @@
 	  		<</script>>
 		<</link>>
 	<</if>>
-	<<link 'Invite to your shower'>>
-		<<goto 'Event: Guest invite shower'>>
-	<</link>>
+	
+	<<if ($game.hotShower ?? false) && $player.energy >= 10>>
+		<<link 'Invite to your shower'>>
+			<<goto 'Event: Guest invite shower'>>
+		<</link>>
+	<</if>>
 <</if>>
 
 <<if $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>

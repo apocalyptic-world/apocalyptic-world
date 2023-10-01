@@ -1,0 +1,44 @@
+:: Laura - new sample
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<<laura>>
+    Alright! You know the drill. Get on the bed. 
+<</laura>>
+<br /><br />
+
+<<set _videoOptions = [
+    'new_home1',
+    'sample_bj',
+    'sample_bj2',
+    'sample2_3'
+]>>
+<<set _video = 'laura/' + _videoOptions[Math.floor(Math.random()*_videoOptions.length)]>>
+<<video _video>>
+<br /><br />
+As usual, she approaches this matter very professionally. She takes your dick and gently starts to stroke it. Slowly she picks up the pace it up and down. She looks in your direction quite often, sometimes with a flirtatious smile.
+<br /><br />
+
+<<linkreplace 'Cum'>>
+    <<addmins 30>>
+        <<horny_reset>>
+        <center>
+			[img[setup.ImagePath+'people/laura/sample_cum.webp']]
+		</center>
+		<br /><br />
+		Before you cum she puts another sample cup in front of your dick and collects all cum you shoot out. 
+		<br /><br />
+        <<laura>>
+            Thanks! Be safe out there.
+        <</laura>>
+        <br /><br />
+        <<if $characters.laura.relationship < 50>>
+            <strong>Reputation with Laura increased by 1</strong>
+            <<set $characters.laura.relationship++>>
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<set $characters.laura.quests.productionSamples++>>
+            <<set $characters.laura.quests.sampleToday = true>>
+            <<goto 'Guest house'>>
+        <</link>>
+<</linkreplace>>

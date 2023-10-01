@@ -1,0 +1,159 @@
+:: Isabel - gas shortage
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br /><br />
+You see a number of people you know and many you do not, and while enjoying a drink you see Isabel walking towards you, her bodyguards pushing people away from her roughly.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/dom/quest_gas_shortage1.jpg']]
+</center>
+<br /><br />
+ <<isabel>>
+    You need to come with me right now. We have business to discuss…come along.
+ <</isabel>>
+<br /><br />
+It is obvious this is not a request, and her bodyguards reinforce that, helping you from your chair. 
+You are taken with Isabel, but into the usual room where Dom handled business, but to their private residence part.
+<br /><br />
+It is a very nice place, out of place in this ruined place you live in, seemingly untouched by war and filth. You are brought the an office inside of their residence, where Isabel offers you a seat.
+<br /><br />
+<<linkreplace 'Take a seat'>>
+    You start to ask a question, but Isabel raises a hand to stop you and then wastes no time.
+    <br /><br />
+    <<isabel>>
+        You are coming with me on a job. I am making an important transaction, one needed to maintain order in our city. 
+        I can only bring one people to the deal, and I don't trust anyone of the Dom's goons.
+    <</isabel>>
+    <br /><br />
+    <<isabel>>
+        We are running low on fuel, critically low. But you know that already. 
+    <</isabel>>
+    <br /><br />
+    Isabel says, pouring herself some tea. There are two cups, but she doesn’t offer you any, in fact she barely makes any eye contact at all.
+    <br /><br />
+    <<isabel>>
+        We uses gasoline in generators that keep the crucial systems running at night. Without them, our security would be compromised, we might have riots…the city me and Dom built might fall.
+    <</isabel>>
+    <br /><br />
+    <<linkreplace 'Accept her mission'>>
+        <<set $player.companions = {}>>
+        <<run $('#companions-list').hide()>>
+        <<set $enemies = []>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newgirl>>
+        <<run $enemies.push($tmpGirl)>>
+        After you accept you are escorted with Isabel to a part of Underground City you have never been to, where a sidecar is lined up with few other junks. 
+        <br /><br />
+        <center>
+	        [img[setup.ImagePath+'people/dom/quest_gas_shortage2.jpg']]
+        </center>
+        <br /><br />
+        Isabel climbs into one-wheeled device attached to the side of the motorcycle, and one of the bodyguards points at 3 gas canisters next to it. 
+        <br /><br />
+        <<isabel>>
+            We need to get these filled. We have a guy who runs an old oil and gas refinery, and he has in the past been willing to do business. 
+        <</isabel>>
+        <br /><br />
+        Isabel says, settling in and trying to get comfortable.
+        <br /><br />
+        <<isabel>>
+            I have caps, alcohol and drugs, it should be enough.
+        <</isabel>>
+        <br /><br />
+        <div id="option_should">
+            <<linkreplace 'Should be?'>>
+                <<isabel>>
+                    How the fuck would I know? Dom has always handled this, and he is in a fucking coma!
+                <</isabel>>
+                <br /><br />
+                She nearly shouts at you.
+                <br /><br />
+                <<isabel>>
+                    This is what Dom took when he went to get our fuel, for all I know he did the drugs himself, I have no idea. I just know we need the fuel
+                <</isabel>>
+                <br /><br/>
+            <</linkreplace>>
+        </div>
+        <<linkreplace 'Start the engine'>>
+            <<run $('#option_should').hide()>>
+            You fire up the engine and head out, with men closing a large set of doors behind you as you drive quickly off into the distance.
+            <br /><br />
+            You follow Isabel’s instructions and drive until the sun is setting, at which time you pull up near the refinery. 
+            It is still lit up well as it would have been before the war, but Isabel leans over and turns the lights off as you come to a stop, pulling out some binoculars to take a look.
+            <br /><br />
+            <center>
+	            [img[setup.ImagePath+'people/dom/quest_gas_shortage3.jpg']]
+            </center>
+            <br /><br />
+            <<isabel>>
+                Fuck... This isn’t good. That is a raider flag, and that looks like the man who used to do business with us strung up on the gas tank.
+            <</isabel>>
+            <br /><br />
+            She hands you the binoculars and you see what she was talking about, a dead man is hanging by his feet from the flagpole, and a raider flag is flying above him
+            <br />
+            Isabel seems very stressed.
+            <br /><br />
+            <<isabel>>
+                We have to have this fuel, but these raiders will be just as likely to have you up next to that previous owner, and me on my knees serving them sexually... 
+                That isn’t going to happen. But if we come back without this fuel, Dom might lose his power in the city and riots will start…
+            <</isabel>>
+            <br /><br />
+            We go in quietly when it gets dark, and if we need to we knock them out as many as we can quietly.
+            <br /><br />
+            <<linkreplace 'Wait for night'>>
+                <<addhours 3>>
+                You wait a few hours until it gets pitch black dark.
+                <br />
+                The two of you move in under cover of night, scouting around till you find what looks like a storage tank for newly refined gasoline. The raiders hit the jackpot with this place, gasoline and diesel that aren’t fouled is much harder to come by.
+                <br /><br />
+                You move in close with your gas cans, cutting a hole in a fence and making your way as close to the storage tank as you think you can get, trying not to make a sound.
+                <br />
+                As you move closer you notice <strong>3 guys and one girl</strong> sitting around firepit, very close to the fuel tank.
+                <br /><br />
+                <div id="option-stealth">
+                    <<linkreplace 'Go in stealth'>>
+                        <<set $gasShortageStealth = true>>
+                        <<if $player.int > 100>>
+                            <<run $('#option-fight').hide()>>
+                            You both moved with the precision of a well-oiled machine, choreographing your steps to the rhythm of your heartbeats. Isabel slipped behind a rusting shipping container, her movements graceful and soundless. Meanwhile, you edged towards the main tank, the weight of the canisters in your grip a constant reminder of your mission's urgency.
+                            <br /><br />
+                            As you reached the tank, the night seemed to hold its breath. With practiced hands, you worked the valves, the muted creaking of metal masked by the distant crackle of the fire. The fuel began to flow, a steady stream of liquid gold into the first canister.
+                            <br /><br />
+                            <strong>You collected <strong class="iitem">3 fuel canisters</strong></strong>
+                            <br /><br />
+                            <<link 'Leave'>>
+                                <<set $gasShortageCans = 3>>
+                                <<pickup $backpack 'fuel' 3>>
+                                <<goto 'Isabel - gas shortage #2'>>
+                            <</link>>
+                        <<else>>
+                            The night air hung heavy with tension as you and Isabel crept towards the fuel refinery, shadows weaving around you like silent sentinels. 
+                            <br />
+                            As you reached the tank, the night seemed to hold its breath. With practiced hands, you worked the valves, the muted creaking of metal masked by the distant crackle of the fire. The fuel began to flow, a steady stream of liquid gold into the first two canisters.
+                            <br /><br />
+                            <<pickup $backpack 'fuel' 2>>
+                            <<set $gasShortageCans = 2>>
+                            <strong>You collected <strong class="iitem">2 fuel canisters</strong></strong>
+                            <br /><br />
+                            But this time, luck was not on your side. A loose piece of debris shifted underfoot, emitting a sharp, echoing sound that seemed to pierce the stillness.
+                            <br />
+                            The guards around the fire pit jolted, their heads snapping in the direction of the noise. Panic surged through your veins as their eyes met yours, their faces a twisted mixture of surprise and alarm. There was no turning back now; stealth had betrayed you, and your only option was to fight.
+                            <br /><br />
+                        <</if>>
+                    <</linkreplace>>
+                </div>
+                <div id="option-fight">
+                    <<linkreplace 'Fight them'>>
+                        <<set $gasShortageFight = true>>
+                        <<fight $enemies 'Isabel - gas shortage #2' 'Isabel - gas shortage #2'>>
+                        <<set $fight.skipEnding = true>>
+                    <</linkreplace>>
+                </div>
+            <</linkreplace>>
+        <</linkreplace>>
+    <</linkreplace>>
+<</linkreplace>>

@@ -1,28 +1,34 @@
 :: Nightclub - invite {"position":"3003,1464","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
 <br /><br />
-<center>
+<<if !$tmpGirl.gender>>	
+	<center>
 	[img[setup.ImagePath+'places/nightclub/dress_up.webp']]
-</center>
+	</center>
+<<else>>
+	<center>
+	[img[setup.ImagePath+'places/nightclub/dress_up_guy.webp']]
+	</center>
+<</if>>
 
 <<include 'NPC info'>>
 
 <br /><br />
-After having fun in restroom she picks up her clothes and dresses while making a small talk with you.
+After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<=setup.pronounceWhos($tmpGirl)>> clothes and dresses while making a small talk with you.
 <br /><br />
 
 
 <<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
-	<<linkreplace 'Ask if she would like to move in with you'>>
-		<<if $orgasmsBefore === $tmpGirl.orgasms>>
+	<<linkreplace 'Ask to move in with you'>>
+		<<if !$tmpGirl.gender && $orgasmsBefore === $tmpGirl.orgasms>>
 			She giggles while looking at you "<strong>Why would I</strong>"
 		<<elseif setup.percentageChance(50)>>
-			You're a live savior. I recently started to look for a new place<br /> I'll go live with you! 
+			You're a life savior. I recently started to look for a new place<br /> I'll go live with you! 
 			<br /><br />
 			<strong><<=$tmpGirl.name>> moved in as guest</strong>
 			<<run $guests.push($tmpGirl)>>
 		<<else>>
-			Sorry but no. You look like a nice guy but I've my family and I won't leave them for you.
+			Sorry but no. You look like a nice guy but I've got my family and I won't leave them for you.
 		<</if>>
 		<br /><br />
 	<</linkreplace>>

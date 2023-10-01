@@ -9,7 +9,7 @@
 			<</if>>		
 			<tr>
 				<td style="width: 300px">
-					<<if _guest.gender || setup.getAge(_guest) < 17>>
+					<<if setup.getAge(_guest) < 17>>
 						<span class="name-no-click"><<=_guest.name>></span>
 					<<else>>
 						<<link _guest.name>>
@@ -18,10 +18,15 @@
 						  <<set $tmpGirlBack = 'Forest'>>
 						  <<set $tmpGirlCapture to false>>
 						  <<set $tmpGirl.rape to false>>
-						  <<set $tmpGirlViewBack = 'Girl view - guest' >>
 						  <<set $guestId = _guestI>>
-						  <<run delete $slaveId>>
-						  <<goto 'Girl view - guest'>>
+						  <<run delete $slaveId>>						  
+						  <<if !$tmpGirl.gender>>
+							<<set $tmpGirlViewBack = 'Girl view - guest' >>
+							<<goto 'Girl view - guest'>>
+						  <<else>>
+							<<set $tmpGirlViewBack = 'Guy view - guest' >>
+							<<goto 'Guy view - guest'>>							
+						  <</if>>
 					  	<</link>>
 						
 						<<if _guest.pregnancy >= 7>>

@@ -1,0 +1,110 @@
+:: Isabel - gas shortage #2
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<if $gasShortageFight>>
+    <<if !$prevFight.won>>
+        <<perkAdd 'bleeding'>>
+        <<perkAdd 'beaten'>>
+        Only thanks to luck, at the moment when you were already lying on the ground and they wanted to hang you next to the owner, the metal piece to which the owner was hanging broke. 
+        It was purely by chance that he fell directly on them, giving you the opportunity to escape with two gas cans, where Isabela was already waiting for you by the fence.
+        <br /><br />
+        <<isabel>>
+            Oh, thank god! I panicked! Lets get out of here before anyone else arrives.
+        <</isabel>>
+    <<else>>
+        After you successfully managed to fight them off, Isabela appeared out of nowhere. Just as they noticed you running, she had abandoned you, leaving you alone.
+        <br /><br />
+        <<isabel>>
+            Oh, thank god! I panicked! Lets get out of here before anyone else arrives.
+        <</isabel>>
+        <br /><br />
+        Instead of leaving immediately, you decided to fill up the third canister with fuel first. Only then did you follow Isabela along the same path you entered.
+        <br /><br />
+        <<pickup $backpack 'fuel' 1>>
+        <strong>You collected <strong class="iitem">1 fuel canister</strong></strong>
+        <br /><br />
+    <</if>>
+<</if>>
+<center>
+    [img[setup.ImagePath+'people/dom/quest_gas_shortage4.jpg']]
+</center>
+<br /><br />
+You get out of the camp, load the cans you start the drive back to the city with Isabel.
+<br />
+As you reach the Underground City, the hidden side entrance you used to leave in the bike, you drive in and stop. There's one guard but as soon as you get off the bike Isabel tells him to get lost.
+<br /><br />
+<<isabel>>
+    I am very grateful that you decided to help me after all. When Doms wakes up, he will surely find out about this, and he will reward you generously.
+<</isabel>>
+<br /><br />
+    <<set _relIncrease = $gasShortageCans * 5>>
+    <<set $characters.isabel.relationship += _relIncrease>>
+    <strong>Relationship with Isabel increased by <<=_relIncrease>></strong>
+    <<drop $backpack 'fuel' $gasShortageCans>>
+<br /><br />
+<div id="option_keep">
+<<linkreplace 'Keep one gas can'>>
+    <<pickup $backpack 'fuel' 1>>
+    <<run $('#option_reward, #option_quiet').hide()>>
+    <<isabel>>
+        What? No way! I can't let you do that. We need it! 
+    <</isabel>>
+    <br />
+    <<you>>
+        And what else can I do? I risked my life, and if you want this collaboration to continue, I'll be collecting my share.
+    <</you>>
+    <br />
+    <<set $characters.isabel.relationship -= 5>>
+     <strong>Relationship with Isabel decreased by 5</strong>
+    <br /><br />
+    <div id="option_hand">
+        <<linkreplace 'Put had on her leg'>>
+            <<run $('#ending').show()>>
+            <<run $('#option_nothing').hide()>>
+            <<video 'dom/gas_shortage'>>
+            <br /><br />
+            You slowly put your hand on her thigh and start to slide it across her leg. 
+            She doesn't resist but she's not really enjoying it so you move your hand up and grab her breast and squeeze it few times before she steps back and says that's enough.
+            <br /><br />
+            <<set $characters.isabel.sub +=5>>
+            <strong>Isabel's submission increased by 5</strong>
+            <br /><br />
+        <</linkreplace>>
+    </div>
+    <div id="option_nothing">
+        <<linkreplace 'Do nothing'>>
+            <<run $('#option_hand').hide()>>
+            <<run $('#ending').show()>>
+            <br /><br />
+        <</linkreplace>>
+    </div>
+<</linkreplace>>
+</div>
+<div id="option_reward">
+    <<linkreplace 'What about a reward?'>>
+        <<drop $backpack 'fuel' $gasShortageCans>>
+        <<run $('#option_keep, #option_quiet').hide()>>
+        <<run $('#ending').show()>>
+        <<isabel>>
+            Not this time. You'll get your reward. I promise. 
+        <</isabel>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_quiet">
+    <<linkreplace 'Keep quiet'>>
+        <<drop $backpack 'fuel' $gasShortageCans>>
+        <<run $('#option_keep, #option_reward').hide()>>
+        <<run $('#ending').show()>>
+    <</linkreplace>>
+</div>
+<div id="ending" style="display: none">
+    She accompanies you to the exit of the underground parking lot, where you emerge into the underground city. She turns in one direction and heads off with the bodyguards who are already waiting for her at the exit.
+    <br /><br />
+    <<link 'Leave'>>
+        <<run delete $gasShortageCans, $gasShortageFight, $gasShortageStealth>>
+        <<set $characters.dom.quests.quest4_done_day = $game.day>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>
+

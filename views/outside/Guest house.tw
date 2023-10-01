@@ -3,6 +3,12 @@
 <div id="place-head">
 [img[setup.ImagePath+'places/cabin/guesthouse_head.jpg']]
 </div>
+<<if ($game.location.lab ?? false)>>
+	<br /><br />
+	<<link 'Lab'>>
+		<<goto 'Lab'>>
+	<</link>>
+<</if>>
 <h3>Guests</h3>
 <<set _guestHouseLimitShow = (($guesthouseLimit ?? 3) - ($guests ?? []).length)>>
 <<if _guestHouseLimitShow < 0>>

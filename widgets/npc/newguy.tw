@@ -1,4 +1,4 @@
-:: Widget- newguy [widget]
+:: Widget- newguy [widget] {"position":"600,5100","size":"100,100"}
 <<widget newguy>>
 	<<include 'Guy names'>>
 	<<set _age = setup.ageRoll()>>
@@ -24,15 +24,17 @@
 		assignedTo: null,	
 		horny: random(0, 30),
 		traits: [],
-		skills: setup.percentageChance(30) ? [either(['scavanger', 'gardener', 'shopkeeper'])] : [],
+		skills: [],
 		endurance: 0,
 	}>>
 	
 <<set $tmpGuy = setup.setSexuality($tmpGuy, _orientation)>>
-<<if ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) && setup.percentageChance(50)>>
-	<<set 
-		$tmpGuy.traits = setup.percentageChance(30) ? [either(['analslut', 'cumslut', 'deepthroat'])] : []
-	>>
+<<if ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) && setup.percentageChance(25)>>
+	<<set $tmpGuy.traits = either(['analslut', 'cumslut', 'deepthroat'])>>
+<</if>>
+
+<<if setup.percentageChance(50)>>
+	<<set $tmpGuy.skills = setup.getRandomSkills()>>
 <</if>>
 
 <<if (setup.getAge($tmpGuy) <= 20 && setup.percentageChance(50))>>
@@ -47,5 +49,7 @@
 	>>
 <</if>>
 
-	<<set $tmpGuy.id = setup.generateUniqueKey($tmpGuy)>>
+<<set $tmpGuy.id = setup.generateUniqueKey($tmpGuy)>>
 <</widget>>
+
+

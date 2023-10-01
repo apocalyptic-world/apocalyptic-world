@@ -1,0 +1,80 @@
+:: Octavia - wolf pelt
+
+<h1 class="ptitle">OCTAVIA'S CAMP</h1>
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/settlement/octavia_wolf_pelt.jpg']]
+</center>
+<br /><br />
+<<set _peltCount = $backpack.count('pelt_wolf')>>
+<<drop $backpack 'pelt_wolf' _peltCount>>
+You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCount > 1 ? 's' : '')>> and throw them on the ground in her tent next to the other pelts.
+<br /><br />
+<<if _peltCount < 3>>
+    <<octavia>>
+        That's it? I need more! A lot more. Leave and come back when you got some more!
+    <</octavia>>
+    <br /><br />
+    <<if $characters.octavia.relationship < 40>>
+        <<set $characters.octavia.relationship++>>
+        <strong>Relationship increased by 1</strong>
+        <br /><br />
+    <</if>>
+    <<link 'Leave'>>
+        <<addmins 15>>
+        <<goto 'Settlement'>>
+    <</link>>
+<<else>>
+    <<octavia>>
+        Very good! It seems that you are useful after all. Your friends in the village don't have to worry right now.
+    <</octavia>>
+    <br /><br />
+    <<linkreplace 'Leave'>>
+        <<octavia>>
+            Already leaving? Stay.
+        <</octavia>>
+        <<addmins 15>>
+        <br /><br />
+        <<linkreplace 'Stay'>>
+            <<run $('#option_ignore').hide()>>
+            <<if $characters.octavia.isSub && false>>
+
+            <<else>>
+                She once slowly walks around you before standing behind you, grabs your hands and, lifting them up and tying up against tent poles. 
+                After that, she stands in front of you and gently caresses you before undressing you and in the end putting a dirty cloth in your mouth.
+                <br /><br />
+                <<video 'octavia/pelt_dom1'>>
+                <br /><br />
+                <<octavia>>
+                    Next time I want more! Do you understand it? More! 
+                <</octavia>>
+                <br /><br />
+                You see anger and pleasure in her eyes in the same time. She repeats herself few times in a raised tone. After a moment she calms down and playfully slides her finger across your flaccid dick. 
+                Slowly it gets erected and she stops to do that and steps back...
+                <br /><br />
+                <<octavia>>
+                    I expected better from you.
+                <</octavia>>
+                <br /><br />
+                <<video 'octavia/pelt_dom2'>>
+                <br /><br />
+                With a sharp kick, she strikes you right in the groin. You groan, but the dirty cloth in your mouth muffles almost all sound. She slowly walks around you and pushes you away, telling you to gather yourself and leave
+                <br /><br />
+                <<link 'Leave'>>
+                    <<goto 'Settlement'>>
+                <</link>>
+            <</if>>
+        <</linkreplace>>
+        <div id="option_ignore">
+            <<linkreplace 'Ignore her and leave'>>
+                <<if $characters.octavia.sub < 10>>
+                    <<set $characters.octavia.sub++>>
+                    <strong>Octavia's submission increased by 1</strong>
+                <</if>>
+                <<link 'Continue'>>
+                    <<goto 'Settlement'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <</linkreplace>>
+<</if>>
