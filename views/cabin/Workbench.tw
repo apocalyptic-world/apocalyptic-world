@@ -36,13 +36,16 @@
 					  <div class="workbench-required">
 						  Required:<br />
 						  <<for _r to 0; _r lt _required.length; _r++>>
-							  <<if $backpack.count(_required[_r]) + $storage.count(_required[_r]) < _item.required[_required[_r]]>>
+						  	  <<set _count = $backpack.count(_required[_r]) + $storage.count(_required[_r])>>
+							  <<set _needtxt = ''>>
+							  <<if _count < _item.required[_required[_r]]>>
 								  <<set _itemHasResources = false>>
+								  <<set _needtxt = '(missing ' + (_item.required[_required[_r]] - _count) +  ')'>>
 							  <</if>>
-							  <span><<=_item.required[_required[_r]]>> <<=Item.get(_required[_r]).name>></span><br />
+							  <span><<=_item.required[_required[_r]]>> <<=Item.get(_required[_r]).name>> _needtxt</span><br />
 						  <</for>>
 						  <span><<=_workEnergy>> energy</span>
-						  <<if $player.energy < _workEnergyy>>
+						  <<if $player.energy < _workEnergy>>
 					   	  	<<set _itemHasResources = false>>
 						  <</if>>
 					  </div>
