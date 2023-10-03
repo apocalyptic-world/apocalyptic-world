@@ -149,6 +149,9 @@
 			
 			// Learn skill
 			<<if $slaves[_i].stats['garden'] > 100 && !($slaves[_i].skills ?? []).includes('gardener')>>
+				<<if typeof $slaves[_i].skills === 'undefined'>>
+					<<set $slaves[_i].skills = []>>
+				<</if>>
 				<<run $slaves[_i].skills.push('gardener')>>
 				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned gardener skill</span>')>>
 			<</if>>
@@ -316,6 +319,9 @@
 
 			// Learn skill
 			<<if $guests[_guestI].stats['garden'] > 100 && !($guests[_guestI].skills ?? []).includes('gardener')>>
+				<<if typeof $guests[_guestI].skills === 'undefined'>>
+					<<set $guests[_guestI].skills = []>>
+				<</if>>
 				<<run $guests[_guestI].skills.push('gardener')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned gardening skill</span>')>>
 			<</if>>
@@ -382,6 +388,9 @@
 			
 			// Learn skill
 			<<if $guests[_guestI].stats['forest'] > 100 && !($guests[_guestI].skills ?? []).includes('woodcraft')>>
+				<<if typeof $guests[_guestI].skills === 'undefined'>>
+					<<set $guests[_guestI].skills = []>>
+				<</if>>
 				<<run $guests[_guestI].skills.push('woodcraft')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned woodcraft skill</span>')>>
 			<</if>>
@@ -413,6 +422,9 @@
 			
 			// Learn skill
 			<<if $guests[_guestI].stats['scavenging'] > 100 && !($guests[_guestI].skills ?? []).includes('scavenger')>>
+				<<if typeof $guests[_guestI].skills === 'undefined'>>
+					<<set $guests[_guestI].skills = []>>
+				<</if>>
 				<<run $guests[_guestI].skills.push('scavenger')>>
 				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned scavenger skill</span>')>>
 			<</if>>
