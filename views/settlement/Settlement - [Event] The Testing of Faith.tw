@@ -4,6 +4,7 @@
 	[img[setup.ImagePath+'people/rodger/event_testing_faith1.jpg']]
 </center>
 <br /><br />
+<<set $prevFight = null>>
 Approaching the village, you notice that a large portion of its inhabitants are gathered by the church, with Roger standing among them. It seems that a rather loud argument has erupted in their midst. You decide to get closer and find out what exactly has transpired.
 <br /><br />
  <<rodger>>
@@ -114,7 +115,85 @@ Approaching the village, you notice that a large portion of its inhabitants are 
             <</rodger>>
             <br /><br />
             <<linkreplace 'Go to the camp'>>
-                
+                The sun hung low in the sky, casting long, ominous shadows across the desolate landscape. You and the priest, clad in tattered robes, 
+                cautiously approached the blocked water stream, your hearts heavy with the burden of your mission. 
+                This water source was crucial for Rodger's settlement's survival, and you couldn't afford to fail.
+                <br />
+                As you drew nearer, the sharp crackle of a campfire echoed through the barren wasteland. 
+                Hidden behind the remnants of a shattered trees, you beheld a bandit camp, a motley assortment of makeshift tents and scavenged weaponry.
+                <br />
+                The leader, a burly figure with a cruel glint in his eye, stepped forward, his lips curling into a sneer.
+                <br /><br />
+                <<newguy>>
+                <<sayNpc $tmpGuy>>
+                    Well, well, what have we here? Holy men, come to beg for a sip of water?
+                <</sayNpc>>
+                <br /><br />
+                Rodger, a man of weathered faith, held his ground, his voice steady.
+                <br /><br />
+                <<rodger>>
+                    We seek only what is rightfully ours, friend. The stream you've blocked is meant to flow freely for all who need it.
+                <</rodger>>
+                <br />
+                A harsh, mocking laugh rang out from the bandit leader.
+                <br /><br />
+                <<sayNpc $tmpGuy>>
+                    Rights? There's no such thing in this world, padre. It's what you can take that matters.
+                <</sayNpc>>
+                <br /><br />
+                Undeterred, Rodger continued.
+                <br /><br />
+                <<rodger>>
+                    I implore you, let us pass. Our settlement is in dire need. We can find another way to resolve this.
+                <</rodger>>
+                <br />
+                <<sayNpc $tmpGuy>>
+                    Resolve, eh? I've got a resolution for you. Leave, now, before my patience runs out.
+                <</sayNpc>>
+                <br /><br />
+                <<if $player.money >= 500>>
+                    <div id="option_money">
+                        <<linkreplace 'Offer them 500 caps'>>
+                            <<set $faithMoney = true>>
+                            <<set $player.money -= 500>>
+                            The bandits' leader, a gruff and weathered figure, took the caps from your outstretched hand with a sly grin.
+                            <br />
+                            As he pocketed the caps, the bandits started to disperse, chatting and laughing among themselves, paying you no heed. 
+                            Confused and growing frustrated, you cleared your throat, trying to regain their attention.
+                            <br /><br />
+                            <<you>>
+                                So, about unblocking the stream... We gave you the caps, now fulfill your end of the deal.
+                            <</you>>
+                            <br />
+                            The bandit exchanged a knowing glance with his comrades before bursting into laughter.
+                            <br />
+                            <br />
+                            <<sayNpc $tmpGuy>>
+                                What caps? We haven't seen any caps, have we?
+                            <</sayNpc>>
+                            <br /><br />
+                        <</linkreplace>>
+                    </div>
+                <</if>>
+                <div id="option_fight">
+                    <<linkreplace 'Fight them'>>
+                        <<set $enemies = []>>
+                        <<set $faithFight = true>>
+                        <<run $enemies.push($tmpGuy)>>
+                        <<newguy>>
+                        <<run $enemies.push($tmpGuy)>>
+                        <<newgirl>>
+                        <<run $enemies.push($tmpGirl)>>
+                        <<fight $enemies 'Settlement - [Event] The Testing of Faith #2' 'Settlement - [Event] The Testing of Faith #2'>>
+                        <<set $fight.skipEnding = true>>
+                    <</linkreplace>>
+                </div>
+                <div id="option_leave">
+                    <<link 'Leave'>>
+                        <<set $faithLeave = true>>
+                        <<goto 'Settlement - [Event] The Testing of Faith #2'>>
+                    <</link>>
+                </div>
             <</linkreplace>>
         <</linkreplace>>
     <</linkreplace>>
