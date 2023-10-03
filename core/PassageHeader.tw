@@ -27,6 +27,12 @@
 	<</if>>
 <</if>>
 
+/* restore companion after hero being alone with Blair or Isabel */
+<<if passage().search(/^(Blair|Fight|Isabel)/) == -1 && typeof $player.companionsHome !== 'undefined'>>
+      	<<set $player.companions = $player.companionsHome>>
+        <<run delete $player.companionsHome>>
+<</if>>
+
 <<if tags().includes('nightclub') && !timeBetween('20:00', '04:00')>>
 	<<goto 'Nightclub'>>
 <</if>>

@@ -35,6 +35,7 @@ It is a very nice place, out of place in this ruined place you live in, seemingl
     <</isabel>>
     <br /><br />
     <<linkreplace 'Accept her mission'>>
+	<<set $player.companionsHome = $player.companions>>
         <<set $player.companions = {}>>
         <<run $('#companions-list').hide()>>
         <<set $enemies = []>>
@@ -149,6 +150,7 @@ It is a very nice place, out of place in this ruined place you live in, seemingl
                 <div id="option-fight">
                     <<linkreplace 'Fight them'>>
                         <<set $gasShortageFight = true>>
+                        <<set $gasShortageCans = 0>>
                         <<fight $enemies 'Isabel - gas shortage #2' 'Isabel - gas shortage #2'>>
                         <<set $fight.skipEnding = true>>
                     <</linkreplace>>
