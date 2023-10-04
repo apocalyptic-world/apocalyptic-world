@@ -1,0 +1,152 @@
+:: Octavia \[Event\] - The rival tribe ultimatum
+<h1 class="ptitle">OCTAVIA'S CAMP</h1>
+<br /><br />
+<center>
+    ### IMAGE ###
+</center>
+
+<br /><br />
+You find Octavia deep in thought, standing at the edge of her encampment. The messenger from the rival tribe's camp stands nearby, impatience etched on his face. The tension is palpable.
+<br /><br />
+Octavia turning to her warriors.
+<br /><br />
+<<octavia>>
+     We're facing a grave threat. They demand we surrender our territory or face war. What do you think
+<</octavia>>
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/kill.gif']]
+</center>
+<br /><br />
+Everyone around looks at each other and slowly starts to laugh. Octavia joins them just before she pulls out her sword and with a swift motion slashes the messenger's belly.
+<br /><br />
+<<octavia>>
+    Those stupid fools. We should prepare for a war!
+<</octavia>>
+<br /><br />
+At that very moment, she notices that you're also here and decides to address you
+<br /><br />
+<<octavia>>
+    They demand we surrender our territory or face war. What do you think?
+<</octavia>>
+<br /><br />
+<div id="option_negotiation">
+    <<linkreplace 'Advocate for negotiation'>>
+        <<set _negotation = true>>
+        <<run $('#option_war').hide()>>
+        <strong>Octavia's submission decreased by 10</strong>
+        <br /><br />
+        <<set $characters.octavia.sub -= 10>>
+        <<you>>
+            Octavia, let's consider negotiation. It might be a chance to find common ground.
+        <</you>>
+        <br /><br />
+        She starts to laugh bitterly while looking at others.
+        <br /><br />
+        <<octavia>>
+            Negotiation? They would never agree to such a thing. They've made their stance clear and so are we.
+        <</octavia>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_war">
+    <<linkreplace 'Prepare for war'>>
+        <<set _war = true>>
+        <strong>Octavia's submission increased by 10</strong>
+        <<set $characters.octavia.sub += 10>>
+        <br /><br />
+        <<run $('#option_negotiation').hide()>>
+        <<you>>
+            Octavia, sometimes strength is the only language they understand. We should fortify you defenses, gather your best fighters, and show them we're not to be trifled with.
+        <</you>>
+        <br /><br />
+        <<octavia>>
+            We're not going to win this in a clear fight. They outnumber us and have better resources. We need something else, something that gives us an edge.
+        <</octavia>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_sabotage">
+    <<linkreplace 'Suggest sabotage'>>
+        <<if !_war>>
+            <<run $('#option_war').hide()>>
+        <</if>>
+        <<if !_negotation>>
+            <<run $('#option_negotation').hide()>>
+        <</if>>
+        <<you>>
+            There might be another way. Let me gather a small, elite team. We'll infiltrate their camp, sabotage their supplies, and sow discord among their ranks.
+        <</you>>
+        <br /><br />
+        Octavia studies your face, assessing the resolve in your eyes. After a tense moment, she nods.
+        <br /><br />
+        <<octavia>>
+            But you won't take your or my team. We both will go alone. Now!
+        <</octavia>>
+        <br /><br />
+        <<linkreplace 'Go with her'>>
+            Under the cover of cloudy day, you and Octavia move like shadows towards the rival tribe's camp. The sun flickers through the barren trees, casting long, eerie shadows.
+            <br /><br />
+            <center>
+                #### IMAGE ####
+            </center>
+            <br /><br />
+            As you approach the outskirts of the camp, you spot a storage hangar, guarded by two drowsy sentinels.
+            <br /><br />
+            <<octavia>>
+                Take out the guards quietly. We can't afford an alarm.
+            <</octavia>>
+            <br /><br />
+            <<linkreplace 'Take out guards'>>
+                Your and Octavia moves in unison, dispatching the guards swiftly and silently. You slip inside the hangar, finding barrels of supplies, crates of weapons, and stacks of provisions.
+                <br /><br />
+                <<octavia>>
+                    Someone's coming!
+                <</octavia>>
+                <br /><br />
+                She grabs your hand and pulls you into the darkest corner of the hangar.
+                <br /><br />
+                In silence, without making a sound, you stand in the corner and hear as three individuals enter the hangar and talk amongst themselves. They linger for a moment, and Octavia begins to consider whether it's best to attack them outright.
+                <br /><br />
+                <<if $characters.octavia.isSub>>
+                    <<linkreplace 'Grab her quetly from behind'>>
+                        <center>
+                            [img[setup.ImagePath+'people/octavia/breasts.webp']]
+                        </center>
+                        <br /><br />
+                        Unexpectedly, you quietly grab her and begin to squeeze her breasts from behind. 
+                        It was so unexpected that she accidentally lets out a quiet gasp. 
+                        <br />
+                        But that's enough for the people in the hangar to hear you, and they start lunging towards you.
+                        <<run $('before_fight').show()>>
+                        <br /><br />
+                    <</linkreplace>>
+                <<else>>
+                    <<run $('before_fight').show()>>
+                    Octavia stands in front of you and covers your entire field of vision. While you wait for them to leave, she starts tracing her finger along the ice cream.
+                    <br /><br />
+                <</if>>
+                <div id="option_quetly">
+                    <<linkreplace 'Keep it together'>>
+                        <<run $('before_fight').show()>> 
+                    <</linkreplace>>
+                </div>
+                <div id="before_fight" style="display: none">
+                    Suddenly, one of the three individuals emerges from the corner and, with a shout, signals the others to charge towards you. To your surprise, four more people rush in through the back exit, and Octavia lunges at them.
+                    <br /><br />
+                    <<set $enemies = []>>
+                    <<newguy>>
+                    <<run $enemies.push($tmpGuy)>>
+                    <<newguy>>
+                    <<run $enemies.push($tmpGuy)>>
+                    <<newguy>>
+                    <<run $enemies.push($tmpGuy)>>
+                    <<set $game.death_reason = 'knife in your heart'>>
+                    <<fight $enemies 'Octavia [Event] The rival tribe ultimatum #2', 'Death'>>
+                    <<set $fight.skipEnding = true>>
+                </div>
+            <</linkreplace>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>
+
