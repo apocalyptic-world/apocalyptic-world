@@ -2,7 +2,7 @@
 <h1 class="ptitle">OCTAVIA'S CAMP</h1>
 <br /><br />
 <center>
-    ### IMAGE ###
+    [img[setup.ImagePath+'people/octavia/ultimatum.jpg']]
 </center>
 
 <br /><br />
@@ -72,7 +72,7 @@ At that very moment, she notices that you're also here and decides to address yo
             <<run $('#option_war').hide()>>
         <</if>>
         <<if !_negotation>>
-            <<run $('#option_negotation').hide()>>
+            <<run $('#option_negotiation').hide()>>
         <</if>>
         <<you>>
             There might be another way. Let me gather a small, elite team. We'll infiltrate their camp, sabotage their supplies, and sow discord among their ranks.
@@ -88,39 +88,41 @@ At that very moment, she notices that you're also here and decides to address yo
             Under the cover of cloudy day, you and Octavia move like shadows towards the rival tribe's camp. The sun flickers through the barren trees, casting long, eerie shadows.
             <br /><br />
             <center>
-                #### IMAGE ####
+                [img[setup.ImagePath+'people/octavia/hangar.jpg']]
             </center>
-            <br /><br />
+            <br />
             As you approach the outskirts of the camp, you spot a storage hangar, guarded by two drowsy sentinels.
             <br /><br />
             <<octavia>>
                 Take out the guards quietly. We can't afford an alarm.
             <</octavia>>
-            <br /><br />
+            <br />
             <<linkreplace 'Take out guards'>>
                 Your and Octavia moves in unison, dispatching the guards swiftly and silently. You slip inside the hangar, finding barrels of supplies, crates of weapons, and stacks of provisions.
                 <br /><br />
                 <<octavia>>
                     Someone's coming!
                 <</octavia>>
-                <br /><br />
+                <br />
                 She grabs your hand and pulls you into the darkest corner of the hangar.
                 <br /><br />
                 In silence, without making a sound, you stand in the corner and hear as three individuals enter the hangar and talk amongst themselves. They linger for a moment, and Octavia begins to consider whether it's best to attack them outright.
                 <br /><br />
                 <<if $characters.octavia.isSub>>
-                    <<linkreplace 'Grab her quetly from behind'>>
-                        <center>
-                            [img[setup.ImagePath+'people/octavia/breasts.webp']]
-                        </center>
-                        <br /><br />
-                        Unexpectedly, you quietly grab her and begin to squeeze her breasts from behind. 
-                        It was so unexpected that she accidentally lets out a quiet gasp. 
-                        <br />
-                        But that's enough for the people in the hangar to hear you, and they start lunging towards you.
-                        <<run $('before_fight').show()>>
-                        <br /><br />
-                    <</linkreplace>>
+                    <div id="option_grab">
+                        <<linkreplace 'Grab her quetly from behind'>>
+                            <center>
+                                [img[setup.ImagePath+'people/octavia/breasts.webp']]
+                            </center>
+                            <br /><br />
+                            Unexpectedly, you quietly grab her and begin to squeeze her breasts from behind. 
+                            It was so unexpected that she accidentally lets out a quiet gasp. 
+                            <br />
+                            But that's enough for the people in the hangar to hear you, and they start lunging towards you.
+                            <<run $('before_fight').show()>>
+                            <br /><br />
+                        <</linkreplace>>
+                    </div>
                 <<else>>
                     <<run $('before_fight').show()>>
                     Octavia stands in front of you and covers your entire field of vision. While you wait for them to leave, she starts tracing her finger along the ice cream.
@@ -128,22 +130,25 @@ At that very moment, she notices that you're also here and decides to address yo
                 <</if>>
                 <div id="option_quetly">
                     <<linkreplace 'Keep it together'>>
-                        <<run $('before_fight').show()>> 
+                        <<run $('#before_fight').show()>> 
+                        <<run $('#option_grab').hide()>>
                     <</linkreplace>>
                 </div>
                 <div id="before_fight" style="display: none">
                     Suddenly, one of the three individuals emerges from the corner and, with a shout, signals the others to charge towards you. To your surprise, four more people rush in through the back exit, and Octavia lunges at them.
                     <br /><br />
-                    <<set $enemies = []>>
-                    <<newguy>>
-                    <<run $enemies.push($tmpGuy)>>
-                    <<newguy>>
-                    <<run $enemies.push($tmpGuy)>>
-                    <<newguy>>
-                    <<run $enemies.push($tmpGuy)>>
-                    <<set $game.death_reason = 'knife in your heart'>>
-                    <<fight $enemies 'Octavia [Event] The rival tribe ultimatum #2', 'Death'>>
-                    <<set $fight.skipEnding = true>>
+                    <<link 'Fight'>>
+                        <<set $enemies = []>>
+                        <<newguy>>
+                        <<run $enemies.push($tmpGuy)>>
+                        <<newguy>>
+                        <<run $enemies.push($tmpGuy)>>
+                        <<newguy>>
+                        <<run $enemies.push($tmpGuy)>>
+                        <<set $game.death_reason = 'knife in your heart'>>
+                        <<fight $enemies 'Octavia [Event] The rival tribe ultimatum #2', 'Death'>>
+                        <<set $fight.skipEnding = true>>
+                    <</link>>
                 </div>
             <</linkreplace>>
         <</linkreplace>>
