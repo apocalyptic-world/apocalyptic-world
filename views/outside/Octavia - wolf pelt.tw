@@ -16,8 +16,8 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
     <</octavia>>
     <br /><br />
     <<if $characters.octavia.relationship < 40>>
-        <<set $characters.octavia.relationship++>>
-        <strong>Relationship increased by 1</strong>
+        <<set $characters.octavia.relationship = Math.min(40, ($characters.octavia.relationship + _peltCount))>>
+        <strong>Relationship increased by <<=_peltCount>></strong>
         <br /><br />
     <</if>>
     <<link 'Leave'>>
@@ -29,6 +29,11 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
         Very good! It seems that you are useful after all. Your friends in the village don't have to worry right now.
     <</octavia>>
     <br /><br />
+    <<if $characters.octavia.relationship < 40>>
+        <<set $characters.octavia.relationship = Math.min(40, ($characters.octavia.relationship + _peltCount))>>
+        <strong>Relationship increased by <<=_peltCount>></strong>
+        <br /><br />
+    <</if>>
     <<linkreplace 'Leave'>>
         <<octavia>>
             Already leaving? Stay.
