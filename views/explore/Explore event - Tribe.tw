@@ -1,0 +1,43 @@
+:: Explore event: Tribe
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+
+Beneath the rustling canopy of leaves, you froze, ears attuned to the faintest of sounds. There it was again, distant voices, foreign and indistinct. 
+Crouching low, you blended seamlessly with the underbrush, your heart pounding a rhythm of caution.
+<br /><br />
+Peering through the foliage, you spotted them - members of a rival tribe, unmistakable by their worn emblems and rugged attire. 
+They moved with a fluidity that spoke of practiced coordination, their eyes scanning the forest like seasoned hunters.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore/tribe.jpg']]
+</center>
+<br />
+You held your breath, assessing the situation.
+<br />
+You needed to observe, to understand their intent. The forest was your sanctuary, every rustling leaf and hidden trail your allies.
+<br /><br />
+<<link 'Fight them'>>
+    <<set $enemies = []>>
+    <<newgirl>>
+    <<set 
+	    $tmpGirl.inventory = [],
+		$tmpGirl.inventory.push('knife')
+	>>
+    <<run $enemies.push($tmpGirl)>>
+    <<newguy>>
+     <<set 
+	    $tmpGuy.inventory = [],
+		$tmpGuy.inventory.push('knife')
+	>>
+    <<run $enemies.push($tmpGuy)>>
+    <<newguy>>
+     <<set 
+	    $tmpGuy.inventory = [],
+		$tmpGuy.inventory.push('knife')
+	>>
+    <<run $enemies.push($tmpGuy)>>
+    <<fight $enemies 'Explore event: Tribe won' 'Outside'>>
+<</link>>
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>
