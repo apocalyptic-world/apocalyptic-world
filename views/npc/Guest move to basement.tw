@@ -1,21 +1,21 @@
 :: Guest move to basement {"position":"1335,279","size":"100,100"}
 <h1 class="ptitle">GUEST HOUSE</h1>
-<<if !$tmpGirl.gender>>
+<<if [0,2].includes($tmpGirl.gender)>>
 	<center>
 		[img[setup.ImagePath+'places/guesthouse/move_to_basement.webp']]
 	</center>
 <</if>>
 <br /><br />
-You tell <<=$tmpGirl.name>> that you will move <<=setup.pronounceWho($tmpGirl)>> to a basement cell, <br />
+You tell <<=setup.displayName($tmpGirl)>> that you will move <<=setup.pronounceWho($tmpGirl)>> to a basement cell, <br />
 <<=setup.pronounceWhat($tmpGirl)>> starts to resist and scream and tries to escape your grab and fails as you go there.
 <br /><br />
-<<if !$tmpGirl.gender>>
+<<if [0,2].includes($tmpGirl.gender)>>
 	<center>
 		[img[setup.ImagePath+'places/guesthouse/move_to_basement2.webp']]
 	</center>
 <</if>>
 <br /><br />
-As you leave the cell, you can hear <<=$tmpGirl.name>> crying out of resignation.
+As you leave the cell, you can hear <<=setup.displayName($tmpGirl)>> crying out of resignation.
 <br /><br />
 <<set $tmpGirl.relationship -= 30>>
 <strong><<=$tmpGirl.name>> relationship decreased by 30</strong>
