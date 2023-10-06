@@ -119,7 +119,7 @@ You see some hookers standing against the wall..
 		<</if>>
 	<</if>>
 
-<<elseif !$characters.dom.quests.invite && $game.day >= 100 && $player.reputation >= 100 && (setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) >= 4>>
+<<elseif $warnedAboutStreetHookers && !$characters.dom.quests.invite && $game.day >= 100 && $player.reputation >= 100 && (setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) >= 4>>
 	<<set $characters.dom.quests.invite = true>>
 	<<goto 'Streets - Dom invite'>>
 <<elseif $characters.dom.quests.accepted_deal && !$characters.dom.quests.quest1 && ($characters.dom.quests.day + 10) < $game.day>>
