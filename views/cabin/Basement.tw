@@ -40,7 +40,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<center>
 			<<actionImage $tmpGirl mistress>>
 		</center> 
-		<<=$tmpGirl.name>> is whipping one of your slaves<br /><br />
+		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
 		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 		<<link `_girlGuestLink`>>
 			<<set $tmpGirlViewBack = 'Girl view - guest'>>
@@ -58,7 +58,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
-		<<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 			<<set $workingInGarden++>>
 			<<continue>>
@@ -109,7 +109,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				  <</if>>
 			</td>
 			<td>
-				<<if !$slaves[_i].gender && setup.getAge($slaves[_i]) >= 17>>
+				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
 						Beauty score: <<=$slaves[_i].beauty>>
 				<</if>>
 			</td>
