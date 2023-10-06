@@ -1,20 +1,22 @@
-:: Nightclub - girl decline [nightclub bg-underground] {"position":"2663,1464","size":"100,100"}
-<h1 class="ptitle">NIGHTCLUB</h1>
-<<if !$tmpGirl.gender>>
-	<center>
-	[img[setup.ImagePath+'places/nightclub/club-drink-together.webp']]
-	</center>
-<<else>>
-	<center>
-	[img[setup.ImagePath+'places/nightclub/club-drink-together_guy.webp']]
-	</center>
+:: Bar - drink [bg-underground] {"position":"2505,1941","size":"100,100"}
+<<addmins 15>>
+<<set $player.drunk++>>
+<<if $player.drunk > 3>>
+	<<perkAdd 'drunk'>>
 <</if>>
+
+<h1 class="ptitle">BAR</h1>
+<center>
+	[img[setup.ImagePath+'places/bar/drink.webp']]
+</center>
+<br /><br />
+You order a beer at the bar and start drinking it.
 <br /><br />
 
-The <<=setup.getNpcAgeDescription($tmpGirl)>> declines the offer and goes back to <<=setup.pronounceWhos($tmpGirl)>> friends...
-<br /><br />
-[[Leave|Nightclub - inside]] 
+<<if randomInteger(1,5) === 1>>
+	<<goto 'Bar - random event #1'>>
+<</if>>
 
-<<addmins 5>>
+[[Continue|Bar]]
 
 
