@@ -1,0 +1,74 @@
+:: Widget newtransgirl [widget] {"position":"475,5100","size":"100,100"}
+<<widget newtransgirl>>
+	<<include 'Girl names'>>
+	<<set _age = setup.ageRoll()>>
+	<<set _race = setup.raceRoll()>>
+	<<set _hair = setup.hairRoll(_race, _age, 0)>>
+	<<set _hair = setup.dyeRoll(_hair)>>
+	<<set _orientation = setup.orientationRoll(2)>>
+
+	<<set $tmpGirl = {
+		gender: 2,
+		name: either(_names),
+		beauty: random(20, 70),
+		birthDate: setup.getBirthDate(_age),
+		relationship: 0,
+		corruption: random(0, 10),
+		sub: random(0, 30),
+		hair: _hair,
+		breasts: either('small', 'medium', 'big'),
+		dick: either('small', 'medium', 'big'),
+		race: _race,
+		location: 'forest',
+		talked: false,
+		food: random(10, 90),
+		strength: random(5, 15),
+		assignedTo: null,
+		horny: random(0, 30),
+		traits: [],
+		skills: [],
+		endurance: 0,
+		clothes: {
+			top: either(1,2,3),
+			bottom: either(1,2,3)
+		}
+	}>>
+
+<<set $tmpGirl = setup.setSexuality($tmpGirl, _orientation)>>
+<<if setup.getAge($tmpGirl) < 18>>
+	<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
+<</if>>
+
+<<if (setup.getAge($tmpGirl) <= 20 && setup.percentageChance(50)) >>
+	<<set 
+		$tmpGirl.guys = 0,
+		$tmpGirl.girls = 0,
+		$tmpGirl.tguys = 0,
+		$tmpGirl.tgirls = 0,
+		$tmpGirl.anal = 0,
+		$tmpGirl.bj = 0,
+		$tmpGirl.dp = 0
+	>>
+<</if>>
+
+<<if setup.getAge($tmpGirl) <= 30>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 10, 100)>>
+<</if>>
+<<if setup.getAge($tmpGirl) >= 50>>
+	<<set $tmpGirl.beauty = Math.max($tmpGirl.beauty - 10, 0)>>
+<</if>>
+
+<<set $tmpGirl.id = setup.generateUniqueKey($tmpGirl)>>
+<<if setup.percentageChance(50)>>
+	<<set _npcTraits = 1>>
+	<<if setup.percentageChance(30)>>
+		<<set _npcTraits = 2>>
+	<</if>>
+	<<set $tmpGirl.traits = setup.getRandomTraits(_npcTraits)>>
+<</if>>
+<<if setup.percentageChance(50)>>
+	<<set $tmpGirl.skills = setup.getRandomSkills()>>>>
+<</if>>
+<</widget>>
+
+
