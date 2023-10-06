@@ -565,3 +565,7 @@ setup.decrypt = function(encryptedText) {
     }
     return decrypted;
 };
+
+setup.getRandomElement = function(items) {
+    return items[Math.floor(Math.random()*items.length)];
+};
