@@ -17,7 +17,7 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 	<<if setup.getAge(_workoutGuest) < 5>>
 		<<continue>>
 	<</if>>
-	<<set _genderClass = 'gender-' + (!_workoutGuest.gender ? 'girl' : 'guy')>>
+	<<set _genderClass = 'gender-' + setup.genderClass(_workoutGuest)>>
 	<<set $guests[_workoutGuestI].strength++>>
 	<span @class="''+_genderClass+''" style="font-weight:bold">
 		<<=_workoutGuest.name>>
