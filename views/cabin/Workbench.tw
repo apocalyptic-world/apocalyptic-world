@@ -10,16 +10,17 @@
 <<set _items to Object.keys($workbenchItems)>>
 <<for _i to 0; _i lt _items.length; _i++>>
 	<<set _item = $workbenchItems[_items[_i]]>>
-	<<capture _i, _item>>
+	  
+	<<capture _i, _item, _workEnergy, _required>>
 	  <<if !_item.show>>
 		  <<continue>>
 	  <</if>>
 	  
-	  <<set _workEnergy = clone(_item.energy)>>
+	  <<run _workEnergy = clone(_item.energy)>>
 	  <<if $player.int > 30>>
-	  		<<set _workEnergy -= 20>>
+	  		<<run _workEnergy -= 20>>
 	  <<elseif $player.int > 20>>
-	  		<<set _workEnergy -= 10>>
+	  		<<run _workEnergy -= 10>>
 	  <</if>>
 	  
 	  <<set _required to Object.keys(_item.required)>>
@@ -36,13 +37,15 @@
 					  <div class="workbench-required">
 						  Required:<br />
 						  <<for _r to 0; _r lt _required.length; _r++>>
-						  	  <<set _count = $backpack.count(_required[_r]) + $storage.count(_required[_r])>>
+						  	  <<set _reqKey   = _required[_r]>>
+							  <<set _reqCount = _item.required[_reqKey]>>
+						  	  <<set _hasCount = $backpack.count(_reqKey) + (_isStorageAvailable ? $storage.count(_reqKey) : 0)>>
 							  <<set _needtxt = ''>>
-							  <<if _count < _item.required[_required[_r]]>>
+							  <<if _hasCount < _reqCount>>
 								  <<set _itemHasResources = false>>
-								  <<set _needtxt = '(missing ' + (_item.required[_required[_r]] - _count) +  ')'>>
+								  <<set _needtxt = '(missing ' + (_reqCount - _hasCount) +  ')'>>
 							  <</if>>
-							  <span><<=_item.required[_required[_r]]>> <<=Item.get(_required[_r]).name>> _needtxt</span><br />
+							  <span><<=_reqCount>> <<=Item.get(_reqKey).name>> _needtxt</span><br />
 						  <</for>>
 						  <span><<=_workEnergy>> energy</span>
 						  <<if $player.energy < _workEnergy>>
@@ -59,10 +62,12 @@
 							<<set $player.debug = $workbenchItems[_items[_i]].energy>>
 							<<for _r to 0; _r lt _required.length; _r++>>
 								<<capture _r>>
+                                                                        <<set _reqKey   = _required[_r]>>
+                                                                        <<set _reqCount = _item.required[_reqKey]>>
 									<<if _isStorageAvailable>>
-									    <<transfer $storage $backpack _required[_r] _item.required[_required[_r]]>>
+									    <<transfer $storage $backpack _reqKey _reqCount>>
 									<</if>>
-									<<drop $backpack _required[_r] _item.required[_required[_r]]>>
+									<<drop $backpack _reqKey _reqCount>> 
 								<</capture>>
 							<</for>>
 							<<run $workbenchItems[_items[_i]].after()>>
