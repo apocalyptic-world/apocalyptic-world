@@ -17,7 +17,7 @@ You see some hookers standing against the wall..
 			<<continue>>
 		<</if>>
 		<<set $assignedToStreets = true>>
-		<<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">
@@ -36,7 +36,9 @@ You see some hookers standing against the wall..
 				</span>
 			</td>
 			<td>
-				Beauty score: <<print $slaves[_i].beauty>>
+				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
+					Beauty score: <<print $slaves[_i].beauty>>
+				<</if>>
 			</td>
 			<td>
 				Age: <<=setup.getAge($slaves[_i])>>
@@ -49,7 +51,7 @@ You see some hookers standing against the wall..
 		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
 			<<continue>>
 		<</if>>
-		<<set _genderClass = 'gender-' + (!_streetGuest.gender ? 'girl' : 'guy')>>
+		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set $assignedToStreets = true>>
 		<tr>
 			<td style="width: 300px">
@@ -69,7 +71,9 @@ You see some hookers standing against the wall..
 				</span>
 			</td>
 			<td>
-				Beauty score: <<print _streetGuest.beauty>>
+				<<if [0,2].includes(_streetGuest.gender) && setup.getAge(_streetGuest) >= 17>>
+					Beauty score: <<print _streetGuest.beauty>>
+				<</if>>
 			</td>
 			<td>
 				Age: <<=setup.getAge(_streetGuest)>>
@@ -115,7 +119,7 @@ You see some hookers standing against the wall..
 		<</if>>
 	<</if>>
 
-<<elseif $warnedAboutStreetHookers && !$characters.dom.quests.invite && $game.day >= 100 && $player.reputation >= 100 && (setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) >= 4>>
+<<elseif !$characters.dom.quests.invite && $game.day >= 100 && $player.reputation >= 100 && (setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) >= 4>>
 	<<set $characters.dom.quests.invite = true>>
 	<<goto 'Streets - Dom invite'>>
 <<elseif $characters.dom.quests.accepted_deal && !$characters.dom.quests.quest1 && ($characters.dom.quests.day + 10) < $game.day>>
