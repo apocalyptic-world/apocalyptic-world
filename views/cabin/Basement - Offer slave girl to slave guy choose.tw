@@ -3,7 +3,7 @@
 <<if (_availableGirlSlaves[0] ?? []).length>>
 	<<for _offerSlaveSlaveI, _offerSlaveSlave range _availableGirlSlaves[0]>>
 		<<capture _offerSlaveSlaveI, _offerSlaveSlave>>
-			<<set _genderClass = 'gender-' + (!$slaves[_offerSlaveSlave].gender ? 'girl' : 'guy')>>
+			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_offerSlaveSlave])>>
 			<div>
 				<span @class="''+_genderClass+''">
 					<<link $slaves[_offerSlaveSlave].name>>
