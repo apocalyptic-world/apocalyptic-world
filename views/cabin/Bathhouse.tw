@@ -38,12 +38,17 @@
 </div>
 <br /><br />
 
+<<set _peopleInBathhouse = {}>>
 <table id="slaves">
 	<<for _bathGuestI, _bathGuest range $guests>>
 		<<capture _bathGuestI, _bathGuest>>
 		<<if _bathGuest.location !== 'bathhouse'>>
 			<<continue>>
 		<</if>>
+		<<if typeof _peopleInBathhouse[_bathGuest.gender] === 'undefined'>>
+			<<set _peopleInBathhouse[_bathGuest.gender] = {}>>
+		<</if>>
+		<<run _peopleInBathhouse[_bathGuest.gender]['guest:' + _bathGuestI] = true>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_bathGuest)>>
 		<tr>
 			<td style="width: 300px">
@@ -58,7 +63,17 @@
 						<<run delete $charId>>
                         <<set $guestId = _bathGuestI>>
                         <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
-                        <<goto `$tmpGirlViewBack`>>
+						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender]).length >= 2 && setup.percentageChance(10)>>
+							<<set $tmpEvent = {
+								bathhouseThreesome: [
+									Object.keys(_peopleInBathhouse[_bathGuest.gender])[0],
+									Object.keys(_peopleInBathhouse[_bathGuest.gender])[1]
+								]
+							}>>
+							<<goto 'Bathhouse - threesome'>>
+						<<else>>
+							<<goto `$tmpGirlViewBack`>>
+						<</if>>
                       <</link>>
                   </span>
 			</td>
