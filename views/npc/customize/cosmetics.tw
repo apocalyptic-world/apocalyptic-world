@@ -1,20 +1,22 @@
-:: Girl customize - cosmetics [girlview no-redirect]
+:: Girl customize - cosmetics [girlview no-redirect] {"position":"350,2725","size":"100,100"}
 <h1 class="ptitle">COSMETICS</h1>
 <br /><br />
-<center>
-	[img[setup.ImagePath+'places/cabin/customize_cosmetics.jpg']]
-</center>
+<<if [0,2].includes($tmpGirl.gender)>>
+	<center>
+		[img[setup.ImagePath+'places/cabin/customize_cosmetics.jpg']]
+	</center>
+<</if>>
 <br /><br />
 <<drop $backpack 'cosmetics' 1>>
-<<=setup.displayName($tmpGirl)>>  opens the jar of cream and applies a small layer to their face, carefully spreading it all over.
+<<=setup.displayName($tmpGirl)>>  opens the jar of cream and applies a small layer to <<=setup.pronounceWhos($tmpGirl)>> face, carefully spreading it all over.
 <br /><br />
-After a few minutes, she rinses off the cream.
+After a few minutes, <<=setup.pronounceWhat($tmpGirl)>> rinses off the cream.
 <br /><br />
 <<if $tmpGirl.beauty < 80>>
     <strong><<=setup.displayName($tmpGirl)>>  beauty increased by 1</strong>
     <<set $tmpGirl.beauty++>>
 <<else>>
-    <strong>Can't increase her beauty with cosmetics any more.</strong>
+    <strong>Can't increase <<=setup.pronounceWhos($tmpGirl)>> beauty with cosmetics any more.</strong>
 <</if>> 
 
 <<addmins 15>>
