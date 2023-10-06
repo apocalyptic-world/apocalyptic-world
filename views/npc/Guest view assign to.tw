@@ -22,7 +22,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
+<<if [0,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign as maid'>>
 		  <<set $tmpGirl.assignedTo = 'maid'>>
@@ -68,7 +68,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
   <</link>> (Provides you with plastic, glass, rope, etc)
 </div>
 
-<<if $tmpGirl.relationship >= 50 && !$tmpGirl.gender && !$tmpGirl.assignedTo>>
+<<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
 	<<link 'Assign to streets'>>
 		<<set $tmpGirl.assignedTo = 'streets'>>
 		<<dialogclose>>
