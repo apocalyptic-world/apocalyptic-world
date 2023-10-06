@@ -9,9 +9,11 @@
 			<</if>>		
 			<tr>
 				<td style="width: 300px">
+					<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 					<<if setup.getAge(_guest) < 17>>
 						<span class="name-no-click"><<=_guest.name>></span>
 					<<else>>
+						<span @class="''+_genderClass+''">
 						<<link _guest.name>>
 						  <<set $tmpGirl to _guest>>
 						  <<set $tmpGirl.location = 'forest'>>
@@ -28,14 +30,14 @@
 							<<goto 'Guy view - guest'>>							
 						  <</if>>
 					  	<</link>>
-						
+						</span>
 						<<if _guest.pregnancy >= 7>>
 						  (pregnant <<=_guest.pregnancy>> days)
 						<</if>>
 					<</if>>
 				</td>
 				<td>
-					<<if !_guest.gender && setup.getAge(_guest) >= 17>>
+					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<=_guest.beauty>>
 					<</if>>
 				</td>
