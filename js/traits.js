@@ -1,17 +1,15 @@
 setup.traits = {
     analslut: {
         title: 'Anal slut',
-        description: 'Gets orgasm only from anal sex',
-        gender: [0]
+        description: 'Gets orgasm only from anal sex'
     },
     cumslut: {
         title: 'Cumslut',
-        description: 'Loves cum in mouth',
-        gender: [0]
+        description: 'Loves cum in mouth'
     },
     masochist: {
         title: 'Masochist',
-        description: 'Likes to be punished',
+        description: 'Likes to be punished'
     },
     deepthroat: {
         title: 'Deepthroat',
@@ -19,7 +17,8 @@ setup.traits = {
     },
     breeder: {
         title: 'Breeder',
-        description: '100% chance to get pregnant and pregnancy goes x2'
+        description: '100% chance to get pregnant and pregnancy goes x2',
+        gender: [0]
     },
     sadistic: {
         title: 'Sadistic',
@@ -32,8 +31,7 @@ setup.traits = {
     },
     nymphomaniac: {
         title: 'Nymphomaniac',
-        description: 'Never says no, and earn double on street',
-        gender: [0]
+        description: 'Never says no, and earn double on street'
     }
 };
 
