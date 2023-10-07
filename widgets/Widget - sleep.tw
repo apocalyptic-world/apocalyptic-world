@@ -190,10 +190,12 @@
 				<<continue>>
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
-					<<if !$slaves[_i].gender>>				
+					<<if $slaves[_i].gender == 0>>				
 						<<set _moneyEarned = randomInteger(4, 8)>>
+					<<elseif $slaves[_i].gender == 2>>				
+						<<set _moneyEarned = randomInteger(2, 6)>>
 					<<else>>	
-						<<set _moneyEarned = randomInteger(2, 4)>>
+						<<set _moneyEarned = randomInteger(0, 4)>>
 					<</if>>
 					<<if ($slaves[_i].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
