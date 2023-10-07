@@ -368,7 +368,13 @@
 				<<continue>>
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<if $guests[_guestI].gender == 0>>
+						<<set _moneyEarned = randomInteger(4, 8)>>
+					<<elseif $guests[_guestI].gender == 2>>			
+						<<set _moneyEarned = randomInteger(2, 6)>>
+					<<else>>
+						<<set _moneyEarned = randomInteger(0, 4)>>
+					<</if>>
 					<<if ($guests[_guestI].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
 					<</if>>
