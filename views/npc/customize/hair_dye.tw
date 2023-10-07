@@ -1,19 +1,18 @@
-:: Girl customize - hair dye [girlview no-redirect]
+:: Girl customize - hair dye [girlview no-redirect] {"position":"475,2725","size":"100,100"}
 <h1 class="ptitle">HAIR DYE</h1>
 <br /><br />
-
-
 <<set _colorOptions = [
     'black',
-    'blonde',
-    'red',
     'brown',
+    'blonde',
     'ginger',
+    'gray',
+    'white',
+    'red',
     'green',
     'blue',
-    'pink',
     'purple',
-    'white'
+    'pink'
 ]>>
 <div id="options">
     Choose color:
@@ -30,11 +29,13 @@
 </div>
 
 <div id="done" style="display:none">
-    <center>
-        [img[setup.ImagePath+'places/cabin/customize_hair_dye.jpg']]
-    </center>
+	<<if [0,2].includes($tmpGirl.gender)>>
+		<center>
+			[img[setup.ImagePath+'places/cabin/customize_hair_dye.jpg']]
+		</center>
+	<</if>>
     <br /><br />
-    <<=setup.displayName($tmpGirl)>>  puts on gloves and mixes up the colorant and applies it according to the instructions. She makes sure not to miss a spot.
+    <<=setup.displayName($tmpGirl)>>  puts on gloves and mixes up the colorant and applies it according to the instructions, making sure not to miss a spot.
 </div>
 
 <br /><br />

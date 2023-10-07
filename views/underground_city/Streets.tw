@@ -17,7 +17,7 @@ You see some hookers standing against the wall..
 			<<continue>>
 		<</if>>
 		<<set $assignedToStreets = true>>
-		<<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">
@@ -36,7 +36,9 @@ You see some hookers standing against the wall..
 				</span>
 			</td>
 			<td>
-				Beauty score: <<print $slaves[_i].beauty>>
+				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
+					Beauty score: <<print $slaves[_i].beauty>>
+				<</if>>
 			</td>
 			<td>
 				Age: <<=setup.getAge($slaves[_i])>>
@@ -49,7 +51,7 @@ You see some hookers standing against the wall..
 		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
 			<<continue>>
 		<</if>>
-		<<set _genderClass = 'gender-' + (!_streetGuest.gender ? 'girl' : 'guy')>>
+		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set $assignedToStreets = true>>
 		<tr>
 			<td style="width: 300px">
@@ -69,7 +71,9 @@ You see some hookers standing against the wall..
 				</span>
 			</td>
 			<td>
-				Beauty score: <<print _streetGuest.beauty>>
+				<<if [0,2].includes(_streetGuest.gender) && setup.getAge(_streetGuest) >= 17>>
+					Beauty score: <<print _streetGuest.beauty>>
+				<</if>>
 			</td>
 			<td>
 				Age: <<=setup.getAge(_streetGuest)>>

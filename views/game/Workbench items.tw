@@ -129,6 +129,18 @@
 		},
 		goto: "Workbench"
 	},
+	bandage: {
+		show: true,
+		title: 'Bandage',
+		description: 'Stops bleeding',
+		required: {
+			cloth: 1
+		},
+		energy: 30,
+		after: function() {
+			variables().backpack.pickup('bandage', 1);
+		}
+	},
 	gate: {
 		show: isMetChar('blair') && $characters.blair.quests.gate && !$game.cabinName,
 		title: "Settlement gate",

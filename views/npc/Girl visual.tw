@@ -1,10 +1,10 @@
 :: Girl visual {"position":"3374,99","size":"100,100"}
 <<set _visualType = ''>>
-<<if _girlVisual.gender === 1>>
+<<if [1,3].includes(_girlVisual.gender)>>
 	<<set _visualType = '_male'>>
 <</if>>
 <div id="girl_body" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/body_' + _girlVisual.race + _visualType + '.gif\')'"></div>
-<<if !_girlVisual.gender>>
+<<if [0,2].includes(_girlVisual.gender)>>
 	<div id="girl_hair" @class="'girl_body_hair_' + _girlVisual.hair + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/hair_' + _girlVisual.hair + '.gif\')'"></div>
 	<div id="girl_top" @class="'top' + _girlVisual.clothes.top + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/top_' + _girlVisual.clothes.top + '.gif\')'"></div>
 	<<if _girlVisual.clothes.bot>>

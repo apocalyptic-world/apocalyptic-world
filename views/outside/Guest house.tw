@@ -16,6 +16,7 @@
 <</if>>
 Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 
+<<set _guests18yoWomen = []>>
 <<if ($guests ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		You have no guests...
@@ -26,7 +27,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
-			<<set _genderClass = 'gender-' + (!_guest.gender ? 'girl' : 'guy')>>
+			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 				<<continue>>
 			<</if>>	
@@ -50,6 +51,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<<if setup.getAge(_guest) < 18>>
 						<span class="name-no-click"><<=_guest.name>></span>
 					<<else>>
+						<<if !_guest.gender>>
+							<<run _guests18yoWomen.push(_guestI)>>
+						<</if>>
 						<span @class="''+_genderClass+''">
 							<<link _guest.name>>
 							  <<set $tmpGirl to _guest>>
@@ -73,7 +77,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<</if>>
 				</td>
 				<td>
-					<<if !_guest.gender && setup.getAge(_guest) >= 17>>
+					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<=_guest.beauty>>
 					<</if>>
 				</td>
@@ -105,6 +109,14 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<</capture>>
 	<</for>>
 	</table>
+<</if>>
+
+<<if !($locationEvents.guesthouse ?? false)>>
+	<<if timeBetween('23:00', '02:00') && _guests18yoWomen && setup.percentageChance(10)>>
+		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
+		<<set $locationEvents.guesthouse = true>>
+		<<goto 'Guesthouse [Event] - sleeping beauty'>>
+	<</if>>
 <</if>>
 
 [[Back|Wood cabin]]

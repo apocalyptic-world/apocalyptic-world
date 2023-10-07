@@ -1,4 +1,4 @@
-:: Widget- newguy [widget] {"position":"600,5100","size":"100,100"}
+:: Widget- newguy [widget]
 <<widget newguy>>
 	<<include 'Guy names'>>
 	<<set _age = setup.ageRoll()>>
@@ -30,7 +30,7 @@
 	
 <<set $tmpGuy = setup.setSexuality($tmpGuy, _orientation)>>
 <<if ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) && setup.percentageChance(25)>>
-	<<set $tmpGuy.traits = either(['analslut', 'cumslut', 'deepthroat'])>>
+	<<set $tmpGuy.traits = [either('analslut', 'cumslut', 'deepthroat')]>>
 <</if>>
 
 <<if setup.percentageChance(50)>>

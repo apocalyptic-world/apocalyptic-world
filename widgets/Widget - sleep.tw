@@ -46,6 +46,7 @@
   <<set $player.fight_today to false>>
   <<set $player.drunk = 0>>
   <<set $player.nap = false>>
+  <<set $player.metTransGirl = false>>
   <<horny 5>>
   <<set $game.day += 1>>
   
@@ -189,7 +190,13 @@
 				<<continue>>
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<if $slaves[_i].gender == 0>>				
+						<<set _moneyEarned = randomInteger(4, 8)>>
+					<<elseif $slaves[_i].gender == 2>>				
+						<<set _moneyEarned = randomInteger(2, 6)>>
+					<<else>>	
+						<<set _moneyEarned = randomInteger(0, 4)>>
+					<</if>>
 					<<if ($slaves[_i].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
 					<</if>>
@@ -202,7 +209,7 @@
 					<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
-					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, <<=setup.pronounceWhat($slaves[_i])>> got you <strong>' + _moneyEarned + '</strong> caps')>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -277,7 +284,7 @@
 		
 		// Leave
 		<<if $guests[_guestI].relationship < 0>>
-			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning. She probably decided to leave this place')>>
+			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning, <<=setup.pronounceWhat($guests[_guestI])>> probably decided to leave this place')>>
 			<<guestRemove _guestI >>
 			<<set _guestI-->>
 			<<continue>>
@@ -361,7 +368,13 @@
 				<<continue>>
 			<<else>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set _moneyEarned = randomInteger(4, 8)>>
+					<<if $guests[_guestI].gender == 0>>
+						<<set _moneyEarned = randomInteger(4, 8)>>
+					<<elseif $guests[_guestI].gender == 2>>			
+						<<set _moneyEarned = randomInteger(2, 6)>>
+					<<else>>
+						<<set _moneyEarned = randomInteger(0, 4)>>
+					<</if>>
 					<<if ($guests[_guestI].traits ?? []).includes('nymphomaniac')>>
 						<<set _moneyEarned = _moneyEarned * 2>>
 					<</if>>
@@ -442,7 +455,7 @@
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
-			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap')>>
+			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth')>>
 			  <<set _giveCount = 1>>
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>

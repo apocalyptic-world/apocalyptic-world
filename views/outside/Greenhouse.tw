@@ -16,7 +16,7 @@
 			<<run _girlsCompetition.push('slave:' + _i)>>
 		<</if>>
 		<<set $assignedToGreenhouse = true>>
-        <<set _genderClass = 'gender-' + (!$slaves[_i].gender ? 'girl' : 'guy')>>
+        <<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
            		 <span @class="''+_genderClass+''">
@@ -34,7 +34,7 @@
                   </span>
 			</td>
 			<td>
-				<<if !$slaves[_i].gender>>
+				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
 					Beauty score: <<print $slaves[_i].beauty>>
 				<</if>>
 			</td>
@@ -53,12 +53,12 @@
 		<<if !_gardenGuest.gender>>
 			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
 		<</if>>
-        <<set _genderClass = 'gender-' + (!_gardenGuest.gender ? 'girl' : 'guy')>>
+        <<set _genderClass = 'gender-' + setup.genderClass(_gardenGuest)>>
 		<tr>
 			<td style="width: 300px">
             		<span @class="''+_genderClass+''">
                           <<link _gardenGuest.name>>
-                          <<set $tmpGirlViewBack = 'Girl view'>>
+                          <<set $tmpGirlViewBack = 'Girl view - guest'>>
                           <<set $tmpGirl to _gardenGuest>>
                           <<set $tmpGirl.location = 'garden'>>
                           <<set $tmpGirlBack = 'Greenhouse'>>
@@ -66,13 +66,13 @@
                           <<set $tmpGirl.rape to false>>
                           <<run delete $slaveId>>
                           <<set $guestId to _gardenGuestI>>
-                          <<set $tmpGirlViewBack = (!_gardenGuest.gender ? 'Girl' : 'Guy') + ' view'>>
+                          <<set $tmpGirlViewBack = (!_gardenGuest.gender ? 'Girl' : 'Guy') + ' view - guest'>>
                           <<goto `$tmpGirlViewBack`>>
 				  <</link>>
                   </span>
 			</td>
 			<td>
-				<<if !_gardenGuest.gender>>
+				<<if [0,2].includes(_gardenGuest.gender) && setup.getAge(_gardenGuest) >= 17>>
 					Beauty score: <<print _gardenGuest.beauty>>
 				<</if>>
 			</td>

@@ -24,7 +24,9 @@ You don't have any slaves
 				<<=$slaves[_i].name>>
 			</td>
 			<td>
-				Beauty score: <<print $slaves[_i].beauty>>
+				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
+					Beauty score: <<print $slaves[_i].beauty>>
+				<</if>>
 			</td>
 			<td>
 				Age: <<=setup.getAge($slaves[_i])>>

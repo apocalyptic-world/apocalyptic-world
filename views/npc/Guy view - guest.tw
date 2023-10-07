@@ -1,4 +1,8 @@
 :: Guy view - guest [sex noredirect girlview] {"position":"5010,145","size":"100,100"}
+<<set $pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+<<set $pronounceWhos = setup.pronounceWhos($tmpGirl)>>
+<<set $pronounceWho = setup.pronounceWho($tmpGirl)>>
+
 <<if !$tmpGirl.talked>>
 	<<link 'Talk'>>
 		<<set $tmpGirl.relationship += 3>>
@@ -13,7 +17,8 @@
 <</if>>
 
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
-	<<link 'Fuck him'>>
+	<<set _linkName = 'Fuck ' + $pronounceWho>>
+	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'Guy view - guest'>>
 		<<set _randomGuestFuck = randomInteger(1,3)>>
 		<<if !$tmpGirl.likesGuys || $tmpGirl.relationship < 50 || _randomGuestFuck === 3>>
@@ -32,7 +37,8 @@
 	<</link>>
 <</if>>
 
-<<link 'Move him to the basement cell'>>
+<<set _linkName = 'Move ' + $pronounceWho + ' to the basement cell'>>
+<<link `_linkName`>>
 	<<set $guests[$guestId] = $tmpGirl>>
 	<<goto 'Guest move to basement'>>
 <</link>>
@@ -69,15 +75,8 @@
 	<</link>>
 <</if>>
 
-<<link 'Change name'>>
-		<<dialog 'Change name'>>	
-			What you will call your guest? <<textbox "_tmpGirlName" $tmpGirl.name>>
-			<<link 'OK'>>
-				<<set $tmpGirl.name = _tmpGirlName>>
-				<<dialogclose>>	
-				<<goto `passage()`>>
-			<</link>>
-		<</dialog>>	
+<<link 'Customize'>>
+	<<goto 'Girl customize'>>
 <</link>>
 	
  <<link 'Go back'>>
