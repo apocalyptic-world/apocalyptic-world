@@ -63,14 +63,28 @@ setup.dyeRoll = function(hair) {
 setup.orientationRoll = function(gender) {
 	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
 	var _orientation = '';
-	if (_orientationRoll <= 70) {
-		_orientation = 'straight';
-	} else if (_orientationRoll <= 75) {
-		_orientation = ['lesbian','gay'][gender];
-	} else if (_orientationRoll <= 95) {
-		_orientation = 'bisexual';
+	if (gender == 0 || gender == 1) {
+		if (_orientationRoll <= 70) {
+			_orientation = 'straight';
+		} else if (_orientationRoll <= 75) {
+			_orientation = ['lesbian','gay'][gender];
+		} else if (_orientationRoll <= 95) {
+			_orientation = 'bisexual';
+		} else {
+			_orientation = 'asexual';
+		}
 	} else {
-		_orientation = 'asexual';
+		if (_orientationRoll <= 20) {
+			_orientation = 'straight';
+		} else if (_orientationRoll <= 50) {
+			_orientation = ['lesbian','gay'][gender-2];
+		} else if (_orientationRoll <= 70) {
+			_orientation = 'bisexual';
+		} else if (_orientationRoll <= 90) {
+			_orientation = 'pansexual';
+		} else {
+			_orientation = 'asexual';
+		}
 	}
 	return _orientation;
 };
@@ -89,7 +103,7 @@ setup.setSexuality = function(person, orientation) {
 	person.bj = 0;
 	person.dp = 0;
 
-	if (!person.gender) {
+	if (person.gender == 0 || person.gender == 3 ) {
 			person.pussy = 0;
 	}	
 
@@ -109,15 +123,25 @@ setup.setSexuality = function(person, orientation) {
 			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 30;
 			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 15;
 	}
-	else if (!person.gender && orientation == 'straight') {
+	else if ((person.gender == 0 || person.gender == 2) && orientation == 'straight') {
 			person.likesGuys = true;
 			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 10;
 	}
-	else if (person.gender && orientation == 'straight') {
+	else if ((person.gender == 1 || person.gender == 3) && orientation == 'straight') {
 			person.likesGirls = true;
 			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 10;
 	}
-
+	else if (orientation == 'pansexual') {
+			person.likesGuys = true;
+			person.likesGirls = true;
+			person.likesTGuys = true;
+			person.likesTGirls = true;
+	}
+	
+	if (person.likesGuys == true && person.likesGirls == true && person.likesTGuys == true && person.likesTGirls == true) {
+			person.orientation = 'pansexual';
+	}
+	
 	if (person.likesGuys) {
 			person.guys = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
 	}
@@ -144,29 +168,34 @@ setup.setSexuality = function(person, orientation) {
 			person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
 	}
 
-	if (!person.gender && orientation !== 'asexual') {
+	if ((person.gender == 0 || person.gender == 3) && orientation !== 'asexual') {
 			person.pussy = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
 	}
 
-	if (!person.gender && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+	if (person.gender !== 1 && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
 			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 	}
 
-	if (person.gender && (orientation == 'bisexual' || orientation == 'gay') && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+	if (person.gender == 1 && orientation !== 'straight' && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
 			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 	}
+
+	if (person.gender == 1 && orientation == 'straight' && (Math.floor(Math.random() * 100) + 1 <= 10)) {
+			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	}	
+	
 	return person;
 };
 
-setup.genderDescriptor = function(person) {
+setup.genderDescription = function(person) {
 	if (person.gender == 0) {
-		return 'girl';
+		return 'cis woman';
 	} else if (person.gender == 1) {
-		return 'guy';
+		return 'cis man';
 	} else if (person.gender == 2) {
-		return 'tgirl';
+		return 'trans woman';
 	} else if (person.gender == 3) {
-		return 'tguy';
+		return 'trans man';
 	}
 };
 
@@ -197,4 +226,16 @@ setup.beautyDescription = function(beauty) {
 	const categories = ['repulsive looking', 'hideous', 'ugly', 'unattractive', 'plain looking', 'average looking', 'attractive', 'beautiful', 'gorgeous', 'stunning'];
     const categoryIndex = Math.ceil(beauty / 10) - 1;
     return categories[Math.min(categoryIndex, 9)];
+};
+
+setup.genderClass = function(person) {
+	if (person.gender == 0) {
+		return 'girl';
+	} else if (person.gender == 1) {
+		return 'guy';
+	} else if (person.gender == 2) {
+		return 'tgirl';
+	} else if (person.gender == 3) {
+		return 'tguy';
+	}
 };

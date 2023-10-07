@@ -4,9 +4,9 @@
 	[img[setup.ImagePath+'game/misc/no_anal_guy.webp']]
 	</center>
 	<br /><br />
-	You tried to fuck him in the ass but your dick is too big for him and he can't relax. 
+	You tried to fuck <<=$pronounceWho>> in the ass but your dick is too big for <<=$pronounceWho >> and <<=$pronounceWhat>> can't relax. 
 	<br />
-	He can't take it in his ass and begs you to stop.
+	<<=setup.displayName($tmpGirl)>> can't take it in <<=$pronounceWhos>> ass and begs you to stop.
 	<br /><br />
 	<strong><<=$tmpGirl.name>> submission increased by 1</strong>
 	<<set $tmpGirl.sub = Math.min($tmpGirl.sub+1, 100)>>
@@ -45,8 +45,12 @@
 <<if $player.horny >= 100>>
 	[[Cum in ass|Guy fuck - cum in ass]]
 <<else>>
-	  [[Blowjob|Guy fuck - blowjob]]
-	  [[Anal|Guy fuck - anal]]
+	[[Blowjob|Guy fuck - blowjob]]
+	<<if ['medium', 'big'].includes($tmpGirl.breasts)>>
+		[[Titjob|Guy fuck - titjob]]
+	<</if>>
+	[[Anal|Guy fuck - anal]]
+	
 	[[Back|Guy fuck]]
 <</if>>
 

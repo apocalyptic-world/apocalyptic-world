@@ -7,7 +7,7 @@
  	<<actionImage $tmpGirl wash>>
 </center>
  <br /><br />
- You bring <strong><<=$tmpGirl.name>></strong> upstairs and let the hot water run in the shower.<br />You stand guard as <<=setup.pronounceWhat($tmpGirl)>> starts to wash <<=setup.pronounceWho($tmpGirl)>>self.
+ You bring <strong><<=setup.displayName($tmpGirl)>></strong> upstairs and let the hot water run in the shower.<br />You stand guard as <<=setup.pronounceWhat($tmpGirl)>> starts to wash <<=setup.pronounceWho($tmpGirl)>>self.
  <br /><br />
  
  <<addmins 15>>
@@ -42,12 +42,13 @@
 	<br /><br />
 		
 	<<if $player.energy >= 30>>
+		<<set _linkName = 'Fuck ' + $pronounceWho>>
 		<<if !$tmpGirl.gender>>
-			<<linkreplace 'Fuck her'>>
+			<<linkreplace `_linkName`>>
 				<<goto 'Girl fuck'>>
 			<</linkreplace>>
 		<<else>>
-			<<linkreplace 'Fuck him'>>
+			<<linkreplace `_linkName`>>
 				<<goto 'Guy fuck'>>
 			<</linkreplace>>
 		<</if>>

@@ -27,7 +27,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
-			<<set _genderClass = 'gender-' + (!_guest.gender ? 'girl' : 'guy')>>
+			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 				<<continue>>
 			<</if>>	
@@ -77,7 +77,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<</if>>
 				</td>
 				<td>
-					<<if !_guest.gender && setup.getAge(_guest) >= 17>>
+					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<=_guest.beauty>>
 					<</if>>
 				</td>

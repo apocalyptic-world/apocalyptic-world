@@ -299,7 +299,7 @@ setup.getAge = function(person, approx) {
         if (person.age < 17) {
             person.age = 17;
         }
-        yearsDiff = yearsDiff + ' (approx)';
+        yearsDiff = person.age + ' (approx)';
     }
 
     return yearsDiff;
@@ -377,7 +377,7 @@ setup.getNpcAgeDescription = function(npc) {
         } else if(age < 20) {
             return 'teenage girl';
         } else if(age < 25) {
-            return 'girl';
+            return 'young woman';
         } else if(age < 50) {
             return 'woman';
         }
@@ -390,7 +390,7 @@ setup.getNpcAgeDescription = function(npc) {
     } else if(age < 20) {
         return 'teenage boy';
     } else if(age < 25) {
-        return 'man';
+        return 'young man';
     } else if(age < 50) {
         return 'man';
     }
@@ -411,7 +411,7 @@ setup.objectSortReverse = function(unordered) {
 };
 
 setup.pronounceWho = function(npc) {
-    if (npc.gender) {
+    if (npc.gender == 1 || npc.gender == 3 ) {
         return 'him';
     }
 
@@ -419,7 +419,7 @@ setup.pronounceWho = function(npc) {
 };
 
 setup.pronounceWhos = function(npc) {
-    if (npc.gender) {
+    if (npc.gender == 1 || npc.gender == 3 ) {
         return 'his';
     }
 
@@ -427,7 +427,7 @@ setup.pronounceWhos = function(npc) {
 };
 
 setup.pronounceWhat = function (npc) {
-    if (npc.gender) {
+    if (npc.gender == 1 || npc.gender == 3 ) {
         return 'he';
     }
 
@@ -486,7 +486,7 @@ setup.blinkScreen = function()
 };
 
 setup.displayName = function (npc) {
-    return '<span class="gender-' + (!npc.gender ? 'girl' : 'guy') + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+'" data-balloon-pos="up-left">' + npc.name + '</span></span>';
+    return '<span class="gender-' + setup.genderClass(npc) + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+'" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
 };
 
 setup.getNpcByKey = function (key) {

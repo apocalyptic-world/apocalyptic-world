@@ -1,5 +1,5 @@
 :: Event: Guest invite shower [sex no-redirect] {"position":"288,1735","size":"100,100"}
-<<if !$tmpGirl.gender>>	
+<<if [0,2].includes($tmpGirl.gender)>>
 	<<set _portrait = '/people/anongirl.png'>>
 <<else>>				
 	<<set _portrait = '/people/anonguy.png'>>
@@ -36,10 +36,6 @@
 <<link 'Back'>>
   	<<if $tmpGirlViewBack>>
 		<<goto $tmpGirlViewBack>>
-	<<elseif !$tmpGirl.gender>>
-		<<goto [[Girl view]]>>
-	<<else>>
-		<<goto [[Guy view]]>>
 	<</if>>
 <</link>>
 

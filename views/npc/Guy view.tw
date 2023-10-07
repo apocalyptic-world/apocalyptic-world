@@ -1,4 +1,8 @@
 :: Guy view [sex noredirect girlview] {"position":"5012,30","size":"100,100"}
+<<set $pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+<<set $pronounceWhos = setup.pronounceWhos($tmpGirl)>>
+<<set $pronounceWho = setup.pronounceWho($tmpGirl)>>
+
 <<if !$tmpGirl.talked>>
 	<<link 'Talk'>>
 		<<set $tmpGirl.relationship += 3>>
@@ -12,7 +16,8 @@
 <</if>>
 
 <<if $player.energy >= 30 && $tmpGirl.location !== 'garden'>>
-	<<link 'Fuck him'>>
+	<<set _linkName = 'Fuck ' + $pronounceWho>>
+	<<link `_linkName`>>
 		<<goto 'Guy fuck'>>
 	<</link>>
 <</if>>
@@ -32,7 +37,7 @@
 <</if>>
 
 <<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
-<<if (_availableGirlSlaves[0] ?? []).length && !$tmpGirl.offerSlave>>
+<<if $tmpGirl.gender == 1 && (_availableGirlSlaves[0] ?? []).length && !$tmpGirl.offerSlave>>
 	<<link 'Offer him one of your slave girls'>>
 		<<script>>
 			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
@@ -50,12 +55,12 @@
 <</if>>
 
 <<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
-	<<link 'Wash him'>>
+	<<set _linkName = 'Wash ' + $pronounceWho>>
+	<<link `_linkName`>>
 		<<energy -10>>
-		<<goto 'Slave - wash'>>
-	<</link>>
+	  <<goto 'Slave - wash'>>
+  <</link>>
 <</if>>
-
 <<if !$tmpGirl.gift>>
 	<<link 'Give gift'>>
 		<<script>>
@@ -69,7 +74,8 @@
 <<if $tmpGirl.location === 'basement'>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
 	<<if $player.energy >= 10 && hasTime(1)>>
-		<<link 'Punish him'>>
+		<<set _linkName = 'Punish ' + $pronounceWho>>
+		<<link `_linkName`>>
 			<<if $backpack.has('paddle')>>
 				<<set $punishType = 'paddle'>>
 			<</if>>
@@ -78,7 +84,8 @@
 	<</if>>
 	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
 		<<if $player.energy >= 5 && hasTime(1)>>
-			<<link 'Mistress punishes him'>>
+			<<set _linkName = 'Mistress punishes ' + $pronounceWho>>
+			<<link `_linkName`>>
 				<<if $backpack.has('paddle')>>
 					<<set $punishType = 'paddle'>>
 				<</if>>
@@ -86,22 +93,16 @@
 			<</link>>
 		<</if>>		
 		<<if $player.energy >= 15 && hasTime(1)>>
-			<<link 'Mistress fucks him'>>
+			<<set _linkName = 'Mistress fucks ' + $pronounceWho>>
+			<<link `_linkName`>>
 				<<goto 'Mistress - Guy fuck'>>
 			<</link>>
-		<</if>>			
+		<</if>>
 	<</if>>
 <</if>>
 
-<<link 'Change name'>>
-	<<dialog 'Change name'>>	
-		What you will call your slave? <<textbox "_tmpGirlName" $tmpGirl.name>>
-		<<link 'OK'>>
-			<<set $tmpGirl.name = _tmpGirlName>>
-			<<dialogclose>>	
-			<<goto 'Guy view'>>
-		<</link>>
-	<</dialog>>	
+<<link 'Customize'>>
+	<<goto 'Girl customize'>>
 <</link>>
 
  <<link 'Go back'>>
