@@ -189,9 +189,9 @@ setup.setSexuality = function(person, orientation) {
 
 setup.genderDescription = function(person) {
 	if (person.gender == 0) {
-		return 'cis woman';
+		return 'woman';
 	} else if (person.gender == 1) {
-		return 'cis man';
+		return 'man';
 	} else if (person.gender == 2) {
 		return 'trans woman';
 	} else if (person.gender == 3) {
