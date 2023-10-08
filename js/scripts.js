@@ -295,11 +295,11 @@ setup.getAge = function(person, approx) {
 
     if (approx) {
         var approxAdd = window.randomInteger(-6,6);
-        person.age += approxAdd;
-        if (person.age < 17) {
-            person.age = 17;
+        yearsDiff += approxAdd;
+        if (yearsDiff < 18) {
+            yearsDiff = 18;
         }
-        yearsDiff = person.age + ' (approx)';
+        yearsDiff = yearsDiff + ' (approx)';
     }
 
     return yearsDiff;
