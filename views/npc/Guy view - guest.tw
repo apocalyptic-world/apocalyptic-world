@@ -1,7 +1,7 @@
 :: Guy view - guest [sex noredirect girlview] {"position":"5010,145","size":"100,100"}
-<<set $pronounceWhat = setup.pronounceWhat($tmpGirl)>>
-<<set $pronounceWhos = setup.pronounceWhos($tmpGirl)>>
-<<set $pronounceWho = setup.pronounceWho($tmpGirl)>>
+<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+<<set _pronounceWhos = setup.pronounceWhos($tmpGirl)>>
+<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
 
 <<if !$tmpGirl.talked>>
 	<<link 'Talk'>>
@@ -17,7 +17,7 @@
 <</if>>
 
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
-	<<set _linkName = 'Fuck ' + $pronounceWho>>
+	<<set _linkName = 'Fuck ' + _pronounceWho>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'Guy view - guest'>>
 		<<set _randomGuestFuck = randomInteger(1,3)>>
@@ -37,7 +37,7 @@
 	<</link>>
 <</if>>
 
-<<set _linkName = 'Move ' + $pronounceWho + ' to the basement cell'>>
+<<set _linkName = 'Move ' + _pronounceWho + ' to the basement cell'>>
 <<link `_linkName`>>
 	<<set $guests[$guestId] = $tmpGirl>>
 	<<goto 'Guest move to basement'>>
