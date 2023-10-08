@@ -1,7 +1,7 @@
 :: Guy view [sex noredirect girlview] {"position":"5012,30","size":"100,100"}
-<<set $pronounceWhat = setup.pronounceWhat($tmpGirl)>>
-<<set $pronounceWhos = setup.pronounceWhos($tmpGirl)>>
-<<set $pronounceWho = setup.pronounceWho($tmpGirl)>>
+<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+<<set _pronounceWhos = setup.pronounceWhos($tmpGirl)>>
+<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
 
 <<if !$tmpGirl.talked>>
 	<<link 'Talk'>>
@@ -16,7 +16,7 @@
 <</if>>
 
 <<if $player.energy >= 30 && $tmpGirl.location !== 'garden'>>
-	<<set _linkName = 'Fuck ' + $pronounceWho>>
+	<<set _linkName = 'Fuck ' + _pronounceWho>>
 	<<link `_linkName`>>
 		<<goto 'Guy fuck'>>
 	<</link>>
@@ -55,7 +55,7 @@
 <</if>>
 
 <<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
-	<<set _linkName = 'Wash ' + $pronounceWho>>
+	<<set _linkName = 'Wash ' + _pronounceWho>>
 	<<link `_linkName`>>
 		<<energy -10>>
 	  <<goto 'Slave - wash'>>
@@ -74,7 +74,7 @@
 <<if $tmpGirl.location === 'basement'>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
 	<<if $player.energy >= 10 && hasTime(1)>>
-		<<set _linkName = 'Punish ' + $pronounceWho>>
+		<<set _linkName = 'Punish ' + _pronounceWho>>
 		<<link `_linkName`>>
 			<<if $backpack.has('paddle')>>
 				<<set $punishType = 'paddle'>>
@@ -84,7 +84,7 @@
 	<</if>>
 	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
 		<<if $player.energy >= 5 && hasTime(1)>>
-			<<set _linkName = 'Mistress punishes ' + $pronounceWho>>
+			<<set _linkName = 'Mistress punishes ' + _pronounceWho>>
 			<<link `_linkName`>>
 				<<if $backpack.has('paddle')>>
 					<<set $punishType = 'paddle'>>
@@ -93,7 +93,7 @@
 			<</link>>
 		<</if>>		
 		<<if $player.energy >= 15 && hasTime(1)>>
-			<<set _linkName = 'Mistress fucks ' + $pronounceWho>>
+			<<set _linkName = 'Mistress fucks ' + _pronounceWho>>
 			<<link `_linkName`>>
 				<<goto 'Mistress - Guy fuck'>>
 			<</link>>
