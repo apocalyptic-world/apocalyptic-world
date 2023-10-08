@@ -15,7 +15,7 @@
 
 <<set _talkDialog = _talkDialogs[Math.floor(Math.random()*_talkDialogs.length)]>>
 <br />
-<<if $tmpGirl.gender>>
+<<if [1,3].includes($tmpGirl.gender)>>
 	<<anonguy 'baba'>>
 	  <<=_talkDialog>>
   <</anonguy>>
@@ -33,13 +33,15 @@
 <<link 'Back'>>
   	<<if $tmpGirlViewBack>>
 		<<goto $tmpGirlViewBack>>
+	<<elseif $tmpGirl.gender>>
+		<<goto [[Guy view]]>>
 	<<else>>
 		<<goto [[Girl view]]>>
 	<</if>>
 <</link>>
 
 <<done>>
-	<<if $tmpGirl.gender>>
+	<<if [1,3].includes($tmpGirl.gender)>>
 		<<replace ".anonguy.say p:first">><<=$tmpGirl.name>><</replace>>
 	<<else>>
 		<<replace ".anongirl.say p:first">><<=$tmpGirl.name>><</replace>>

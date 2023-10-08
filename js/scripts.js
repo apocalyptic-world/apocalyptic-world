@@ -369,7 +369,7 @@ setup.generateUniqueKey = function(npc) {
 
 setup.getNpcAgeDescription = function(npc) {
     var age = setup.getAge(npc);
-    if(!npc.gender) {
+    if(npc.gender == 0 || npc.gender == 2) {
         if (age < 3) {
             return 'baby';
         } else if (age < 18) {
