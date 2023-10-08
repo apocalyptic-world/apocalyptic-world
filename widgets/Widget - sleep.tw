@@ -206,7 +206,9 @@
 					<</if>>
 					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
 					<<set _moneyEarned += Math.round($slaves[_i].sub / 25, 0)>>
-					<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
+					<<if $slaves[_i].pussy !== 'undefined'>>
+						<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
+					<</if>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, <<=setup.pronounceWhat($slaves[_i])>> got you <strong>' + _moneyEarned + '</strong> caps')>>
@@ -384,7 +386,9 @@
 					<</if>>
 					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
 					<<set _moneyEarned += Math.round($guests[_guestI].sub / 25, 0)>>
-					<<set _moneyEarned += Math.round($guests[_guestI].pussy / 25, 0)>>
+					<<if $guests[_guestI].pussy !== 'undefined'>>
+						<<set _moneyEarned += Math.round($guests[_guestI].pussy / 25, 0)>>
+					<</if>>
 					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>

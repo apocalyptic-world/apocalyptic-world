@@ -10,7 +10,7 @@
 		<<set $tmpGirl.location = $oldTmpGirlLocation>>
 		<<run delete $oldTmpGirlLocation>>
 	<</if>>
-  	<<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('guyview')>>
+  	<<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('girlview')>>
 		<<if typeof $slaveId !== 'undefined'>>
 			<<set $slaves[$slaveId] = $tmpGirl>>
 			<<run delete $slaveId>>
@@ -21,9 +21,17 @@
 			<<set $characters[$charId] = $tmpGirl>>
 			<<run delete $charId>>
 		<</if>>
-		<<goto $tmpGirlViewBack>>
+		<<if $tmpGirlViewBack>>
+			<<goto $tmpGirlViewBack>>
+		<<else>>
+			<<goto 'Guy view'>>
+		<</if>>
 	<<else>>
-		<<goto [[Guy view]]>>
+		<<if $tmpGirlViewBack>>
+			<<goto $tmpGirlViewBack>>
+		<<else>>
+			<<goto 'Guy view'>>
+		<</if>>
 	<</if>>
 <</link>>
 
