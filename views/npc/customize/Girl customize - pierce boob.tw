@@ -9,14 +9,16 @@
 	<<set $tmpGirl.piercedBoobs = true>>
 	<<drop $backpack 'piercing' 1>>
 	<br /><br />
-	<center>
-		[img[setup.ImagePath+'game/misc/nipple_piercing.webp']]
-	</center>
+	<<if [0,2].includes($tmpGirl.gender)>>
+		<center>
+			[img[setup.ImagePath+'game/misc/nipple_piercing.webp']]
+		</center>
+	<</if>>
 	<br /><br />
 	<<=setup.displayName($tmpGirl)>> feels a brief, sharp sensation as the needle passes through the nipple tissue. That feels uncomfortable but is generally tolerable.
 	<br /><br />
 	<<addmins 60>>
-	After few minutes it's done and she shows her nipples pierced.
+	After few minutes it's done and <<=setup.pronounceWhat($tmpGirl)>> shows <<=setup.pronounceWhos($tmpGirl)>> nipples pierced.
 <</if>>
 <br /><br />
 <<link 'Back'>>
