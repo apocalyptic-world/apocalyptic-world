@@ -58,7 +58,10 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.tmpGirl.traits.splice(saveTmpGirlTraitI, 1);
                 saveTmpGirlTraitI--;
             }
-        }
+
+            if (typeof save.state.history[save.state.index].variables.tmpGirl.orientation === 'undefined') {  
+                save.state.history[save.state.index].variables.tmpGirl.orientation = 'straight';
+            }
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
@@ -89,6 +92,9 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms = 0;
             save.state.history[save.state.index].variables.slaves[varsSlaveI].guys = 1;
+        }
+        if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation === 'undefined') {
+            save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation = 'straight';
         }
 
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].id === 'undefined') {
@@ -152,6 +158,10 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].race === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].race = 'white';
             save.state.history[save.state.index].variables.guests[saveGuestI].breasts = 'medium';
+        }
+
+        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].orientation === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].orientation = 'straight';
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].endurance === 'undefined') {
