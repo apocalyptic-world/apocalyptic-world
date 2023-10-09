@@ -59,6 +59,13 @@ Save.onLoad.add(function (save) {
                 saveTmpGirlTraitI--;
             }
         }
+          
+        if (typeof save.state.history[save.state.index].variables.tmpGirl.orientation === 'undefined') {  
+            save.state.history[save.state.index].variables.tmpGirl.orientation = 'straight';
+            if (!save.state.history[save.state.index].variables.tmpGirl.gender) {
+                save.state.history[save.state.index].variables.tmpGirl.likesGuys = true;
+            }
+        }
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
@@ -89,6 +96,12 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms = 0;
             save.state.history[save.state.index].variables.slaves[varsSlaveI].guys = 1;
+        }
+        if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation === 'undefined') {
+            save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation = 'straight';
+            if (!save.state.history[save.state.index].variables.slaves[varsSlaveI].gender) {
+                save.state.history[save.state.index].variables.slaves[varsSlaveI].likesGuys = true;
+            }
         }
 
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].id === 'undefined') {
@@ -152,6 +165,13 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].race === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].race = 'white';
             save.state.history[save.state.index].variables.guests[saveGuestI].breasts = 'medium';
+        }
+
+        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].orientation === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].orientation = 'straight';
+            if (!save.state.history[save.state.index].variables.guests[saveGuestI].gender) {
+                save.state.history[save.state.index].variables.guests[saveGuestI].likesGuys = true;
+            }
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].endurance === 'undefined') {
