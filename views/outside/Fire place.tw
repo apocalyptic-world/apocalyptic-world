@@ -38,9 +38,9 @@
 <</if>>
 
 <<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 3>>
-	<<if timeBetween('19:00','20:30')>>
+	<<if timeBetween('19:00','20:30') && $player.energy >= 40>>
 		<<link 'Group workout with guests'>>
-			<<energy 40>>
+			<<energy -40>>
 			<<addmins 90>>
 			<<goto 'Group workout - guests'>>
 		<</link>>
