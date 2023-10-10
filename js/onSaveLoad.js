@@ -175,7 +175,7 @@ Save.onLoad.add(function (save) {
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].endurance === 'undefined') {
-            save.state.history[save.state.index].variables.guests[saveGuestI].endurace = 0;
+            save.state.history[save.state.index].variables.guests[saveGuestI].endurance = 0;
         }
 
         for (var saveGuestTraitI = 0; saveGuestTraitI < (save.state.history[save.state.index].variables.guests[saveGuestI].traits ?? []).length; saveGuestTraitI++) {
