@@ -39,4 +39,15 @@ setup.hasDoctor = function() {
     }
 
     return false;
-}
+};
+
+setup.getDoctors = function() {
+    var tmpDoctors = [];
+    for (var i = 0; i < variables().guests.length; i++) {
+        if ((variables().guests[i].skills ?? []).includes('doctor')) {
+            tmpDoctors.push(variables().guests[i]);
+        }
+    }
+    return tmpDoctors;
+};
+

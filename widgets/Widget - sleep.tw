@@ -40,6 +40,8 @@
 		<<set $player.hunger = 100>>
   <<else>>
   	  <<set $player.hunger -= 30>>
+	  <<set $morningMessages.main.unshift('<span class="starving">You are starving!</span>')>>
+
   <</if>>
   <<set $player.mast to false>>
   <<set $player.showered to false>>
@@ -73,13 +75,13 @@
 		<<drop $backpack 'hay' 1>>
 		<<set $characters.horse.food = 100>>
 	<<elseif $characters.horse.food >0>>
-		<<set $morningMessages.main.push('Your horse is starving')>>
+		<<set $morningMessages.main.push('<span class="starving">Your horse is starving</span>')>>
 	<</if>>
 	
 	<<if $characters.horse.food <= 0>>
 		<<run delete $player.horse>>
 		<<run delete $characters.horse>>
-		<<set $morningMessages.main.push('Your horse died of starvation')>>
+		<<set $morningMessages.main.push('<span class="dead">Your horse died of starvation</span>')>>
 	<</if>>
 <</if>>
 
@@ -532,7 +534,7 @@
 				<<drop $backpack 'food' 1>> 
 				<<set $nursery[_nurseryI].food to 100>>
 			<<else>>
-				<<set $morningMessages.main.push('Kid ' + $nursery[_nurseryI].name + ' died because do not have enough food')>>
+				<<set $morningMessages.main.push('<span class="dead">Kid ' + $nursery[_nurseryI].name + ' died because you do not have enough food</span>')>>
 				<<set $nursery.splice(_nurseryI, 1)>>
 				<<set _nurseryI-->>
 				<<continue>>
@@ -569,6 +571,17 @@
 
 <<set $sleepDead = null>>
 
+// debug
+<<if !($debugPeter ?? false)>>
+  <<set $debugPeter = true>>
+  <<perkAdd 'bleeding'>>
+  <<drop $storage  'food' infinity>>
+  <<drop $backpack 'food' infinity>>
+  <<drop $storage  'hay'  infinity>>
+  <<drop $backpack 'hay'  infinity>>
+  <<set $morningMessages.main.push('DEBUG')>>
+<</if>>
+
 // Perks
 <<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
 	<<capture _playerPerkDay, _playerPerk>>
@@ -576,10 +589,13 @@
 			<<if _playerPerk === 'bleeding'>>
 			     <<set _item = 'bandage'>>
 			     <<if _hasDoctor>>
+			        <<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + 'stops your bleeding and saves your bacon')>>
 			     <<elseif $storage.has(_item, 1)>>
 			     	<<drop $storage _item 1>>
+				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
 			     <<elseif $backpack.has(_item, 1)>>
 			     	<<drop $backpack _item 1>>
+				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
 			     <<else>>
 				<<set $sleepDead = 'bleed out'>>
 			     <</if>>
@@ -587,7 +603,11 @@
 			<<run delete $player.perks[_playerPerk]>>
 			<<continue>>
 		<</if>>
-		
+
+		<<if _playerPerk === 'bleeding'>>
+	  	  <<set $morningMessages.main.unshift('<span class="starving">You are bleeding!</span>')>>
+		<</if>>
+
 		<<if _playerPerk === 'beaten'>>
 			<<set $player.energy -= 50>>
 			<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
