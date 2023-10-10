@@ -571,17 +571,6 @@
 
 <<set $sleepDead = null>>
 
-// debug
-<<if !($debugPeter ?? false)>>
-  <<set $debugPeter = true>>
-  <<perkAdd 'bleeding'>>
-  <<drop $storage  'food' infinity>>
-  <<drop $backpack 'food' infinity>>
-  <<drop $storage  'hay'  infinity>>
-  <<drop $backpack 'hay'  infinity>>
-  <<set $morningMessages.main.push('DEBUG')>>
-<</if>>
-
 // Perks
 <<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
 	<<capture _playerPerkDay, _playerPerk>>
