@@ -141,6 +141,12 @@
 				}>>
 			<</if>>
 		<</if>>
+		<<if typeof $slaves[_i].noPregnancyDays !== 'undefined'>>
+			<<set $slaves[_i].noPregnancyDays-->>
+			<<if $slaves[_i].noPregnancyDays <= 0>>
+				<<run delete $slaves[_i].noPregnancyDays>>
+			<</if>>
+		<</if>>
 		
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
@@ -317,6 +323,12 @@
 					type: 'guest',
 					id: _guestI
 				}>>
+			<</if>>
+		<</if>>
+		<<if typeof $guests[_guestI].noPregnancyDays !== 'undefined'>>
+			<<set $guests[_guestI].noPregnancyDays-->>
+			<<if $guests[_guestI].noPregnancyDays <= 0>>
+				<<run delete $guests[_guestI].noPregnancyDays>>
 			<</if>>
 		<</if>>
 		
