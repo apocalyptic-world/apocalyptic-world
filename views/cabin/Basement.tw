@@ -1,12 +1,9 @@
-:: Basement [Place] {"position":"1202,389","size":"100,100"}
+:: Basement [Place bg-basement] {"position":"1202,389","size":"100,100"}
 <<set $workingInGarden = 0>>
 <<set $workingOnStreets = 0>>
 <<set $showSlavesCount = 0>>
 
 <h1 class="ptitle">BASEMENT</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/basement_head.jpg']]
-</div>
 <h3>Slaves</h3>
 <<set _basementLimitShow = ($basementLimit - $slaves.length)>>
 <<if _basementLimitShow < 0>>
@@ -75,7 +72,15 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<tr>
 			<td style="width: 300px">
 				<<if setup.getAge($slaves[_i]) < 18>>
-						<span class="name-no-click"><<=$slaves[_i].name>></span>
+					<span @class="''+_genderClass+''">
+						<<link $slaves[_i].name>>
+							<<set $slaveId = _i>>
+							<<run delete $guestId, $charId>>
+							<<set $tmpGirl = $slaves[_i]>>
+							<<set $tmpGirlBack = 'Basement'>>
+							<<goto 'Child view'>>
+						<</link>>
+					</span>
 				<<else>>
 					<span @class="''+_genderClass+''">
 					  <<link $slaves[_i].name>>

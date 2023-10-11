@@ -49,7 +49,15 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<tr>
 				<td style="width: 300px">
 					<<if setup.getAge(_guest) < 18>>
-						<span class="name-no-click"><<=_guest.name>></span>
+						<span @class="''+_genderClass+''">
+							<<link _guest.name>>
+								<<set $guestId = _guestI>>
+								<<run delete $slaveId, $charId>>
+								<<set $tmpGirl = _guest>>
+								<<set $tmpGirlBack = 'Guest house'>>
+								<<goto 'Child view'>>
+							<</link>>
+						</span>
 					<<else>>
 						<<if !_guest.gender>>
 							<<run _guests18yoWomen.push(_guestI)>>

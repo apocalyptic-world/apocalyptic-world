@@ -4,6 +4,10 @@
 	  <<set $player.money += 100>>
 	  <<goto `passage()`>>
   <</link>>
+  	<<link 'Add energy'>>
+		<<set $player.energy = $player.maxEnergy>>
+		<<goto `passage()`>>
+	<</link>>
   <<link 'Add slave'>>
 	  <<newgirl>>
 	  <<run $slaves.push($tmpGirl)>>
@@ -45,10 +49,14 @@
   	<<set $player.companions = {}>>
   	<<goto `passage()`>>
   <</link>>
-  <<link 'Increase guest house limit'>>
+  <<link 'Increase guest house bed limit'>>
   	<<set $guesthouseLimit++>>
 	<<goto `passage()`>>
   <</link>>
+  	<<link 'Increase basement cell limit'>>
+		<<set $basementLimit++>>
+		<<goto `passage()`>>
+	<</link>>
   <<link 'Increase MC strength'>>
   	<<set $player.strength++>>
 	<<goto `passage()`>>
