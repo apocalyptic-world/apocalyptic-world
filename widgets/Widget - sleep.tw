@@ -141,6 +141,12 @@
 				}>>
 			<</if>>
 		<</if>>
+		<<if typeof $slaves[_i].noPregnancyDays !== 'undefined'>>
+			<<set $slaves[_i].noPregnancyDays-->>
+			<<if $slaves[_i].noPregnancyDays <= 0>>
+				<<run delete $slaves[_i].noPregnancyDays>>
+			<</if>>
+		<</if>>
 		
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
@@ -191,6 +197,7 @@
 				<<set _i-->>
 				<<continue>>
 			<<else>>
+				<<setNpcStats 'slave' _i 'happy' -5>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if $slaves[_i].gender == 0>>				
 						<<set _moneyEarned = randomInteger(4, 8)>>
@@ -319,6 +326,12 @@
 				}>>
 			<</if>>
 		<</if>>
+		<<if typeof $guests[_guestI].noPregnancyDays !== 'undefined'>>
+			<<set $guests[_guestI].noPregnancyDays-->>
+			<<if $guests[_guestI].noPregnancyDays <= 0>>
+				<<run delete $guests[_guestI].noPregnancyDays>>
+			<</if>>
+		<</if>>
 		
 		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
 		// Assigned jobs
@@ -371,6 +384,7 @@
 				<<set _guestI-->> 
 				<<continue>>
 			<<else>>
+				<<setNpcStats 'guest' _guestI 'happy' -5>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if $guests[_guestI].gender == 0>>
 						<<set _moneyEarned = randomInteger(4, 8)>>
@@ -485,6 +499,31 @@
 					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
 				<</if>>
 			<</for>>
+		<</if>>
+
+		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick>>
+			<<set _percentageHunter = 10>>
+			<<if $guests[_guestI].strength > 50>>
+				<<set _percentageHunter += 25>>
+			<<elseif $guests[_guestI].strength > 20>>
+				<<set _percentageHunter += 10>>
+			<</if>>
+			<<set _hunterItem = 'food'>>
+			<<set _giveCount = randomInteger(2,5)>>
+
+			<<if setup.percentageChance(10)>>
+				<<set _hunterItem = 'pelt_wolf'>>
+				<<set _giveCount = randomInteger(1,2)>>
+			<</if>>
+
+			<<if setup.percentageChance(_percentageHunter)>>
+				<<if _isStorageAvailable>>
+			  		<<pickup $storage _hunterItem _giveCount>>
+			  	<<else>>
+			  		<<pickup $backpack _hunterItem _giveCount>>
+			  	<</if>>
+				<<set $morningMessages.slaves.push('Guest ' + $guests[_guestI].name + ' managed to get ' + _giveCount  + ' ' + Item.get(_hunterItem).name + ' while hunting')>>
+			<</if>>
 		<</if>>
 		
 		// Starvation

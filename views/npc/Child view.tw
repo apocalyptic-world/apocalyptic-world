@@ -4,9 +4,20 @@
 		<<goto 'Give growth potion'>>
 	<</link>>
 <</if>>
-<<link 'Leave'>>
-	<<set $nursery[$childId] = $tmpGirl>>
-	<<goto 'Nursery'>>
+ <<link 'Leave'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<run delete $slaveId, $charId, $guestId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Nursery'>>
+	<</if>>
 <</link>>
 
 

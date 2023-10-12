@@ -60,6 +60,14 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
   <</link>> (Provides you with wood)
 </div>
 
+<<if($tmpGirl.skills ?? []).includes('woodcraft')>>
+	<<link 'Assign to forest'>>
+	  	<<set $tmpGirl.assignedTo = 'hunter'>>
+	  	<<dialogclose>>
+		<<goto `$tmpGirlViewBack`>>
+  	<</link>> (Provides you with food or wolf pelts)
+<</if>>
+
 <div>
   <<link 'Assign to scavenging'>>
 	  <<set $tmpGirl.assignedTo = 'scavenging'>>
