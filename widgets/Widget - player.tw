@@ -160,18 +160,22 @@
 <</widget>>
 
 <<widget setNpcStats>>
+	<<set _minMaxRange = {
+		relationship: [-100, 100],
+		happy: [-100, 100]
+	}>>
 	<<if $args[0] === 'guest'>>
 		<<if $args[3] > 0>>
 			<<set $guests[$args[1]][$args[2]] = Math.min(100, $guests[$args[1]][$args[2]] + $args[3])>>
 		<<else>>
-			<<set _maxMin = ($args[2] === 'relationship' ? -100 : 0)>>
+			<<set _maxMin = _minMaxRange[$args[2]][0] ?? 0>>
 			<<set $guests[$args[1]][$args[2]] = Math.max(_maxMin, ($guests[$args[1]][$args[2]] - Math.abs($args[3])))>>
 		<</if>>
 	<<elseif $args[0] === 'slave'>>
 		<<if $args[3] > 0>>
 			<<set $slaves[$args[1]][$args[2]] = Math.min(100, $slaves[$args[1]][$args[2]] + $args[3])>>
 		<<else>>
-			<<set _maxMin = ($args[2] === 'relationship' ? -100 : 0)>>
+			<<set _maxMin = _minMaxRange[$args[2]][0] ?? 0>>
 			<<set $slaves[$args[1]][$args[2]] = Math.max(_maxMin, ($slaves[$args[1]][$args[2]] - Math.abs($args[3])))>>
 		<</if>>
 	<</if>>

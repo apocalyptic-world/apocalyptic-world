@@ -66,6 +66,10 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.tmpGirl.likesGuys = true;
             }
         }
+
+        if (typeof save.state.history[save.state.index].variables.tmpGirl.happy === 'undefined') {
+            save.state.history[save.state.index].variables.tmpGirl.happy = randomInteger(0, 40);
+        }
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
@@ -102,6 +106,10 @@ Save.onLoad.add(function (save) {
             if (!save.state.history[save.state.index].variables.slaves[varsSlaveI].gender) {
                 save.state.history[save.state.index].variables.slaves[varsSlaveI].likesGuys = true;
             }
+        }
+
+        if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].happy === 'undefined') {
+            save.state.history[save.state.index].variables.slaves[varsSlaveI].happy = randomInteger(0, 30);
         }
 
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].id === 'undefined') {
@@ -172,6 +180,10 @@ Save.onLoad.add(function (save) {
             if (!save.state.history[save.state.index].variables.guests[saveGuestI].gender) {
                 save.state.history[save.state.index].variables.guests[saveGuestI].likesGuys = true;
             }
+        }
+
+        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].happy === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].happy = randomInteger(0, 40);
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].endurance === 'undefined') {
