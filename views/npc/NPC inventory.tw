@@ -1,0 +1,68 @@
+:: NPC inventory
+<div id="storage-transfer">
+	<div id="storage-transfer-left">
+		<fieldset>
+  			<legend><<=$player.name>></legend>
+            <<for _inventoryNpcMcKey, _inventoryNpcMcItem range setup.inventoryNpc>>
+                <<capture _inventoryNpcMcItem>>
+                    <<if !$backpack.has(_inventoryNpcMcItem)>>
+                        <<continue>>
+                    <</if>>
+                    <div class="npc-inventory-transfer-container">
+                        <div class="npc-inventory-transfer-icon">
+                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                        </div>
+                        <div class="npc-inventory-transfer-name">
+                            <<=Item.get(_inventoryNpcMcItem).name>>
+                        </div>
+                        <div class="npc-inventory-transfer-link">
+                            <<link '>>'>>
+                                <<drop $backpack _inventoryNpcMcItem 1>>
+                                <<=setup.npcInventoryAdd($tmpGirl, _inventoryNpcMcItem)>>
+                                <<script>>
+                                    Dialog.setup("NPC inventory", "NPC inventory");
+                                    Dialog.wiki(Story.get("NPC inventory").processText());
+                                    Dialog.open();
+                                <</script>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        </div>
+                    </div>
+                <</capture>>
+            <</for>>
+        </fieldset>
+    </div>
+    <div id="storage-transfer-right">
+        <fieldset>
+  			<legend><<=$tmpGirl.name>></legend>
+            <<for _inventoryNpcMcKey, _inventoryNpcMcItem range setup.inventoryNpc>>
+                <<capture _inventoryNpcMcItem>>
+                    <<if !setup.npcInventoryHas($tmpGirl, _inventoryNpcMcItem)>>
+                        <<continue>>
+                    <</if>>
+                    <div class="npc-inventory-transfer-container">
+                        <div class="npc-inventory-transfer-link">
+                            <<link '<<'>>
+                                <<pickup $backpack _inventoryNpcMcItem 1>>
+                                <<=setup.npcInventoryRemove($tmpGirl, _inventoryNpcMcItem)>>
+                                <<script>>
+                                    Dialog.setup("NPC inventory", "NPC inventory");
+                                    Dialog.wiki(Story.get("NPC inventory").processText());
+                                    Dialog.open();
+                                <</script>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        </div>
+                        <div class="npc-inventory-transfer-name">
+                            <<=Item.get(_inventoryNpcMcItem).name>>
+                        </div>
+                        <div class="npc-inventory-transfer-icon">
+                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                        </div>
+                    </div>
+                <</capture>>
+            <</for>>
+        </fieldset>
+    </div>
+</div>
+
