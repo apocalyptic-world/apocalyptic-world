@@ -38,14 +38,14 @@
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('hit')>>
-		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (- ' + Math.round($player.strength / 3, 0) + ')')>>
+		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (-' + Math.round($player.strength / 3, 0) + ')')>>
 	<<elseif $args[1] === 'knife'>>
 		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 2, 0)>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('knife')>>
-		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in chest (- ' + Math.round($player.strength / 2, 0) + ')')>>
+		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in chest (-' + Math.round($player.strength / 2, 0) + ')')>>
 	<<elseif $args[1] === 'revolver'>>
 		<<drop $backpack 'bullet_revolver' 1>>
 		<<set $fight.enemies[$args[0]].hp = 0>>
@@ -70,15 +70,24 @@
 			<<if !$fight.enemies.length>>
 				<<continue>>
 			<</if>>
+			<<set _allyHasKnife = setup.npcInventoryHas($fight.allies[_i], 'knife')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
 			<<set _allyStrength = Math.round($fight.allies[_i].strength / 3, 0)>>
 			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
 				<<set $fight.enemies[_randomEnemyKey].attacks = []>>
 			<</if>>
-			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
-			<<set $fight.enemies[_randomEnemyKey].attacks.push('hit')>>
-			<<set $fight.messages.push($fight.allies[_i].name + ' punched ' + $fight.enemies[_randomEnemyKey].name + ' in the face (- ' + _allyStrength + ')')>>
 
+			<<if _allyHasKnife>>
+				<<set _allyStrength += randomInteger(2, 5)>>
+			<</if>>
+			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
+			<<if _allyHasKnife>>
+				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
+				<<set $fight.messages.push($fight.allies[_i].name + ' stabbed ' + $fight.enemies[_randomEnemyKey].name + ' in the chest (-' + _allyStrength + ')')>>
+			<<else>>
+				<<set $fight.enemies[_randomEnemyKey].attacks.push('hit')>>
+				<<set $fight.messages.push($fight.allies[_i].name + ' punched ' + $fight.enemies[_randomEnemyKey].name + ' in the face (-' + _allyStrength + ')')>>
+			<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp <= 0>>
 				<<run $fight.defeatedEnemies.push($fight.enemies[_randomEnemyKey])>>
 				<<run $fight.enemies.splice(_randomEnemyKey, 1)>>
@@ -101,7 +110,7 @@
 					<</if>>
 					<<perkAdd 'bleeding'>>
 				<</if>>
-				<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (- ' + $enemyStrength + ')')>>
+				<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + $enemyStrength + ')')>>
 			<</if>>
 		<<else>>
 			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 3, 0) + randomInteger(0, 10)>>
