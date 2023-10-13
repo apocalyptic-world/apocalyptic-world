@@ -198,7 +198,8 @@ setup.gifts = {
 };
 
 setup.inventoryNpc = [
-    'knife'
+    'knife',
+    'bow'
 ];
 
 setup.inventoryManageable = {
