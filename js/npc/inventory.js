@@ -1,11 +1,11 @@
-setup.npcInventoryAdd = function (npc, item) {
+setup.npcInventoryAdd = function (npc, item, amount = 1) {
     npc.inventory ??= {};
     npc.inventory[item] ??= 0;
-    npc.inventory[item]++;
+    npc.inventory[item] += amount;
 };
 
-setup.npcInventoryRemove = function (npc, item) {
-    npc.inventory[item]--;
+setup.npcInventoryRemove = function (npc, item, amount = 1) {
+    npc.inventory[item] -= amount;
     if (npc.inventory[item] <= 0) {
         delete npc.inventory[item];
     }
