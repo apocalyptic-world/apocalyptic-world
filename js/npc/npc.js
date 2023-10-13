@@ -61,6 +61,9 @@ setup.dyeRoll = function(hair) {
 };
 
 setup.orientationRoll = function(gender) {
+	if (!settings.gaysEnabled) {
+		return 'straight';
+	}
 	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
 	var _orientation = '';
 	if (gender == 0 || gender == 1) {

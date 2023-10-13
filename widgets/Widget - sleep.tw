@@ -191,6 +191,9 @@
 			<<if $characters.dom.quests.accepted_deal>>
 				<<set _girlChanceToDie = 1>>
 			<</if>>
+			<<if setup.npcInventoryHas($slaves[_i], 'knife')>>
+				<<set _girlChanceToDie -=1>>
+			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
 				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
 				<<set $slaves.splice(_i, 1)>>
@@ -378,6 +381,9 @@
 			<<if $characters.dom.quests.accepted_deal>>
 				<<set _girlChanceToDie = 1>>
 			<</if>>
+			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
+				<<set _girlChanceToDie -=1>>
+			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
 				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
 				<<guestRemove _guestI >>
@@ -464,10 +470,13 @@
 
 			<<set _chanceOfNotComingHome = 10>>
 			<<if $guests[_guestI].strength >= 30>>
-				<<set _changeOfNotComingHome -=5>>
+				<<set _changeOfNotComingHome -=4>>
 			<</if>>
 			<<if ($guests[_guestI].skills ?? []).includes('scavenger')>>
 				<<set _chanceOfNotComingHome -=4>>
+			<</if>>
+			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
+				<<set _chanceOfNotComingHome -=1>>
 			<</if>>
 			<<if $guests[_guestI].gender>>
 				<<set _chanceOfNotComingHome = 0>>
@@ -501,7 +510,7 @@
 			<</for>>
 		<</if>>
 
-		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick>>
+		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick && setup.npcInventoryHas($guests[_guestI], 'bow')>>
 			<<set _percentageHunter = 10>>
 			<<if $guests[_guestI].strength > 50>>
 				<<set _percentageHunter += 25>>
