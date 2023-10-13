@@ -17,7 +17,7 @@ setup.npcInventoryHas = function (npc, item) {
 }
 
 setup.npcInventoryCount = function (npc, item) {
-    return setup.npcInventoryHas(np, item);
+    return setup.npcInventoryHas(npc, item);
 }
 
 setup.npcInventoryList = function (npc) {
