@@ -35,8 +35,14 @@ setup.traits = {
     }
 };
 
-setup.getRandomTraits = function (count = 1) {
-    var shuffledTraits = Object.keys(setup.traits).sort((a, b) => 0.5 - Math.random());
+setup.getRandomTraits = function (count = 1, exclude) {
+    const _traits = clone(setup.traits);
+    if (exclude) {
+        for (excludeTrait in exclude) {
+            delete _traits[excludeTrait];
+        }
+    }
+    var shuffledTraits = Object.keys(_traits).sort((a, b) => 0.5 - Math.random());
 
     return shuffledTraits.slice(0, count);
 };

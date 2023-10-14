@@ -226,6 +226,13 @@ Save.onLoad.add(function (save) {
         if (!Array.isArray(save.state.history[save.state.index].variables.characters[saveCharI].skills ?? [])) {
             save.state.history[save.state.index].variables.characters[saveCharI].skills = [];
         }
+
+        if (typeof save.state.history[save.state.index].variables.characters[saveCharI].orientation === 'undefined') {
+            save.state.history[save.state.index].variables.characters[saveCharI].orientation = 'straight';
+            if (!save.state.history[save.state.index].variables.characters[saveCharI].gender) {
+                save.state.history[save.state.index].variables.characters[saveCharI].likesGuys = true;
+            }
+        }
     }
 
     for(var saveNurseryI in save.state.history[save.state.index].variables.nursery ?? []) {
