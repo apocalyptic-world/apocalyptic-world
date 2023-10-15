@@ -10,7 +10,7 @@ if (document.location.href.toLowerCase().includes("/maris/appdata/local")) {
 }
 setup.ImagePath = setup.Path + "images/";
 setup.videoPath = setup.Path + "videos/";
-setup.audioPath = setup.Path + "sounds/";
+setup.audioPath = setup.Path + "audio/";
 
 importScripts(setup.Path + "js/actions.js")
 	.then(function() {
@@ -152,3 +152,12 @@ $characters to {
 <<set $storage to Inventory.create()>>
 <<include "Inventory items">>
 
+<<run console.log(setup.audioPath + "bg/rain.mp3")>>
+<<cacheaudio "bg-rain" "audio/bg/rain.mp3">>
+<<cacheaudio "bg-storm" "audio/bg/storm.mp3">>
+<<cacheaudio "bg-sun" "audio/bg/sun.mp3">>
+<<createaudiogroup ":bg">>
+    <<track "bg-rain">>
+    <<track "bg-storm">>
+    <<track "bg-sun">>
+<</createaudiogroup>>
