@@ -11,11 +11,13 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 <br /><br />
 
 <<set _wantToHaveFunWorkoutTogether = $tmpGirl.horny > 50 || setup.percentageChance(70)>>
+<<set _notInterested = ($guestId && !$tmpGirl.likesGuys)>>
 <<linkreplace 'Pull down her shorts'>>
 	<<actionImage $tmpGirl pull_pants>>
-
 	<br /><br />
-	<<if _wantToHaveFunWorkoutTogether>>
+	<<if _notInterested>>
+		She looks at you with widened eyes and an angry face. Then she reminds you that she's not interested in men.
+	<<elseif _wantToHaveFunWorkoutTogether>>
 		She giggles and smiles at you as you pull down her shorts.
 		<br /><br />
 		<<set $tmpGirl.relationship++>>
@@ -25,28 +27,30 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 	<</if>>
 	<br /><br />
 	
-	<<linkreplace 'Fuck her'>>
-		<<actionImage $tmpGirl fuck>>
-		<br /><br />
-		You shove your hard dick inside her sweaty pussy and fuck her as she moans.
-		<br /><br />
-		<<set $tmpGirl.virgin = false>>
-		<<if _wantToHaveFunWorkoutTogether>>
-			<<set $tmpGirl.horny = 0>>
-			<<set $tmpGirl.relationship += 3>>
-			<<set $tmpGirl.strength++>>
-			<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
-			<br />
-			<strong><<=$tmpGirl.name>> strength increased by 1</strong>
-			<<horny_reset>>
-		<<else>>
-			<<set $tmpGirl.horny = 0>>
-			<<set $tmpGirl.relationship -= 10>>
-			<strong><<=$tmpGirl.name>> relationship decreased by 10</strong>
-			<<horny_reset>>
-		<</if>>
-		<br /><br />
-	<</linkreplace>>
+	<<if !_notInterested>>
+		<<linkreplace 'Fuck her'>>
+			<<actionImage $tmpGirl fuck>>
+			<br /><br />
+			You shove your hard dick inside her sweaty pussy and fuck her as she moans.
+			<br /><br />
+			<<set $tmpGirl.virgin = false>>
+			<<if _wantToHaveFunWorkoutTogether>>
+				<<set $tmpGirl.horny = 0>>
+				<<set $tmpGirl.relationship += 3>>
+				<<set $tmpGirl.strength++>>
+				<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
+				<br />
+				<strong><<=$tmpGirl.name>> strength increased by 1</strong>
+				<<horny_reset>>
+			<<else>>
+				<<set $tmpGirl.horny = 0>>
+				<<set $tmpGirl.relationship -= 10>>
+				<strong><<=$tmpGirl.name>> relationship decreased by 10</strong>
+				<<horny_reset>>
+			<</if>>
+			<br /><br />
+		<</linkreplace>>
+	<</if>>
 <</linkreplace>>
 <<link 'Finish'>>
 	<<goto $tmpGirlViewBack>>
