@@ -4,6 +4,7 @@
 	<<set _age = setup.ageRoll()>>
 	<<set _race = setup.raceRoll()>>
 	<<set _hair = setup.hairRoll(_race, _age, 1)>>
+	<<set _eyes = setup.eyesRoll(_race, _hair)>>
 	<<set _orientation = setup.orientationRoll(1)>>
 	
 	<<set $tmpGuy = {
@@ -15,6 +16,7 @@
 		corruption: random(0, 10),
 		sub: random(5, 13),	
 		hair: _hair,
+		eyes: _eyes,
 		dick: either('small', 'medium', 'big'),
 		race: _race,
 		location: null,
@@ -25,6 +27,7 @@
 		horny: random(0, 30),
 		traits: [],
 		skills: [],
+		personality: setup.personalityTraits(either(1, 2, 2)),
 		endurance: 0,
 	}>>
 	
