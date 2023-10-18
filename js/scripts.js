@@ -375,32 +375,32 @@ setup.generateUniqueKey = function(npc) {
 setup.getNpcAgeDescription = function(npc) {
     var age = setup.getAge(npc);
     if(npc.gender == 0 || npc.gender == 2) {
-        if (age <= 3) {
+        if (age < 4) {
             return 'baby';
-        } else if (age <= 12) {
+        } else if (age < 13) {
             return 'kid';
-        } else if(age <= 17) {
+        } else if(age < 18) {
             return 'teenage girl';
-        } else if(age <= 24) {
+        } else if(age < 25) {
             return 'young woman';
-        } else if(age <= 39) {
+        } else if(age < 40) {
             return 'woman';
-        } else if(age <= 59) {
+        } else if(age < 60) {
             return 'mature woman';
 		}
         return 'old woman';
     }
-	if (age <= 3) {
+	if (age < 4) {
 		return 'baby';
-	} else if (age <= 12) {
+	} else if (age < 13) {
 		return 'kid';
-	} else if(age <= 17) {
+	} else if(age < 18) {
 		return 'teenage boy';
-	} else if(age <= 24) {
+	} else if(age < 25) {
 		return 'young man';
-	} else if(age <= 39) {
+	} else if(age < 40) {
 		return 'man';
-	} else if(age <= 59) {
+	} else if(age < 60) {
 		return 'mature man';
 	}
 	return 'old man';
