@@ -197,6 +197,11 @@ setup.gifts = {
     }
 };
 
+setup.inventoryNpc = [
+    'knife',
+    'bow'
+];
+
 setup.inventoryManageable = {
     food: {
         price: 1,
