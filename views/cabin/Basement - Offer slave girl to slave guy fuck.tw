@@ -23,6 +23,15 @@
 		Relationship with <<=$tmpGirl.name>> increased by 5
 		<<set $tmpGirl.relationship += 5>>
 	</strong>
+
+	<<set _slaveRelationshipDecrease = 10>>
+	<<if !$slaves[$slaveOfferId].likesGuys>>
+		<<set _slaveRelationshipDecrease += 10>>
+	<</if>>
+	<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
+	<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+	<br /><br />
+	<<= setup.displayName($slaves[$slaveOfferId)>> relationship decreased by <<=_slaveRelationshipDecrease>>
 <</if>>
 <br /><br />
 <<link 'Leave'>>
