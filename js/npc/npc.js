@@ -103,6 +103,9 @@ setup.eyesRoll = function(_race, _hair) {
 };
 
 setup.orientationRoll = function(gender) {
+	if (!settings.gaysEnabled) {
+		return 'straight';
+	}
 	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
 	var _orientation = '';
 	if (gender == 0 || gender == 1) {
@@ -133,6 +136,9 @@ setup.orientationRoll = function(gender) {
 
 setup.setSexuality = function(person, orientation) {
 	person.orientation = orientation;
+	if (!settings.gaysEnabled) {
+		person.orientation = 'straight';
+	}
 	person.likesGuys = false;
 	person.likesGirls = false;
 	person.likesTGuys = false;
@@ -230,15 +236,14 @@ setup.setSexuality = function(person, orientation) {
 };
 
 setup.genderDescription = function(person) {
-	if (person.gender == 0) {
-		return 'woman';
-	} else if (person.gender == 1) {
-		return 'man';
-	} else if (person.gender == 2) {
-		return 'trans woman';
-	} else if (person.gender == 3) {
-		return 'trans man';
-	}
+	const _mapping = [
+		'woman',
+		'man',
+		'trans woman',
+		'trans man'
+	];
+
+	return _mapping[person.gender];
 };
 
 setup.agePeriod = function(age) {
@@ -271,15 +276,34 @@ setup.beautyDescription = function(beauty) {
 };
 
 setup.genderClass = function(person) {
-	if (person.gender == 0) {
-		return 'girl';
-	} else if (person.gender == 1) {
-		return 'guy';
-	} else if (person.gender == 2) {
-		return 'tgirl';
-	} else if (person.gender == 3) {
-		return 'tguy';
+	const _mapping = [
+		'girl',
+		'guy',
+		'tgirl',
+		'tguy'
+	];
+
+	return _mapping[person.gender];
+};
+
+setup.getNpcHappyLevel = function(person) {
+	if (!person.happy) {
+		person.happy = 50;
 	}
+	const emotions = {
+        very_sad: person.happy < -50,
+        sad: person.happy < 0,
+        normal: person.happy < 20,
+        happy: person.happy < 50
+    };
+
+    for (const emotion in emotions) {
+        if (emotions[emotion]) {
+            return emotion;
+        }
+    }
+
+    return 'very_happy';
 };
 
 setup.personalityTraits = function(count = 1) {
