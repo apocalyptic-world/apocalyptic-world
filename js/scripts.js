@@ -197,11 +197,6 @@ setup.gifts = {
     }
 };
 
-setup.inventoryNpc = [
-    'knife',
-    'bow'
-];
-
 setup.inventoryManageable = {
     food: {
         price: 1,
@@ -375,32 +370,35 @@ setup.generateUniqueKey = function(npc) {
 setup.getNpcAgeDescription = function(npc) {
     var age = setup.getAge(npc);
     if(npc.gender == 0 || npc.gender == 2) {
-        if (age < 3) {
+        if (age <= 3) {
             return 'baby';
-        } else if (age < 18) {
+        } else if (age <= 12) {
             return 'kid';
-        } else if(age < 20) {
+        } else if(age <= 17) {
             return 'teenage girl';
-        } else if(age < 25) {
+        } else if(age <= 24) {
             return 'young woman';
-        } else if(age < 50) {
+        } else if(age <= 39) {
             return 'woman';
-        }
-        return 'mature woman';
+        } else if(age <= 59) {
+            return 'mature woman';
+		}
+        return 'old woman';
     }
-    if (age < 3) {
-        return 'baby';
-    } else if (age < 18) {
-        return 'kid';
-    } else if(age < 20) {
-        return 'teenage boy';
-    } else if(age < 25) {
-        return 'young man';
-    } else if(age < 50) {
-        return 'man';
-    }
-
-    return 'elderly man';
+	if (age <= 3) {
+		return 'baby';
+	} else if (age <= 12) {
+		return 'kid';
+	} else if(age <= 17) {
+		return 'teenage boy';
+	} else if(age <= 24) {
+		return 'young man';
+	} else if(age <= 39) {
+		return 'man';
+	} else if(age <= 59) {
+		return 'mature man';
+	}
+	return 'old man';
 };
 
 setup.objectSort = function(unordered) {
