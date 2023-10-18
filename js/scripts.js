@@ -387,7 +387,7 @@ setup.getNpcAgeDescription = function(npc) {
             return 'woman';
         } else if(age < 60) {
             return 'mature woman';
-		}
+	}
         return 'old woman';
     }
 	if (age < 4) {
