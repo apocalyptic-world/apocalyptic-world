@@ -375,32 +375,35 @@ setup.generateUniqueKey = function(npc) {
 setup.getNpcAgeDescription = function(npc) {
     var age = setup.getAge(npc);
     if(npc.gender == 0 || npc.gender == 2) {
-        if (age < 3) {
+        if (age < 4) {
             return 'baby';
-        } else if (age < 18) {
+        } else if (age < 13) {
             return 'kid';
-        } else if(age < 20) {
+        } else if(age < 18) {
             return 'teenage girl';
         } else if(age < 25) {
             return 'young woman';
-        } else if(age < 50) {
+        } else if(age < 40) {
             return 'woman';
-        }
-        return 'mature woman';
+        } else if(age < 60) {
+            return 'mature woman';
+	}
+        return 'old woman';
     }
-    if (age < 3) {
-        return 'baby';
-    } else if (age < 18) {
-        return 'kid';
-    } else if(age < 20) {
-        return 'teenage boy';
-    } else if(age < 25) {
-        return 'young man';
-    } else if(age < 50) {
-        return 'man';
-    }
-
-    return 'elderly man';
+	if (age < 4) {
+		return 'baby';
+	} else if (age < 13) {
+		return 'kid';
+	} else if(age < 18) {
+		return 'teenage boy';
+	} else if(age < 25) {
+		return 'young man';
+	} else if(age < 40) {
+		return 'man';
+	} else if(age < 60) {
+		return 'mature man';
+	}
+	return 'old man';
 };
 
 setup.objectSort = function(unordered) {
@@ -573,4 +576,13 @@ setup.decrypt = function(encryptedText) {
 
 setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
+};
+
+function shuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+
+	return array;
 };
