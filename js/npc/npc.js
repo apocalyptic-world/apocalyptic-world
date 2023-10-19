@@ -31,14 +31,14 @@ setup.raceRoll = function() {
 setup.hairRoll = function(_race, _age, _gender) {
 	var _hairRoll = Math.floor(Math.random() * 100 + 1);
 	var _hair = '';
-	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 25) {
+	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 15) {
 		_hair = 'black';
-	} else if (_hairRoll <= 65) {
+	} else if (_hairRoll <= 50) {
 		_hair = 'brown';
-	} else if (_hairRoll <= 75) {
-		_hair = 'ginger';
-	} else {
+	} else if (_hairRoll <= 85) {
 		_hair = 'blonde';
+	} else {
+		_hair = 'ginger';
 	}
 	if (_age >= 50) {
 		_hair = 'gray';
@@ -58,6 +58,48 @@ setup.dyeRoll = function(hair) {
 		_hairList = ['ginger', 'blonde'];
 	}
 	return _hairList[Math.floor(Math.random() * _hairList.length)];
+};
+
+setup.eyesRoll = function(_race, _hair) {
+	var _eyesRoll = Math.floor(Math.random() * 100 + 1);
+	var _metisRoll = Math.floor(Math.random() * 100 + 1);
+	var _lightRoll = Math.floor(Math.random() * 100 + 1);
+	var _eyes = 'brown';
+	
+	if (_race = 'white' || _metisRoll <= 30){
+		if (['black', 'brown'].includes(_hair)){
+			if (_eyesRoll <= 40) {
+			_eyes = 'brown';
+			} else if (_eyesRoll <= 60) {
+			_eyes = 'blue';
+			} else if (_eyesRoll <= 80) {
+			_eyes = 'hazel';
+			} else if (_eyesRoll <= 90) {
+			_eyes = 'green';
+			} else {
+			_eyes = 'gray';
+			}
+		}
+		if (['blonde', 'ginger'].includes(_hair)){
+			if (_eyesRoll <= 10) {
+			_eyes = 'brown';
+			} else if (_eyesRoll <= 50) {
+			_eyes = 'blue';
+			} else if (_eyesRoll <= 75) {
+			_eyes = 'hazel';
+			} else if (_eyesRoll <= 90) {
+			_eyes = 'green';
+			} else {
+			_eyes = 'gray';
+			}
+		}
+	}
+	if (_lightRoll <= 33) {
+		_eyes = 'dark '+_eyes;
+	} else if (_lightRoll <= 66) {
+		_eyes = 'light '+_eyes;
+	}
+	return _eyes;
 };
 
 setup.orientationRoll = function(gender) {
@@ -94,6 +136,9 @@ setup.orientationRoll = function(gender) {
 
 setup.setSexuality = function(person, orientation) {
 	person.orientation = orientation;
+	if (!settings.gaysEnabled) {
+		person.orientation = 'straight';
+	}
 	person.likesGuys = false;
 	person.likesGirls = false;
 	person.likesTGuys = false;
@@ -191,15 +236,14 @@ setup.setSexuality = function(person, orientation) {
 };
 
 setup.genderDescription = function(person) {
-	if (person.gender == 0) {
-		return 'woman';
-	} else if (person.gender == 1) {
-		return 'man';
-	} else if (person.gender == 2) {
-		return 'trans woman';
-	} else if (person.gender == 3) {
-		return 'trans man';
-	}
+	const _mapping = [
+		'woman',
+		'man',
+		'trans woman',
+		'trans man'
+	];
+
+	return _mapping[person.gender];
 };
 
 setup.agePeriod = function(age) {
@@ -260,5 +304,15 @@ setup.getNpcHappyLevel = function(person) {
     }
 
     return 'very_happy';
-}
+};
 
+setup.personalityTraits = function(count = 1) {
+	var c = shuffle(['efficient','organized','extravagant','careless']);
+	var a = shuffle(['friendly','compassionate','critical','rational']);
+	var n = shuffle(['sensitive','nervous','resilient','confident']);
+	var o = shuffle(['inventive','curious','consistent','cautious']);
+	var e = shuffle(['outgoing','energetic','solitary','reserved']);
+	var traits = shuffle([c[0], a[0], n[0], o[0], e[0]]);
+
+	return traits.slice(0, count).sort();
+};

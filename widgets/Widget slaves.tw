@@ -20,16 +20,7 @@
 
 <<widget slaveInfo>>
 	<<set _age = setup.getAge($args[0])>>
-	<<if (_age < 20)>>
-		<<set $ageDescription = 'teenage girl'>>
-	<<elseif (_age < 25)>>
-		<<set $ageDescription = 'young woman'>>
-	<<elseif (_age < 50)>>
-		<<set $ageDescription = 'woman'>>
-	<<else>>
-		<<set $ageDescription = 'mature woman'>>
-	<</if>>
-	
+	<<set $ageDescription = getNpcAgeDescription($args[0])>>
 	<strong><<=$args[0].name>> - <<=_age>></strong> year old, 
 	<<=$ageDescription>> with <strong><<=$args[0].hair>></strong> hair.
 	<br />
