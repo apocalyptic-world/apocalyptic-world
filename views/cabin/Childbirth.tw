@@ -37,7 +37,10 @@ Her contractions grew stronger, <<=setup.displayName($tmpGirl)>> knew that she d
 	You look around but see nothing that could work (<strong>missing 5 towels</strong>)
 	<br /><br />
 <</if>>
-	
+<<if setup.hasDoctor()>>
+	<<set _chanceSuccess += 20>>
+	<<set _chanceMotherDies -= 3>>
+<</if>>	
 <<linkreplace 'Continue'>>
 	<center>
 		[img[setup.ImagePath+'game/misc/childbirth3.webp']]
@@ -130,17 +133,26 @@ Her contractions grew stronger, <<=setup.displayName($tmpGirl)>> knew that she d
 
 	<<else>>
 		<center>
-
+			[img[setup.ImagePath+'places/cabin/childbirth_failed.jpg']]
 		</center>
 		<br /><br />
-		Despite the best efforts of the community, tragedy strikes. The child is born, but due to the harsh conditions and lack of medical resources, it becomes clear that survival is impossible. The child passes away in Mother Grace's arms.
+		Despite the best efforts of the community, tragedy strikes. The child is born, but due to the harsh conditions and lack of medical resources, it becomes clear that survival is impossible. The child passes away in Mother <<=setup.displayName($tmpGirl)>>'s arms.
+		<br /><br />
 		<<link 'Continue'>>
 			<<for _childGuestI, _childGuest range $guests>>
-				<<set $guests[_g_childGuestIuestI].happy -= 10>>
+				<<set $guests[_childGuestI].happy -= 10>>
 			<</for>>
 			<<for _childSlaveI, _childSlave range $slaves>>
 				<<set $slaves[_childSlaveI].happy -= 10>>
 			<</for>>
+			<<set _mother = $tmpGirl>>
+			<<run delete _mother.prengnacy>>
+			<<if $pregnancyHappening.type === 'slave'>>
+				<<set $slaves[$pregnancyHappening.id] = _mother>>
+			<<else>>
+				<<set $guests[$pregnancyHappening.id] = _mother>>
+			<</if>>
+
 			<<goto 'Guest house'>>
 		<</link>>
 	<</if>>
