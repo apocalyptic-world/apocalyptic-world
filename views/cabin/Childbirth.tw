@@ -15,8 +15,14 @@ Her contractions grew stronger, <<=setup.displayName($tmpGirl)>> knew that she d
 	<<set _chanceMotherDies = 1>>
 <</if>>
 <br /><br />
-<<if $backpack.count('towel') >= 5>>
+<<set _isStorageAvailable = ($game.location.shop ?? false)>>
+<<set _reqKey = 'towel'>>
+<<set _towelCount = $backpack.count(_reqKey) + (_isStorageAvailable ? $storage.count(_reqKey) : 0)>>
+<<if _towelCount >= 5>>
 	<<linkreplace 'Grab towels and make a birthing area'>>
+		<<if _isStorageAvailable>>
+		    <<transfer $storage $backpack _reqKey 5>>
+		<</if>>
 		<<drop $backpack 'towel' 5>>
 	  <center>
 		  [img[setup.ImagePath+'game/misc/childbirth2.jpg']]
