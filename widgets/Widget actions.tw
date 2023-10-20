@@ -14,32 +14,57 @@
 		<<if typeof setup.actions === 'undefined'>>
 		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
 			[img[setup.ImagePath+'game/misc/deflower.webp']]
+		<<elseif $args[0].virgin && $args[1] === 'mistress_pussy'>>
+			[img[setup.ImagePath+'game/misc/deflower_strapon.webp']]
 		<<else>>
-		  <<if typeof setup.actions[$args[0].name] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location] !== 'undefined' && typeof setup.actions[$args[0].name][$args[0].location][$args[1]] !== 'undefined'>>
-			  	<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].name + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[$args[0].name][$args[0].location][$args[1]])`>>
-		  <<elseif typeof setup.actions[$args[0].name] !== 'undefined' && typeof setup.actions[$args[0].name]['bedroom'] !== 'undefined' && typeof setup.actions[$args[0].name]['bedroom'][$args[1]] !== 'undefined'>>
-		  		<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].name + '/bedroom/'+ $args[1] + '/' + either(setup.actions[$args[0].name]['bedroom'][$args[1]])`>>
-		  <<elseif !$args[0].gender && typeof setup.actions[$args[0].race] !== 'undefined' && typeof setup.actions[$args[0].race][$args[0].location] !== 'undefined' && typeof setup.actions[$args[0].race][$args[0].location][$args[1]] !== 'undefined'>>
-		  		<<actionImageOutput `setup.ImagePath+'actions/' + $args[0].race + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[$args[0].race][$args[0].location][$args[1]])`>>
-		  <<elseif !$args[0].gender && setup.getAge($args[0]) >= 55 && typeof setup.actions['gilf'][$args[0].location] !== 'undefined' && typeof setup.actions['gilf'][$args[0].location][$args[1]] !== 'undefined'>>
-		  	 	<<actionImageOutput `setup.ImagePath+'actions/gilf/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['gilf'][$args[0].location][$args[1]])`>>
-		  <<elseif ($args[0].pregnancy ?? 0) > 100 && typeof setup.actions['pregnant'][$args[0].location] !== 'undefined' && typeof setup.actions['pregnant'][$args[0].location][$args[1]] !== 'undefined'>>
-		  		<<actionImageOutput `setup.ImagePath+'actions/pregnant/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions['pregnant'][$args[0].location][$args[1]])`>>
-		  <<elseif $args[0].gender === 1 && typeof setup.actions['male'][$args[0].location] !== 'undefined' && typeof setup.actions['male'][$args[0].location][$args[1]] !== 'undefined'>>
-		  		<<actionImageOutput `setup.ImagePath+'actions/male/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.male[$args[0].location][$args[1]])`>>
-		  <<elseif $args[0].gender === 1>>
-			  		<<actionImageOutput `setup.ImagePath+'actions/male/default/'+ $args[1] + '/' + either(setup.actions.male.default[$args[1]])`>>
-		  <<elseif $args[0].gender === 2 && typeof setup.actions['transgirl'][$args[0].location] !== 'undefined' && typeof setup.actions['transgirl'][$args[0].location][$args[1]] !== 'undefined'>>
-		  		<<actionImageOutput `setup.ImagePath+'actions/transgirl/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.transgirl[$args[0].location][$args[1]])`>>
-		  <<elseif $args[0].gender === 2>>
-			  		<<actionImageOutput `setup.ImagePath+'actions/transgirl/default/'+ $args[1] + '/' + either(setup.actions.transgirl.default[$args[1]])`>>
-		  <<else>>
-			  <<if typeof setup.actions['default'][$args[0].location][$args[1]] !== 'undefined'>>
-			  		<<actionImageOutput `setup.ImagePath+'actions/default/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions.default[$args[0].location][$args[1]])`>>
-			  <<else>>
-			  		<<actionImageOutput `setup.ImagePath+'actions/default/bedroom/'+ $args[1] + '/' + either(setup.actions.default.bedroom[$args[1]])`>>
-			  <</if>>
-		  <</if>>
+		
+			<<set _genderDesc = ['female', 'male', 'transfemale', 'transmale'][$args[0].gender]>>
+			<<set _race = '.' + $args[0].race>>
+		
+			<<if ($args[0].pregnancy ?? 0) > 100 >>
+				<<set _pregnancyDesc = '.pregnant'>>
+			<<else>>
+				<<set _pregnancyDesc = '.notpregnant'>>				
+			<</if>>
+			
+			<<if setup.getAge($args[0]) <= 24 >>
+				<<set _ageDesc = '.young'>>
+			<<elseif setup.getAge($args[0]) <= 39 >>
+				<<set _ageDesc = ''>>		
+			<<elseif setup.getAge($args[0]) <= 59 >>
+				<<set _ageDesc = '.mature'>>
+			<<else>>
+				<<set _ageDesc = '.old'>>				
+			<</if>>
+			
+			<<set _morphs = [
+			$args[0].name,
+			_genderDesc + _race + _ageDesc + _pregnancyDesc,		
+			_genderDesc + _race + _pregnancyDesc,		
+			_genderDesc + _race + _ageDesc,
+			_genderDesc + _race,
+			_genderDesc + _ageDesc + _pregnancyDesc,		
+			_genderDesc + _pregnancyDesc,		
+			_genderDesc + _ageDesc,
+			_genderDesc
+			]>>
+			
+			<<for _i to 0; _i < _morphs.length; _i++>>
+				<<if
+				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
+				typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
+				typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
+						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
+					<<break>>
+				<<elseif
+				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
+				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
+				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
+						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
+					<<break>>
+				<</if>>	
+			<</for>>
+			
 		<</if>>
 	</div>
 	<br />
@@ -80,14 +105,14 @@
 
 <<widget actionDream>>
 	<<set $sleepAction = {
-		place: either(['bedroom', 'basement', 'streets', 'forest']),
+		place: either(['basement', 'bathhouse', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
 		type: either('pussy', 'anal', 'bj', 'dp')
 	}>>
 	<<if typeof setup.actions === 'undefined'>>
-		[img['images/actions/default/bedroom/pussy/7771836.webp']]
+		[img['images/actions/female/default/pussy/7771836.webp']]
 	<<else>>
-		<<set _dreamImg = setup.ImagePath+'actions/default/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.default[$sleepAction.place][$sleepAction.type])>>
-		[img[_dreamImg]]	
+		<<set _dreamImg = setup.ImagePath+'actions/female/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.female[$sleepAction.place][$sleepAction.type])>>
+		[img[_dreamImg]]
 	<</if>>
 <</widget>>
 

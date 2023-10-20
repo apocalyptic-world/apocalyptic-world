@@ -4,6 +4,7 @@
 	<<set _age = setup.ageRoll()>>
 	<<set _race = setup.raceRoll()>>
 	<<set _hair = setup.hairRoll(_race, _age, 0)>>
+	<<set _eyes = setup.eyesRoll(_race, _hair)>>
 	<<set _hair = setup.dyeRoll(_hair)>>
 	<<set _orientation = setup.orientationRoll(2)>>
 
@@ -16,6 +17,7 @@
 		corruption: random(0, 10),
 		sub: random(0, 30),
 		hair: _hair,
+		eyes: _eyes,
 		breasts: either('small', 'medium', 'big'),
 		dick: either('small', 'medium', 'big'),
 		race: _race,
@@ -27,6 +29,7 @@
 		horny: random(0, 30),
 		traits: [],
 		skills: [],
+		personality: setup.personalityTraits(either(1, 2, 2)),
 		endurance: 0,
 		clothes: {
 			top: either(1,2,3),

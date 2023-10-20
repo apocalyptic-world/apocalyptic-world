@@ -22,23 +22,25 @@ You order a beer at the bar and start drinking it.
 	<<set $tmpGirl = null, $slaveId = null>>
 	<<newtransgirl>>
 	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
-	A <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in her <strong class="iitem"><<=setup.agePeriod(_age)>></strong> sits next to you, <<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts
+	A <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in her <strong class="iitem"><<=setup.agePeriod(_age)>></strong> is shyly looking at you, <<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts.
 	<br />
-	She presents herself as <<=setup.displayName($tmpGirl)>>, then tells you she is a <strong class="iitem">trans</strong> woman and is looking for a welcoming place to live.
-	<br />
+	It is hard to pinpoint but something about her seems <strong class="iitem">unusual</strong>. 
+	<br /><br />
 	<center>
-		[img[setup.ImagePath+'places/nightclub/girl1.jpg']]
+		[img[setup.ImagePath+'places/nightclub/girl2.jpg']]
 	</center>
 	<br /><br />
-
-	<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
-		<<linkreplace 'Invite as guest'>>
-				<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
-				<<run $guests.push($tmpGirl)>>
-			<br /><br />
-		<</linkreplace>>
-	<</if>>
-
+	<<linkreplace 'Go talk to her'>>
+		She presents herself as <<=setup.displayName($tmpGirl)>>, then tells you she is a <strong class="iitem">trans</strong> woman and is looking for a welcoming place to live.
+		<br /><br />
+		<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+			<<linkreplace 'Invite as guest'>>
+					<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
+					<<run $guests.push($tmpGirl)>>
+				<br /><br />
+			<</linkreplace>>
+		<</if>>
+	<</linkreplace>>
 <</if>>
 [[Continue|Nightclub - inside]] 
 <<addmins 15>>

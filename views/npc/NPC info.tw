@@ -3,8 +3,12 @@
 <<if _forceKnown>>
 	<<set _unknown = false>>
 <</if>>
-<<set _age = setup.getAge($tmpGirl, ($tmpGirlCapture && !$guestId && !$charId))>>
 <<set _ageReal = setup.getAge($tmpGirl)>>
+<<if $tmpGirlCapture && !$guestId && !$charId>>
+	<<set _age = setup.agePeriod(_ageReal)>>
+<<else>>
+	<<set _age = _ageReal>>
+<</if>>
 <div id="girl_info_stats">
 <div id="girl_info_left" style="float: left; width: 60%">
 	<div id="girl_description">
@@ -27,7 +31,7 @@
 		 <</if>>
 	</div>
 
-	<div id="npc-inventory">
+<div id="npc-inventory">
 		<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
 		<<if ($tmpGirl.inventory ?? {})>>
 			<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
@@ -39,13 +43,15 @@
 			<</for>>
 		<</if>>
 	</div>
-	
-	<div id="npc_stats">
+
+		<div id="npc_stats">
 		<span>Name: <<=$tmpGirl.name>></span>
 		<span>Age: <<=_age>></span>
-		<span>Beauty score: <<print $tmpGirl.beauty>></span>
-		
+		<span>Beauty score: <<=$tmpGirl.beauty>></span>
+		<span>Eyes: <<=$tmpGirl.eyes>></span>
+				
 		<<if !_unknown>>
+			<span>Personality: <<=$tmpGirl.personality>></span>
 			<span>Gender: <<=setup.genderDescription($tmpGirl)>></span>
 			<span>Orientation: <<=$tmpGirl.orientation>></span>
 		<</if>>
