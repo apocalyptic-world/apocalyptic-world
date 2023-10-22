@@ -1,5 +1,7 @@
 sugarcube-2:
   macros:
+
+    # start meter macros
     newmeter:
       container: true
       children:
@@ -21,13 +23,28 @@ sugarcube-2:
         - newmeter
     showmeter: {}
     updatemeter: {}
+    # end meter macros
+
+    # start speech box system
     character:
       name: character
-      description: >-
-        *Syntax:* `<<character name [displayname] imageSrc>>`
-
+      parameters:
+        - string &+ string |+ string
+    say:
+      name: say
+      container: true
       parameters:
         - string |+ string
+    ### You'll have to add your own character macros for the characters you create with <<character>> or setup.addCharacter()!
+
+    ### Use this format:
+    ### characterName:
+    ###   name: characterName
+    ###   container: true
+
+    ### (Optional) If you for some reason want a description in the mouse-over tooltip you can add one to your character like it's done above in the say and character definitions.
+    
+    # end speech box system
 
     # simple inventory macros
     item:
@@ -81,3 +98,4 @@ sugarcube-2:
     give : {}
     
     # end simple inventory
+    
