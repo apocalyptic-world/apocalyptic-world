@@ -6,6 +6,7 @@
 <h3>Workers</h3>
 <<set $assignedToGreenhouse = false>>
 <<set _girlsCompetition = []>>
+<<set _guestGirlsInGreenhouse = []>>
 <table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
@@ -52,6 +53,7 @@
 		<<set $assignedToGreenhouse = true>>
 		<<if !_gardenGuest.gender>>
 			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
+			<<run _guestGirlsInGreenhouse.push(_gardenGuestI)>>
 		<</if>>
         <<set _genderClass = 'gender-' + setup.genderClass(_gardenGuest)>>
 		<tr>
@@ -92,6 +94,12 @@
 		<<set $locationEvents.greenhouse = true>>
 		<<set $game.greenhouseCompetition = _girlsCompetition>>
 		<<goto 'Greenhouse - competition'>>
+	<<elseif _guestGirlsInGreenhouse.length && setup.percentageChance(5)>>
+		<<set $locationEvents.greenhouse = true>>
+		<<set $tmpEvent = {
+			guestId: _guestGirlsInGreenhouse[0],
+		}>>
+		<<goto 'Greenhouse - big pumpkin'>>	
 	<</if>>
 <</if>>
 
