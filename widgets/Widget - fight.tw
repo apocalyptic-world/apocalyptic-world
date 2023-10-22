@@ -12,7 +12,8 @@
 		reward: false,
 		passageWon: $args[1] ?? null,
 		passageLost: $args[2] ?? null,
-		public: ($args[3] ?? false)
+		public: ($args[3] ?? false),
+		xtraAllies: $args[4] ?? []
 	}>>
 	
 	<<for _i to 0; _i lt $args[0].length; _i++>>
@@ -22,6 +23,14 @@
 	
 	<<for _ally, _allyId range $player.companions>>
 		<<set _allyKey = _ally.split(':')>>
+		<<set _tmpAlly = $guests[_allyKey[1]]>>
+		<<set _tmpAlly.key = _allyKey>>
+		<<set _tmpAlly.hp = 100>>
+		<<run $fight.allies.push(_tmpAlly)>>
+	<</for>>
+
+	<<for _i to 0; _i lt $fight.xtraAllies.length; _i++>>
+		<<set _allyKey = ['guest', $fight.xtraAllies[_i]]>>
 		<<set _tmpAlly = $guests[_allyKey[1]]>>
 		<<set _tmpAlly.key = _allyKey>>
 		<<set _tmpAlly.hp = 100>>
