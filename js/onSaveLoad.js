@@ -256,6 +256,9 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.characters[saveCharI].likesGuys = true;
             }
         }
+        if (typeof save.state.history[save.state.index].variables.characters[saveCharI].eyes === 'undefined') {  
+            save.state.history[save.state.index].variables.characters[saveCharI].eyes = setup.eyesRoll(save.state.history[save.state.index].variables.characters[saveCharI].race, save.state.history[save.state.index].variables.characters[saveCharI].hair);
+        }
     }
 
     for(var saveNurseryI in save.state.history[save.state.index].variables.nursery ?? []) {
