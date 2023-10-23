@@ -38,7 +38,7 @@ setup.traits = {
 setup.getRandomTraits = function (count = 1, exclude) {
     const _traits = clone(setup.traits);
     if (exclude) {
-        for (excludeTrait in exclude) {
+        for (let excludeTrait in exclude) {
             delete _traits[excludeTrait];
         }
     }
