@@ -65,9 +65,11 @@
 		<<goto 'Wood cabin'>>
 	<</if>>
 
-	<<set _weather = either('rain','storm','sun')>>
-	<<set _bgWeather = "bg-" + _weather>>
-	<<set _bgVolume = (settings.bgVolume / 20)>>
-	<<audio _bgWeather loop play volume _bgVolume>>
+	<<if settings.bgVolumeEnabled>>
+		<<set _weather = either('rain','storm','sun')>>
+		<<set _bgWeather = "bg-" + _weather>>
+		<<set _bgVolume = (settings.bgVolume / 20)>>
+		<<audio _bgWeather loop play volume _bgVolume>>
+	<</if>>
 <</widget>>
 
