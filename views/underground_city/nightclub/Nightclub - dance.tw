@@ -1,7 +1,7 @@
 :: Nightclub - dance [nightclub bg-underground] {"position":"2314,1466","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
 <<set $tmpGirl = null, $slaveId = null>>
-<<if (setup.percentageChance(80))>>
+<<if (setup.percentageChance(70))>>
 	<<newgirl>>
 	<<if (setup.percentageChance(75))>>
 		<<set _orientation = 'straight'>>
@@ -19,22 +19,25 @@
 	<<set $tmpGirl = setup.setSexuality($tmpGuy, _orientation)>>
 <</if>>
 
-<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
-<<set _age = setup.getAge($tmpGirl)>>
-<<set $tmpGirl.location = 'nightclub'>>
-<<set $tmpGirl.drunk = random(0,2)>>
-<<actionImage $tmpGirl dance>>
-<br />
-After an hour on the dancefloor, a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in <<=setup.pronounceWhos($tmpGirl)>> <strong class="iitem"><<=setup.agePeriod(_age)>></strong> starts dancing close to you,<br /><<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair
-<<if !$tmpGirl.gender>>
- and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts
-<</if>>
-<<if $tmpGirl.drunk == 2>>
- - <<=setup.pronounceWhat($tmpGirl)>>'s drunk.
-<<elseif $tmpGirl.drunk == 1>>
- - <<=setup.pronounceWhat($tmpGirl)>>'s a little drunk.
+<<if $tmpGirl>>
+	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
+	<<set _age = setup.getAge($tmpGirl)>>
+	<<set $tmpGirl.location = 'nightclub'>>
+	<<set $tmpGirl.drunk = random(0,2)>>
+	<<actionImage $tmpGirl dance>>
+	<br />
+	After an hour on the dancefloor, a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in <<=setup.pronounceWhos($tmpGirl)>> <strong class="iitem"><<=setup.agePeriod(_age)>></strong> starts dancing close to you,<br /><<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair
+	<<if !$tmpGirl.gender>>
+	and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts
+	<</if>>
+	<<if $tmpGirl.drunk == 2>>
+	- <<=setup.pronounceWhat($tmpGirl)>>'s drunk.
+	<<elseif $tmpGirl.drunk == 1>>
+	- <<=setup.pronounceWhat($tmpGirl)>>'s a little drunk.
+	<</if>>
 <<else>>
-
+	<br /><br />
+	You're dancing alone and no one joins you.
 <</if>>
 <br /><br />
 <<addmins 15>>

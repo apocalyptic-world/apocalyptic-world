@@ -95,6 +95,7 @@
 
 <<if ($game.location.settlement ?? false) && isMetChar('rodger')>>
 	<h2>Rodger</h2>
+	<div>Relationship: <<=$characters.rodger.relationship ?? 0>></div>
 	<<if !($game.location.settlement_church ?? false)>>
 		Help him finish the church
 	<<elseif !$characters.rodger.quests.book>>
@@ -162,6 +163,7 @@
 
 <<if ($game.location.settlement ?? false) && isMetChar('rodger') && isMetChar('octavia')>>
 	<h2>Octavia</h2>
+	<div>Relationship: <<=$characters.octavia.relationship ?? 0>></div>
 	<<if !$characters.octavia.quests.burned_settlement>>
 		<<if $game.day < 80>>
 			Reach 80 ingame days
@@ -183,6 +185,7 @@
 <</if>>
 
 <h2>Laura (Dr. Finch)</h2>
+<div>Relationship: <<= isMetChar('laura') ? $characters.laura.relationship : 0>></div>
 <<if isMetChar('laura')>>
 	<<if !$characters.laura.quests.successful_test>>
 		Wait few days

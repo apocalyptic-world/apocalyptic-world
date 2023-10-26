@@ -61,11 +61,13 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 </div>
 
 <<if($tmpGirl.skills ?? []).includes('woodcraft') && setup.npcInventoryHas($tmpGirl, 'bow')>>
-	<<link 'Assign to forest'>>
+	<<link 'Assign as hunter'>>
 	  	<<set $tmpGirl.assignedTo = 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
   	<</link>> (Provides you with food or wolf pelts)
+<<else>>
+	Assign as hunter [Need woodcraft skill and bow] (Provides you with food or wolf pelts)
 <</if>>
 
 <div>

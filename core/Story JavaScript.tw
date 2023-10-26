@@ -73,6 +73,16 @@ $(document).on(':passageend', function (e) {
 // end notify.min.js
 
 // Setting up a volume control for the settings property 'masterVolume' w/ callback
+Setting.addToggle("bgVolumeEnabled", {
+	label : "Background sound enabled",
+	default: true,
+	onChange : function () {
+		if (!settings.bgVolumeEnabled) {
+			SimpleAudio.stop();
+		}
+	}
+});
+
 Setting.addRange("bgVolume", {
 	label    : "Background volume",
 	min      : 0,
@@ -80,7 +90,8 @@ Setting.addRange("bgVolume", {
 	step     : 1,
 	default  : 1,
 	onChange : function () {
-		SimpleAudio.volume(settings.bgVolume / 20);
+		const newVolume = settings.bgVolume / 20;
+		SimpleAudio.volume(newVolume);
 	}
 });
 
