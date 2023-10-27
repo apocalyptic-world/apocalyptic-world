@@ -13,23 +13,7 @@ As you arrive at the gate, the sight that greets you is one of chaos. Gates lie 
 <br /><br />
 <<set $prevFight = {}>>
 <div id="option1">
-	<<link 'Attack them'>>
-		<<set $enemies = []>>
-		<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
-			<<newguy>>
-			<<set $tmpGuy.strength = randomInteger(40, 70)>>
-			<<if setup.percentageChance(20)>>
-				<<set 
-					$tmpGuy.inventory = [],
-					$tmpGuy.inventory.push('knife')
-				>>
-			<</if>>
-			<<run $enemies.push($tmpGuy)>>
-		<</for>>
-		<<newgirl>>
-		<<run $enemies.push($tmpGirl)>>
-		<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
-	<</link>>
+    <<include 'Event: Base attack - fight'>>
 </div>
 <<linkreplace 'Try to negotiate'>>
 	<<run $('#option1').hide()>>
@@ -40,25 +24,9 @@ As you arrive at the gate, the sight that greets you is one of chaos. Gates lie 
 		<br /><br />
 		They all start laughing in your face. One of them spits on your face.
 		<br /><br />
-		<strong class="iitem">Your intelligence  failed</strong>
+		<strong class="iitem">Your intelligence failed</strong>
 		<br /><br />
-		<<link 'Attack them'>>
-			<<set $enemies = []>>
-			<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
-				<<newguy>>
-				<<set $tmpGuy.strength = randomInteger(40, 70)>>
-				<<if setup.percentageChance(20)>>
-					<<set 
-						$tmpGuy.inventory = [],
-						$tmpGuy.inventory.push('knife')
-					>>
-				<</if>>
-				<<run $enemies.push($tmpGuy)>>
-			<</for>>
-			<<newgirl>>
-			<<run $enemies.push($tmpGirl)>>
-			<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
-		<</link>>
+		<<include 'Event: Base attack - fight'>>
 	<<else>>
 		They mockingly look at each other and nods their heads.
 		<br /><br />
@@ -70,23 +38,7 @@ As you arrive at the gate, the sight that greets you is one of chaos. Gates lie 
 		<<linkdesc>>
 			Will take one of your slaves.
 		<</linkdesc>>
-		<<link 'Attack them'>>
-			<<set $enemies = []>>
-			<<for _baseAttackI = 0; _baseAttackI < 4; _baseAttackI++>>
-				<<newguy>>
-				<<set $tmpGuy.strength = randomInteger(40, 70)>>
-				<<if setup.percentageChance(20)>>
-					<<set 
-						$tmpGuy.inventory = [],
-						$tmpGuy.inventory.push('knife')
-					>>
-				<</if>>
-				<<run $enemies.push($tmpGuy)>>
-			<</for>>
-			<<newgirl>>
-			<<run $enemies.push($tmpGirl)>>
-			<<fight $enemies 'Wood cabin' 'Event: Base attack - lost'>>
-		<</link>>
+		<<include 'Event: Base attack - fight'>>
 	<</if>>
 <</linkreplace>>
 
