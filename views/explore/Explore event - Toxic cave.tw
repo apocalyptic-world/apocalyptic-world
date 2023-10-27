@@ -1,0 +1,105 @@
+:: Explore event - toxic cave 
+<h1 class="ptitle">FOREST</h1>
+<br />
+As you venture deeper into the forest, the ancient trees loom overhead, their gnarled branches reaching for the sky. 
+The air is thick with the scent of moss and earth. 
+<br /><br />
+<center>    
+    [img[setup.ImagePath+'places/explore/event_toxic_cave.jpg']]
+</center>
+<br />
+Suddenly, you spot a cave entrance partially obscured by a strange mist that billows out, its ethereal tendrils dancing in the air. 
+Curiosity piqued, you approach cautiously. The mist seems to beckon, promising secrets and untold mysteries.
+<br /><br />
+<<linkreplace 'Go in'>>
+    With a deep breath, you decide to step inside.
+    <br />
+    The cave is dark and damp, its walls glistening with moisture. The air is cooler here, sending shivers down your spine. The mist swirls around your feet, its touch both chilling and invigorating.
+    <br /><br />
+    <<if $player.companions ?? {}>>
+        <<set _hadCompanions = true>>
+        Your companions... They follow hesitantly, their apprehension palpable. As they step into the cave, the mist takes on an eerie luminescence, casting strange shadows on the rocky walls.
+        <br /><br />
+        <<set _companionsWithoutMaskKeys = []>>
+        <<set _companionsWithoutMaskNames = []>>
+        <<for _companionKey, _companion range $player.companions>>
+            <<set _npcId = _companionKey.split(':')[1]>>
+            <<set _npc = $guests[_npcId]>>
+            <<if !setup.npcInventoryHas(_npc, 'gas_mask')>>
+                <<run _companionsWithoutMaskKeys.push(_npcId)>>
+                <<run _companionsWithoutMaskNames.push(setup.displayName(_npc))>>
+            <</if>>  
+        <</for>>
+
+        <<if _companionsWithoutMaskNames.length>>
+            Suddenly <<=_companionsWithoutMaskNames.join(', ')>> begin to gasp and choke, their faces contorted in agony. They collapse to the ground, unable to withstand the strange effects of the mist. Panic surges through you as you watch helplessly. 
+            <br /><br />
+        <</if>>
+
+    <</if>>
+    <<if $backpack.has('gas_mask')>>
+        <<set _randomUniqueItem = either('gas_mask', 'car_part')>>
+        The cave's interior is illuminated by the soft glow of luminescent moss, revealing a path that winds deeper into the heart of the earth. 
+        The air feels damp, but your mask ensures each breath is clear and crisp.
+        <br /><br />
+        Deeper still, you discover a chamber that seems untouched by time. Crates and barrels lay scattered about, covered in layers of dust and cobwebs. Among the relics of a forgotten era, you find some stuff.
+        <br /><br />
+
+        <<if setup.percentageChance(50)>>
+            <<for _caveItemI, _caveItem range ['rope', 'glass','plastic']>>
+                <<set _randomItemCount = randomInteger(1, 10)>>
+                <strong>You picked up <strong class="iitem"><<=_randomItemCount>> <<=Item.get(_caveItem).name>></strong></strong>
+                <<pickup $backpack _caveItem _randomItemCount>>
+                <br />
+            <</for>>
+            <br />
+        <</if>>
+        Then, in the corner, you spot it...
+        <br /><br />
+        <center>    
+            [img[setup.ImagePath+'places/explore/event_toxic_cave_' + _randomUniqueItem + '.jpg']]
+        </center>
+        <br />
+        <<pickup $storage _randomUniqueItem 1>>
+        <strong>You picked up <strong class="iitem"><<=Item.get(_randomUniqueItem).name>></strong></strong>
+        <br /><br />
+    <<else>>
+        <center>    
+            [img[setup.ImagePath+'places/explore/event_toxic_cave_collapse.jpg']]
+        </center>
+        <br />
+        <<if _companionsWithoutMaskNames.length>>
+            You also collapse on the ground and start to choke.
+        <<else>>
+            Suddenly you collapse on the ground and start to choke.
+        <</if>>
+        <br />
+        <br />
+        <<perkAdd 'beaten'>>
+        Summoning all your strength, you turn and sprint back towards the entrance. 
+        <br />
+        The mist seems to thicken, pressing in on you from all sides. Your breath comes in ragged gasps, your heart pounding in your chest. 
+        It feels like an eternity, but finally, you burst out into the open air.
+        <br /><br />
+        <<if _hadCompanions && !Object.keys($player.companions).length>>
+            <strong>
+                None of companions who entered with you comes out. They are all dead...
+            </strong>
+            <br /><br />
+        <<elseif _hadCompanions>>
+            <strong><<=_companionsWithoutMaskNames.join(', ')>> didn't came out...</strong>
+            <br /><br />
+        <</if>>
+
+        <<if _companionsWithoutMaskKeys.length>>
+            <<run _companionsWithoutMaskKeys.sort().reverse()>>
+            <<for _companionRemoveKey range _companionsWithoutMaskKeys>>
+                <<run console.log('remove')>>
+                <<guestRemove _companionRemoveKey>>
+            <</for>>
+        <</if>>
+    <</if>>
+<</linkreplace>>
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>

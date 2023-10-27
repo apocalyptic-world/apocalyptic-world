@@ -68,16 +68,16 @@ setup.eyesRoll = function(_race, _hair) {
 	
 	if (_race = 'white' || _metisRoll <= 30){
 		if (['black', 'brown'].includes(_hair)){
-			if (_eyesRoll <= 40) {
-			_eyes = 'brown';
-			} else if (_eyesRoll <= 60) {
+			if (_eyesRoll <= 5) {
+				_eyes = 'hazel';
+		} else if (_eyesRoll <= 10) {
 			_eyes = 'blue';
-			} else if (_eyesRoll <= 80) {
-			_eyes = 'hazel';
-			} else if (_eyesRoll <= 90) {
-			_eyes = 'green';
-			} else {
+			} else if (_eyesRoll <= 40) {
 			_eyes = 'gray';
+			} else if (_eyesRoll <= 60) {
+				_eyes = 'green';
+			} else {
+				_eyes = 'brown';
 			}
 		}
 		if (['blonde', 'ginger'].includes(_hair)){

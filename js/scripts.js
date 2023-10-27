@@ -199,7 +199,8 @@ setup.gifts = {
 
 setup.inventoryNpc = [
     'knife',
-    'bow'
+    'bow',
+    'gas_mask'
 ];
 
 setup.inventoryManageable = {
@@ -355,11 +356,11 @@ setup.getRandomPersons = function(persons, limit = 2) {
 setup.getRandomPersonIds = function(persons, limit = 2) {
     var randomIds = [];
     var randomPersonList = clone(persons);
-    while (randomIds.length < limit && randomPersonList) {
+    while (randomIds.length < limit && randomPersonList.length) {
         var randomIndex = Math.floor(Math.random() * randomPersonList.length);
         if (!randomIds.includes(randomIndex)) {
             randomIds.push(randomIndex);
-            delete randomPersonList[randomIndex];
+            randomPersonList.splice(randomIndex, 1);
         }
     }
 
@@ -443,13 +444,23 @@ setup.pronounceWhat = function (npc) {
 };
 
 setup.getNpcById = function(id) {
-    var npcList = variables().slaves.concat(variables().guests.concat(variables().nursery ?? []));
+    var npcList = variables().slaves.concat(variables().guests, (variables().nursery ?? []));
+
+    console.log(npcList);
 
     for (var i = 0; i < npcList.length; i++) {
         if (npcList[i].id === id) {
             return npcList[i];
         }
     }
+
+    for (var i in variables().characters) {
+        if(variables().characters[i].id && variables().characters[i].id === id) {
+            return variables().characters[i];
+        }
+    }
+
+
 
     return null;
 };
