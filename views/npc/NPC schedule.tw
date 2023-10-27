@@ -40,7 +40,7 @@
 			<<continue>>
 		<</if>> 
 
-		<<if (!_scheduleGuest.washedBathhouse &&
+		<<if (($game.location.bathhouse ?? false) && !_scheduleGuest.washedBathhouse &&
 			(((!_scheduleGuest.assignedTo || typeof _bathSchedule[_scheduleGuest.assignedTo] === 'undefined') && setup.percentageChance(5)) || 
 			(typeof _bathSchedule[_scheduleGuest.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleGuest.assignedTo].from, _bathSchedule[_scheduleGuest.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleGuest.assignedTo].p))))
 			)>>
