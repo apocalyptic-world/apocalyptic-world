@@ -1,0 +1,273 @@
+:: Help [Help] {"position":"1009,12","size":"100,100"}
+
+<h1>Help or hinder?</h1>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showItems = !(_showItems ?? false)>>
+    <<if _showItems>>
+        <<run $('#items').show()>>
+    <<else>>
+        <<run $('#items').hide()>>
+    <</if>>
+<</button>>Items</h2>
+<div id="items" style="display:none;">
+
+<table border=1>
+    <tr>
+        <th>Item</th>
+        <th>Source</th>
+        <th>Used for</th>
+    </tr>
+
+    <tr><td colspan=3><h3>Building materials</h3></td></tr>
+    <tr>
+        <td>Glass</td>
+        <td><ul><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
+        <td>Build things like solar panels & lab in workbench.</td>
+    </tr>
+    <tr>
+        <td>Plastic</td>
+        <td><ul><li>Sold in Underground city shop</li><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
+        <td>Build things like solar panels & home improvements in workbench.</td>
+    </tr>
+    <tr>
+        <td>Rope</td>
+        <td><ul><li>Sold by Vincent on his farm</li><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
+        <td>Build things like bow, paddle & home improvements in workbench.</td>
+    </tr>
+    <tr>
+        <td>Wood</td>
+        <td></td>
+        <td>Used in many craftings in workbench</td>
+    </tr>
+
+    <tr><td colspan=3><h3>Fabric</h3></td></tr>
+    <tr>
+        <td>Bandage</td>
+        <td><ul><li>Sold in Underground city shop</li><li>Workbench: Can be sewn from cloth</li></ul></td>
+        <td>Stops the hero from bleeding out & dying</td>
+    </tr>
+    <tr>
+        <td>Cloth</td>
+        <td><ul><li>Scavenging</li><li>(Hero explores)</li></ul></td>
+        <td>Can be sewn into bandages & towels in the workbench</td>
+    </tr>
+    <tr>
+        <td>Towel</td>
+        <td><ul><li>Workbench: Can be sewn from cloth</li></ul></td>
+        <td>Used in childbirth. Increases chances for mother & child to survive.</td>
+   </tr>
+
+    <tr><td colspan=3><h3>For the girls & boys & horses</h3></td></tr>
+    <tr>
+        <td>Cheap necklace</td>
+        <td><ul><li>Sold in settlement shop</li><li>Scavenging</li><li>(Hero explores)</li></ul></td>
+        <td>Can use as a gift (+5 rel)</td>
+    </tr>
+    <tr>
+        <td>Food</td>
+        <td></td>
+        <td>Eaten by humans. Very important having food to eat!</td>
+    </tr>
+    <tr>        
+        <td>Hay</td>
+        <td></td>
+        <td>Food for your horse</td>
+    </tr>
+    <tr>
+        <td>Paddle</td>
+        <td><ul><li>Workbench</li></ul></td>
+        <td>Increases submission gain while punishing slave</td>
+    </tr>
+    <tr>
+        <td>Pregnancy termination potion</td>
+        <td><ul><li>Workbench</li></ul></td>
+        <td>Terminate pregnancy</td>
+    </tr>
+
+    <tr><td colspan=3><h3>Unused for now</h3></td></tr>
+    <tr>
+        <td>Duck tape</td>
+        <td><ul><li>Scavenging</li></ul></td>
+        <td>No ducks implemented in game yet! :love:</td>
+    </tr>
+ 
+</table>
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showSkill = !(_showSkill ?? false)>>
+    <<if _showSkill>>
+        <<run $('#skills').show()>>
+    <<else>>
+        <<run $('#skills').hide()>>
+    <</if>>
+<</button>>Important skills and traits</h2>
+<div id="skills" style="display:none;">
+<dl>
+    <dt>Cook      </dt><dd>Decreases chance of rotten food. Not learnable. Useable only in kitchen assignment</dd>
+    <dt>Doctor    </dt><dd>Decreases chance of miscarriage and reduces sickdays. Not learnable. Any guest with doctor skill will step in as doctor when needed.</dd>
+    <dt>Gardener  </dt><dd>Gives bonus food while assigned to garden/greenhouse. Learnable</dd>
+    <dt>Sadistic  </dt><dd>Not a skill but a trait. A must for the mistress job. Not learnable?</dd>
+    <dt>Scavenger </dt><dd>More likely to find stuff, and less likely to get into trouble. Learnable</dd>
+    <dt>Shopkeeper</dt><dd>Can work in shop and manage your goods. Not learnable</dd>
+    <dt>Woodcraft </dt><dd>Can gather more wood. Learnable. Required for the hunters</dd>
+</dl>
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showJob = !(_showJob ?? false)>>
+    <<if _showJob>>
+        <<run $('#jobs').show()>>
+    <<else>>
+        <<run $('#jobs').hide()>>
+    <</if>>
+<</button>>Assigned to & jobs of all kinds</h2>
+<div id="jobs" style="display:none;">
+You can assign your slaves and guests to different jobs.<br/>
+Slaves can only work in the garden/greenhouse or streets. <br/>
+Guests can work in any job.
+
+<dl>
+    <dt>Companion</dt><dd>A companion travels with the mc. Help him with fights.</dd>
+    <dt>Doctor</dt><dd>The doctor don't need a special assignment. Can work anywhere. Any guest with doctor skill will step in as doctor when needed.</dd>
+    <dt>Forest</dt><dd>    Works in the forest, producing wood and sometimes a few berries to eat.</dd>
+    <dt>Garden/Greenhouse</dt><dd>Works in garden/greenhouse producing food.</dd>
+    <dt>Guard</dt><dd>A guest with good strength might work as a guard, watching over your place. Might sometimes capture cute young women who tries to sneak in.</dd>
+    <dt>Hunter</dt><dd>Provides you with food or wolf pelts</dd>
+    <dt>Kitchen</dt><dd>Any guest can work in the kitchen but with no effect. Only if the guest has the cook skill it will ha an effect.</dd>
+    <dt>Maid</dt><dd>Any guest can work as a maid. Will give extra energy for the hero taking a nap.</dd>
+    <dt>Mistress</dt><dd>Any guest with the sadistic trait might work as mistress. Will whip the slaves into shape.</dd>
+    <dt>Scavening</dt><dd>A guest assigned to scavening is sent out to find and collect nice-to-have things. There is a chance of a scavenger not coming home. When that happens the mc have a chance to go out and try to find her.</dd>
+    <dt>Shop</dt><dd>If you build a shop you will need a guest with shopkeeper skill to handle it. With a shopkeeper you can sell surplus and buy needed materials.<br/>
+    The shop also contains storage space to keep materials in the house.</dd>
+    <dt>Streets</dt><dd>Whatever you call the sexworkers, working the streets means coming in contact with the dark underbelly of human society. People don't respect others property. o_O Assaults, abuse and even killing of the workers isn't unheard of. High risk of miscarriage and loosing unborn childs.<br/>
+    Dom, that more or less owns the streets, let your girls work there but you have to pay high taxes and get little or no protection in return.
+    After getting a better deal with Dom you will get lesser tax and some protection.</dd>
+</dl>
+
+<table border=1>
+    <tr>
+        <th>Job</th>
+        <th>Requirements</th>
+        <th>Bonus/Survival</th>
+    </tr>
+
+    <tr>
+        <td>Companion</td>
+        <td>None</td>
+        <td>A good strength & a knife helps in fight</td>
+   </tr>
+    <tr>
+        <td>Doctor</td>
+        <td>Doctor skill</td>
+        <td>None</td>
+   </tr>
+    <tr>
+        <td>Forest</td>
+        <td>None</td>
+        <td>Good strength & skill woodcraft</td>
+   </tr>
+    <tr>
+        <td>Garden/Greenhouse</td>
+        <td>None</td>
+        <td>Upgrade the garden with a greenhouse to produce more food
+        <br/>Skill gardener</td>
+   </tr>
+    <tr>
+        <td>Guard</td>
+        <td>A good strength</td>
+        <td>A good strength & knife, for the rare base attack</td>
+   </tr>
+    <tr>
+        <td>Hunter</td>
+        <td>Woodcraft skill & bow</td>
+        <td></td>
+   </tr>
+    <tr>
+        <td>Kitchen</td>
+        <td>None</td>
+        <td>Cook skill</td>
+   </tr>
+    <tr>
+        <td>Maid</td>
+        <td>None</td>
+        <td>None</td>
+   </tr>
+    <tr>
+        <td>Mistress</td>
+        <td>Female with sadistic trait</td>
+        <td>A paddle?</td>
+   </tr>
+    <tr>
+        <td>Scavening</td>
+        <td>None</td>
+        <td>A good strength, a knife & the scavening skills increases chance of survival
+        <br/>Scavening skills also gives bonus items</td>
+   </tr>
+    <tr>
+        <td>Shop</td>
+        <td>Shopkeeper skill for shop part, none for storage part</td>
+        <td>None</td>
+   </tr>
+    <tr>
+        <td>Streets</td>
+        <td>Being female</td>
+        <td>
+          <ul>
+            <li>Deal with Dom for protection & lower taxes</li>
+            <li>High endurance for survival</li>
+            <li>Beauty, submission and other sexual traits pays more</li>
+          </ul>
+        </td>
+   </tr>
+</table>
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showFarm = !(_showFarm ?? false)>>
+    <<if _showFarm>>
+        <<run $('#farm').show()>>
+    <<else>>
+        <<run $('#farm').hide()>>
+    <</if>>
+<</button>>Improving the farm</h2>
+<div id="farm" style="display:none;">
+
+The hero takes possession of a farm with little luxury. There is water but only cold water, a basement with only a few slave cells, a barren garden.
+
+<dl>
+    <dt>Basement</dt>
+        <dd>You start with only a few slave cells in the basement but with room for more. Obedient slaves, that is high relationship, can be released and upgraded to guests in the guesthouse.</dd>
+    <dt>Bathhouse</dt>
+        <dd>A little luxury for the persons living in the farm. Improves beauty, at least temporary.</dd>
+    <dt>Bedroom</dt>
+        <dd>A place to rest and sleep and more. Taking a nap will restore energy. Having a house-maid will restore more energy when napping.</dd>
+    <dt>Cold shower</dt>
+        <dd>Can be upgraded to hot shower</dd>
+    <dt>Garden</dt>
+        <dd>Produces food upgradable to greenhouse, produces more food/worker</dd>
+    <dt>Gate</dt>
+        <dd>You can upgrade your farm to a settlement. For this you need a gate.</dd>
+    <dt>Greenhouse</dt>
+        <dd>An upgraden garden, produces more food per worker</dd>
+    <dt>Guest beds</dt>
+        <dd>Expands the guesthouse.</dd>
+    <dt>Guest house</dt>
+        <dd>You can build a guest house. It starts with only a few beds but with room for more. Released slaves and invited persons live in the guest-house.</dd>
+    <dt>Lab</dt>
+        <dd>An expansion to the guest house. A scientific laboratory.</dd>
+    <dt>Nursery</dt>
+        <dd>A place to store children. Otherwise they will take up valuable space in basement and guesthouse.</dd>
+    <dt>Shower</dt>
+        <dd>Starts with cold water only. Taking a cold shower will restore a little energy. Can be upgraded to hot shower that restore a little more energy.</dd>
+    <dt>Shop</dt>
+        <dd>A shopkeeper can sell surplus and buy needed items. from passers-by. Also storage space for the farm.</dd>
+    <dt>Slave cells</dt>
+        <dd>Expands the basement</dd>
+</dl>
+</div>
