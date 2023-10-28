@@ -51,6 +51,9 @@
 
 
 <<widget wakeUp>>
+	<<run console.log(isMetChar('blair'))>>
+	<<run console.log($characters.blair.quests.pregnancy)>>
+	<<run console.log(!$characters.blair.quests.pregnancy_talk)>>
 	<<set _randomSleepEventInteger = randomInteger(0,2)>>
 	<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0>>
 		<<goto 'Blair quest - morning bj'>>
@@ -61,6 +64,8 @@
 		<<goto 'Scavenging - didnt came home'>>
 	<<elseif setup.getRandomPersonIdsGirls($guests, 1) && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5)>>
 		<<goto 'Blair - morning surprise'>>
+	<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
+		<<goto 'Blair - pregnant'>>
 	<<else>>
 		<<goto 'Wood cabin'>>
 	<</if>>

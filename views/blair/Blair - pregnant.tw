@@ -1,0 +1,60 @@
+:: Blair - pregnant [bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br /><br />
+<<set $characters.blair.quests.pregnancy_talk = true>>
+<<set $locationEvents.cabin = true>>
+<<blair>>
+    <<=$player.name>>! We need to talk. I've missed my period. I believe... I believe I may be pregnant.
+<</blair>>
+<br />
+As the words left her lips, tears welled up in her eyes. 
+She collapsed into a nearby chair, her body shaking with sobs. It was a torrent of conflicting emotions, a tidal wave of fear, hope, and uncertainty.
+<br /><br />
+<<blair>>
+    In this harsh, post-apocalyptic world, bringing a child into existence seems like an almost impossible task.. I don't know what to do. 
+<</blair>>
+<br />
+Yet, as she wept, it was clear that another part of her longed for this child. It was a glimmer of hope, a beacon of light amidst the darkness. 
+The thought of cradling a tiny life in her arms, of nurturing and loving a new soul in this unforgiving world, filled her with a warmth that contrasted sharply with the cold reality around them.
+<br /><br />
+<div id="option_keep">
+    <<linkreplace 'You should keep it'>>
+        <<run $('#option_no').hide()>>
+        <<set $characters.blair.happy += 30>>
+        <<set $player.godwill += 5>>
+        As you tell her that you believe she should keep the child, a mix of emotions washes over her face. Surprise, relief, and a flicker of hope light up her eyes. 
+        She searches your gaze, seeking confirmation and finding it in your determined expression.
+        <br /><br />
+        <<blair>>
+            Okay. We'll do this. We'll find a way to make it work, for us and for the kid.
+        <</blair>>
+        <br />
+        From that moment forward, you both embark on a journey filled with challenges, but also with moments of profound joy and connection.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_no">
+    <<linkreplace 'The world is too harsh for a kid'>>
+        <<run $('#option_keep').hide()>>
+        <<run delete $characters.blair.pregnancy>>
+        <<set $characters.blair.happy -= 30>>
+        <<set $player.godwill -= 10>>
+        When you express your concerns about bringing a child into this harsh post-apocalyptic world, the atmosphere in the room grows heavy with the weight of reality. 
+        She looks at you, her eyes still brimming with tears, and her face reflects a mixture of understanding and sorrow.
+        <br /><br />
+        <<blair>>
+            You're right. It's not fair to bring a child into this world. We'll find a way... I... I can't bear to imagine what their life would be like here.
+        <</blair>>
+        <br />
+        Together, you share a somber moment of understanding. 
+        It's a decision borne out of love and a desire to protect the potential life that lingers in the balance. 
+        The weight of the world outside remains, but you face it together, knowing that this decision, however painful, is made with the best intentions for the child that might have been.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <</linkreplace>>
+</div>
