@@ -2,10 +2,13 @@
 <h1 class="ptitle">BASEMENT</h1>
 <br /><br />
 
+
 <<if setup.getAge($tmpGirl) > 55>>
 	What the hell have you imagined? I'm not interested in your whores.
+	<<run $('#option_end').show()>>
 <<elseif !$tmpGirl.likesGirls>>
 	Thank you for the offer but I'm not interested.
+	<<run $('#option_end').show()>>
 <<else>>
 	He nods affirmatively and <<=setup.displayName($slaves[$slaveOfferId])>> approaches closer to his cell door. 
 	<br /><br />
@@ -17,8 +20,9 @@
 	<br /><br />
 	<<video 'basement/slave_offer_slave2'>>
 	<br /><br />
-	He grabs her by the hips and pulls her as close as possible to his cell bars. She hesitates, but after a moment, it seems that she slowly starts to enjoy this whole process. It doesn't last long, and after a few more thrusts, he's done.	
+	He grabs her by the hips and pulls her as close as possible to his cell bars. She hesitates, but after a moment, it seems that she slowly starts to enjoy this whole process. It doesn't last long, and after a few more thrusts, he's almost done.	
 	<br /><br />
+	
 	<strong>
 		Relationship with <<=$tmpGirl.name>> increased by 5
 		<<set $tmpGirl.relationship += 5>>
@@ -28,17 +32,63 @@
 	<<if !$slaves[$slaveOfferId].likesGuys>>
 		<<set _slaveRelationshipDecrease += 10>>
 	<</if>>
-	<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
-	<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+
 	<br /><br />
-	<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
+	<<sayNpc $tmpGirl>>
+		Can I cum inside her?
+	<</sayNpc>>
+	<br />
+	<div id="option_no">
+		<<linkreplace 'No'>>
+			<<run $('#option_yes').hide()>>
+			<<run $('#option_end').show()>>
+			<center>
+				[img[setup.ImagePath+'places/cabin/workout_cum_outside.webp']]
+			</center>
+			<br /><br />
+			<<=setup.displayName($slaves[$slaveOfferId])>> pushes away from <<=setup.displayName($tmpGirl)>> and lets him cum on the ground right outside his cell. 
+			<br /><br />
+			<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
+			<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+			<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
+		<</linkreplace>>
+	</div>
+	<div id="option_yes">
+		<<linkreplace 'Yes'>>
+			<<run $('#option_no').hide()>>
+			<<run $('#option_end').show()>>
+			<<set _slaveRelationshipDecrease += 10>>
+			<<sayNpc $slaves[$slaveOfferId]>>
+				Please no!
+			<</sayNpc>>
+			<br />
+			<center>
+				[img[setup.ImagePath+'game/misc/creampie.webp']]
+			</center>
+			<br />
+			<<=setup.displayName($tmpGirl)>> wraps his hands around <<=setup.displayName($slaves[$slaveOfferId])>> and holds her strongly as he cums inside her pussy.
+			<br /><br />
+			<<if setup.getAge($slaves[$slaveOfferId]) < 55 && typeof $slaves[$slaveOfferId].pregnancy === 'undefined' && (
+				setup.percentageChance(40) || 
+				($tmpGirl.traits ?? []).includes('breeder')
+			)>>
+				<<set $tmpGirl.pregnancy_father = $tmpGirl.id>>
+				<<set $tmpGirl.pregnancy = 0>>
+			<</if>>
+			<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
+			<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+			<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
+		<</linkreplace>>
+	</div>
 <</if>>
-<br /><br />
-<<link 'Leave'>>
-	<<set $tmpGirl.horny = 0>>
-	<<set $slaves[$slaveOfferId].horny = 0>>
-	<<run delete $slaveOfferId>>
-	<<goto 'Guy view'>>
-<</link>>
+<div id="option_end" style="display:none">
+	<br />
+	<<link 'Leave'>>
+		<<set $tmpGirl.horny = 0>>
+		<<set $slaves[$slaveOfferId].horny = 0>>
+		<<run delete $slaveOfferId>>
+		<<goto 'Guy view'>>
+	<</link>>
+</div>
 
 

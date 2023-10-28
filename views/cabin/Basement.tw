@@ -12,6 +12,7 @@
 Free rooms left: <strong><<=_basementLimitShow>></strong>
 
 <<set _isSlaveInBasement = false>>
+<<set _suicidalSlaves = []>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 		<<set $workingInGarden++>>
@@ -69,6 +70,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<</if>>
 		<<set $showSlavesCount++>>
 		<<set $cellSlaveIds.push(_i)>>
+		<<if $slaves[_i].happy < -70>>
+			<<run _suicidalSlaves.push(_i)>>
+		<</if>>
 		<tr>
 			<td style="width: 300px">
 				<<if setup.getAge($slaves[_i]) < 18>>
@@ -184,6 +188,10 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $hornySlaveId = _hornySlaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement event - horny slave'>>
+	<<elseif _suicidalSlaves.length && setup.percentageChance(60)>>
+		<<set $slaveId = _suicidalSlaves[0]>>
+		<<set $locationEvents.basement = true>>
+		<<goto 'Basement - slave hangman'>>
 	<</if>>
 <</if>>
 [[Back|Wood cabin]]
