@@ -116,43 +116,41 @@ You slowly and quietly approach the source of the smoke and notice that they are
 			  		<</linkreplace>>
 			  	</div>
 			  <<if (($game.location.guesthouse ?? false) && ($guests.length + 3) < $guesthouseLimit)>>
-				  <<linkreplace 'Invite them to live with you'>>
-					  	<<run $('#option2, #option5').hide()>>
-						<<newgirl>>
-						<<set _mother = $tmpGirl>>
-						<<set _mother.race = 'white'>>
-						<<set _mother.birthDate = setup.getBirthDate(41)>>
-						<<set _mother.traits = ['analslut']>>
-						<<set _mother.skills = ['gardener', 'shopkeeper']>>
-						<<set _mother.sub = 90>>
-						<<set _mother.relationship = 100>>
-						<<set _mother.virgin = false>>
-						<<newgirl>>
-						<<set _daughter1 = $tmpGirl>>
-						<<set _daughter1.race = 'white'>>
-						<<set _daughter1.birthDate = setup.getBirthDate(19)>>
-						<<set _daughter1.skills = ['gardener']>>
-						<<set _daughter1.family = {
-							mother: _mother.id
-						}>>
-						<<set _daughter1.virgin = false>>
-						<<set _daughter1.relationship = 80>>
-						<<newgirl>>
-						<<set _daughter2 = $tmpGirl>>
-						<<set _daughter2.race = 'white'>>
-						<<set _daughter2.birthDate = setup.getBirthDate(20)>>
-						<<set _daughter2.skills = ['gardener']>>
-						<<set _daughter2.family = {
-							mother: _mother.id
-						}>>
-						<<set _daughter2.virgin = false>>
-						<<set _daughter2.relationship = 80>>
-						<<set _mother.family = {
-							kids: [
-							_daughter1.id,
-							_daughter2.id
-						]}>>
-						<<run $guests.push(_mother, _daughter1, _daughter2)>>
+					<div id="option_invite">
+						<<linkreplace 'Invite them to live with you'>>
+								<<run $('#option2, #option5, #option_capture').hide()>>
+								<<domQuest2Invite 'guests'>>
+								<<if !_fucked>>
+									<<run $('#option4').hide()>>
+								<</if>>
+								<center>
+									[img[setup.ImagePath+'places/streets/dom_quest2_happy.jpg']]
+								</center>
+								<br /><br />
+								Their faces light up and a smile appears on them. They look at each other, and hope is visible in their eyes.
+								<br /><br />
+								<<say 'Daughter' setup.ImagePath+'/people/anongirl.png'>>
+									Really? Thank you! 
+								<</say>>
+								<br /><br />
+								<<set $player.godwill += 10>>
+								<<say 'Mother' setup.ImagePath+'/people/anongirl.png'>>
+									I'll be forever in your debt. Thank you!
+								<</say>>
+								<br /><br />
+								You tell them as accurately as possible, the way for them to get from here to your camp.
+								<br /><br />
+								<<link 'Go back to Dom'>>
+									<<goto 'Dom quest #2 3'>>
+								<</link>>
+						<</linkreplace>>
+				  	</div>
+			  <</if>>
+			  <<if (($game.location.basement ?? false) && ($slaves.length + 3) < $basementLimit)>>
+				<div id="option_capture">
+				  <<linkreplace 'Capture them all'>>
+					  	<<run $('#option2, #option5, #option_invite').hide()>>
+						<<domQuest2Invite 'slaves'>>
 						<<if !_fucked>>
 							<<run $('#option4').hide()>>
 						<</if>>
@@ -160,23 +158,24 @@ You slowly and quietly approach the source of the smoke and notice that they are
 							[img[setup.ImagePath+'places/streets/dom_quest2_happy.jpg']]
 						</center>
 						<br /><br />
-						Their faces light up and a smile appears on them. They look at each other, and hope is visible in their eyes.
+						Fear shows on their faces. They look at each other, and they're trying to run away but you manage to hold them all.
 						<br /><br />
 						<<say 'Daughter' setup.ImagePath+'/people/anongirl.png'>>
-							Really? Thank you! 
+							Please no! We can't go back! 
 						<</say>>
 						<br /><br />
 						<<set $player.godwill += 10>>
 						<<say 'Mother' setup.ImagePath+'/people/anongirl.png'>>
-							I'll be forever in your debt. Thank you!
+							Sir! Please! Enough is enough! They won't make it!
 						<</say>>
 						<br /><br />
-						You tell them as accurately as possible, the way for them to get from here to your camp.
+						You grab all of them and bring them back to your camp where you put each of them in different cell.
 						<br /><br />
 						<<link 'Go back to Dom'>>
 							<<goto 'Dom quest #2 3'>>
 						<</link>>
 				  <</linkreplace>>
+				</div>
 			  <</if>>
 			</div>
 			
@@ -239,8 +238,46 @@ You slowly and quietly approach the source of the smoke and notice that they are
 	</div>
 <</linkreplace>>
 
-<<widget _domQuest2Invite>>
-	
+<<widget domQuest2Invite>>
+	<<newgirl>>
+	<<set _mother = $tmpGirl>>
+	<<set _mother.race = 'white'>>
+	<<set _mother.birthDate = setup.getBirthDate(41)>>
+	<<set _mother.traits = ['analslut']>>
+	<<set _mother.skills = ['gardener', 'shopkeeper']>>
+	<<set _mother.sub = 90>>
+	<<set _mother.relationship = 100>>
+	<<set _mother.virgin = false>>
+	<<newgirl>>
+	<<set _daughter1 = $tmpGirl>>
+	<<set _daughter1.race = 'white'>>
+	<<set _daughter1.birthDate = setup.getBirthDate(19)>>
+	<<set _daughter1.skills = ['gardener']>>
+	<<set _daughter1.family = {
+		mother: _mother.id
+	}>>
+	<<set _daughter1.virgin = false>>
+	<<set _daughter1.relationship = 80>>
+	<<newgirl>>
+	<<set _daughter2 = $tmpGirl>>
+	<<set _daughter2.race = 'white'>>
+	<<set _daughter2.birthDate = setup.getBirthDate(20)>>
+	<<set _daughter2.skills = ['gardener']>>
+	<<set _daughter2.family = {
+		mother: _mother.id
+	}>>
+	<<set _daughter2.virgin = false>>
+	<<set _daughter2.relationship = 80>>
+	<<set _mother.family = {
+		kids: [
+		_daughter1.id,
+		_daughter2.id
+	]}>>
+	<<if $args[0] == 'guests'>>
+		<<run $guests.push(_mother, _daughter1, _daughter2)>>
+	<<else>>
+		<<run $slaves.push(_mother, _daughter1, _daughter2)>>
+	<</if>>
 <</widget>>
 
 

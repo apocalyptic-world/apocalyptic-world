@@ -1,0 +1,36 @@
+:: Basement - slave hangman
+<h1 class="ptitle">BASEMENT</h1>
+<<set _npc = $slaves[$slaveId]>>
+<br />
+In the fading twilight, you made your way towards the decrepit basement, place where you held your slaves prisoners with this unforgiving wasteland above. 
+<br />
+Just before reaching the iron door, a strange, haunting sound echoed through the damp corridors. Your heart raced, but you pressed on.
+<br /><br />
+As you descended, the feeble light of your lantern revealed the rows of cells, each one holding a weary figure, bound by chains and shadows. 
+The air was thick with despair. And then, in one corner, a silent figure swung limply from a frayed rope.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/basement/hangman.jpg']]
+</center>
+<br />
+Time seemed to stop as you rushed forward, hands trembling as you fumbled to release <<=setup.displayName(_npc)>> from <<=setup.pronounceWhos(_npc)>> grim embrace. 
+But the life had already fled, leaving behind only the weight of futile regret.
+<br /><br />
+Gently, you lowered <<=setup.displayName(_npc)>> to the cold ground, their vacant eyes fixed on a world that could offer them no solace.
+<br />
+In this unforgiving realm, even the will to survive could prove to be the most elusive of all.
+<br /><br />
+
+<<run $slaves.splice($slaveId, 1)>>
+
+<<if $slaves>>
+    <<for _slaveI, _slave range $slaves>>
+        <<set $slaves[_slaveI].happy -= 20>>
+    <</for>>
+    <strong>Happiness for all slaves dropped by 20 points</strong>
+    <br /><br />
+<</if>>
+
+<<link 'Leave'>>
+    <<goto 'Basement'>>
+<</link>>
