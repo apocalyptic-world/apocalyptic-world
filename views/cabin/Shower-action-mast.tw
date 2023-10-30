@@ -4,8 +4,87 @@
 <center>[img[setup.ImagePath+'places/cabin/mast1.webp']]</center>
 <<horny_reset>>
 <br /><br />
-<center>
-[[Back|Shower-room]]
-</center>
+    You soap your own dick and firmly start to jerk off.
+<br /><br />
+<<set _guests = setup.getAvailablePersons18yo($guests)>>
+<<if _guests[0].length && setup.percentageChance(30)>>
+    <<set _guestId = _guests[0][Math.floor(Math.random()*_guests[0].length)];>>
+    <<set _npc = $guests[_guestId]>>
+    <<if _npc.likesGuys && _npc.relationship >= 30 && _npc.horny >= 50>>
+        You don't notice, but you hear the sound of a door closing. You turn around and see <<=setup.displayName(_npc)>>. She stands at the door with smile on her face. After brief moment she bends and takes off her clothes.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/shower/join1.webp']]
+        </center>
+        <br />
+        <<sayNpc _npc>>
+            How about I join you?
+        <</sayNpc>>
+        <br />
+        <div id="option_yes">
+            <<linkreplace 'Sure'>>
+                <<run $('#option_no').hide()>>
+            
+                <center>
+                    [img[setup.ImagePath+'places/shower/join2.webp']]
+                </center>
+                <br />
+                She steps into the shower with you and, standing behind you, starts washing your back. After a moment, she reaches her arm around you and grabs your hard dick and starts to jerk you off.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Like this? Heh. 
+                <</sayNpc>>
+                <br />
+                <center>
+                    [img[setup.ImagePath+'places/shower/join3.webp']]
+                </center>
+                <br />
+                <<=setup.displayName(_npc)>> turns you around and puts your hard dick between her ass cheeks. She teases you by rubbing her ass against it as she presses her hands against the wall.
+                <br /><br />
+                <<sayNpc _npc>>
+                    You like this? I bet this will be even better.
+                <</sayNpc>>
+                <br />
+                <center>
+                    [img[setup.ImagePath+'places/shower/join4.webp']]
+                </center>
+                <br />
+                Without saying anything you grab her by her hips and hold her still as you shove your dick inside her. She lets out loud moan.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Oh shit... Yes.. Keep going...
+                <</sayNpc>>
+                <br />
+                <<linkreplace 'Cum'>>
+                    <<set $guests[_guestId].horny = 0>>
+                    <<setNpcStats 'guests' _guestId 'happy' 5>>
+                    <center>
+                        [img[setup.ImagePath+'game/misc/creampie.webp']]
+                    </center>
+                    <br />
+                    You press on her back as you cum right into her wet pussy. Some cum leaks out and water washes it away instantly. 
+                    <br /><br />
+                <</linkreplace>>
+            <</linkreplace>>
+        </div>
+        <div id="option_no">
+            <<linkreplace 'Maybe some other time'>>
+                <<run $('#option_yes').hide()>>
+                <<set $guests[_guestId].relationship -= 10>>
+                <<set $guests[_guestId].happy -= 5>>
+                <<sayNpc _npc>>
+                    <<=either('Something wrong?', 'Eh, and I hoped for something.')>>
+                <</sayNpc>>
+                <br />
+                You see disappointment on her face as she picks up her clothes from the ground, gets dressed, and leaves.
+                <br /><br />
+            <</linkreplace>>
+        </div>
+    <</if>>
+<</if>>
+<<link 'Back'>>
+    <<goto 'Shower-room'>>
+<</link>>
+
 
 
