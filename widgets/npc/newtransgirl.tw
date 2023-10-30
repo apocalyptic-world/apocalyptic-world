@@ -1,4 +1,4 @@
-:: Widget newtransgirl [widget]
+:: Widget newtransgirl [widget] {"position":"975,5475","size":"100,100"}
 <<widget newtransgirl>>
 	<<include 'Girl names'>>
 	<<set _age = setup.ageRoll()>>
@@ -16,6 +16,7 @@
 		relationship: 0,
 		corruption: random(0, 10),
 		sub: random(0, 30),
+		happy: random(40, 60),
 		hair: _hair,
 		eyes: _eyes,
 		breasts: either('small', 'medium', 'big'),
@@ -29,6 +30,8 @@
 		horny: random(0, 30),
 		traits: [],
 		skills: [],
+		likes: [],
+		dislikes: [],
 		personality: setup.personalityTraits(either(1, 2, 2)),
 		endurance: 0,
 		clothes: {
@@ -72,6 +75,10 @@
 <<if setup.percentageChance(50)>>
 	<<set $tmpGirl.skills = setup.getRandomSkills()>>
 <</if>>
+
+<<set $tmpGirl.likes = setup.getRandomGifts(either(1, 2))>>
+<<set $tmpGirl.dislikes = setup.getRandomGifts(either(1, 2), $tmpGirl.likes)>>
+
 <</widget>>
 
 
