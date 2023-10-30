@@ -187,13 +187,40 @@ setup.perkList = {
 
 setup.gifts = {
     necklace_cheap: {
-        rel: 5
+        rel: 4
     },
     flower: {
-        rel: 1
+        rel: 3
     },
     cosmetics: {
+        rel: 4
+    },
+    tobacco: {
         rel: 3
+    },
+    alcohol: {
+        rel: 3
+    },
+    candy: {
+        rel: 3
+    },
+    soda: {
+        rel: 4
+    },
+    whippit: {
+        rel: 5
+    },
+    xanax: {
+        rel: 5
+    },
+    glue: {
+        rel: 4
+    },
+    plush: {
+        rel: 5
+    },
+    sextoy: {
+        rel: 5
     }
 };
 
