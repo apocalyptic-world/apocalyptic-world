@@ -14,7 +14,8 @@
 		birthDate: setup.getBirthDate(_age),
 		relationship: 0,
 		corruption: random(0, 10),
-		sub: random(5, 13),	
+		sub: random(5, 13),
+		happy: random(40, 60),
 		hair: _hair,
 		eyes: _eyes,
 		dick: either('small', 'medium', 'big'),
@@ -27,6 +28,8 @@
 		horny: random(0, 30),
 		traits: [],
 		skills: [],
+		likes: [],
+		dislikes: [],
 		personality: setup.personalityTraits(either(1, 2, 2)),
 		endurance: 0,
 	}>>
@@ -53,6 +56,9 @@
 <</if>>
 
 <<set $tmpGuy.id = setup.generateUniqueKey($tmpGuy)>>
+<<set $tmpGuy.likes = setup.getRandomGifts(either(1, 2))>>
+<<set $tmpGuy.dislikes = setup.getRandomGifts(either(1, 2), $tmpGuy.likes)>>
+
 <</widget>>
 
 
