@@ -21,9 +21,20 @@
 			  <</if>>
 
 			 	<<link 'Gift'>>
-					<<drop $backpack _item 1>>
-					<<set $tmpGirl.gift = true>>
-					<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + setup.gifts[_item].rel)>>
+					<<set _giftMultiplier = 1>>
+					<<if ($tmpGirl.likes ?? []).includes(_item)>>
+						<<set _giftMultiplier = 3>>
+					<<elseif ($tmpGirl.dislikes ?? []).includes(_item)>>
+						<<set _giftMultiplier = -1>>
+					<</if>>				
+
+					<<if _giftMultiplier >= 1 >>				
+						<<drop $backpack _item 1>>
+						<<set $tmpGirl.gift = true>>
+					<</if>>
+
+					<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + _giftMultiplier*setup.gifts[_item].rel)>>
+					
 					<<script>>Dialog.close();<</script>>
 					<<script>>state.display(state.active.title, null, "back")<</script>>
 				<</link>>
@@ -44,5 +55,3 @@
 	 flex: 0 0 33.3333%;
 }
 </style>
-
-

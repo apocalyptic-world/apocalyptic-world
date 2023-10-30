@@ -39,7 +39,7 @@ setup.getRandomTraits = function (count = 1, exclude) {
     const _traits = clone(setup.traits);
     if (exclude) {
         for (let excludeTrait in exclude) {
-            delete _traits[excludeTrait];
+            delete _traits[exclude[excludeTrait]];
         }
     }
     var shuffledTraits = Object.keys(_traits).sort((a, b) => 0.5 - Math.random());
