@@ -224,6 +224,18 @@ setup.gifts = {
     }
 };
 
+setup.getRandomGifts = function (count = 1, exclude) {
+    const _gifts = clone(setup.gifts);
+    if (exclude) {
+        for (let excludeGift in exclude) {
+            delete _gifts[exclude[excludeGift]];
+        }
+    }
+    var shuffledGifts = Object.keys(_gifts).sort((a, b) => 0.5 - Math.random());
+
+    return shuffledGifts.slice(0, count);
+};
+
 setup.inventoryNpc = [
     'knife',
     'bow',
