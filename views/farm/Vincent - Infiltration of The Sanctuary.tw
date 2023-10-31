@@ -1,0 +1,187 @@
+:: Vincent - Infiltration of The Sanctuary
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<vincent>>
+	<<=$player.name>>! Good, you're all here. We need to wait till sun goes down and then we will go in
+<</vincent>>
+<br />
+
+<<for _companionKey, _companion range $player.companions>>
+    <<set _companionKey = _companionKey.split(':')[1]>>
+    <<if !$guests[_companionKey].gender>>
+        <<set _girlCompanion = $guests[_companionKey]>>
+    <</if>>
+<</for>>
+<<linkreplace 'Wait until the sun sets'>>
+    As the crimson hues of the setting sun cast long shadows across the desolate cityscape, you and your crew gather on the outskirts of the street where The Sanctuary looms, 
+    a massive ship marooned in the heart of the urban wasteland. Its towering presence speaks volumes of its potential riches, now guarded by some crew.
+    <br /><br />
+    Vincent, with a determined glint in his eye, briefs the team on the plan. 
+    The night air is charged with anticipation as you await the cover of darkness. Your hearts beat in synchrony with the quiet rhythm of the post-apocalyptic world.
+    <br /><br />
+    <center>
+	    [img[setup.ImagePath+'places/sanctuary/night.jpg']]
+    </center>
+    <br />
+    <<vincent>>
+        Slowly! One by one!
+    <</vincent>>
+    <br />
+    Vincent motions for everyone to follow him, creeping through the debris-strewn streets like shadows. 
+    The scent of decay mingles with the metallic tang of old battles. You reach the aft of The Sanctuary, the tube, like a beckoning portal to potential victory.
+    <br /><br />
+    With bated breath, you slide through the narrow tube, the echo of your heartbeat resonating in the metallic chamber. 
+    Your team follows, one by one, their silent movements a testament to their expertise.
+    <br /><br />
+    <<if _girlCompanion>>
+        <<=setup.displayName(_girlCompanion)>> grabs you by hand and tells you that she will go first as she would be more discreet.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/sanctuary/night_girl.jpg']]
+        </center>
+        <br /><br />
+    <</if>>
+    The sight that greets you on the other side of the tube is both shocking and disheartening. A makeshift factory has taken root within the bowels of The Sanctuary. 
+    The air is thick with the acrid scent of metal and the rhythmic clang of hammers against steel reverberates through the chamber.
+    <br /><br />
+    <<video 'sanctuary/night1'>>
+    <br /><br />
+    In the harsh glow of the overhead lights, you see a grim tableau. Women, without any clothes and sweaty, toil tirelessly amidst the machinery. 
+    Their hands, calloused and scarred, deftly manipulate the raw materials, crafting them into weapons, ammo, armor and other metal stuff.
+    <br /><br />
+    <<video 'sanctuary/night2'>>
+    <br /><br />
+    Some are welding, sparks flying like angry fireflies, while others operate heavy presses, shaping metal with a relentless determination. 
+    Their eyes bear the weariness of endless labor, yet there is a glimmer of resilience, a fierce determination to survive.
+    <br /><br />
+    You exchange a somber glance with your crew, a silent acknowledgment of the harsh realities that this new world has wrought. 
+    The Sanctuary, once a symbol of hope, has become a crucible of desperation and exploitation.
+    <br /><br />
+    <<vincent>>
+        We can't help them so don't even bother. Others stay here. <<=$player.name>> come with me!
+    <</vincent>>
+    <br /><br />
+    <<linkreplace 'Follow Vincent'>>
+        <<video 'sanctuary/night3'>>
+        <br /><br />
+        The air grows heavy with tension as Vincent motions for you to follow, leaving the others behind in the shadows. 
+        Together, you move stealthily through the compartment, inching closer to the room adjacent to the looming exit doors. The car, a glimmer of hope in the dim light, awaits your inspection.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/sanctuary/night_car.jpg']]
+        </center>
+        <br />
+        With cautious precision, you check the car for fuel and examine its wiring, ensuring it's ready for escape. Every moment counts, each movement deliberate and focused. 
+        The adrenaline courses through your veins, the weight of the mission pressing on your shoulders.
+        <br /><br />
+        Satisfied that the car is prepared, you turn to head back for the rest of the crew. But as you retrace your steps, dread settles in the pit of your stomach. 
+        The sight that awaits you is a nightmare come to life.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/sanctuary/night_caught.jpg']]
+        </center>
+        <br />
+        They're all there, your companions, kneeling in front of a menacing figure wielding a bat. 
+        His presence exudes authority, a malevolent force in this bleak world. Their faces bear the marks of fear and defiance, a testament to the strength that courses through their veins.
+        <br /><br />
+        <<negan>>
+            Who are you? How did you get in?
+        <</negan>>
+        <br />
+        Vincent's eyes meet yours, a silent understanding passing between you. This is a moment that will define the outcome of your mission, the lives of your comrades hanging in the balance. The weight of the decision is palpable.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'people/negan/bat_kill.gif']]
+        </center>
+        <br />
+        Suddenly, in a surge of brutal violence, he raises his bat high and brings it down with a sickening thud. The impact echoes through the chamber, a grotesque punctuation mark to the silence. 
+        <<set _companionKeys = Object.keys($player.companions)>>
+        <<set _lastCompanion = _companionKeys[_companionKeys.length - 1].split(':')>>
+        <br />
+        <strong><<=setup.displayName($guests[_lastCompanion[1]])>> crumples to the ground, a life extinguished in an instant.</strong>
+        <<guestRemove _lastCompanion[1]>>
+        <br /><br />
+        A wave of horror washes over you, the brutality of the act searing into your memory. 
+        The loss is palpable, a stark reminder of the unforgiving nature of this world. The remaining companions remain resolute, their faces a mix of grief, anger, and determination.
+        <br /><br />
+        <<negan>>
+            Why are you here? Where do you live?
+        <</negan>>
+        <br /><br />
+        The sickening thud reverberates through the chamber, another life extinguished in a brutal act of violence. Another companion falls, their fate sealed in a horrifying instant.
+        <br />
+        <<set _companionKeys = Object.keys($player.companions)>>
+        <<set _lastCompanion = _companionKeys[_companionKeys.length - 1].split(':')>>
+        <strong><<=setup.displayName($guests[_lastCompanion[1]])>> drops on the ground with <<=setup.pronounceWhos($guests[_lastCompanion[1]])>> skull crushed open.</strong>
+        <<guestRemove _lastCompanion[1]>>
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'people/negan/bat_kill_blood.gif']]
+        </center>
+        <br /><br />
+        <div id="option_kill_help">
+            <<linkreplace 'Help them'>>
+                <<set _tryHelp = true>>
+                <<set $player.godwill++>>
+                As you try to stand up Vincent grabs you by hand and holds you.
+                <br /><br />
+                <<vincent>>
+                    Don't! It's suicide! They are gone. Nothing we can do about that. We should just go get that car
+                <</vincent>>
+                <br /><br />
+            <</linkreplace>>
+        </div>
+
+        <<linkreplace 'Leave them and get car'>>
+            <<if !_tryHelp>>
+                <<set $player.godwill -= 10>>
+                <<run $('#option_kill_help').hide()>>
+            <</if>>
+            As you make the harrowing decision to leave your remaining companions behind, your heart heavy with grief and desperation, you push forward towards the car. 
+            Every step feels like an eternity, the weight of your choice bearing down on you.
+            <br /><br />
+            The journey back is a blur, your mind racing, the road a mere ribbon of asphalt beneath your tires. The shadows of the forest loom around you, a silent witness to your escape. 
+            Just as you near your settlement, a sinking feeling takes hold.
+            <br /><br />
+            <center>
+                [img[setup.ImagePath+'places/sanctuary/night_car_inside.jpg']]
+            </center>
+            <br />
+            The engine sputters and groans, and a cacophony of metallic noises fills the air. Panic surges through you as the car grinds to a halt, its final protest against the relentless strain. 
+            The reality of the situation crashes down on you like a tidal wave.
+            <br /><br />
+            <<vincent>>
+                That doesn't sound right! Hopefully we make to your settlement.
+            <</vincent>>
+            <br />
+            You reach your settlement.
+            <br />
+            Exhaustion courses through your veins as you pull yourself out of the now immobile car. 
+            <br />
+            Every step feels like a monumental effort, your muscles protesting with every movement.
+            <br />
+            Vincent, his face etched with weariness, turns to you with a grim determination.
+            <br /><br />
+            <<vincent>>
+                I'm going home. You should get some sleep too.
+            <</vincent>>
+            <br />
+            You nod, understanding the weight of his words. The events of the day have taken their toll on both of you, and the need for respite is undeniable.
+            With a grateful glance, Vincent turns and begins to trudge towards his own abode, leaving you standing amidst the eerie silence of the settlement.
+            <<set $game.location.garage = true>>
+            <<set $characters.vincent.car_get_day = $game.day>>
+            <<for _companionKey, _companion range $player.companions>>
+                <<set _companionSplitKey = _companionKey.split(':')>>
+                <<guestRemove _companionSplitKey[1]>>
+            <</for>>
+            <<for _companionKey, _companion range $player.companions>>
+                <<set _companionSplitKey = _companionKey.split(':')>>
+                <<guestRemove _companionSplitKey[1]>>
+            <</for>>
+            <br /><br />
+            <<link 'Go to bed'>>
+                <<goto 'Sleep eval'>>
+            <</link>>
+        <</linkreplace>>
+    <</linkreplace>>
+<</linkreplace>>
