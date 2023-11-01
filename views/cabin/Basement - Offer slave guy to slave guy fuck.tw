@@ -1,0 +1,42 @@
+:: Basement - Offer slave guy to slave guy: fuck {"position":"2313,336","size":"100,100"}
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+
+<<if setup.getAge($tmpGirl) > 55>>
+	What the hell have you imagined? I'm not interested in your Faggots.
+<<elseif !$tmpGirl.likesGuys>>
+	Thank you for the offer but I'm not interested in men.
+<<else>>
+	He nods affirmatively and <<=setup.displayName($slaves[$slaveOfferId])>> approaches closer to his cell door. 
+	<br /><br />
+	<<video 'basement/slave_offer_slave3'>>
+	<br /><br />
+	He immediately unbuttons his pants and with a smile on his face looks at <<=setup.displayName($slaves[$slaveOfferId])>>. Unhappy, <<=setup.displayName($slaves[$slaveOfferId])>>, however, kneels down, taking <<=setup.displayName($tmpGirl)>> dick in his mouth. In an instant, he starts to shove his dick as deep as he can but you've trained <<=setup.displayName($slaves[$slaveOfferId])>> as he isn't bothered by that at all.
+	<br />
+	After few good thrusts he asks him to turn around. He obeys. 
+	<br /><br />
+	<<video 'basement/slave_offer_slave4'>>
+	<br /><br />
+	He grabs him by the hips and pulls him as close as possible to his cell bars. He hesitates, but after a moment, it seems that he slowly starts to enjoy this whole process. It doesn't last long, and after a few more thrusts, he's done.	
+	<br /><br />
+	<strong>
+		Relationship with <<=$tmpGirl.name>> increased by 5
+		<<set $tmpGirl.relationship += 5>>
+	</strong>
+
+	<<set _slaveRelationshipDecrease = 10>>
+	<<if !$slaves[$slaveOfferId].likesGuys>>
+		<<set _slaveRelationshipDecrease += 10>>
+	<</if>>
+	<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
+	<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+	<br /><br />
+	<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
+<</if>>
+<br /><br />
+<<link 'Leave'>>
+	<<set $tmpGirl.horny = 0>>
+	<<set $slaves[$slaveOfferId].horny = 0>>
+	<<run delete $slaveOfferId>>
+	<<goto 'Guy view'>>
+<</link>>
