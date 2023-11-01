@@ -6,6 +6,9 @@
 <<set _relStats = 1>>
 <<set _subStats = 1>>
 <<set _punishView = 'punish'>>
+<<if !settings.gaysEnabled>>
+	<<set _punishView = _punishView + '_hit'>>
+<</if>>
 <<if $punishType === 'paddle'>>
 	<<set 
 		_relStats = 2,
@@ -74,15 +77,17 @@
 			<<goto `passage()`>>
 		<</link>>
 	<</if>>
-  <<link 'Punish (slap)'>>
-  		<<set $punishType = 'slap'>>
-	  	<<goto `passage()`>>
-  <</link>>
-  <<if $backpack.has('paddle')>>
-	  <<link 'Punish (paddle)'>>
-	  	<<set $punishType = 'paddle'>>
-		<<goto `passage()`>>
-	  <</link>>
+	<<if settings.gaysEnabled>>
+		<<link 'Punish (slap)'>>
+				<<set $punishType = 'slap'>>
+				<<goto `passage()`>>
+		<</link>>
+		<<if $backpack.has('paddle')>>
+			<<link 'Punish (paddle)'>>
+				<<set $punishType = 'paddle'>>
+				<<goto `passage()`>>
+			<</link>>
+		<</if>>
   <</if>>
 <</if>>
 
