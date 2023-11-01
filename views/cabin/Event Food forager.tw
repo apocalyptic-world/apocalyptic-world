@@ -12,27 +12,47 @@ Amongst rooms, you pursued a faint noise to a storage room. Its door revealed a 
 <<set _foodOptions = [$storage.count('food'), $backpack.count('food'), 5]>>
 <<set _foodGive = Math.min.apply(null, _foodOptions.filter(Boolean))>>
 <<if _foodGive && ($storage.count('food') || $backpack.count('food'))>>
-	<<linkreplace 'Tell him to take as much as he like'>>
-		<<run $('#option1_desc, #option2').hide()>>
-		<<if $storage.count('food') >= _foodGive>>
-			<<drop $storage 'food' _foodGive>>
-		<<else>>
-			<<drop $backpack 'food' _foodGive>>
-		<</if>>
-		<strong>You lost <<=_foodGive>> food</strong>
-		<br /><br />
-		A child with a wide smile on his face leans over and says <strong>"Thank you so much mister!"</strong> before taking a few more  food and quickly walking out of the building and disappearing into the nearby forest.
-		<br /><br />
-		<<link 'Leave'>>
-			<<set $player.godwilll++>>
-			<<goto 'Wood cabin'>>
-		<</link>>
-		
-	<</linkreplace>>
-	<div id="option1_desc">
-		<<linkdesc>>
-		-<<=_foodGive>> food
-		<</linkdesc>>
+	<div id="option_food">
+		<<linkreplace 'Tell him to take as much as he like'>>
+			<<run $('#option1_desc, #option2, #option_invite').hide()>>
+			<<if $storage.count('food') >= _foodGive>>
+				<<drop $storage 'food' _foodGive>>
+			<<else>>
+				<<drop $backpack 'food' _foodGive>>
+			<</if>>
+			<strong>You lost <<=_foodGive>> food</strong>
+			<br /><br />
+			A child with a wide smile on his face leans over and says <strong>"Thank you so much mister!"</strong> before taking a few more  food and quickly walking out of the building and disappearing into the nearby forest.
+			<br /><br />
+			<<link 'Leave'>>
+				<<set $player.godwilll++>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+			
+		<</linkreplace>>
+		<div id="option1_desc">
+			<<linkdesc>>
+			-<<=_foodGive>> food
+			<</linkdesc>>
+		</div>
+	</div>
+<</if>>
+<<if ($game.location.nursery ?? false)>>
+	<div id="option_invite">
+		<<linkreplace 'Invite to live in your settlement'>>
+			<<run $('#option2, #option_food').hide()>>
+			<<newguy>>
+			<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(7, 13))>>
+			<<set $tmpGuy.relationship = randomInteger(40, 70)>>
+			<<run $nursery.push($tmpGuy)>>
+			A child with a wide smile on his face leans over and says <strong>"Thank you so much mister! I would like that!"</strong>. He puts down food he was trying to steal and you show him place where he can sleep.
+			<br /><br />
+			<<link 'Leave'>>
+				<<set $player.godwilll += 2>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+
+		<</linkreplace>>
 	</div>
 <</if>>
 <div id="option2">
