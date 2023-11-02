@@ -1,0 +1,13 @@
+:: Garage [Place]
+<h1 class="ptitle">GARAGE</h1>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Wood cabin'>>
+<</link>>
+<<if !$player.quests.garage_first>>
+    <<set $player.quests.garage_first = true>>
+    <<goto 'Car - first event'>>
+<</if>>
+<<if setup.percentageChance(20)>>
+    <<goto 'Car - repair fuck'>>
+<</if>>

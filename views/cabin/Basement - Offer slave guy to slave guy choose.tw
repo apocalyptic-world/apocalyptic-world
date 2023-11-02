@@ -1,0 +1,25 @@
+:: Basement - Offer slave guy to slave guy: choose {"position":"2307,223","size":"100,100"}
+<<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if (_availableGuySlaves[1] ?? []).length>>
+	<<for _offerSlaveSlaveI, _offerSlaveSlave range _availableGuySlaves[1]>>
+		<<capture _offerSlaveSlaveI, _offerSlaveSlave>>
+        <<if  $tmpGirl.id !== $slaves[_offerSlaveSlave].id>>
+			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_offerSlaveSlave])>>
+			<div>
+				<span @class="''+_genderClass+''">
+					<<link $slaves[_offerSlaveSlave].name>>
+						<<set $slaveOfferId = _offerSlaveSlave>>
+						<<set $tmpGirl.offerSlave = true>>
+						<<dialogclose>>
+						<<goto 'Basement - Offer slave guy to slave guy: fuck'>>
+					<</link>>
+				</span>
+			</div>
+            <</if>>
+		<</capture>>
+	<</for>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<dialogclose>>
+<</link>>
