@@ -636,3 +636,28 @@ function shuffle(array) {
 
 	return array;
 };
+
+/* convert map.keys() to a regular list since sugarcube is stupid when it comess to Map */
+setup.mapKeys2list = function(map) {
+    const list = [];
+    for(const key of map.keys()) {
+        list.push(key);
+    };
+    return list;
+};
+
+/*
+    chapel, simple inventory lacks hasTag(), hasAnyTag() but have the parameter tags
+    - _item.hasTag(tag) <=> _item.tags.includes(tag)
+    - _item.hasAnyTag(tag) <=> setup.includesAny(_item.tags, tags)
+    - _item.hasAllTag(tag) <=> setup.includesAll(_item.tags, tags)
+
+    Of course these utility functions will work for any arrrays
+*/
+
+setup.includesAny = function(have, want) {
+    return want.some(i => have.includes(i));
+};
+setup.includesAll = function(have, want) {
+    return want.every(i => have.includes(i));
+}; 

@@ -13,87 +13,59 @@
 <</button>>Items</h2>
 <div id="items" style="display:none;">
 
-<table border=1>
+Note! Many items can be found by going exploring. Not mentioned in table!<br /><br />
+
+<<set _catOrder = [
+    'food','crafting','fabric', 'potion','tool','gift','quest','no_use','que'
+]>>
+<<set _catTitle = {
+    food:     'Food for eating',
+    crafting: 'Materials for building & crafting in workbench',
+    fabric:   'Fabric',
+    potion:   'Pharmacy; materials & finished products',
+    tool:     'Tools, weapons & equipment',
+    gift:     'Gifts or stuff for slaves & guests',
+    quest:    'Quest items',
+    no_use:   'No use for now', 
+    que:      'Unsorted or new items',
+}>>
+
+/* dynamic help for all items */
+<<if typeof setup.helpitemsByCategory === 'undefined'>>
+    <<include 'Help - items include'>>
+<</if>>
+<<set _catHelpItems = setup.helpitemsByCategory>>
+
+/* Finally, we are ready to make a (almost dynamic) table of items */
+<table border="1">
     <tr>
         <th>Item</th>
         <th>Source</th>
         <th>Used for</th>
     </tr>
 
-    <tr><td colspan=3><h3>Building materials</h3></td></tr>
-    <tr>
-        <td>Glass</td>
-        <td><ul><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
-        <td>Build things like solar panels & lab in workbench.</td>
-    </tr>
-    <tr>
-        <td>Plastic</td>
-        <td><ul><li>Sold in Underground city shop</li><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
-        <td>Build things like solar panels & home improvements in workbench.</td>
-    </tr>
-    <tr>
-        <td>Rope</td>
-        <td><ul><li>Sold by Vincent on his farm</li><li>Scavenging</li><li>Shopkeeper</li><li>(Hero explores)</li></ul></td>
-        <td>Build things like bow, paddle & home improvements in workbench.</td>
-    </tr>
-    <tr>
-        <td>Wood</td>
-        <td></td>
-        <td>Used in many craftings in workbench</td>
-    </tr>
+<<for _cat range _catOrder>>
+    <tr><td colspan="3"><h3>_catTitle[_cat]</h3></td></tr>
+    <<for _itemID range setup.mapKeys2list(_catHelpItems[_cat]) >>
+        <<set _helpItem = _catHelpItems[_cat].get(_itemID)>>
+     <tr>    
+        <td>_helpItem.name</td>
+        <td>
+        <<if _helpItem.sources.length>>
+            /*<ul>*/
+                /*<li><<=_helpItem.sources.join('</li><li>')>></li> */
+                <<=_helpItem.sources.join('<br/>')>>
+            /*</ul>*/
+        <</if>>
+        </td>
+        <td>_helpItem.desc</td>
+    </tr>   
+    <</for>>
+<</for>>
 
-    <tr><td colspan=3><h3>Fabric</h3></td></tr>
-    <tr>
-        <td>Bandage</td>
-        <td><ul><li>Sold in Underground city shop</li><li>Workbench: Can be sewn from cloth</li></ul></td>
-        <td>Stops the hero from bleeding out & dying</td>
-    </tr>
-    <tr>
-        <td>Cloth</td>
-        <td><ul><li>Scavenging</li><li>(Hero explores)</li></ul></td>
-        <td>Can be sewn into bandages & towels in the workbench</td>
-    </tr>
-    <tr>
-        <td>Towel</td>
-        <td><ul><li>Workbench: Can be sewn from cloth</li></ul></td>
-        <td>Used in childbirth. Increases chances for mother & child to survive.</td>
-   </tr>
-
-    <tr><td colspan=3><h3>For the girls & boys & horses</h3></td></tr>
-    <tr>
-        <td>Cheap necklace</td>
-        <td><ul><li>Sold in settlement shop</li><li>Scavenging</li><li>(Hero explores)</li></ul></td>
-        <td>Can use as a gift (+5 rel)</td>
-    </tr>
-    <tr>
-        <td>Food</td>
-        <td></td>
-        <td>Eaten by humans. Very important having food to eat!</td>
-    </tr>
-    <tr>        
-        <td>Hay</td>
-        <td></td>
-        <td>Food for your horse</td>
-    </tr>
-    <tr>
-        <td>Paddle</td>
-        <td><ul><li>Workbench</li></ul></td>
-        <td>Increases submission gain while punishing slave</td>
-    </tr>
-    <tr>
-        <td>Pregnancy termination potion</td>
-        <td><ul><li>Workbench</li></ul></td>
-        <td>Terminate pregnancy</td>
-    </tr>
-
-    <tr><td colspan=3><h3>Unused for now</h3></td></tr>
-    <tr>
-        <td>Duck tape</td>
-        <td><ul><li>Scavenging</li></ul></td>
-        <td>No ducks implemented in game yet! :love:</td>
-    </tr>
- 
 </table>
+
+<br /><hr /><br />
 </div>
 
 <h2>
@@ -115,6 +87,7 @@
     <dt>Shopkeeper</dt><dd>Can work in shop and manage your goods. Not learnable</dd>
     <dt>Woodcraft </dt><dd>Can gather more wood. Learnable. Required for the hunters</dd>
 </dl>
+<br /><hr /><br />
 </div>
 
 <h2>
@@ -225,6 +198,7 @@ Guests can work in any job.
         </td>
    </tr>
 </table>
+<br /><hr /><br />
 </div>
 
 <h2>
@@ -270,4 +244,5 @@ The hero takes possession of a farm with little luxury. There is water but only 
     <dt>Slave cells</dt>
         <dd>Expands the basement</dd>
 </dl>
+<br /><hr /><br />
 </div>

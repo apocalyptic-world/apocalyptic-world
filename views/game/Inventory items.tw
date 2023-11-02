@@ -1,72 +1,93 @@
 :: Inventory items {"position":"22,520","size":"100,100"}
+
+/*
+    <<item id [name]>>
+        [use code]
+    <<description>>
+        [description code]
+    <<tags [listOfTags]>>
+    <<unique>>
+    <<permanent>>
+    <</item>>
+*/
 <<item "laptop" "Laptop">>
-<<description>>
-    An old Windows 95 laptop
 	<<description>>
-	No use for now
-<<unique>>
+    An old Windows 95 laptop
+	<<unique>>
+	<<tags 'start_item' 'no_use'>>
 <</item>>
 <<item "porn_magazine" "Porn">>
-<<description>>
-    Vintage porn magazine
 	<<description>>
-	No use for now
-<<unique>>
+    Vintage porn magazine
+	<<unique>>
+	<<tags 'start_item' 'no_use'>>
 <</item>>
 <<item "raw_human_meat" "Raw human meat">>
-<<description>>
+  <<description>>
     No use for now
+	<<tags 'no_use'>>
 <</item>>
 <<item "csgo_knife" "CS-GO knife">>
-<<description>>
+	<<description>>
     No use for now
-<<unique>>
+	<<unique>>
+	<<tags 'start_item' 'no_use'>>
 <</item>>
 <<item "wood" "Wood">>
-<<description>>
-    Needed for crafting.  You can sell at the farm store.
+	<<description>>
+    Needed for crafting. You can sell at the farm store.
 <</item>>
 <<item "axe" "Axe">>
-<<description>>
+	<<description>>
     Increases amount of wood you get in the forest.
-<<unique>>
+	<<unique>>
+	<<tags 'tool'>>
 <</item>>
 <<item "food" "Food">>
-<<description>>
+	<<description>>
     Eat it
+	<<tags 'food'>>
 <</item>>
 <<item "rope" "Rope">>
-<<description>>
+	<<description>>
     Needed for building things.
 <</item>>
 <<item "breast_pump" "Breast pump">>
-<<unique>>
-<<description>>
+	<<unique>>
+	<<description>>
     Breast pump for milking slaves.
+	<<tags 'tool'>>
 <</item>>
 <<item "milk" "Milk">>
-<<description>>
+	<<description>>
     Needed to craft pregnancy termination potion
 <</item>>
 <<item "solar_panel" "Solar panel">>
-<<description>>
+	<<description>>
     Needed for building things.
 <</item>>
 
 <<item "blueprint_hot_shower" "Hot shower">>
-<<unique>>
+	<<unique>>
+	<<permanent>>
+	<<tags 'crafting'>>
+	<<description>>
+	Home improvement!
 <</item>>
 <<item "revolver" "Revolver">>
-<<description>>
-Uses 38 Special bullets
+	<<description>>
+	Uses 38 Special bullets
+	<<tags 'weapon'>>
 <</item>>
 <<item "knife" "Knife">>
-<<description>>
-Rusty but in good shape knife
+	<<description>>
+	Rusty but in good shape knife
+	<<tags 'weapon'>>
 <</item>>
-<<item "glowing_mushroom" "Glowing mushroom">
+<<item "glowing_mushroom" "Glowing mushroom">>
 	<<description>>
 	The main ingredient in the pregnancy and growth potion.
+	<<tags 'potion'>>
 <</item>>
 <<item "pregnancy_potion" "Pregnancy termination potion">>
 	<<description>>
@@ -76,18 +97,22 @@ Rusty but in good shape knife
 	<<run delete $player.perks['bleeding']>>
 	<<description>>
 	Use this if you're bleeding.
+	<<tags 'fabric' 'potion'>>
 <</consumable>>
 <<item "bow" "Bow">>
 	<<description>>
 	Used for hunting.
+	<<tags 'tool'>>
 <</item>>
 <<item "towel" "Towel">>
 	<<description>>
 	Used for cleaning or childbirth.
+	<<tags 'fabric'>>
 <</item>>
 <<item "antibiotics" "Antibiotics">>
 	<<description>>
 	Used to cure illness.
+	<<tags 'potion'>>
 <</item>>
 <<consumable "fertility_potion" "Fertility potion">>
 	<<run $.wiki("<<perkAdd 'fertility'>>")>>
@@ -109,19 +134,23 @@ Rusty but in good shape knife
 <<item "champagne" "Champagne">>
 	<<description>>
 	Use them to throw party.
+	<<tags 'gift'>>
 <</item>>
 <<item "paddle" "Paddle">>
 	<<description>>
 	Increases submission gain while punishing slave
+	<<tags 'tool'>>
 <</item>>
 <<item "bullet_revolver" "Bullet .38">>
 	<<description>>
 	Bullet for revolver
+	<<tags 'weapon'>>
 <</item>>
 
 <<item "duck_tape" "Duck tape">>
 	<<description>>
 	Needed for building things.
+	<<tags 'no_use'>>
 <</item>>
 <<item "necklace_cheap" "Cheap necklace">>
 	<<description>>
@@ -134,6 +163,7 @@ Rusty but in good shape knife
 <<item "hay" "Hay">>
 	<<description>>
 	Used for feeding farm animals
+	<<tags 'food'>>
 <</item>>
 <<item "pelt_wolf" "Wolf pelt">>
 	<<description>>
@@ -142,10 +172,12 @@ Rusty but in good shape knife
 <<item "wedding_ring" "Wedding ring">>
 	<<description>>
 	Ask someone to marry you
+	<<tags 'gift'>>
 <</item>>
 <<item "piercing" "Piercing">>
 	<<description>>
 	Use to customize your girls
+	<<tags 'gift'>>
 <</item>>
 <<item "cosmetics" "Cosmetics">>
 	<<description>>
@@ -158,14 +190,17 @@ Rusty but in good shape knife
 <<item "hair_dye_kit" "Hair dye kit">>
 	<<description>>
 	Change hair color of your girls
+	<<tags 'gift'>>
 <</item>>
 <<item "buttplug" "Butt plug">>
 	<<description>>
 	Increase girl anal stats automatically (max 20)
+	<<tags 'tool'>>
 <</item>>
 <<item "fuel" "Fuel can">>
 	<<description>>
 	For vehicle and story item
+	<<tags 'no_use' 'food'>>
 <</item>>
 <<item "tribe_medallion" "Tribe medaillion">>
 	<<description>>
@@ -174,18 +209,22 @@ Rusty but in good shape knife
 <<item "cloth" "Cloth">>
 	<<description>>
 		Can craft bandages and towels
+	<<tags 'fabric' 'crafting'>>
 <</item>>
 <<item "gas_mask" "Gas mask">>
 	<<description>>
 		Used to get into toxic places
+	<<tags 'tool'>>
 <</item>>
 <<item "car_part" "Car part">>
 	<<description>>
 		Used to fix car
+	<<tags 'no_use'>>
 <</item>>
 <<item "metal" "Metal">>
 <<description>>
     Needed for crafting
+	<<tags 'no_use'>>
 <</item>>
 <<item "tobacco" "Tobacco">>
 	<<description>>
