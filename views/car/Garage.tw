@@ -1,7 +1,24 @@
 :: Garage [Place]
 <h1 class="ptitle">GARAGE</h1>
-<br /><br />
-<<warning 'Nothing more to do here. Except one random fuck event.'>>
+<br />
+    <fieldset>
+        <legend>
+            Stats
+        </legend>
+        <table>
+            <tr>
+                <td>Damaged:</td><td><<=$player?.car?.damaged ?? 100>>%</td>
+            </tr>
+            <tr>
+                <td>Fuel:</td><td><<=$player?.car?.fuel ?? 0>>%</td>
+            </tr>
+            <tr>
+                <td>Parts missing:</td><td><<=$player?.car?.parts ?? 5>></td>
+            </tr>
+        </table>
+    </fieldset>
+    <br />
+    <<warning 'End of content'>>
 <br /><br />
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
@@ -11,8 +28,8 @@
     <<goto 'Car - first event'>>
 <</if>>
 <<if !($locationEvents.garage ?? false)>>
-    <<if setup.percentageChance(20) >>
-        <<set $locatioNEvents.garage = true>>
+    <<if setup.percentageChance(10) >>
+        <<set $locationEvents.garage = true>>
         <<goto 'Car - repair fuck'>>
     <</if>>
 <</if>>
