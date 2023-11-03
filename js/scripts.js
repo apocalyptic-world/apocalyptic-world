@@ -663,7 +663,7 @@ setup.includesAll = function(have, want) {
 };
 
 setup.sexChance = function (person) {
-	if ((person.traits ?? []).includes('nymphomeniac')) {
+	if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
 	} else if (!person.likesGuys) {
 		return Math.floor(person.sub/2);
