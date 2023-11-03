@@ -1,41 +1,289 @@
 :: Girl fuck [sex] {"position":"2653,93","size":"100,100"}
-[[Blowjob|Girl fuck - blowjob]]
-<<if ['medium', 'big'].includes($tmpGirl.breasts)>>
-	[[Titjob|Girl fuck - titjob]]
-<</if>>
-[[Footjob|Girl fuck - footjob]]
-[[Lick her|Girl fuck - lick pussy]]
-[[Pussy|Girl fuck - pussy]]
-[[Anal|Girl fuck - anal]]
-
-<<link 'End'>>
-	<<if $oldTmpGirlLocation>>
-		<<set $tmpGirl.location = $oldTmpGirlLocation>>
-		<<run delete $oldTmpGirlLocation>>
+<<if $action !== 'undefined'>>
+	<<addmins 5>>
+	<<energy -5>>
+	<<if $action !== 'pussy_lick' && $action !== 'anal_fingering'>>
+		<<horny 20>>
 	<</if>>
-  	<<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('girlview')>>
-		<<if typeof $slaveId !== 'undefined'>>
-			<<set $slaves[$slaveId] = $tmpGirl>>
-			<<run delete $slaveId>>
-		<<elseif typeof $guestId !== 'undefined'>>
-			<<set $guests[$guestId] = $tmpGirl>>
-			<<run delete $guestId>>
-		<<elseif typeof $charId !== 'undefined'>>
-			<<set $characters[$charId] = $tmpGirl>>
-			<<run delete $charId>>
-		<</if>>
-		<<if $tmpGirlViewBack>>
-			<<goto $tmpGirlViewBack>>
+	
+	<<if $action == 'anal' && $tmpGirl.anal < 20>>
+		<center>
+		[img[setup.ImagePath+'game/misc/no_anal.webp']]
+		</center>
+		<br /><br />
+		You tried to fuck her in the ass but your dick is too big for her and she can't relax. 
+		<br />
+		
+		<<if !$tmpGirl.traits.includes('masochist')>>
+			She can't take it in her ass and begs you to stop.<strong> (Submission + 1, Happy / Relationship - 1)</strong>
+			<br />
+			<<set
+				$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+				$tmpGirl.relationship = Math.max($tmpGirl.relationship - 1, -100),
+				$tmpGirl.happy = Math.max($tmpGirl.happy - 1, -100)
+			>>
 		<<else>>
-			<<goto 'Girl view'>>
+			She seems to enjoy the pain you are causing her.<strong> (Submission / Happy / Relationship + 1)</strong>
+			<br />
+			<<set
+				$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+				$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+			>>
 		<</if>>
+		
 	<<else>>
-		<<if $tmpGirlViewBack>>
-			<<goto $tmpGirlViewBack>>
-		<<else>>
-			<<goto 'Girl view'>>
+		<br />
+		<<actionImage $tmpGirl $action>>
+		<br />
+	<</if>>
+	
+	<<if $forced>>
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
+			$tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+			$tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+		>>
+		She asks you to leave her alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+		<br />
+	<<else>>
+		<<set
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+		>>
+		She welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+		<br />
+	<</if>>
+	
+	<<if
+		($action == 'handjob' && $tmpGirl.corruption - 10 < 10)
+		|| ($action == 'footjob' && $tmpGirl.corruption - 10 < 20)
+		|| ($action == 'pussy_lick' && $tmpGirl.corruption - 10 < 30)
+		|| ($action == 'titjob' && $tmpGirl.corruption - 10 < 35)
+		|| ($action == 'bj' && $tmpGirl.corruption - 10 <= 40)
+		|| ($action == 'pussy' && $tmpGirl.corruption - 10 < 50)
+		|| ($action == 'anal_fingering' && $tmpGirl.corruption - 10 < 55)
+		|| ($action == 'dp' && $tmpGirl.corruption - 10 < 60)
+		|| ($action == 'anal' && $tmpGirl.corruption - 10 < 70)
+	>>
+		<<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
+		She is getting more corrupted.<strong> (Corruption + 1)</strong>
+		<br />
+	<</if>>
+
+	<<if
+		$action == 'pussy_lick'
+		|| ($action == 'pussy' && !($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin)
+		|| ($action == 'anal_fingering' && ($tmpGirl.traits ?? []).includes('analslut'))
+		|| ($action == 'anal' && ($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20)
+		|| ($action == 'dp' && ($tmpGirl.traits ?? []).includes('deepthroat'))
+		|| ($action == 'cum_in_mouth' && ($tmpGirl.traits ?? []).includes('cumslut'))
+	>>
+		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+		Her body reacts positively to you.<strong> (Horny + 20)</strong>
+		<br />
+		<<if $tmpGirl.horny >= 100 && $action != 'dp' && $action != 'cum_in_mouth'>>
+			<<if ($tmpGirl.traits ?? []).includes('squirter')>>
+				<br />
+				<<if $action == 'pussy'>>
+					<<actionImage $tmpGirl squirt>>
+				<<elseif $action == 'anal'>>
+					<<actionImage $tmpGirl squirt_anal>>
+				<<elseif $action == 'anal_fingering'>>
+					<<actionImage $tmpGirl squirt_anal_fingering>>
+				<<elseif $action == 'pussy_lick'>>
+					<<actionImage $tmpGirl squirt_lick>>
+				<</if>>
+				<br />
+			<</if>>
+			<<=setup.displayName($tmpGirl)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+			<br />		
+			<<set $tmpGirl.horny = 0,
+				$tmpGirl.orgasms++,
+				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
 		<</if>>
 	<</if>>
-<</link>>
+	
+	<<if $action == 'anal' || $action == 'anal_fingering'>>
+		<<set $tmpGirl.anal++>>
+	<<elseif $action == 'bj'>>
+		<<set $tmpGirl.bj++>>
+	<<elseif $action == 'dp'>>
+		<<set $tmpGirl.dp++>>
+	<<elseif $action == 'pussy'>>
+		<<set $tmpGirl.pussy++>>
+		<<set $tmpGirl.virgin = false>>
+	<</if>>
 
+	<<if typeof $tmpGirl.traitsLocked === 'undefined'>>
+		<<set $tmpGirl.traitsLocked = setup.getRandomTraits(3)>>
+	<</if>>
 
+	<<if $action == 'anal' && $tmpGirl.anal >= 100 && !$tmpGirl.traits.includes('analslut') && setup.percentageChance(5) && !$tmpGirl.traitsLocked.includes('analslut')>>
+		<<run $tmpGirl.traits.push('analslut')>>
+		<strong><<= setup.displayName($tmpGirl)>> got anal slut trait!</strong>
+		<br />
+	<<elseif $action == 'bj' && $tmpGirl.bj >= 100 && !$tmpGirl.traits.includes('cumslut') && setup.percentageChance(5) && !$tmpGirl.traitsLocked.includes('cumslut')>>
+		<<run $tmpGirl.traits.push('cumslut')>>
+		<strong><<= setup.displayName($tmpGirl)>> got cum slut trait!</strong>
+		<br />
+	<<elseif $action == 'dp' && $tmpGirl.dp >= 100 && !$tmpGirl.traits.includes('deepthroat') && setup.percentageChance(5) && !$tmpGirl.traitsLocked.includes('deepthroat')>>
+		<<run $tmpGirl.traits.push('deepthroat')>>
+		<strong><<= setup.displayName($tmpGirl)>> got deepthroat trait!</strong>
+		<br />
+	<<elseif $action == 'pussy' && $tmpGirl.pussy >= 100 && !$tmpGirl.traits.includes('nymphomaniac') && setup.percentageChance(5) && !$tmpGirl.traitsLocked.includes('nymphomaniac')>>
+		<<run $tmpGirl.traits.push('nymphomaniac')>>
+		<strong><<= setup.displayName($tmpGirl)>> got nymphomaniac trait!</strong>
+		<br />
+	<</if>>
+
+	<<if $action == 'cum_in_pussy'
+		&& setup.getAge($tmpGirl) < 49
+		&& typeof $tmpGirl.pregnancy === 'undefined' 
+		&& (
+			(setup.perkHas('fertility')
+			&& setup.percentageChance(50)) || 
+			(!setup.perkHas('fertility')
+			&& setup.percentageChance(10)) || 
+			($tmpGirl.traits ?? []).includes('breeder')
+		)>>
+		<<set $tmpGirl.pregnancy_father = 'mc'>>
+		<<set $tmpGirl.pregnancy = 0>>
+		<<statsAdd 'girls_impregnated'>>
+	<</if>>
+<</if>>
+
+<<if $player.horny >= 100>>
+	<<energy +5>>
+	<<horny_reset>>
+	<<set $player.sexp++>>
+
+	<<if $action == 'handjob'>>
+		[[Handjob cum|Girl fuck][$action to 'handjob_cum']]
+	<<elseif $action == 'footjob'>>
+		[[Footjob cum|Girl fuck][$action to 'footjob_cum']]
+	<<elseif $action == 'footjob'>>
+		[[Cum on tits|Girl fuck][$action to 'cum_on_tits']]
+	<<elseif $action == 'pussy'>>
+		[[Cum in pussy|Girl fuck][$action to 'cum_in_pussy']]
+		[[Cum on stomach|Girl fuck][$action to 'cum_on_stomach']]		
+	<<elseif $action == 'anal'>>
+		[[Cum in ass|Girl fuck][$action to 'cum_in_ass']]
+		[[Cum on back|Girl fuck][$action to 'cum_on_back']]
+	<</if>>
+	[[Cum on face|Girl fuck][$action to 'cum_on_face']]
+	[[Cum in mouth|Girl fuck][$action to 'cum_in_mouth']]	
+
+<<else>>
+
+	<<if $forced || ($tmpGirl.traits ?? []).includes('nymphomeniac')>>
+		<<set _actionMax = 100>>
+	<<elseif $tmpGirl.likesGuys>>
+		<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
+		<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
+		<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub)>>		
+	<<else>>
+		<<set _actionMax = Math.floor($tmpGirl.sub/2)>>
+	<</if>>
+
+	<<if _actionMax >= 10>>
+		[[Handjob|Girl fuck][$action to 'handjob']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Handjob
+		</div>
+	<</if>>
+	<<if _actionMax >= 20>>
+		[[Footjob|Girl fuck][$action to 'footjob']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Footjob
+		</div>	
+	<</if>>
+	<<if _actionMax >= 35 && ['medium', 'big'].includes($tmpGirl.breasts)>>
+		[[Titjob|Girl fuck][$action to 'titjob']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Titjob
+		</div>	
+	<</if>>
+	<<if _actionMax >= 40 || ($tmpGirl.traits ?? []).includes('cumslut')>>
+		[[Blowjob|Girl fuck][$action to 'bj']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Blowjob
+		</div>	
+	<</if>>	
+	<<if (_actionMax >= 60 || ($tmpGirl.traits ?? []).includes('deepthroat')) && ['bj', 'dp'].includes($action)>>
+		[[Deepthroat|Girl fuck][$action to 'dp']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Deepthroat
+		</div>
+	<</if>>
+	<<if _actionMax >= 30>>
+		[[Pussy lick|Girl fuck][$action to 'pussy_lick']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Pussy lick
+		</div>
+	<</if>>
+	<<if _actionMax >= 50>>
+		[[Pussy|Girl fuck][$action to 'pussy']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Pussy
+		</div>
+	<</if>>
+	<<if _actionMax >= 55 || ($tmpGirl.traits ?? []).includes('analslut')>>
+		[[Anal fingering|Girl fuck][$action to 'anal_fingering']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Anal fingering
+		</div>
+	<</if>>
+	<<if _actionMax >= 70 || ($tmpGirl.traits ?? []).includes('analslut')>>
+		[[Anal|Girl fuck][$action to 'anal']]
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Anal
+		</div>
+	<</if>>
+	
+	<<if !$forced>>
+		[[Force her|Girl fuck][$action to 'undefined', $forced to true]]
+	<</if>>
+
+	<<link 'End'>>
+		<<run delete $forced>>	
+		<<run delete $action>>
+		<<if $oldTmpGirlLocation>>
+			<<set $tmpGirl.location = $oldTmpGirlLocation>>
+			<<run delete $oldTmpGirlLocation>>
+		<</if>>
+		<<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('girlview')>>
+			<<if typeof $slaveId !== 'undefined'>>
+				<<set $slaves[$slaveId] = $tmpGirl>>
+				<<run delete $slaveId>>
+			<<elseif typeof $guestId !== 'undefined'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+				<<run delete $guestId>>
+			<<elseif typeof $charId !== 'undefined'>>
+				<<set $characters[$charId] = $tmpGirl>>
+				<<run delete $charId>>
+			<</if>>
+			<<if $tmpGirlViewBack>>
+				<<goto $tmpGirlViewBack>>
+			<<else>>
+				<<goto 'Girl view'>>
+			<</if>>
+		<<else>>
+			<<if $tmpGirlViewBack>>
+				<<goto $tmpGirlViewBack>>
+			<<else>>
+				<<goto 'Girl view'>>
+			<</if>>
+		<</if>>
+	<</link>>
+<</if>>
