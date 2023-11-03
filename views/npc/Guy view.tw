@@ -58,6 +58,17 @@
 	<</link>>
 <</if>>
 
+<<set _availableTGirlsSlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if settings.transEnabled && $tmpGirl.gender == 1 && (_availableTGirlsSlaves[2] ?? []).length && !$tmpGirl.offerSlave>>
+	<<link 'Offer him one of your slave trans girls'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave trans girls to slave guy: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
 <<if $tmpGirl.assignedTo>>
 	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
 		<<run delete $tmpGirl.assignedTo>>
