@@ -1,0 +1,189 @@
+:: Help - items include [Help include] 
+
+<<set _catHelpItems = {}>>
+/* _catHelpItems[category] = map _itemID, _helpItem */
+/* sugarcube do not like for ... of ..., must be for ... range ... */
+<<for _cat range _catOrder>>
+    <<set _catHelpItems[_cat] = new Map()>>
+<</for>>
+
+/* $workbenchItems from <<include 'Workbench items' */
+/* should perhaps be setup.workbenchItems ? */
+<<if typeof $workbenchItems === 'undefined'>>
+    <<include 'Workbench items'>>
+<</if>>
+
+<<set _crafting = []>>
+
+<<for _itemID range Object.keys($workbenchItems)>>
+    /*<<set _crafting = _crafting.append(Object.keys($workbenchItems[_itemID].required))>>*/
+    <<if typeof $workbenchItems[_itemID].required === 'undefined'>>
+    <</if>> 
+    <<for _craftingID range Object.keys($workbenchItems[_itemID].required)>>
+        <<run _crafting.push[_craftingID]>>
+    <</for>>
+<</for>>
+
+/* sold in shops, manual */
+/* $shopItems in different shops,
+   should perhaps be setup.shopitems{shop} ? */
+<<set _shops = [
+    {
+        name: 'Farm',        
+        sells: ['food','wood','axe','rope','alcohol','tobacco','glue','soda', 'milk'],
+    },
+    {
+        name: 'Settlement',  
+        sells: ['wood','hay','flower','candy','necklace_cheap','plush'],
+    },
+    {
+        name: 'Underground', 
+        sells: ['bandage', 'knife', 'solar_panel','fertility_potion','pregnancy_speed_potion','plastic','hair_dye_kit','buttplug','piercing','cosmetics','sextoy','whippit','xanax'],
+    },
+    {
+        name: 'Sanctuary',   
+        sells: ['metal','bullet_revolver','piercing'],
+    },
+]>>
+
+<<set _shopSells = {}>>
+
+<<for _shop range _shops>>
+    <<set _shopname = _shop.name>>
+    <<for _itemID range _shop.sells>>
+        <<set _shopSells[_itemID] ??= []>>
+        /*<<set _shopSells[_itemID] = (_shopSells[_itemID] ?? []).push(_shopname)>>*/
+        <<run _shopSells[_itemID].push(_shopname)>>
+    <</for>>
+<</for>>
+
+<<set _helpItems = new Map()>>
+/*
+/*<<for _itemID, _item of Item.list.entries()>>*/
+<<for _itemID range setup.mapKeys2list(Item.list).sort() >> /* .sort() */
+    <<set _item = Item.get(_itemID)>>
+    <<set _helpItem = {
+        name: _item.name,
+        desc: _item.description ?? '',
+        npc: setup.inventoryNpc[_itemID] ?? false,
+        sources: []
+    }>>
+    <<run _helpItems.set(_itemID, _helpItem)>>
+    <<set _tags = _item.tags>>
+
+    <<if !/no\suse/i.test(_helpItem.desc) && _tags.includes('no_use')>>
+        <<set _helpItem.desc += '<br />No use for now'>>
+    <</if>>
+    
+    /* a little hmor */
+     <<if ['duck_tape'].includes(_itemID)>>
+        <<set _helpItem.desc += '<br />No ducks implemented in game yet!'>>
+    <</if>>
+
+    /* sources */
+    <<if (_shopSells[_itemID] ?? []).length>>
+        <<set _key = 'Shop: ' + _shopSells[_itemID].join(', ')>>
+        <<run _helpItem.sources.push(_key)>>
+     <</if>>
+    <<if ['milk'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Milking the ladies')>>
+    <</if>>
+    <<if $workbenchItems[_itemID] ?? false>>
+        <<run _helpItem.sources.push('Workbench')>>
+    <</if>>
+    <<if ['food'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Garden/Greenhouse')>>
+    <</if>>    
+    <<if ['food', 'wood', 'glowing_mushroom', 'pelt_wolf'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Forest')>>
+    <</if>>    
+    <<if ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Scavening')>>
+    <</if>>    
+    <<if setup.inventoryManageable[_itemID] ?? false>>
+         <<run _helpItem.sources.push('Shopkeeper')>>
+    <</if>>  
+    /* <<if _item.hasTag('start_item')>> */
+    <<if _tags.includes('start_item')>>
+        <<run _helpItem.sources.push('Start item')>>
+    <</if>>
+    <<if ['breast_pump', 'wedding_ring'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Vincent quests/tasks')>>
+    <</if>>    
+    <<if ['champagne'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Rodger quests/tasks')>>
+    <</if>>    
+   <<if ['fuel'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Dom quests/tasks')>>
+        
+    <</if>>
+    <<if  ['growth_potion'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Laura in lab')>>
+    <</if>>    
+    <<if  ['revolver'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Special')>>
+    <</if>>    
+    <<if _helpItem.sources.length == 0 && ['raw_human_meat', 'blueprint_hot_shower', 'fuel', 'tribe_medallion', 'gas_mask', 'car_part', 'metal'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Explore!')>>
+    <</if>>
+
+    /* categories */
+    <<set _catCount = 0>>
+/*
+    crafting: 'Materials for building & crafting in workbench',
+    potion:   'Pharmacy; materials & finished products',
+    tool:     'Tools and weapons',
+    gift:     'Gifts for slaves & guests',
+    quest:    'Quest items',
+    no_use:   'No use for now', 
+    que:      'Unsorted or new items',
+ */
+    
+     <<if _tags.includes('food')>>
+       <<run _catHelpItems['food'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+    /* <<if /building|crafting/i.test(_helpItem.desc) ||
+      _item.hasAnyTag('building', 'crafting') || _crafting.includes(_itemID) >> */
+    <<if /building|crafting/i.test(_helpItem.desc) ||
+      setup.includesAny(_tags, ['building', 'crafting']) || _crafting.includes(_itemID) >>   
+        <<run _catHelpItems['crafting'].set(_itemID, _helpItem)>>
+        <<set _catCount++>>
+    <</if>>
+      <<if _tags.includes('fabric')>>
+       <<run _catHelpItems['fabric'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>   
+    /* <<if /potion/i.test(_item.name + _helpItem.desc) || _item.hasTag('potion')>>*/
+    <<if /potion/i.test(_item.name + _helpItem.desc) || _tags.includes('potion')>>
+       <<run _catHelpItems['potion'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+   /* <<if _item.hasAnyTag('tool', 'weapon')>> */
+   <<if setup.includesAny(_tags, ['tool', 'weapon'])>>
+       <<run _catHelpItems['tool'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+   <<if (setup.gifts[_itemID] ?? false) || _tags.includes('gift')>>
+       <<run _catHelpItems['gift'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+    /* <<if /quest/i.test(_helpItem.desc) || _item.hasTag('quest')>> */
+    <<if /quest/i.test(_helpItem.desc) || _tags.includes('quest')>>
+       <<run _catHelpItems['quest'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+    /* <<if /no\suse/i.test(_helpItem.desc) || _item.hasTag('no_use')>> */
+    <<if /no\suse/i.test(_helpItem.desc) || _tags.includes('no_use')>>
+        <<if !/no\suse/i.test(_helpItem.desc)>>
+            <<set _helpItem.desc += '<br />No use for now'>>
+        <</if>>
+       <<run _catHelpItems['no_use'].set(_itemID, _helpItem)>>
+       <<set _catCount++>>
+    <</if>>
+    <<if _catCount == 0>>
+        <<run _catHelpItems['que'].set(_itemID, _helpItem)>>
+    <</if>>
+<</for>>
+
+<<set setup.helpitemsByCategory = _catHelpItems>>
