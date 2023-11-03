@@ -660,4 +660,14 @@ setup.includesAny = function(have, want) {
 };
 setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
-}; 
+};
+
+setup.sexChance = function (person) {
+	if ((person.traits ?? []).includes('nymphomeniac')) {
+		return 100;
+	} else if (!person.likesGuys) {
+		return Math.floor(person.sub/2);
+	} else {
+		return Math.max(person.relationship, person.horny, person.sub);
+	}
+};
