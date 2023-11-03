@@ -34,15 +34,18 @@
 	<br /><br />
 	You walk behind <<=setup.pronounceWho($tmpGirl)>> and slowly massage <<=setup.pronounceWhos($tmpGirl)>> body as <<=setup.pronounceWhat($tmpGirl)>> quietly gasps,  
 
-	<<if $tmpGirl.likesGuys && $tmpGirl.relationship > 30>>
+	<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+		<<set $forced = false>>
 		<<=setup.pronounceWhat($tmpGirl)>> presses <<=setup.pronounceWhos($tmpGirl)>> body against yours and you think that <<=setup.pronounceWhat($tmpGirl)>>'s really enjoying the moment.
 	<<else>>
+		<<set $forced = true>>
 		<<=setup.pronounceWhat($tmpGirl)>> looks a bit unconfortable and says <<=setup.pronounceWhat($tmpGirl)>> is finished washing.
 	<</if>>
 	<br /><br />
 		
 	<<if $player.energy >= 30>>
 		<<set _linkName = 'Fuck ' + setup.pronounceWho($tmpGirl)>>
+		<<set $action = 'undefined'>>
 		<<if !$tmpGirl.gender>>
 			<<linkreplace `_linkName`>>
 				<<goto 'Girl fuck'>>
@@ -66,5 +69,3 @@
 		<<goto 'Guy view'>>
 	<</if>>
 <</link>>
-
-
