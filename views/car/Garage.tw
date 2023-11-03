@@ -1,6 +1,8 @@
 :: Garage [Place]
 <h1 class="ptitle">GARAGE</h1>
 <br /><br />
+<<warning 'Nothing more to do here. Except one random fuck event.'>>
+<br /><br />
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
 <</link>>
@@ -8,6 +10,9 @@
     <<set $player.quests.garage_first = true>>
     <<goto 'Car - first event'>>
 <</if>>
-<<if setup.percentageChance(20)>>
-    <<goto 'Car - repair fuck'>>
+<<if !($locationEvents.garage ?? false)>>
+    <<if setup.percentageChance(20) >>
+        <<set $locatioNEvents.garage = true>>
+        <<goto 'Car - repair fuck'>>
+    <</if>>
 <</if>>
