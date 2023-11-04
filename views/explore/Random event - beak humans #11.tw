@@ -28,10 +28,31 @@ Two naked girls are coming so you decide to jump out.  You freeze as soon as you
         Or you could choose to retreat, leaving them to their grim fate.
         <br /><br />
         <<linkreplace 'Help them'>>
+            <<run $('#option_leave').hide()>>
+            <<set _help = true>>
 
+            
+
+            <<link 'Fight'>>
+                <<set $enemies = []>>
+                <<newguy>>
+                <<set $tmpGuy.strength = randomInteger(50, 100)>>
+                <<run $enemies.push($enemies)>>
+                <<newguy>>
+                <<set $tmpGuy.strength = randomInteger(50, 100)>>
+                <<run $enemies.push($enemies)>>
+                <<fight $enemies 'Random event - beak humans #11 won' 'Outside'>>
+            <</link>>
         <</linkreplace>>
     <</linkreplace>>
 <</if>>
-[[Leave|Outside]]
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<if !_help>>
+            <<set $player.godwill -= 5>>
+        <</if>>
+        <<goto 'Outside'>>
+    <</link>>
+</div>
 
 
