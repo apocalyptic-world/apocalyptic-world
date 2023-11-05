@@ -1,3 +1,88 @@
 :: Random event - beak humans #11 won
-
-thank you
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/explore/event_beak_won.jpg']]
+</center>
+<br /><br />
+After a hard-fought struggle, the attackers are on the ground, leaving the factory once again cloaked in silence. 
+The women, their faces streaked with dirt and sweat, turn to you with eyes filled with gratitude.
+<br /><br />
+<<newgirl>>
+<<set _npc1 = $tmpGirl>>
+<<newgirl>>
+<<set _npc2 = $tmpGirl>>
+<<sayNpc _npc1>>
+    Thank you! We thought... we thought it was over for us.
+<</sayNpc>>
+<br />
+The other woman nods fervently, her voice steady.
+<br /><br />
+<<sayNpc _npc2>>
+    You've given us a chance, a second lease on life. Could you please untie us?
+<</sayNpc>>
+<br />
+They look to you for guidance, their trust in you evident.
+<br /><br />
+<div id="option_fuck">
+    <<if !recall($suppCode)>>
+        <div class="link-internal disabled" style="background: #ccc">
+            Fuck them
+            <<notPatreonIcon>>
+        </div>
+    <<else>>
+        <<linkreplace 'Fuck them'>>
+            <<set _fucked = true>>
+        <</linkreplace>>
+    <</if>>
+</div>
+<div id="option_release">
+    <<linkreplace 'Free them'>>
+        <<set $player.godwill++>>
+        <<run $('#option_enslave').hide()>>
+        <<if !_fucked>>
+            <<run $('#option_fuck').hide()>>
+        <</if>>
+        <<sayNpc _npc1>>
+            Thank you so much!
+        <</sayNpc>>
+        <br />
+        As they step into the world outside, you watch them go, knowing that you've made a difference in their lives. 
+        The post-apocalyptic world is harsh, but moments like these remind you that compassion and courage still hold sway.
+        <br />
+        With a renewed sense of purpose, you continue your journey, knowing that you have the power to make a positive impact, even in the bleakest of times
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<if (($game.location.basement ?? false) && ($slaves.length + 2) < $basementLimit)>>
+    <div id="option_enslave">
+        <<linkreplace 'Enslave them'>>
+            <<set $player.godwill -= 5>>
+            <<run $('#option_release').hide()>>
+            <<if !_fucked>>
+                <<run $('#option_fuck').hide()>>
+            <</if>>
+            You free them from the metal pipes they were tied to, but instead of untying their hands, you bind them both together with a longer rope and lead them outside. 
+            They realize that you won't let them go and start shouting and cursing at you.
+            <br /><br />
+            <<sayNpc _npc2>>
+                What are you doing? Please don't !
+            <</sayNpc>>
+            <br />
+            <<sayNpc _npc1>>
+                You fucking bastard!
+            <</sayNpc>>
+            <br />
+            <<link 'Leave'>>
+                <<set _npc1.relationship = -50>>
+                <<set _npc2.relationship = -50>>
+                <<run $slaves.push(_npc1)>>
+                <<run $slaves.push(_npc2)>>
+                <<goto 'Basement'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</if>>

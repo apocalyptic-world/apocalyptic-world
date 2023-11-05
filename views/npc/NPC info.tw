@@ -51,9 +51,11 @@
 		<span>Eyes: <<=$tmpGirl.eyes>></span>
 				
 		<<if !_unknown && !$charId>>
-			<span>Likes: <<=$tmpGirl.likes>></span>
-			<span>Dislikes: <<=$tmpGirl.dislikes>></span>
-			<span>Personality: <<=$tmpGirl.personality>></span>
+			<<if $tmpGirl.relationship >= 50>>
+				<span>Likes: <<=$tmpGirl.likes>></span>
+				<span>Dislikes: <<=$tmpGirl.dislikes>></span>
+				<span>Personality: <<=$tmpGirl.personality>></span>
+			<</if>>
 			<span>Gender: <<=setup.genderDescription($tmpGirl)>></span>
 			<span>Orientation: <<=$tmpGirl.orientation>></span>
 		<</if>>
