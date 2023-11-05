@@ -211,6 +211,12 @@
 			Wait few days
 		<<elseif !($game.location.lab ?? false)>>
 			Build lab for her from workbench
+		<<elseif ($game.location.lab ?? false) && !$characters.laura.quests.breeder_trait>>
+			<<if  ($characters.laura.quests.lastTestDay + 20) < $game.day>>
+				Meet her at greenhouse
+			<<else>>
+				Wait some days
+			<</if>>
 		<<else>>
 			That's all for now
 		<</if>>
