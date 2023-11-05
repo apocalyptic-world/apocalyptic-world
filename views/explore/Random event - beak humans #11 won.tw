@@ -50,19 +50,28 @@ They look to you for guidance, their trust in you evident.
             <<sayNpc _npc2>>
                 Don't you dare to touch me!
             <</sayNpc>>
-            <<set _linkName = 'Fuck ' + _npc2.name + ' ass'>>
-            <<linkreplace _linkName>>
-                <<video 'explore/beak_human_fuck3'>>
-                <br /><br />
-            <</linkreplace>>
-            <<set _linkName 'Cum in ' + _npc1.name + ' mouth'>>
-            <<linkreplace _linkName>>
+            <br />
+            <<set _linkName = 'Fuck ' + _npc2.name + '\'s ass'>>
+            <div id="option_ass">
+                <<linkreplace `_linkName`>>
+                    <<set _fuckAss = true>>
+                    <<video 'explore/beak_human_fuck3'>>
+                    <br /><br />
+                <</linkreplace>>
+            </div>
+
+            <<set _linkName = 'Cum in ' + _npc1.name + '\'s mouth'>>
+            <<linkreplace `_linkName`>>
+                <<if !_fuckAss>>
+                    <<run $('#option_ass').hide()>>
+                <</if>>
                 <<video 'explore/beak_human_fuck4'>>
                 <br /><br />
-                <<=setup.displayName(_npc1)>>
+                <<=setup.displayName(_npc1)>> submissively gets on her knees, grabs your dick and puts it in her mouth. She's calm and knows what she needs to do. As soon as you start to cum she puts out her tonque
+                 and lets you cum on it...
                 <br /><br />
+                <<horny_reset>>
             <</linkreplace>>
-            <<horny_reset>>
         <</linkreplace>>
     <</if>>
 </div>
