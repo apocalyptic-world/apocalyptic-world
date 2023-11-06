@@ -89,7 +89,10 @@
 <<if !$assignedToGreenhouse>>
 	No girls are working at the moment...
 <</if>>
-<<if !($locationEvents.greenhouse ?? false)>>
+<<if isMetChar('laura') && $characters.laura.quests.successful_test && ($characters.laura.quests.lastTestDay + 20) < $game.day && !$characters.laura.quests.breeder_trait>>
+	<<set $characters.laura.quests.breeder_trait = true>>
+	<<goto 'Laura - breeder trait'>>
+<<elseif !($locationEvents.greenhouse ?? false)>>
 	<<if _girlsCompetition.length >= 2 && setup.percentageChance(5)>>
 		<<set $locationEvents.greenhouse = true>>
 		<<set $game.greenhouseCompetition = _girlsCompetition>>

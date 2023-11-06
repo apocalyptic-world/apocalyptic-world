@@ -78,6 +78,11 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.tmpGirl.happy === 'undefined') {
             save.state.history[save.state.index].variables.tmpGirl.happy = randomInteger(0, 40);
         }
+
+	if (typeof save.state.history[save.state.index].variables.tmpGirl.likes === 'undefined') {
+            save.state.history[save.state.index].variables.tmpGirl.likes = setup.getRandomGifts(either(1, 2));
+			save.state.history[save.state.index].variables.tmpGirl.dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.tmpGirl.likes);
+        }
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
@@ -148,6 +153,11 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].breasts = 'medium';
         }
 
+	if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].likes === 'undefined') {
+            save.state.history[save.state.index].variables.slaves[varsSlaveI].likes = setup.getRandomGifts(either(1, 2));
+            save.state.history[save.state.index].variables.slaves[varsSlaveI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.slaves[varsSlaveI].likes);
+        }
+
         for (var saveSlaveTraitI = 0; saveSlaveTraitI < (save.state.history[save.state.index].variables.slaves[varsSlaveI].traits ?? []).length; saveSlaveTraitI++) {
             if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.slaves[varsSlaveI].traits[saveSlaveTraitI])) {
                 if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].skills === 'undefined') {
@@ -188,6 +198,11 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].race === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].race = 'white';
             save.state.history[save.state.index].variables.guests[saveGuestI].breasts = 'medium';
+        }
+
+	if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].likes === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].likes = setup.getRandomGifts(either(1, 2));
+            save.state.history[save.state.index].variables.guests[saveGuestI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.guests[saveGuestI].likes);
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].orientation === 'undefined') {
@@ -241,6 +256,11 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.characters[saveCharI].race === 'undefined') {
             save.state.history[save.state.index].variables.characters[saveCharI].race = 'white';
             save.state.history[save.state.index].variables.characters[saveCharI].breasts = 'medium';
+        }
+
+	if (typeof save.state.history[save.state.index].variables.characters[saveCharI].likes === 'undefined') {
+            save.state.history[save.state.index].variables.characters[saveCharI].likes = setup.getRandomGifts(either(1, 2));
+            save.state.history[save.state.index].variables.characters[saveCharI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.characters[saveCharI].likes);
         }
 
         if (!Array.isArray(save.state.history[save.state.index].variables.characters[saveCharI].traits ?? [])) {
@@ -298,5 +318,10 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.wanted[saveWantedI].race = 'white';
             save.state.history[save.state.index].variables.wanted[saveWantedI].breasts = 'medium';
         }
+
+	if (typeof save.state.history[save.state.index].variables.wanted[saveWantedI].likes === 'undefined') {
+            save.state.history[save.state.index].variables.wanted[saveWantedI].likes = setup.getRandomGifts(either(1, 2));
+            save.state.history[save.state.index].variables.wanted[saveWantedI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.wanted[saveWantedI].likes);
+        } 
     }
 });

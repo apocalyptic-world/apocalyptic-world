@@ -1,0 +1,71 @@
+:: Laura - breeder trait give [bg-lab]
+<h1 class="ptitle">LAB</h1>
+<br /><br />
+<<laura>>
+    You need to decide which of the girls will be given the serum.
+<</laura>>
+<br />
+<div id="breeder-girls">
+    <table id="slaves">
+    <<for _labGuestI, _labGuest range $guests>>
+        <<capture _labGuestI, _labGuest>>
+            <<if _labGuest.gender || (_labGuest.traits ?? []).includes('breeder') || setup.getAge(_labGuest) < 18>>
+                <<continue>>
+            <</if>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_labGuest)>>
+            <tr>
+                <td style="width: 300px">
+                    <span @class="''+_genderClass+''">
+                        <<link _labGuest.name>>
+                            <<run $('#breeder-girls').hide()>>
+                            <<addmins 30>>
+                            <<set $characters.laura.quests.productionSamples-->>
+                            <<run $guests[_labGuestI].traits.push('breeder')>>
+                            <<run $('#breeder-girls-give').show()>>
+                            <<replace ".breeder-girl-name">><<=setup.displayName(_labGuest)>><</replace>>
+                        <</link>>
+                    </span>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+    <<for _labSlaveI, _labSlave range $slaves>>
+        <<capture _labSlaveI, _labSlave>>
+            <<if _labSlave.gender || (_labSlave.traits ?? []).includes('breeder') || setup.getAge(_labSlave) < 18>>
+                <<continue>>
+            <</if>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>
+            <tr>
+                <td style="width: 300px">
+                    <span @class="''+_genderClass+''">
+                        <<link _labSlave.name>>
+                            <<run $('#breeder-girls').hide()>>
+                            <<addmins 30>>
+                            <<set $characters.laura.quests.productionSamples-->>
+                            <<run $slaves[_labSlaveI].traits.push('breeder')>>
+                            <<run $('#breeder-girls-give').show()>>
+                             <<replace ".breeder-girl-name">><<=setup.displayName(_labSlave)>><</replace>>
+                        <</link>>
+                    </span>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+    </table>
+</div>
+
+<div id="breeder-girls-give" style="display: none">
+    <center>
+        [img[setup.ImagePath+'people/laura/breeder_trait_give.jpg']]
+    </center>
+    <br />
+    You call <span class="breeder-girl-name"></span> inside the lab and Laura gives her serum of the fertility serum.
+    <br /><br />
+    <strong><span class="breeder-girl-name"></span> got breeder trait.</strong>
+    <br /><br />
+</div>
+
+
+<<link 'Leave'>>
+    <<goto 'Laura - lab talk'>>
+<</link>>
