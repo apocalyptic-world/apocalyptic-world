@@ -1,0 +1,109 @@
+:: Dom - quest #5 The Sanctuary
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+As you approached the streets of the underground city, the howling winds masked your footsteps, creating an eerie silence. 
+<br />
+Suddenly, a group of Dom's goons emerged from the shadows, their faces hidden beneath masks, their eyes sharp with suspicion.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'people/dom/goons.jpg']]
+</center>
+<br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    You're expected. 
+<</sayNpc>>
+<br />
+One of them grunted, their voice carrying a note of warning.
+<br />
+They gestured for you to follow, and you fell in line, the tension in the air palpable.
+<br /><br />
+You finally arrived at a Dom's place, guarded by two burly figures. 
+With a nod, they allowed you entry. 
+Inside, the atmosphere was starkly different. 
+<br />
+Isabel, Dom's wife, stood in the center of the room. 
+Her eyes were filled with a mixture of worry and determination. She dismissed the goons with a stern nod, leaving just the two of you in the room.
+<br /><br />
+<<isabel>>
+    How it's going with the fuel? I haven't heard from you. They start to suspect something.
+<</isabel>>
+<br />
+<div id="option_time">
+    <<linkreplace 'Give me more time'>>
+        <<set _moreTime = true>>
+        <<isabel>>
+            I don't have time! If Dom won't wake up soon I and him are done!
+        <</isabel>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<<linkreplace 'I was busy'>>
+    <<if !_moreTime>>
+        <<run $('#option_time').hide()>>
+    <</if>>
+    <<isabel>>
+        Busy? Busy!?? My fucking life is on the line. 
+    <</isabel>>
+    <br />
+    Her frustration boils over, and she raises her voice, her words cutting through the tense air.
+    <br />
+    You can see the fear and worry etched into the lines of her face.
+    <br /><br />
+    Isabel's voice holds a mixture of relief and apprehension as she shares the news. 
+    <br /><br />
+    <<isabel>>
+        I've managed to strike a deal in the Sanctuary. They have the fuel we need, but they're... ruthless. They won't negotiate with a group. You have to go alone.
+    <</isabel>>
+    <br />
+    The weight of her words settles on you, and you understand the gravity of the situation. 
+    <br />
+    The Sanctuary is notorious for its uncompromising nature, but it's also our only hope for survival. You meet Isabel's gaze, determination burning in your eyes.
+    <br /><br />
+    <div id="option_reward">
+        <<linkreplace "Ask for a reward">>
+            <<set $characters.isabel.sub += 10>>
+            <<run $('#option_yes').hide()>>
+            <<set _award = true>>
+            <<isabel>>
+                I can't give you any caps as I don't know where Dom hides it all...
+            <</isabel>>
+            <br />
+            She looks at you and takes a deep breath. Then, making sure no one is around, she reaches for you and pulls you close by grabbing your pants. Then she slowly unbuttons your pants and takes out your soft dick.
+            <br /><br />
+            <<video 'isabel/dick_out'>>
+            <br /><br />
+            Suddenly, from the other corner, the sound of a door slam appears and Dom's men burst into the room. She barely manages to put your dick back. 
+            <br />
+            They inform her that a riot has broken out in one of the districts of the underground city, and she needs to come with them.
+            <br /><br />
+            <<isabel>>
+                The Sanctuary - Just get it done and you will get your reward! 
+            <</isabel>>
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Streets'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+    <div id="option_yes">
+        <<linkreplace 'I will do that'>>
+            <<if !_award>>
+                <<run $('#option_reward').hide()>>
+            <</if>>
+            Suddenly, from the other corner, the sound of a door slam appears and Dom's men burst into the room.
+            <br />
+            They inform her that a riot has broken out in one of the districts of the underground city, and she needs to come with them.
+            <br /><br />
+            <<isabel>>
+                Thank you so much! Dom and I will be in your debt!
+            <</isabel>>
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Streets'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</linkreplace>>
+
+<<set $game.location.sanctuary = true>>
