@@ -222,7 +222,7 @@
 					<</if>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
-					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, <<=setup.pronounceWhat($slaves[_i])>> got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -298,7 +298,7 @@
 		
 		// Leave
 		<<if $guests[_guestI].relationship < 0>>
-			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning, <<=setup.pronounceWhat($guests[_guestI])>> probably decided to leave this place')>>
+			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning, ' + setup.pronounceWhat($guests[_guestI]) + ' probably decided to leave this place')>>
 			<<guestRemove _guestI >>
 			<<set _guestI-->>
 			<<continue>>
