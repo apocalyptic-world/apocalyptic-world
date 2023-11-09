@@ -27,7 +27,7 @@
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
 							<<else>>
 								<<set $player.money += _shopItem.price * $shopItems[_i].qty>>
-								<<drop $backpack _shopItem.name $shopItem.qty>>
+								<<drop $backpack _shopItem.name _shopItem.qty>>
 								<<goto $args[1]>>
 							<</if>>
 
@@ -55,7 +55,7 @@
 									<<run $.wiki($args[2])>>
 								<</if>>
 								<<set $player.money -= _totalPrice>>
-								<<pickup $backpack _shopItem.name $shopItems[_i].qty>>
+								<<pickup $backpack _shopItem.name _shopItem.qty>>
 								<<goto $args[1]>>
 							<</if>>
 						<</link>>

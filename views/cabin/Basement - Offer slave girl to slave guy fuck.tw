@@ -70,10 +70,10 @@
 			<br /><br />
 			<<if setup.getAge($slaves[$slaveOfferId]) < 55 && typeof $slaves[$slaveOfferId].pregnancy === 'undefined' && (
 				setup.percentageChance(40) || 
-				($tmpGirl.traits ?? []).includes('breeder')
+				($slaves[$slaveOfferId].traits ?? []).includes('breeder')
 			)>>
-				<<set $tmpGirl.pregnancy_father = $tmpGirl.id>>
-				<<set $tmpGirl.pregnancy = 0>>
+				<<set $slaves[$slaveOfferId].pregnancy_father = $tmpGirl.id>>
+				<<set $slaves[$slaveOfferId].pregnancy = 0>>
 			<</if>>
 			<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
 			<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
