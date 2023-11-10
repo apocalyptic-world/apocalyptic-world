@@ -23,9 +23,11 @@
 			 	<<link 'Gift'>>
 					<<set _giftMultiplier = 1>>
 					<<if ($tmpGirl.likes ?? []).includes(_item)>>
-						<<set _giftMultiplier = 3>>
+						<<set _giftMultiplier = 2>>
+						<<set $tmpGirl.happy += 2>>
 					<<elseif ($tmpGirl.dislikes ?? []).includes(_item)>>
 						<<set _giftMultiplier = -1>>
+						<<set $tmpGirl.happy -= 1>>
 					<</if>>				
 
 					<<if _giftMultiplier >= 1 >>				
