@@ -42,8 +42,10 @@ Then, it began.
 <</if>>
 <<link 'Leave'>>
 	<<if _isAdult>>
-		<<run $guests.push($tmpGirl)>>
-		<<run $nursery.splice($childId, 1)>>
+		<<if $childId>>
+			<<run $guests.push($tmpGirl)>>
+			<<run $nursery.splice($childId, 1)>>
+		<</if>>
 		<<goto 'Guest house'>>
 	<<else>>
 		<<goto 'Child view'>>
