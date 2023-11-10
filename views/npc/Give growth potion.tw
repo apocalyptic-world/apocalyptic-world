@@ -45,8 +45,14 @@ Then, it began.
 		<<if $childId>>
 			<<run $guests.push($tmpGirl)>>
 			<<run $nursery.splice($childId, 1)>>
+			<<goto 'Guest house'>>
+		<<elseif $slaveId>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<goto 'Basement'>>
+		<<else>>
+			<<set $guests[$guestId] = $tmpGirl>>
+			<<goto 'Guest house'>>
 		<</if>>
-		<<goto 'Guest house'>>
 	<<else>>
 		<<goto 'Child view'>>
 	<</if>>
