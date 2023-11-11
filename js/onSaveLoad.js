@@ -5,6 +5,11 @@ Save.onLoad.add(function (save) {
             relationship: 0
         };
     }
+    save.state.history[save.state.index].variables.characters.dom.name ??= 'Dom';
+    save.state.history[save.state.index].variables.characters.dom.id ??= 'dom';
+    save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
+    save.state.history[save.state.index].variables.characters.isabel.family ??= {};
+    save.state.history[save.state.index].variables.characters.isabel.family.husband ??= 'dom';
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
     }
@@ -17,7 +22,12 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.characters.blair === 'undefined') {
         save.state.history[save.state.index].variables.characters.blair = {};
     }
-
+    save.state.history[save.state.index].variables.characters.blair.id ??= 'blair';
+    save.state.history[save.state.index].variables.characters.blair.family ??= {};
+    save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
+    save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
+    save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
+    save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
     if (typeof save.state.history[save.state.index].variables.game.cabinName !== 'undefined') {
         save.state.history[save.state.index].variables.game.showFlag = true;
     }
@@ -87,8 +97,13 @@ Save.onLoad.add(function (save) {
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
     save.state.history[save.state.index].variables.characters.eve = (save.state.history[save.state.index].variables.characters.eve ?? {});
-    if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' && typeof save.state.history[save.state.index].variables.characters.eve.quests === 'undefined') {
-        save.state.history[save.state.index].variables.characters.eve.quests = {};
+    if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' ) {
+        save.state.history[save.state.index].variables.characters.eve.quests ??= {};
+        save.state.history[save.state.index].variables.characters.eve.id ??= 'eve';
+        save.state.history[save.state.index].variables.characters.eve.family ??= 
+            { husband: 'rodger'};
+        save.state.history[save.state.index].variables.characters.rodger.name ??= 'Rodger';
+        save.state.history[save.state.index].variables.characters.rodger.id ??= 'rodger';
     }
 
     if (typeof save.state.history[save.state.index].variables.guests === 'undefined') {
