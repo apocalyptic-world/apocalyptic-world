@@ -46,8 +46,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<<set $tmpGirlCapture to false>>
 			<<set $tmpGirl.rape to false>>
 			<<set $guestId = _girlGuest[0]>>
-			<<run delete $slaveId>>
-			<<run delete $charId>>
+			<<unset $slaveId, $charId, $childId>>
 			<<goto 'Girl view - guest'>>
 		<</link>>
 	<</if>>
@@ -79,7 +78,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 					<span @class="''+_genderClass+''">
 						<<link $slaves[_i].name>>
 							<<set $slaveId = _i>>
-							<<run delete $guestId, $charId, $childId>>
+							<<unset $guestId, $charId, $childId>>
 							<<set $tmpGirl = $slaves[_i]>>
 							<<set $tmpGirlBack = 'Basement'>>
 							<<goto 'Child view'>>
