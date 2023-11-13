@@ -1,15 +1,21 @@
 :: Girl visual {"position":"3374,99","size":"100,100"}
 <<set _visualType = ''>>
+<<set _bodyImage = 'body_' + _girlVisual.race + '.svg'>>
 <<if [1,3].includes(_girlVisual.gender)>>
-	<<set _visualType = '_male'>>
+	<<set _bodyImage = 'body_' + _girlVisual.race + '_male.gif'>>
 <</if>>
-<div id="girl_body" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/body_' + _girlVisual.race + _visualType + '.gif\')'"></div>
 <<if [0,2].includes(_girlVisual.gender)>>
+	<div id="npc_visual_body" @class="'' + _girlVisual.race + ''">
+		<<include 'NPC visual body'>>
+	</div>
+	<div id="girl_face" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/face.svg\')'"></div>
+	<div id="girl_breasts" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/breasts_' + _girlVisual.race + '.svg\')'"></div>
 	<div id="girl_hair" @class="'girl_body_hair_' + _girlVisual.hair + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/hair_' + _girlVisual.hair + '.gif\')'"></div>
-	<div id="girl_top" @class="'top' + _girlVisual.clothes.top + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/top_' + _girlVisual.clothes.top + '.gif\')'"></div>
+	<div id="girl_top" @class="'top' + _girlVisual.clothes.top + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/top/' + _girlVisual.clothes.top + '.png\')'"></div>
+	<div id="girl_panties" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/panties.png\')'"></div>
 	<<if _girlVisual.clothes.bot>>
-		<div id="girl_bot" @class="'bot' + _girlVisual.clothes.bot + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/bot_' + _girlVisual.clothes.bot + '.gif\')'"></div>
+		<div id="girl_bot" @class="'bot' + _girlVisual.clothes.bot + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/bot/' + _girlVisual.clothes.bot + '.gif\')'"></div>
 	<</if>>
+<<else>>
+	<div id="girl_body" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/' + _bodyImage + '\')'"></div>
 <</if>>
-
-
