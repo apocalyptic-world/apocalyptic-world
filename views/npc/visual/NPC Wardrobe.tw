@@ -1,0 +1,36 @@
+:: NPC Wardrobe
+
+<<set _wardrobe = {
+    top: {
+        list: setup.range(1, 8),
+        ext: 'png'
+    },
+    bot: {
+        list: setup.range(1, 2),
+        ext: 'gif'
+    }
+}>>
+
+<<for _wardrobeCategory, _wardrobeCategoryItems range _wardrobe>>
+    <<capture _wardrobeCategory>>
+        <fieldset>
+            <legend>
+                <<=_wardrobeCategory>>
+            </legend>
+            <div class="npc-wardrobe-items">
+                <<for _wardrobeItem range _wardrobeCategoryItems.list>>
+                    <<capture _wardrobeItem>>
+                        <div class="npc-wardrobe-item">
+                            [img[setup.ImagePath+'game/doll/' + _wardrobeCategory + '/' + _wardrobeItem + '.' + _wardrobeCategoryItems.ext]]
+                            <br />
+                            <<link 'wear'>>
+                                <<set $tmpGirl.clothes[_wardrobeCategory] = _wardrobeItem>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </div>
+        </fieldset>
+    <</capture>>
+<</for>>

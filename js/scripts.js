@@ -661,3 +661,8 @@ setup.includesAny = function(have, want) {
 setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
+
+setup.range = function (start, end) {
+    return Array.apply(0, Array(end))
+      .map((element, index) => index + start);
+};
