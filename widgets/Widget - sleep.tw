@@ -438,6 +438,9 @@
 			<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
 				<<set _giveWood++>>
 			<</if>>
+			<<if setup.npcInventoryHas('axe')>>
+				<<set _giveWood++>>
+			<</if>>
 			<<if _isStorageAvailable>>
 				<<pickup $storage 'wood' _giveWood>>
 			<<else>>
@@ -645,20 +648,28 @@
 // Perks
 <<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
 	<<capture _playerPerkDay, _playerPerk>>
+		<<if _playerPerk === 'bleeding'>>
+			<<set _item = 'bandage'>>
+			<<if _hasDoctor>>
+				<<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + 'stops your bleeding and saves your bacon')>>
+				<<unset $player.perks[_playerPerk]>>
+				<<continue>>
+			<<elseif $storage.has(_item, 1)>>
+			    <<drop $storage _item 1>>
+				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
+				<<unset $player.perks[_playerPerk]>>
+				<<continue>>
+			<<elseif $backpack.has(_item, 1)>>
+				<<drop $backpack _item 1>>
+				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
+				<<unset $player.perks[_playerPerk]>>
+				<<continue>>
+			<</if>>
+		<</if>>
+
 		<<if _playerPerkDay < $game.day>>
 			<<if _playerPerk === 'bleeding'>>
-			     <<set _item = 'bandage'>>
-			     <<if _hasDoctor>>
-			        <<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + 'stops your bleeding and saves your bacon')>>
-			     <<elseif $storage.has(_item, 1)>>
-			     	<<drop $storage _item 1>>
-				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
-			     <<elseif $backpack.has(_item, 1)>>
-			     	<<drop $backpack _item 1>>
-				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
-			     <<else>>
 				<<set $sleepDead = 'bleed out'>>
-			     <</if>>
 			<</if>>
 			<<run delete $player.perks[_playerPerk]>>
 			<<continue>>
