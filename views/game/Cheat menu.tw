@@ -73,6 +73,18 @@
   		<<set $player.reputation++>>
 		<<goto `passage()`>>
   	<</link>>
+	<<link 'Increase happiness to max for all NPCS'>>
+		<<for _cheatMenuNpcI, _cheatMenuNpc range ($slaves ?? [])>>
+			<<set $slaves[_cheatMenuNpcI].happy = 100>>
+		<</for>>
+		<<for _cheatMenuNpcI, _cheatMenuNpc range ($guests ?? [])>>
+			<<set $guests[_cheatMenuNpcI].happy = 100>>
+		<</for>>
+		<<if $tmpGirl ?? null>>
+			<<set $tmpGirl.happy = 100>>
+		<</if>>
+		<<goto `passage()`>>
+  	<</link>>
   <<if recall($suppCode)>>
   	<<link 'Skip time (1 week)'>>
 		<<sleep>>
