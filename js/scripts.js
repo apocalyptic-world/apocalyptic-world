@@ -239,13 +239,14 @@ setup.getRandomGifts = function (count = 1, exclude) {
 setup.inventoryNpc = [
     'knife',
     'bow',
-    'gas_mask'
+    'gas_mask',
+    'axe'
 ];
 
 setup.inventoryManageable = {
     food: {
         price: 1,
-        range: [1, 5],
+        range: [1, 10],
         chance: 90
     },
     hay: {
@@ -255,7 +256,7 @@ setup.inventoryManageable = {
     },
     wood: {
         price: 1,
-        range: [1, 1],
+        range: [1, 10],
         chance: 20
     },
     champagne: {
@@ -270,7 +271,7 @@ setup.inventoryManageable = {
     },
     rope: {
         price: 1,
-        range: [1,1],
+        range: [1,5],
         chance: 5
     },
     solar_panel: {
@@ -280,7 +281,7 @@ setup.inventoryManageable = {
     },
     bandage: {
         price: 5,
-        range: [1, 2],
+        range: [1, 5],
         chance: 5
     },
     knife: {
@@ -295,7 +296,7 @@ setup.inventoryManageable = {
     },
     plastic: {
         price: 4,
-        range: [2, 4],
+        range: [2, 6],
         chance: 5
     },
     milk: {
@@ -661,3 +662,8 @@ setup.includesAny = function(have, want) {
 setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
+
+setup.range = function (start, end) {
+    return Array.apply(0, Array(end))
+      .map((element, index) => index + start);
+};

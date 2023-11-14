@@ -42,9 +42,17 @@ Then, it began.
 <</if>>
 <<link 'Leave'>>
 	<<if _isAdult>>
-		<<run $guests.push($tmpGirl)>>
-		<<run $nursery.splice($childId, 1)>>
-		<<goto 'Guest house'>>
+		<<if typeof $childId !== 'undefined'>>
+			<<run $guests.push($tmpGirl)>>
+			<<run $nursery.splice($childId, 1)>>
+			<<goto 'Guest house'>>
+		<<elseif typeof $slaveId !== 'undefined'>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<goto 'Basement'>>
+		<<else>>
+			<<set $guests[$guestId] = $tmpGirl>>
+			<<goto 'Guest house'>>
+		<</if>>
 	<<else>>
 		<<goto 'Child view'>>
 	<</if>>

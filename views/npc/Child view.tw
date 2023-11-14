@@ -9,12 +9,11 @@
 		<<set $slaves[$slaveId] = $tmpGirl>>
 	<<elseif typeof $guestId !== 'undefined'>>
 		<<set $guests[$guestId] = $tmpGirl>>
-	<<elseif typeof $charId !== 'undefined'>>
-		<<set $characters[$charId] = $tmpGirl>>
 	<<elseif typeof $childId !== 'undefined'>>
 		<<set $nursery[$childId] = $tmpGirl>>
 	<</if>>
-	<<run delete $slaveId, $charId, $guestId, $childId>>
+	<<unset $slaveId, $charId, $guestId, $childId>>
+
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>
 	<<else>>

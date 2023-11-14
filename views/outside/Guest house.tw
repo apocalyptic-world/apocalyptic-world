@@ -1,8 +1,5 @@
-:: Guest house [Place] {"position":"1219,769","size":"100,100"}
+:: Guest house [Place bg-guesthouse] {"position":"1219,769","size":"100,100"}
 <h1 class="ptitle">GUEST HOUSE</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/guesthouse_head.jpg']]
-</div>
 <<if ($game.location.lab ?? false)>>
 	<br /><br />
 	<<link 'Lab'>>
@@ -52,7 +49,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<span @class="''+_genderClass+''">
 							<<link _guest.name>>
 								<<set $guestId = _guestI>>
-								<<run delete $slaveId, $charId>>
+								<<unset $slaveId, $charId, $childId>>
 								<<set $tmpGirl = _guest>>
 								<<set $tmpGirlBack = 'Guest house'>>
 								<<goto 'Child view'>>
@@ -70,7 +67,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 							  <<set $tmpGirlCapture to false>>
 							  <<set $tmpGirl.rape to false>>
 							  <<set $guestId = _guestI>>
-							  <<run delete $slaveId>>
+							  <<unset $slaveId>>
 							  <<set $tmpGirlViewBack = (!_guest.gender ? 'Girl' : 'Guy') + ' view - guest'>>
 							  <<goto `$tmpGirlViewBack`>>
 							<</link>>
