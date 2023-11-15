@@ -23,8 +23,7 @@
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
 	<<link 'Fuck her'>>
 		<<set $tmpGirlViewBack = 'Girl view - guest'>>
-		<<set _randomGuestFuck = randomInteger(1,3)>>
-		<<if (!$tmpGirl.likesGuys || $tmpGirl.relationship < 50 || _randomGuestFuck === 3) && !$tmpGirl.traits.includes('nymphomaniac')>>
+		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<goto 'Girl fuck - no'>>
 		<<else>>
 			<<goto 'Girl fuck'>>
