@@ -73,7 +73,9 @@
 
 <<if $player.energy >= 20 && hasTime(10) && $backpack.has('bow')>>
 	<<link 'Go hunt'>>
-    	<<if setup.percentageChance(70)>>
+		<<set _fullmoon = setup.isFullMoon()>>
+    	<<if (!_fullmoon  && setup.percentageChance(70)) ||
+			 ( _fullmoon  && setup.percentageChance(30))>>
         		<<set _huntEnemy = 'deer'>>
         <<else>>
         		<<set _huntEnemy = 'wolf'>>

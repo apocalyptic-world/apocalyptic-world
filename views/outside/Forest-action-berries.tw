@@ -4,11 +4,16 @@
 [img[setup.ImagePath+'places/explore/forest_berries.webp']]
 </center>
 <br /><br />
-You picked up <strong>2</strong> food
-<<pickup $backpack 'food' 2>>
+<<set _newmoon = setup.isNewMoon()>>
+<<set _food = 2 * (_newmoon ? 3 : 1)>>
+You picked up <strong>_food</strong> food.
+<<pickup $backpack 'food' _food>>
 <br /><br />
+<<addmins 120>>
+<<include 'Forest - new moon include'>>
+<<include 'Forest - full moon include'>>
 [[Back|Outside]]
 
-<<addmins 120>>
+
 
 

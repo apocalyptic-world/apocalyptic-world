@@ -1,0 +1,25 @@
+:: Forest - full moon include [include]
+
+<<set _fullmoon = setup.isFullMoon()>>
+<<if _fullmoon>>
+    <<set _bow = $backpack.has('bow')>>
+    <<if !_bow>>
+        <<for _companionKey, _companion range $player.companions>>
+            <<set _npcId = _companionKey.split(':')[1]>>
+            <<set _npc = $guests[_npcId]>>
+		    <<if !setup.npcInventoryHas(_npc, 'bow')>>
+                <<set _bow = true>>
+                <<break>>
+            <</if>>  
+        <</for>>
+    <</if>>
+
+    <<if $player.energy >= 10 && hasTime(5) && _bow>>
+        You hear a lone wolf howling near-by. Seems like a simple hunt.
+	    <<link 'Hunt that wolf'>>
+ 		    <<energy -10>>
+		    <<addhours 5>>
+		    <<shooterGame null 'wolf' null 'Forest - hunt' 'Forest - hunt'>>
+	    <</link>>
+    <</if>>
+<</if>>
