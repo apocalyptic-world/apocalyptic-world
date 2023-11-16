@@ -45,46 +45,21 @@
 	</div>
 
 		<div id="npc_stats">
-		<span>Name: <<=$tmpGirl.name>></span>
-		<span>Age: <<=_age>></span>
-		<span>Beauty score: <<=$tmpGirl.beauty>></span>
-		<span>Eyes: <<=$tmpGirl.eyes>></span>
-				
-		<<if !_unknown && !$charId>>
-			<<if $tmpGirl.relationship >= 50>>
-				<span>Likes: <<=$tmpGirl.likes>></span>
-				<span>Dislikes: <<=$tmpGirl.dislikes>></span>
-				<span>Personality: <<=$tmpGirl.personality>></span>
+			<span>Name: <<=$tmpGirl.name>></span>
+			<span>Age: <<=_age>></span>
+			<span>Beauty score: <<=$tmpGirl.beauty>></span>
+			
+			<<if !$tmpGirlCapture>>
+				<span>Relationship: <<print $tmpGirl.relationship>></span>
 			<</if>>
-			<span>Gender: <<=setup.genderDescription($tmpGirl)>></span>
-			<span>Orientation: <<=$tmpGirl.orientation>></span>
-		<</if>>
-		
-		<<if !$tmpGirlCapture>>
-			<span>Relationship: <<print $tmpGirl.relationship>></span>
-		<</if>>
-		
-		<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined'>>
-			<span>Strength: <<=$tmpGirl.strength>></span>
-			<span>Submission: <<= $tmpGirl.sub ?? 0>></span>
-
-			<<if !$tmpGirl.gender>>
-				<span>Orgasms: <<=$tmpGirl.orgasms>></span>
+			
+			<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined'>>
+				<span>Strength: <<=$tmpGirl.strength>></span>
 			<</if>>
-
-			<<if !$tmpGirl.gender || $tmpGirl.anal > 0>>
-				<span>Anal: <<=$tmpGirl.anal>></span>
-			<</if>>
-				
-		<</if>>
-	</div>
+			<div>Submission: <<= $tmpGirl.sub ?? 0>></div>
+		</div>
 
 	<<if !_unknown || $player.int > 30 || _isSlaveMarket>>
-		<<if !_unknown>>
-			<div id="npc-birthday">
-				Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
-			</div>
-		<</if>>
 		<div id="npc-traits">
 				Traits: 
 		<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
@@ -112,6 +87,49 @@
 		<</if>>
 	  </div>
   <</if>>
+
+  	<<linkreplace 'More info'>>
+		<div id="additional-npc-info">
+			<<if !$tmpGirl.gender>>
+				<div>
+					Orgasms: <<=$tmpGirl.orgasms>>
+				</div>
+				<<if !$tmpGirl.gender>>
+					Creampies: <<=$tmpGirl.creampies ?? 0>>
+				<</if>>
+				<div>
+					Gender: <<=setup.genderDescription($tmpGirl)>>
+				</div>
+				<div>
+					Orientation: <<=$tmpGirl.orientation>>
+				</div>
+				<<if !$tmpGirl.gender || $tmpGirl.anal > 0>>
+						<div>Anal: <<=$tmpGirl.anal>></div>
+					<</if>>
+
+				<<if !_unknown && !$charId && $tmpGirl.relationship >= 50>>
+					<div>
+						Likes: <<=$tmpGirl.likes>>
+					</div>
+					<div>
+						Dislikes: <<=$tmpGirl.dislikes>>
+					</div>
+					<div>
+						Personality: <<=$tmpGirl.personality>>
+					</div>
+				<</if>>
+				<div>
+					Eyes: <<=$tmpGirl.eyes>>
+				</div>
+				<div>
+					Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
+				</div>
+			<</if>>
+		</div>
+	
+	<</linkreplace>>
+
+
 </div>
 </div>
 <<if typeof $tmpGirl.clothes === 'undefined'>>
