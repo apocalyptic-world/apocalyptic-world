@@ -1,4 +1,7 @@
 sugarcube-2:
+  enums:
+    peoplelist: "'guests'|'slaves'"
+    statlist: "'happy'|'relationship'|'sub'"
   macros:
     horny_reset:
       name: horny_reset
@@ -116,6 +119,13 @@ sugarcube-2:
       name: wakeUp
     setNpcStats:
       name: setNpcStats
+      parameters:
+        - ('guest'|'slave') &+ number &+ ('happy'|'relationship'|'sub')  &+ number
+      description: |-
+        *Syntax:* `<<setNpcStats list index stat change>>`
+
+        list = guest|slave,
+        stat = happy|relationship|sub
     happyIcon:
       name: happyIcon
     anongirl:
@@ -132,7 +142,7 @@ sugarcube-2:
       parameters:
         - var &+ string |+ string
       description: |-
-        *Syntax:* `<<shop shopItems passage buy_code`
+        *Syntax:* `<<shop shopItems passage buy_code>>`
     linkdesc:
       name: linkdesc
       container: true
@@ -181,5 +191,11 @@ sugarcube-2:
       container: true
     domQuest2Invite:
       name: domQuest2Invite
-      parameters: string
-
+      parameters: 
+        - ('guests'|'slaves')
+      description: |-
+        *Syntax:* `<<domQuest2Invite list>>`
+    backButton:
+      name: backbutton
+      parameters: 
+        - string
