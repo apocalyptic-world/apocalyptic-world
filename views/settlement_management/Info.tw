@@ -1,0 +1,38 @@
+:: Settlement management - info
+
+<<set _settlementStatsData = {
+	work: {},
+	settlets: 0,
+	happy: 0,
+}>>
+<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
+	<<if _statsNpc.assignedTo>>
+		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
+		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
+		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
+		<<set _settlementStatsData['settlers']++>>
+	<</if>>
+<</for>>
+<<for _statsNpcI, _statsNpc range ($slaves ?? [])>>
+	<<if _statsNpc.assignedTo>>
+		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
+		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
+		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
+		<<set _settlementStatsData['settlers']++>>
+	<</if>>
+<</for>>
+
+<<set _happiness = {
+	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
+}>>
+
+<table class="mc-stats-table">
+	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td></tr>
+	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td></tr>
+	<tr><td>Nursery:</td><td><<=($guests ?? []).length>></td></tr>
+	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td></tr>
+	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
+	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
+	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td></tr>
+	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td></tr>
+</table>

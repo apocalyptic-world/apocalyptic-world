@@ -1,0 +1,40 @@
+:: Settlement management
+<h1 class="ptitle">
+    <<=$game.cabinName>>
+</h1>
+
+<<set _tabs = [
+    {
+        name: 'info',
+        title: 'Info'
+    }, 
+    {
+        name: 'customize',
+        title: 'Customize'
+    }
+];>>
+<<set _currentTab = $game.managementTab ?? 'info'>>
+<ul class="tab">
+    <<for _tabKey, _tab range _tabs>>
+        <<capture _tab>>
+            <<set _tabClass = _tab.name === _currentTab ? 'active' : ''>>
+            <li @class="''+ _tabClass +''">
+                <<link _tab.title>>
+                    <<set $game.managementTab = _tab.name>>
+                    <<goto 'Settlement management'>>
+                <</link>>
+            </li>
+        <</capture>>
+    <</for>>
+</ul>
+
+<div class="tabcontent">
+    <<set _viewName = 'Settlement management - ' + _currentTab>>
+    <<include _viewName>>
+</div>
+
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Bedroom'>>
+<</link>>
+

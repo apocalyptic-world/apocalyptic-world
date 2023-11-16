@@ -1,86 +1,39 @@
 :: MC stats
+<h2>Your stats</h2>
+<h4>Reputation (<<=$player.reputation>>)</h4>
+<<if $player.reputation < 10>>
+	Nobody knows you. When you go around, everyone will try to take advantage of you.
+<<elseif $player.reputation < 20>>
+	Your name is whispered occasionally, though not with much significance.
+<<elseif $player.reputation < 30>>
+	Your deeds have started to catch the attention of the local communities.
+<<elseif $player.reputation < 50>>
+	You're gaining a following of supporters who admire your achievements.
+<<elseif $player.reputation < 100>>
+	You're a well-known figure in multiple regions, often recognized on your travels.
+<<else>>
+	Your actions have earned you respect and recognition from various communities. People speak of your achievements with admiration and respect.
+<</if>>
+<h4>Bounty hunter reputation (<<=$player.reputation_bounty_hunter>>)</h4>
+<<if $player.reputation_bounty_hunter < 1>>
+	You are nobody.
+<<elseif $player.reputation_bounty_hunter < 10>>
+	Few people have seen you but they still laugh at you
+<<elseif $player.reputation_bounty_hunter < 20>>
+	Your deeds have started to catch the attention of the bounty hunter community.
+<<else>>
+	People are starting to avoid you and be scared of you.
+<</if>>
+<br /><br />
+<table class="mc-stats-table">
+	<tr><td>People captured:</td><td><<=$player.stats.people_captured ?? 0>></td></tr>
+	<tr><td>People killed:</td><td><<=$player.stats.people_killed ?? 0>></td></tr>
+	<tr><td>Girls impregnated:</td><td><<=$player.stats.girls_impregnated ?? 0>></td></tr>
+	<tr><td>Slaves sold:</td><td><<=$player.stats.slaves_sold ?? 0>></td></tr>
+	<tr><td>Slaves killed:</td><td><<=$player.stats.slaves_killed ?? 0>></td></tr>
+	<tr><td>Slaves released:</td><td><<=$player.stats.slaves_released ?? 0>></td></tr>
+</table>
 
-<<set _settlementStatsData = {
-	work: {},
-	settlets: 0,
-	happy: 0,
-}>>
-<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
-	<<if _statsNpc.assignedTo>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
-		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
-		<<set _settlementStatsData['settlers']++>>
-	<</if>>
-<</for>>
-<<for _statsNpcI, _statsNpc range ($slaves ?? [])>>
-	<<if _statsNpc.assignedTo>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
-		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
-		<<set _settlementStatsData['settlers']++>>
-	<</if>>
-<</for>>
-
-<<run console.log(_settlementStatsData)>>
-
-<<set _happiness = {
-	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
-}>>
-
-<div id="mc-stats">
-	<div class="mc-stats-container">
-		<h2>Your stats</h2>
-		<h4>Reputation (<<=$player.reputation>>)</h4>
-		<<if $player.reputation < 10>>
-			Nobody knows you. When you go around, everyone will try to take advantage of you.
-		<<elseif $player.reputation < 20>>
-			Your name is whispered occasionally, though not with much significance.
-		<<elseif $player.reputation < 30>>
-			Your deeds have started to catch the attention of the local communities.
-		<<elseif $player.reputation < 50>>
-			You're gaining a following of supporters who admire your achievements.
-		<<elseif $player.reputation < 100>>
-			You're a well-known figure in multiple regions, often recognized on your travels.
-		<<else>>
-			Your actions have earned you respect and recognition from various communities. People speak of your achievements with admiration and respect.
-		<</if>>
-		<h4>Bounty hunter reputation (<<=$player.reputation_bounty_hunter>>)</h4>
-		<<if $player.reputation_bounty_hunter < 1>>
-			You are nobody.
-		<<elseif $player.reputation_bounty_hunter < 10>>
-			Few people have seen you but they still laugh at you
-		<<elseif $player.reputation_bounty_hunter < 20>>
-			Your deeds have started to catch the attention of the bounty hunter community.
-		<<else>>
-			People are starting to avoid you and be scared of you.
-		<</if>>
-		<br /><br />
-
-		<table class="mc-stats-table">
-			<tr><td>People captured:</td><td><<=$player.stats.people_captured ?? 0>></td></tr>
-			<tr><td>People killed:</td><td><<=$player.stats.people_killed ?? 0>></td></tr>
-			<tr><td>Girls impregnated:</td><td><<=$player.stats.girls_impregnated ?? 0>></td></tr>
-			<tr><td>Slaves sold:</td><td><<=$player.stats.slaves_sold ?? 0>></td></tr>
-			<tr><td>Slaves killed:</td><td><<=$player.stats.slaves_killed ?? 0>></td></tr>
-			<tr><td>Slaves released:</td><td><<=$player.stats.slaves_released ?? 0>></td></tr>
-		</table>
-	</div>
-
-	<div class="mc-stats-container">
-		<h2>Settlement stats</h2>
-		<table class="mc-stats-table">
-			<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td></tr>
-			<tr><td>Guests:</td><td><<=($guests ?? []).length>></td></tr>
-			<tr><td>Nursery:</td><td><<=($guests ?? []).length>></td></tr>
-			<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td></tr>
-			<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
-			<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
-			<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td></tr>
-			<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td></tr>
-		</table>
-	</div>
-</div>
 <br /><br />
 <<link 'Leave'>>
 	<<goto 'Bedroom'>>
