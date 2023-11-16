@@ -102,6 +102,14 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easy')>></strong> win the fight and
 						<</if>>
 					<</if>>
 			 	</td>
+				<td>
+					<<set _ageReal = setup.getAge($fight.defeatedEnemies[_i])>>
+					<<set _age = setup.agePeriod(_ageReal)>>
+					Age: <<= _age>> 
+					<<if [0, 2].includes($fight.defeatedEnemies[_i].gender)>>
+						Beauty: <<=$fight.defeatedEnemies[_i].beauty>>
+					<</if>>
+				</td>
 			</tr>
 		  <</capture>>
 	  <</for>>
