@@ -1,7 +1,7 @@
 :: Girl - workout together {"position":"3081,583","size":"100,100"}
 <h1 class="ptitle"><<cabinName>></h1>
 <<set $tmpGirl.location = 'workout'>>
-<<addmins 60>>
+<<addmins 30>>
 <<actionImage $tmpGirl workout>>
 <br /><br /> 
 You start with some light stretches to warm up your muscles and prevent injury. You chat and catch up as you do some arm circles, shoulder rolls, and leg stretches.
@@ -10,50 +10,24 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 <strong><<=$tmpGirl.name>> strength increased by 1</strong>
 <br /><br />
 
-<<set _wantToHaveFunWorkoutTogether = $tmpGirl.horny > 50 || setup.percentageChance(70)>>
-<<set _notInterested = ($guestId && !$tmpGirl.likesGuys)>>
 <<linkreplace 'Pull down her shorts'>>
 	<<actionImage $tmpGirl pull_pants>>
 	<br /><br />
-	<<if _notInterested>>
-		She looks at you with widened eyes and an angry face. Then she reminds you that she's not interested in men.
-	<<elseif _wantToHaveFunWorkoutTogether>>
+	<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 		She giggles and smiles at you as you pull down her shorts.
 		<br /><br />
 		<<set $tmpGirl.relationship++>>
 		<strong><<=$tmpGirl.name>> relationship increased by 1</strong>
+		[[Fuck her|Girl fuck]]
 	<<else>>
-		She flinches and asks you to stop. She's not in the mood right now. 
-	<</if>>
-	<br /><br />
-	
-	<<if !_notInterested>>
-		<<linkreplace 'Fuck her'>>
-			<<actionImage $tmpGirl fuck>>
-			<br /><br />
-			You shove your hard dick inside her sweaty pussy and fuck her as she moans.
-			<br /><br />
-			<<set $tmpGirl.virgin = false>>
-			<<if _wantToHaveFunWorkoutTogether>>
-				<<set $tmpGirl.horny = 0>>
-				<<set $tmpGirl.relationship += 3>>
-				<<set $tmpGirl.strength++>>
-				<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
-				<br />
-				<strong><<=$tmpGirl.name>> strength increased by 1</strong>
-				<<horny_reset>>
-			<<else>>
-				<<set $tmpGirl.horny = 0>>
-				<<set $tmpGirl.relationship -= 10>>
-				<strong><<=$tmpGirl.name>> relationship decreased by 10</strong>
-				<<horny_reset>>
-			<</if>>
-			<br /><br />
-		<</linkreplace>>
+		<<if !$tmpGirl.likesGuys>>
+			She looks at you with widened eyes and an angry face. Then she reminds you that she's not interested in men.
+		<<else>>
+			She flinches and asks you to stop.
+		<</if>>
+		[[Force her|Girl fuck][$tmpGirl.relationship -=30]]
 	<</if>>
 <</linkreplace>>
 <<link 'Finish'>>
 	<<goto $tmpGirlViewBack>>
 <</link>>
-
-
