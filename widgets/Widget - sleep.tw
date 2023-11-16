@@ -232,9 +232,11 @@
 			<<if $storage.has('food')>>
 				<<drop $storage 'food' 1>> 
 				<<set $slaves[_i].food to 100>>
+				<<set $slaves[_i].happy++>>
 			<<elseif $backpack.has('food')>>
 				<<drop $backpack 'food' 1>> 
 				<<set $slaves[_i].food to 100>>
+				<<set $slaves[_i].happy++>>
 			<</if>>
 
 			<<if $slaves[_i].food <= -20>>
@@ -543,9 +545,11 @@
 			<<if $storage.has('food')>>
 				<<drop $storage 'food' 1>> 
 				<<set $guests[_guestI].food to 100>>
+				<<set $guests[_guestI].happy++>>
 			<<elseif $backpack.has('food')>>
 				<<drop $backpack 'food' 1>> 
 				<<set $guests[_guestI].food to 100>>
+				<<set $guests[_guestI].happy++>>
 			<</if>>
 
 			<<if $guests[_guestI].food <= -20>>
