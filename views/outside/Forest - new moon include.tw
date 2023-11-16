@@ -1,0 +1,16 @@
+:: Forest - new moon include [include]
+
+<<set _newmoon = setup.isNewMoon()>>
+<<if _newmoon>>
+    <<set _mushroom to randomInteger(1,2)>>
+    You also got <strong>_mushroom</strong> mushroom<<=_mushroom > 1 ? 's' : ''>>.
+    <<pickup $backpack 'glowing_mushroom' _mushroom>>
+
+    <<if $characters.vincent.quests.pregnancy_talked && $player.energy >= 30>>
+        It seems like the mushrooms glows extra brightly today so they might be easier to find.<br/>
+        (You wonder if is it because of the new moon?)
+	    <<link 'Pick up glowing mushrooms'>>
+		    <<goto 'Forest - mushrooms'>>
+	    <</link>>
+    <</if>>
+<</if>>

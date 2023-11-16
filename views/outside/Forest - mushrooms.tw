@@ -3,10 +3,10 @@
 <br /><br />
 <<energy -30>>
 <<set _newmoon = setup.isNewMoon()>>
-<<set _count =  randomInteger(0,1) + (_newmoon ? randomInteger(1,4) : 0)>>
+<<set _count =  randomInteger(0,1) + (_newmoon ? randomInteger(1,2) : 0)>>
 <<if _newmoon && setup.percentageChance(80)>>
 	You find a patch of perishable fruit and berries. 
-	Since they spoil easily (not storable) you decide to have a snack. 
+	Since they spoil easily (not storable) you decide to have a snack, eating your full. 
 	<<set $player.hunger = 100>>
 	<<for _companionKey, _companion range $player.companions>>
         <<set _npcId = _companionKey.split(':')[1]>>
@@ -22,7 +22,7 @@
 	</center>
 	<br /><br />
 	<<pickup $backpack 'glowing_mushroom' _count>>
-	<strong>You picked up _count glowing mushroom<<=_count > 1 ? 's' : ''>></strong>
+	<strong>You picked up _count glowing mushroom<<=_count > 1 ? 's' : ''>></strong>.
 <<else>>
 	<center>
 		[img[setup.ImagePath+'places/explore/forest_walk.webp']]
@@ -31,8 +31,10 @@
 	You found nothing...
 <</if>>
 <br /><br />
+<<addmins 120>>
+<<include 'Forest - full moon include'>>
 [[Back|Outside]]
 
-<<addmins 120>>
+
 
 
