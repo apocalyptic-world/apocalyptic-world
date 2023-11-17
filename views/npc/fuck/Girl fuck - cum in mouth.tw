@@ -4,12 +4,25 @@
 <<set $player.sexp++>>
 <<addmins 5>>
 
+<<set $tmpGirl.sexStats ??= {}>>
+<<set $tmpGirl.sexStats.cum_in_mouth ??= 0>>
+<<set $tmpGirl.sexStats.cum_in_mouth++>>
+
 <<if ($tmpGirl.traits ?? []).includes('cumslut') && $tmpGirl.relationship < 100>>
 	<<set $tmpGirl.relationship++>>
 	<strong><<=setup.displayName($tmpGirl)>> swallows all cum and even licks her fingers with smile on her face<br />
 	Relationship increased by 1
 	</strong>
 	<br /><br />
+<</if>>
+<<if $tmpGirl.sexStats.cum_in_mouth >= 100 && !($tmpGirl.traits ?? []).includes('cumslut') && setup.percentageChance(5)>>
+	<<if typeof $tmpGirl.traitsLocked === 'undefined'>>
+		<<set $tmpGirl.traitsLocked = setup.getRandomTraits(3)>>
+	<</if>>
+	<<if !$tmpGirl.traitsLocked.includes('cumslut')>>
+		<<run $tmpGirl.traits.push('cumslut')>>
+		<strong><<= setup.displayName($tmpGirl)>> got cumslut trait!</strong>
+	<</if>>
 <</if>>
 
 [[Back|Girl fuck]]

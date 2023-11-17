@@ -458,6 +458,21 @@
 				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>')>>
 			<</if>>
 		<</if>>
+		<<if $guests[_guestI].assignedTo === 'kitchen' && !_isSick>>
+			<<set $guests[_guestI].stats['kitchen'] ??= 0>>
+			<<set $guests[_guestI].stats['kitchen']++>>
+
+			// Learn skill
+			<<if $guests[_guestI].stats['kitchen'] > 100 && !($guests[_guestI].skills ?? []).includes('cook')>>
+				<<if typeof $guests[_guestI].skills === 'undefined'>>
+					<<set $guests[_guestI].skills = []>>
+				<</if>>
+				<<run $guests[_guestI].skills.push('cook')>>
+				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned cook skill</span>')>>
+			<</if>>
+
+		<</if>>
+
 		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick>>
 			<<if typeof $guests[_guestI].stats['scavenging'] === 'undefined'>>
 				<<set $guests[_guestI].stats['scavenging'] = 0>>

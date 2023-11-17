@@ -90,12 +90,14 @@
 
   	<<linkreplace 'More info'>>
 		<div id="additional-npc-info">
-			<<if !$tmpGirl.gender>>
-				<div>
-					Orgasms: <<=$tmpGirl.orgasms>>
-				</div>
+			<div id="additional-npc-info-single">
 				<<if !$tmpGirl.gender>>
-					Creampies: <<=$tmpGirl.creampies ?? 0>>
+					<div>
+						Orgasms: <<=$tmpGirl.orgasms>>
+					</div>
+				<</if>>
+				<<if !$tmpGirl.gender>>
+					Creampies: <<=$tmpGirl?.sexStats?.creampies ?? 0;>>
 				<</if>>
 				<div>
 					Gender: <<=setup.genderDescription($tmpGirl)>>
@@ -104,8 +106,8 @@
 					Orientation: <<=$tmpGirl.orientation>>
 				</div>
 				<<if !$tmpGirl.gender || $tmpGirl.anal > 0>>
-						<div>Anal: <<=$tmpGirl.anal>></div>
-					<</if>>
+					<div>Anal: <<=$tmpGirl.anal>></div>
+				<</if>>
 
 				<<if !_unknown && !$charId && $tmpGirl.relationship >= 50>>
 					<div>
@@ -123,6 +125,23 @@
 				</div>
 				<div>
 					Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
+				</div>
+			</div>
+			<<if ($tmpGirl.stats ?? {})>>
+				<div id="npc-work-stats">
+					<h4 style="display:block; margin-bottom: 0px;">Work stats</h4>
+					<table style="margin-top: 0px;">
+					<<for _npcWorkStatsLocation, _npcWorkStatsDays range $tmpGirl.stats>>
+						<tr>
+							<td>
+								<<=_npcWorkStatsLocation>>:
+							</td>
+							<td>
+								<<=_npcWorkStatsDays>>
+							</td>
+						</tr>
+					<</for>>
+					</table>
 				</div>
 			<</if>>
 		</div>
