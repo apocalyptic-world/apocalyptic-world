@@ -1,0 +1,150 @@
+:: Girl fuck 2.0 [sex]
+
+<<set _sexActions = {
+    handjob: {
+        title: 'Handjob',
+        minAction: 10,
+        horny: 20,
+        maxCorruption: 10
+    },
+    footjob: {
+        title: 'Footjob',
+        minAction: 20,
+        horny: 20,
+        maxCorruption: 20
+    },
+    titjob: {
+        title: 'Titjob',
+        minAction: 35,
+        show: ['medium', 'big'].includes($tmpGirl.breasts),
+        horny: 20,
+        maxCorruption: 35
+    },
+    bj: {
+        title: 'Blowjob',
+        minAction: 40,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
+        horny: 0,
+        maxCorruption: 40,
+        stats: 'bj'
+    },
+    dp: {
+        title: 'Deepthroat',
+        minAction: 60,
+        show: ['bj', 'dp'].includes($sexAction),
+        horny: 20,
+        maxCorruption: 60,
+        positive: ($tmpGirl.traits ?? []).includes('deepthroat'),
+        stats: 'dp'
+    },
+    pussy_lick: {
+        title: 'Lick pussy',
+        minAction: 30,
+        horny: 0,
+        maxCorruption: 30,
+        positive: true
+    },
+    pussy: {
+        title: 'Fuck pussy',
+        minAction: 50,
+        horny: 20,
+        maxCorruption: 50,
+        positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
+        pussy: 'pussy'
+    },
+    anal_fingering: {
+        title: 'Finger ass',
+        minAction: 60,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        horny: 0,
+        maxCorruption: 55,
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 10),
+        stats: 'anal'
+    },
+    anal: {
+        title: 'Fuck ass',
+        minAction: 70,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        horny: 20,
+        maxCorruption: 70,
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20),
+        stats: 'anal'
+    },
+    cum_in_mouth: {
+        show: false,
+        positive: ($tmpGirl.traits ?? []).includes('cumslut')
+    }
+}>>
+
+<<if typeof $sexAction !== 'undefined'>>
+	<<addmins 5>>
+	<<energy -5>>
+    <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
+    <<horny _hornyGained>>
+	<<set _showSex = true>>
+
+    <<if $sexAction === 'anal'>>
+        <<include 'Fuck 2.0 anal'>>
+    <</if>>
+
+    <<if _showSex>>
+	    <<actionImage $tmpGirl $sexAction>>
+        <br />
+    <</if>>
+    
+    <<if $sexForced>>
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
+			$tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+			$tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+		>>
+		She asks you to leave her alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+	<<else>>
+		<<set
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+		>>
+		She welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+	<</if>>
+    <br /><br />
+
+    <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
+        <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
+		She is getting more corrupted.<strong> (Corruption + 1)</strong>
+        <br /><br />
+    <</if>>
+
+
+    <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+        <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+		Her body reacts positively to you. <strong>(Horny + 20)</strong>
+		<br /><br />
+    <</if>>
+
+    <<if $tmpGirl.horny >= 100>>
+		<<include 'Fuck 2.0 squirt'>>
+		<<=setup.displayName($tmpGirl)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+		<br /><br />		
+		<<set $tmpGirl.horny = 0,
+			$tmpGirl.orgasms++,
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+	<</if>>
+
+    <<if _sexActions[$sexAction]?.stats>>
+        <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+    <</if>>
+    <<if $sexAction === 'pussy'>>
+        <<set $tmpGirl.virgin = false>>
+    <</if>>
+
+    <<include 'Fuck 2.0 traits'>>
+
+	<<if $sexAction == 'cum_in_pussy'>>
+        <<include 'Fuck 2.0 cum in pussy'>>
+	<</if>>
+<</if>>
+
+<<include 'Fuck 2.0 buttons'>>
+
+    

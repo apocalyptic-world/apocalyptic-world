@@ -485,9 +485,6 @@ setup.pronounceWhat = function (npc) {
 
 setup.getNpcById = function(id) {
     var npcList = variables().slaves.concat(variables().guests, (variables().nursery ?? []));
-
-    console.log(npcList);
-
     for (var i = 0; i < npcList.length; i++) {
         if (npcList[i].id === id) {
             return npcList[i];
