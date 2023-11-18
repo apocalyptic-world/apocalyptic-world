@@ -1,0 +1,64 @@
+:: Widget - mods [mods widget]
+
+/* a little automation if settings allow it */
+<<widget auto_distribute>>
+    <<set $game.mods ??= {}>>
+    <<set _axe = $game.mods.auto_axe ?? false>>
+    <<set _bow = $game.mods.auto_bow ?? false>>
+    <<set _items = ['axe', 'bow']>>
+    <<if _axe || _bow>>
+        <<set _isStorageAvailable = ($game.location.shop ?? false)>>
+        <<set _npcs = $slaves.concat($guests)>> 
+        <<for _i, _npc range _npcs>>
+            <<set _axecount = setup.npcInventoryCount(_npc, 'axe')>>
+            <<if _axecount > 1>>
+                /* WORK IN PROGRESS */
+            <</if>>
+            <<set _bowcount = setup.npcInventoryCount(_npc, 'bow')>>
+        <</for>>
+        /* mc sould have at least one bow and one axe, if available */
+        <<if _isStorageAvailable>>
+            <<for _i, _item range ['axe', 'bow']>>
+                <<if !$backpack.has(_item) && storage.has(_item)>>
+                    <<transfer $storage $backpack _item 1>>
+                    You get a _item.<br/>
+                <</if>>
+            <</for>>
+        <</if>>
+    <</if>>
+<</widget>>>>
+
+
+<<widget auto_broken>>
+	/* a little automation if settings allow it */
+	<<if settings.magnus_castor>>
+		<<set _isStorageAvailable = ($game.location.shop ?? false)>>
+		<<set _victims = []>>
+		<<set _npcList = $slaves.concat($guests)>>
+		<<set _item = 'buttplug'>>
+		<<for _i = 0; _i < _npcList.length; _i++>>
+			<<set _npc = _npcList[_i]>>
+			<<if _npc.sub >= 20 && _npc.anal < 20 && setup.getAge(_npc) >= 18 &&
+				 !_npc.traits.includes('analslut')>>
+				<<if !_npc.buttplug>>
+					<<run _victims.push(_npc)>>
+				<</if>>
+			<<elseif _npc.buttplug>>
+				<<set _npc.buttplug = false>>
+				<<pickup $backpack _item 1>>
+			<</if>> 
+		<</for>>
+		<<for _i = 0; _i < _victims.length; _i++>>
+			<<set _npc = _victims[_i]>>
+			<<if !((_isStorageAvailable && $storage.has(_item)) || $backpack.has(_item))>>
+				<<break>>
+			<</if>>
+			<<set _npc.buttplug = true>>
+			<<if _isStorageAvailable && $storage.has(_item)>>
+				<<drop $storage _item 1>>
+			<<else>>
+				<<drop $backpack _item 1>>
+			<</if>>
+		<</for>>
+	<</if>>
+<</widget>>
