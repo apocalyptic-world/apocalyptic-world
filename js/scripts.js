@@ -384,13 +384,7 @@ setup.calculateDaysBetween = function (start, end) {
 };
 
 setup.getRandomPersons = function(persons, limit = 2) {
-    var randomIds = setup.getRandomPersonIds(persons, limit);
-    var randomPersons = [];
-    for (var i = 0; i < randomIds.length; i++) {
-        randomPersons.push(persons[i]);
-    }
-
-    return randomPersons;
+    return shuffle(persons).slice(0, limit);
 };
 
 setup.getRandomPersonIds = function(persons, limit = 2) {
