@@ -26,3 +26,15 @@ setup.npcInventoryList = function (npc) {
 
     return items;
 }
+
+/* In cabin we have both $storage and $backpack */
+setup.cabinInvCount = function (item) {
+    const storeAvailable = variables().game.location.shop ?? false;
+    return  (storeAvailable ? variables().storage.count(item) : 0) + variables().backpack.count(item);
+}
+
+setup.cabinInvHas = function (item, count=1) {
+    return setup.cabinInvCount(item) >= count;
+}
+
+/* && */

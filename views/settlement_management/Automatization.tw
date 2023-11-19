@@ -1,0 +1,27 @@
+:: Settlement management - automatization [include]
+
+/* I reallly need a nice toggle-button; on-off */
+<h1>Auto-rules for the house</h1>
+<<set $automatization ??= {}>>
+<table class="mc-stats-table">
+    <<for _dummy, _autoId range Object.keys(setup.automatization)>>
+        <<capture _autoId>>
+            <<set $automatization[_autoId] ??= false>>
+            <<set _auto = setup.automatization[_autoId] >>
+            <tr>
+                <td><<=_auto.name>></td>
+                <td><<=_auto.description>></td>
+                <td>
+                    <<set _linktext = $automatization[_autoId] ? 'Active →  Off' : 'Off →  Active'>>
+                    <<link _linktext>>
+                        <<set $automatization[_autoId] = !$automatization[_autoId]>>
+                        <<goto 'Settlement management'>>
+                    <</link>>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+
+
+             
