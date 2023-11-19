@@ -90,23 +90,23 @@
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
+
+        <<if $sexForced>>
+            <<set
+                $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
+                $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+                $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+            >>
+            She asks you to leave her alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+        <<else>>
+            <<set
+                $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+                $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+            >>
+            She welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+        <</if>>
+         <br /><br />
     <</if>>
-    
-    <<if $sexForced>>
-		<<set
-			$tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
-			$tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
-			$tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
-		>>
-		She asks you to leave her alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
-	<<else>>
-		<<set
-			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
-			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
-		>>
-		She welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
-	<</if>>
-    <br /><br />
 
     <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
         <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>

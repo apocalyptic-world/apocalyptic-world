@@ -96,10 +96,9 @@
         <br />
         Suddenly, in a surge of brutal violence, he raises his bat high and brings it down with a sickening thud. The impact echoes through the chamber, a grotesque punctuation mark to the silence. 
         <<set _companionKeys = Object.keys($player.companions)>>
-        <<set _lastCompanion = _companionKeys[_companionKeys.length - 1].split(':')>>
+        <<set _firstCompanion = _companionKeys[0].split(':')>>
         <br />
-        <strong><<=setup.displayName($guests[_lastCompanion[1]])>> crumples to the ground, a life extinguished in an instant.</strong>
-        <<guestRemove _lastCompanion[1]>>
+        <strong><<=setup.displayName($guests[_firstCompanion[1]])>> crumples to the ground, a life extinguished in an instant.</strong>
         <br /><br />
         A wave of horror washes over you, the brutality of the act searing into your memory. 
         The loss is palpable, a stark reminder of the unforgiving nature of this world. The remaining companions remain resolute, their faces a mix of grief, anger, and determination.
@@ -113,7 +112,6 @@
         <<set _companionKeys = Object.keys($player.companions)>>
         <<set _lastCompanion = _companionKeys[_companionKeys.length - 1].split(':')>>
         <strong><<=setup.displayName($guests[_lastCompanion[1]])>> drops on the ground with <<=setup.pronounceWhos($guests[_lastCompanion[1]])>> skull crushed open.</strong>
-        <<guestRemove _lastCompanion[1]>>
         <br /><br />
         <center>
             [img[setup.ImagePath+'people/negan/bat_kill_blood.gif']]
@@ -170,12 +168,10 @@
             With a grateful glance, Vincent turns and begins to trudge towards his own abode, leaving you standing amidst the eerie silence of the settlement.
             <<set $game.location.garage = true>>
             <<set $characters.vincent.car_get_day = $game.day>>
-            <<for _companionKey, _companion range $player.companions>>
-                <<set _companionSplitKey = _companionKey.split(':')>>
-                <<guestRemove _companionSplitKey[1]>>
-            <</for>>
-            <<for _companionKey, _companion range $player.companions>>
-                <<set _companionSplitKey = _companionKey.split(':')>>
+            <<for Object.keys($player.companions).length > 0>>
+                <<set _companionKeys = Object.keys($player.companions)>>
+                <<set _lastCompanionKey = _companionKeys[_companionKeys.length -1]>>
+                <<set _companionSplitKey = _lastCompanionKey.split(':')>>
                 <<guestRemove _companionSplitKey[1]>>
             <</for>>
             <br /><br />
