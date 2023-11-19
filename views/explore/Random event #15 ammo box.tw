@@ -8,20 +8,34 @@ You decide to explore what's happening in one of the corners of the destroyed ci
  [img[setup.ImagePath+'places/explore/police_car.jpg']]
  </center>
  <br /><br />
- 
+<<if setup.percentageChance(30)>>
+	The car is partly destroyed. You try to open the back of the truck but with no initial success. 
+	<br />
+	You try few more times before you successfully open the back of the truck and see a <strong>gas mask</strong> in it.
+	<br /><br />
+	<center>
+	[img[setup.ImagePath+'places/explore/police_car_gas_mask.jpg']]
+	</center>
+	<br />
+	<strong>You picked up gas mask</strong>
+	<<pickup $backpack 'gas_mask' 1>>
+<<else>>
 The car was completely destroyed, most likely from the shockwave of a bomb explosion. 
 <br /> 
 Your attention was drawn to a piece of metal that had fallen into a sewer hole.
 <br /><br />
-You reach out your hand and grab the cardboard box, pulling out the strange object. They were 0.38 caliber bullets
-<br /><br />
- <center>
- [img[setup.ImagePath+'places/explore/ammo_box.jpg']]
- </center>
+You reach out your hand and grab the cardboard box, pulling out the strange object.
 
-<br /><br />
-<strong>You picked up 6 .38 bullets</strong>
-<<pickup $backpack 'bullet_revolver' 6>>
+	They were 0.38 caliber bullets
+	<br /><br />
+	<center>
+	[img[setup.ImagePath+'places/explore/ammo_box.jpg']]
+	</center>
+
+	<br /><br />
+	<strong>You picked up 6 .38 bullets</strong>
+	<<pickup $backpack 'bullet_revolver' 6>>
+<</if>>
 <br /><br />
 <<link 'Leave'>>
 	<<goto 'Outside'>>
