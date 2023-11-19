@@ -118,7 +118,7 @@
 <<widget companionRearange>>
 	<<for _compR, _compIR range $player.companions>>
 		<<set _compKeyR = _compR.split(':')>>
-		<<if _compKeyR[1] > $args[0]>>
+		<<if parseInt(_compKeyR[1]) > parseInt($args[0])>>
 			<<run delete $player.companions[_compR]>>
 			<<set _compKeyR[1]-->>
 			<<set $player.companions[_compKeyR.join(':')] = true>>
