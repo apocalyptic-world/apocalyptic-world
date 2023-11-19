@@ -1,7 +1,6 @@
 :: Widget - sleep [widget] {"position":"20,634","size":"100,100"}
 <<widget sleep>>
 	<<set _t0 = performance.now()>>
-	<<auto_distribute>>
 	<<set $morningMessages = {
 		main: [],
 		shop: [],
@@ -421,7 +420,7 @@
 			<</if>>
 		<</if>>
 		
-		<<set _hunter_no_bow = ( $game.mods.auto_hunter ?? false) &&
+		<<set _hunter_no_bow = ( $automatization.hunter ?? false) &&
 			$guests[_guestI].assignedTo === 'hunter' && !setup.npcInventoryHas($guests[_guestI], 'bow') >>
 		<<if (_hunter_no_bow || $guests[_guestI].assignedTo === 'forest')  && !_isSick>>
 			<<if typeof $guests[_guestI].stats['forest'] === 'undefined'>>

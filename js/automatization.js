@@ -1,14 +1,14 @@
 /* game modification support */
-setup.mods = {
-    auto_axe: {
+setup.automatization = {
+    axe: {
         name: 'Axe',
         description: 'An axe for every forest worker, while stocks last.',
     },
-    auto_bow: {
+    bow: {
         name: 'Bow',
         description: 'An bow for every hunter, while stocks last.',
     },
-    auto_hunt: {
+    hunter: {
         name: 'Hunter',
         description: 'A hunter without a bow hunts berries and wood instead.',
     }
