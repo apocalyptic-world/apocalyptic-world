@@ -1,0 +1,85 @@
+:: Bedrom - auto_morning  [automatization include]
+
+/* a little automation if settings allow it */
+<<set $automatization ??= {}>>
+<<set _hunterCheck = $automatization.hunter ?? false>>
+<<if _hunterCheck>>
+    <<set _isStorageAvailable = ($game.location.shop ?? false)>>
+    <<set _npcs = $slaves.concat($guests)>> 
+    <<set _hunters_no_bow = []>>
+    <<set _dupNpcs = []>>
+    <<set _haveBow  = []>>
+    <<for _npcI, _npc range _npcs>>
+        /* duplicates go to backpack or storage */
+        <<set _dupItems = []>>
+        <<for _itemI, _item range setup.inventoryNpc>>
+            <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
+            <<if _itemcount > 1>>
+                <<run _itemcount-->>
+                <<run setup.npcInventoryRemove(_npc, _item, _itemcount)>>
+                <<if _isStorageAvailable>>
+                    <<pickup $storage _item _itemcount>>
+                <<else>>
+                    <<pickup $backpack _item _itemcount>>
+                <</if>>
+                <<set _itemcount = 1>>
+                <<set _dupItems.push(_item + ': ' + _itemcount)>>
+            <</if>>
+
+            <<if _npc.assignedTo === 'hunter' && _item === 'bow' && _itemcount == 0>>
+                <<run _hunters_no_bow.push(_npc)>>
+            <<elseif _npc.assignedTo === 'hunter' && _item === 'bow' && _itemcount > 0>>
+                <<set _haveBow.push(_npc.name)>>
+            <</if>>
+        <</for>>
+        <<if _dupItems.length > 0>>
+            <<set _dupNpcs.push(_npc.name + ' (' + _dupItems.sort().join(', ') + ')')>>
+        <</if>>
+    <</for>>
+    <<if _dupNpcs.length > 0>>
+        <<set $morningMessages.rules.push('Extra items returned: ' + _dupNpcs.sort().join('; '))>>
+    <</if>>
+
+    <<set  _gotBow = []>>
+    <<for _hunters_no_bow.length > 0 && setup.cabinInvHas('bow', 2)>>
+        <<set _npc = _hunters_no_bow.pop()>>
+        <<run setup.npcInventoryAdd(_npc, 'bow')>>
+        <<run setup.cabinInvDrop('bow')>>
+        /*
+        <x<if _isStorageAvailable>>
+            <x<transfer $storage $backpack 'bow' 1>>
+        <x</if>>
+        <x<drop $backpack 'bow' 1>> 
+        */
+        <<set _gotBow.push(_npc.name)>>
+    <</for>>
+
+    <<set  _noBow = []>>
+    <<for _hunter range _hunters_no_bow>>
+        <<set _noBow.push(_hunter.name)>>
+    <</for>>
+   <<if _gotBow.length > 0>>
+        <<set $morningMessages.rules.push('Hunters now with a bow: ' + _gotBow.sort().join(', '))>>
+    <</if>>
+    <<if _haveBow.length > 0>>
+        <<set $morningMessages.rules.push('Hunters has bow: (unchanged): ' + _haveBow.sort().join(', '))>>
+    <</if>>
+    <<if _noBow.length > 0>>
+        <<set $morningMessages.rules.push('Hunters *need* a bow: ' + _noBow.sort().join(', '))>>
+    <</if>>
+   
+    /* mc should have at least one of each useful npc-items, if available */
+    <<if _isStorageAvailable>>
+        <<set _itemsGot = []>>
+        <<for _item range setup.inventoryNpc>>
+            <<if !$backpack.has(_item) && $storage.has(_item)>>
+                <<transfer $storage $backpack _item 1>>
+                <<set _itemsGot.push(_item)>>
+            <</if>>
+        <</for>>
+    <</if>>
+    <<if _itemsGot.length > 0>>
+        <<set _text = 'You got: ' + _itemsGot.sort().join('|')>>
+         <<set $morningMessages.rules.push(_text)>>
+    <</if>>     
+<</if>>
