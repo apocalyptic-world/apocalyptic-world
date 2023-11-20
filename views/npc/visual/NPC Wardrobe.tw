@@ -2,12 +2,10 @@
 
 <<set _wardrobe = {
     top: {
-        list: setup.range(1, 8),
-        ext: 'png'
+        list: setup.range(1, 9),
     },
     bot: {
         list: setup.range(1, 2),
-        ext: 'gif'
     }
 }>>
 
@@ -21,7 +19,7 @@
                 <<for _wardrobeItem range _wardrobeCategoryItems.list>>
                     <<capture _wardrobeItem>>
                         <div class="npc-wardrobe-item">
-                            [img[setup.ImagePath+'game/doll/' + _wardrobeCategory + '/' + _wardrobeItem + '.' + _wardrobeCategoryItems.ext]]
+                            [img[setup.ImagePath+'game/doll/' + _wardrobeCategory + '/' + _wardrobeItem + '.png']]
                             <br />
                             <<link 'wear'>>
                                 <<set $tmpGirl.clothes[_wardrobeCategory] = _wardrobeItem>>
