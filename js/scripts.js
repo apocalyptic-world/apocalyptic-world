@@ -620,6 +620,14 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
+setup.commonValues = function(array1, array2) {
+    return array1.filter(value => array2.includes(value));
+};
+
+setup.matchIndex = function(array, property, value) {
+    return array.map((item, i) => item[property] === value ? i : -1).filter(index => index !== -1);
+};
+
 function shuffle(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
