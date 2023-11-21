@@ -629,7 +629,7 @@ setup.commonValues = function(allArrays) {
     return array;
 };
 
-setup.findIndexes = function(array, property, value = true, operator = '==') {
+setup.propertyMatchIndexes = function(array, property, value = true, operator = '==') {
 	if (operator == '==') {
 		array = array.map((item, i) => item[property] == value ? i : -1);
 	} else if (operator == '!=') {
