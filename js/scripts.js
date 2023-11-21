@@ -620,6 +620,34 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
+setup.commonValues = function(allArrays) {
+	var array = allArrays[0] ?? [];
+	var length = allArrays.length;
+	for (var i = 1; i < length; i++) {
+		array = array.filter(value => allArrays[i].includes(value));
+	}
+    return array;
+};
+
+setup.propertyMatchIndexes = function(array, property, value = true, operator = '==') {
+	if (operator == '==') {
+		array = array.map((item, i) => item[property] == value ? i : -1);
+	} else if (operator == '!=') {
+		array = array.map((item, i) => item[property] != value ? i : -1);
+	} else if (operator == '>') {
+		array = array.map((item, i) => item[property] > value ? i : -1);
+	} else if (operator == '<') {
+		array = array.map((item, i) => item[property] < value ? i : -1);
+	} else if (operator == '>=') {
+		array = array.map((item, i) => item[property] >= value ? i : -1);
+	} else if (operator == '<=') {
+		array = array.map((item, i) => item[property] <= value ? i : -1);
+	} else {
+		array = [];
+	}
+    return array.filter(index => index !== -1);
+};
+
 function shuffle(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
