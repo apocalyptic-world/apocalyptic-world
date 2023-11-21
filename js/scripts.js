@@ -620,8 +620,13 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
-setup.commonValues = function(array1, array2) {
-    return array1.filter(value => array2.includes(value));
+setup.commonValues = function(allArrays) {
+	var array = allArrays[0] ?? [];
+	var length = allArrays.length;
+	for (var i = 1; i < length; i++) {
+		array = array.filter(value => allArrays[i].includes(value));
+	}
+    return array;
 };
 
 setup.matchIndex = function(array, property, value) {
