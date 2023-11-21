@@ -124,8 +124,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
-	<<elseif setup.commonValues([setup.findIndexes($guests, 'likesGirls'), _guests18yoWomen]).length > 1 && setup.percentageChance(30)>>
-		<<set $tmpEvent = setup.commonValues([setup.findIndexes($guests, 'likesGirls'), _guests18yoWomen])>>
+	<<elseif setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen]).length > 1 && setup.percentageChance(30)>>
+		<<set $tmpEvent = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - lesbian sex'>>
 	<</if>>
