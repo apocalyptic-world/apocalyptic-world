@@ -629,8 +629,23 @@ setup.commonValues = function(allArrays) {
     return array;
 };
 
-setup.matchIndex = function(array, property, value) {
-    return array.map((item, i) => item[property] === value ? i : -1).filter(index => index !== -1);
+setup.matchIndex = function(array, property, value = true, operator = '==') {
+	if (operator == '==') {
+		array = array.map((item, i) => item[property] == value ? i : -1);
+	} else if (operator == '!=') {
+		array = array.map((item, i) => item[property] != value ? i : -1);
+	} else if (operator == '>') {
+		array = array.map((item, i) => item[property] > value ? i : -1);
+	} else if (operator == '<') {
+		array = array.map((item, i) => item[property] < value ? i : -1);
+	} else if (operator == '>=') {
+		array = array.map((item, i) => item[property] >= value ? i : -1);
+	} else if (operator == '<=') {
+		array = array.map((item, i) => item[property] <= value ? i : -1);
+	} else {
+		array = [];
+	}
+    return array.filter(index => index !== -1);
 };
 
 function shuffle(array) {
