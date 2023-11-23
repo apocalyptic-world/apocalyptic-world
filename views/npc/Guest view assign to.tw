@@ -4,7 +4,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if $tmpGirl.relationship > 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>
-		  <<set $tmpGirl.assignedTo = 'garden'>>
+		  <<assignedTo $tmpGirl 'garden'>>
 		  <<set $tmpGirl.gardenDay = 0>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
@@ -15,7 +15,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if !setup.getPersonsForLocation($guests, 'kitchen').length && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign to kitchen'>>
-		  <<set $tmpGirl.assignedTo = 'kitchen'>>
+		  <<assignedTo $tmpGirl 'kitchen'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>>
@@ -25,7 +25,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if [0,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign as maid'>>
-		  <<set $tmpGirl.assignedTo = 'maid'>>
+		  <<assignedTo $tmpGirl 'maid'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Gives additional energy while taking a nap)
@@ -35,7 +35,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
 	<div>
 	  <<link 'Assign to shop'>>
-		  <<set $tmpGirl.assignedTo = 'shop'>>
+		  <<assignedTo $tmpGirl 'shop'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Will work in shop and sell/buy items for you automatically)
@@ -45,7 +45,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
 	<div>
 	  <<link 'Assign as mistress'>>
-		  <<set $tmpGirl.assignedTo = 'mistress'>>
+		  <<assignedTo $tmpGirl 'mistress'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Keeps slaves in order. Increases submission for them)
@@ -54,15 +54,16 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 
 <div>
   <<link 'Assign to forest'>>
-	  <<set $tmpGirl.assignedTo = 'forest'>>
+	  <<assignedTo $tmpGirl 'forest'>>
 	  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
   <</link>> (Provides you with wood)
 </div>
 
-<<if($tmpGirl.skills ?? []).includes('woodcraft') && setup.npcInventoryHas($tmpGirl, 'bow')>>
+<<if ($tmpGirl.skills ?? []).includes('woodcraft') && 
+			(setup.npcInventoryHas($tmpGirl, 'bow') || ($automatization.job ?? false) && setup.cabinInventory.has(_item, 2))>>
 	<<link 'Assign as hunter'>>
-	  	<<set $tmpGirl.assignedTo = 'hunter'>>
+		<<assignedTo $tmpGirl 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
   	<</link>> (Provides you with food or wolf pelts)
@@ -72,7 +73,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 
 <div>
   <<link 'Assign to scavenging'>>
-	  <<set $tmpGirl.assignedTo = 'scavenging'>>
+	  <<assignedTo $tmpGirl 'scavenging'>>
 	  <<dialogclose>>
 	  <<goto `$tmpGirlViewBack`>>
   <</link>> (Provides you with plastic, glass, rope, etc)
@@ -80,7 +81,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 
 <<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
 	<<link 'Assign to streets'>>
-		<<set $tmpGirl.assignedTo = 'streets'>>
+		<<assignedTo $tmpGirl 'streets'>>
 		<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
 	<</link>> (Earns you money as hooker)
@@ -89,7 +90,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if $tmpGirl.strength >= 30>>
 	<div>
 	  <<link 'Assign as guard'>>
-		  <<set $tmpGirl.assignedTo = 'guard'>>
+		  <<assignedTo $tmpGirl 'guard'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Decreases the chance of someone breaking in and stealing, and sometimes might catch intruders)

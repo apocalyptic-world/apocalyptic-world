@@ -32,7 +32,7 @@
 <<if !($player.companions['guest:' + $guestId] ?? false)>>
 	<<link 'Add as companion'>>
 		<<companionAdd 'guest' $guestId>>
-		<<run delete $tmpGirl.assignedTo>>
+		<<assignedTo $tmpGirl 'companion'>>
 		<<goto `passage()`>>
 	<</link>>
 <</if>>
@@ -53,7 +53,7 @@
 
 <<if $tmpGirl.assignedTo>>
 	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
-		<<run delete $tmpGirl.assignedTo>>
+		<<assignedTo $tmpGirl 'none'>>
 		<<goto `passage()`>>
 	<</link>>
 <</if>>
