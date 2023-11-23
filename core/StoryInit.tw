@@ -12,9 +12,14 @@ setup.ImagePath = setup.Path + "images/";
 setup.videoPath = setup.Path + "videos/";
 setup.audioPath = setup.Path + "audio/";
 
+setup.lockID = LoadScreen.lock();  // Lock loading screen
+
 importScripts(setup.Path + "js/actions.js")
 	.then(function() {
         memorize('actions', setup.actions);
+        // Reload current passage since imported scripts can function now.
+		Engine.play(passage(), true);
+		LoadScreen.unlock(setup.lockID);  // Unlock loading screen
 	}).catch(function(error) {  // eslint-disable-line
 		alert("Error: Could not find file 'actions.js'.");
 	}
