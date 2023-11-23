@@ -1,85 +1,128 @@
 :: Bedrom - auto_morning  [automatization include]
 
 /* a little automation if settings allow it */
-<<set $automatization ??= {}>>
-<<set _hunterCheck = $automatization.hunter ?? false>>
-<<if _hunterCheck>>
+<<set _automatization ??= {}>>
+<<set _ruleAdd      = $automatization.add ?? false>>
+<<set _ruleSubtract = $automatization.subtract ?? false>>
+<<set _ruleJob      = $automatization.job ?? false>>
+<<set _ruleDup      = $automatization.dup ?? false>>
+<<set _ruleHunter   = $automatization.hunter ?? false>>
+<<if _ruleAdd || _ruleSubtract || _ruleJob || _ruleDup || _ruleHunter>>
+    <<set _outputAutoList ??= []>>
     <<set _isStorageAvailable = ($game.location.shop ?? false)>>
     <<set _npcs = $slaves.concat($guests)>> 
-    <<set _hunters_no_bow = []>>
-    <<set _dupNpcs = []>>
-    <<set _haveBow  = []>>
+    <<set _want = {}>>
+    <<set _companions = new Map()>>
+    <<for _companionKey, _companion range $player.companions>>
+        <<set _guestIndex = _companionKey.split(':')[1]>>
+        <<set _guest = $guests[_guestIndex]>>
+        <<set _npcId = _guest.id>>
+        <<set _companions.set(_npcId, true)>>
+    <</for>>
+    <<set _outDupNpcs = []>>
+    <<set _outMinusNpcs = []>>
     <<for _npcI, _npc range _npcs>>
-        /* duplicates go to backpack or storage */
-        <<set _dupItems = []>>
+        <<set _job = _companions.has(_npc.id) ? 'companion' : (_npc.assignedTo ?? 'none') >>
+
+        /* duplicates go to backpack or storage, always on */
+        <<set _outDupItems = []>>
+        <<set _outMinusItems = []>>
         <<for _itemI, _item range setup.inventoryNpc>>
             <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
             <<if _itemcount > 1>>
                 <<run _itemcount-->>
-                <<run setup.npcInventoryRemove(_npc, _item, _itemcount)>>
-                <<if _isStorageAvailable>>
-                    <<pickup $storage _item _itemcount>>
-                <<else>>
-                    <<pickup $backpack _item _itemcount>>
-                <</if>>
+                <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                <<set _outDupItems.push(_item + ': ' + _itemcount)>>
                 <<set _itemcount = 1>>
-                <<set _dupItems.push(_item + ': ' + _itemcount)>>
             <</if>>
 
-            <<if _npc.assignedTo === 'hunter' && _item === 'bow' && _itemcount == 0>>
-                <<run _hunters_no_bow.push(_npc)>>
-            <<elseif _npc.assignedTo === 'hunter' && _item === 'bow' && _itemcount > 0>>
-                <<set _haveBow.push(_npc.name)>>
+            <<if setup.automatization.job_tools[_job].includes(_item) && _itemcount == 0>>
+                <<if _ruleAdd || _ruleSubtract || _ruleJob || _ruleHunter>>
+                    <<set _want[_item] ??= []>>
+                    <<set _want[_item].push(_npc)>>
+                <</if>>
+            <<elseif !setup.automatization.job_tools[_job].includes(_item) && _itemcount > 0>>
+                <<if _ruleSubtract || _ruleJob || _ruleHunter>>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                <</if>>
             <</if>>
         <</for>>
-        <<if _dupItems.length > 0>>
-            <<set _dupNpcs.push(_npc.name + ' (' + _dupItems.sort().join(', ') + ')')>>
+        <<if _outDupItems.length > 0>>
+            <<set _outDupNpcs.push(_npc.name + ' (' + _outDupItems.sort().join(', ') + ')')>>
+        <</if>>
+        <<if _outMinusItems.length > 0>>
+            <<set _outMinusNpcs.push(_npc.name + ' (' + _outMinusItems.sort().join(', ') + ')')>>
         <</if>>
     <</for>>
-    <<if _dupNpcs.length > 0>>
-        <<set $morningMessages.rules.push('Extra items returned: ' + _dupNpcs.sort().join('; '))>>
+    <<if _outDupNpcs.length > 0>>
+        <<set  _outputAutoList.push('No extras - npc → cabin: ' + _outDupNpcs.sort().join('; ') + ';')>>
     <</if>>
+    <<if _outMinusNpcs.length > 0>>
+        <<set _outputAutoList.push('Subtract - npc → cabin: ' + _outMinusNpcs.sort().join('; ')+ ';')>>
+    <</if>>
+    <<unset _outDupItems, _outDupNpcs, _outMinusItems, _outMinusNpcs, _npcI, _npc, _npcs, _itemI, _item, _itemcount>>
 
-    <<set  _gotBow = []>>
-    <<for _hunters_no_bow.length > 0 && setup.cabinInvHas('bow', 2)>>
-        <<set _npc = _hunters_no_bow.pop()>>
-        <<run setup.npcInventoryAdd(_npc, 'bow')>>
-        <<run setup.cabinInvDrop('bow')>>
-        /*
-        <x<if _isStorageAvailable>>
-            <x<transfer $storage $backpack 'bow' 1>>
-        <x</if>>
-        <x<drop $backpack 'bow' 1>> 
-        */
-        <<set _gotBow.push(_npc.name)>>
+    /* using pop so guests gets first ;-) */
+
+    /* add */
+    <<for _item, _npcs  range _want>>
+        <<set _outItem = []>>
+        <<for _npcs.length > 0 && setup.cabinInventory.has(_item, 2)>>
+            <<set _npc = _npcs.pop()>>
+            <<run setup.cabinInventory.to_npc(_npc, _item)>>
+            <<set _outItem.push(_npc.name)>>
+        <</for>>
+        <<if _outItem.length > 0>>
+            <<set _outputAutoList.push('Add ' + _item + ' npc ← cabin: ' + _outItem.sort().join(', ') + ';')>>
+        <</if>>
+        <<if _want[_item].length > 0>>
+            <<set _outNo = []>>
+            <<for _npc range _want[_item]>>
+                <<set _outNo.push(_npc.name)>>
+            <</for>>
+            <<set _outputAutoList.push('Add failed - no ' + _item + ': ' + _outNo.sort().join(', ') + ';')>>
+        <</if>>
     <</for>>
 
-    <<set  _noBow = []>>
-    <<for _hunter range _hunters_no_bow>>
-        <<set _noBow.push(_hunter.name)>>
-    <</for>>
-   <<if _gotBow.length > 0>>
-        <<set $morningMessages.rules.push('Hunters now with a bow: ' + _gotBow.sort().join(', '))>>
+    <<if _ruleHunter>>
+        <<set _item = 'axe'>>
+        <<set _outItem = []>>
+        <<set _want.bow ??= []>>
+        <<for _want.bow.length > 0 && setup.cabinInventory.has(_item, 2)>>
+            <<set _npc = _want.bow.pop()>>
+            <<run setup.cabinInventory.to_npc(_npc, _item)>>
+            <<set _outItem.push(_npc.name)>>
+        <</for>>
+        <<if _outItem.length > 0>>
+            <<set _outputAutoList.push('Hunter ' + _item + ' npc ← cabin: ' + _outItem.sort().join(', ') + ';')>>
+        <</if>>
+        <<if _want.bow.length > 0>>
+            <<set _outNo = []>>
+            <<for _npc range _want.bow>>
+                <<set _outNo.push(_npc.name)>>
+            <</for>>
+            <<set _outputAutoList.push('Hunter failed - no ' + _item + ': ' + _outNo.sort().join(', ') + ';')>>
+        <</if>>
     <</if>>
-    <<if _haveBow.length > 0>>
-        <<set $morningMessages.rules.push('Hunters has bow: (unchanged): ' + _haveBow.sort().join(', '))>>
-    <</if>>
-    <<if _noBow.length > 0>>
-        <<set $morningMessages.rules.push('Hunters *need* a bow: ' + _noBow.sort().join(', '))>>
-    <</if>>
-   
-    /* mc should have at least one of each useful npc-items, if available */
+    <<unset _npc, _want, _outNo>>
+
+    /* MC */
     <<if _isStorageAvailable>>
-        <<set _itemsGot = []>>
-        <<for _item range setup.inventoryNpc>>
+        <<set _outItem = []>>
+        <<for _item range setup.automatization.job_tools.mc.sort()>>
             <<if !$backpack.has(_item) && $storage.has(_item)>>
                 <<transfer $storage $backpack _item 1>>
-                <<set _itemsGot.push(_item)>>
+                <<set _outItem.push('+ ' + _item)>>
+            <<elseif $backpack.has(_item)>>
+                <<set _outItem.push('± ' + _item)>>
+            <<else>>
+                <<set _outItem.push('-' + _item)>>
             <</if>>
         <</for>>
     <</if>>
-    <<if _itemsGot.length > 0>>
-        <<set _text = 'You got: ' + _itemsGot.sort().join('|')>>
-         <<set $morningMessages.rules.push(_text)>>
-    <</if>>     
+    <<if _outItem .length > 0>>
+         <<set _outputAutoList.push('You: ' + _outItem.join(' | '))>>
+    <</if>> 
+    <<unset _outItem, _item>>
 <</if>>

@@ -16,16 +16,20 @@
                          (<<=$backpack.count(_inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-link">
-                            <<link '>>'>>
-                                <<drop $backpack _inventoryNpcMcItem 1>>
-                                <<=setup.npcInventoryAdd($tmpGirl, _inventoryNpcMcItem)>>
-                                <<script>>
-                                    Dialog.setup("NPC inventory", "NPC inventory");
-                                    Dialog.wiki(Story.get("NPC inventory").processText());
-                                    Dialog.open();
-                                <</script>>
-                                <<goto `passage()`>>
-                            <</link>>
+                            <<if ($automatization.dup ?? false) && setup.npcInventoryHas($tmpGirl, _inventoryNpcMcItem)>>
+                                ≯≯  
+                            <<else>>
+                                <<link '>>'>>
+                                    <<drop $backpack _inventoryNpcMcItem 1>>
+                                    <<=setup.npcInventoryAdd($tmpGirl, _inventoryNpcMcItem)>>
+                                    <<script>>
+                                        Dialog.setup("NPC inventory", "NPC inventory");
+                                        Dialog.wiki(Story.get("NPC inventory").processText());
+                                        Dialog.open();
+                                    <</script>>
+                                    <<goto `passage()`>>
+                                <</link>>                       
+                             <</if>>
                         </div>
                     </div>
                 <</capture>>

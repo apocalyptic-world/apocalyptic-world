@@ -1,7 +1,9 @@
 sugarcube-2:
   enums:
-    peoplelist: "'guests'|'slaves'"
-    statlist: "'happy'|'relationship'|'sub'"
+    npc_types:  '"guest"|"slave"'
+    npcs_types: '"guests"|"slaves"'
+    stat_types: '"happy"|"relationship"|"sub"'
+    job_types:  '"companion"|"forest"|"garden"|"guard"|"hunter"|"kitchen"|"maid"|"mistress"|"none"|"scavenging"|"shop"|"streets"'
   macros:
     horny_reset:
       name: horny_reset
@@ -120,12 +122,13 @@ sugarcube-2:
     setNpcStats:
       name: setNpcStats
       parameters:
-        - ('guest'|'slave') &+ number &+ ('happy'|'relationship'|'sub')  &+ number
+        - %npc_types% &+ number &+ %stat_types%  &+ number
       description: |-
         *Syntax:* `<<setNpcStats list index stat change>>`
 
-        list = guest|slave,
-        stat = happy|relationship|sub
+        `list` : %npc_types%
+        `stat` : %stat_types%
+
     happyIcon:
       name: happyIcon
     anongirl:
@@ -192,7 +195,7 @@ sugarcube-2:
     domQuest2Invite:
       name: domQuest2Invite
       parameters: 
-        - ('guests'|'slaves')
+        - %npcs_types%
       description: |-
         *Syntax:* `<<domQuest2Invite list>>`
     backButton:
@@ -201,4 +204,12 @@ sugarcube-2:
         - string
     fuck:
       name: fuck
+    assignedTo:
+      name: assignedTo
+      parameters:
+      - var &+ %job_types%
+      description: |-
+        *Syntax:* `<<assignedTo npc job>>`
+
+        Use `companion` as job for companionAdd, use `none` as job when removing
 

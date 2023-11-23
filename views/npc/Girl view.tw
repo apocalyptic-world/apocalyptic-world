@@ -83,7 +83,7 @@
 <</if>>
 <<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<<link 'Assign to garden'>>
-		<<set $tmpGirl.assignedTo = 'garden'>>
+		<<assignedTo $tmpGirl 'garden'>>
 		<<set $tmpGirl.gardenDay = 0>>
 		<<if $tmpGirlBack>>
 			<<set $slaves[$slaveId] = $tmpGirl>>
@@ -96,7 +96,7 @@
 <</if>>
 <<if $tmpGirl.relationship >= 50 && $slaveId !== undefined && !$tmpGirl.assignedTo>>
 	<<link 'Assign to streets'>>
-		<<set $tmpGirl.assignedTo = 'streets'>>
+		<<assignedTo $tmpGirl 'streets'>>
 		<<if $tmpGirlBack>>
 			<<set $slaves[$slaveId] = $tmpGirl>>
 			<<set $slaveId to null>>
@@ -121,7 +121,7 @@
 	<</if>>
 	<<if $tmpGirl.assignedTo>>
 		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
-			<<run delete $tmpGirl.assignedTo>>
+			<<assignedTo $tmpGirl 'none'>>
 			<<goto 'Girl view'>>
 		<</link>>
 	<</if>>

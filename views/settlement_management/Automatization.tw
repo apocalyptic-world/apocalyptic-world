@@ -1,23 +1,18 @@
-:: Settlement management - automatization [include]
+:: Settlement management - automatization [automatization include]
 
-/* I reallly need a nice toggle-button; on-off */
-<h1>Auto-rules for the house</h1>
+<h1>House rules for settlers</h1>
+<br/>You are the boss of this place. You set the rules and the settlers obeys (probably)
+<br/>Things in storage only collects dust so it's better to distribute to settlers that need them. Like bows for hunters, axes to woodcutter & knives to nealy everyone.
+<br/><br/>
 <<set $automatization ??= {}>>
 <table class="mc-stats-table">
-    <<for _dummy, _autoId range Object.keys(setup.automatization)>>
-        <<capture _autoId>>
+    <<for _dummy, _autoId range Object.keys(setup.automatization.rule)>>
+        <<capture _autoId, _auto>>
             <<set $automatization[_autoId] ??= false>>
-            <<set _auto = setup.automatization[_autoId] >>
+            <<set _auto = setup.automatization.rule[_autoId] >>
             <tr>
-                <td><<=_auto.name>></td>
+                <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
                 <td><<=_auto.description>></td>
-                <td>
-                    <<set _linktext = $automatization[_autoId] ? 'Active →  Off' : 'Off →  Active'>>
-                    <<link _linktext>>
-                        <<set $automatization[_autoId] = !$automatization[_autoId]>>
-                        <<goto 'Settlement management'>>
-                    <</link>>
-                </td>
             </tr>
         <</capture>>
     <</for>>
