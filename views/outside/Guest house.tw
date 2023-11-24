@@ -121,7 +121,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <</if>>
 
 <<if !($locationEvents.guesthouse ?? false)>>
-	<<if timeBetween('23:00', '02:00') && _guests18yoWomen && setup.percentageChance(10)>>
+	<<if timeBetween('23:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(10)>>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
