@@ -4,13 +4,53 @@ sugarcube-2:
     npcs_types: '"guests"|"slaves"'
     stat_types: '"happy"|"relationship"|"sub"'
     job_types:  '"companion"|"forest"|"garden"|"guard"|"hunter"|"kitchen"|"maid"|"mistress"|"none"|"scavenging"|"shop"|"streets"'
+    perk_types: '"beaten"|"bleeding"|"drunk"|"fertility"'
   macros:
-    horny_reset:
-      name: horny_reset
+    # "system"
     video:
       name: video
-    companionList:
-      name: companionList
+      parameters: 
+      - text
+    dialog:
+      name: dialog
+      container: true
+      parameters: 
+        - text
+    dialogclose:
+      name: dialogclose
+    showmeter:
+      name: showmeter
+    grid:
+      name: grid
+    updatemeter:
+      name: updatemeter
+    notPatreonIcon:
+      name: notPatreonIcon
+    notify:
+      name: notify
+      container: true
+    warning:
+      name: warning
+    backButton:
+      name: backbutton
+      parameters: 
+        - string
+    linkdesc:
+      name: linkdesc
+      container: true
+    notPatreon:
+      name: notPatreon
+
+    # inventory stuff and other chapel, chapel stuff in twee-config/chapel-light.twee-config.yaml
+    newinv:
+      name: newinv
+    description:
+      name: description
+    consumable:
+      name: consumable
+      container: true
+    
+    # clock, date, time etc.
     time24hr:
       name: time24hr
     timeDay:
@@ -19,32 +59,159 @@ sugarcube-2:
       name: timeCycle
     gameDay:
       name: gameDay
-    showmeter:
-      name: showmeter
-    perkList:
-      name: perkList
-    flag:
-      name: flag
-    sleep:
-      name: sleep
-    newgirl:
-      name: newgirl
-    newguy:
-      name: newguy
-    energy:
-      name: energy
     addhours:
       name: addhours
     addmins:
       name: addmin
-    companionAdd:
-      namn: companionAdd
+    date:
+      name: date
+    time12hr:
+      name: time12hr
+
+    # say and named characters with speaking roles, see Storyinit.tw - $characters, <<character..>>
+    sayNpc:
+      name: sayNpc
+      container: true
+    grandfather:
+      name: grandfather
+      container: true
+    you:
+      name: you
+      container: true
+    vincent:
+      name: vincent
+      container: true
+    boris:
+      name: boris
+      container: true
+    blair:
+      name: blair
+      container: true
+    dom:
+      name: dom
+      container: true
+    eve:
+      name: eve
+      container: true
+    rodger:
+      name: rodger
+      container: true
+    octavia:
+      name: octavia
+      container: true
+    anonguy:
+      name: anonguy
+      container: true
+    anongirl:
+      name: anongirl
+      container: true
+    harper:
+      name: harper
+      container: true
+    isabel:
+      name: isabel
+      container: true
+    laura:
+      name: laura
+      container: true
+    negan:
+      name: negan
+      container: true
+
+    # MC
+    domQuest2Invite:
+      name: domQuest2Invite
       parameters: 
-      - string &+ number
-    companionRemove:
-      name: companionRemove
-    companionRearange:
-      name: companionRearange
+        - %npcs_types%
+      description: |-
+        *Syntax:* `<<domQuest2Invite list>>`
+    energy:
+      name: energy
+      parameters: 
+      - number
+    fight:
+      name: fight
+      description: |-
+        *Syntax:* `<<fight enemies passageWon passageLost public xtraAllies>>`
+    fightAction:
+      name: fightAction
+    fightEnd:
+      name: fightEnd
+    fuck:
+      name: fuck
+      parameters: 
+      - var
+    horny:
+      name: horny
+      parameters: 
+      - number
+    horny_reset:
+      name: horny_reset
+    nightclub_suggest_bathroom_link:
+      name: nightclub_suggest_bathroom_link
+    perkList:
+      name: perkList
+    perkAdd:
+      name: perkAdd
+      parameters: 
+      - %perk_types%
+    setPlayerStats:
+      name: setPlayerStats
+    shop:
+      name: shop
+      parameters:
+        - var &+ string |+ string
+      description: |-
+        *Syntax:* `<<shop shopItems passage buy_code>>`
+    shooterGame:
+      name: shooterGame
+    sleep:
+      name: sleep
+    statsAdd:
+      name: statsAdd
+    wakeUp:
+      name: wakeUp
+
+    # npc's
+    newgirl:
+      name: newgirl
+    newguy:
+      name: newguy
+    newtransgirl:
+      name: newtransgirl
+    assignedTo:
+      name: assignedTo
+      parameters:
+      - var |+ %job_types%
+      description: |-
+        *Syntax:* `<<assignedTo npc job>>`
+
+        Use `companion` as job for companionAdd, use `none` as job when removing
+    showFamilyTree:
+      name: showFamilyTree
+    slaveValue:
+      name: slaveValue
+    setNpcStats:
+      name: setNpcStats
+      parameters:
+        - %npc_types% &+ number &+ %stat_types%  &+ number
+      description: |-
+        *Syntax:* `<<setNpcStats list index stat change>>`
+
+        `list` : %npc_types%
+        `stat` : %stat_types%
+    happyIcon:
+      name: happyIcon
+      parameters:
+      - var
+
+    # cabin
+    cabinName:
+      name: cabinName
+    flag:
+      name: flag
+
+    # companionList, guestlist
     guestRemove:
       name: guestRemove
       container: false
@@ -58,158 +225,25 @@ sugarcube-2:
 
         Does guests.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of guest.splice
+    companionList:
+      name: companionList
+    companionAdd:
+      namn: companionAdd
+      parameters: 
+      - string &+ number
+    companionRemove:
+      name: companionRemove
+    companionRearange:
+      name: companionRearange
+      parameters: 
+      - number
+
+    # action, sex
     actionDream:
       name: actionDream
     actionImage:
       name: actionImage
-    blair:
-      name: blair
-      container: true
-    notPatreonIcon:
-      name: notPatreonIcon
-    horny:
-      name: horny
-    fight:
-      name: fight
-      description: |-
-        *Syntax:* `<<fight enemies passageWon passageLost public xtraAllies>>`
     actionImageOutput:
       name: actionImageOutput
-    laura:
-      name: laura
-      container: true
-    notify:
-      name: notify
-      container: true
-    cabinName:
-      name: cabinName
-    you:
-      name: you
-      container: true
-    octavia:
-      name: octavia
-      container: true
-    sayNpc:
-      name: sayNpc
-      container: true
-    isabel:
-      name: isabel
-      container: true
-    perkAdd:
-      name: perkAdd
-    rodger:
-      name: rodger
-      container: true
-    eve:
-      name: eve
-      container: true
-    description:
-      name: description
-    consumable:
-      name: consumable
-      container: true
-    grid:
-      name: grid
-    updatemeter:
-      name: updatemeter
-    newtransgirl:
-      name: newtransgirl
-    dialog:
-      name: dialog
-      container: true
-    wakeUp:
-      name: wakeUp
-    setNpcStats:
-      name: setNpcStats
-      parameters:
-        - %npc_types% &+ number &+ %stat_types%  &+ number
-      description: |-
-        *Syntax:* `<<setNpcStats list index stat change>>`
 
-        `list` : %npc_types%
-        `stat` : %stat_types%
-
-    happyIcon:
-      name: happyIcon
-    anongirl:
-      name: anongirl
-      container: true
-    statsAdd:
-      name: statsAdd
-    dialogclose:
-      name: dialogclose
-    newinv:
-      name: newinv
-    shop:
-      name: shop
-      parameters:
-        - var &+ string |+ string
-      description: |-
-        *Syntax:* `<<shop shopItems passage buy_code>>`
-    linkdesc:
-      name: linkdesc
-      container: true
-    boris:
-      name: boris
-      container: true
-    dom:
-      name: dom
-      container: true
-    slaveValue:
-      name: slaveValue
-    nightclub_suggest_bathroom_link:
-      name: nightclub_suggest_bathroom_link
-    vincent:
-      name: vincent
-      container: true
-    harper:
-      name: harper
-      container: true
-    fightAction:
-      name: fightAction
-    fightEnd:
-      name: fightEnd
-    anonguy:
-      name: anonguy
-      container: true
-    notPatreon:
-      name: notPatreon
-    grandfather:
-      name: grandfather
-      container: true
-    shooterGame:
-      name: shooterGame
-    showFamilyTree:
-      name: showFamilyTree
-    setPlayerStats:
-      name: setPlayerStats
-    date:
-      name: date
-    time12hr:
-      name: time12hr
-    warning:
-      name: warning
-    negan:
-      name: negan
-      container: true
-    domQuest2Invite:
-      name: domQuest2Invite
-      parameters: 
-        - %npcs_types%
-      description: |-
-        *Syntax:* `<<domQuest2Invite list>>`
-    backButton:
-      name: backbutton
-      parameters: 
-        - string
-    fuck:
-      name: fuck
-    assignedTo:
-      name: assignedTo
-      parameters:
-      - var |+ %job_types%
-      description: |-
-        *Syntax:* `<<assignedTo npc job>>`
-
-        Use `companion` as job for companionAdd, use `none` as job when removing
-
+    # unsorted here
