@@ -5,11 +5,29 @@ Save.onLoad.add(function (save) {
             relationship: 0
         };
     }
-    save.state.history[save.state.index].variables.characters.dom.name ??= 'Dom';
-    save.state.history[save.state.index].variables.characters.dom.id ??= 'dom';
-    save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
-    save.state.history[save.state.index].variables.characters.isabel.family ??= {};
-    save.state.history[save.state.index].variables.characters.isabel.family.husband ??= 'dom';
+    if (typeof save.state.history[save.state.index].variables.characters.dom !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.dom.name ??= 'Dom';
+        save.state.history[save.state.index].variables.characters.dom.id ??= 'dom';
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.isabel !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
+        save.state.history[save.state.index].variables.characters.isabel.family ??= {};
+        save.state.history[save.state.index].variables.characters.isabel.family.husband ??= 'dom';
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.blair.id ??= 'blair';
+        save.state.history[save.state.index].variables.characters.blair.family ??= {};
+        save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
+        save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
+        save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
+    }
+
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
     }
@@ -22,12 +40,7 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.characters.blair === 'undefined') {
         save.state.history[save.state.index].variables.characters.blair = {};
     }
-    save.state.history[save.state.index].variables.characters.blair.id ??= 'blair';
-    save.state.history[save.state.index].variables.characters.blair.family ??= {};
-    save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
-    save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
-    save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
-    save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
+
     if (typeof save.state.history[save.state.index].variables.game.cabinName !== 'undefined') {
         save.state.history[save.state.index].variables.game.showFlag = true;
     }
@@ -41,8 +54,6 @@ Save.onLoad.add(function (save) {
         var dateOffset = (24*60*60*1000) * save.state.history[save.state.index].variables.game.day;
         save.state.history[save.state.index].variables.startDate.setTime(save.state.history[save.state.index].variables.startDate.getTime() - dateOffset);
     }
-
-
 
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null) && !Array.isArray(save.state.history[save.state.index].variables.tmpGirl.traits ?? [])) {
         save.state.history[save.state.index].variables.tmpGirl.traits = [];
