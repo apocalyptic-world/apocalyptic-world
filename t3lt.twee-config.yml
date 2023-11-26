@@ -5,6 +5,7 @@ sugarcube-2:
     stat_types: '"happy"|"relationship"|"sub"'
     job_types:  '"companion"|"forest"|"garden"|"guard"|"hunter"|"kitchen"|"maid"|"mistress"|"none"|"scavenging"|"shop"|"streets"'
     perk_types: '"beaten"|"bleeding"|"drunk"|"fertility"'
+    sites:      "'cabin'|'outside'|'sanctuary'|'settlement'|'underground'"
   macros:
     # "system"
     video:
@@ -22,6 +23,13 @@ sugarcube-2:
       name: showmeter
     grid:
       name: grid
+      parameters:
+        - %sites% &+ text &+ text &+ text |+ number| bool |+ number
+      description: |-
+        *Syntax:* `<<grid place location goto grid_title energy time>>`
+
+        *Arguments:*
+          * `place`: %sites%
     updatemeter:
       name: updatemeter
     notPatreonIcon:
