@@ -15,11 +15,11 @@ setup.automatization = {
         },
         dup: {
             name: 'No duplicates',
-            description: 'Removes duplicate from settler invemtory. 2 bows is not better than 1 bow.'
+            description: 'Removes duplicates from settler inventory. 2 bows is not better than 1 bow.'
         },
         hunter: {
             name: 'Hunter with no bow',
-            description: 'Hunter with no bow works as a woodcutter; Might get a axe.'
+            description: 'Hunter with no bow works as a woodcutter; Might get an axe.'
         }
     },
 

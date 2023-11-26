@@ -676,18 +676,18 @@
 		<<if _playerPerk === 'bleeding'>>
 			<<set _item = 'bandage'>>
 			<<if _hasDoctor>>
-				<<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + 'stops your bleeding and saves your bacon')>>
-				<<unset $player.perks[_playerPerk]>>
+				<<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon')>>
+				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
 			<<elseif $storage.has(_item, 1)>>
 			    <<drop $storage _item 1>>
 				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
-				<<unset $player.perks[_playerPerk]>>
+				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
 			<<elseif $backpack.has(_item, 1)>>
 				<<drop $backpack _item 1>>
 				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out')>>
-				<<unset $player.perks[_playerPerk]>>
+				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
 			<</if>>
 		<</if>>
