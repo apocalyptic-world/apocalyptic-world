@@ -62,6 +62,14 @@ There are <strong class="iitem"><<=_money>></strong> caps inside, enough to cons
 	<<linkdesc>>
 		+10 relationship <<=$guests[_randomPerson2Id].name>>; -20 relationship <<=$guests[_randomPerson1Id].name>>
 	<</linkdesc>>
+	<<link 'Split between them'>>
+		<<set $guests[_randomPerson2Id].relationship -= 5>>
+		<<set $guests[_randomPerson1Id].relationship -= 5>>
+		<<goto 'Guest house'>>
+	<</link>>
+	<<linkdesc>>
+		-5 relationship
+	<</linkdesc>>
 	<<link 'Split between you three'>>
 		<<set $guests[_randomPerson2Id].relationship -= 10>>
 		<<set $guests[_randomPerson1Id].relationship -= 10>>
@@ -77,7 +85,9 @@ There are <strong class="iitem"><<=_money>></strong> caps inside, enough to cons
 		<<set $player.money += _money>>
 		<<goto 'Guest house'>>
 	<</link>>
-	<<linkdesc>>+<<=_money>> caps; -20 relationship<</linkdesc>>
+	<<linkdesc>>
+		+<<=_money>> caps; -20 relationship
+	<</linkdesc>>
 <</linkreplace>>
 
 

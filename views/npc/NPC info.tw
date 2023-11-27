@@ -30,20 +30,20 @@
 			<</if>>
 		 <</if>>
 	</div>
-
-<div id="npc-inventory">
-		<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
-		<<if ($tmpGirl.inventory ?? {})>>
-			<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
-				<div class='npc-inventory-item'>
-					<div class='npc-inventory-img'>
-						[img[setup.ImagePath+'game/inventory/' + _npcInventoryItem + '.png']]
+<<if !_unknown>>
+	<div id="npc-inventory">
+			<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
+			<<if ($tmpGirl.inventory ?? {})>>
+				<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
+					<div class='npc-inventory-item'>
+						<div class='npc-inventory-img'>
+							[img[setup.ImagePath+'game/inventory/' + _npcInventoryItem + '.png']]
+						</div>
 					</div>
-				</div>
-			<</for>>
-		<</if>>
+				<</for>>
+			<</if>>
 	</div>
-
+<</if>>
 		<div id="npc_stats">
 			<span>Name: <<=$tmpGirl.name>></span>
 			<span>Age: <<=_age>></span>
