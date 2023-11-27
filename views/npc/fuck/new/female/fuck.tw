@@ -34,7 +34,7 @@
         orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         horny: 20,
         maxCorruption: 60,
-        positive: ($tmpGirl.traits ?? []).includes('deepthroat'),
+        positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
         stats: 'dp'
     },
     pussy_lick: {
@@ -75,7 +75,7 @@
     cum_in_mouth: {
         show: false,
         minAction: 45,
-        positive: ($tmpGirl.traits ?? []).includes('cumslut')
+        positive: (($tmpGirl.traits ?? []).includes('cumslut') && $tmpGirl.horny <= 79)
     }
 }>>
 
@@ -122,7 +122,7 @@
 		Her body reacts positively to you. <strong>(Horny + 20)</strong>
 		<br />
 		
-		<<if $tmpGirl.horny >= 100 && !['dp','cum_in_mouth'].includes($sexAction)>>
+		<<if $tmpGirl.horny >= 100>>
 			<<include 'Fuck 2.0 squirt'>>
 			<<=setup.displayName($tmpGirl)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
