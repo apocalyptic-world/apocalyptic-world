@@ -3,16 +3,18 @@
 <<if $sexForced || ($tmpGirl.traits ?? []).includes('nymphomaniac')>>
     <<set _actionMax = 100>>
 <<elseif $tmpGirl.likesGuys>>
-	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny, $tmpGirl.corruption, $tmpGirl.sub)>>
+	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
+	<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
+	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub)>>
 <<else>>
 	<<set _actionMax = Math.floor($tmpGirl.sub/2)>>
 <</if>>
 
-
 <<if $player.horny >= 100>>
+	<<energy +5>>
 	<<horny_reset>>
 	<<set $player.sexp++>>
-
+	
 	<<if $sexAction == 'handjob'>>
         <<link 'Handjob cum'>>
             <<set $sexAction = 'handjob_cum'>>
@@ -29,10 +31,10 @@
             <<goto `passage()`>>
         <</link>>
 	<<elseif $sexAction == 'pussy'>>
-        <<link 'Cum in pussy'>>
-            <<set $sexAction = 'cum_in_pussy'>>
-            <<goto `passage()`>>
-        <</link>>
+		<<link 'Cum in pussy'>>
+			<<set $sexAction = 'cum_in_pussy'>>
+			<<goto `passage()`>>
+		<</link>>
         <<link 'Cum on stomatch'>>
             <<set $sexAction = 'cum_on_stomatch'>>
             <<goto `passage()`>>
@@ -46,34 +48,46 @@
             <<set $sexAction = 'cum_on_back'>>
             <<goto `passage()`>>
         <</link>>
+	<<elseif _actionMax >= _sexActions['cum_on_face'].minAction>>
+	<<link 'Cum on face'>>
+		<<set $sexAction = 'cum_on_face'>>
+		<<goto `passage()`>>
+	<</link>>
+	<<elseif _actionMax >= _sexActions['cum_in_mouth'].minAction || _sexActions['cum_in_mouth'].orConditionTrue>>
+		<<link 'Cum in mouth'>>
+			<<set $sexAction = 'cum_in_mouth'>>
+			<<goto `passage()`>>
+		<</link>>
 	<</if>>
-    <<link 'Cum on face'>>
-        <<set $sexAction = 'cum_on_face'>>
-        <<goto `passage()`>>
-    <</link>>
-    <<link 'Cum in mouth'>>
-        <<set $sexAction = 'cum_in_mouth'>>
-        <<goto `passage()`>>
-    <</link>>
+		
 <<else>>
-    <div id="action-buttons">
-    <<for _sexActionKey, _sexAction range _sexActions>>
-        <<capture _sexActionKey, _sexAction>>
-            <<if !(_sexAction.show ?? true)>>
-                <<continue>>
-            <</if>>
-            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
-            <<link _linkName>>
-                <<set $sexAction = _sexActionKey>>
-                <<goto `passage()`>>
-            <</link>>
-        <</capture>>
-    <</for>>
-    </div>
+	<<if $player.energy >= 0>>
+		<div id="action-buttons">
+		<<for _sexActionKey, _sexAction range _sexActions>>
+			<<capture _sexActionKey, _sexAction>>
+				<<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+					<<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
+					<<link _linkName>>
+						<<set $sexAction = _sexActionKey>>
+						<<goto `passage()`>>
+					<</link>>
+				<</if>>
+			<</capture>>
+		<</for>>
+		</div>
 
-    <br /><br />
+		<br />
 
+		<<if !$sexForced>>	
+			<<link 'Force her'>>
+				<<set $sexForced = true>>
+				<<unset $sexAction>>
+				<<goto `passage()`>>
+			<</link>>
+		<</if>>	
+	<</if>>	
     <<link 'End'>>
+	    <<unset $sexAction, $sexForced>>
         <<if $oldTmpGirlLocation>>
             <<set $tmpGirl.location = $oldTmpGirlLocation>>
             <<unset $oldTmpGirlLocation>>
