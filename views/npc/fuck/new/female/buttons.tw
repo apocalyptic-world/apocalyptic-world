@@ -63,33 +63,33 @@
 	<</if>>
 		
 <<else>>
-	<<if $player.energy >= 5>>
-		<div id="action-buttons">
-		<<for _sexActionKey, _sexAction range _sexActions>>
-			<<capture _sexActionKey, _sexAction>>
-				<<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
-					<<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
-					<<link _linkName>>
-						<<set $sexAction = _sexActionKey>>
-						<<goto `passage()`>>
-					<</link>>
-				<</if>>
-			<</capture>>
-		<</for>>
-		</div>
+        <<if $player.energy >= 5>>
+            <div id="action-buttons">
+                <<for _sexActionKey, _sexAction range _sexActions>>
+                    <<capture _sexActionKey, _sexAction>>
+                        <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
+                            <<link _linkName>>
+                                <<set $sexAction = _sexActionKey>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        <</if>>
+                    <</capture>>
+                <</for>>
+            </div>
+        <br />
 
-		<br />
+        <<if !$sexForced>>	
+            <<link 'Force her'>>
+                <<set $sexForced = true>>
+                <<unset $sexAction>>
+                <<goto `passage()`>>
+            <</link>>
+        <</if>>	
+     <</if>>
 
-		<<if !$sexForced>>	
-			<<link 'Force her'>>
-				<<set $sexForced = true>>
-				<<unset $sexAction>>
-				<<goto `passage()`>>
-			<</link>>
-		<</if>>	
-	<</if>>	
-    <<link 'End'>>
-	    <<unset $sexAction, $sexForced>>
+     <<link 'End'>>
+	<<unset $sexAction, $sexForced>>
         <<if $oldTmpGirlLocation>>
             <<set $tmpGirl.location = $oldTmpGirlLocation>>
             <<unset $oldTmpGirlLocation>>
