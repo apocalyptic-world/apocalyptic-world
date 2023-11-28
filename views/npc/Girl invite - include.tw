@@ -1,0 +1,40 @@
+:: Girl invite - include [include]
+
+/* An 'invite her'-button
+    Random event - meet girl #3 → Girl view
+        $fuckForced
+    Explore event: Abandoned mall
+        _gaveFood
+ */
+ /*
+    things to consider
+    - current events
+    - personal status: relationship, happpiness, sub ....
+    - have she heard (rumours) of the hero? Good or bad?
+    - do she know any of the companions?
+  */
+
+ <<if ($game.location.guesthouse ?? false) && ($tmpGirlInvite ?? false) && $guests.length < $guesthouseLimit>>
+	<<linkreplace 'Invite her a guest'>>
+        <<set $tmpGirlInvite = false>>
+        <<set _strongGirl = $player.strength <= $tmpGirl.strength>>
+        <<set _relation   = $tmpGirl.relationship ?? 0>>
+        <<set _countComp  = $player.companions.length ?? 0>>
+        <<set _reputation = $player.reputation ?? 0>>
+        <<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
+        <<set _no = !_yes || ($fuckForced ?? false) || (_relation <= 0)>>
+        <<if _no>>
+            <<if _strongGirl>>
+                <<set $escapeReason = 'She considers your invite for a few moments, says no and leaves.'>>
+			    <<goto 'Girl escape'>>
+            <<else>>
+                No, I don't want to come to live with you. Please let me go!
+            <</if>>
+        <<else>>
+            <<set $tmpGirl.capture = false>>
+			<<set $guests.push($tmpGirl)>>
+			<<addhours 1>>
+			<<goto 'Guest house'>>
+        <</if>>
+	<</linkreplace>>
+<</if>>
