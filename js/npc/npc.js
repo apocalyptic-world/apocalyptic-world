@@ -102,37 +102,60 @@ setup.orientationRoll = function(gender) {
 		return 'straight';
 	}
 	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
-	var _orientation = '';
+
 	if (gender == 0 || gender == 1) {
 		if (_orientationRoll <= 70) {
-			_orientation = 'straight';
+			return 'straight';
 		} else if (_orientationRoll <= 75) {
-			_orientation = ['lesbian','gay'][gender];
+			return ['lesbian','gay'][gender];
 		} else if (_orientationRoll <= 95) {
-			_orientation = 'bisexual';
+			return 'bisexual';
 		} else {
-			_orientation = 'asexual';
+			return 'asexual';
 		}
 	} else {
 		if (_orientationRoll <= 20) {
-			_orientation = 'straight';
+			return 'straight';
 		} else if (_orientationRoll <= 50) {
-			_orientation = ['lesbian','gay'][gender-2];
+			return ['lesbian','gay'][gender-2];
 		} else if (_orientationRoll <= 70) {
-			_orientation = 'bisexual';
+			return 'bisexual';
 		} else if (_orientationRoll <= 90) {
-			_orientation = 'pansexual';
+			return 'pansexual';
 		} else {
-			_orientation = 'asexual';
+			return 'asexual';
 		}
 	}
-	return _orientation;
+};
+
+setup.displayOrientation = function(person) {
+	if (person.likesGuys == false && person.likesGirls == false && person.likesTGuys == false && person.likesTGirls == false) {
+		return 'asexual';
+	}
+	else if (person.likesGuys == true && person.likesGirls == true && person.likesTGuys == true && person.likesTGirls == true) {
+		return 'pansexual';
+	}
+	else if (person.likesGuys == true && person.likesGirls == true) {
+		return 'bisexual';
+	}
+	else if ((person.gender == 1 || person.gender == 3) && person.likesGirls == true) {
+		return 'straight';
+	}	
+	else if ((person.gender == 0 || person.gender == 2) && person.likesGuys == true) {
+		return 'straight';
+	}
+	else if ((person.gender == 1 || person.gender == 3) && person.likesGuys == true) {
+		return 'gay';
+	}	
+	else if ((person.gender == 0 || person.gender == 2) && person.likesGirls == true) {
+		return 'lesbian';
+	}	
 };
 
 setup.setSexuality = function(person, orientation) {
-	person.orientation = orientation;
+	var _orientation = orientation;
 	if (!settings.gaysEnabled) {
-		person.orientation = 'straight';
+		_orientation = 'straight';
 	}
 	person.likesGuys = false;
 	person.likesGirls = false;
@@ -147,84 +170,80 @@ setup.setSexuality = function(person, orientation) {
 	person.dp = 0;
 
 	if (person.gender == 0 || person.gender == 3 ) {
-			person.pussy = 0;
+		person.pussy = 0;
 	}	
 
-	if (orientation == 'bisexual') {
-			person.likesGuys = true;
-			person.likesGirls = true;
-			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 60;
-			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 60;
+	if (_orientation == 'bisexual') {
+		person.likesGuys = true;
+		person.likesGirls = true;
+		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 60;
+		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 60;
 	}
-	else if (orientation == 'lesbian') {
-			person.likesGirls = true;
-			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 15;
-			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 30;
+	else if (_orientation == 'lesbian') {
+		person.likesGirls = true;
+		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 15;
+		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 30;
 	}
-	else if (orientation == 'gay') {
-			person.likesGuys = true;
-			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 30;
-			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 15;
+	else if (_orientation == 'gay') {
+		person.likesGuys = true;
+		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 30;
+		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 15;
 	}
-	else if ((person.gender == 0 || person.gender == 2) && orientation == 'straight') {
-			person.likesGuys = true;
-			person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 10;
+	else if ((person.gender == 0 || person.gender == 2) && _orientation == 'straight') {
+		person.likesGuys = true;
+		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 10;
 	}
-	else if ((person.gender == 1 || person.gender == 3) && orientation == 'straight') {
-			person.likesGirls = true;
-			person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 10;
+	else if ((person.gender == 1 || person.gender == 3) && _orientation == 'straight') {
+		person.likesGirls = true;
+		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 10;
 	}
-	else if (orientation == 'pansexual') {
-			person.likesGuys = true;
-			person.likesGirls = true;
-			person.likesTGuys = true;
-			person.likesTGirls = true;
-	}
-	
-	if (person.likesGuys == true && person.likesGirls == true && person.likesTGuys == true && person.likesTGirls == true) {
-			person.orientation = 'pansexual';
+	else if (_orientation == 'pansexual') {
+		person.likesGuys = true;
+		person.likesGirls = true;
+		person.likesTGuys = true;
+		person.likesTGirls = true;
 	}
 	
 	if (person.likesGuys) {
-			person.guys = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+		person.guys = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
 	}
 
 	if (person.likesGirls) {
-			person.girls = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+		person.girls = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
 	}
 
 	if (person.likesTGuys && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-			person.tguys = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+		person.tguys = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
 	}
 
 	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-			person.tgirls = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+		person.tgirls = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
 	}
 
 	if (person.likesGuys) {
-			person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-			person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+		person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+		person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
 	}
 	
 	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-			person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-			person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+		person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+		person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
 	}
 
-	if ((person.gender == 0 || person.gender == 3) && orientation !== 'asexual') {
-			person.pussy = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+	if ((person.gender == 0 || person.gender == 3) && _orientation !== 'asexual') {
+		person.pussy = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
 	}
 
-	if (person.gender !== 1 && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender !== 1 && _orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 	}
 
-	if (person.gender == 1 && orientation !== 'straight' && orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender == 1 && _orientation !== 'straight' && _orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
+		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 	}
 
-	if (person.gender == 1 && orientation == 'straight' && (Math.floor(Math.random() * 100) + 1 <= 10)) {
-			person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender == 1 && _orientation == 'straight' && (Math.floor(Math.random() * 100) + 1 <= 10)) {
+		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 	}	
 	
 	return person;
