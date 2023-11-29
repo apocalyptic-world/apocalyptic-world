@@ -7,9 +7,9 @@
 </center>
 <br /><br />
 <<if !$wanted[$wantedId].gender>>
-You put cuffs around her and push her against the wall
+You put cuffs around her and push her against the wall.
 <<else>>
-You beat his ass and cuff him as he lies on the ground
+You beat his ass and cuff him as he lies on the ground.
 <</if>>
 
 <<if !$wanted[$wantedId].gender>>
@@ -30,6 +30,7 @@ You beat his ass and cuff him as he lies on the ground
 	<<link 'Use her'>>
 		<<addmins 30>>
 		<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
+		<<set $fuckForced = true>>
 		<<goto `$wantedPsg`>>
 	<</link>>
 	<<if $slaves.length < $basementLimit>>
@@ -40,6 +41,50 @@ You beat his ass and cuff him as he lies on the ground
 			<<addhours 2>>
 			<<goto 'Basement'>>
 		<</link>>
+	<</if>>
+	<<slaveValue $wanted[$wantedId]>>
+	<<if $wanted[$wantedId].value > $wanted[$wantedId].wanted.value && timeBetween('14:00', '19:00')>>
+		You think she is worth more on the slave market than bounty. She's your property now since you catched her.<br/>
+		<<link 'Sell her on the slave market'>>
+			<<set $wanted[$wantedId].capture = false>>
+			<<set $wanted.splice($wantedId, 1)>>
+			<<addmins 30>>
+			<<set $player.reputation++>>
+			<<set $player.goodwill-=5>>
+			<<set $player.reputation_bounty_hunter-->>
+			<<set $player.money += $wanted[$wantedId].value>>
+			<<statsAdd 'slaves_sold'>>
+			<<goto 'Slave market'>>
+		<</link>>
+	<</if>>
+	<<set _rel = ($slaves.length < $basementLimit) ? 15 : 30>>
+	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+		Want to make a good deed? Or is the basement full? Being a guest beats being a slave so she might not refuse anyway!<br/>
+		<<linkreplace 'Invite her home as a guest'>>
+			<<set $wanted[$wantedId].relationship += _rel>>
+
+			<<set $tmpGirlInvite = false>>
+        	<<set _strongGirl = false>>
+        	<<set _relation   = $tmpGirl.relationship ?? 0>>
+        	<<set _countComp  = $player.companions.length ?? 0>>
+        	<<set _reputation = $player.reputation ?? 0>>
+        	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
+        	<<set _no = !_yes || ($fuckForced ?? false) || (_relation <= 0)>>
+       		 <<if _no>>
+                No, I don't want to come to live with you. Please let me go!
+        	<<else>>
+				<<set $guests.push($wanted[$wantedId])>>
+				<<set $wanted[$wantedId].capture = false>>
+				<<set $wanted.splice($wantedId, 1)>>
+				<<set $player.reputation_bounty_hunter-->>
+				<<set $player.goodwill++>>
+				<<addhours 1>>
+				<<set $tmpGirl.capture = false>>
+				<<set $guests.push($tmpGirl)>>
+				<<addhours 1>>
+				<<goto 'Guest house'>>
+			<</if>>
+		<</linkreplace>>
 	<</if>>
 <</if>>
 
