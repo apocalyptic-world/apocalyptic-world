@@ -7,6 +7,7 @@
  		<</if>>
 		<<set $tmpGirl.talked = true>>
 		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'Girl view'>>
 		<<goto 'Girl talk'>>
 	<</link>>
 <</if>>
@@ -16,12 +17,14 @@
 		  <<if $player.strength < $tmpGirl.strength>>
 			  <<goto 'Girl escape'>>
 		  <<else>>
+  				<<set $tmpGirlViewBack = 'Girl view'>>
 				<<fuck $tmpGirl>>
-				<<set $fuckForced = true>>
+				<<set $sexForced = true>> 
 		  <</if>>
 	  <</link>>
   <<else>>
 	  <<link 'Fuck her'>>
+			<<set $tmpGirlViewBack = 'Girl view'>>
 		  	<<fuck $tmpGirl>>
 	  <</link>>
   <</if>>
@@ -40,6 +43,7 @@
 		<</if>>
 	<</link>>
 <</if>>
+<<include 'Girl invite - include'>>
 
 <<if $tmpGirl.location === 'garden'>>
 	<<if $player.energy >= 20>>
