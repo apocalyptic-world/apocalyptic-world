@@ -4,6 +4,7 @@
 <<run delete $guestId>>
 <<run delete $charId>>
 <<set $tmpGirlCapture = true>>
+<<set $tmpGirlInvite to true>>
 <br /><br />
 <center>
 	[img[setup.ImagePath+'places/explore/abandoned_mall.jpg']]
@@ -50,24 +51,31 @@ Exploring through the city you stumble upon a burnt out shopping center. While n
 					-5 food
 				<</linkdesc>>
 			<</if>>
+			/*  include standard rape-attempt here? */
 			<<if $game.location.basement && $tmpGirlCapture && $slaves.length < $basementLimit && $player.energy >= 30>>
-				<<link 'Capture her'>>
+				<<link 'Try to capture her'>>
 					<<if _gaveFood>>
 						<<set $player.reputation-->>
 					<</if>>
-					<<set $tmpGirl.capture = false>>
-					<<set $slaves.push($tmpGirl)>>
-					<<addhours 1>>
-					<<energy -30>>
-					<<statsAdd 'people_captured'>>
-					<<goto 'Basement'>>
+					<<if $player.strength > $tmpGirl.strength>>
+						<<set $tmpGirl.capture = false>>
+						<<set $slaves.push($tmpGirl)>>
+						<<addhours 1>>
+						<<energy -30>>
+						<<statsAdd 'people_captured'>>
+						<<goto 'Basement'>>
+					<<else>>
+						<<goto 'Girl escape'>>
+					<</if>>
 				<</link>>
 			<</if>>
+			<<include 'Girl invite - include'>>
 		<</linkreplace>>
 	<</if>>
 <</linkreplace>>
 <<link 'Leave'>>
 	<<run delete $tmpGirlCapture>>
+	<<run delete $tmpGirlInvite>>
 	<<goto 'Outside'>>
 <</link>>
 
