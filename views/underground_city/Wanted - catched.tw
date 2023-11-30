@@ -30,7 +30,7 @@ You beat his ass and cuff him as he lies on the ground.
 	<<link 'Use her'>>
 		<<addmins 30>>
 		<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
-		<<set $sexForced = true>>
+		<<set $wanted[$wantedId].wasRaped = true>>
 		<<goto `$wantedPsg`>>
 	<</link>>
 	<<if $slaves.length < $basementLimit>>
@@ -65,12 +65,12 @@ You beat his ass and cuff him as he lies on the ground.
 
 			<<set $tmpGirlInvite = false>>
         	<<set _strongGirl = false>>
-        	<<set _relation   = $tmpGirl.relationship ?? 0>>
+        	<<set _relation   = $wanted[$wantedId].relationship ?? 0>>
         	<<set _countComp  = $player.companions.length ?? 0>>
         	<<set _reputation = $player.reputation ?? 0>>
         	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-        	<<set _no = !_yes || ($sexForced ?? false) || (_relation <= 0)>>
-			<<unset $sexForced>>
+        	<<set _no = !_yes || ($wanted[$wantedId].wasRaped ?? false) || (_relation <= 0)>>
+			<<unset $wanted[$wantedId].wasRaped>>
        		 <<if _no>>
                 No, I don't want to come to live with you. Please let me go!
         	<<else>>
