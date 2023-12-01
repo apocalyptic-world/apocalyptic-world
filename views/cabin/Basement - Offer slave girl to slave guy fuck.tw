@@ -4,11 +4,21 @@
 
 
 <<if setup.getAge($tmpGirl) > 55>>
-	What the hell have you imagined? I'm not interested in your whores.
-	<<run $('#option_end').show()>>
+	<<sayNpc $tmpGirl>>
+		What the hell have you imagined? I'm not interested in your whores.
+	<</sayNpc>>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Guy view'>>
+	<</link>>
 <<elseif !$tmpGirl.likesGirls>>
-	Thank you for the offer but I'm not interested.
-	<<run $('#option_end').show()>>
+	<<sayNpc $tmpGirl>>
+		Thank you for the offer but I'm not interested.
+	<</sayNpc>>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Guy view'>>
+	<</link>>
 <<else>>
 	He nods affirmatively and <<=setup.displayName($slaves[$slaveOfferId])>> approaches closer to his cell door. 
 	<br /><br />
