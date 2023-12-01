@@ -1,0 +1,149 @@
+:: Negan introduction [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<br />
+<center>
+    [img[setup.ImagePath+'places/farm/sanctuary_intro2.jpg']]
+</center>
+<br />
+The air is thick with dust as you approach the entrance to the Sanctuary, a makeshift fortress built from salvaged materials in the midst of the post-apocalyptic wasteland. 
+<br />Armed guards stand watch at the entrance, eyeing you suspiciously as you approach. The heavy side door lowers, revealing a bustling community within the walls. 
+<br />
+<br />
+<<newguy>>
+<<set _guard1 = $tmpGuy>>
+<<sayNpc _guard1>>
+    Hold it right there. What's your business in the Sanctuary?
+<</sayNpc>>
+<br />
+<div id="option_isabel">
+    <<linkreplace 'Isabel sent me'>>
+        <<run $('#option_dom').hide()>>
+        <<run $('#negan_introduction').show()>>
+        <<replace ".senderName">>Isabel<</replace>>
+    <</linkreplace>>
+</div>
+<div id="option_dom">
+    <<linkreplace 'Dom sent me'>>
+        <<run $('#option_isabel').hide()>>
+        <<run $('#negan_introduction').show()>>
+        <<replace ".senderName">>Dom<</replace>>
+    <</linkreplace>>
+</div>
+<div id="negan_introduction" style="display:none">
+    <<sayNpc _guard1>>
+        <span class="senderName"></span>, huh? Wait here. I'll see if Negan's in the mood to talk.
+    <</sayNpc>>
+    <br />
+    After a tense few minutes, the guard returns and motions for you to follow him inside the side of the ship.
+    <br />
+    <br />
+    <center>
+        [img[setup.ImagePath+'places/sanctuary/negan_door.jpg']]
+    </center>
+    <br />
+    Inside is filled with people going about their business, trading goods and repairing makeshift structures. 
+    Eventually, you find yourself in front of a brown metal door with text "Negan" on them.
+    <br />
+    Guard knocks on the doors and from the inside you hear "Come in".
+    <br /><br />
+    Guard opens the doors and lets you in. First you notice a boss, Negan sitting in comfortable green chair. As you get closer you notice a girl under his table sucking him off. He doesn't care about you and lets her continue.
+    <br /><br />
+    <center>
+        [img[setup.ImagePath+'places/sanctuary/negan_blowjob_table.webp']]
+    </center>
+    <<newguy>>
+    <<set 
+        $tmpGuy.name = 'Negan',
+        $tmpGuy.orientation = 'straight',
+        $tmpGuy.birthDate = setup.getBirthDate(40),
+        $tmpGuy.likeGirls = false,
+        $tmpGuy.strength = 150,
+        $tmpGuy.hair = 'black',
+        $tmpGuy.race = 'white',
+        $tmpGuy.quests = {}
+    >>
+    <<set $characters.negan = $tmpGuy>>
+
+    <br />
+    <<negan>>
+        Well, well, well. Look who we have here. <span class="senderName"></span>'s little messenger. What's your name, sweetheart?
+    <</negan>>
+    <br />
+    <div id="option1">
+        <<set _linkName = $player.name + ". And I'm not here to play games.">>
+        <<linkreplace _linkName>>
+            <<run $('#option2, #option3').hide()>>
+            <<run $('#negan_continue').show()>>
+        <</linkreplace>>
+    </div>
+    <div id="option2">
+        <<set _linkName = "You can call me " + $player.name + ". Let's get straight to business.">>
+        <<linkreplace _linkName>>
+            <<run $('#option1, #option3').hide()>>
+            <<run $('#negan_continue').show()>>
+        <</linkreplace>>
+    </div>
+    <div id="option3">
+        <<set _linkName = "Just call me " + $player.name + ". I'm here for the fuel, nothing else.">>
+        <<linkreplace _linkName>>
+            <<run $('#option1, #option2').hide()>>
+            <<run $('#negan_continue').show()>>
+        <</linkreplace>>
+    </div>
+    <div id="negan_continue" style="display:none">
+        <<negan>>
+            I like a person who gets straight to the point. So, <span class="senderName"></span>'s running on empty, huh? Tough break. But nothing comes for free, darlin'. What's in it for us?
+        <</negan>>
+        <br />
+        <<if $player.money >= 400>>
+        <div id="option_money">
+            <<linkreplace 'Offer money'>>
+                <<you>>
+                    I have money! 
+                <</you>>
+                <br />
+                You put 400 caps on his table. He takes them and puts them in drawer.
+                <br /><br />
+                <<run $('#option_slaves, #option_money_desc').hide()>>
+                <<run $('#negan_quest').show()>>
+                <<set $player.money -= 400>>
+                <<negan>>
+                    That'a start. But I will need more.
+                <</negan>>
+            <</linkreplace>>
+            <<linkdesc 'option_money_desc'>>
+                -400 caps.
+            <</linkdesc>>
+        </div>
+        <</if>>
+        <div id="option_slaves">
+            <<linkreplace 'Offer slaves'>>
+                <<you>>
+                    Slaves. Girls, Guys. Anything you like.
+                <</you>>
+                <br />
+                <<run $('#option_money, #option_money_desc').hide()>>
+                <<run $('#negan_quest').show()>>
+                <<negan>>
+                    I hope  you have something good as I am not easy to pleasure.
+                <</negan>>
+            <</linkreplace>>
+        </div>
+
+        <div id="negan_quest" style="display:none">
+            <br />
+            <<negan>>
+                My request will be very specific. Four girls. All blonds and very beautiful (80+). Either that or we have no deal.
+            <</negan>>
+            <br />
+            You nod with your head and leave his office without saying a word.
+            <br /><br />
+            <<link 'Leave'>>
+                <<set $characters.negan.quests.quest1 = true>>
+                <<set $characters.negan.quests.quest1_day = $game.day>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        </div>
+    </div>
+
+</div>
