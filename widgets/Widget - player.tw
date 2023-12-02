@@ -208,14 +208,14 @@
 <<widget showFamilyTree>>
 	<<if $args[0].mother>>
 		<<set _motherNpc = setup.getNpcById($args[0].mother)>>
-		Mother: <<=(_motherNpc ? _motherNpc.name : 'dead')>>
+		Mother: <<=(_motherNpc ? _motherNpc.name : '????')>>
 		<br />
 	<</if>>
 	<<if $args[0].father>>
 		<<if $args[0].father === 'mc'>>
 			Father: You
 		<<else>>
-			Father: <<=setup.getNpcById($args[0].father).name ?? 'dead'>>
+			Father: <<=setup.getNpcById($args[0].father)?.name ?? '????'>>
 		<</if>>
 		<br />
 	<</if>>
@@ -224,7 +224,7 @@
 		<<if $args[0].husband === 'mc'>>
 			You
 		<<else>>
-			<<=setup.getNpcById($args[0].husband).name ??  'dead'>>
+			<<=setup.getNpcById($args[0].husband)?.name ??  '????'>>
 		<</if>>
 	<</if>>
 	<<if $args[0].kids>>

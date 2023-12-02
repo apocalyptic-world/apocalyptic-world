@@ -321,11 +321,19 @@ setup.getNpcHappyLevel = function(person) {
 };
 
 setup.personalityTraits = function(count = 1) {
+<<<<<<< HEAD
 	var c = setup.getRandomElement(['efficient','organized','extravagant','careless']);
 	var a = setup.getRandomElement(['friendly','compassionate','critical','rational']);
 	var n = setup.getRandomElement(['sensitive','nervous','resilient','confident']);
 	var o = setup.getRandomElement(['inventive','curious','consistent','cautious']);
 	var e = setup.getRandomElement(['outgoing','energetic','solitary','reserved']);
+=======
+	var c = ['efficient','organized','extravagant','careless'][window.randomInteger(0, 3)];
+	var a = ['friendly','compassionate','critical','rational'][window.randomInteger(0, 3)];
+	var n = ['sensitive','nervous','resilient','confident'][window.randomInteger(0, 3)];
+	var o = ['inventive','curious','consistent','cautious'][window.randomInteger(0, 3)];
+	var e = ['outgoing','energetic','solitary','reserved'][window.randomInteger(0, 3)];
+>>>>>>> 4bf786626291e9a2858701b5da835dd63ba5eefe
 	var traits = shuffle([c, a, n, o, e]);
 
 	return traits.slice(0, count).sort();

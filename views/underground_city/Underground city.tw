@@ -27,6 +27,9 @@
 <<if !($game.location.streets ?? false) && isMetChar('blair') && ($characters.blair.quests.metOnDay + 3) < $game.day>>
 	<<set $game.location.streets = true>>
 	<<goto 'Underground city - wanted poster'>>
+<<elseif isMetChar('negan') && $characters.dom.quests.quest5 && $characters.negan.quests.quest2 && !$characters.dom.quests.quest6 && $backpack.count('fuel') >= 15>>
+	<<set $characters.dom.quests.quest6>>
+	<<goto 'Dom - quest #6 isabel fuel'>>
 <<else>>
 	<<if !$locationEvents.underground>>
 		<<set $randomNumber = randomInteger(0, 100)>>
