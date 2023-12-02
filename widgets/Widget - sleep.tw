@@ -152,6 +152,8 @@
 		
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
 		<<if $slaves[_i].assignedTo === 'garden' && !_isSick>>
 			<<if typeof $slaves[_i].stats['garden'] === 'undefined'>>
 				<<set $slaves[_i].stats['garden'] = 0>>
@@ -182,7 +184,7 @@
 				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
 			<</if>>
 		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' && !_isSick>>
+		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($slaves[_i].endurance ?? 0) > 10>>
 				<<set _girlChanceToDie = 4>>
@@ -265,6 +267,13 @@
 				<<run delete $slaves[_i].sick>>
 			<</if>>
 		<</if>>
+		// Resting
+		<<if _isRest>>
+			<<set $slaves[_i].rest.days-->>
+			<<if $slaves[_i].rest.days <= 0>>
+				<<run delete $slaves[_i].rest>>
+			<</if>>
+		<</if>>
 	<</capture>>
 <</for>>
 
@@ -342,6 +351,8 @@
 		<</if>>
 		
 		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
+		<<set _isRest = (typeof $guests[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
 		// Assigned jobs
 		<<if $guests[_guestI].assignedTo === 'garden' && !_isSick>>
 			<<if typeof $guests[_guestI].stats['garden'] === 'undefined'>>
@@ -375,7 +386,7 @@
 		<</if>>
 		
 		
-		<<if $guests[_guestI].assignedTo === 'streets' && !_isSick>>
+		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($guests[_guestI].endurance ?? 0) > 10>>
 				<<set _girlChanceToDie = 4>>
@@ -594,6 +605,13 @@
 			<</if>>
 			<<if $guests[_guestI].sick.days <= 0>>
 				<<run delete $guests[_guestI].sick>>
+			<</if>>
+		<</if>>
+		// Resting
+		<<if _isRest>>
+			<<set $guests[_guestI].rest.days-->>
+			<<if $guests[_guestI].rest.days <= 0>>
+				<<run delete $guests[_guestI].rest>>
 			<</if>>
 		<</if>>
 	<</capture>>
