@@ -2,7 +2,7 @@
 
 /* An 'invite her'-button
     Random event - meet girl #3 → Girl view
-        $sexForced
+        $wasRaped
     Explore event: Abandoned mall
         _gaveFood
  */
@@ -22,8 +22,8 @@
         <<set _countComp  = $player.companions.length ?? 0>>
         <<set _reputation = $player.reputation ?? 0>>
         <<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-        <<set _no = !_yes || ($sexForced ?? false) || (_relation <= 0)>>
-        <<unset $sexForced>>
+        <<set _no = !_yes || ($wasRaped ?? false) || (_relation <= 0)>>
+        <<unset $wasRaped>>
         <<if _no>>
             <<if _strongGirl>>
                 <<set $escapeReason = 'She considers your invite for a few moments, says no and leaves.'>>
