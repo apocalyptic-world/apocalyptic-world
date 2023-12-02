@@ -43,7 +43,7 @@ setup.hairRoll = function(_race, _age, _gender) {
 	if (_age >= 50) {
 		_hair = 'gray';
 	}
-	if (_gender && setup.percentageChance(_age - 10)) {
+	if (_gender == 1 && setup.percentageChance(_age - 10)) {
 		_hair = 'bald';
 	}	
 	return _hair;
