@@ -1,0 +1,28 @@
+:: Mods 
+<h1 class="ptitle">MODS</h1>
+<table>
+    <<set $mods ??= {}>>
+    <<for _modKey, _mod range setup.mods>>
+        <<capture _modKey, _mod>>
+            <<set $mods[_modKey] ??= false>>
+            <tr>
+                <td>
+                    <<checkbox '$mods[_modKey]' false true autocheck>>
+                </td>
+                <td>
+                    <<= _mod.name>>
+                </td>
+                <td>
+                    <<= _mod.description>>
+                </td>
+                <td>
+                    <<= _mod.download>>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>
