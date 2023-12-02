@@ -1,5 +1,5 @@
 setup.ageRoll = function() {
-	var _ageRoll = Math.floor(Math.random() * 100 + 1);
+	var _ageRoll = window.randomInteger(1, 100);
 	var _ageRange = new Array();
 	if (_ageRoll <= 55) {
 		_ageRange = [18,27];
@@ -10,11 +10,11 @@ setup.ageRoll = function() {
 	} else {
 		_ageRange = [48,60];
 	}
-	return Math.floor(Math.random() * (_ageRange[1] - _ageRange[0] + 1)) + _ageRange[0];
+	return window.randomInteger(_ageRange[0], _ageRange[1]);
 };
 
 setup.raceRoll = function() {
-	var _raceRoll = Math.floor(Math.random() * 100 + 1);
+	var _raceRoll = window.randomInteger(1, 100);
 	var _race = '';
 	if (_raceRoll <= 40) {
 		_race = 'white';
@@ -29,7 +29,7 @@ setup.raceRoll = function() {
 };
 
 setup.hairRoll = function(_race, _age, _gender) {
-	var _hairRoll = Math.floor(Math.random() * 100 + 1);
+	var _hairRoll = window.randomInteger(1, 100);
 	var _hair = '';
 	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 15) {
 		_hair = 'black';
@@ -43,27 +43,27 @@ setup.hairRoll = function(_race, _age, _gender) {
 	if (_age >= 50) {
 		_hair = 'gray';
 	}
-	if (_gender && (Math.floor(Math.random() * 100) + 1 <= (_age - 10))) {
+	if (_gender == 1 && setup.percentageChance(_age - 10)) {
 		_hair = 'bald';
 	}	
 	return _hair;
 };
 
 setup.dyeRoll = function(hair) {
-	var _dyeRoll = Math.floor(Math.random() * 100 + 1);
+	var _dyeRoll = window.randomInteger(1, 100);
 	var _hairList = [hair];
 	if (_dyeRoll <= 25) {
-		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white'];
+		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white', 'gray'];
 	} else if (_dyeRoll <= 50) {
 		_hairList = ['ginger', 'blonde'];
 	}
-	return _hairList[Math.floor(Math.random() * _hairList.length)];
+	return _hairList[window.randomInteger(0, _hairList.length - 1)];
 };
 
 setup.eyesRoll = function(_race, _hair) {
-	var _eyesRoll = Math.floor(Math.random() * 100 + 1);
-	var _metisRoll = Math.floor(Math.random() * 100 + 1);
-	var _lightRoll = Math.floor(Math.random() * 100 + 1);
+	var _eyesRoll = window.randomInteger(1, 100);
+	var _metisRoll = window.randomInteger(1, 100);
+	var _lightRoll = window.randomInteger(1, 100);
 	var _eyes = 'brown';
 	
 	if (_race = 'white' || _metisRoll <= 30){
@@ -101,7 +101,7 @@ setup.orientationRoll = function(gender) {
 	if (!settings.gaysEnabled) {
 		return 'straight';
 	}
-	var _orientationRoll = Math.floor(Math.random() * 100 + 1);
+	var _orientationRoll = window.randomInteger(1, 100);
 
 	if (gender == 0 || gender == 1) {
 		if (_orientationRoll <= 70) {
@@ -176,26 +176,26 @@ setup.setSexuality = function(person, orientation) {
 	if (_orientation == 'bisexual') {
 		person.likesGuys = true;
 		person.likesGirls = true;
-		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 60;
-		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 60;
+		person.likesTGuys = setup.percentageChance(60);
+		person.likesTGirls = setup.percentageChance(60);
 	}
 	else if (_orientation == 'lesbian') {
 		person.likesGirls = true;
-		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 15;
-		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 30;
+		person.likesTGuys = setup.percentageChance(15);
+		person.likesTGirls = setup.percentageChance(30);
 	}
 	else if (_orientation == 'gay') {
 		person.likesGuys = true;
-		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 30;
-		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 15;
+		person.likesTGuys = setup.percentageChance(30);
+		person.likesTGirls = setup.percentageChance(15);
 	}
 	else if ((person.gender == 0 || person.gender == 2) && _orientation == 'straight') {
 		person.likesGuys = true;
-		person.likesTGuys = Math.floor(Math.random() * 100) + 1 <= 10;
+		person.likesTGuys = setup.percentageChance(10);
 	}
 	else if ((person.gender == 1 || person.gender == 3) && _orientation == 'straight') {
 		person.likesGirls = true;
-		person.likesTGirls = Math.floor(Math.random() * 100) + 1 <= 10;
+		person.likesTGirls = setup.percentageChance(10);
 	}
 	else if (_orientation == 'pansexual') {
 		person.likesGuys = true;
@@ -205,45 +205,45 @@ setup.setSexuality = function(person, orientation) {
 	}
 	
 	if (person.likesGuys) {
-		person.guys = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+		person.guys = window.randomInteger(2, 20);
 	}
 
 	if (person.likesGirls) {
-		person.girls = Math.floor(Math.random() * (20 - 2 + 1)) + 2;
+		person.girls = window.randomInteger(2, 20);
 	}
 
-	if (person.likesTGuys && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-		person.tguys = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+	if (person.likesTGuys && setup.percentageChance(50)) {
+		person.tguys = window.randomInteger(1, 5);
 	}
 
-	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-		person.tgirls = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+	if (person.likesTGirls && setup.percentageChance(50)) {
+		person.tgirls = window.randomInteger(1, 5);
 	}
 
 	if (person.likesGuys) {
-		person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-		person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+		person.bj = window.randomInteger(10, 30);
+		person.dp = window.randomInteger(0, 20);
 	}
 	
-	if (person.likesTGirls && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-		person.bj = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-		person.dp = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
+	if (person.likesTGirls && setup.percentageChance(25)) {
+		person.bj = window.randomInteger(10, 30);
+		person.dp = window.randomInteger(0, 20);
 	}
 
 	if ((person.gender == 0 || person.gender == 3) && _orientation !== 'asexual') {
-		person.pussy = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+		person.pussy = window.randomInteger(10, 30);
 	}
 
-	if (person.gender !== 1 && _orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender !== 1 && _orientation !== 'asexual' && setup.percentageChance(50)) {
+		person.anal = window.randomInteger(5, 20);
 	}
 
-	if (person.gender == 1 && _orientation !== 'straight' && _orientation !== 'asexual' && (Math.floor(Math.random() * 100) + 1 <= 50)) {
-		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender == 1 && _orientation !== 'straight' && _orientation !== 'asexual' && setup.percentageChance(50)) {
+		person.anal = window.randomInteger(5, 20);
 	}
 
-	if (person.gender == 1 && _orientation == 'straight' && (Math.floor(Math.random() * 100) + 1 <= 10)) {
-		person.anal = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+	if (person.gender == 1 && _orientation == 'straight' && setup.percentageChance(10)) {
+		person.anal = window.randomInteger(5, 20);
 	}	
 	
 	return person;
@@ -285,8 +285,8 @@ setup.agePeriod = function(age) {
 
 setup.beautyDescription = function(beauty) {
 	const categories = ['repulsive looking', 'hideous', 'ugly', 'unattractive', 'plain looking', 'average looking', 'attractive', 'beautiful', 'gorgeous', 'stunning'];
-    const categoryIndex = Math.ceil(beauty / 10) - 1;
-    return categories[Math.min(categoryIndex, 9)];
+    const categoryIndex = Math.floor((beauty - 1) / 10);
+    return categories[Math.max(categoryIndex, 0)];
 };
 
 setup.genderClass = function(person) {
@@ -321,12 +321,12 @@ setup.getNpcHappyLevel = function(person) {
 };
 
 setup.personalityTraits = function(count = 1) {
-	var c = shuffle(['efficient','organized','extravagant','careless']);
-	var a = shuffle(['friendly','compassionate','critical','rational']);
-	var n = shuffle(['sensitive','nervous','resilient','confident']);
-	var o = shuffle(['inventive','curious','consistent','cautious']);
-	var e = shuffle(['outgoing','energetic','solitary','reserved']);
-	var traits = shuffle([c[0], a[0], n[0], o[0], e[0]]);
+	var c = ['efficient','organized','extravagant','careless'][window.randomInteger(0, 3)];
+	var a = ['friendly','compassionate','critical','rational'][window.randomInteger(0, 3)];
+	var n = ['sensitive','nervous','resilient','confident'][window.randomInteger(0, 3)];
+	var o = ['inventive','curious','consistent','cautious'][window.randomInteger(0, 3)];
+	var e = ['outgoing','energetic','solitary','reserved'][window.randomInteger(0, 3)];
+	var traits = shuffle([c, a, n, o, e]);
 
 	return traits.slice(0, count).sort();
 };
