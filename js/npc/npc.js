@@ -53,7 +53,7 @@ setup.dyeRoll = function(hair) {
 	var _dyeRoll = Math.floor(Math.random() * 100 + 1);
 	var _hairList = [hair];
 	if (_dyeRoll <= 25) {
-		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white'];
+		_hairList = ['red', 'green', 'blue', 'pink', 'purple', 'white', 'gray'];
 	} else if (_dyeRoll <= 50) {
 		_hairList = ['ginger', 'blonde'];
 	}
