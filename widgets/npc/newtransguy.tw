@@ -1,14 +1,16 @@
 :: Widget- newtransguy [widget]
 <<widget newguy>>
 	<<include 'Guy names'>>
+	<<set _gender = 3>>	
 	<<set _age = setup.ageRoll()>>
 	<<set _race = setup.raceRoll()>>
-	<<set _hair = setup.hairRoll(_race, _age, 3)>>
-	<<set _eyes = setup.eyesRoll(_race, _hair)>>
-	<<set _orientation = setup.orientationRoll(3)>>
+	<<set _naturalHair = setup.hairRoll(_race, _age, _gender)>>
+	<<set _eyes = setup.eyesRoll(_race, _naturalHair)>>
+	<<set _orientation = setup.orientationRoll(_gender)>>
+	<<set _hair = setup.dyeRoll(_naturalHair)>>
 	
 	<<set $tmpGuy = {
-		gender: 3,	
+		gender: _gender,	
 		name: either(_names),
 		beauty: random(20, 70),
 		birthDate: setup.getBirthDate(_age),
@@ -16,6 +18,7 @@
 		corruption: random(0, 50),
 		sub: random(0, 30),
 		happy: random(40, 60),
+		naturalHair: _naturalHair,
 		hair: _hair,
 		eyes: _eyes,
 		race: _race,
