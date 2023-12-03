@@ -319,9 +319,8 @@ setup.genderClass = function(person) {
 };
 
 setup.getNpcHappyLevel = function(person) {
-	if (!person.happy) {
-		person.happy = 50;
-	}
+	person.happy ??= 0;
+
 	const emotions = {
         very_sad: person.happy < -50,
         sad: person.happy < 0,
