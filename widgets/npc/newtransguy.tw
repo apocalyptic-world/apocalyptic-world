@@ -1,17 +1,12 @@
-:: Widget newgirl [widget]
-<<widget newgirl>>
-	<<include 'Girl names'>>
-	<<set _gender = 0>>	
+:: Widget- newtransguy [widget]
+<<widget newguy>>
+	<<include 'Guy names'>>
+	<<set _gender = 3>>	
 	<<include 'newnpc'>>
 
 	<<set
-		_npc.breasts = either('small', 'medium', 'big'),
 		_npc.virgin = false,
-		_npc.orgasms = 0,
-		_npc.clothes = {
-			top: either(1,2,3),
-			bottom: either(1,2,3)
-		}
+		_npc.orgasms = 0
 	>>
 
 	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
@@ -26,7 +21,5 @@
 		<<set _npc.traits = setup.getRandomTraits(_npcTraits)>>
 	<</if>>
 
-	<<set $tmpGirl = _npc>>
+	<<set $tmpGuy = _npc>>
 <</widget>>
-
-
