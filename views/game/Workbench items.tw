@@ -1,5 +1,5 @@
 :: Workbench items  [include] {"position":"146,521","size":"100,100"}
-<<if typeof setup.workbenchItems>>
+<<if typeof setup.workbenchItems === 'undefined'>>
 	<<set setup.workbenchItems = {
 		greenhouse: {
 			show: !($game.location.greenhouse ?? false),
@@ -231,4 +231,5 @@
 		
 	}>>
 <</if>>
-<<set _workbenchItems = setup.workbenchItems>>
+<<set   _workbenchItems = setup.workbenchItems>>
+<<unset $workbenchItems>>
