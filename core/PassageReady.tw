@@ -62,3 +62,18 @@
 		Dialog.open();
 	<</script>>
 <</if>>
+<<script>>
+	Object.keys(variables().mods ?? {}).forEach(key => {
+		if (!variables().mods[key]) {
+			return;
+		}
+
+		importScripts(setup.Path + "js/" + key + ".js")
+            .then(function() {
+                memorize('actions', setup.actions[key]);
+            }).catch(function(error) {  // eslint-disable-line
+                alert("Error: Could not load mod '" + key + ".js'.");
+            }
+        );
+	});
+<</script>>
