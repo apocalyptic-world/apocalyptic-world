@@ -1,7 +1,7 @@
 :: Farm - shop [bg-farm] {"position":"1934,911","size":"100,100"}
 <h1 class="ptitle">FARM - SHOP</h1>
 <br /><br />
-  <<set $shopItems = [
+  <<set _shopItems = [
 	  {name:'food',price:1, sell: false},
 	  {name:'wood',price:1},
 	  {name:'axe', price:20},
@@ -12,17 +12,12 @@
   	  {name:'soda',price:8,sell:false},
 	  ]>>
   <<if $characters.vincent.quests.pregnancy_talked>>
-  	<<run $shopItems.push({
+  	<<run _shopItems.push({
 		name: 'milk',
 		price: 10,
 		sell: false
 	})>>
   <</if>>
-<<shop $shopItems 'Farm - shop' '<<if $characters.vincent.relationship < 20>><<set $characters.vincent.relationship++>><</if>>'>>
+<<shop _shopItems 'Farm - shop' '<<if $characters.vincent.relationship < 20>><<set $characters.vincent.relationship++>><</if>>'>>
 <br /><br />
-/* [[Leave|Farm]] */
-<<link 'Leave'>>
-	<<unset $shopItems>>
-	<<goto 'Farm'>>
-<</link>>
-
+[[Leave|Farm]]
