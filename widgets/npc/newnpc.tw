@@ -1,0 +1,52 @@
+:: newnpc
+<<set _age = setup.ageRoll()>>
+<<set _race = setup.raceRoll()>>
+<<set _naturalHair = setup.hairRoll(_race, _age, _gender)>>
+<<set _eyes = setup.eyesRoll(_race, _naturalHair)>>
+<<set _orientation = setup.orientationRoll(_gender)>>
+<<set _hair = setup.dyeRoll(_naturalHair)>>
+
+<<set _npc = {
+    gender: _gender,
+    name: either(_names),
+    beauty: random(20, 70),
+    birthDate: setup.getBirthDate(_age),
+    relationship: 0,
+    corruption: random(0, 50),
+    strength: random(5, 15),
+   	sub: random(0, 30),
+    happy: random(40, 60),
+    naturalHair: _naturalHair,
+    hair: _hair,
+    eyes: _eyes,
+    race: _race,
+    location: null,
+    talked: false,
+    food: random(10, 90),
+    assignedTo: null,
+    horny: random(0, 30),
+    traits: [],
+    skills: [],
+    likes: [],
+    dislikes: [],
+    personality: setup.personalityTraits(either(1, 2, 2)),
+    endurance: 0
+}>>
+
+<<set _npc.id = setup.generateUniqueKey(_npc)>>
+<<if setup.getAge(_npc) < 18>>
+	<<run _npc.birthDate.setFullYear(_npc.birthDate.getFullYear() - 1)>>
+<</if>>
+<<if setup.getAge(_npc) <= 30>>
+	<<set _npc.beauty = Math.min(_npc.beauty + 10, 100)>>
+<</if>>
+<<if setup.getAge(_npc) >= 50>>
+	<<set _npc.beauty = Math.max(_npc.beauty - 10, 0)>>
+<</if>>
+
+<<set _npc = setup.setSexuality(_npc, _orientation)>>
+<<set _npc.likes = setup.getRandomGifts(either(1, 2))>>
+<<set _npc.dislikes = setup.getRandomGifts(either(1, 2), _npc.likes)>>
+<<if setup.percentageChance(50)>>
+	<<set _npc.skills = setup.getRandomSkills()>>
+<</if>>

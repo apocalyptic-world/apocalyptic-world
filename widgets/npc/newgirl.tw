@@ -2,88 +2,41 @@
 <<widget newgirl>>
 	<<include 'Girl names'>>
 	<<set _gender = 0>>	
-	<<set _age = setup.ageRoll()>>
-	<<set _race = setup.raceRoll()>>
-	<<set _naturalHair = setup.hairRoll(_race, _age, _gender)>>
-	<<set _eyes = setup.eyesRoll(_race, _naturalHair)>>
-	<<set _orientation = setup.orientationRoll(_gender)>>
-	<<set _hair = setup.dyeRoll(_naturalHair)>>
+	<<include 'newnpc'>>
 
-	<<set $tmpGirl = {
-		gender: _gender,
-		name: either(_names),
-		beauty: random(20, 70),
-		birthDate: setup.getBirthDate(_age),
-		relationship: 0,
-		corruption: random(0, 50),
-		sub: random(0, 30),
-		happy: random(40, 60),
-		naturalHair: _naturalHair,
-		hair: _hair,
-		eyes: _eyes,
-		breasts: either('small', 'medium', 'big'),
-		race: _race,
-		location: 'forest',
-		talked: false,
-		food: random(10, 90),
-		strength: random(5, 15),
-		assignedTo: null,
-		virgin: false,
-		horny: random(0, 30),
-		orgasms: 0,
-		traits: [],
-		skills: [],
-		likes: [],
-		dislikes: [],
-		personality: setup.personalityTraits(either(1, 2, 2)),
-		endurance: 0,
-		clothes: {
+	<<set
+		_npc.breasts = either('small', 'medium', 'big'),
+		_npc.virgin = false,
+		_npc.orgasms = 0,
+		_npc.clothes = {
 			top: either(1,2,3),
 			bottom: either(1,2,3)
 		}
-	}>>
-
-<<set $tmpGirl = setup.setSexuality($tmpGirl, _orientation)>>
-<<if setup.getAge($tmpGirl) < 18>>
-	<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
-<</if>>
-
-<<if (setup.getAge($tmpGirl) <= 20 && setup.percentageChance(50)) >>
-	<<set 
-		$tmpGirl.virgin = true,
-		$tmpGirl.guys = 0,
-		$tmpGirl.girls = 0,
-		$tmpGirl.tguys = 0,
-		$tmpGirl.tgirls = 0,
-		$tmpGirl.anal = 0,
-		$tmpGirl.bj = 0,
-		$tmpGirl.dp = 0,
-		$tmpGirl.pussy = 0
 	>>
-<</if>>
 
-<<if setup.getAge($tmpGirl) <= 30>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 10, 100)>>
-<</if>>
-<<if setup.getAge($tmpGirl) >= 50>>
-	<<set $tmpGirl.beauty = Math.max($tmpGirl.beauty - 10, 0)>>
-<</if>>
-
-<<set $tmpGirl.id = setup.generateUniqueKey($tmpGirl)>>
-<<if setup.percentageChance(50)>>
-	<<set _npcTraits = 1>>
-	<<if setup.percentageChance(30)>>
-		<<set _npcTraits = 2>>
+	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
+		<<set 
+			_npc.virgin = true,
+			_npc.guys = 0,
+			_npc.girls = 0,
+			_npc.tguys = 0,
+			_npc.tgirls = 0,
+			_npc.anal = 0,
+			_npc.bj = 0,
+			_npc.dp = 0,
+			_npc.pussy = 0
+		>>
 	<</if>>
-	<<set $tmpGirl.traits = setup.getRandomTraits(_npcTraits)>>
-<</if>>
-<<if setup.percentageChance(50)>>
-	<<set $tmpGirl.skills = setup.getRandomSkills()>>
-<</if>>
 
-<<set $tmpGirl.likes = setup.getRandomGifts(either(1, 2))>>
-<<set $tmpGirl.dislikes = setup.getRandomGifts(either(1, 2), $tmpGirl.likes)>>
+	<<if setup.percentageChance(50)>>
+		<<set _npcTraits = 1>>
+		<<if setup.percentageChance(30)>>
+			<<set _npcTraits = 2>>
+		<</if>>
+		<<set _npc.traits = setup.getRandomTraits(_npcTraits)>>
+	<</if>>
 
+	<<set $tmpGirl = _npc>>
 <</widget>>
 
 
