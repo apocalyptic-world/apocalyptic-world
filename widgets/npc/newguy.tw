@@ -1,64 +1,24 @@
 :: Widget- newguy [widget]
 <<widget newguy>>
 	<<include 'Guy names'>>
-	<<set _age = setup.ageRoll()>>
-	<<set _race = setup.raceRoll()>>
-	<<set _hair = setup.hairRoll(_race, _age, 1)>>
-	<<set _eyes = setup.eyesRoll(_race, _hair)>>
-	<<set _orientation = setup.orientationRoll(1)>>
-	
-	<<set $tmpGuy = {
-		gender: 1,	
-		name: either(_names),
-		beauty: random(20, 70),
-		birthDate: setup.getBirthDate(_age),
-		relationship: 0,
-		corruption: random(0, 10),
-		sub: random(5, 13),
-		happy: random(40, 60),
-		hair: _hair,
-		eyes: _eyes,
-		dick: either('small', 'medium', 'big'),
-		race: _race,
-		location: null,
-		talked: false,
-		food: random(10, 90),
-		strength: random(20, 40),
-		assignedTo: null,	
-		horny: random(0, 30),
-		traits: [],
-		skills: [],
-		likes: [],
-		dislikes: [],
-		personality: setup.personalityTraits(either(1, 2, 2)),
-		endurance: 0,
-	}>>
-	
-<<set $tmpGuy = setup.setSexuality($tmpGuy, _orientation)>>
-<<if ($tmpGuy.likesGuys || $tmpGuy.likesTGirls) && setup.percentageChance(25)>>
-	<<set $tmpGuy.traits = [either('analslut', 'cumslut', 'deepthroat')]>>
-<</if>>
+	<<set _gender = 1>>	
+	<<include 'newnpc'>>
 
-<<if setup.percentageChance(50)>>
-	<<set $tmpGuy.skills = setup.getRandomSkills()>>
-<</if>>
-
-<<if (setup.getAge($tmpGuy) <= 20 && setup.percentageChance(50))>>
-	<<set 
-		$tmpGuy.guys = 0,
-		$tmpGuy.girls = 0,
-		$tmpGuy.tguys = 0,
-		$tmpGuy.tgirls = 0,
-		$tmpGuy.anal = 0,
-		$tmpGuy.bj = 0,
-		$tmpGuy.dp = 0
+	<<set
+		_npc.dick = either('small', 'medium', 'big'),
+		_npc.strength = random(20, 40),
+   		_npc.sub = random(5, 13)
 	>>
-<</if>>
 
-<<set $tmpGuy.id = setup.generateUniqueKey($tmpGuy)>>
-<<set $tmpGuy.likes = setup.getRandomGifts(either(1, 2))>>
-<<set $tmpGuy.dislikes = setup.getRandomGifts(either(1, 2), $tmpGuy.likes)>>
+	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
+		<<set _npc = setup.setToVirgin(_npc)>>
+	<</if>>
 
+	<<if (_npc.likesGuys || _npc.likesTGirls) && setup.percentageChance(25)>>
+		<<set _npc.traits = [either('analslut', 'cumslut', 'deepthroat')]>>
+	<<else>>
+		<<set _npc.hair = _npc.naturalHair>>
+	<</if>>
+	
+	<<set $tmpGuy = _npc>>
 <</widget>>
-
-
