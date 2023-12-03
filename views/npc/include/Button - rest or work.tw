@@ -1,0 +1,33 @@
+:: Button - rest or work [include]
+
+/* using $tmpgirl */
+<<if $tmpGirl.assignedTo === 'streets'>>
+	<<set _isRest = ($tmpGirl.rest !== 'undefined')>>
+	<<if $tmpGirl.assignedTo === 'streets'>>
+		<<if _isRest>>
+			<<set _restDisplay='block', _workDisplay='none'>>
+		<<else>>
+			<<set _restDisplay='none', _workDisplay='block'>>
+		<</if>>
+	<<else>>
+		<<set _restDisplay='none', _workstyle='none'>>
+	<</if>>
+	<div id="optrest" @style="'display:' + _restDisplay">
+		<<link 'Enough rest! - Back to work'>>
+			<<run delete $tmpGirl.rest>>
+			<<run $('#optrest').hide()>>
+			<<run $('#optwork').show()>>
+		<</link>>
+	</div>
+	<div id="optwork" @style="'display:' + _workDisplay"> 
+		<<link 'Hard work? - Take a day off'>>
+			<<set $tmpGirl.rest = {
+				days: 1,
+				desc: 'Day off resting',
+				id: 'resting'
+			}>>
+			<<run $('#optrest').show()>>
+			<<run $('#optwork').hide()>>
+		<</link>>
+	</div>
+<</if>>
