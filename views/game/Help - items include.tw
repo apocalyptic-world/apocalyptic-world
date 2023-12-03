@@ -7,19 +7,16 @@
     <<set _catHelpItems[_cat] = new Map()>>
 <</for>>
 
-/* $workbenchItems from <<include 'Workbench items' */
-/* should perhaps be setup.workbenchItems ? */
-<<if typeof $workbenchItems === 'undefined'>>
-    <<include 'Workbench items'>>
-<</if>>
+/* _workbenchItems from <<include 'Workbench items' */
+<<include 'Workbench items'>>
 
 <<set _crafting = []>>
 
-<<for _itemID range Object.keys($workbenchItems)>>
-    /*<<set _crafting = _crafting.append(Object.keys($workbenchItems[_itemID].required))>>*/
-    <<if typeof $workbenchItems[_itemID].required === 'undefined'>>
+<<for _itemID range Object.keys(_workbenchItems)>>
+    /*<<set _crafting = _crafting.append(Object.keys(_workbenchItems[_itemID].required))>>*/
+    <<if typeof _workbenchItems[_itemID].required === 'undefined'>>
     <</if>> 
-    <<for _craftingID range Object.keys($workbenchItems[_itemID].required)>>
+    <<for _craftingID range Object.keys(_workbenchItems[_itemID].required)>>
         <<run _crafting.push[_craftingID]>>
     <</for>>
 <</for>>
@@ -75,7 +72,7 @@
         <<set _helpItem.desc += '<br />No use for now'>>
     <</if>>
     
-    /* a little hmor */
+    /* a little humor */
      <<if ['duck_tape'].includes(_itemID)>>
         <<set _helpItem.desc += '<br />No ducks implemented in game yet!'>>
     <</if>>
@@ -88,7 +85,7 @@
     <<if ['milk'].includes(_itemID)>>
         <<run _helpItem.sources.push('Milking the ladies')>>
     <</if>>
-    <<if $workbenchItems[_itemID] ?? false>>
+    <<if _workbenchItems[_itemID] ?? false>>
         <<run _helpItem.sources.push('Workbench')>>
     <</if>>
     <<if ['food'].includes(_itemID)>>
