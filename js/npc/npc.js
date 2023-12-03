@@ -249,6 +249,24 @@ setup.setSexuality = function(person, orientation) {
 	return person;
 };
 
+setup.setToVirgin = function(person) {
+	person.guys = 0;
+	person.girls = 0;
+	person.tguys = 0;
+	person.tgirls = 0;
+
+	person.anal = 0;
+	person.bj = 0;
+	person.dp = 0;
+
+	if (person.gender == 0 || person.gender == 3) {
+		person.virgin = true;
+		person.pussy = 0;
+	}
+
+	return person;
+};
+
 setup.genderDescription = function(person) {
 	const _mapping = [
 		'woman',
