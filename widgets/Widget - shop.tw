@@ -11,7 +11,7 @@
 					<<print Item.get(_shopItem.name).name>>
 				</td>
 				<td>
-					<<numberbox "$shopItems[_i].qty" 1>>
+					<<numberbox "_shopItems[_i].qty" 1>>
 				</td>
 				<td style="text-align: center;">
 					<<if (_shopItem.sell ?? true)>>
@@ -21,12 +21,12 @@
 				<td>
 					<<if $backpack.has(_shopItem.name) && (_shopItem.sell ?? true)>>
 						<<link 'Sell'>> 
-							<<if $backpack.count(_shopItem.name) < $shopItems[_i].qty>>
+							<<if $backpack.count(_shopItem.name) < _shopItems[_i].qty>>
 								<<replace `'#shop-error-'+_i`>>You don't have enough items<</replace>>
-							<<elseif $shopItems[_i].qty < 1>>
+							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
 							<<else>>
-								<<set $player.money += _shopItem.price * $shopItems[_i].qty>>
+								<<set $player.money += _shopItem.price * _shopItems[_i].qty>>
 								<<drop $backpack _shopItem.name _shopItem.qty>>
 								<<goto $args[1]>>
 							<</if>>
@@ -47,10 +47,10 @@
 				<td>
 					<<if (_shopItem.buy ?? true)>>
 						<<link 'Buy'>> 
-							<<set _totalPrice = _buyprice * $shopItems[_i].qty>>
+							<<set _totalPrice = _buyprice * _shopItems[_i].qty>>
 							<<if $player.money < _totalPrice>> 
 								<<replace `'#shop-error-'+_i`>>You don't have enough caps<</replace>>
-							<<elseif $shopItems[_i].qty < 1>>
+							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
 							<<else>>
 								<<if $args[2]>>
