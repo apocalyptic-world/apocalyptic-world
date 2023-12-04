@@ -5,7 +5,7 @@
 	<<set _portrait = '/people/anonguy.png'>>
 <</if>>
 <br />
-<<if $tmpGirl.likesGuys && $tmpGirl.relationship > 30>>
+<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 	<<if $tmpGirl.washedBathhouse>>
 		<<say $tmpGirl.name setup.ImagePath+_portrait>>
 			Sorry, I will have to decline. I already was in bathhouse today. Maybe some other time
@@ -26,11 +26,7 @@
 	<<link 'Go to the shower'>>
 		<<set $oldTmpGirlLocation = $tmpGirl.location>>
 		<<set $tmpGirl.location = 'shower'>>
-		<<if !$tmpGirl.gender>>	
-			<<fuck $tmpGirl>>
-		<<else>>				
-			<<goto 'Guy fuck'>>
-		<</if>>
+		<<fuck $tmpGirl>>
 	<</link>>
 <</if>>
 <<link 'Back'>>
