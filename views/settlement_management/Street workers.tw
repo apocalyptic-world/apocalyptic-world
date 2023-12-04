@@ -1,0 +1,31 @@
+:: Settlement management - streets_workers [management include]
+
+<h1>Street workers</h1>
+
+Working the streets is a unhappy work. Needs a day off now and then.
+<br/><br/>
+
+<<set _workersByHappyLvl = {
+    very_sad:   {slaves: [], guests: []},
+    sad:        {slaves: [], guests: []},
+    normal:     {slaves: [], guests: []},
+    happy:      {slaves: [], guests: []},
+    very_happy: {slaves: [], guests: []}
+}>>
+<<set _workers = {
+    slaves: setup.getPersonsForLocation($slaves, 'streets'),
+    guests: setup.getPersonsForLocation($guests, 'streets'),
+}>>
+
+<<set _slaves = >>
+
+<<set _npcs = $slaves.concat($guests)>>
+<<for _npcI, _npc range _npcs>>
+<</for>>
+
+<table class="mc-stats-table">
+</table>
+
+/*
+setup.getNpcHappyLevel = function(person)
+*/
