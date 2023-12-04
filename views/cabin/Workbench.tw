@@ -4,9 +4,9 @@
 <br />
 
 <<set _isStorageAvailable = ($game.location.shop ?? false)>>
-<<set _items to Object.keys($workbenchItems)>>
+<<set _items to Object.keys(_workbenchItems)>>
 <<for _i to 0; _i lt _items.length; _i++>>
-	<<set _item = $workbenchItems[_items[_i]]>>
+	<<set _item = _workbenchItems[_items[_i]]>>
 	  
 	<<capture _i, _item, _workEnergy, _required>>
 	  <<if !_item.show>>
@@ -27,8 +27,8 @@
 		  <table>
 			  <tr>
 				  <td style="width: 67%">
-					  <h3><<=$workbenchItems[_items[_i]].title>></h3>
-					  <<=$workbenchItems[_items[_i]].description>>
+					  <h3><<=_workbenchItems[_items[_i]].title>></h3>
+					  <<=_workbenchItems[_items[_i]].description>>
 				  </td>
 				  <td>
 					  <div class="workbench-required">
@@ -56,7 +56,7 @@
 
 							<<energy `-_workEnergy`>>
 							
-							<<set $player.debug = $workbenchItems[_items[_i]].energy>>
+							<<set $player.debug = _workbenchItems[_items[_i]].energy>>
 							<<for _r to 0; _r lt _required.length; _r++>>
 								<<capture _r>>
                                                                         <<set _reqKey   = _required[_r]>>
@@ -67,8 +67,8 @@
 									<<drop $backpack _reqKey _reqCount>> 
 								<</capture>>
 							<</for>>
-							<<run $workbenchItems[_items[_i]].after()>>
-							<<goto $workbenchItems[_items[_i]].goto>>
+							<<run _workbenchItems[_items[_i]].after()>>
+							<<goto _workbenchItems[_items[_i]].goto>>
 						<</link>>
 					  <<else>>
 						<div class="workbench-not-enough">

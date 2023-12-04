@@ -355,4 +355,10 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.wanted[saveWantedI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.wanted[saveWantedI].likes);
         } 
     }
+
+    /* obselete variables */
+    delete 
+        save.state.history[save.state.index].variables.workbenchItems,
+        save.state.history[save.state.index].variables.shopItems,
+        save.state.history[save.state.index].variables.actionText;
 });

@@ -1,233 +1,235 @@
-:: Workbench items {"position":"146,521","size":"100,100"}
-<<set $workbenchItems = {
-	greenhouse: {
-		show: !($game.location.greenhouse ?? false),
-		title: 'Greenhouse',
-		description: 'Increase food productivity by assigning slaves here.',
-		required: {
-			'solar_panel': 2,
-			'wood': 30,
+:: Workbench items  [include] {"position":"146,521","size":"100,100"}
+<<if typeof setup.workbenchItems === 'undefined'>>
+	<<set setup.workbenchItems = {
+		greenhouse: {
+			show: !($game.location.greenhouse ?? false),
+			title: 'Greenhouse',
+			description: 'Increase food productivity by assigning slaves here.',
+			required: {
+				'solar_panel': 2,
+				'wood': 30,
+			},
+			energy: 60,
+			after: function() {
+				variables().game.location.greenhouse = true;
+			},
+			goto: 'Greenhouse'
 		},
-		energy: 60,
-		after: function() {
-			variables().game.location.greenhouse = true;
+		hot_shower: {
+			show: $backpack.has('blueprint_hot_shower') && !$game.hotShower,
+			title: 'Hot shower',
+			description: 'Adds additional energy gain.',
+			required: {
+				'solar_panel': 2,
+			},
+			energy: 60,
+			goto: 'Shower-room',
+			after: function() {
+				variables().game.hotShower = true;
+			},
 		},
-		goto: 'Greenhouse'
-	},
-	hot_shower: {
-		show: $backpack.has('blueprint_hot_shower') && !$game.hotShower,
-		title: 'Hot shower',
-		description: 'Adds additional energy gain.',
-		required: {
-			'solar_panel': 2,
+		basement_cell: {
+			show: $basementLimit < 30,
+			title: 'Basement cell',
+			description: 'Build an additional cell in the basement.',
+			required: {
+				wood: 40,
+				rope: 2,
+			},
+			energy: 60,
+			after: function() {
+				variables().basementLimit = variables().basementLimit +=1;
+			},
+			goto: 'Workbench'
 		},
-		energy: 60,
-		goto: 'Shower-room',
-		after: function() {
-			variables().game.hotShower = true;
+		pregnancy_potion: {
+			show: $characters.vincent.quests.pregnancy_talked,
+			title: "Pregnancy termination potion",
+			description: 'Craft pregnancy termination potion to terminate pregnancy',
+			required: {
+				glowing_mushroom: 1,
+				milk: 1
+			},
+			energy: 40,
+			after: function() {
+				variables().backpack.pickup('pregnancy_potion', 1);
+			},
+			goto: "Workbench"
 		},
-	},
-	basement_cell: {
-		show: $basementLimit < 30,
-		title: 'Basement cell',
-		description: 'Build an additional cell in the basement.',
-		required: {
-			wood: 40,
-			rope: 2,
+		guest_house: {
+			show:  !($game.location.guesthouse ?? false),
+			title: "Guest house",
+			description: "Build a guest house for released slaves or new guests.",
+			required: {
+				wood: 200,
+				rope: 30,
+				solar_panel: 2
+			},
+			energy: 100,
+			after: function() {
+				variables().game.location.guesthouse = true;
+			},
+			goto: "Guest house"
 		},
-		energy: 60,
-		after: function() {
-			variables().basementLimit = variables().basementLimit +=1;
+		bow: {
+			show: true,
+			title: "Bow",
+			description: "Used for hunting",
+			required: {
+				wood: 3,
+				rope: 3
+			},
+			energy: 60,
+			after: function() {
+				variables().backpack.pickup('bow', 1);
+			},
+			goto: "Workbench"
 		},
-		goto: 'Workbench'
-	},
-	pregnancy_potion: {
-		show: $characters.vincent.quests.pregnancy_talked,
-		title: "Pregnancy termination potion",
-		description: 'Craft pregnancy termination potion to terminate pregnancy',
-		required: {
-			glowing_mushroom: 1,
-			milk: 1
+		guesthouse_cell: {
+			show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 25,
+			title: 'Guest house bed',
+			description: 'Build additional bed in guest house',
+			required: {
+				wood: 50,
+				rope: 5,
+			},
+			energy: 60,
+			after: function() {
+				if (!Number.isInteger(variables().guesthouseLimit)) {
+					variables().guesthouseLimit = 3;
+				}
+				variables().guesthouseLimit = variables().guesthouseLimit +=1;
+			},
+			goto: "Workbench"
 		},
-		energy: 40,
-		after: function() {
-			variables().backpack.pickup('pregnancy_potion', 1);
+		solar_panel: {
+			show: true,
+			title: "Solar panel",
+			description: "Used for crafting",
+			required: {
+				plastic: 5,
+				glass: 5
+			},
+			energy: 60,
+			after: function() {
+				variables().backpack.pickup('solar_panel', 1);
+			},
+			goto: "Workbench"
 		},
-		goto: "Workbench"
-	},
-	guest_house: {
-		show:  !($game.location.guesthouse ?? false),
-		title: "Guest house",
-		description: "Build a guest house for released slaves or new guests.",
-		required: {
-			wood: 200,
-			rope: 30,
-			solar_panel: 2
+		paddle: {
+			show: !$backpack.has('paddle'),
+			title: "Paddle",
+			description: "Increases submission gain while punishing slave",
+			required: {
+				wood: 2,
+				rope: 1
+			},
+			energy: 30,
+			after: function() {
+				variables().backpack.pickup('paddle', 1);
+			},
+			goto: "Workbench"
 		},
-		energy: 100,
-		after: function() {
-			variables().game.location.guesthouse = true;
+		bandage: {
+			show: true,
+			title: 'Bandage',
+			description: 'Stops bleeding',
+			required: {
+				cloth: 1
+			},
+			energy: 30,
+			after: function() {
+				variables().backpack.pickup('bandage', 1);
+			},
+			goto: "Workbench"
 		},
-		goto: "Guest house"
-	},
-	bow: {
-		show: true,
-		title: "Bow",
-		description: "Used for hunting",
-		required: {
-			wood: 3,
-			rope: 3
+		gate: {
+			show: isMetChar('blair') && $characters.blair.quests.gate && !$game.cabinName,
+			title: "Settlement gate",
+			description: "Gates for the entrance to your village",
+			required: {
+				wood: 150,
+				rope: 10,
+			},
+			goto: "Blair - gate done",
+			energy: 100,
+			after: function() {}
 		},
-		energy: 60,
-		after: function() {
-			variables().backpack.pickup('bow', 1);
+		nursery: {
+			show: isMetChar('blair') && $characters.blair.quests.nursery && !($game.location.nursery ?? false),
+			title: "Nursery",
+			description: "Shelter were all babies/kids will live.",
+			required: {
+				wood: 50,
+				plastic: 10,
+				rope: 10
+			},
+			goto: "Nursery - built",
+			energy: 100,
+			after: function() {}
 		},
-		goto: "Workbench"
-	},
-	guesthouse_cell: {
-		show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 25,
-		title: 'Guest house bed',
-		description: 'Build additional bed in guest house',
-		required: {
-			wood: 50,
-			rope: 5,
-		},
-		energy: 60,
-		after: function() {
-			if (!Number.isInteger(variables().guesthouseLimit)) {
-				variables().guesthouseLimit = 3;
+		shop: {
+			show: isMetChar('vincent') && $characters.vincent.quests.shop_talk && (!$game.location.shop ?? false),
+			title: "Shop",
+			description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
+			required: {
+				wood: 200,
+				plastic: 30,
+				rope: 30
+			},
+			goto: "Workbench",
+			energy: 100,
+			after: function() {
+				variables().game.location.shop = true;
 			}
-			variables().guesthouseLimit = variables().guesthouseLimit +=1;
 		},
-		goto: "Workbench"
-	},
-	solar_panel: {
-		show: true,
-		title: "Solar panel",
-		description: "Used for crafting",
-		required: {
-			plastic: 5,
-			glass: 5
+		bathhouse: {
+			show: !($game.location.bathhouse ?? false) && $player.quests.bathhouse_talk,
+			title: 'Bathhouse',
+			description: "Your guests will have place where to wash them self and mistress will be able to wash slaves too.",
+			required: {
+				wood: 200,
+				plastic: 20,
+				rope: 20,
+				solar_panel: 1
+			},
+			goto: "Workbench",
+			energy: 100,
+			after: function() {
+				variables().game.location.bathhouse = true;
+			}
 		},
-		energy: 60,
-		after: function() {
-			variables().backpack.pickup('solar_panel', 1);
+		lab: {
+			show: (isMetChar('laura') && $characters.laura.quests.lab_workbench && !$game.location.lab),
+			title: 'Lab',
+			description: 'Lab. An extension to guest house',
+			required: {
+				glass: 20,
+				wood: 100,
+				rope: 10,
+				solar_panel: 5
+			},
+			goto: 'Workbench',
+			energy: 100,
+			after: function() {
+				variables().game.location.lab = true;
+			}
 		},
-		goto: "Workbench"
-	},
-	paddle: {
-		show: !$backpack.has('paddle'),
-		title: "Paddle",
-		description: "Increases submission gain while punishing slave",
-		required: {
-			wood: 2,
-			rope: 1
-		},
-		energy: 30,
-		after: function() {
-			variables().backpack.pickup('paddle', 1);
-		},
-		goto: "Workbench"
-	},
-	bandage: {
-		show: true,
-		title: 'Bandage',
-		description: 'Stops bleeding',
-		required: {
-			cloth: 1
-		},
-		energy: 30,
-		after: function() {
-			variables().backpack.pickup('bandage', 1);
-		},
-		goto: "Workbench"
-	},
-	gate: {
-		show: isMetChar('blair') && $characters.blair.quests.gate && !$game.cabinName,
-		title: "Settlement gate",
-		description: "Gates for the entrance to your village",
-		required: {
-			wood: 150,
-			rope: 10,
-		},
-		goto: "Blair - gate done",
-		energy: 100,
-		after: function() {}
-	},
-	nursery: {
-		show: isMetChar('blair') && $characters.blair.quests.nursery && !($game.location.nursery ?? false),
-		title: "Nursery",
-		description: "Shelter were all babies/kids will live.",
-		required: {
-			wood: 50,
-			plastic: 10,
-			rope: 10
-		},
-		goto: "Nursery - built",
-		energy: 100,
-		after: function() {}
-	},
-	shop: {
-		show: isMetChar('vincent') && $characters.vincent.quests.shop_talk && (!$game.location.shop ?? false),
-		title: "Shop",
-		description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
-		required: {
-			wood: 200,
-			plastic: 30,
-			rope: 30
-		},
-		goto: "Workbench",
-		energy: 100,
-		after: function() {
-			variables().game.location.shop = true;
+		towel: {
+			show: true,
+			title: 'Towel',
+			description: 'Used for childbirth to increase chance of survival',
+			required: {
+				cloth: 2
+			},
+			goto: 'Workbench',
+			energy: 30,
+			after: function() {
+				variables().backpack.pickup('towel', 1);
+			}
 		}
-	},
-	bathhouse: {
-		show: !($game.location.bathhouse ?? false) && $player.quests.bathhouse_talk,
-		title: 'Bathhouse',
-		description: "Your guests will have place where to wash them self and mistress will be able to wash slaves too.",
-		required: {
-			wood: 200,
-			plastic: 20,
-			rope: 20,
-			solar_panel: 1
-		},
-		goto: "Workbench",
-		energy: 100,
-		after: function() {
-			variables().game.location.bathhouse = true;
-		}
-	},
-	lab: {
-		show: (isMetChar('laura') && $characters.laura.quests.lab_workbench && !$game.location.lab),
-		title: 'Lab',
-		description: 'Lab. An extension to guest house',
-		required: {
-			glass: 20,
-			wood: 100,
-			rope: 10,
-			solar_panel: 5
-		},
-		goto: 'Workbench',
-		energy: 100,
-		after: function() {
-			variables().game.location.lab = true;
-		}
-	},
-	towel: {
-		show: true,
-		title: 'Towel',
-		description: 'Used for childbirth to increase chance of survival',
-		required: {
-			cloth: 2
-		},
-		goto: 'Workbench',
-		energy: 30,
-		after: function() {
-			variables().backpack.pickup('towel', 1);
-		}
-	}
-	
-}>>
-
-
+		
+	}>>
+<</if>>
+<<set   _workbenchItems = setup.workbenchItems>>
+<<unset $workbenchItems>>
