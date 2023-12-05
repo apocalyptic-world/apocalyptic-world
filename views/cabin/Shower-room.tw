@@ -4,7 +4,6 @@
 [img[setup.ImagePath+'places/cabin/shower_head.jpg']]
 </div>
 <br /><br />
-<center>
 <<if $player.showered is false && hasTime(0, 30)>>
 	<<link 'Take a shower'>>
 		<<addmins 30>>
@@ -20,7 +19,19 @@
 	<</link>>
 <</if>>
 
-[[Back|Wood cabin]]
-</center>
-
+<<if !($locationEvents.shower ?? false)>>
+	<<set _girls = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+	<<set _randomGirlId = setup.getRandomElement(_girls)>>
+	<<if setup.percentageChance(10) && $guests[_randomGirlId].likesGuys>>
+		<<set $locationEvents.shower = true>>
+		<<set $tmpEvent = {
+			id: _randomGirlId
+		}>>
+		<<goto 'Event [Shower] - Taken'>>
+	<</if>>
+<</if>>
+<<link 'Back'>>
+	<<addmins 5>>
+	<<goto 'Wood cabin'>>
+<</link>>
 
