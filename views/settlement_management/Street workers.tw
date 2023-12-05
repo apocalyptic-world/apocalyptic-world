@@ -58,39 +58,37 @@ Working the streets is a unhappy work. Needs a day off now and then.
                                 </div>
                             </td>
 
-
-/*                            
                             <td>
-
+                                <<set _restId = 'rest_' + $tmpGirl.id>>
+                                <<set _workId = 'work_' + $tmpGirl.id>>
                                 <<if def _npc.rest>>
                                         <<set _r2w = 'block', _w2r = 'none'>>
                                     <<else>>
                                         <<set _r2w = 'none', _w2r = 'block'>>
-                                <</if>>>>
+                                <</if>>
 
-                                <div @id="'rest_' + $tmpGirl.id" style="display:none">
+                                <div @id="_restId" @style="'display:' + _r2w">
                                     <<link 'Enough rest! - Back to work'>>
                                         <<run delete $tmpGirl.rest>>
-                                        <<run $(`'#rest_' + $tmpGirl.id`).hide()>>
-                                        <<run $(`'#work_' + $tmpGirl.id`).show()>>
+                                        <<run $('#' + _restId).hide()>>
+                                        <<run $('#' + _workId).show()>>
                                         <<replace `'#' + _statusId`>>... is working<</replace>>
                                     <</link>>
                                 </div>
-                                <div @id="'work' + $tmpGirl.id"  style="`'display:none"> 
+                                <div @id="_workId" @style="'display:' + _w2r"> 
                                     <<link 'Hard work? - Take a day off'>>
                                         <<set $tmpGirl.rest = {
                                             days: 1,
                                             desc: 'Day off resting',
                                             id: 'resting'
                                         }>>
-                                        <<run $(`'#rest_' + $tmpGirl.id`).show()>>
-                                        <<run $(`'#work_' + $tmpGirl.id`).hide()>>
+                                        <<run $('#' + _restId).show()>>
+                                        <<run $('#' + _workId).hide()>>
                                         <<replace `'#' + _statusId`>>... has a day off<</replace>>
                                     <</link>>
                                 </div>
 
-*/
-
+                              </td>
                         </tr>
                     <</capture>>
                 <</for>>
