@@ -22,7 +22,7 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 <br /><br />
 
 <<for _guestI, _guest range $guests>>
-	<<if _guest.gender || setup.getAge(_guest) < 17>>
+	<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 		<<continue>>
 	<</if>>
 	<<setNpcStats 'guest' _guestI 'relationship' +10>>
@@ -38,28 +38,26 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 	<h4>Guests attending the party</h4>
 	<table id="slaves">
 		<<for _guestI, _guest range $guests>>
-			<<if _guest.gender || setup.getAge(_guest) < 17>>
+			<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 				<<continue>>
 			<</if>>
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=_guest.name>> 
+					 	  <<=setup.displayName(_guest)>> 
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
 				  </td>
 				  <td>
-				  	<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<print _guest.beauty>>
-					<</if>>						
 				  </td>
 				  <td>
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
 				  		<<link 'Invite to the bedroom'>>
-							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+							<<if _guest.gender == 0 && _guest.likesGuys && (setup.percentageChance(30) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -122,7 +120,7 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 			</center>
 			<br /><br />
 			<<for _guestI, _guest range $guests>>
-				<<if _guest.gender || setup.getAge(_guest) < 17>>
+				<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 					<<continue>>
 				<</if>>
 				<<setNpcStats 'guest' _guestI 'relationship' +10>>
@@ -137,35 +135,33 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 			  -1 champagne; +10 relationship
 		  <</linkdesc>>
 		</div>
-	</div>		
+	</div>
 <</if>>
 
 <div id="girls_bottom_table" style="display:none">
 	<h4>Guests attending the party</h4>
 	<table id="slaves">
 		<<for _guestI, _guest range $guests>>
-			<<if _guest.gender || setup.getAge(_guest) < 17>>
+			<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 				<<continue>>
 			<</if>>
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=_guest.name>> 
+					 	  <<=setup.displayName(_guest)>> 
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
 				  </td>
 				  <td>
-					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<print _guest.beauty>>
-					<</if>>				
 				  </td>
 				  <td>
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
 				  		<<link 'Invite to the bedroom'>>
-							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+							<<if _guest.gender == 0 && _guest.likesGuys && (setup.percentageChance(30) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -174,9 +170,9 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 								<<set $tmpGirl to _guest>>
 								<<set $tmpGirl.location = 'bedroom'>>
 								<<set $tmpGirlViewBack = 'Sleep eval'>>
-								<<set $tmpGirl.rape to false>>
 								<<set $tmpGirlCapture to false>>
 								<<set $tmpGirlInvite to false>>
+								<<set $tmpGirl.rape to false>>
 								<<set $guestId = _guestI>>
 								<<run delete $slaveId>>
 								<<fuck $tmpGirl>>
