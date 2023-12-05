@@ -13,7 +13,10 @@ You see some hookers standing against the wall..
 <table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
-		<<if $slaves[_i].assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
+		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
+		<<if $slaves[_i].assignedTo != 'streets' || !timeBetween('12:00', '06:00') || _dayOff>>
 			<<continue>>
 		<</if>>
 		<<set $assignedToStreets = true>>
@@ -49,7 +52,10 @@ You see some hookers standing against the wall..
 	<</for>>
 	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
 		<<capture _streetGuestI, _streetGuest>>
-		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00')>>
+		<<set _isSick = (typeof $guests[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $guests[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
+		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00') || _dayOff>>
 			<<continue>>
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>

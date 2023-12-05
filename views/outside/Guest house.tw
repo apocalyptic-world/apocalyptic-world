@@ -27,6 +27,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
+			<<set _isRest = (typeof _guest.rest !== 'undefined')>>
+			<<set _dayOff = _isSick || _isRest>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 				<<continue>>
@@ -40,7 +42,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'mistress' and timeBetween('12:00', '22:00') && !_isSick>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff>>
 				<<continue>>
 			<</if>>
 			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick>>
@@ -82,6 +84,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<</if>>
 						<<if _isSick>>
 							 (sick)
+				  		<<elseif _isRest>>
+							 (resting)
 						<</if>>
 					<</if>>
 				</td>
