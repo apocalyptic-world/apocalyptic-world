@@ -315,7 +315,18 @@ setup.getPersonsForLocation = function (persons, location) {
     }
     return tmpPersons;
 };
-
+/**
+ * returns a list of actual NPCs, not just index in the list
+ */
+setup.getNpcsForLocation = function (persons, location) {
+    const npcs = [];
+    for (const npc of persons) {
+        if (npc.assignedTo === location) {
+            npcs.push(npc);
+        }
+    }
+    return npcs;
+};
 setup.getBirthDate = function(yearsAgo) {
     var now = variables().gameDate;
     var earliestDate = new Date(now.getFullYear() - yearsAgo, 0, 1);
