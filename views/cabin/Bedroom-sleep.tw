@@ -63,6 +63,8 @@
 		<<goto 'Blair - morning surprise'>>
 	<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
 		<<goto 'Blair - pregnant'>>
+	<<elseif isMetChar('laura') && $characters.laura.quests.productionLastDay && ($characters.laura.quests.morningSampleDay ?? 0 + 10) < $game.day && setup.percentageChance(30)>>
+		<<goto 'Laura - morning sample'>>
 	<<else>>
 		<<goto 'Wood cabin'>>
 	<</if>>

@@ -207,6 +207,7 @@
 			<<else>>
 				<<setNpcStats 'slave' _i 'happy' -5>>
 				<<if randomInteger(0, 1) === 0>>
+					<<set $slaves[_i].virgin = false>>
 					<<if $slaves[_i].gender == 0>>				
 						<<set _moneyEarned = randomInteger(4, 8)>>
 					<<elseif $slaves[_i].gender == 2>>				
@@ -435,6 +436,7 @@
 					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<set $guests[_guestI].virgin = false>>
 				<</if>>
 			<</if>>
 		<</if>>
