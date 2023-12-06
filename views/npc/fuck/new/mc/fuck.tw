@@ -16,7 +16,7 @@
     titjob: {
         title: 'Titjob',
         minAction: 30,
-        show: ['medium', 'big'].includes($tmpGirl.breasts),
+        show: ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
         horny: 20,
         maxCorruption: 40
     },
@@ -40,16 +40,18 @@
     pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
+        show: typeof $tmpGirl.pussy !== 'undefined',
         maxCorruption: 40,
         positive: true
     },
     pussy: {
         title: 'Fuck pussy',
         minAction: 50,
+        show: typeof $tmpGirl.pussy !== 'undefined',
         horny: 20,
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
-        pussy: 'pussy'
+        stats: 'pussy'
     },
     anal_fingering: {
         title: 'Finger ass',
@@ -94,42 +96,44 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
 
-        <<if $sexForced>>
+        <<if $sexForced && !$tmpGirl.traits.includes('masochist')>>
             <<set
                 $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
                 $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
                 $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
             >>
-            She asks you to leave her alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+            <<=setup.pronounceWhat($tmpGirl, true)>> asks you to leave <<=setup.pronounceWho($tmpGirl)>> alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
         <<else>>
             <<set
                 $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
                 $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
             >>
-            She welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+            <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
         <</if>>
          <br />
     <</if>>
 
     <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
         <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
-		She is getting more corrupted.<strong> (Corruption + 1)</strong>
+		<<=setup.pronounceWhat($tmpGirl, true)>> is getting more corrupted.<strong> (Corruption + 1)</strong>
         <br />
     <</if>>
 
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
         <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
-		Her body reacts positively to you. <strong>(Horny + 20)</strong>
+		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + 20)</strong>
 		<br />
 		
 		<<if $tmpGirl.horny >= 100>>
 			<<include 'Fuck 2.0 squirt'>>
-			<<=setup.displayName($tmpGirl)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
 			<<set $tmpGirl.horny = 0,
-				$tmpGirl.orgasms++,
 				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
 				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+            <<if typeof $tmpGirl.orgasms !== 'undefined'>>
+                <<set $tmpGirl.orgasms++>>
+            <</if>>
 		<</if>>	
     <</if>>
 

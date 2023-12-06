@@ -464,27 +464,42 @@ setup.objectSortReverse = function(unordered) {
         .reduce((obj, [key,value]) => Object.assign(obj, {[key]: value}), {});
 };
 
-setup.pronounceWho = function(npc) {
+setup.pronounceWho = function(npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'Him';
+        }
         return 'him';
     }
-
+    if (capitalize) {
+        return 'Her';
+    }
     return 'her';
 };
 
-setup.pronounceWhos = function(npc) {
+setup.pronounceWhos = function(npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'His';
+        }
         return 'his';
     }
-
+    if (capitalize) {
+        return 'Her';
+    }
     return 'her';
 };
 
-setup.pronounceWhat = function (npc) {
+setup.pronounceWhat = function (npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'He';
+        }
         return 'he';
     }
-
+    if (capitalize) {
+        return 'She';
+    }
     return 'she';
 };
 

@@ -20,7 +20,8 @@
 		
 			<<set _genderDesc = ['female', 'male', 'transfemale', 'transmale'][$args[0].gender]>>
 			<<set _race = '.' + $args[0].race>>
-		
+			<<set _hair = '.' + $args[0].hair + 'hair'>>
+
 			<<if ($args[0].pregnancy ?? 0) > 100 >>
 				<<set _pregnancyDesc = '.pregnant'>>
 			<<else>>
@@ -40,13 +41,21 @@
 			<<set _morphs = [
 			$args[0].name + _pregnancyDesc,
 			$args[0].name,
+			_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,		
 			_genderDesc + _race + _ageDesc + _pregnancyDesc,		
+			_genderDesc + _race + _hair + _pregnancyDesc,		
 			_genderDesc + _race + _pregnancyDesc,		
+			_genderDesc + _race + _hair + _ageDesc,
 			_genderDesc + _race + _ageDesc,
+			_genderDesc + _race + _hair,
 			_genderDesc + _race,
+			_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
 			_genderDesc + _ageDesc + _pregnancyDesc,		
+			_genderDesc + _hair + _pregnancyDesc,		
 			_genderDesc + _pregnancyDesc,		
+			_genderDesc + _hair + _ageDesc,
 			_genderDesc + _ageDesc,
+			_genderDesc + _hair,
 			_genderDesc
 			]>>
 			
