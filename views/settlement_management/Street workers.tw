@@ -1,4 +1,4 @@
-:: Settlement management - streets_workers [management include]
+:: Settlement management - street_workers [management include]
 
 <h1>Street workers</h1>
 
@@ -13,19 +13,86 @@ Working the streets is a unhappy work. Needs a day off now and then.
     very_happy: {slaves: [], guests: []}
 }>>
 <<set _workers = {
-    slaves: setup.getPersonsForLocation($slaves, 'streets'),
-    guests: setup.getPersonsForLocation($guests, 'streets'),
+    slaves: setup.getNpcsForLocation($slaves, 'streets'),
+    guests: setup.getNpcsForLocation($guests, 'streets'),
 }>>
 
-<<set _slaves = >>
 
-<<set _npcs = $slaves.concat($guests)>>
-<<for _npcI, _npc range _npcs>>
+<<for _persons, _npcs range _workers>>
+    <<for _npc range _npcs>>
+        <<set _happyLevel = setup.getNpcHappyLevel(_npc)>>
+        <<set _workersByHappyLvl[_happyLevel][_persons].push(_npc)>>
+    <</for>>
 <</for>>
 
-<table class="mc-stats-table">
-</table>
+<<set _happyLvlHuman = {
+    very_sad:   'Very sad',
+    sad:        'Sad',
+    normal:     'Normal',
+    happy:      'Happy',
+    very_happy: 'Very happy'
+}>>
 
-/*
-setup.getNpcHappyLevel = function(person)
-*/
+<table class="mc-stats-table">
+    <<for _happyLevel, _object range _workersByHappyLvl>>
+        <<for _persons, _npcs range _object>>
+            <<if _npcs.length>>
+                <tr>
+                    <td><<happyIconFromLevel>></td>
+                    <td>_happyLvlHuman[_happyLevel] _persons</td>
+                </tr>
+                <<for $tmpGirl range _npcs>>
+                    <<capture $tmpGirl, _restId, _workId, _statusId>>
+                        <tr>
+                            <td/>
+                            <td/>
+                            <td>$tmpGirl.name</td>
+                            <td>
+                                <<set _statusId = 'status_' + $tmpGirl.id>>
+                                <div @id="_statusId">
+                                    <<if def _npc.rest>>
+                                        ... has a day off
+                                    <<else>>
+                                        ... is working
+                                    <</if>>
+                                </div>
+                            </td>
+
+                            <td>
+                                <<set _restId = 'rest_' + $tmpGirl.id>>
+                                <<set _workId = 'work_' + $tmpGirl.id>>
+                                <<if def _npc.rest>>
+                                        <<set _r2w = 'block', _w2r = 'none'>>
+                                    <<else>>
+                                        <<set _r2w = 'none', _w2r = 'block'>>
+                                <</if>>
+
+                                <div @id="_restId" @style="'display:' + _r2w">
+                                    <<link 'Enough rest! - Back to work'>>
+                                        <<run delete $tmpGirl.rest>>
+                                        <<run $('#' + _restId).hide()>>
+                                        <<run $('#' + _workId).show()>>
+                                        <<replace `'#' + _statusId`>>... is working<</replace>>
+                                    <</link>>
+                                </div>
+                                <div @id="_workId" @style="'display:' + _w2r"> 
+                                    <<link 'Hard work? - Take a day off'>>
+                                        <<set $tmpGirl.rest = {
+                                            days: 1,
+                                            desc: 'Day off resting',
+                                            id: 'resting'
+                                        }>>
+                                        <<run $('#' + _restId).show()>>
+                                        <<run $('#' + _workId).hide()>>
+                                        <<replace `'#' + _statusId`>>... has a day off<</replace>>
+                                    <</link>>
+                                </div>
+
+                              </td>
+                        </tr>
+                    <</capture>>
+                <</for>>
+            <</if>>
+        <</for>>
+    <</for>>
+</table>

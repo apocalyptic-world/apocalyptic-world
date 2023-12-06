@@ -17,11 +17,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 <<set _isSlaveInBasement = false>>
 <<set _suicidalSlaves = []>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
+	<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+	<<set _dayOff = _isSick || _isRest>>
 	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 		<<set $workingInGarden++>>
 		<<continue>>
 	<</if>>
-	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff>>
 		<<set $workingOnStreets++>>
 		<<continue>>
 	<</if>>
@@ -59,12 +62,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
 			<<set $workingInGarden++>>
 			<<continue>>
 		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff>>
 			<<set $workingOnStreets++>>
 			<<continue>>
 		<</if>>
@@ -119,7 +124,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				  
 				  <<if _isSick>>
 				  	(sick)
-				  <</if>>
+				  <<elseif _isRest>>
+					(resting)
+			  	  <</if>>
 			</td>
 			<td>
 				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
