@@ -1,0 +1,33 @@
+:: Fuck 2.0 anal 
+
+<<if $tmpGirl.anal < 20>>
+	<center>
+	<<if [0].includes($tmpGirl.gender)>>
+		[img[setup.ImagePath+'game/misc/no_anal.webp']]
+	<<elseif [1,2].includes($tmpGirl.gender)>>
+		[img[setup.ImagePath+'game/misc/no_anal_guy.webp']]
+	<</if>>
+	</center>
+	<br /><br />
+	You tried to fuck <<=setup.pronounceWho($tmpGirl)>> in the ass but your dick is too big for <<=setup.pronounceWho($tmpGirl)>> and <<=setup.pronounceWhat($tmpGirl)>> can't relax. 
+	<br />
+	
+	<<if !$tmpGirl.traits.includes('masochist')>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> can't take it in <<=setup.pronounceWhos($tmpGirl)>> ass and begs you to stop.<strong> (Submission + 1, Happy / Relationship - 1)</strong>
+		<br />
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+			$tmpGirl.relationship = Math.max($tmpGirl.relationship - 1, -100),
+			$tmpGirl.happy = Math.max($tmpGirl.happy - 1, -100)
+		>>
+        <<set _showSex = false>>
+	<<else>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> seems to enjoy the pain you are causing her.<strong> (Submission / Happy / Relationship + 1)</strong>
+		<br />
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+		>>
+	<</if>>
+<</if>>

@@ -20,11 +20,10 @@
 	<<set _linkName = 'Fuck ' + _pronounceWho>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'Guy view - guest'>>
-		<<set _randomGuestFuck = randomInteger(1,3)>>
-		<<if !$tmpGirl.likesGuys || $tmpGirl.relationship < 50 || _randomGuestFuck === 3>>
-			<<goto 'Guy fuck - no'>>
+		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<fuck $tmpGirl>>
 		<<else>>
-			<<goto 'Guy fuck'>>
+			<<goto 'Guy fuck - no'>>
 		<</if>>
 	<</link>>
 <</if>>
