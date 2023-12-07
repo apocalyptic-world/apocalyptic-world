@@ -789,6 +789,14 @@
 	<</for>>
 <</if>>
 
+// moon
+<<set $morningMessages.moon =  []>>
+<<if setup.isNewMoon()>>
+	<<set $morningMessages.moon.push('This time of the month, around the new moon, the glowing mushrooms seem to be more abundant. Visit the forest!') >>
+<<elseif setup.isFullMoon()>>
+	<<set $morningMessages.moon.push('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!') >>
+<</if>>
+
 <<if $player.hunger <= 0 && !$sleepDead>>
 	<<set $sleepDead = 'hunger'>>
 <</if>>

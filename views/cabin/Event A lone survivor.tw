@@ -11,9 +11,9 @@ A lone survivor approaches the gate, claiming to be a doctor who can provide val
 	Please, sir. Can I stay here for one night? I'm hungry and I don't have the strength to continue my journey. I beg you. I could offer you something in return for it.. 
 <</anonguy>>
 <br /><br />
-<<if $backpack.has('food')>>
+<<if setup.cabinInventory.has('food', 2)>>
 	<<link 'Let him in'>>
-		<<drop $backpack 'food' 2>>
+		<<set setup.cabinInventory.drop('food', 2)>>
 		<<set $game.lone_survivor = true>>
 		<<goto 'Wood cabin'>>
 	<</link>>
