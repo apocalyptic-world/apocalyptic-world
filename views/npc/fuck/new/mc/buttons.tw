@@ -1,6 +1,6 @@
 :: Fuck 2.0 buttons
 
-<<if $sexForced || ($tmpGirl.traits ?? []).includes('nymphomaniac')>>
+<<if ($sexForced ?? false) || ($tmpGirl.traits ?? []).includes('nymphomaniac')>>
     <<set _actionMax = 100>>
 <<elseif $tmpGirl.likesGuys>>
 	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
@@ -10,7 +10,7 @@
 	<<set _actionMax = Math.floor($tmpGirl.sub/2)>>
 <</if>>
 
-<<if $player.horny >= 100>>
+<<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
 	<<energy +5>>
 	<<horny_reset>>
 	<<set $player.sexp++>>
@@ -79,7 +79,7 @@
             </div>
         <br />
 
-        <<if !$sexForced && _actionMax < 70>>	
+        <<if !($sexForced ?? false) && _actionMax < 70>>	
             <<link 'Force more'>>
                 <<set $sexForced = true>>
                 <<unset $sexAction>>
