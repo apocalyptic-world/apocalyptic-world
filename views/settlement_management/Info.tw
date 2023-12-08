@@ -1,26 +1,35 @@
 :: Settlement management - info
 
+<<set _companions = new Map()>>
+<<for _companionKey, _companion range $player.companions>>
+	<<set _guestIndex = _companionKey.split(':')[1]>>
+	<<set _guest = $guests[_guestIndex]>>
+	<<set _npcId = _guest.id>>
+	<<set _companions.set(_npcId, true)>>
+<</for>>
+
 <<set _settlementStatsData = {
 	work: {},
-	settlets: 0,
+	settlers: 0,
 	happy: 0,
 }>>
-<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
+<<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? [])>> 
 	<<if _statsNpc.assignedTo>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
-		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
-		<<set _settlementStatsData['settlers']++>>
+		<<set _job = _statsNpc.assignedTo >>
+	<<elseif _companions.has(_statsNpc.id)>>
+		<<set _job = 'companion'>>
+	<<elseif setup.getAge(_statsNpc) < 18>>
+		<<set _job = 'child'>>
+	<<else>>
+		<<set _job = 'none'>>
 	<</if>>
+	<<set _settlementStatsData['work'][_job] ??= 0>>
+	<<set _settlementStatsData['work'][_job]++>>
+	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
+	<<set _settlementStatsData['settlers']++>>
 <</for>>
-<<for _statsNpcI, _statsNpc range ($slaves ?? [])>>
-	<<if _statsNpc.assignedTo>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo] ??= 0>>
-		<<set _settlementStatsData['work'][_statsNpc.assignedTo]++>>
-		<<set _settlementStatsData['happy'] += _statsNpc.happy>>
-		<<set _settlementStatsData['settlers']++>>
-	<</if>>
-<</for>>
+<<set _settlementStatsData['work']['child']  ??= 0>>
+<<set _settlementStatsData['work']['child']  += ($nursery ?? []).length>>
 
 <<set _happiness = {
 	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
@@ -30,11 +39,20 @@
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td></tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
+	<tr><td>Working as companion:</td><td><<=_settlementStatsData.work.companion ?? 0>></td></tr>
+	<tr><td>Working in kitchen:</td><td><<=_settlementStatsData.work.kitchen ?? 0>></td></tr>
+	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td></tr>
+	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td></tr>
+	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td></tr>
+	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
+	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td></tr>
 </table>
