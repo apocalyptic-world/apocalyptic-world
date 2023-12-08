@@ -318,14 +318,26 @@ setup.genderClass = function(person) {
 	return _mapping[person.gender];
 };
 
-setup.getNpcHappyLevel = function(person) {
-	person.happy ??= 0;
-
+/**
+ * Gives happy level from either a npc, a number or a string
+ * @param   {npc|number|string}   nns 
+ * @returns {string}              happy level
+ */
+setup.getNpcHappyLevel = function(nns) {
+	var happy = 0;
+	if (typeof nns === 'number' || nns instanceof Number) {
+		happy = nns;
+	} else if (typeof nns === 'string' || nns instanceof String) {
+		return nns;
+	} else { /* npc */
+		happy = nns.happy ??= 0;
+	}
+	
 	const emotions = {
-        very_sad: person.happy < -50,
-        sad: person.happy < 0,
-        normal: person.happy < 20,
-        happy: person.happy < 50
+        very_sad: nns.happy < -50,
+        sad: nns.happy < 0,
+        normal: nns.happy < 20,
+        happy: nns.happy < 50
     };
 
     for (const emotion in emotions) {
