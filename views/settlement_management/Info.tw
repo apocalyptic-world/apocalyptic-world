@@ -12,10 +12,13 @@
 	work: {},
 	settlers: 0,
 	happy: 0,
+	happylvl: {
+		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
+	},
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? [])>> 
 	<<if _statsNpc.assignedTo>>
-		<<set _job = _statsNpc.assignedTo >>
+		<<set _job = _statsNpc.assignedTo>>
 	<<elseif _companions.has(_statsNpc.id)>>
 		<<set _job = 'companion'>>
 	<<elseif setup.getAge(_statsNpc) < 18>>
@@ -27,6 +30,7 @@
 	<<set _settlementStatsData['work'][_job]++>>
 	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
 	<<set _settlementStatsData['settlers']++>>
+	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
 <</for>>
 <<set _settlementStatsData['work']['child']  ??= 0>>
 <<set _settlementStatsData['work']['child']  += ($nursery ?? []).length>>
@@ -35,24 +39,45 @@
 	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
 }>>
 
+<<set _basementLimit = (($basementLimit ?? 3) - ($slaves ?? []).length)>>
+<<set _basementBuild = (30 - ($basementLimit ?? 3))>>
+<<set _basementText = '(' + (_basementLimit > 0 ? _basementLimit : 'No') + ' free cells; ' + 
+	(_basementBuild > 0 ? 'Can build ' + _basementBuild + ' more' : 'Fully built') + ')'>>
+
+<<set _guesthouseLimit = (($guesthouseLimit ?? 3) - ($guests ?? []).length)>>
+<<set _guesthouseBuild = (25 - ($guesthouseLimit ?? 3))>>
+<<if ($game.location.guesthouse ?? false)>>
+	<<set _guesthouseText = '(' + (_guesthouseLimit > 0 ? _guesthouseLimit : 'No') + ' free beds; ' + 
+		(_guesthouseBuild > 0 ? 'Can build ' + _guesthouseBuild + ' more' : 'Fully built') + ')'>>
+<<else>>
+	<<set _guesthouseText = '(Build guest house first with room for up to 25 guests)'>>
+<</if>>
+
 <table class="mc-stats-table">
-	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td></tr>
-	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td></tr>
+	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
+	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
-	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td></tr>
+	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
 	<tr><td>Working as companion:</td><td><<=_settlementStatsData.work.companion ?? 0>></td></tr>
-	<tr><td>Working in kitchen:</td><td><<=_settlementStatsData.work.kitchen ?? 0>></td></tr>
-	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td></tr>
-	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td></tr>
-	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td></tr>
+	<tr><td>Working in kitchen:</td><td><<=_settlementStatsData.work.kitchen ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
 	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
-	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td></tr>
+	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td>
+		<td>(
+			<<for _happyLevel, _count range _settlementStatsData.happylvl>>
+				<<happyIcon _happyLevel>> <<=_count>>, 
+			<</for>>
+		)
+		</td>
+	</tr>
 </table>
