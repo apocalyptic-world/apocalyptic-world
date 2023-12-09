@@ -732,14 +732,17 @@ setup.drink = function (person, glass = 1, alcohol = 25) {
 };
 
 setup.drunkDescription = function (person) {
-    const desc = ['buzzed', 'tipsy', 'high', 'drunk', 'wasted'];
-    var state = Math.min(Math.floor(Math.max(((person.drunk ?? 0) - 1), 0) / 25), 4);
+    const desc = ['buzzed', 'tipsy', 'high', 'drunk'];
+    var drunk = person.drunk ?? 0;
+    var state = Math.floor((drunk - 1) / 25);
 
-    if ((person.drunk ?? 0) == 0) {
+    if (drunk == 0) {
 		return 'sober';
+	} else if (drunk > 100) {
+		return 'wasted';
 	} else {
-		return desc[state];
-	}
+        return desc[state];
+    }
 };
 
 window.openTab = function(evt, name) {
