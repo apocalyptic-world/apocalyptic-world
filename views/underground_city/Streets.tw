@@ -49,8 +49,8 @@ You see some hookers standing against the wall..
 	<</for>>
 	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
 		<<capture _streetGuestI, _streetGuest>>
-		<<set _isSick = (typeof $guests[_i].sick !== 'undefined')>>
-		<<set _isRest = (typeof $guests[_i].rest !== 'undefined')>>
+		<<set _isSick = (typeof $guests[_streetGuestI].sick !== 'undefined')>>
+		<<set _isRest = (typeof $guests[_streetGuestI].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
 		<<if _streetGuest.assignedTo != 'streets' || !timeBetween('12:00', '06:00') || _dayOff>>
 			<<continue>>
