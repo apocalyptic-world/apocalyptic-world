@@ -732,7 +732,7 @@ setup.drink = function (person, glass = 1, alcohol = 25) {
 };
 
 setup.drunkDescription = function (person) {
-    const desc = ['buzzed', 'tipsy', 'high', 'drunk'];
+    const desc = ['buzzed', 'euphoric', 'tipsy', 'drunk'];
     var drunk = person.drunk ?? 0;
     var state = Math.floor((drunk - 1) / 25);
 
