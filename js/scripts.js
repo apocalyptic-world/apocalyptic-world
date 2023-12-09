@@ -737,10 +737,10 @@ setup.drunkDescription = function (person) {
     var state = Math.floor((drunk - 1) / 25);
 
     if (drunk == 0) {
-		return 'sober';
-	} else if (drunk > 100) {
-		return 'wasted';
-	} else {
+        return 'sober';
+    } else if (drunk > 100) {
+        return 'wasted';
+    } else {
         return desc[state];
     }
 };
