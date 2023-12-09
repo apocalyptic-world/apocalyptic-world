@@ -717,10 +717,32 @@ setup.sexChance = function (person) {
 	if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
 	} else if (!person.likesGuys) {
-		return Math.floor(person.sub/2);
+		return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
 	} else {
-		return Math.max(person.relationship, person.horny, person.sub);
+		return Math.max(person.relationship, person.horny, person.sub, person.drunk ?? 0);
 	}
+};
+
+setup.drink = function (person, glass = 1, alcohol = 25) {
+    alcohol = Math.max(alcohol + window.randomInteger(0, 5) - window.randomInteger(0, 5), 0);
+    var resistance = 1 + (person.endurance ?? 0) / 200;
+    person.drunk = (person.drunk ?? 0) + Math.round(glass * alcohol / resistance);
+
+	return person;
+};
+
+setup.drunkDescription = function (person) {
+    const desc = ['buzzed', 'euphoric', 'tipsy', 'drunk'];
+    var drunk = person.drunk ?? 0;
+    var state = Math.floor((drunk - 1) / 25);
+
+    if (drunk == 0) {
+        return 'sober';
+    } else if (drunk > 100) {
+        return 'wasted';
+    } else {
+        return desc[state];
+    }
 };
 
 window.openTab = function(evt, name) {

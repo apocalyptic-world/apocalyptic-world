@@ -5,9 +5,9 @@
 <<elseif $tmpGirl.likesGuys>>
 	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
 	<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
-	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub)>>
+	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub, $tmpGirl.drunk ?? 0)>>
 <<else>>
-	<<set _actionMax = Math.floor($tmpGirl.sub/2)>>
+	<<set _actionMax = Math.floor(Math.max($tmpGirl.sub, $tmpGirl.drunk ?? 0)/2)>>
 <</if>>
 
 <<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>

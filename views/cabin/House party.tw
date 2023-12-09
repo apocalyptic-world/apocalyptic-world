@@ -17,7 +17,7 @@ Champagne is such a rare thing in this world that only a few have ever tasted it
 	[img[setup.ImagePath+'places/cabin/house_party_champagne_mouth.webp']]
 </center>
 <br /><br />
-The e is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
+The bottle is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
 <<addhours 4>>
 <br /><br />
 
@@ -30,7 +30,10 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 <</for>>
 <br /><br />
 
-<<perkAdd 'drunk'>>
+<<set $player = setup.drink($player, 4)>>
+<<if $player.drunk > 75>>
+	<<perkAdd 'drunk'>>
+<</if>>
 <<drop $backpack 'champagne' 1>>
 <<drop $backpack 'food' 20>>
 
@@ -56,8 +59,9 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
+						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if _guest.gender == 0 && _guest.likesGuys && (setup.percentageChance(30) || !$characters.blair.quests.house_party_finished)>>
+							<<if _guest.gender == 0 && setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -160,8 +164,9 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
+  						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if _guest.gender == 0 && _guest.likesGuys && (setup.percentageChance(30) || !$characters.blair.quests.house_party_finished)>>
+							<<if _guest.gender == 0 && setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
