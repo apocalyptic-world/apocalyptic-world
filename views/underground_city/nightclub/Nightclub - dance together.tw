@@ -12,9 +12,13 @@ You present yourself... <<=setup.pronounceWhos($tmpGirl)>> name is <strong><<=se
 
 <<if $player.money >= 5>>
   <<link 'Offer a drink (5 caps)'>>
+		<<set $player = setup.drink($player)>>
+		<<if $player.drunk > 75>>
+			<<perkAdd 'drunk'>>
+		<</if>>
   		<<set $player.money -=5>>
 		<<set $tmpGirl.relationship += 10>>
-		<<set $tmpGirl.drunk++>>
+		<<set $tmpGirl = setup.drink($tmpGirl)>>
 		<<goto 'Nightclub - drink together'>>
   <</link>>
 <</if>>

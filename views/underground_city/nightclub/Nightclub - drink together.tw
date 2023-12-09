@@ -11,16 +11,20 @@
 <</if>>
 <br /><br />
 <<=setup.displayName($tmpGirl)>> and you go to the bar, where you purchase two drinks and sit down together drinking them.
-<<if $tmpGirl.drunk >= 4>>
+<<if $tmpGirl.drunk > 75>>
 	<br /><br />
-	<strong>The <<=setup.getNpcAgeDescription($tmpGirl)>> is very drunk and barely stays on <<=setup.pronounceWhos($tmpGirl)>> feet...</strong>
+	<strong>The <<=setup.getNpcAgeDescription($tmpGirl)>> is <<=setup.drunkDescription($tmpGirl)>> and barely stays on <<=setup.pronounceWhos($tmpGirl)>> feet...</strong>
 <</if>>
 <br /><br />
-<<if $tmpGirl.drunk < 4 && $player.money >= 5>>
+<<if $tmpGirl.drunk <= 75 && $player.money >= 5>>
 	<<link 'Offer another drink (5 caps)'>>
+		<<set $player = setup.drink($player)>>
+		<<if $player.drunk > 75>>
+			<<perkAdd 'drunk'>>
+		<</if>>
 		<<set $player.money -=5>>
 		<<set $tmpGirl.relationship += 10>>
-		<<set $tmpGirl.drunk++>>
+		<<set $tmpGirl = setup.drink($tmpGirl)>>
 		<<goto 'Nightclub - drink together'>>
 	<</link>>
 <</if>>

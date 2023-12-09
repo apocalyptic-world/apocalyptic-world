@@ -5,9 +5,7 @@
   	<<if random(0, 3) === 0>>
 		<<goto 'Nightclub - outside ask'>>
 	<<else>>
-	  <<if !$tmpGirl.likesGuys || ($tmpGirl.relationship + $tmpGirl.drunk * 10) < 60>>
-		  <<goto 'Nightclub - girl decline'>>
-	  <<else>>
+	  <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 		  <<set $tmpGirl.rape to false>>
 		  <<set $tmpGirlCapture to false>>
 		  <<set $tmpGirlInvite to false>>
@@ -15,6 +13,8 @@
 		  <<set $tmpGirlViewBack = $tmpGirlBack>>
 		  <<set $orgasmsBefore = $tmpGirl.orgasms>>
 		  <<fuck $tmpGirl>>
+	  <<else>>
+  		  <<goto 'Nightclub - girl decline'>>
 	  <</if>>
 	<</if>>
   <</link>>
