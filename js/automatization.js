@@ -20,7 +20,19 @@ setup.automatization = {
         hunter: {
             name: 'Hunter with no bow',
             description: 'Hunter with no bow works as a woodcutter; Might get an axe.'
-        }
+        },
+        streetworker: {
+            name: 'Streetworkers need rest',
+            description: 'Very unhappy, sad street workers takes a day off by themselves'
+        },
+        grouptalk: {
+            name: 'Group talk',
+            description: 'Talk with (almost) all persons in a group. Saves clicks only! (WIP, not in game yet)'
+        },
+        buttplug: {
+            name: 'Buttplug rotation',
+            description: 'Settlers trade buttplugs between then as needed, thoroughly cleaned of course ;-)'
+        },
     },
 
     job_tools: {
