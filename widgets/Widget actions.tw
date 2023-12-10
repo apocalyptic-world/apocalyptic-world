@@ -12,7 +12,7 @@
 	<</if>>
 	<div class="action-image">
 		<<if typeof setup.actions === 'undefined'>>
-		<<elseif $args[0].virgin && $args[1] === 'pussy' && $args[0].location === 'basement-mistress.female'>>
+		<<elseif $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
 			[img[setup.ImagePath+'game/misc/deflower_strapon.webp']]
 		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
 			[img[setup.ImagePath+'game/misc/deflower.webp']]
@@ -112,7 +112,7 @@
 <<widget actionDream>>
 	<<set $sleepAction = {
 		place: either(['basement', 'bathhouse', 'default', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
-		type: either('anal', 'bj', 'dp', 'pussy')
+		type: either('pussy', 'anal', 'bj', 'dp')
 	}>>
 	<<if typeof setup.actions !== 'undefined'>>
 		<<set _dreamImg = setup.ImagePath+'actions/female/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.female[$sleepAction.place][$sleepAction.type])>>
