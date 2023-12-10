@@ -193,7 +193,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $eventSlaveId = Math.floor(Math.random()*$cellSlaveIds.length);>>
 		<<if $slaves[$eventSlaveId].sub < 50 && setup.getAge($slaves[$eventSlaveId]) > 17 && !$slaves[$eventSlaveId].gender>>
 			<<set $locationEvents.basement = true>>
-			<<goto 'Basement event - try escape'>>
+			<<set $tmpEvent = {
+				id: $eventSlaveId
+			}>>
+			<<if setup.percentageChance(50)>>
+				<<goto 'Basement event - try escape'>>
+			<<else>>
+				<<goto 'Basement event - try escape 2'>>
+			<</if>>
 		<</if>>
 	<<elseif $randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender && !$slaves[_hornySlaveId].virgin>>
 		<<set $hornySlaveId = _hornySlaveId>>
