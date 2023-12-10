@@ -1,0 +1,108 @@
+:: Vincent - Strange note
+<br /><br />
+<center>
+	[img[setup.ImagePath+'people/vincent/base1.jpg']]
+</center>
+<br />
+In the early morning light, you wake to find Vincent, waiting for you at the settlement gate.
+<br />
+His eyes reflect urgency, and without a word, he gestures for you to get ready for an expedition. Curiosity piqued, you prepare for the journey ahead.
+<br /><br />
+<<vincent>>
+    <<=$player.name>> get ready. We should go. I might know a place where we can find a vital part for the car.
+<</vincent>>
+<br />
+You and Vincent set out on a journey through the desolate forest, armed with makeshift weapons and a determination to find car parts for the vehicle you're building. 
+The sky above is a canvas of muted colors, a stark contrast to the vibrant world that once existed.
+<br /><br />
+Vincent leads the way, his gaze fixed on a peculiar mountain in the distance. 
+<br /><br />
+<<vincent>>
+    I've heard rumors about an old military base around here. Figured it's worth checking out. Might have the parts we need.
+<</vincent>>
+<br />
+    <center>
+	     [img[setup.ImagePath+'people/vincent/base5.jpg']]
+    </center>
+<br />
+As you tread carefully through the dense foliage, the ground beneath your feet gives an ominous creak. Without warning, the earth gives way, and you find yourselves tumbling into darkness. 
+After what seems like an eternity, you land with a thud in an underground garage, the air thick with the scent of rust and decay.
+<br /><br />
+Vincent groans in pain as he is shaking off the dust.
+<br /><br />
+<<vincent>>
+    Well, that wasn't on the map
+<</vincent>>
+<br />
+You glance around, your eyes adjusting to the dim light. The underground space reveals a trove of old military vehicles, forgotten relics of a bygone era.
+<br /><br />
+<<you>>
+    Looks like we stumbled upon something, alright
+<</you>>
+<br />
+As you explore the underground garage, you discover a cache of car parts neatly organized in dusty crates. Vincent grins, a glint of excitement in his eyes.
+<br /><br />
+<<vincent>>
+    This is exactly what we needed. Let's load up and get out of here before anything else collapses.
+<</vincent>>
+<br />
+<center>
+	[img[setup.ImagePath+'people/vincent/base2.jpg']]
+</center>
+<br />
+Amidst the car parts, you notice a door leading to somewhere..
+<br /><br />
+<div id="option_door">
+    <<linkreplace 'Push them'>>
+        <<set _door = true>>
+        <center>
+	        [img[setup.ImagePath+'people/vincent/base3.jpg']]
+        </center>
+        <br />
+        As you push the door open, an uneasy tension fills the air. The dim light reveals a frozen chamber, and your eyes widen as you notice a human figure suspended within. 
+        A frozen body, encased in what appears to be a cryo freezer, catches your attention. The eerie sight sends a shiver down your spine, and a sense of foreboding lingers in the confined space.
+        <br />
+        <br />
+        <center>
+	        [img[setup.ImagePath+'people/vincent/base4.jpg']]
+        </center>
+        <br />
+        In the end of the room you see a single desk with a worn-out chair and a dim light flickering overhead. On the desk lies a yellowed paper with the handwritten code and gas mask.
+        <br /><br />
+        Vincent raises an eyebrow and he asks, picking up the note.
+        <br /><br />
+        <<vincent>>
+            What's this?
+        <</vincent>>
+        <br />
+        <<you>>
+            Could be a code for something. Let's keep it, might come in handy.
+        <</you>>
+        <<pickup $backpack 'note3844' 1>>
+        <<pickup $backpack 'gas_mask' 1>>
+        <br />
+        <strong>You picked up <strong class="iitem">1 gas mask</strong> and <strong class="iitem">one note</strong> with text "3844" on it.</strong>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<<linkreplace 'Leave'>>
+    <<if !_door>>
+        <<run $('#option_door').hide()>>
+    <</if>>
+    You and Vincent gather the car parts and make your way back to the surface.
+    <br />
+    The unstable ground beneath trembles, and before you can react, the collapsed tunnel begins to shift and close. Rocks and debris cascade down, sealing the entrance entirely. 
+    The entrance you had just emerged from now stands as a cryptic monument to the unexpected discovery in the post-apocalyptic world.
+    <br /><br />
+    With no chance to re-enter the collapsed hole, you and Vincent exchange a solemn glance, realizing that the secrets buried within are now beyond reach.
+    <br /><br />
+    <<if _door>>
+        The mysterious code in your pocket becomes a lingering reminder of the unpredictability of the wasteland, leaving you to ponder the significance of the note and the lost possibilities hidden beneath the rubble.
+        <br /><br />
+    <</if>>
+    <<link 'Leave'>>
+        <<set $characters.vincent.quests.military_base_day = $game.day>>
+        <<set $characters.vincent.quests.military_base = true>>
+        <<goto 'Outside'>>
+    <</link>>
+<</linkreplace>>

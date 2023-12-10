@@ -100,6 +100,8 @@
 	<<elseif !$locationEvents.cabin && (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 1 && setup.percentageChance(20) && recall($suppCode) && timeBetween('22:00', '00:00')>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Late dance'>>
+	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
+		<<goto 'Vincent - Strange note'>>
 	<<else>>
 		
 	<</if>>
