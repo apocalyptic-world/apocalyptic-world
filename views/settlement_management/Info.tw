@@ -19,7 +19,7 @@
 	},
 	food: {produce: 0, consume: 0, none: 0}
 }>>
-<<for _statsNpcI, _statsNpc range ($guests ?? []).concat ($slaves ?? [])>>
+<<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
 		<<set _job = _statsNpc.assignedTo>>
 	<<elseif _companions.has(_statsNpc.id)>>
@@ -61,6 +61,7 @@
 <<else>>
 	<<set _guesthouseText = '(Build guest house first with room for up to 25 guests)'>>
 <</if>>
+<<set _nurseryText = '(No limits, always room for more kids. This is a Hilbert nursery .... with ∞ space)'>>
 
 <<set _avgFoodProduce =     _settlementStatsData.food.produce/3>>
 <<set _avgFoodConsume = 1 + _settlementStatsData.food.consume/3>>
@@ -73,7 +74,7 @@
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
-	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td></tr>
+	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
 	<tr><td>(People ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
