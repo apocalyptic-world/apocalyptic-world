@@ -8,6 +8,8 @@
 	<<set _companions.set(_npcId, true)>>
 <</for>>
 
+<<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
+
 <<set _settlementStatsData = {
 	work: {},
 	settlets: 0,
@@ -15,6 +17,7 @@
 	happylvl: {
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
+	food: {produce: 0, consume: 0, none: 0}
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat ($slaves ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -31,6 +34,14 @@
 	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
 	<<set _settlementStatsData['settlers']++>>
 	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
+	<<if _job === 'garden'>>
+		<<set _settlementStatsData.food.produce += _giveFood  + ((_statsNpc.skills ?? []).includes('gardener') ? 2 : 0)>>
+	<</if>>
+	<<if  setup.getAge(_statsNpc) > 3>>
+		<<set _settlementStatsData.food.consume++>>
+	<<else>>
+		<<set _settlementStatsData.food.none++>>
+	<</if>>
 <</for>>
 
 <<set _happiness = {
@@ -51,10 +62,19 @@
 	<<set _guesthouseText = '(Build guest house first with room for up to 25 guests)'>>
 <</if>>
 
+<<set _avgFoodProduce =     _settlementStatsData.food.produce/3>>
+<<set _avgFoodConsume = 1 + _settlementStatsData.food.consume/3>>
+<<set _avgFoodNet = _avgFoodProduce - _avgFoodConsume>>
+
+<<set _avgFoodText = '(Average food/day:<br/>+ Garden makes ' + setup.ppFraction(_avgFoodProduce) +  
+	' - people eats '                                         + setup.ppFraction(_avgFoodConsume) +  
+	' = net result '                                          + setup.ppFraction(_avgFoodNet) + ')'>>
+
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td></tr>
+	<tr><td>(People ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>

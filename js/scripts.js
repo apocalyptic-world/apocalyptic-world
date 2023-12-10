@@ -761,3 +761,18 @@ window.openTab = function(evt, name) {
     document.getElementById(name).style.display = "block";
     evt.currentTarget.className += " active";
   }
+
+  /**
+   * pretty prints a fractional number
+   * @param   {Number} n         fractional number to pretty print
+   * @param   {Number} divisor   
+   * @returns {String}           pretty print version of n
+   */
+setup.ppFraction = function(n, divisor = 3) {
+    const intPart  = Math.trunc(n);
+    const quotient = Math.abs(n - intPart);
+    const dividend = Math.round(quotient*divisor);
+    const fractext = dividend ? '&nbsp;<span class="frac"><sup>' + dividend  + '</sup><span>&frasl;</span><sub>' + divisor + '</sub></span>': '';
+    const inttext =  intPart  ? intPart : '';
+    return inttext + fractext;
+}
