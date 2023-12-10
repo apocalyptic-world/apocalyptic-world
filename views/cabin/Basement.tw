@@ -40,13 +40,15 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
 	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined' && _isSlaveInBasement>>
 		<<set $tmpGirl = $guests[_girlGuest[0]]>>
-		<<set $tmpGirl.location = 'basement'>>
+		<<set $tmpGirl.location = 'mistress'>>
 		<center>
 			<<actionImage $tmpGirl mistress>>
-		</center> 
+		</center>
+		
 		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
 		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 		<<link `_girlGuestLink`>>
+			<<set $tmpGirl.location = 'basement'>>
 			<<set $tmpGirlViewBack = 'Girl view - guest'>>
 			<<set $tmpGirlBack = 'Basement'>>
 			<<set $tmpGirlCapture to false>>
@@ -143,16 +145,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			</td>
 			<td>
 				<<link 'Release'>>
-					  <<dialog 'Release'>>
-						  Are you sure you want to release <<=setup.pronounceWho($slaves[_i])>>?
-						  <br />
-						  <<link 'Yes'>>
-							  <<set $tmpGirl = $slaves[_i]>>
-							  <<set $slaveId = _i>>
-							  <<dialogclose>>
-							  <<goto 'Basement - release slave'>>
-						  <</link>>	
-					  <</dialog>>
+					  <<set $tmpGirl = $slaves[_i]>>
+					  <<set $slaveId = _i>>
+					  <<goto 'Basement - release slave'>>
 				  <</link>>
 			</td>
 			<td>

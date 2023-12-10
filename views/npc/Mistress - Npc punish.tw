@@ -1,0 +1,86 @@
+:: Mistress - Npc punish [sex] {"position":"2900,341","size":"100,100"}
+<<set _isMasochist = ($tmpGirl.traits ?? []).includes('masochist')>>
+
+<<set _relStats = 1>>
+<<set _subStats = 1>>
+
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set $tmpGirl.location = 'basement-mistress.' + setup.genderPath($guests[_girlGuest[0]])>>
+
+<<set _punishView = 'mistress_punish'>>
+<<if $punishType === 'paddle'>>
+	<<set 
+		_relStats = 2,
+		_subStats = 2,
+		_punishView = _punishView + '_paddle'
+	>>
+<</if>>
+
+<<set _relChanged = true, _subChanged = true>>
+<<if _isMasochist>>
+	<<set 
+		_relStats = 0, 
+		_relChanged = false
+	>>
+<</if>>
+
+<<actionImage $tmpGirl _punishView>>
+
+<<set $tmpGirl.relationship -= _relStats>>
+<<if $tmpGirl.relationship < -100>>
+	<<set $tmpGirl.relationship = -100>>
+	<<set _relChanged = false>>
+<</if>>
+<<set $tmpGirl.sub += _subStats>>
+<<if $tmpGirl.sub > 100>>
+	<<set $tmpGirl.sub = 100>>
+	<<set _subChanged = false>>
+<</if>>
+
+<<addmins 60>>
+<<energy -5>>
+
+<br /><br />
+<<if _isMasochist>>
+	<<=setup.pronounceWhat($tmpGirl, true)>> moans in enjoyment while looking over <<=setup.pronounceWhos($tmpGirl)>> shoulder straight in your eyes. 
+	<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 100)>>
+<<else>>
+	<<=setup.pronounceWhat($tmpGirl, true)>> yells in pain as the mistress punishes <<=setup.pronounceWho($tmpGirl)>> by whipping. 
+<</if>>
+<br /><br />
+<<if _relChanged>>
+	<strong><<print $tmpGirl.name>></strong> relationship decreased by <<=_relStats>><br />
+<</if>>
+<<if _subChanged>>
+	<strong><<print $tmpGirl.name>></strong> submission increased by <<=_subStats>><br />
+<</if>>
+<br /><br />
+
+<<if $player.energy >= 5 && hasTime(1)>>
+	<<set _linkName = 'Mistress punishes ' + setup.pronounceWho($tmpGirl)>>
+	<<link `_linkName`>>
+  		<<run delete $punishType>>
+		<<goto 'Mistress - Npc punish'>>
+	<</link>>
+
+	<<set _linkName = _linkName +' with paddle'>>
+	<<if $backpack.has('paddle')>>
+		<<link `_linkName`>>
+		<<set $punishType = 'paddle'>>
+		<<goto 'Mistress - Npc punish'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<link 'Back'>>
+	<<run delete $punishType>>
+	<<set $tmpGirl.location = 'basement'>>
+
+	<<if !$tmpGirl.gender>>
+		<<goto 'Girl view'>>
+	<<else>>
+		<<goto 'Guy view'>>
+	<</if>>
+<</link>>
+
+
