@@ -1,0 +1,83 @@
+:: Basement event - try escape 2
+<h1 class="ptitle">BASEMENT</h1>
+<<set _npc = $slaves[$tmpEvent.id]>>
+<br />
+The heavy clank of the metal door echoes through the stale air as you approach the row of cells. 
+As you reach the one at the end, you notice the door slightly ajar, the lock broken. Panic seizes you as you fling the door open, revealing an empty cell.
+<br /><br />
+Heart pounding, you rush back upstairs, your mind racing with possibilities. 
+Fear grips you as you consider the consequences of a prisoner escaping into the lawless wasteland outside. The realization dawns upon you that your carefully constructed facade of control is crumbling.
+<br /><br />
+Without hesitation, you burst out into the daylight, squinting against the blinding sun. 
+Your focus sharpens as you spot a figure scrambling over the wood fence at the perimeter of your settlement. Adrenaline surges through your veins as you sprint toward the escapee.
+<br /><br />
+<<video 'basement/escape2_1'>>
+<br /><br />
+<<sayNpc _npc>>
+    Please! Let me go! I won't come back, I promise!
+<</sayNpc>>
+<br />
+She begs, her voice choked with fear and desperation. Her eyes search yours for a hint of mercy, but you remain stoic, your own survival instincts kicking in.
+<br /><br />
+<<video 'basement/escape2_2'>>
+<br /><br />
+As you secure the makeshift bindings around her wrists, her struggles intensify, the frayed rope biting into her skin. The pleas for mercy grow louder, 
+echoing in the desolation that surrounds you.
+<<if $slaves.length > 1>>
+    The wind carries her desperate cries, blending with the distant wails of other survivors, creating a haunting symphony of despair.
+<</if>>
+<br /><br />
+<div id="option_fuck">
+    <<linkreplace 'Force blowjob'>>
+        <<set _fucked = true>>
+        <<set $player.goodwill-->>
+        <<you>>
+            Drop to your knees.
+        <</you>>
+        <br />
+        <<video 'basement/escape2_3'>>
+        <br /><br />
+        Her eyes, once filled with defiance, now reflect a mix of fear and submission. You pull out your dick and forcefully push it inside her mouth and force her to suck you.
+        <br /><br />
+        <<sayNpc _npc>>
+            Yes, sir! I am sorry! That won't happen again!
+        <</sayNpc>>
+        <br />
+        <<set $guests[$tmpEvent.id].sub += 10>>
+        <strong><<=setup.displayName(_npc)>> submission increased by 10</strong>
+        <br /><br />
+        <<linkreplace 'Fuck her'>>
+            <<set $player.goodwill-->>
+            <<video 'basement/escape2_4'>>
+            <br /><br />
+            You push <<=setup.displayName(_npc)>> against the ladder, her breasts colliding with the cool metal. The air thickens with tension as you lift her leg, accentuating the vulnerability of her position.
+            <br />
+            She begs one last time before you shove your dick inside her pussy and forcefully and aggressively fuck her pussy. She lets out moans mixed with cry.
+            <br /><br />
+            <<linkreplace 'Cum'>>
+                <<horny_reset>>
+                <<set $guests[$tmpEvent.id].horny = 0>>
+                <<setNpcStats 'slave' $tmpEvent.id 'happy' 5>>
+                <center>
+                    [img[setup.ImagePath+'game/misc/creampie.webp']]
+                </center>
+                <br /><br />
+                You fill up her pussy with your warm cum and let it drip out of her as you pull out.
+                <br /><br />
+            <</linkreplace>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>
+<<linkreplace 'Put her back in cell'>>
+    <<if !_fucked>>
+        <<run $('#option_fuck').hide()>>
+    <</if>>
+    You guide her back to basement, a dimly lit space with cold concrete walls that reverberate with the echoes of misery. 
+    The once vibrant world outside feels like a distant memory as you grapple with the consequences of your actions. In this unforgiving landscape, every choice carries the weight of survival.
+    <br /><br /> 
+    <<link 'Leave'>>
+        <<unset $tmpEvent>>
+        <<goto 'Basement'>>
+    <</link>>
+<</linkreplace>>
+
