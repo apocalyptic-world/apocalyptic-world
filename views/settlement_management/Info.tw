@@ -12,12 +12,13 @@
 
 <<set _settlementStatsData = {
 	work: {},
-	settlets: 0,
+	settlers: 0,
 	happy: 0,
 	happylvl: {
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
-	food: {produce: 0, consume: 0, none: 0}
+	food: {produce: 0, consume: 0, none: 0},
+	wood: 0
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -36,6 +37,9 @@
 	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
 	<<if _job === 'garden'>>
 		<<set _settlementStatsData.food.produce += _giveFood  + ((_statsNpc.skills ?? []).includes('gardener') ? 2 : 0)>>
+	<<elseif _job === 'forest'>>
+		<<set _settlementStatsData.wood +=  (_statsNpc.strength > 30 ? 2 : 1) + 
+			((_statsNpc.skills ?? []).includes('woodcraft') ? 1 : 0) + setup.npcInventoryHas(_statsNpc, 'axe')>>
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
@@ -61,26 +65,35 @@
 <<else>>
 	<<set _guesthouseText = '(Build guest house first with room for up to 25 guests)'>>
 <</if>>
-<<set _nurseryText = '(No limits, always room for more kids. This is a Hilbert nursery .... with ∞ space)'>>
+<<if ($game.location.nursery ?? false)>>
+	<<set _nurseryText = '(No limits, always room for more kids. This is a Hilbert nursery .... with ∞ space)'>>
+<<else>>
+	<<set _nursery = '(Build nursery first with room for up to ∞ kids)'>>
+<</if>>
 
 <<set _avgFoodProduce =     _settlementStatsData.food.produce/3>>
 <<set _avgFoodConsume = 1 + _settlementStatsData.food.consume/3>>
 <<set _avgFoodNet = _avgFoodProduce - _avgFoodConsume>>
 
-<<set _avgFoodText = '(Average food/day:<br/>+ Garden makes ' + setup.ppFraction(_avgFoodProduce) +  
-	' - people eats '                                         + setup.ppFraction(_avgFoodConsume) +  
-	' = net result '                                          + setup.ppFraction(_avgFoodNet) + ')'>>
+<<set _pre = '', _post = ''>>
+<<if _avgFoodNet < 0>>
+	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
+<</if>>
+<<set _avgFoodText = '(Average food/day: + Garden makes ' + setup.ppFraction(_avgFoodProduce) +  
+	' - people eats '                                     + setup.ppFraction(_avgFoodConsume) +  
+	' = net result '                               + _pre + setup.ppFraction(_avgFoodNet) + _post +')'>>
+<<set _avgWood = 'Average production wood/day: ' + _settlementStatsData.wood>>
 
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
-	<tr><td>(People ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
+	<tr><td>(people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
-	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td></tr>
+	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
 	<tr><td>Working as companion:</td><td><<=_settlementStatsData.work.companion ?? 0>></td></tr>
