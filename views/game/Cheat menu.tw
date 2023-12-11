@@ -100,6 +100,7 @@
 
 
     <<if recall($suppCode)>>
+		<<set _availableGuests = setup.getAvailablePersons18yo($guests ?? [])>>
 		<fieldset>
 			<legend>
 				Trigger event
@@ -110,6 +111,15 @@
 			<<link 'Explore: Waterfall'>>
 				<<goto 'Explore event: Waterfall'>>
 			<</link>>
+			<<if (_availableGuests[0] ?? []).length >= 2>>
+				<<link 'Bathhouse: Threesome'>>
+					<<set $tmpEvent.bathhouseThreesome = [
+						'guest:' + _availableGuests[0][0],
+						'guest:' + _availableGuests[0][1]
+					]>>
+					<<goto 'Bathhouse - threesome'>>
+				<</link>>
+			<</if>>
 			<<link 'Event: Base attack - fight'>>
 				<<goto 'Event: Base attack - fight'>>
 			<</link>>
