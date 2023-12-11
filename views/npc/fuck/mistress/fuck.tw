@@ -7,29 +7,31 @@
     mistress_handjob: {
         title: 'Handjob',
         minAction: 10,
+        show: false,
         maxCorruption: 20
     },
     mistress_footjob: {
         title: 'Footjob',
         minAction: 20,
+        show: false,
         maxCorruption: 30
     },
     mistress_titjob: {
         title: 'Titjob',
         minAction: 30,
-        show: ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
+        show: false && ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
         maxCorruption: 40
     },
     mistress_face_strapon: {
         title: 'Face strapon',
         minAction: 30,
-        show: !$guests[_girlGuest[0]].gender,
+        show: $guests[_girlGuest[0]].gender == 0 && $tmpGirl.gender == 1,
         maxCorruption: 40
     },
     mistress_licked: {
         title: 'Sit on face',
         minAction: 40,
-        show: !$guests[_girlGuest[0]].gender,
+        show: $guests[_girlGuest[0]].gender == 0,
         maxCorruption: 50
     },
     mistress_bj: {
@@ -88,6 +90,10 @@
     <<horny _hornyGained>>
 	<<set _showSex = true>>
 
+    <<if $sexAction === 'mistress_anal'>>
+        <<include 'Mistress fuck anal'>>
+    <</if>>
+
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
@@ -121,6 +127,7 @@
 		<br />
 		
 		<<if $tmpGirl.horny >= 100>>
+            <<include 'Mistress fuck squirt'>>
 			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
 			<<set $tmpGirl.horny = 0,
@@ -135,9 +142,12 @@
     <<if _sexActions[$sexAction]?.stats>>
         <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
     <</if>>
-    <<if $sexAction === 'pussy'>>
+    <<if $sexAction === 'mistress_pussy'>>
         <<set $tmpGirl.virgin = false>>
     <</if>>
+
+    <<include 'Mistress fuck traits'>>
+
 <</if>>
 <br />
 <<include 'Mistress fuck buttons'>>
