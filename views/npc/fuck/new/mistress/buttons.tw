@@ -1,0 +1,61 @@
+:: Mistress fuck buttons
+<<if ($sexForced ?? false) || ($tmpGirl.traits ?? []).includes('nymphomaniac')>>
+    <<set _actionMax = 100>>
+<<elseif setup.likesGender($tmpGirl, $guests[_girlGuest[0]].gender)>>
+	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
+	<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
+	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub, $tmpGirl.drunk ?? 0)>>
+<<else>>
+	<<set _actionMax = Math.floor(Math.max($tmpGirl.sub, $tmpGirl.drunk ?? 0)/2)>>
+<</if>>
+
+<<if $player.horny >= 100>>
+    <br />
+    <<linkreplace 'Cum with help'>>
+        <<horny_reset>>
+        <<set $player.sexp++>>
+        <<actionImage $guests[_girlGuest[0]] mistress_hj_cum>>
+        <br />
+        <<link 'Continue'>>
+            <<unset $sexAction>>
+            <<goto `passage()`>>
+        <</link>>
+    <</linkreplace>>
+		
+<<else>>
+        <<if $player.energy >= 3>>
+            <div id="action-buttons">
+                <<for _sexActionKey, _sexAction range _sexActions>>
+                    <<capture _sexActionKey, _sexAction>>
+                        <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey.replace("mistress_", "")+".png"]]</span>'>>
+                            <<link _linkName>>
+                                <<set $sexAction = _sexActionKey>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        <</if>>
+                    <</capture>>
+                <</for>>
+            </div>
+        <br />
+
+        <<if !($sexForced ?? false) && _actionMax < 70>>	
+            <<link 'Force more'>>
+                <<set $sexForced = true>>
+                <<unset $sexAction>>
+                <<goto `passage()`>>
+            <</link>>
+        <</if>>	
+     <</if>>
+
+<</if>>
+
+<<link 'End'>>
+    <<unset $sexAction, $sexForced>>
+    <<set $tmpGirl.location = 'basement'>>
+	<<if !$tmpGirl.gender>>
+		<<goto 'Girl view'>>
+	<<else>>
+		<<goto 'Guy view'>>
+	<</if>>
+<</link>>

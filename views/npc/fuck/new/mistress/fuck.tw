@@ -1,59 +1,68 @@
-:: Mc fuck [sex]
+:: Mistress fuck [sex]
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set $guests[_girlGuest[0]].location = 'mistress'>>
+<<set $tmpGirl.location = 'basement-mistress.' + setup.genderPath($guests[_girlGuest[0]])>>
 
 <<set _sexActions = {
-    handjob: {
+    mistress_handjob: {
         title: 'Handjob',
         minAction: 10,
-        horny: 20,
         maxCorruption: 20
     },
-    footjob: {
+    mistress_footjob: {
         title: 'Footjob',
         minAction: 20,
-        horny: 20,
         maxCorruption: 30
     },
-    titjob: {
+    mistress_titjob: {
         title: 'Titjob',
         minAction: 30,
         show: ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
-        horny: 20,
         maxCorruption: 40
     },
-    bj: {
+    mistress_face_strapon: {
+        title: 'Face strapon',
+        minAction: 30,
+        show: !$guests[_girlGuest[0]].gender,
+        maxCorruption: 40
+    },
+    mistress_licked: {
+        title: 'Sit on face',
+        minAction: 40,
+        show: !$guests[_girlGuest[0]].gender,
+        maxCorruption: 50
+    },
+    mistress_bj: {
         title: 'Blowjob',
         minAction: 40,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
-        horny: 20,
         maxCorruption: 50,
         stats: 'bj'
     },
-    dp: {
+    mistress_dp: {
         title: 'Deepthroat',
         minAction: 50,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
-        horny: 20,
         maxCorruption: 60,
         positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
         stats: 'dp'
     },
-    pussy_lick: {
+    mistress_pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
         show: typeof $tmpGirl.pussy !== 'undefined',
         maxCorruption: 40,
         positive: true
     },
-    pussy: {
+    mistress_pussy: {
         title: 'Fuck pussy',
         minAction: 50,
         show: typeof $tmpGirl.pussy !== 'undefined',
-        horny: 20,
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
         stats: 'pussy'
     },
-    anal_fingering: {
+    mistress_anal_fingering: {
         title: 'Finger ass',
         minAction: 60,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
@@ -61,40 +70,23 @@
         positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 10),
         stats: 'anal'
     },
-    anal: {
+    mistress_anal: {
         title: 'Fuck ass',
         minAction: 70,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
-        horny: 20,
         maxCorruption: 80,
         positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20),
         stats: 'anal'
-    },
-    cum_on_face: {
-        show: false,
-        minAction: 35
-    },
-    cum_in_mouth: {
-        show: false,
-        minAction: 45,
-        positive: (($tmpGirl.traits ?? []).includes('cumslut') && $tmpGirl.horny <= 79)
     }
 }>>
 
 <<if typeof $sexAction !== 'undefined'>>
     <<addmins 5>>
-    <<energy -5>>
-    <<if setup.perkHas('drunk')>>
-        <<energy -5>>
-    <</if>>
+    <<energy -3>>
 
-    <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
+    <<set _hornyGained = 10>>
     <<horny _hornyGained>>
 	<<set _showSex = true>>
-
-    <<if $sexAction === 'anal'>>
-        <<include 'Mc fuck anal'>>
-    <</if>>
 
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
@@ -106,7 +98,7 @@
                 $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
                 $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
             >>
-            <<=setup.pronounceWhat($tmpGirl, true)>> asks you to leave <<=setup.pronounceWho($tmpGirl)>> alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+            <<=setup.pronounceWhat($tmpGirl, true)>> asks for mercy!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
         <<else>>
             <<set
                 $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
@@ -125,11 +117,10 @@
 
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
         <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
-		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + 20)</strong>
+		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively. <strong>(Horny + 20)</strong>
 		<br />
 		
 		<<if $tmpGirl.horny >= 100>>
-			<<include 'Mc fuck squirt'>>
 			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
 			<<set $tmpGirl.horny = 0,
@@ -147,12 +138,6 @@
     <<if $sexAction === 'pussy'>>
         <<set $tmpGirl.virgin = false>>
     <</if>>
-
-    <<include 'Mc fuck traits'>>
-
-	<<if $sexAction == 'cum_in_pussy'>>
-        <<include 'Mc fuck cum in pussy'>>
-	<</if>>
 <</if>>
 <br />
-<<include 'Mc fuck buttons'>>
+<<include 'Mistress fuck buttons'>>

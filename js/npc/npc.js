@@ -267,12 +267,41 @@ setup.setToVirgin = function(person) {
 	return person;
 };
 
+setup.likesGender = function(person, gender = 1) {
+	return [person.likesGirls,
+	person.likesGuys,
+	person.likesTGirls,
+	person.likesTGuys][gender];
+};
+
+setup.genderClass = function(person) {
+	const _mapping = [
+		'girl',
+		'guy',
+		'tgirl',
+		'tguy'
+	];
+
+	return _mapping[person.gender];
+};
+
 setup.genderDescription = function(person) {
 	const _mapping = [
 		'woman',
 		'man',
 		'trans woman',
 		'trans man'
+	];
+
+	return _mapping[person.gender];
+};
+
+setup.genderPath = function(person) {
+	const _mapping = [
+		'female',
+		'male',
+		'transfemale',
+		'transmale'
 	];
 
 	return _mapping[person.gender];
@@ -305,17 +334,6 @@ setup.beautyDescription = function(beauty) {
 	const categories = ['repulsive looking', 'hideous', 'ugly', 'unattractive', 'plain looking', 'average looking', 'attractive', 'beautiful', 'gorgeous', 'stunning'];
     const categoryIndex = Math.floor((beauty - 1) / 10);
     return categories[Math.max(categoryIndex, 0)];
-};
-
-setup.genderClass = function(person) {
-	const _mapping = [
-		'girl',
-		'guy',
-		'tgirl',
-		'tguy'
-	];
-
-	return _mapping[person.gender];
 };
 
 /**
