@@ -18,7 +18,8 @@
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
 	food: {produce: 0, consume: 0, none: 0},
-	wood: 0
+	wood: 0,
+	birthday: []
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -45,6 +46,9 @@
 		<<set _settlementStatsData.food.consume++>>
 	<<else>>
 		<<set _settlementStatsData.food.none++>>
+	<</if>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<set _settlementStatsData.birthday.push(_statsNpc.name)>>
 	<</if>>
 <</for>>
 
@@ -112,4 +116,11 @@
 		)
 		</td>
 	</tr>
+	<<if _settlementStatsData.birthday.length>>
+		<tr>
+			<td>Today's birthdays:</td>
+			<td></td>
+			<td>_settlementStatsData.birthday.join('<br/>')</tr>
+		<tr/>
+	<</if>>
 </table>
