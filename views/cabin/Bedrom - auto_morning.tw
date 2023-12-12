@@ -77,10 +77,10 @@
         <</if>>
     <</for>>
     <<if _outDupNpcs.length > 0>>
-        <<set  _outputAutoList.push('No extras - npc → cabin: ' + _outDupNpcs.sort().join('; ') + ';')>>
+        <<set  _outputAutoList.push('Duplicates removed: ' + _outDupNpcs.sort().join('; ') + ';')>>
     <</if>>
     <<if _outMinusNpcs.length > 0>>
-        <<set _outputAutoList.push('Subtract - npc → cabin: ' + _outMinusNpcs.sort().join('; ')+ ';')>>
+        <<set _outputAutoList.push('Removed things: ' + _outMinusNpcs.sort().join('; ')+ ';')>>
     <</if>>
     <<unset _outDupItems, _outDupNpcs, _outMinusItems, _outMinusNpcs, _npcI, _npc, _npcs, _itemI, _item, _itemcount>>
 
@@ -95,14 +95,14 @@
             <<set _outItem.push(_npc.name)>>
         <</for>>
         <<if _outItem.length > 0>>
-            <<set _outputAutoList.push('Add ' + _item + ' npc ← cabin: ' + _outItem.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Added ' + _item + ' to: ' + _outItem.sort().join(', ') + ';')>>
         <</if>>
         <<if _want[_item].length > 0>>
             <<set _outNo = []>>
             <<for _npc range _want[_item]>>
                 <<set _outNo.push(_npc.name)>>
             <</for>>
-            <<set _outputAutoList.push('Add failed - no ' + _item + ': ' + _outNo.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Add failed - no ' + _item + ' to: ' + _outNo.sort().join(', ') + ';')>>
         <</if>>
     <</for>>
 
@@ -146,11 +146,11 @@
         <<for _item range setup.automatization.job_tools.mc.sort()>>
             <<if !$backpack.has(_item) && $storage.has(_item)>>
                 <<transfer $storage $backpack _item 1>>
-                <<set _outItem.push('+ ' + _item)>>
+                <<set _outItem.push('Got +' + _item)>>
             <<elseif $backpack.has(_item)>>
-                <<set _outItem.push('± ' + _item)>>
+                /* keep */
             <<else>>
-                <<set _outItem.push('-' + _item)>>
+                <<set _outItem.push('Lost -' + _item)>>
             <</if>>
         <</for>>
     <</if>>
