@@ -1,4 +1,4 @@
-:: Girl fuck - tired {"position":"2897,215","size":"100,100"}
+:: Mc fuck - tired {"position":"2897,215","size":"100,100"}
 <<if $tiredNoTime>>
 	You feel too tired to continue, it has been a long day.
 <<else>>
@@ -7,6 +7,7 @@
 <br /><br />
 
  <<link 'Back'>>
+	<<unset $sexAction, $sexForced>>
 	<<if typeof $slaveId !== 'undefined'>>
 		<<set $slaves[$slaveId] = $tmpGirl>>
 	<<elseif typeof $guestId !== 'undefined'>>
@@ -14,10 +15,13 @@
 	<<elseif typeof $charId !== 'undefined'>>
 		<<set $characters[$charId] = $tmpGirl>>
 	<</if>>
+
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>
-	<<else>>
+	<<elseif !$tmpGirl.gender>>
 		<<goto 'Girl view'>>
+	<<else>>
+		<<goto 'Guy view'>>
 	<</if>>
 <</link>>
 
