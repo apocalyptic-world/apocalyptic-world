@@ -9,6 +9,7 @@
 <</for>>
 
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
+<<set _garden =   ($game.location.greenhouse ?? false) ? 'greenhouse' : 'garden' >>
 
 <<set _settlementStatsData = {
 	work: {},
@@ -18,7 +19,8 @@
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
 	food: {produce: 0, consume: 0, none: 0},
-	wood: 0
+	wood: 0,
+	birthday: []
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -45,6 +47,9 @@
 		<<set _settlementStatsData.food.consume++>>
 	<<else>>
 		<<set _settlementStatsData.food.none++>>
+	<</if>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<set _settlementStatsData.birthday.push(_statsNpc.name)>>
 	<</if>>
 <</for>>
 
@@ -79,7 +84,7 @@
 <<if _avgFoodNet < 0>>
 	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
 <</if>>
-<<set _avgFoodText = '(Average food/day: + Garden makes ' + setup.ppFraction(_avgFoodProduce) +  
+<<set _avgFoodText = '(Average food/day: + ' +  _garden + ' makes ' + setup.ppFraction(_avgFoodProduce) +  
 	' - people eats '                                     + setup.ppFraction(_avgFoodConsume) +  
 	' = net result '                               + _pre + setup.ppFraction(_avgFoodNet) + _post +')'>>
 <<set _avgWood = 'Average production wood/day: ' + _settlementStatsData.wood>>
@@ -90,7 +95,7 @@
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
 	<tr><td>(people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
-	<tr><td>Working in garden:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
+	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
@@ -112,4 +117,11 @@
 		)
 		</td>
 	</tr>
+	<<if _settlementStatsData.birthday.length>>
+		<tr>
+			<td>Today's birthdays:</td>
+			<td></td>
+			<td>_settlementStatsData.birthday.join('<br/>')</tr>
+		<tr/>
+	<</if>>
 </table>
