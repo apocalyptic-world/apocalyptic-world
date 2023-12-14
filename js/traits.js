@@ -43,6 +43,9 @@ setup.getRandomTraits = function (count = 1, exclude) {
         }
     }
     var shuffledTraits = Object.keys(_traits).sort((a, b) => 0.5 - Math.random());
-
+    if (!shuffledTraits.length) {
+        return [];
+    }
+    
     return shuffledTraits.slice(0, count);
 };
