@@ -1,0 +1,26 @@
+:: Mistress fuck anal 
+
+<<if $tmpGirl.anal < 20>>
+
+	The mistress tried to fuck <<=setup.pronounceWho($tmpGirl)>> in the ass but <<=setup.pronounceWhos($tmpGirl)>> anus won't relax. 
+	<br />
+	
+	<<if !$tmpGirl.traits.includes('masochist')>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> can't take it in <<=setup.pronounceWhos($tmpGirl)>> ass and begs for mercy.<strong> (Submission + 1, Happy / Relationship - 1)</strong>
+		<br />
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+			$tmpGirl.relationship = Math.max($tmpGirl.relationship - 1, -100),
+			$tmpGirl.happy = Math.max($tmpGirl.happy - 1, -100)
+		>>
+        <<set _showSex = false>>
+	<<else>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> seems to enjoy the pain caused.<strong> (Submission / Happy / Relationship + 1)</strong>
+		<br />
+		<<set
+			$tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100),
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+		>>
+	<</if>>
+<</if>>
