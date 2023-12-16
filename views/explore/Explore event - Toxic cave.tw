@@ -1,6 +1,8 @@
 :: Explore event - toxic cave 
 <h1 class="ptitle">FOREST</h1>
 <br />
+<<set _companionsWithoutMaskKeys = []>>
+<<set _companionsWithoutMaskNames = []>>
 As you venture deeper into the forest, the ancient trees loom overhead, their gnarled branches reaching for the sky. 
 The air is thick with the scent of moss and earth. 
 <br /><br />
@@ -16,12 +18,10 @@ Curiosity piqued, you approach cautiously. The mist seems to beckon, promising s
     <br />
     The cave is dark and damp, its walls glistening with moisture. The air is cooler here, sending shivers down your spine. The mist swirls around your feet, its touch both chilling and invigorating.
     <br /><br />
-    <<if $player.companions ?? {}>>
+    <<if Object.keys($player.companions ?? {}).length>>
         <<set _hadCompanions = true>>
         Your companions... They follow hesitantly, their apprehension palpable. As they step into the cave, the mist takes on an eerie luminescence, casting strange shadows on the rocky walls.
         <br /><br />
-        <<set _companionsWithoutMaskKeys = []>>
-        <<set _companionsWithoutMaskNames = []>>
         <<for _companionKey, _companion range $player.companions>>
             <<set _npcId = _companionKey.split(':')[1]>>
             <<set _npc = $guests[_npcId]>>
@@ -68,7 +68,7 @@ Curiosity piqued, you approach cautiously. The mist seems to beckon, promising s
             [img[setup.ImagePath+'places/explore/event_toxic_cave_collapse.jpg']]
         </center>
         <br />
-        <<if _companionsWithoutMaskNames.length>>
+        <<if (_companionsWithoutMaskNames ?? []).length>>
             You also collapse on the ground and start to choke.
         <<else>>
             Suddenly you collapse on the ground and start to choke.

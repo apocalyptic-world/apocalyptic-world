@@ -22,7 +22,7 @@
 <<if !($locationEvents.shower ?? false)>>
 	<<set _girls = setup.getAvailablePersons18yo($guests)[0] ?? []>>
 	<<set _randomGirlId = setup.getRandomElement(_girls)>>
-	<<if setup.percentageChance(10) && $guests[_randomGirlId].likesGuys>>
+	<<if setup.percentageChance(10) && _randomGirlId && $guests[_randomGirlId].likesGuys>>
 		<<set $locationEvents.shower = true>>
 		<<set $tmpEvent = {
 			id: _randomGirlId

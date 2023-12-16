@@ -21,15 +21,21 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 		<<set $tmpGirl.strength++>>
 		<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
 		<strong><<=$tmpGirl.name>> strength increased by 1</strong>
-
-		[[Fuck her|Girl fuck]]
+		<br /><br />
+		<<link 'Fuck'>>
+			<<fuck $tmpGirl>>
+		<</link>>
 	<<else>>
 		<<if !$tmpGirl.likesGuys>>
 			She looks at you with widened eyes and an angry face. Then she reminds you that she's not interested in men.
 		<<else>>
 			She flinches and asks you to stop.
 		<</if>>
-		[[Force her|Girl fuck][$tmpGirl.relationship -=30]]
+		<br /><br />
+		<<link 'Force her'>>
+			<<fuck $tmpGirl>>
+			<<set $forcedSex = true>>
+		<</link>>
 	<</if>>
 <</linkreplace>>
 <<link 'Finish'>>
