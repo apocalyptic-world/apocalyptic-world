@@ -64,7 +64,7 @@
 						<<run delete $charId>>
                         <<set $guestId = _bathGuestI>>
                         <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
-						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender]).length >= 2 && setup.percentageChance(10)>>
+						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender] ?? '').length >= 2 && setup.percentageChance(20)>>
 							<<set $tmpEvent = {
 								bathhouseThreesome: [
 									Object.keys(_peopleInBathhouse[_bathGuest.gender])[0],
