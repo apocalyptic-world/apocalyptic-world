@@ -1,7 +1,7 @@
 :: Welcome intro {"position":"17,288","size":"100,100"}
 <div id="welcome">
 [img[setup.ImagePath+'intro/start.jpg']]
-<h1>Version 0.28</h1>
+<h1>Version 0.28a</h1>
 <div id="versionCheck" style="display:none">
 	<div class="caut-bar"></div>
 	<div id="versionCheckInner"></div>
@@ -47,13 +47,14 @@ There will be some story elements but it will be optional and I'll try to leave 
 			if (!data) {
 				return;
 			}
-			var currentVersion = $('#version').text().replace('v.','');
+			var currentVersion = $('#version').text().replace('v','');
 			const pattern = /^(\d+(\.\d+)?)([a-zA-Z]*)$/;
 			const matches = currentVersion.match(pattern);
 			if (matches) {
 			  const currentMainVersion = parseFloat(matches[1]);
 			  const currentSubVersion = matches[3];
 			  
+			  var data = data.replace('v','');
 			  const liveMatches = data.match(pattern);
 			  if (liveMatches) {
 			  	const liveMainVersion = parseFloat(liveMatches[1]);
