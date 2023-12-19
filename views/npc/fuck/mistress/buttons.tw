@@ -27,9 +27,12 @@
             <div id="action-buttons">
                 <<for _sexActionKey, _sexAction range _sexActions>>
                     <<capture _sexActionKey, _sexAction>>
-                        <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+                        <<if (_sexAction.show ?? true)>>
                             <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey.replace("mistress_", "")+".png"]]</span>'>>
                             <<link _linkName>>
+                                <<if !($tmpGirl.traits ?? []).includes('nymphomaniac')>>
+                                    <<set $sexForced = true>>
+                                <</if>>
                                 <<set $sexAction = _sexActionKey>>
                                 <<goto `passage()`>>
                             <</link>>
@@ -38,14 +41,6 @@
                 <</for>>
             </div>
         <br />
-
-        <<if !($sexForced ?? false) && _actionMax < 70>>	
-            <<link 'Force more'>>
-                <<set $sexForced = true>>
-                <<unset $sexAction>>
-                <<goto `passage()`>>
-            <</link>>
-        <</if>>	
      <</if>>
 
 <</if>>

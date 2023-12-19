@@ -61,6 +61,7 @@
 <<else>>
         <<if $player.energy >= 5>>
             <div id="action-buttons">
+                <<set _sexOptionHidden = false>>
                 <<for _sexActionKey, _sexAction range _sexActions>>
                     <<capture _sexActionKey, _sexAction>>
                         <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
@@ -69,13 +70,15 @@
                                 <<set $sexAction = _sexActionKey>>
                                 <<goto `passage()`>>
                             <</link>>
+                        <<elseif (_sexAction.show ?? true)>>
+                            <<set _sexOptionHidden = true>>
                         <</if>>
                     <</capture>>
                 <</for>>
             </div>
         <br />
 
-        <<if !($sexForced ?? false) && _actionMax < 70>>	
+        <<if !($sexForced ?? false) && _actionMax < 70 && _sexOptionHidden>>	
             <<link 'Force more'>>
                 <<set $sexForced = true>>
                 <<unset $sexAction>>
