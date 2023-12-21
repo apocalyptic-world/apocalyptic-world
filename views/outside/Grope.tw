@@ -1,18 +1,24 @@
 :: Grope [sex] {"position":"3112,95","size":"100,100"}
 <<energy -20>>
 <<addmins 15>>
-<<if !$tmpGirl.groped>>
-  <<set $tmpGirl.relationship +=2>>
-  <<if $tmpGirl.relationship > 100>>
-  	<<set $tmpGirl.relationship = 100>>
-  <</if>>
-  <<set $tmpGirl.groped = true>>
-<</if>>
 <center>[img[setup.ImagePath+'places/greenhouse/grope.webp']]</center>
 <br /><br />
 While <<print $tmpGirl.name>> plows ground, you lower your hands below her waist and squeeze her ass.
 <br /><br />
-
+<<if !$tmpGirl.groped>>
+  <<if $tmpGirl.relationship < 50>>
+    <<set $tmpGirl.relationship++>>
+    <strong>Relationship increased by 1</strong>
+  <<else>>
+    <strong>Can't increase releationship with this action anymore</strong>
+  <</if>>
+  <br /><br />
+  <<set $tmpGirl.groped = true>>
+<</if>>
+<<sayNpc $tmpGirl>>
+  <<=either('Uh, I like that!', "What's with you today? Mmm")>>
+<</sayNpc>>
+<br />
 <<link 'Back'>>
   <<if $tmpGirlViewBack>>
       <<goto $tmpGirlViewBack>>
