@@ -32,6 +32,15 @@
 		<</if>>
 		<<goto `passage()`>> 
   	<</link>>
+	<<link 'Set all slave submission to max'>>
+  		<<for _cheatslaveI, _cheatSlave range $slaves>>
+			<<set $slaves[_cheatslaveI].sub = 100>>
+		<</for>>
+		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.sub = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  	<</link>>
 	<<link 'Add growth potion'>>
 		<<pickup $backpack 'growth_potion' 1>>
 		<<goto `passage()`>>
@@ -73,7 +82,7 @@
   		<<set $player.reputation++>>
 		<<goto `passage()`>>
   	<</link>>
-	<<link 'Increase happiness to max for all NPCS'>>
+	<<link 'Increase happiness to max for all NPCs'>>
 		<<for _cheatMenuNpcI, _cheatMenuNpc range ($slaves ?? [])>>
 			<<set $slaves[_cheatMenuNpcI].happy = 100>>
 		<</for>>
