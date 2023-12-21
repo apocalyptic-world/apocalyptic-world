@@ -12,53 +12,66 @@
 
 <<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
 	<<energy +5>>
-	<<horny_reset>>
 	<<set $player.sexp++>>
+
+    <<if !$tmpGirl.gender>>
+        <<include 'asks to cum inside'>>
+    <</if>>
 	
 	<<if $sexAction == 'handjob'>>
         <<link 'Handjob cum'>>
             <<set $sexAction = 'handjob_cum'>>
+            <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
 	<<elseif $sexAction == 'footjob'>>
         <<link 'Footjob cum'>>
             <<set $sexAction = 'footjob_cum'>>
+            <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
 	<<elseif $sexAction == 'titjob'>>
         <<link 'Cum on tits'>>
             <<set $sexAction = 'cum_on_tits'>>
+            <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
 	<<elseif $sexAction == 'pussy'>>
         <<link 'Cum in pussy'>>
+            <<horny_reset>>
             <<set $sexAction = 'cum_in_pussy'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on stomach'>>
+            <<horny_reset>>
             <<set $sexAction = 'cum_on_stomach'>>
             <<goto `passage()`>>
         <</link>>	
 	<<elseif $sexAction == 'anal'>>
         <<link 'Cum in ass'>>
+            <<horny_reset>>
             <<set $sexAction = 'cum_in_ass'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on back'>>
+            <<horny_reset>>
             <<set $sexAction = 'cum_on_back'>>
             <<goto `passage()`>>
         <</link>>
     <<elseif $sexAction === 'dp'>>
         <<link 'Cum in throat'>>
+            <<horny_reset>>
 	        <<set $sexAction = 'cum_throat'>>
 	        <<goto `passage()`>>
 	    <</link>>
 	<</if>>
     <<link 'Cum on face'>>
+        <<horny_reset>>
 	    <<set $sexAction = 'cum_on_face'>>
 	    <<goto `passage()`>>
 	<</link>>
     <<link 'Cum in mouth'>>
+        <<horny_reset>>
 	    <<set $sexAction = 'cum_in_mouth'>>
 	    <<goto `passage()`>>
 	<</link>>
