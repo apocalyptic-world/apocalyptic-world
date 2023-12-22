@@ -28,7 +28,7 @@
 	<</link>>
 <</if>>
 
-<<if !($player.companions['guest:' + $guestId] ?? false)>>
+<<if !($player.companions['guest:' + $guestId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
 	<<link 'Add as companion'>>
 		<<companionAdd 'guest' $guestId>>
 		<<assignedTo $tmpGirl 'companion'>>

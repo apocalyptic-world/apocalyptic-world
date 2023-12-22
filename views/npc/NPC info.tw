@@ -133,6 +133,17 @@
 						Pregnancy: <<=$tmpGirl.pregnancy>> days
 					</div>
 				<</if>>
+				<<if !_unknown && $player.int >= 50>>
+					<div>
+					Locked traits: 
+					<<for _trait range ($tmpGirl.traitsLocked ?? [])>>
+						<div class="trait tooltip">
+							<<=setup.traits[_trait].title>>
+							<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
+						</div>
+					<</for>>
+					</div>
+				<</if>>
 			</div>
 			<<if ($tmpGirl.stats ?? false)>>
 				<div id="npc-work-stats">
