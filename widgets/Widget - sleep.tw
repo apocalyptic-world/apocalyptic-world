@@ -794,7 +794,11 @@
 // moon
 <<set $morningMessages.moon =  []>>
 <<if setup.isNewMoon()>>
-	<<set $morningMessages.moon.push('This time of the month, around the new moon, the glowing mushrooms seem to be more abundant. Visit the forest!') >>
+	<<if $characters.vincent.quests.pregnancy_talked>>
+		<<set $morningMessages.moon.push('This time of the month, around the new moon, the glowing mushrooms seem to be more abundant. Visit the forest!') >>
+	<<else>>
+		<<set $morningMessages.moon.push('This time of the month, around the new moon, strange things occurs in the forest...') >>
+	<<</if>>
 <<elseif setup.isFullMoon()>>
 	<<set $morningMessages.moon.push('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!') >>
 <</if>>
