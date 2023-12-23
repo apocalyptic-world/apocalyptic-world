@@ -2,6 +2,10 @@
 
 <<set _newmoon = setup.isNewMoon()>>
 <<if _newmoon>>
+	<center>
+		[img[setup.ImagePath+'places/forest/glowing_mushroom.webp']]
+	</center>
+	<br /><br />
     <<set _mushroom to randomInteger(1,2)>>
     You also got <strong>_mushroom</strong> mushroom<<=_mushroom > 1 ? 's' : ''>>.
     <<pickup $backpack 'glowing_mushroom' _mushroom>>
@@ -12,5 +16,7 @@
 	    <<link 'Pick up glowing mushrooms'>>
 		    <<goto 'Forest - mushrooms'>>
 	    <</link>>
+    <<else>>
+        You havee no idea what these strange mushrooms can be used for. Maybe you can find a use for them later.
     <</if>>
 <</if>>
