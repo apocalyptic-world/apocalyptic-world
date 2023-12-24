@@ -729,13 +729,11 @@ setup.suicideChance = function (person) {
 
     if (happy >= 0) {
         return 0;
-    } else if (sub >= 98) {
-        return 2;
     }
 
     let baseChance = -happy;
     let subMultiplier = 1 - sub / 100;
-    let finalChance = Math.min(100, baseChance * subMultiplier);
+    let finalChance = Math.max(2, Math.min(100, baseChance * subMultiplier));
 
     return finalChance;
   }
