@@ -723,6 +723,21 @@ setup.sexChance = function (person) {
 	}
 };
 
+setup.suicideChance = function (person) {
+    var happy = Math.max(-100, Math.min(100, person.happy));
+    var sub = Math.max(0, Math.min(100, person.sub));
+
+    if (happy >= 0) {
+        return 0;
+    }
+
+    let baseChance = -happy;
+    let subMultiplier = 1 - sub / 100;
+    let finalChance = Math.max(2, Math.min(100, baseChance * subMultiplier));
+
+    return finalChance;
+  }
+
 setup.drink = function (person, glass = 1, alcohol = 25) {
     alcohol = Math.max(alcohol + window.randomInteger(0, 5) - window.randomInteger(0, 5), 0);
     var resistance = 1 + (person.endurance ?? 0) / 200;
