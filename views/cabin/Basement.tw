@@ -200,7 +200,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $hornySlaveId = _hornySlaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement event - horny slave'>>
-	<<elseif _suicidalSlaves.length && setup.percentageChance(60)>>
+	<<elseif _suicidalSlaves.length && setup.percentageChance(setup.suicideChance($slaves[_suicidalSlaves[0]]))>>
 		<<set $slaveId = _suicidalSlaves[0]>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave hangman'>>
