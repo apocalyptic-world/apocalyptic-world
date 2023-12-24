@@ -1,6 +1,6 @@
 setup.mods = {
-    anita: {
-        name: 'Anita',
+    Anna: {
+        name: 'Anna',
         description: 'Pornstart Anita mod pack',
         download: 'http://google.com'
     },
