@@ -1,7 +1,7 @@
-:: Guy view - guest [sex no-redirect girlview] {"position":"5010,145","size":"100,100"}
-<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
-<<set _pronounceWhos = setup.pronounceWhos($tmpGirl)>>
-<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
+:: Guest view [sex no-redirect girlview] {"position":"5010,145","size":"100,100"}
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
 
 <<if !$tmpGirl.talked>>
 	<<link 'Talk'>>
@@ -11,15 +11,20 @@
  		<</if>>
 		<<set $tmpGirl.talked = true>>
 		<<addmins 15>>
-		<<set $tmpGirlViewBack = 'Guy view - guest'>>
+		<<set $tmpGirlViewBack = 'Guest view'>>
 		<<goto 'Girl talk'>>
 	<</link>>
 <</if>>
 
+<<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20>>
+	<<set $tmpGirlViewBack = 'Guest view'>>
+	[[Grope|Grope]]
+<</if>>
+
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
-	<<set _linkName = 'Fuck ' + _pronounceWho>>
+	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
-		<<set $tmpGirlViewBack = 'Guy view - guest'>>
+		<<set $tmpGirlViewBack = 'Guest view'>>
 		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
 		<<else>>
@@ -36,7 +41,7 @@
 	<</link>>
 <</if>>
 
-<<set _linkName = 'Move ' + _pronounceWho + ' to the basement cell'>>
+<<set _linkName = 'Move ' + _himOrHer + ' to the basement cell'>>
 <<link `_linkName`>>
 	<<set $guests[$guestId] = $tmpGirl>>
 	<<goto 'Guest move to basement'>>
@@ -59,9 +64,17 @@
 
 <<include 'Button - rest or work'>>
 
+<<if !$tmpGirl.gender && !$tmpGirl.workout && $player.energy >= 10>>
+	<<link 'Workout together'>>
+		<<set $tmpGirl.workout = true>>
+		<<energy -10>>
+		<<goto 'Girl - workout together'>>
+	<</link>>
+<</if>>
+
 <<if ($game.hotShower ?? false) && $player.energy >= 10>>
 	<<link 'Invite to your shower'>>
-		<<set $tmpGirlViewBack = 'Guy view - guest'>>
+		<<set $tmpGirlViewBack = 'Guest view'>>
 		<<goto 'Event: Guest invite shower'>>
 	<</link>>
 <</if>>
@@ -73,6 +86,26 @@
 			Dialog.wiki(Story.get("Give gift").processText());
 			Dialog.open();
 		<</script>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give pregnancy potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<if !$tmpGirl.gender && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
+	<<set _linkName = 'Marry ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<goto 'NPC marry'>>
 	<</link>>
 <</if>>
 
@@ -95,5 +128,3 @@
 		<<goto 'Outside'>>
 	<</if>>
 <</link>>
-
-

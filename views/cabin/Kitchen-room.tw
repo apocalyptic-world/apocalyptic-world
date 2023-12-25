@@ -17,7 +17,7 @@
 	<<=setup.displayName($tmpGirl)>> is cooking in the kitchen, <<=setup.pronounceWhat($tmpGirl)>> notices you and gives you a warm smile<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
-		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<set $tmpGirlViewBack = 'Guest view'>>
 		<<set $tmpGirlBack = 'Kitchen-room'>>
 		<<set $tmpGirl.rape to false>>
 		<<set $tmpGirlCapture to false>> 
@@ -25,11 +25,7 @@
 		<<set $guestId = _girlGuest[0]>>
 		<<run delete $slaveId>>
 		<<run delete $charId>>
-		<<if !$tmpGirl.gender>>
-			<<goto 'Girl view - guest'>>
-		<<else>>
-			<<goto 'Guy view - guest'>>		
-		<</if>>	
+		<<goto 'Guest view'>>
 	<</link>>
 <</if>>
 <<if $backpack.has('food') && (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
