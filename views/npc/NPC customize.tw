@@ -39,13 +39,15 @@
 		<<goto 'NPC customize - hair dye'>>
 	<</link>>	
 <</if>>
-<<link 'Clothes'>>
-	<<script>>
-		Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
-		Dialog.wiki(Story.get("NPC Wardrobe").processText());
-		Dialog.open();
-	<</script>>
-<</link>>
+<<if [0,2].includes($tmpGirl.gender)>>
+	<<link 'Clothes'>>
+		<<script>>
+			Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+			Dialog.wiki(Story.get("NPC Wardrobe").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
 <<link 'Back'>>
 	<<goto $tmpGirlViewBack>>
 <</link>>
