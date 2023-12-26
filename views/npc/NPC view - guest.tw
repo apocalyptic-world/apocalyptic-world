@@ -1,4 +1,4 @@
-:: Guest view [sex no-redirect girlview] {"position":"5010,145","size":"100,100"}
+:: NPC view - guest [sex no-redirect girlview] {"position":"5010,145","size":"100,100"}
 <<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
 <<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
@@ -11,20 +11,20 @@
  		<</if>>
 		<<set $tmpGirl.talked = true>>
 		<<addmins 15>>
-		<<set $tmpGirlViewBack = 'Guest view'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<goto 'NPC talk'>>
 	<</link>>
 <</if>>
 
 <<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20>>
-	<<set $tmpGirlViewBack = 'Guest view'>>
+	<<set $tmpGirlViewBack = 'NPC view - guest'>>
 	[[Grope|Grope]]
 <</if>>
 
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
 	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
-		<<set $tmpGirlViewBack = 'Guest view'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
 		<<else>>
@@ -76,7 +76,7 @@
 
 <<if ($game.hotShower ?? false) && $player.energy >= 10>>
 	<<link 'Invite to your shower'>>
-		<<set $tmpGirlViewBack = 'Guest view'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<goto 'Event: Guest invite shower'>>
 	<</link>>
 <</if>>
