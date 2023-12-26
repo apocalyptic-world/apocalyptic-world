@@ -31,6 +31,10 @@ Setting.addToggle("fastTravelEnabled", {
 	default: true
 });
 
+Config.navigation.override = pas => {
+  if (!Story.has(pas)) return 'Wood cabin';
+};
+
 // volume slider, by chapel; for sugarcube 2 (mods by SjoerdHekking)
 !function(){function setVolume(val){"number"!=typeof val&&(val=Number(val)),(Number.isNaN(val)||val<0)&&(val=.5),val>1&&(val=1),settings.volume=100*val,Setting.save(),$("input[name='volume']").val()!=settings.volume&&$("input[name='volume']").val(settings.volume);try{if(SimpleAudio)return"function"==typeof SimpleAudio.volume?SimpleAudio.volume(val):SimpleAudio.volume=val,val;throw new Error("Cannot access audio API.")}catch(err){return console.error(err.message,err),$.wiki("<<masteraudio volume "+val+">>"),val}}function updateVolume(){setVolume(settings.volume/100)}Setting.addRange("volume",{label:"Volume: ",min:0,max:100,step:1,default:50,onInit:updateVolume,onChange:updateVolume}),$(document).on("input","input[name='volume']",(function(){var change;setVolume(parseInt($("input[name='volume']").val())/100)})),Macro.add("volume",{handler:function(){var wrapper=$(document.createElement("span")),slider=$(document.createElement("input")),className="macro-"+this.name;slider.attr({id:"volume-control",type:"range",name:"volume",min:0,max:100,step:1,value:settings.volume}),wrapper.append(slider).addClass(className).appendTo(this.output)}})}();
 // end volume slider

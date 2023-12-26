@@ -93,7 +93,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easy')>></strong> win the fight and
 						<<if $fight.defeatedEnemies[_i].captured>>
 							<span style="color: green">captured</span>
 						<<else>>
-							<<if ($slaves.length + $fight.enemiesCaptured) < $basementLimit>>
+							<<if ($game.location.basement?? false) && ($slaves.length + $fight.enemiesCaptured) < $basementLimit>>
 							  <<link 'capture'>>
 								<<set $fight.defeatedEnemies[_i].captured = true>>
 								<<goto 'Fight - won'>>
