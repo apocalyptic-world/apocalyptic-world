@@ -1,12 +1,16 @@
-:: Guy punish [sex no-redirect] {"position":"5016,355","size":"100,100"}
+:: NPC punish [sex no-redirect] {"position":"5016,355","size":"100,100"}
 <h1 class="ptitle">BASEMENT</h1>
 <br /><br />
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
 <<set _isMasochist = ($tmpGirl.traits ?? []).includes('masochist')>>
 
 <<set _relStats = 1>>
 <<set _subStats = 1>>
 <<set _punishView = 'punish'>>
-<<if !settings.gaysEnabled>>
+<<if !settings.gaysEnabled && $tmpGirl.gender == 1 >>
 	<<set _punishView = _punishView + '_hit'>>
 <</if>>
 <<if $punishType === 'paddle'>>
@@ -47,13 +51,13 @@
 	<br /><br />
 	<<if $punishType == 'beat'>>
 		<strong>
-			You've properly swung a few times and punched <<=setup.displayName($tmpGirl)>> right in the face. He can't do anything because he's tied to a chair, but after a few punches, it seems like he's slowly starting to give in.
+			You've properly swung a few times and punched <<=setup.displayName($tmpGirl)>> right in the face, <<=heOrShe>> can't do anything because <<=heOrShe>>'s tied to a chair, but after a few punches, it seems like <<=heOrShe>>'s slowly starting to give in.
 		</strong>
 	<<elseif _isMasochist>>
-		<strong><<=setup.displayName($tmpGirl)>></strong> moans in enjoyment while looking over his shoulder straight in your eyes.
+		<strong><<=setup.displayName($tmpGirl)>></strong> moans in enjoyment while looking over <<=hisOrHer>> shoulder straight in your eyes.
 		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 100)>>
 	<<else>>
-		<strong><<print $tmpGirl.name>></strong> yells in pain as you  punish him. 
+		<strong><<print $tmpGirl.name>></strong> yells in pain as you punish <<=himOrHer>>. 
 	<</if>>
 	<br /><br />
 	<<if _relChanged>>
@@ -67,9 +71,10 @@
 	  [img[setup.ImagePath+'places/basement/guy_punish.webp']]
 	</center>
 	<br /><br />
-	You enter his basement cell, and he is already waiting for you. Fear is visible in his eyes, while his hands are tied behind his back.
+	You enter <<=hisOrHer>> basement cell, and <<=heOrShe>> is already waiting for you. Fear is visible in <<=hisOrHer>> eyes, while <<=hisOrHer>> hands are tied behind <<=hisOrHer>> back.
 <</if>>
 <br /><br />
+
 <<if $player.energy >= 10 && hasTime(1)>>
 	<<if $tmpGirl.gender == 1>>
 		<<link 'Hit him'>>
@@ -77,7 +82,7 @@
 			<<goto `passage()`>>
 		<</link>>
 	<</if>>
-	<<if settings.gaysEnabled>>
+	<<if settings.gaysEnabled || !$tmpGirl.gender>>
 		<<link 'Punish (slap)'>>
 				<<set $punishType = 'slap'>>
 				<<goto `passage()`>>
@@ -93,7 +98,7 @@
 
 <<link 'Back'>>
 	<<unset $punishType>>
-	<<goto 'Guy view'>>
+	<<goto 'NPC view'>>
 <</link>>
 
 

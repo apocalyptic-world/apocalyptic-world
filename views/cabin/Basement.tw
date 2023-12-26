@@ -48,14 +48,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
 		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 		<<link `_girlGuestLink`>>
-			<<set $tmpGirlViewBack = 'Girl view - guest'>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
 			<<set $tmpGirlBack = 'Basement'>>
 			<<set $tmpGirlCapture to false>>
 			<<set $tmpGirlInvite to false>>
 			<<set $tmpGirl.rape to false>>
 			<<set $guestId = _girlGuest[0]>>
 			<<unset $slaveId, $charId, $childId>>
-			<<goto 'Girl view - guest'>>
+			<<goto 'NPC view - guest'>>
 		<</link>>
 	<</if>>
 
@@ -103,7 +103,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<<set $tmpGirl.rape to false>>
 						<<set $tmpGirlCapture to false>>
 						<<set $tmpGirlInvite to false>>
-						<<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+						<<set $tmpGirlViewBack = 'NPC view'>>
 						<<set $slaveId = _i>>
 						
 						<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>

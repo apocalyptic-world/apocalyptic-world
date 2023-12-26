@@ -63,7 +63,7 @@
                         <<run delete $slaveId>>
 						<<run delete $charId>>
                         <<set $guestId = _bathGuestI>>
-                        <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<set $tmpGirlViewBack = 'NPC view'>>
 						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender] ?? {}).length >= 2 && setup.percentageChance(20)>>
 							<<set $tmpEvent = {
 								bathhouseThreesome: [
@@ -114,7 +114,7 @@
                         <<run delete $guestId>>
 						<<run delete $charId>>
                         <<set $slaveId = _bathSlaveI>>
-                        <<set $tmpGirlViewBack = (!_bathSlave.gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<set $tmpGirlViewBack = 'NPC view'>>
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
