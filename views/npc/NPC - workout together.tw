@@ -1,4 +1,4 @@
-:: Girl - workout together {"position":"3081,583","size":"100,100"}
+:: NPC - workout together {"position":"3081,583","size":"100,100"}
 <h1 class="ptitle"><<cabinName>></h1>
 <<set $tmpGirl.location = 'workout'>>
 <<addmins 30>>
@@ -10,11 +10,17 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 <strong><<=$tmpGirl.name>> strength increased by 1</strong>
 <br /><br />
 
-<<linkreplace 'Pull down her shorts'>>
+<<set _pronSheHe = setup.pronounceWhat($tmpGirl)>>
+<<set _pronSheHeCap = setup.pronounceWhat($tmpGirl, true)>>
+<<set _pronHerHis = setup.pronounceWhos($tmpGirl)>>
+<<set _pronHerHim = setup.pronounceWho($tmpGirl)>>
+<<set _linkName = 'Pull down ' + _pronHerHis + ' shorts'>>
+
+<<linkreplace _linkName>>
 	<<actionImage $tmpGirl 'pull_pants'>>
 	<br /><br />
 	<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
-		She giggles and smiles at you as you pull down her shorts.
+		<<=_pronSheHe>> giggles and smiles at you as you pull down <<=_pronHerHis>> shorts.
 		<br /><br />
 
 		<<set $tmpGirl.relationship += 3>>
@@ -27,12 +33,13 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 		<</link>>
 	<<else>>
 		<<if !$tmpGirl.likesGuys>>
-			She looks at you with widened eyes and an angry face. Then she reminds you that she's not interested in men.
+			<<=_pronSheHeCap>> looks at you with widened eyes and an angry face. Then <<=_pronSheHe>> reminds you that <<=_pronSheHe>>'s not interested in men.
 		<<else>>
-			She flinches and asks you to stop.
+			<<=_pronSheHeCap>> flinches and asks you to stop.
 		<</if>>
 		<br /><br />
-		<<link 'Force her'>>
+		<<set _linkName = 'Force ' + _pronHerHim>>
+		<<link _linkName>>
 			<<fuck $tmpGirl>>
 			<<set $forcedSex = true>>
 		<</link>>
