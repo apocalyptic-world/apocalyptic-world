@@ -20,7 +20,7 @@
 	<</link>>
 <</if>>
 <<if isMetChar('blair') && $characters.blair.quests.house_party>>
-	<<if $backpack.count('food') >= 20 && $backpack.count('champagne') >= 1 && timeBetween('19:00', '21:00')>>
+	<<if $backpack.count('food') >= 20 && $backpack.count('champagne') >= 1 && timeBetween('19:00', '21:00') && (setup.getAvailablePersons18yo($guests)[0] ?? []).length>>
 		<<link 'Throw a party'>>
 			<<goto 'House party'>>
 		<</link>>
@@ -32,7 +32,7 @@
 			Throw a party
 		</div>
 		<<linkdesc>>
-			20 food, 1 champagne and time between 19:00 - 21:00
+			20 food, 1 champagne and time between 19:00 - 21:00 and girls living in guest house
 		<</linkdesc>>
 	<</if>>
 <</if>>

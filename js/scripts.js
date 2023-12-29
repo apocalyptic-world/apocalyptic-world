@@ -240,7 +240,8 @@ setup.inventoryNpc = [
     'knife',
     'bow',
     'gas_mask',
-    'axe'
+    'axe',
+    'dumbbell'
 ];
 
 setup.inventoryManageable = {
