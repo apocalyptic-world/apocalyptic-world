@@ -1,7 +1,7 @@
 :: Widget - shop [widget] {"position":"132,862","size":"100,100"}
 <<widget shop>>
 	<table id="farm-shop" class="shop-table">
-		<<for _i, _shopItem range $args[0]>>
+		<<for _i, _shopItem range $args[1]>>
 		  <<capture _i, _shopItem, _buyprice>>
 			<tr>
 				<td class="shop-img">
@@ -20,15 +20,23 @@
 				</td>
 				<td>
 					<<if $backpack.has(_shopItem.name) && (_shopItem.sell ?? true)>>
-						<<link 'Sell'>> 
+						<<link 'Sell'>>
+							<<set _totalMoney = _shopItem.price * _shopItems[_i].qty>>
 							<<if $backpack.count(_shopItem.name) < _shopItems[_i].qty>>
 								<<replace `'#shop-error-'+_i`>>You don't have enough items<</replace>>
 							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
+							<<elseif ($shopMerchants[$args[0]]?.money ?? 100) < _totalMoney>>
+								<<replace `'#shop-error-'+_i`>>Mercan't doesn't have enough money<</replace>>
 							<<else>>
-								<<set $player.money += _shopItem.price * _shopItems[_i].qty>>
+								<<set $player.money += _totalMoney>>
 								<<drop $backpack _shopItem.name _shopItem.qty>>
-								<<goto $args[1]>>
+								<<set $shopMerchants??={}>>
+								<<set $shopMerchants[$args[0]]??={
+									money: 0
+								}>>
+								<<set $shopMerchants[$args[0]].money -= _totalMoney>>
+								<<goto $args[2]>>
 							<</if>>
 
 						<</link>>
@@ -53,12 +61,19 @@
 							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
 							<<else>>
-								<<if $args[2]>>
-									<<run $.wiki($args[2])>>
+								<<if $args[3]>>
+									<<run $.wiki($args[3])>>
 								<</if>>
 								<<set $player.money -= _totalPrice>>
 								<<pickup $backpack _shopItem.name _shopItem.qty>>
-								<<goto $args[1]>>
+
+								<<set $shopMerchants??={}>>
+								<<set $shopMerchants[$args[0]]??={
+									money: 0
+								}>>
+								<<set $shopMerchants[$args[0]].money += _totalPrice>>
+
+								<<goto $args[2]>>
 							<</if>>
 						<</link>>
 					<</if>>
@@ -76,6 +91,43 @@
 			padding: 10px;
 		}
 	</style>
+<</widget>>
+
+<<widget shopMerchantUpdate>>
+	<<set _shops = {
+		farm: {
+			increase: randomInteger(5, 10),
+			start: 15,
+			max: 100
+		},
+		underground: {
+			increase: randomInteger(10, 15),
+			decrease: randomInteger(6, 10),
+			start: 40,
+			max: 150
+		},
+		settlement: {
+			increase: randomInteger(7, 12),
+			decrease: randomInteger(5, 10),
+			start: 20,
+			max: 120
+		},
+		sanctuary: {
+			increase: randomInteger(20, 40),
+			decrease: randomInteger(10, 20),
+			start: 100,
+			max: 300
+		}
+	}>>
+	<<set $shopMerchants??={}>>
+	<<for _shop, _shopData range _shops>>
+		<<set $shopMerchants[_shop]??={
+			money: _shopData.start,
+		}>>
+
+		<<set $shopMerchants[_shop].money = Math.min($shopMerchants[_shop].money + (_shopData.increase - (_shopData.decrease ?? 0)), _shopData.max)>>
+		<<set $shopMerchants[_shop].money = Math.max($shopMerchants[_shop].money, 0)>>
+	<</for>>
 <</widget>>
 
 
