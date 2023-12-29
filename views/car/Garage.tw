@@ -1,5 +1,10 @@
 :: Garage [Place bg-garage]
 <h1 class="ptitle">GARAGE</h1>
+<<set $player.car??={
+    has: true,
+    health: 0,
+    fuel: 0
+}>>
 <br />
     <fieldset>
         <legend>
@@ -7,18 +12,49 @@
         </legend>
         <table>
             <tr>
-                <td>Damaged:</td><td><<=$player?.car?.damaged ?? 100>>%</td>
+                <td>Damaged:</td>
+                <td><<= 100 - $player.car.health>>%</td>
+                <td>
+                    <<if $backpack.has('car_part') && $player.car.health < 100>>
+                        <<link 'Fix'>>
+                            <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
+                            <<addmins 30>>
+                            <<drop $backpack 'car_part' 1>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    <</if>>
+                </td>
             </tr>
             <tr>
-                <td>Fuel:</td><td><<=$player?.car?.fuel ?? 0>>%</td>
-            </tr>
-            <tr>
-                <td>Parts missing:</td><td><<=$player?.car?.parts ?? 5>></td>
+                <td>Fuel:</td>
+                <td><<=$player.car.fuel>>%</td>
+                <td>
+                    <<if $backpack.has('fuel') && $player.car.fuel < 100>>
+                        <<link 'Fill up'>>
+                            <<set $player.car.fuel = Math.min($player.car.fuel + 20, 100)>>
+                            <<addmins 5>>
+                            <<drop $backpack 'fuel' 1>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    <</if>>
+                </td>
             </tr>
         </table>
     </fieldset>
     <br />
+    <<if !$player.car.explore && !$characters.vincent.quests.car_fixed && $player.car.fuel === 100 && $player.car.health === 100>>
+        <!--<<run console.log('Vincent quest: Car finished. First explore')>>-->
+    <</if>>
+    <<if $player.car.explore>>
+        <div class="menu-grid">
+            <<set $isDisabled = (!timeBetween('08:00', '22:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<grid garage explore Explore Explore 30 $isDisabled>>
+        </div>
+    <</if>>
+
     <<warning 'End of content'>>
+
+
 <br /><br />
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
