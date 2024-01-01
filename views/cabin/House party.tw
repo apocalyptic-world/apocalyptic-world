@@ -132,6 +132,49 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				<<=$guests[_guestI].name>> relationship increased by 10<br />
 			<</for>>
 			<br /><br />
+			<<set  _randomPersons = setup.getAvailablePersons18yo($guests)>>
+			<<if recall($suppCode) && setup.percentageChance(50) && (_randomPersons[0] ?? []).lenght >= 3>>
+				<<set _randomGirls = setup.getRandomPersons(_randomPersons[0], 3)>>
+				<<set _npc1 = $guests[_randomGirls[0]]>>
+				<<set _npc2 = $guests[_randomGirls[1]]>>
+				<<set _npc3 = $guests[_randomGirls[2]]>>
+				Laughter echoed through the air, momentarily drowning out the distant sounds of the desolate world outside. 
+				In this moment of shared joy and camaraderie, <<=setup.displayName(_npc1)>>, <<=setup.displayName(_npc2)>> and <<=setup.displayName(_npc3)>> clearly in high spirits from the bubbly, approached you.
+				<br /><br />
+				<center>
+					[img[setup.ImagePath+'places/cabin/house_party_foursome.jpg']]
+				</center>
+				<br /><br />
+				<<sayNpc _npc1>>
+					This party is a blast! Having fun?
+				<</sayNpc>>
+				<br />
+				With mischievous smiles and playful glances, they suggested another bottle of champagne, hinting at the possibility of an adventure beyond the walls of the gathering. 
+				The suggestion hung in the air like a tantalizing secret, a promise of fleeting joy in a world where joy was a rare commodity.
+				<br /><br />
+				<<sayNpc _npc2>>
+					You got one more bottle just for us? How about we move party so somewhere else.
+				<</sayNpc>>
+				<br />
+				<<if $backpack.has('champagne')>>
+					<<link 'Bring another bottle'>>
+						<<set $tmpEvent = {
+							girls: [
+								_npc1,
+								_npc2,
+								_npc3
+							],
+							girlIds: [
+								_randomGirls[0],
+								_randomGirls[1],
+								_randomGirls[2]
+							]
+						}>>
+						<<addmins 30>>
+						<<goto 'Event - House party foursome'>>
+					<</link>>
+				<</if>>
+			<</if>>
 			
 		<</linkreplace>>
 		<div id="option2_desc">
