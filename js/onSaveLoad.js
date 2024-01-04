@@ -67,6 +67,18 @@ Save.onLoad.add(function (save) {
     }
 
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null)) {
+        for (var saveTmpGirlSkillI = 0; saveTmpGirlSkillI < (save.state.history[save.state.index].variables.tmpGirl.skills ?? []).length; saveTmpGirlSkillI++) {
+            if (setup.traits.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.skills[saveTmpGirlSkillI])) {
+                console.log('yes');
+                if (typeof save.state.history[save.state.index].variables.tmpGirl.traits === 'undefined') {
+                    save.state.history[save.state.index].variables.tmpGirl.traits = [];
+                }
+                save.state.history[save.state.index].variables.tmpGirl.traits.push(save.state.history[save.state.index].variables.tmpGirl.skills[saveTmpGirlSkillI]);
+                save.state.history[save.state.index].variables.tmpGirl.skills.splice(saveTmpGirlSkillI, 1);
+                saveTmpGirlSkillI--;
+            }
+        }
+    
         for (var saveTmpGirlTraitI = 0; saveTmpGirlTraitI < (save.state.history[save.state.index].variables.tmpGirl.traits ?? []).length; saveTmpGirlTraitI++) {
             if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI])) {
                 if (typeof save.state.history[save.state.index].variables.tmpGirl.skills === 'undefined') {
@@ -342,6 +354,17 @@ Save.onLoad.add(function (save) {
             } else {
                 save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
                 saveNurseryTraitI--;
+            }
+        }
+
+        for (var saveNurserySkillI = 0; saveNurserySkillI < (save.state.history[save.state.index].variables.nursery[saveNurseryI].skills ?? []).length; saveNurserySkillI++) {
+            if (setup.traits.hasOwnProperty(save.state.history[save.state.index].variables.nursery[saveNurseryI].skills[saveNurserySkillI])) {
+                if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].traits === 'undefined') {
+                    save.state.history[save.state.index].variables.nursery[saveNurseryI].traits = [];
+                }
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.push(save.state.history[save.state.index].variables.nursery[saveNurseryI].skills[saveNurserySkillI]);
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].skills.splice(saveNurserySkillI, 1);
+                saveNurserySkillI--;
             }
         }
     }
