@@ -20,6 +20,11 @@
                             <<run $('#breeder-girls').hide()>>
                             <<addmins 30>>
                             <<set $characters.laura.quests.productionSamples-->>
+                            <<if ($guests[_labGuestI].traitsLocked ?? []).includes('breeder')>>
+                                <<set _breederTraitLockedKey = setup.getKeyByValue($guests[_labGuestI].traitsLocked, 'breeder')>>
+                                <<run $guests[_labGuestI].traitsLocked.splice(_breederTraitLockedKey, 1)>>
+                            <</if>>
+
                             <<run $guests[_labGuestI].traits.push('breeder')>>
                             <<run $('#breeder-girls-give').show()>>
                             <<replace ".breeder-girl-name">><<=setup.displayName(_labGuest)>><</replace>>
@@ -42,6 +47,10 @@
                             <<run $('#breeder-girls').hide()>>
                             <<addmins 30>>
                             <<set $characters.laura.quests.productionSamples-->>
+                            <<if ($slaves[_labSlaveI].traitsLocked ?? []).includes('breeder')>>
+                                <<set _breederTraitLockedKey = setup.getKeyByValue($slaves[_labSlaveI].traitsLocked, 'breeder')>>
+                                <<run $slaves[_labSlaveI].traitsLocked.splice(_breederTraitLockedKey, 1)>>
+                            <</if>>
                             <<run $slaves[_labSlaveI].traits.push('breeder')>>
                             <<run $('#breeder-girls-give').show()>>
                              <<replace ".breeder-girl-name">><<=setup.displayName(_labSlave)>><</replace>>
