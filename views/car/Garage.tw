@@ -43,17 +43,14 @@
     </fieldset>
     <br />
     <<if !$player.car.explore && !$characters.vincent.quests.car_fixed && $player.car.fuel === 100 && $player.car.health === 100>>
-        <!--<<run console.log('Vincent quest: Car finished. First explore')>>-->
+        <<goto 'Vincent quest - Car finished. First explore'>>
     <</if>>
     <<if $player.car.explore>>
         <div class="menu-grid">
-            <<set $isDisabled = (!timeBetween('08:00', '22:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<set $isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
             <<grid garage explore Explore Explore 30 $isDisabled>>
         </div>
     <</if>>
-
-    <<warning 'End of content'>>
-
 
 <br /><br />
 <<link 'Leave'>>

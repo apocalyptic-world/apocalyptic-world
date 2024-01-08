@@ -1,0 +1,129 @@
+:: Vincent quest - Car finished. First explore [Place bg-garage]
+<h1 class="ptitle">GARAGE</h1>
+<<unset $tmpEvent>>
+<br />
+As the sun dipped below the horizon, casting long shadows across the broken landscape, a solitary figure approached the outskirts of the village. 
+His silhouette emerged from the dusty haze, and as he drew closer, you recognized Vincent, a seasoned survivor known for traversing the harsh lands in search of stories and connections in early days.
+<br /><br />
+<<vincent>>
+    Isn't she a beauty? How about we take this ride together.
+<</vincent>>
+<br />
+<<linkreplace 'Start the engine'>>
+    Vincent stood by, his eyes reflecting the same anticipation that coursed through your veins. 
+    The car's door groaned as you swung it open, revealing a worn but functional interior. You settled into the driver's seat, the cracked leather upholstery creaking beneath you. 
+    Your hands gripped the steering wheel, the tactile connection to the machine grounding you in a reality that seemed almost forgotten.
+    <br /><br />
+    <center>
+         [img[setup.ImagePath+'places/garage/key_ignition.jpg']]
+     </center>
+    <br /><br />
+    <<you>>
+         It's a game-changer. Where are we headed first?
+    <</you>>
+    <br />
+    You grinned, a mix of excitement and relief coursing through you.
+    <br /><br />
+    Vincent leaned back, his eyes scanning the darkened horizon. 
+    <br /><br />
+    <<vincent>>
+        There's a settlement on the outskirts. Word is, they've got supplies we could use. Figured the car could get us there faster than our usual trek. Haven't heard from the in a while tho.
+    <</vincent>>
+    <br />
+    As you left the village behind, the car carried you into the unknown, the wheels turning not only on asphalt but also on the promise of new possibilities in a world that had seemingly forgotten hope. 
+    The dialogue between you and Vincent wove through the journey, punctuating the rhythmic hum of the engine with tales of survival, hope, and the shared determination to navigate the uncertainties that lay ahead.
+    <br /><br />
+    <<vincent>>
+        Turn left here. We need to drive through that tunnel to get there.
+    <</vincent>>
+    <br />
+    <<linkreplace 'Drive inside tunnel'>>
+        The car's headlights sliced through the encroaching darkness as you and Vincent navigated the winding road leading to the settlement. The air inside the tunnel felt heavy, and the distant echoes of your engine reverberated ominously. 
+        The subdued hum of conversation between you and Vincent filled the cabin, a stark contrast to the quiet tension that permeated the air.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/garage/tunnel.jpg']]
+        </center>
+        <br />
+        As the car approached the middle of the tunnel, the shadows seemed to deepen, casting an eerie veil over the road. Suddenly, the vehicle's headlights illuminated a makeshift barricade ahead. 
+        Piled-up debris and scrap metal blocked the path, and silhouettes emerged from the shadows — <strong>three scavengers</strong>, their faces obscured by makeshift masks, stood defiantly in your way.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/garage/tunnel_blocked.jpg']]
+        </center>
+        <br />
+        The leader of the scavengers, a tall figure clad in tattered clothing and adorned with scavenged trinkets, stepped forward. His voice, harsh and demanding, cut through the stillness of the tunnel. 
+        <br /><br />
+        <<newguy>>
+        <<sayNpc $tmpGuy>>
+            Well, well, what do we have here? A fancy ride, fresh off the apocalypse showroom, huh?
+        <</sayNpc>>
+        <br />
+        <<vincent>>
+            We're not looking for trouble. We're headed to a settlement for supplies. If you let us through peacefully, we won't have any reason to make this difficult.
+        <</vincent>>
+        <br />
+        <<sayNpc $tmpGuy>>
+            Passing through, huh? You must have something worth sharing. Supplies, weapons, or maybe some good old caps?
+        <</sayNpc>>
+        <br />
+        The scavengers, undeterred, surrounded the car, their intentions growing more apparent. They demanded answers about the car's origin, its previous owner, and the source of your supplies. 
+        Their questions became more insistent, bordering on aggression, as they eyed your possessions with hungry eyes.
+        <br /><br />
+        <div id="option_pay">
+            <<if $player.money >= 300>>
+                <<linkreplace 'Offer them 300 caps'>>
+                    <<run $('#option_fight').hide()>>
+                    <<set $player.money -= 300>>
+                    <<you>>
+                        Here, take it. Just let us pass peacefully
+                    <</you>>
+                    <br />
+                    <strong>You gave them 300 caps</strong>
+                    <br /><br />
+                    The scavenger leader caught the pouch, his greedy gaze fixated on the spoils.
+                    <br /><br />
+                    <<sayNpc $tmpGuy>>
+                        Well, look at you, playing it smart. You two can go on your way.
+                    <</sayNpc>>
+                    <br />
+                    A sly grin crept across his face as he counted the caps. He conceded, his comrades reluctantly stepping aside.
+                    <br /><br />
+                    <<link 'Continue'>>
+                        <<goto 'Vincent quest - Car finished. First explore #2'>>
+                    <</link>>
+                <</linkreplace>>
+            <</if>>
+        </div>
+        <div id="option_fight">
+            <<linkreplace 'Fight them'>>
+                <<run $('#option_pay').hide()>>
+                As the scavenger leader continued to eye the pouch of caps with avarice, you exchanged a determined glance with Vincent. 
+                A silent understanding passed between you, and without a word, he nodded in agreement. It was time to change the course of this encounter.
+                <br /><br />
+                <center>
+                    [img[setup.ImagePath+'places/garage/tunnel_vincent_shotgun.jpg']]
+                </center>
+                <br />
+                Vincent's hand disappeared beneath his jacket, revealing the gleam of a sawed-off shotgun. 
+                The element of surprise worked in your favor as he swiftly brought the weapon into view, its menacing presence unsettling the scavengers. 
+                With a quick, practiced motion, Vincent fired a single, deafening shot that echoed through the tunnel. The leader crumpled to the ground, a look of shock frozen on his face.
+                <br /><br />
+                <<set $enemies = []>>
+                <<run $enemies.push($tmpGuy)>>
+                <<newguy>>
+                <<run $enemies.push($tmpGuy)>>
+                <<run console.log($enemies)>>
+                <<link 'Fight'>>
+                    <<set $tmpEvent = {
+                        fight: true
+                    }>>
+                    <<set $game.death_reason = 'bleeding'>>
+                    <<fight $enemies 'Vincent quest - Car finished. First explore #2' 'Dead'>>
+                    <<set $fight.canCapture = false>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <</linkreplace>>
+<</linkreplace>>
+<<addhours 3>>
