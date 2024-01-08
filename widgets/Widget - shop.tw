@@ -26,8 +26,8 @@
 								<<replace `'#shop-error-'+_i`>>You don't have enough items<</replace>>
 							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
-							<<elseif ($shopMerchants[$args[0]]?.money ?? 100) < _totalMoney>>
-								<<replace `'#shop-error-'+_i`>>Merchant doesn't have enough money<</replace>>
+							<<elseif ($shopMerchants[$args[0]]?.money ?? 0) < _totalMoney>>
+								<<replace `'#shop-error-'+_i`>>Mercan't doesn't have enough money<</replace>>
 							<<else>>
 								<<set $player.money += _totalMoney>>
 								<<drop $backpack _shopItem.name _shopItem.qty>>
@@ -38,8 +38,12 @@
 								<<set $shopMerchants[$args[0]].money -= _totalMoney>>
 								<<goto $args[2]>>
 							<</if>>
-
 						<</link>>
+						<<linkdesc>>
+							<<set _maxcount = Math.floor(($shopMerchants[$args[0]]?.money ?? 100)/_shopItem.price)>>
+							<<set  _maxcount = Math.min( _maxcount, $backpack.count(_shopItem.name))>>
+							(max <<=_maxcount>>)
+						<</linkdesc>>
 					<<elseif (_shopItem.sell ?? true)>>
 						<div class="link-internal" style="background: #ccc">
 							Sell
@@ -76,7 +80,11 @@
 								<<goto $args[2]>>
 							<</if>>
 						<</link>>
-					<</if>>
+						<<linkdesc>>
+							<<set _maxcount = Math.floor($player.money/_buyprice)>>
+							(max <<=_maxcount>>)
+					<</linkdesc>>
+				<</if>>
 				</td>
 				<td>
 					<div @id="'shop-error-' +_i + ''" style="color: red; font-weight: bold"></div>
