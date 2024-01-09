@@ -135,6 +135,12 @@
 				<<set _pregnantMsg = 'Slave ' + $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $slaves[_i].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
+					<<if !$pregnancyStreetsHappening>>
+						<<set $pregnancyStreetsHappening = {
+							type: 'slave',
+							id: _i
+						}>>
+					<</if>>
 				<</if>>
 				
 				<<set $morningMessages.main.push(_pregnantMsg)>>
@@ -356,6 +362,12 @@
 				<<set _pregnantMsg = 'Guest ' + $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
+					<<if !$pregnancyStreetsHappening>>
+						<<set $pregnancyStreetsHappening = {
+							type: 'guest',
+							id: _guestI
+						}>>
+					<</if>>
 				<</if>>
 				
 				<<set $morningMessages.main.push(_pregnantMsg)>>

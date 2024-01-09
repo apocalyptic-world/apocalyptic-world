@@ -1,0 +1,110 @@
+:: Pregnancy street client
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<<if $pregnancyStreetsHappening.type === 'slave'>>
+    <<set $tmpGirl = $slaves[$pregnancyStreetsHappening.id]>>
+<<else>>
+    <<set $tmpGirl = $guests[$pregnancyStreetsHappening.id]>>
+<</if>>
+
+The air in the makeshift shelter was thick with tension as I descended the creaky stairs, my eyes adjusting to the dim light of a single flickering lantern. 
+The low hum of distant wind echoed through the underground chambers, carrying with it the whispers of a world that had crumbled into chaos.
+<br /><br />
+<center>
+  [img[setup.ImagePath+'places/cabin/table_woman_crying.jpg']]
+</center>
+<br />
+As you reached the bottom step, you noticed a small figure hunched over at a table in the corner. <<=setup.displayName($tmpGirl)>>, her shoulders shaking with silent sobs. 
+She looked up as you approached, her eyes red and swollen.
+<br /><br />
+<<linkreplace 'Hey! Are you okey?'>>
+    <<run $('#option_leave').hide()>>
+    Her gaze fell to the floor, and she hesitated before finally speaking.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        I'm pregnant. From one of my clients from the streets. I don't know what to do.
+    <</sayNpc>>
+    <br />
+    Tears welled up in her eyes again as she pondered the question.
+    <br /><br />
+    <<linkreplace 'What you want to do?'>>
+        <<sayNpc $tmpGirl>>
+            I don't know if I can provide a life for a child in this world. It's so messed up, and I'm barely making it as it is.
+        <</sayNpc>>
+        <br />
+        <<if setup.percentageChance(50)>>
+            <<set _wantsToKeep = true>>
+            <<sayNpc $tmpGirl>>
+                I... I want to keep it. Despite everything, this child could be a glimmer of hope in all this darkness. I can't let the world take away the one thing that could still bring some meaning to my life.
+            <</sayNpc>>
+        <<else>>
+            <<sayNpc $tmpGirl>>
+                I don't want to keep that bastard. This world is already messed up enough, and I can't bring a child into it, especially not from some guy who doesn't even care about anything but his own pleasure.
+            <</sayNpc>>
+        <</if>>
+        <br />
+        <div id="option_yes">
+            <<linkreplace 'Keep it'>>
+                <<run $('#option_no').hide()>>
+                <<run $('#option_leave').show()>>
+                <<if _wantsToKeep>>
+                    <<sayNpc $tmpGirl>>
+                        Really?! Thank you so much!
+                    <</sayNpc>>
+                    <br />
+                    She hugs you and with a smile on her face leaves the building.
+                <<else>>
+                    <<sayNpc $tmpGirl>>
+                        Why!? No! I fucking hate this place.
+                    <</sayNpc>>
+                    <<set $tmpGirl.relationship -= 10>>
+                    <<set $tmpGirl.happy -= 40>>
+                    <strong>Relationship decreased by 10</strong>
+                    <br />
+                    <strong>Happiness decreased by 40</strong>
+                <</if>>
+            <</linkreplace>>
+        </div>
+        <div id="option_no">
+            <<linkreplace 'Don\'t keep it'>>
+                <<run $('#option_yes').hide()>>
+                <<run $('#option_leave').show()>>
+                <<if !_wantsToKeep>>
+                    <<sayNpc $tmpGirl>>
+                        Really?! Thank you so much!
+                    <</sayNpc>>
+                    <br />
+                    She hugs you and with a smile on her face leaves the building.
+                <<else>>
+                    <<sayNpc $tmpGirl>>
+                        Why!? No! I fucking hate this place.
+                    <</sayNpc>>
+                    <<set $tmpGirl.relationship -= 10>>
+                    <<set $tmpGirl.happy -= 40>>
+                    <strong>Relationship decreased by 10</strong>
+                    <br />
+                    <strong>Happiness decreased by 40</strong>
+                <</if>>
+                <<run delete $tmpGirl.pregnancy>>
+            <</linkreplace>>
+        </div>
+
+        <div id="option_leave" style="display:none">
+            <br /><br />
+            <<link 'Leave'>>
+                <<if $pregnancyStreetsHappening.type === 'slave'>>
+                    <<set $slaves[$pregnancyStreetsHappening.id] = $tmpGirl>>
+                <<else>>
+                    <<set $guests[$pregnancyStreetsHappening.id] = $tmpGirl>>
+                <</if>>
+                <<goto 'Wood cabin'>>
+            <</link>>
+        </div>
+    <</linkreplace>>
+
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>
