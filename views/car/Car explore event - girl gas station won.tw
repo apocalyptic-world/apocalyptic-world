@@ -1,0 +1,55 @@
+:: Car explore event - girl gas station won
+<h1 class="ptitle">DESERT</h1>
+<br />
+After a tense standoff, you managed to outsmart and overcome the two bulky figures, leaving them sprawled in the unforgiving desert dust. 
+As the adrenaline began to subside, you turned your attention to the young woman who had been chained to the pole. The air hung heavy with the weight of the post-apocalyptic world.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/explore_girl_gas_station2.jpg']]
+</center>
+<br />
+Approaching her cautiously, you extended a helping hand to lift her from the ground. However, to your surprise, she remained on her knees, unmoving.
+<br /><br />
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="option_slave">
+		<<linkreplace 'Enslave her'>>
+			<<run $('#option_guest').hide()>>
+			<<set $tmpGirl.capture = false>>
+			<<set $tmpGirl.happy -= 40>>
+			<<set $slaves.push($tmpGirl)>>
+			<<statsAdd 'people_captured'>>
+
+			<<sayNpc $tmpGirl>>
+				Do whatever you like. There is no point to struggle.
+			<</sayNpc>>
+			<br />
+			With a firm grip, you pulled her up, her frail frame resisting the movement at first. She yielded, allowing herself to be lifted from the unforgiving ground. 
+			The silence lingered, broken only by the distant howls of the wind. The vast expanse of the deserted landscape stood witness to this unexpected moment.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<div id="option_guest">
+		<<linkreplace 'Invite her as guest'>>
+			<<run $('#option_slave').hide()>>
+			<<set $tmpGirl.capture = false>>
+			<<set $tmpGirl.relationship += 40>>
+			<<set $tmpGirl.happy += 80>>
+			<<set $guests.push($tmpGirl)>>
+
+			<<sayNpc $tmpGirl>>
+				You don't need to do that.
+			<</sayNpc>>
+			<br />
+			Her eyes, though still carrying the weight of the world, held a glimmer of gratitude
+			<br />
+			Without uttering another word, she nodded towards your vehicle, silently agreeing to venture into the unknown.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+
+<<link 'Leave'>>
+	<<goto 'Garage'>>
+<</link>>

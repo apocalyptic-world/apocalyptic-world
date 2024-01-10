@@ -1,0 +1,62 @@
+:: Car explore event - girl gas station
+<h1 class="ptitle">DESERT</h1>
+<br />
+
+The sun beat down mercilessly on the barren landscape as you navigated your makeshift vehicle through the desolate desert, its tires kicking up swirls of dust that hung in the air like a ghostly veil.
+The world had changed, ravaged by some catastrophic event that left only remnants of civilization behind.
+<br /><br />
+In the distance, you spotted the faded sign of an old gas station, its once vibrant colors now muted by years of neglect. Curiosity getting the better of you, you decided to pull over and investigate. 
+As you approached, the creaking hinges of the station door echoed through the emptiness, setting an eerie tone.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/explore_girl_gas_station1.jpg']]
+</center>
+<br />
+Among the rusted pumps, you noticed a young woman. 
+She appeared fragile, chained to a weathered pole as if abandoned in this desolate place. Her sunken eyes met yours as you cautiously approached her.
+<br /><br />
+<<newgirl>>
+<<sayNpc $tmpGirl>>
+    Leave me alone!
+<</sayNpc>>
+<br />
+<<linkreplace 'You need some help?'>>
+    <<you>>
+        Hey, are you okay? Do you need help?
+    <</you>>
+    <br />
+    Her voice, filled with a mix of desperation and defiance, whispered through the dry air.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Just go away. You can't help me.
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Break her chains'>>
+        The silence was shattered by the sudden appearance of two hulking figures emerging from the shadows, seemingly materializing from the vast emptiness of the desert.
+        <br /><br />
+        Their bulky frames and worn leather attire hinted at a rugged existence in this harsh world. 
+        Their eyes met yours with a menacing glare, and the atmosphere grew tense. It became clear that the woman was not alone in this desolation, and your intrusion had not gone unnoticed.
+        <br /><br />
+        <<newguy>>
+        <<sayNpc $tmpGuy>>
+            Looks like we got ourselves a curious wanderer.
+        <</sayNpc>>
+        <br />
+        The other cracked his knuckles, a sinister grin stretching across his weathered face.
+        <br /><br />
+        <<set $enemies = []>>
+        <<set $tmpGuy.strength += 20>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<set $tmpGuy.strength += 25>>
+        <<run $enemies.push($tmpGuy)>>
+        <<link 'Fight them'>>
+            <<fight $enemies 'Car explore event - girl gas station won' 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>
