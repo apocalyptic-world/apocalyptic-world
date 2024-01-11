@@ -2,9 +2,9 @@
 <h1 class="ptitle">BEDROOM</h1>
 <br /><br />
 <center>
-
 <<set _girlGuest = setup.getPersonsForLocation($guests, 'maid')>>
-<<if _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
+<<set _isMaidInRoom = _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
+<<if _isMaidInRoom>>
 	<<set $tmpGirl = $guests[_girlGuest[0]]>>
 	<<set $tmpGirl.location = 'maid'>>
 	<center>
@@ -44,7 +44,17 @@
 		<<if setup.getPersonsForLocation($guests, 'maid').length>>
 			<<energy 20>>
 		<</if>>
-		<<goto 'Bedroom'>>
+		<<run console.log(_isMaidInRoom)>>
+		<<run console.log($tmpGirl.likesGuys)>>
+		<<if _isMaidInRoom && setup.percentageChance(100) && $tmpGirl.likesGuys && !($locationEvents.bedroom ?? false)>>
+			<<set $tmpEvent = {
+				id: $guests[_girlGuest[0]]
+			}>>
+			<<set $locationEvents.bedroom = true>>
+			<<goto 'Bedroom event - maid surprise'>>
+		<<else>>
+			<<goto 'Bedroom'>>
+		<</if>>
 	<</link>>
 <</if>>
 
