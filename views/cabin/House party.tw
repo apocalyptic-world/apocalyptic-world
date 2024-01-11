@@ -34,8 +34,8 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 <<if $player.drunk > 75>>
 	<<perkAdd 'drunk'>>
 <</if>>
-<<drop $backpack 'champagne' 1>>
-<<drop $backpack 'food' 20>>
+<<run setup.cabinInventory.drop('champagne', 1)>>
+<<run setup.cabinInventory.drop('food', 20)>>
 
 <div id="girls_top_table">
 	<h4>Guests attending the party</h4>
@@ -99,10 +99,10 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 		+5 submission
 	<</linkdesc>>
 </div>
-<<if $backpack.has('champagne')>>
+<<if setup.cabinInventory.has('champagne')>>
 	<div id="option2">
 		<<linkreplace 'Offer another bottle of champagne'>>
-			<<drop $backpack 'champagne' 1>>
+			<<run setup.cabinInventory.drop('champagne', 1)>>
 			<<run $('#option1, #girls_top_table, #option2_desc').hide()>>
 			<<run $('#girls_bottom_table').show()>>
 			You bring another bottle and pour a glass for each of the guests, they thank you with a smile and flirtatiously look at you until one sits down in front of you and spreads her legs with the text "Thank you!"
@@ -156,7 +156,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 					You got one more bottle just for us? How about we move party so somewhere else.
 				<</sayNpc>>
 				<br />
-				<<if $backpack.has('champagne')>>
+				<<if setup.cabinInventory.has('champagne')>>
 					<<link 'Bring another bottle'>>
 						<<set $tmpEvent = {
 							girls: [
@@ -171,6 +171,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 							]
 						}>>
 						<<addmins 30>>
+						<<run setup.cabinInventory.drop('champagne', 1)>>
 						<<goto 'Event - House party foursome'>>
 					<</link>>
 				<</if>>
