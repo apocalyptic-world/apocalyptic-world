@@ -13,6 +13,7 @@
 	<<run delete $tmpGirlViewBack>>
 	<<run delete $tmpGirlBack>>
 	<<set $pregnancyHappening = null>>
+	<<set $pregnancyStreetsHappening = null>>
 	<<set $scavengingDidntReturn = null>>
 	<<set $energyPenalty = 0>>
 	<<if $gameDate.getHours() < 8>>
@@ -131,12 +132,23 @@
 				<<set $slaves[_i].pregnancy++>>
 			<</if>>
 			<<if $slaves[_i].pregnancy == 8>>
-				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' told you that <strong>she is pregnant</strong>')>>
+				<<set _pregnantMsg = 'Slave ' + $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<if $slaves[_i].pregnancy_father !== 'mc'>>
+					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
+					<<if !$pregnancyStreetsHappening>>
+						<<set $pregnancyStreetsHappening = {
+							type: 'slave',
+							id: _i
+						}>>
+					<</if>>
+				<</if>>
+				
+				<<set $morningMessages.main.push(_pregnantMsg)>>
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
-			<<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
+			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
 				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
 				<<run delete $slaves[_i].pregnancy>>
@@ -236,6 +248,11 @@
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
+				
+					<<if setup.percentageChance(5)>>
+						<<set $slaves[_i].pregnancy = 0>>
+						<<set $slaves[_i].pregnancy_father = 'unknown'>>
+					<</if>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -342,7 +359,18 @@
 				<<set $guests[_guestI].pregnancy++>>
 			<</if>>
 			<<if $guests[_guestI].pregnancy == 8>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>')>>
+				<<set _pregnantMsg = 'Guest ' + $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
+					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
+					<<if !$pregnancyStreetsHappening>>
+						<<set $pregnancyStreetsHappening = {
+							type: 'guest',
+							id: _guestI
+						}>>
+					<</if>>
+				<</if>>
+				
+				<<set $morningMessages.main.push(_pregnantMsg)>>
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
@@ -449,6 +477,10 @@
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
 					<<set $guests[_guestI].virgin = false>>
+					<<if setup.percentageChance(5)>>
+						<<set $guests[_guestI].pregnancy = 0>>
+						<<set $guests[_guestI].pregnancy_father = 'unknown'>>
+					<</if>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -650,7 +682,7 @@
 				<<drop $backpack 'food' 1>> 
 				<<set $nursery[_nurseryI].food to 100>>
 			<<else>>
-				<<set $morningMessages.main.push('<span class="dead">Kid ' + $nursery[_nurseryI].name + ' died because you do not have enough food</span>')>>
+				<<set $morningMessages.main.push('<span class="dead">Kid ' + $nursery[_nurseryI].name + ' died because you did not have enough food</span>')>>
 				<<set $nursery.splice(_nurseryI, 1)>>
 				<<set _nurseryI-->>
 				<<continue>>

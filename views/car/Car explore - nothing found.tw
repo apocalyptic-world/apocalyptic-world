@@ -1,0 +1,58 @@
+:: Car explore - nothing found
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/nothing.jpg']]
+</center>
+<br /><br />
+You found nothing while driving around.
+<br /><br />
+<<set _companionKeys = Object.keys($player.companions ?? {})>>
+<<if _companionKeys.length > 0>>
+    <<set _splitCompanionKey = _companionKeys[0].split(':')>>
+    <<if _splitCompanionKey[0] === 'guest'>>
+        <<set $guestId = _splitCompanionKey[1]>>
+        <<set $tmpGirl = $guests[_splitCompanionKey[1]]>>
+    <<else>>
+        <<set $slaveId = _splitCompanionKey[1]>>
+        <<set $tmpGirl = $slaves[_splitCompanionKey[1]]>>
+    <</if>>
+    <<set $tmpGirl.location = 'car'>>
+    <<set _pronHerHim = setup.pronounceWho($tmpGirl)>>
+    <<set _pronHerHis = setup.pronounceWhos($tmpGirl)>>
+    <<set $tmpGirlBack = 'Garage'>>
+
+    <<sayNpc $tmpGirl>>
+        It's pointless. Let's just go back.
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Suggest to have fun'>>
+        <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+            <<sayNpc $tmpGirl>>
+                Oh, this could be fun.
+            <</sayNpc>>
+            <br /><br />
+            <<=setup.displayName($tmpGirl)>> with smile unzips your pants and pulls out your dick.
+            <br /><br />
+            <<actionImage $tmpGirl 'handjob'>>
+            <<set $sexAction = 'handjob'>>
+            <br />
+            <<link 'Fuck'>>
+                <<fuck $tmpGirl>>
+            <</link>>
+        <<else>>
+            <<sayNpc $guests[_companionKeys[0]]>>
+                No! I don't want to. Let's just go back.
+            <</sayNpc>>
+            <br />
+            <<set _linkName = 'Force ' + _pronHerHim>>
+            <<link _linkName>>
+                <<fuck $tmpGirl>>
+                <<set $sexForced = true>>
+            <</link>>
+            <</if>>
+    <</linkreplace>>
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+<</if>>

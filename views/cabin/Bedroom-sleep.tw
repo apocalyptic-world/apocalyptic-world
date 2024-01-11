@@ -57,6 +57,8 @@
 		<<set $characters.blair.quests.bj = true>>
 	<<elseif $pregnancyHappening>>
 		<<goto 'Childbirth'>>
+	<<elseif $pregnancyStreetsHappening>>
+		<<goto 'Pregnancy street client'>>
 	<<elseif $scavengingDidntReturn !== null>>
 		<<goto 'Scavenging - didnt came home'>>
 	<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5)>>
