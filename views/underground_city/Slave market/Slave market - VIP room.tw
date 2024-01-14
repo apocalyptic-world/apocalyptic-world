@@ -1,11 +1,13 @@
 :: Slave market - VIP room
 <h1 class="ptitle">SLAVE MARKET (VIP)</h1>
 <br />
-<<if typeof $player.quests.slaveMarketVipRequest === 'undefined' && setup.percentageChance(100)>>
+<<addmins 20>>
+<<if typeof $player.quests.slaveMarketVipRequest === 'undefined' && setup.percentageChance(10)>>
     <<newgirl>>
     <<set $player.quests.slaveMarketVipRequest = {
+        gender: $tmpGirl.gender,
         beauty: randomInteger(80, 90),
-        age: randomInteger(18, 25),
+        maxAge: randomInteger(25, 35),
         hair: $tmpGirl.hair,
         eyes: $tmpGirl.eyes,
         breasts: either('medium', 'big'),
@@ -24,7 +26,7 @@ As you enter the room you notice Elena sitting in her usual place. She notices y
     <<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
         <table style="margin-top:0px">
             <tr><td>
-                One of my clients are looking for a girl, age approximately of <strong><<= $player.quests.slaveMarketVipRequest>></strong>.
+                One of my clients are looking for a girl with <strong>max age <<= $player.quests.slaveMarketVipRequest.maxAge>></strong>.
             </td></tr>
             <tr><td>
                 <strong><<=$player.quests.slaveMarketVipRequest.breasts>></strong> breasts and beauty above <strong><<=$player.quests.slaveMarketVipRequest.beauty>></strong>.
@@ -40,7 +42,58 @@ As you enter the room you notice Elena sitting in her usual place. She notices y
 <</if>>
 <br />
 <<if typeof $player.quests.slaveMarketVipRequest !== 'undefined'>>
-    Check slaves
+    <<set _request = $player.quests.slaveMarketVipRequest>>
+    <table>
+        <<for _marketSlaveI, _marketSlave range $slaves>>
+            <<capture _marketSlaveI, _marketSlave>>
+                <<if 
+                    _marketSlave.gender != _request.gender || 
+                    _marketSlave.hair !== _request.hair || 
+                    _marketSlave.breasts !== _request.breasts || 
+                    _marketSlave.beauty < _request.beauty || 
+                    _marketSlave.race !== _request.race || 
+                    _marketSlave.eyes !== _request.eyes || 
+                    setup.getAge(_marketSlave) > _request.maxAge
+                >>
+                <<continue>>
+                <</if>>
+                
+            <tr>
+                <td style="width: 300px">
+                    <<=setup.displayName(_marketSlave)>>
+                </td>
+                <td>
+                    Beauty score: <<=_marketSlave.beauty>>
+                </td>
+                <td>
+                    Age: <<=setup.getAge(_marketSlave)>>
+                </td>
+                <td>
+                    Value: <strong>300</strong>
+                </td>
+                <td>
+                    <<link 'Sell'>>
+                        <<dialog 'Sell'>>
+                            Are you sure you want to sell her?
+                            <br />
+                            <<link 'Yes' 'Slave market - VIP room'>>
+                                <<set $player.reputation++>>
+                                <<set $player.goodwill-=5>>
+                                <<set $player.money += 300>>
+                                <<run $slaves.splice(_marketSlaveI, 1)>>
+                                <<statsAdd 'slaves_sold_vip'>>
+                                <<addmins 30>>
+                                <<run delete $player.quests.slaveMarketVipRequest>>
+                                <<dialogclose>>
+                            <</link>>	
+                        <</dialog>>
+                    <</link>>
+                </td>
+            </tr>
+
+            <</capture>>
+        <</for>>
+    </table>
 <</if>>
 <br />
 <<link 'Leave'>>
