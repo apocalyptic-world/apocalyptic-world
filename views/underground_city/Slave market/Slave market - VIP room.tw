@@ -1,3 +1,48 @@
 :: Slave market - VIP room
-<h1 class="ptitle">SLAVE MARKET</h1>
+<h1 class="ptitle">SLAVE MARKET (VIP)</h1>
 <br />
+<<if typeof $player.quests.slaveMarketVipRequest === 'undefined' && setup.percentageChance(100)>>
+    <<newgirl>>
+    <<set $player.quests.slaveMarketVipRequest = {
+        beauty: randomInteger(80, 90),
+        age: randomInteger(18, 25),
+        hair: $tmpGirl.hair,
+        eyes: $tmpGirl.eyes,
+        breasts: either('medium', 'big'),
+        race: $tmpGirl.race
+    }>>
+<</if>>
+<<video 'slave_market/vip4'>>
+<br /><br />
+As you enter the room you notice Elena sitting in her usual place. She notices you and greets you with smile through her gag.
+<br /><br />
+<<if typeof $player.quests.slaveMarketVipRequest === 'undefined'>>
+    <<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+        My clients do not have new requests. Come back later.
+    <</say>>
+<<else>>
+    <<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+        <table style="margin-top:0px">
+            <tr><td>
+                One of my clients are looking for a girl, age approximately of <strong><<= $player.quests.slaveMarketVipRequest>></strong>.
+            </td></tr>
+            <tr><td>
+                <strong><<=$player.quests.slaveMarketVipRequest.breasts>></strong> breasts and beauty above <strong><<=$player.quests.slaveMarketVipRequest.beauty>></strong>.
+            </td></tr>
+            <tr><td>
+                With <strong><<=$player.quests.slaveMarketVipRequest.hair>></strong> hair and <strong><<=$player.quests.slaveMarketVipRequest.eyes>></strong> eyes.
+            </td></tr>
+            <tr><td>
+            Race need to be <strong><<=$player.quests.slaveMarketVipRequest.race>></strong>.
+            </td></tr>
+        </table>
+    <</say>>
+<</if>>
+<br />
+<<if typeof $player.quests.slaveMarketVipRequest !== 'undefined'>>
+    Check slaves
+<</if>>
+<br />
+<<link 'Leave'>>
+    <<goto 'Slave market'>>
+<</link>>
