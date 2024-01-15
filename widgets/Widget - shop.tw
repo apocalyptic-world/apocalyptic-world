@@ -39,8 +39,9 @@
 								<<goto $args[2]>>
 							<</if>>
 						<</link>>
+						<<set _shop = $args[0]>>
 						<<linkdesc>>
-							<<set _maxcount = Math.floor(($shopMerchants[$args[0]]?.money ?? 100)/_shopItem.price)>>
+							<<set _maxcount = Math.floor(($shopMerchants[_shop]?.money ?? 0)/_shopItem.price)>>
 							<<set  _maxcount = Math.min( _maxcount, $backpack.count(_shopItem.name))>>
 							(max <<=_maxcount>>)
 						<</linkdesc>>
