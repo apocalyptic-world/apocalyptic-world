@@ -1,0 +1,86 @@
+:: Car explore event - injured guy [bg-garage]
+<h1 class="ptitle">DESERT</h1>
+<br />
+
+<<newguy>>
+As you traverse the desolate landscape in your trusty vehicle, you come across a lone figure stumbling along the side of the road. Drawing closer, you realize it's a wounded traveler, desperately clutching a makeshift bandage to a deep gash on their leg.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/injured_guy1.jpg']]
+</center>
+<br />
+The injured individual, a weary and emaciated soul, pleads for your help. They explain that they were part of a larger group that fell victim to an ambush by ruthless marauders. The attackers stole crucial supplies, leaving the rest of the survivors injured and vulnerable.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    Maybe you can help me somehow?
+<</sayNpc>>
+<br />
+The injured traveler gazes at you with pleading eyes, awaiting your decision as the winds of the wasteland whisper tales of both compassion and self-preservation.
+<br /><br />
+<<if $backpack.has('bandage')>>
+    <div id="option_bandage">
+        <<linkreplace 'Give him bandage'>>
+            <<set _giveBandage = true>>
+            <<drop $backpack 'bandage' 1>>
+            <<set $tmpGuy.relationship += 40>>
+            The wounded traveler gratefully accepts the bandage, and with a nod of appreciation, they carefully stow it away in their bag. 
+            Their eyes convey a mix of relief and gratitude as they express their thanks.
+            <br /><br />
+            <<sayNpc $tmpGuy>>
+                Thank you so much!
+            <</sayNpc>>
+            <br />
+        <</linkreplace>>
+    </div>
+<</if>>
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<div id="option_guest">
+		<<linkreplace 'Invite him as guest'>>
+			<<run $('#option_slave').hide()>>
+            <<if !_giveBandage>>
+                <<run $('#option_bandage').hide()>>
+            <</if>>
+			<<set $tmpGuy.capture = false>>
+			<<set $tmpGuy.relationship += 40>>
+			<<set $tmpGuy.happy += 80>>
+			<<set $guests.push($tmpGuy)>>
+
+			<<sayNpc $tmpGuy>>
+				Really? I would really like that. Thank you so much!
+			<</sayNpc>>
+			<br />
+			His eyes, though still carrying the weight of the world, held a glimmer of gratitude
+			<br />
+			He goes towards car and gets in.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="option_slave">
+		<<linkreplace 'Try to capture him'>>
+			<<run $('#option_guest').hide()>>
+            <<if !_giveBandage>>
+                <<run $('#option_bandage').hide()>>
+            <</if>>
+			<<set $tmpGuy.capture = false>>
+			<<set $tmpGuy.relationship -= 40>>
+			<<set $tmpGuy.happy -= 20>>
+
+            As you unexpectedly lunge at the wounded traveler, he manages to step back just in time, displaying a surprising agility despite his injured state. 
+            The air becomes charged with tension as the traveler readies himself for a potential confrontation.
+            <br /><br />
+			<<sayNpc $tmpGuy>>
+				Fuck you! You are not getting me!
+			<</sayNpc>>
+			<br />
+            <<set $enemies = [$tmpGuy]>>
+            <<link 'Fight'>>
+                <<fight $enemies 'Garage' 'Garage'>>
+            <</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Garage'>>
+<</link>>

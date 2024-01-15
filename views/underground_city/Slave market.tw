@@ -24,6 +24,24 @@ Easy way to get some extra caps but at what cost?
 <<if ($player.stats.slaves_sold ?? 0) >= 30 && !$player.quests.slave_market_vip>>
 	<<set $player.quests.slave_market_vip = true>>
 	<<goto 'Slave market - VIP introduction'>>
+<<elseif ($player.stats.slaves_sold ?? 0) >= 40 && !$player.quests.slave_market_vip_room>>
+	<<set $player.quests.slave_market_vip_room = true>>
+	<<goto 'Slave market - VIP room introduction'>>
+<</if>>
+
+<<if $player.quests.slave_market_vip_room>>
+	<<if timeBetween('15:00', '17:00')>>
+		<<link 'Enter VIP room'>>
+			<<goto 'Slave market - VIP room'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Enter VIP room
+		</div>
+		<<linkdesc>>
+			Time between 15:00-17:00
+		<</linkdesc>>
+	<</if>>
 <</if>>
 [[Leave|Underground city]]
 
