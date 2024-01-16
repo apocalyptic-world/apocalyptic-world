@@ -1,0 +1,83 @@
+:: Fire place event - evening chat
+<h1 class="ptitle">FIRE PLACE</h1>
+<br />
+
+<<set _npcKey = setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0] ?? [])>>
+<<set _npc = $guests[_npcKey]>>
+The night air was cool and crisp as you strolled through the settlement. The soft glow of scattered lanterns illuminated the narrow paths, casting a warm hue on the wooden structures. The sounds of laughter and distant conversations filled the air, creating a comforting ambiance. 
+As you rounded a corner, you noticed a solitary figure sitting by the flickering flames of the central fireplace.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/fireplace_evening_chat.jpg']]
+</center>
+<br />
+<<linkreplace 'Approach her'>>
+    Curiosity tugged at you, and you decided to approach to find <<=setup.displayName(_npc)>>, one of the girls from your community, gazing into the dancing flames. 
+    Her expression seemed distant, lost in thought. You decided to join her, settling down on the rough-hewn log beside her.
+    <br /><br />
+    <<linkreplace 'Join her'>>
+        <<set _npc.relationship += 10>>
+        <<set _npc.happy += 10>>
+        <<you>>
+            <<=_npc.name>>, mind if I join you?
+        <</you>>
+        <br />
+        <<sayNpc _npc>>
+            Oh, it's you. Sure, have a seat.
+        <</sayNpc>>
+        <br />
+        The crackling of the fire filled the silence for a moment before you spoke again.
+        <br /><br />
+        <<you>>
+            What brings you out here all alone? The night is beautiful, but it's not often I see someone sitting here by themselves.
+        <</you>>
+        <br />
+        <<sayNpc _npc>>
+            Just needed some time alone, you know? It's been a long day, and I needed to clear my head.
+        <</sayNpc>>
+        <br />
+        You nodded, understanding the need for solitude in a bustling community. She hesitated for a moment before she continued.
+        <br /><br />
+        <<sayNpc _npc>>
+            It's a bit of everything, really. The challenges we face, the uncertainties. Sometimes it feels overwhelming.
+        <</sayNpc>>
+        <br />
+        You sat in companionable silence for a while, both lost in your thoughts. The flames danced, casting shadows that seemed to mimic the complexities of your lives.
+        <br /><br />
+        As you continued to sit by the fireplace, your conversation turned to lighter topics, and the night seemed a little less daunting with the warmth of camaraderie. 
+        The settlement around you continued to buzz with life, and you couldn't help but feel a sense of unity as you faced the challenges of your shared journey together.
+        <br /><br />
+        <<linkreplace 'Invite her to spend night with you'>>
+            <<if setup.sexChance(_npc)>>
+                <<run $('#option_leave').hide()>>
+                <<sayNpc _npc>>
+                    Sure, why not? It sounds like a nice way to end the night.
+                <</sayNpc>>
+                <br />
+                Together, you walked towards your dwelling, the night air crisp around you. Inside, the soft glow of a single lantern illuminated the room, casting a warm ambiance.
+                You settled into the cozy space, the flickering light creating dancing shadows on the walls.
+                <br /><br />
+                <<link 'Fuck'>>
+                    <<set $tmpGirl = _npc>>
+                    <<set $guestId = _npcKey>>
+                    <<fuck _npc>>
+                    <<set $tmpGirlViewBack = 'Sleep eval'>>
+                    <<set $tmpGirlBack = 'Sleep eval'>>
+                <</link>>
+            <<else>>
+                <<sayNpc _npc>>
+                    Sorry but I'll have to decline.
+                <</sayNpc>>  
+                <br />
+                With a small smile, she bid you goodnight and made her way towards her dwelling. Left alone by the fireplace, you watched as she disappeared into the darkness, realizing that everyone had their own ways of finding solace and comfort during challenging times. 
+                As the night progressed, you decided to take a moment for reflection before eventually heading to bed yourself, grateful for the bonds that held your settlement together.
+                <br />
+            <</if>>
+        <</linkreplace>>
+    <</linkreplace>>
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>

@@ -59,6 +59,10 @@
 	<</link>>
 <</if>>
 
+<<if timeBetween('21:00', '23:59') && !($locationEvents.fireplace ?? false) && (setup.getAvailablePersons18yo($guests)[0] ?? []).length && setup.percentageChance(5)>>
+	<<set $locationEvents.fireplace = true>>
+	<<goto 'Fire place event - evening chat'>>
+<</if>>
 [[Leave|Wood cabin]]
 
 
