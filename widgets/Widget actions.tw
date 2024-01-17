@@ -11,6 +11,13 @@
 		<</if>>
 	<</if>>
 	<div class="action-image">
+
+		<<set _originalLocation = $args[0].location >>
+		<<if $args[0].location === 'basement-mistress.male' >>
+				<<set $args[0].location = 'basement' >>
+				<<set $args[1] = $args[1].replace('mistress_', '') >>
+		<</if>>
+
 		<<if typeof setup.actions === 'undefined'>>
 		<<elseif $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
 			[img[setup.ImagePath+'game/misc/deflower_strapon.webp']]
@@ -79,6 +86,11 @@
 	</div>
 	<br />
 	<div class="action-text">
+
+		<<if _originalLocation === 'basement-mistress.male' >>
+				<<set $args[0].location = _originalLocation >>
+				<<set $args[1] = 'mistress_' + $args[1] >>
+		<</if>>
 		<<set _StatsMapping = {
 			mistress_anal: 'anal'
 		}>>

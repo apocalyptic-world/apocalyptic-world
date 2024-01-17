@@ -11,16 +11,32 @@
 
 <<if $player.horny >= 100>>
     <br />
-    <<linkreplace 'Cum with help'>>
-        <<horny_reset>>
-        <<set $player.sexp++>>
-        <<actionImage $guests[_girlGuest[0]] handjob_cum>>
-        <br />
-        <<link 'Continue'>>
-            <<unset $sexAction>>
-            <<goto `passage()`>>
+    <div id="choices">
+        <<link "Cum">>
+            <<replace "#choices">>
+                <center>
+                    [img[setup.ImagePath+'game/misc/cum.webp']]
+                </center>
+                <br />
+                <<link 'Continue'>>
+                    <<unset $sexAction>>
+                    <<goto `passage()`>>
+                <</link>>
+            <</replace>>
         <</link>>
-    <</linkreplace>>
+        <<link "Cum with help from mistress">>
+            <<replace "#choices">>
+                <<actionImage $guests[_girlGuest[0]] handjob_cum>>
+                <br />
+                <<link 'Continue'>>
+                    <<unset $sexAction>>
+                    <<goto `passage()`>>
+                <</link>>
+            <</replace>>
+        <</link>>
+    </div>
+    <<horny_reset>>
+    <<set $player.sexp++>>
 		
 <<else>>
         <<if $player.energy >= 3>>
