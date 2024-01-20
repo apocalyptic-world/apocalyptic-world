@@ -542,6 +542,21 @@ setup.getAvailablePersons18yo = function (persons) {
     return output;
 };
 
+setup.getAvailablePersons18yoVirgins = function (persons) {
+    var output = {};
+    for (var i = 0; i < persons.length; i++) {
+        if (setup.getAge(persons[i]) < 18 || !persons[i].virgin) {
+            continue;
+        }
+        if (typeof output[persons[i].gender] === 'undefined') {
+            output[persons[i].gender] = [];
+        }
+        output[persons[i].gender].push(i);
+    }
+
+    return output;
+};
+
 setup.shopGetDefaultInput = function (item, type)
 {
     if (

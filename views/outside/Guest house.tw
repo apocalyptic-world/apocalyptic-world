@@ -125,6 +125,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	</table>
 <</if>>
 
+<<set _virginList = setup.getAvailablePersons18yoVirgins($guests)>>
 <<if !($locationEvents.guesthouse ?? false)>>
 	<<if timeBetween('23:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(10)>>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
@@ -134,6 +135,15 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - lesbian sex'>>
+	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(100)>>
+		<<set _npcId = setup.getRandomElement(_virginList[0])>>
+		<<if !($guests[_npcId].quests ?? {}).take_virginity>>
+			<<set $locationEvents.guesthouse = true>>
+			<<set $tmpEvent = {
+				id: setup.getRandomElement(_virginList[0])
+			}>>
+			<<goto 'Guesthouse [Event] - take virginity'>>
+		<</if>>
 	<</if>>
 <</if>>
 
