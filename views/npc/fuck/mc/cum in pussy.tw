@@ -1,14 +1,6 @@
 :: Mc fuck cum in pussy
 
-<<if setup.getAge($tmpGirl) < 49 && 
-    typeof $tmpGirl.pregnancy === 'undefined' && 
-    (
-		(setup.perkHas('fertility')
-		&& setup.percentageChance(50)) || 
-		(!setup.perkHas('fertility')
-		&& setup.percentageChance(10)) || 
-		($tmpGirl.traits ?? []).includes('breeder')
-	)>>
+<<if setup.percentageChance(setup.pregnancyChance($tmpGirl, setup.perkHas('fertility')))>>
 		<<set $tmpGirl.pregnancy_father = 'mc'>>
 		<<set $tmpGirl.pregnancy = 0>>
 		<<statsAdd 'girls_impregnated'>>

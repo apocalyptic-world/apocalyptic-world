@@ -1,5 +1,8 @@
 :: Widget - shop [widget] {"position":"132,862","size":"100,100"}
 <<widget shop>>
+	<<if (typeof $shopMerchants === 'undefined')>>
+		<<set $shopMerchants??={}>>
+	<</if>>
 	<table id="farm-shop" class="shop-table">
 		<<for _i, _shopItem range $args[1]>>
 		  <<capture _i, _shopItem, _buyprice>>

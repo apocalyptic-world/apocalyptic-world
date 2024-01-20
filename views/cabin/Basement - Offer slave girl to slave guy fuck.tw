@@ -78,10 +78,7 @@
 			<br />
 			<<=setup.displayName($tmpGirl)>> wraps his hands around <<=setup.displayName($slaves[$slaveOfferId])>> and holds her strongly as he cums inside her pussy.
 			<br /><br />
-			<<if setup.getAge($slaves[$slaveOfferId]) < 55 && typeof $slaves[$slaveOfferId].pregnancy === 'undefined' && (
-				setup.percentageChance(40) || 
-				($slaves[$slaveOfferId].traits ?? []).includes('breeder')
-			)>>
+			<<if setup.percentageChance(setup.pregnancyChance($slaves[$slaveOfferId]))>>
 				<<set $slaves[$slaveOfferId].pregnancy_father = $tmpGirl.id>>
 				<<set $slaves[$slaveOfferId].pregnancy = 0>>
 			<</if>>

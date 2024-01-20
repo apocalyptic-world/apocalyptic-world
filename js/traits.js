@@ -17,7 +17,7 @@ setup.traits = {
     },
     breeder: {
         title: 'Breeder',
-        description: '100% chance to get pregnant and pregnancy goes x2',
+        description: 'Doubles chance to get pregnant and pregnancy goes x2',
         gender: [0]
     },
     sadistic: {

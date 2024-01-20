@@ -180,7 +180,7 @@ setup.perkList = {
     },
     fertility: {
         title: "Your sperm is overpowered",
-        desc: "100% change to impregnate",
+        desc: "Doubles chance to impregnate",
         days: 0
     }
 };
@@ -738,6 +738,36 @@ setup.suicideChance = function (person) {
 
     return finalChance;
   }
+
+  setup.pregnancyChance = function (person, fertility = false) {
+    var chance = 0;
+    var age = setup.getAge(person);
+    var breeder = (person.traits ?? []).includes('breeder');
+
+    if(typeof person.pregnancy !== 'undefined') {
+        return 0;
+    }
+
+    if(age < 18) {
+        return 0;
+    } else if(age < 25) {
+        chance = 24;
+    } else if(age < 40) {
+        chance = 16;
+    } else if(age < 60) {
+        chance = 8;
+    }
+
+    if(breeder) {
+        chance = Math.min(100, chance*2);
+    }
+
+    if(fertility) {
+        chance = Math.min(100, chance*2);
+    }
+
+    return chance;
+};
 
 setup.drink = function (person, glass = 1, alcohol = 25) {
     alcohol = Math.max(alcohol + window.randomInteger(0, 5) - window.randomInteger(0, 5), 0);
