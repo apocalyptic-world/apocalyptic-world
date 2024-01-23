@@ -31,8 +31,8 @@ setup.automatization = {
         },
         buttplug: {
             name: 'Buttplug rotation',
-            description: 'Settlers trade buttplugs between then as needed, thoroughly cleaned of course ;-)'
-        },
+            description: 'Settlers trade buttplugs between them as needed, thoroughly cleaned of course ;-)'
+        }
     },
 
     job_tools: {
