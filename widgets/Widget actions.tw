@@ -10,6 +10,14 @@
 			<<set setup.actions = _actionsFallback>>
 		<</if>>
 	<</if>>
+
+	<<set _isMod = ($mods[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<<set _actionsPath = _isMod ? 'mods'  : 'images/actions'>>
+	<<set _subActionsPath = ''>>
+	<<if _isMod>>
+		<<set _subActionsPath = '/actions'>>
+	<</if>>
+
 	<div class="action-image">
 
 		<<set _originalLocation = $args[0].location >>
@@ -71,13 +79,13 @@
 				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 				typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
 				typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
+						<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
 					<<break>>
 				<<elseif
 				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
 				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
+						<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
 					<<break>>
 				<</if>>	
 			<</for>>
