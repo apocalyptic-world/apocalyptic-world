@@ -241,7 +241,8 @@ setup.inventoryNpc = [
     'bow',
     'gas_mask',
     'axe',
-    'dumbbell'
+    'dumbbell',
+    'condom'
 ];
 
 setup.inventoryManageable = {
@@ -759,7 +760,7 @@ setup.suicideChance = function (person) {
     var age = setup.getAge(person);
     var breeder = (person.traits ?? []).includes('breeder');
 
-    if(typeof person.pregnancy !== 'undefined') {
+    if(typeof person.pregnancy !== 'undefined' || !person.gender) {
         return 0;
     }
 

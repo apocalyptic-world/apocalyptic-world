@@ -249,7 +249,7 @@
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				
-					<<if !$slaves[_i].gender && setup.percentageChance(5)>>
+					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom')>>
 						<<set $slaves[_i].pregnancy = 0>>
 						<<set $slaves[_i].pregnancy_father = 'unknown'>>
 					<</if>>
@@ -477,7 +477,7 @@
 					<<set $player.money += _moneyEarned>>
 					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
 					<<set $guests[_guestI].virgin = false>>
-					<<if !$guests[_guestI].gender && setup.percentageChance(5)>>
+					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom')>>
 						<<set $guests[_guestI].pregnancy = 0>>
 						<<set $guests[_guestI].pregnancy_father = 'unknown'>>
 					<</if>>
