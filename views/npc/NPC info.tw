@@ -9,6 +9,9 @@
 <<else>>
 	<<set _age = _ageReal>>
 <</if>>
+
+<<set _isLegalAge = _ageReal >= 18>>
+
 <div id="girl_info_stats">
 <div id="girl_info_left" style="float: left; width: 60%">
 	<div id="girl_description">
@@ -47,8 +50,9 @@
 		<div id="npc_stats">
 			<span>Name: <<=$tmpGirl.name>></span>
 			<span>Age: <<=_age>></span>
-			<span>Beauty score: <<=$tmpGirl.beauty>></span>
-			
+			<<if _isLegalAge>>
+				<span>Beauty score: <<=$tmpGirl.beauty>></span>
+			<</if>>
 			<<if !$tmpGirlCapture>>
 				<span>Relationship: <<print $tmpGirl.relationship>></span>
 			<</if>>
@@ -56,23 +60,27 @@
 			<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined'>>
 				<span>Strength: <<=$tmpGirl.strength>></span>
 			<</if>>
-			<div>Submission: <<= $tmpGirl.sub ?? 0>></div>
+			<<if _isLegalAge>>
+				<div>Submission: <<= $tmpGirl.sub ?? 0>></div>
+			<</if>>
 		</div>
 
 	<<if !_unknown || $player.int > 30 || _isSlaveMarket>>
-		<div id="npc-traits">
-				Traits: 
-		<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
-		  <<for _trait range ($tmpGirl.traits ?? [])>>
-			  <div class="trait tooltip">
-				  <<=setup.traits[_trait].title>>
-				  <span class="tooltiptext"><<=setup.traits[_trait].description>></span>
-			  </div>
-		  <</for>>
-		<<else>>
-			none
+		<<if _isLegalAge>>
+			<div id="npc-traits">
+					Traits: 
+			<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
+			<<for _trait range ($tmpGirl.traits ?? [])>>
+				<div class="trait tooltip">
+					<<=setup.traits[_trait].title>>
+					<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
+				</div>
+			<</for>>
+			<<else>>
+				none
+			<</if>>
+			</div>
 		<</if>>
-		</div>
 		<div id="npc-skills">
 		Skills: 
 		<<if ($tmpGirl.skills ?? []).length > 0>>
@@ -90,6 +98,7 @@
 	  </div>
   <</if>>
 
+  <<if _isLegalAge>>
   	<<linkreplace 'More info'>>
 		<div id="additional-npc-info">
 			<div id="additional-npc-info-single">
@@ -167,7 +176,7 @@
 		</div>
 	
 	<</linkreplace>>
-
+<</if>>
 
 </div>
 	<<if typeof $tmpGirl.clothes === 'undefined'>>

@@ -59,6 +59,14 @@
 	<</if>>
 <</if>>
 
+<<if $slaveId !== undefined && !($player.companions['slave:' + $slaveId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
+	<<link 'Add as companion'>>
+		<<companionAdd 'slave' $slaveId>>
+		<<assignedTo $tmpGirl 'companion'>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
 <<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<<link 'Assign to garden'>>
 		<<assignedTo $tmpGirl 'garden'>>
