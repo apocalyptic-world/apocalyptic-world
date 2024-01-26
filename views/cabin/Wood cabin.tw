@@ -83,7 +83,7 @@
 	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
-	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple)>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: The uninvited couple'>>
 	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(5) && timeBetween('08:00', '12:00')>>
