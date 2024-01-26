@@ -14,9 +14,9 @@ From around the corner, Vincent suddenly appears, running as fast as possible wh
 <<linkreplace 'Run'>>
 	<<if $game.vincentSanctuaryGirlFun>>
 		<<set _companionKeys = Object.keys($player.companions)>>
-		<<set _firstCompanion = _companionKeys[0].split(':')[1]>>
+		<<set _firstCompanion = setup.companionget(_companionKeys[0])>>
 		
-		<strong class="gender-girl"><<=$guests[_firstCompanion].name>></strong> is still on the ground, on her knees, and she believe that you are chasing after the girl so that she doesn't escape. However, suddenly, the girl who was peering at you through the hole in the wall comes running from the corner with a knife in her hand and stabs <strong class="gender-girl"><<=$guests[_firstCompanion].name>></strong> in the neck.
+		<<=setup.displayName(_firstCompanion)>> is still on the ground, on her knees, and she believe that you are chasing after the girl so that she doesn't escape. However, suddenly, the girl who was peering at you through the hole in the wall comes running from the corner with a knife in her hand and stabs <strong class="gender-girl"><<=$guests[_firstCompanion].name>></strong> in the neck.
 		<br /><br />
 		<center>
 			[img[setup.ImagePath+'places/farm/sanctuary_intro_stab.gif']]
@@ -25,7 +25,7 @@ From around the corner, Vincent suddenly appears, running as fast as possible wh
 		She instantly drops on the ground and there isn't anything you can do to help her.
 		<br /><br />
 		
-		<<guestRemove _firstCompanion>>
+		<<companionRemove _firstCompanion>>
 	<</if>>	
 			
 		At some point, you manage to break away and hide in one of the collapsed buildings nearby. You are tired and frightened, realizing that things probably won't go as planned.

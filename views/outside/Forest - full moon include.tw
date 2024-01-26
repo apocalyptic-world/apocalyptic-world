@@ -5,6 +5,9 @@
     <<set _bow = $backpack.has('bow')>>
     <<if !_bow>>
         <<for _companionKey, _companion range $player.companions>>
+            <<if _companionKey.split(':')[0] !== 'guest'>>
+                <<continue>>
+            <</if>>
             <<set _npcId = _companionKey.split(':')[1]>>
             <<set _npc = $guests[_npcId]>>
 		    <<if !setup.npcInventoryHas(_npc, 'bow')>>

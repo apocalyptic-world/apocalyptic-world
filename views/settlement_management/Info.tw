@@ -2,6 +2,9 @@
 
 <<set _companions = new Map()>>
 <<for _companionKey, _companion range $player.companions>>
+	<<if _companionKey.split(':')[0] !== 'guest'>>
+		<<continue>>
+	<</if>>
 	<<set _guestIndex = _companionKey.split(':')[1]>>
 	<<set _guest = $guests[_guestIndex]>>
 	<<set _npcId = _guest.id>>

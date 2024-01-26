@@ -7,9 +7,9 @@
 <br />
 
 <<for _companionKey, _companion range $player.companions>>
-    <<set _companionKey = _companionKey.split(':')[1]>>
-    <<if !$guests[_companionKey].gender>>
-        <<set _girlCompanion = $guests[_companionKey]>>
+    <<set _npc = setup.companionGet(_companionKey)>>
+    <<if !_npc.gender>>
+        <<set _girlCompanion = _npc>>
     <</if>>
 <</for>>
 <<linkreplace 'Wait until the sun sets'>>
@@ -96,9 +96,9 @@
         <br />
         Suddenly, in a surge of brutal violence, he raises his bat high and brings it down with a sickening thud. The impact echoes through the chamber, a grotesque punctuation mark to the silence. 
         <<set _companionKeys = Object.keys($player.companions)>>
-        <<set _firstCompanion = _companionKeys[0].split(':')>>
+        <<set _firstCompanion = setup.companionGet(_companionKeys[0])>>
         <br />
-        <strong><<=setup.displayName($guests[_firstCompanion[1]])>> crumples to the ground, a life extinguished in an instant.</strong>
+        <strong><<=setup.displayName(_firstCompanion)>> crumples to the ground, a life extinguished in an instant.</strong>
         <br /><br />
         A wave of horror washes over you, the brutality of the act searing into your memory. 
         The loss is palpable, a stark reminder of the unforgiving nature of this world. The remaining companions remain resolute, their faces a mix of grief, anger, and determination.
@@ -110,8 +110,8 @@
         The sickening thud reverberates through the chamber, another life extinguished in a brutal act of violence. Another companion falls, their fate sealed in a horrifying instant.
         <br />
         <<set _companionKeys = Object.keys($player.companions)>>
-        <<set _lastCompanion = _companionKeys[_companionKeys.length - 1].split(':')>>
-        <strong><<=setup.displayName($guests[_lastCompanion[1]])>> drops on the ground with <<=setup.pronounceWhos($guests[_lastCompanion[1]])>> skull crushed open.</strong>
+        <<set _lastCompanion = setup.companionGet(_companionKeys.length - 1)>>
+        <strong><<=setup.displayName($guests[_lastCompanion[1]])>> drops on the ground with <<=setup.pronounceWhos(_lastCompanion)>> skull crushed open.</strong>
         <br /><br />
         <center>
             [img[setup.ImagePath+'people/negan/bat_kill_blood.webp']]
@@ -171,8 +171,7 @@
             <<for Object.keys($player.companions).length > 0>>
                 <<set _companionKeys = Object.keys($player.companions)>>
                 <<set _lastCompanionKey = _companionKeys[_companionKeys.length -1]>>
-                <<set _companionSplitKey = _lastCompanionKey.split(':')>>
-                <<guestRemove _companionSplitKey[1]>>
+                <<companionRemove _lastCompanionKey>>
             <</for>>
             <br /><br />
             <<link 'Go to bed'>>

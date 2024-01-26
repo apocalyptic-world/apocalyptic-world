@@ -83,7 +83,7 @@
 	<<set $player.companions[$args[0] + ':' + $args[1]] = true>>
 <</widget>>
 
-<<widget companionRemove>>
+<<widget companionRemoveItem>>
 	/* args[0] = list name:index in that array */
 	<<if (typeof $player.companions[$args[0]] !== "undefined" ) >>
 		<<run delete $player.companions[$args[0]]>>
@@ -105,7 +105,7 @@
 						Remove <<=$guests[_compKey[1]].name>> from companions?
 						<br />
 						<<link 'Yes'>>
-							<<companionRemove _comp>>
+							<<companionRemoveItem _comp>>
 							<<goto `passage()`>>
 							<<dialogclose>>
 						<</link>>	
@@ -140,8 +140,35 @@
     <</if>>
 
     /* but companionRearange _guestI works because the arg[0] is the same */
-    <<companionRearange _guestI>>
+    <<companionRearange _compI>>
     <<run $guests.splice(_guestI, 1)>>
+<</widget>>
+
+<<widget slaveRemove>>
+    /* does slaves.splice and companion rearrange, must use at every slave.splice
+       args[0] = index in slaves list */
+    <<set _slaveI = $args[0]>>
+    <<set _compI = 'slave:' + _slaveI>>
+
+    /* I wanted  to do "companionRemove 'slave:' + _slaveI" but it semms that
+       widgets can't call widgets - they share the same variables args[0]
+    */
+    <<if (typeof $player.companions[_compI] !== "undefined" ) >>
+		<<run delete $player.companions[_compI]>>
+    <</if>>
+
+    /* but companionRearange _guestI works because the arg[0] is the same */
+    <<companionRearange _compI>>
+    <<run $slaves.splice(_slaveI, 1)>>
+<</widget>>
+
+<<widget companionRemove>>
+	<<set _splitKey = $args[0].split(':')>>
+	<<if _splitKey[0] === 'guest'>>
+		<<guestRemove _splitKey[1]>>
+	<<else>>
+		<<slaveRemove _splitKey[1]>>
+	<</if>>
 <</widget>>
 
 <<widget setPlayerStats>>

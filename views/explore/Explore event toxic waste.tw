@@ -11,6 +11,7 @@
 	<<run _companionNames.push($guests[_eventCompanionI.split(':')[1]].name)>>
 	<<if !_companionFirst>>
 		<<set _companionFirst = _eventCompanionI.split(':')[1]>>
+		<<set _companionFirstType = _eventCompanionI.split(':')[0]>>
 	<</if>>
 <</for>>
 
@@ -55,8 +56,8 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=se
 		<div id="option1">
 			<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
 			<<link _linkName>>
-				<<set _eventCompanionKey = 'guest:' + _companionFirst>>
-				<<guestRemove _companionFirst>>
+				<<set _eventCompanionKey = _companionFirstType + ':' + _companionFirst>>
+				<<companionRemove _eventCompanionKey>>
 				<<goto 'Outside'>>
 			<</link>>
 		</div>
@@ -67,8 +68,12 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=se
 		<br /><br />
 		<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
 		<<link _linkName>>
-			<<set _eventCompanionKey = 'guest:' + _companionFirst>>
-			<<guestRemove _companionFirst>>
+			<<set _eventCompanionKey = _companionFirstType + ':' + _companionFirst>>
+			<<if _companionFirstType === 'guest'>>
+				<<guestRemove _companionFirst>>
+			<<else>>
+				<<slaveRemove _companionFirst>>
+			<</if>>
 			<<goto 'Outside'>>
 		<</link>>
 	<</if>>

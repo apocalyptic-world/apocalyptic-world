@@ -9,8 +9,7 @@
 	Since they spoil easily (not storable) you decide to have a snack, eating your full. 
 	<<set $player.hunger = 100>>
 	<<for _companionKey, _companion range $player.companions>>
-        <<set _npcId = _companionKey.split(':')[1]>>
-        <<set _npc = $guests[_npcId]>>
+		<<set _npc = setup.companionGet(_companionKey)>>
 		<<set _npc.food to 100>>
     <</for>>
 	<br /><br />

@@ -10,12 +10,11 @@ You found nothing while driving around.
 <<set _companionKeys = Object.keys($player.companions ?? {})>>
 <<if _companionKeys.length > 0>>
     <<set _splitCompanionKey = _companionKeys[0].split(':')>>
+    <<set $tmpGirl = setup.companionGet(_companionKeys[0])>>
     <<if _splitCompanionKey[0] === 'guest'>>
         <<set $guestId = _splitCompanionKey[1]>>
-        <<set $tmpGirl = $guests[_splitCompanionKey[1]]>>
     <<else>>
         <<set $slaveId = _splitCompanionKey[1]>>
-        <<set $tmpGirl = $slaves[_splitCompanionKey[1]]>>
     <</if>>
     <<set $tmpGirl.location = 'car'>>
     <<set _pronHerHim = setup.pronounceWho($tmpGirl)>>

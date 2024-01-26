@@ -23,10 +23,9 @@ Curiosity piqued, you approach cautiously. The mist seems to beckon, promising s
         Your companions... They follow hesitantly, their apprehension palpable. As they step into the cave, the mist takes on an eerie luminescence, casting strange shadows on the rocky walls.
         <br /><br />
         <<for _companionKey, _companion range $player.companions>>
-            <<set _npcId = _companionKey.split(':')[1]>>
-            <<set _npc = $guests[_npcId]>>
+            <<set _npc = setup.companionGet(_companionKey)>>
             <<if !setup.npcInventoryHas(_npc, 'gas_mask')>>
-                <<run _companionsWithoutMaskKeys.push(_npcId)>>
+                <<run _companionsWithoutMaskKeys.push(_companionKey)>>
                 <<run _companionsWithoutMaskNames.push(setup.displayName(_npc))>>
             <</if>>  
         <</for>>
@@ -91,10 +90,11 @@ Curiosity piqued, you approach cautiously. The mist seems to beckon, promising s
             <br /><br />
         <</if>>
 
+        <<run console.log(_companionsWithoutMaskKeys)>>
         <<if _companionsWithoutMaskKeys.length>>
             <<run _companionsWithoutMaskKeys.sort().reverse()>>
             <<for _companionRemoveKey range _companionsWithoutMaskKeys>>
-                <<guestRemove _companionRemoveKey>>
+                <<companionRemove _companionRemoveKey>>
             <</for>>
         <</if>>
     <</if>>
