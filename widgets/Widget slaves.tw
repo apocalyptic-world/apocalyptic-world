@@ -1,21 +1,24 @@
 :: Widget slaves [widget] {"position":"251,632","size":"100,100"}
 <<widget slaveValue>>
 	<<set _age = setup.getAge($args[0])>>
-	<<set $slaveValue = 
+	<<set _slaveValue = 
 		($args[0].beauty / 2) + 
 		($args[0].sub / 5) +
 		((100 - _age) / 5)
 	>>
 	<<if $args[0].virgin>>
-		<<set $slaveValue = $slaveValue * 2>>
+		<<set _slaveValue = _slaveValue * 2>>
 	<</if>>
 	
 	<<if $args[1]>>
-		<<set $slaveValue = $slaveValue * $args[1]>>
+		<<set _slaveValue = _slaveValue * $args[1]>>
 	<</if>>
-	<<set $slaveValue = Math.round($slaveValue / 2, 0)>>
+	<<set _slaveValue = Math.round(_slaveValue / 2, 0)>>
 	
-	<<set $args[0].value = $slaveValue>>
+	<<if $args[0].gender>>
+		<<set _slaveValue = Math.round(_slaveValue / 2, 0)>>
+	<</if>>
+	<<set $args[0].value = _slaveValue>>
 <</widget>>
 
 <<widget slaveInfo>>
