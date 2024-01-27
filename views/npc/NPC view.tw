@@ -194,6 +194,18 @@
 		<</link>>
 	<</if>>
 
+	
+	<<if $guests.length < $guesthouseLimit>>
+		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house cell'>>
+		<<link `_linkName`>>
+			<<set $tmpGirl.happy += 50>>
+			<<set $tmpGirl.relationship += 20>>
+			<<run $slaves.splice($slaveId, 1)>>
+			<<run $guests.push($tmpGirl)>>
+			<<goto 'Guest house'>>
+		<</link>>
+	<</if>>
+
 	<<include 'Button - rest or work'>>
 	
 	<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>

@@ -16,6 +16,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 
 <<set _isSlaveInBasement = false>>
 <<set _suicidalSlaves = []>>
+<<set _lowSubmissionSlaves = []>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
@@ -81,6 +82,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $cellSlaveIds.push(_i)>>
 		<<if $slaves[_i].happy < -70>>
 			<<run _suicidalSlaves.push(_i)>>
+		<</if>>
+		<<if $slaves[_i].sub < 50>>
+			<<run _lowSubmissionSlaves.push(_i)>>
 		<</if>>
 		<tr>
 			<td style="width: 300px">
@@ -183,9 +187,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 
 <<if $showSlavesCount &&  !$locationEvents.basement>>
 	<<set $randomNumber = randomInteger(1, 10)>>
-	<<if $randomNumber === 0>>
-		<<set $eventSlaveId = Math.floor(Math.random()*$cellSlaveIds.length);>>
-		<<if $slaves[$eventSlaveId].sub < 50 && setup.getAge($slaves[$eventSlaveId]) > 17 && !$slaves[$eventSlaveId].gender>>
+	<<if $randomNumber === 0 && _lowSubmissionSlaves.length>>
+		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
+		<<if setup.getAge($slaves[$eventSlaveId]) >= 18 && !$slaves[$eventSlaveId].gender>>
 			<<set $locationEvents.basement = true>>
 			<<set $tmpEvent = {
 				id: $eventSlaveId
