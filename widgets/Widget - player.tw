@@ -94,23 +94,25 @@
 	<<for _comp, _compI range $player.companions>>
 		<<set _compKey = _comp.split(':')>>
 		<<capture _comp, _compKey>>
-			<<set _girlVisual = $guests[_compKey[1]]>>
-			<div class="companion tooltip" @title="'' + $guests[_compKey[1]].name + ''">
-				<div class="girl_info_picture">
-					<<include 'NPC visual'>>
+			<<set _girlVisual = setup.companionGet(_comp)>>
+			<<capture _girlVisual>>
+				<div class="companion tooltip" @title="'' + _girlVisual.name + ''">
+					<div class="girl_info_picture">
+						<<include 'NPC visual'>>
+					</div>
 				</div>
-			</div>
-			<<link 'x'>>
-					<<dialog 'Remove companion'>>
-						Remove <<=$guests[_compKey[1]].name>> from companions?
-						<br />
-						<<link 'Yes'>>
-							<<companionRemoveItem _comp>>
-							<<goto `passage()`>>
-							<<dialogclose>>
-						<</link>>	
-					<</dialog>>
-				<</link>>
+				<<link 'x'>>
+						<<dialog 'Remove companion'>>
+							Remove <<=_girlVisual.name>> from companions?
+							<br />
+							<<link 'Yes'>>
+								<<companionRemoveItem _comp>>
+								<<goto `passage()`>>
+								<<dialogclose>>
+							<</link>>	
+						<</dialog>>
+					<</link>>
+			<</capture>>
 		<</capture>>
 	<</for>>
 <</widget>>

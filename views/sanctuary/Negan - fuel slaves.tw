@@ -6,6 +6,10 @@ His keen eyes assess the group, noting their worn-out clothes and exhaustion.
 <br />
 <br />
 <<set _girls = setup.neganQuest2HaveGirls()>>
+<<set _npc1 = setup.companionGet(_girls[0])>>
+<<set _npc2 = setup.companionGet(_girls[1])>>
+<<set _npc3 = setup.companionGet(_girls[2])>>
+<<set _npc4 = setup.companionGet(_girls[3])>>
 <<negan>>
     Oh, what we got here.
 <</negan>>
@@ -17,14 +21,14 @@ After that he goes back to his desk, opens drawer and takes out ropes and rope g
     [img[setup.ImagePath+'places/sanctuary/negan_slaves.webp']]
 </center>
 <br />
-<<=setup.displayName($guests[_girls[0]])>>, <<=setup.displayName($guests[_girls[1]])>>, <<=setup.displayName($guests[_girls[2]])>> and <<=setup.displayName($guests[_girls[3]])>>
+<<=setup.displayName(_npc1)>>, <<=setup.displayName(_npc2)>>, <<=setup.displayName(_npc3)>> and <<=setup.displayName(_npc4)>>
 look at you with eyes full of incomprehension and fear while their hands are being tied.
 <br /><br />
-<<sayNpc $guests[_girls[2]]>>
+<<sayNpc _npc2>>
     What's happening here?
 <</sayNpc>>
 <br /><br />
-<<=setup.displayName($guests[_girls[3]])>> tries to run but instantly Negan stops her by grabing her by neck and choking her while pushing her down back on her knees.
+<<=setup.displayName(_npc3)>> tries to run but instantly Negan stops her by grabing her by neck and choking her while pushing her down back on her knees.
 <br /><br />
 <center>
     [img[setup.ImagePath+'places/sanctuary/negan_slaves2.webp']]
@@ -56,13 +60,10 @@ As Negan finishes to tie them, he calls for a guards outside and they come in an
     <br /><br />
     <<link 'Leave'>>
         <<set _girls = setup.neganQuest2HaveGirls()>>
-        <<guestRemove _girls[0]>>
-        <<set _girls = setup.neganQuest2HaveGirls()>>
-        <<guestRemove _girls[0]>>
-        <<set _girls = setup.neganQuest2HaveGirls()>>
-        <<guestRemove _girls[0]>>
-        <<set _girls = setup.neganQuest2HaveGirls()>>
-        <<guestRemove _girls[0]>>
+        <<companionRemove _girls[0]>>
+        <<companionRemove _girls[1]>>
+        <<companionRemove _girls[2]>>
+        <<companionRemove _girls[3]>>
         <<set $characters.negan.quests.quest2 = true>>
         <<goto 'Outside'>>
     <</link>>
