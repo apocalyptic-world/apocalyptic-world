@@ -193,6 +193,9 @@
 				<<if setup.percentageChance(5) && !$fight.defeatedEnemies[_i].traits.includes('sadistic')>>
 					<<run $fight.defeatedEnemies[_i].traits.push('sadistic')>>
 				<</if>>
+				<<if setup.percentageChance(50)>>
+					<<set $fight.defeatedEnemies[_i].sub += randomInteger(30, 50)>>
+				<</if>>
 				<<run $slaves.push($fight.defeatedEnemies[_i])>>
 				<<statsAdd 'people_captured'>>
 			<</if>>
