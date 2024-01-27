@@ -26,11 +26,11 @@
 						<<link 'Sell'>>
 							<<set _totalMoney = _shopItem.price * _shopItems[_i].qty>>
 							<<if $backpack.count(_shopItem.name) < _shopItems[_i].qty>>
-								<<replace `'#shop-error-'+_i`>>You don't have enough items<</replace>>
+								<<replace `'#shop-error-'+_i`>>You don't have enough items.<</replace>>
 							<<elseif _shopItems[_i].qty < 1>>
-								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
+								<<replace `'#shop-error-'+_i`>>Quantity needs to be greater than or equal to 1.<</replace>>
 							<<elseif ($shopMerchants[$args[0]]?.money ?? 0) < _totalMoney>>
-								<<replace `'#shop-error-'+_i`>>Mercan't doesn't have enough money<</replace>>
+								<<replace `'#shop-error-'+_i`>>Merchant doesn't have enough money.<</replace>>
 							<<else>>
 								<<set $player.money += _totalMoney>>
 								<<drop $backpack _shopItem.name _shopItem.qty>>
@@ -65,9 +65,9 @@
 						<<link 'Buy'>> 
 							<<set _totalPrice = _buyprice * _shopItems[_i].qty>>
 							<<if $player.money < _totalPrice>> 
-								<<replace `'#shop-error-'+_i`>>You don't have enough caps<</replace>>
+								<<replace `'#shop-error-'+_i`>>You don't have enough caps.<</replace>>
 							<<elseif _shopItems[_i].qty < 1>>
-								<<replace `'#shop-error-'+_i`>>Quantity needs to be equal or more than 1<</replace>>
+								<<replace `'#shop-error-'+_i`>>Quantity needs to be greater than or equal to 1.<</replace>>
 							<<else>>
 								<<if $args[3]>>
 									<<run $.wiki($args[3])>>
