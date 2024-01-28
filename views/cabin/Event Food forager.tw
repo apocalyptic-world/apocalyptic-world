@@ -5,27 +5,27 @@
 	[img[setup.ImagePath+'places/cabin/kid_stealing_food.jpg']]
 </center>
 <br /><br />
-You hear a sound coming from a place where food is stored and decide to go check what the sound is. The door to the room is open and the sound keeps getting louder and louder. To your surprise, as you open the door, you see a small child in front of you, who with fearful eyes looks into your eyes, holding a few pieces of food in their hands.
-Amongst rooms, you pursued a faint noise to a storage room. Its door revealed a small, wary figure clutching stolen food.
+You hear noise coming from a place where you've stored some food, and decide to cautiously investigate its source. The door to the room is ajar and the sounds keep getting louder and louder as you approach - something's definitely here. To your surprise, as you carefully take a peak in between the door's gap, you see a small child in front of you. He immediately spots you peering through the doorway, a fearful look in his eyes.
+Abandoning stealth and swinging open the door, you see that they're holding a few pieces of food in their gaunt hands.
 <br /><br />
 
 <<set _foodOptions = [$storage.count('food'), $backpack.count('food'), 5]>>
 <<set _foodGive = Math.min.apply(null, _foodOptions.filter(Boolean))>>
 <<if _foodGive && ($storage.count('food') || $backpack.count('food'))>>
 	<div id="option_food">
-		<<linkreplace 'Tell him to take as much as he like'>>
+		<<linkreplace 'Tell him to take as much as he likes.'>>
 			<<run $('#option1_desc, #option2, #option_invite').hide()>>
 			<<if $storage.count('food') >= _foodGive>>
 				<<drop $storage 'food' _foodGive>>
 			<<else>>
 				<<drop $backpack 'food' _foodGive>>
 			<</if>>
-			<strong>You lost <<=_foodGive>> food</strong>
+			<strong>You've lost <<=_foodGive>> food.</strong>
 			<br /><br />
-			A child with a wide smile on his face leans over and says <strong>"Thank you so much mister!"</strong> before taking a few more  food and quickly walking out of the building and disappearing into the nearby forest.
+			A wide smile bursts onto the child's face as he exclaims, <strong>"Thank you so much mister!"</strong> He takes some more food, before quickly darting out of the building and disappearing into the nearby forest.
 			<br /><br />
 			<<link 'Leave'>>
-				<<set $player.goodwilll++>>
+				<<set $player.goodwill++>>
 				<<goto 'Wood cabin'>>
 			<</link>>
 			
@@ -45,10 +45,10 @@ Amongst rooms, you pursued a faint noise to a storage room. Its door revealed a 
 			<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(7, 13))>>
 			<<set $tmpGuy.relationship = randomInteger(40, 70)>>
 			<<run $nursery.push($tmpGuy)>>
-			A child with a wide smile on his face leans over and says <strong>"Thank you so much mister! I would like that!"</strong>. He puts down food he was trying to steal and you show him place where he can sleep.
+			A wide smile bursts onto the child's face as he exclaims, <strong>"Thank you so much mister! I would like that!"</strong>. He puts down the food he was trying to steal, and you show him a place where he can sleep.
 			<br /><br />
 			<<link 'Leave'>>
-				<<set $player.goodwilll += 2>>
+				<<set $player.goodwill += 2>>
 				<<goto 'Wood cabin'>>
 			<</link>>
 
@@ -56,7 +56,7 @@ Amongst rooms, you pursued a faint noise to a storage room. Its door revealed a 
 	</div>
 <</if>>
 <div id="option2">
-	<<link 'Throw him out'>>
+	<<link 'Throw him out.'>>
 		<<set $player.goodwill -= 5>>
 		<<goto 'Wood cabin'>>
 	<</link>>
