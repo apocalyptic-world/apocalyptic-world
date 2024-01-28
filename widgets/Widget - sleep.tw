@@ -132,7 +132,7 @@
 				<<set $slaves[_i].pregnancy++>>
 			<</if>>
 			<<if $slaves[_i].pregnancy == 8>>
-				<<set _pregnantMsg = 'Slave ' + $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<set _pregnantMsg = $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $slaves[_i].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
 					<<if !$pregnancyStreetsHappening>>
@@ -150,7 +150,7 @@
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
-				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
 				<<run delete $slaves[_i].pregnancy>>
 			<</if>>
 			
@@ -185,7 +185,7 @@
 					<<set $slaves[_i].skills = []>>
 				<</if>>
 				<<run $slaves[_i].skills.push('gardener')>>
-				<<set $morningMessages.main.push('<span class="skill">Slave ' + $slaves[_i].name + ' learned gardener skill</span>')>>
+				<<set $morningMessages.main.push('<span class="skill">' + $slaves[_i].name + ' learned gardener skill</span>')>>
 			<</if>>
 
 			<<set $slaves[_i].gardenDay++>>
@@ -200,7 +200,7 @@
 				<<else>>
 					<<pickup $backpack 'food' _foodGive>>
 				<</if>>
-				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
+				<<set $morningMessages.main.push($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
 			<</if>>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff>>
@@ -218,7 +218,7 @@
 				<<set _girlChanceToDie -=1>>
 			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
-				<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
+				<<set $morningMessages.main.push($slaves[_i].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
 				<<set $slaves.splice(_i, 1)>>
 				<<set _i-->>
 				<<continue>>
@@ -247,7 +247,7 @@
 					<</if>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
-					<<set $morningMessages.main.push('Slave ' + $slaves[_i].name + ' had client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<set $morningMessages.main.push($slaves[_i].name + ' had client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				
 					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom')>>
 						<<set $slaves[_i].pregnancy = 0>>
@@ -270,12 +270,12 @@
 			<</if>>
 
 			<<if $slaves[_i].food <= -20>>
-				<<set $morningMessages.main.push('<span class="dead">Slave ' + $slaves[_i].name + ' died of hunger. You dont have enough food</span>')>>
+				<<set $morningMessages.main.push('<span class="dead">' + $slaves[_i].name + ' died of hunger. You dont have enough food</span>')>>
 				<<set $slaves.splice(_i, 1)>>
 				<<set _i-->>
 				<<continue>>
 			<<elseif $slaves[_i].food <= 10>>
-				<<set $morningMessages.main.push('<span class="starving">Slave ' + $slaves[_i].name + ' is starving</span>')>>
+				<<set $morningMessages.main.push('<span class="starving">' + $slaves[_i].name + ' is starving</span>')>>
 			<</if>>	
 		<</if>>
 		<<if setup.getAge($slaves[_i]) > 3>>
@@ -346,7 +346,7 @@
 		
 		// Leave
 		<<if $guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70>>
-			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' was missing in the morning, ' + setup.pronounceWhat($guests[_guestI]) + ' probably decided to leave this place')>>
+			<<set $morningMessages.main.push($guests[_guestI].name + ' was missing in the morning, ' + setup.pronounceWhat($guests[_guestI]) + ' probably decided to leave this place')>>
 			<<guestRemove _guestI >>
 			<<set _guestI-->>
 			<<continue>>
@@ -359,7 +359,7 @@
 				<<set $guests[_guestI].pregnancy++>>
 			<</if>>
 			<<if $guests[_guestI].pregnancy == 8>>
-				<<set _pregnantMsg = 'Guest ' + $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
 					<<if !$pregnancyStreetsHappening>>
@@ -377,7 +377,7 @@
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
 			<<set _streetWork = $guests[_guestI].asssignedTo === 'streets' && !_dayOff>>
 			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
 				<<run delete $guests[_guestI].pregnancy>>
 			<</if>>
 			
@@ -412,7 +412,7 @@
 					<<set $guests[_guestI].skills = []>>
 				<</if>>
 				<<run $guests[_guestI].skills.push('gardener')>>
-				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned gardening skill</span>')>>
+				<<set $morningMessages.main.push('<span class="skill">' + $guests[_guestI].name + ' learned gardening skill</span>')>>
 			<</if>>
 
 			<<set $guests[_guestI].gardenDay++>>
@@ -427,7 +427,7 @@
 				<<else>>
 					<<pickup $backpack 'food' _foodGive>>
 				<</if>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden')>>
 			<</if>>
 		<</if>>
 		
@@ -447,7 +447,7 @@
 				<<set _girlChanceToDie -=1>>
 			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' <strong class="iitem">was found dead</strong> in the streets')>>
 				<<guestRemove _guestI >>
 				<<set _guestI-->> 
 				<<continue>>
@@ -475,7 +475,7 @@
 					<</if>>
 					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
-					<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<set $morningMessages.main.push($guests[_guestI].name + ' had client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
 					<<set $guests[_guestI].virgin = false>>
 					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom')>>
 						<<set $guests[_guestI].pregnancy = 0>>
@@ -499,7 +499,7 @@
 					<<set $guests[_guestI].skills = []>>
 				<</if>>
 				<<run $guests[_guestI].skills.push('woodcraft')>>
-				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned woodcraft skill</span>')>>
+				<<set $morningMessages.main.push('<span class="skill">' + $guests[_guestI].name + ' learned woodcraft skill</span>')>>
 			<</if>>
 
 			<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
@@ -514,14 +514,14 @@
 			<<else>>
 				<<pickup $backpack 'wood' _giveWood>>
 			<</if>>
-			<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest')>>
+			<<set $morningMessages.main.push($guests[_guestI].name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest')>>
 			<<if setup.percentageChance(10)>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' 1>>
 				<<else>>
 					<<pickup $backpack 'food' 1>>
 				<</if>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>')>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>')>>
 			<</if>>
 		<</if>>
 		<<unset _hunter_no_bow>>
@@ -553,7 +553,7 @@
 					<<set $guests[_guestI].skills = []>>
 				<</if>>
 				<<run $guests[_guestI].skills.push('scavenger')>>
-				<<set $morningMessages.main.push('<span class="skill">Guest ' + $guests[_guestI].name + ' learned scavenger skill</span>')>>
+				<<set $morningMessages.main.push('<span class="skill">' + $guests[_guestI].name + ' learned scavenger skill</span>')>>
 			<</if>>
 
 			<<set _chanceOfNotComingHome = 10>>
@@ -582,7 +582,7 @@
 			  <<else>>
 			  	<<pickup $backpack _randomItem _giveCount>>
 			  <</if>>
-			  <<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging')>>
+			  <<set $morningMessages.main.push($guests[_guestI].name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging')>>
 			<</if>>
 		<</if>>
 		
@@ -592,7 +592,7 @@
 					<<continue>>
 				<</if>>
 				<<if setup.percentageChance(30) && _mistressSlave.sub < 100>>
-					<<set $morningMessages.slaves.push('Mistress ' + $guests[_guestI].name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
+					<<set $morningMessages.slaves.push($guests[_guestI].name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
 					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
 				<</if>>
 			<</for>>
@@ -619,7 +619,7 @@
 			  	<<else>>
 			  		<<pickup $backpack _hunterItem _giveCount>>
 			  	<</if>>
-				<<set $morningMessages.main.push('Guest ' + $guests[_guestI].name + ' managed to get ' + _giveCount  + ' ' + Item.get(_hunterItem).name + ' while hunting')>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' managed to get ' + _giveCount  + ' ' + Item.get(_hunterItem).name + ' while hunting')>>
 			<</if>>
 		<</if>>
 		
@@ -636,12 +636,12 @@
 			<</if>>
 
 			<<if $guests[_guestI].food <= -20>>
-				<<set $morningMessages.main.push('<span class="left">Guest ' + $guests[_guestI].name + ' left because you have not enough food</span>')>>
+				<<set $morningMessages.main.push('<span class="left">' + $guests[_guestI].name + ' left because you have not enough food</span>')>>
 				<<guestRemove _guestI>>
 				<<set _guestI-->>
 				<<continue>>
 			<<elseif $guests[_guestI].food <= 10>>
-				<<set $morningMessages.main.push('<span class="starving">Guest ' + $guests[_guestI].name + ' is starving</span>')>>		
+				<<set $morningMessages.main.push('<span class="starving">' + $guests[_guestI].name + ' is starving</span>')>>		
 			<</if>>
 		<</if>>
 		<<if setup.getAge($guests[_guestI]) > 3>>
@@ -748,7 +748,7 @@
 		<<if _playerPerk === 'bleeding'>>
 			<<set _item = 'bandage'>>
 			<<if _hasDoctor>>
-				<<set $morningMessages.main.push('Doctor ' + either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon')>>
+				<<set $morningMessages.main.push(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon')>>
 				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
 			<<elseif $storage.has(_item, 1)>>
@@ -792,7 +792,7 @@
 			desc: 'Food poisoning',
 			id: 'food_poisoning'
 		}>>
-		<<set $morningMessages.main.push('Guest ' + $guests[_rottenFoodId].name + ' got sick with food poisoning')>>
+		<<set $morningMessages.main.push($guests[_rottenFoodId].name + ' got sick with food poisoning')>>
 	<</for>>
 	<<set _foodRottenSlaves = setup.getRandomPersonIds($slaves, randomInteger(1,3))>>
 	<<for _rottenFoodKey, _rottenFoodId range _foodRottenSlaves>>
@@ -801,7 +801,7 @@
 			desc: 'Food poisoning',
 			id: 'food_poisoning'
 		}>>
-		<<set $morningMessages.main.push('Slave ' + $slaves[_rottenFoodId].name + ' got sick with food poisoning')>>
+		<<set $morningMessages.main.push($slaves[_rottenFoodId].name + ' got sick with food poisoning')>>
 	<</for>>
 	<<run delete $game.foodRotten>>
 <</if>>
@@ -818,7 +818,7 @@
 				<<if $player.money >= _totalPrice>>
 					<<pickup $storage _manageGoodsName _amount>>
 					<<set $player.money -= _totalPrice>>
-					<<set $morningMessages.shop.push('Shopkeper ' + setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+					<<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -827,7 +827,7 @@
 				<<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
 				<<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
 				<<set $player.money += _totalPrice>>
-				<<set $morningMessages.shop.push('Shopkeper ' + setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+				<<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
 			<</if>>
 		<</if>>
 	<</for>>
