@@ -17,6 +17,7 @@
 Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 
 <<set _guests18yoWomen = []>>
+<<set _guests18yoMen = []>>
 <<if ($guests ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		You have no guests...
@@ -63,6 +64,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<<else>>
 						<<if !_guest.gender>>
 							<<run _guests18yoWomen.push(_guestI)>>
+						<<elseif _guest.gender == 1>>
+							<<run _guests18yoMen.push(_guestI)>>
 						<</if>>
 						<span @class="''+_genderClass+''">
 							<<link _guest.name>>
@@ -135,6 +138,10 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - lesbian sex'>>
+	<<elseif setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoWomen]).length > 0 && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoMen]).length > 0 && setup.percentageChance(20)>>
+		<<set $tmpEvent = [setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoWomen]), setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<goto 'Guesthouse [Event] - straight sex'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(100)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
 		<<if !($guests[_npcId].quests ?? {}).take_virginity>>
