@@ -1,0 +1,133 @@
+:: Guesthouse \[Event\] - straight sex {"position":"336,1079","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+
+<<if typeof $randEvent === 'undefined'>>
+	<<set
+		_guestIds = [setup.getRandomPersons($tmpEvent[0], 1), setup.getRandomPersons($tmpEvent[1], 1)],
+		_minCorruption = Math.min($guests[_guestIds[0]].corruption, $guests[_guestIds[1]].corruption),
+		_isVirgin = $guests[_guestIds[0]].virgin,
+		_isAnalVirgin = ($guests[_guestIds[0]].anal < 20),
+		_isSquirter = ($guests[_guestIds[0]].traits ?? []).includes('squirter'),
+		_hasSmallTits = $guests[_guestIds[0]].breasts == 'small',
+		_index = 0,
+		_names =''
+	>>
+
+	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
+	<<if _r < 0>>
+		<<set _r = 0>>
+	<</if>>
+	<<set _sexActions = [
+		['handjob','handjob','footjob','footjob','bj'][random(0, _r)],
+		['bj','bj','titjob','titjob','dp'][random(0, _r)],
+		['pussy_lick','pussy_lick','pussy_lick','anal_fingering','anal_fingering'][random(0, _r)],
+		['pussy','pussy','anal','anal','anal'][random(0, _r)],
+		['pussy','pussy','anal','anal','anal'][random(0, _r)],
+		['cum_on_back','cum_on_stomach','cum_on_tits','cum_on_face','cum_in_mouth'][random(0, 4)]
+	]>>
+
+	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
+		<<set _sexActions[1] = 'dp'>>
+	<</if>>
+	<<if _sexActions[2] == 'pussy_lick' && _isSquirter>>
+		<<set _sexActions[3] = 'squirt_lick'>>
+	<</if>>
+	<<if _sexActions[3] == 'pussy' && _isVirgin>>
+		<<set _sexActions[3] = 'anal'>>
+	<</if>>
+	<<if _sexActions[3] == 'anal' && _isAnalVirgin>>
+		<<set _sexActions[3] = 'anal_fingering'>>
+	<</if>>
+	<<if _sexActions[4] == 'pussy' && _isVirgin>>
+		<<set
+			_sexActions[4] = 'anal',
+			_sexActions[5] = 'cum_in_ass'
+		>>
+	<</if>>
+	<<if _sexActions[4] == 'anal' && _isAnalVirgin>>
+		<<set
+			_sexActions[4] = 'dp',
+			_sexActions[5] = 'cum_throat'
+		>>
+	<</if>>
+
+
+	<<set $randEvent = [
+		_guestIds,
+		_names,
+		_sexActions,
+		_index
+	]>>
+
+	As you approach the dormitory, you hear muffled sounds.<br />
+	You take a peek and see <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex.<br />
+
+<<else>>
+	<<addmins 5>>
+	<<set 
+		_guestIds = $randEvent[0],
+		_names = $randEvent[1],
+		_sexActions = $randEvent[2],
+		_index = $randEvent[3]
+	>>
+<</if>>
+
+<br /><br />
+
+<<set _actionText = setup.actionText>>
+<div id="choice">
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
+	<</for>>
+
+	<<actionImage $guests[_guestIds[0]] _sexActions[_index]>>
+	
+	<br /><br />
+	<<if $player.horny >= 100>>
+		<<linkreplace 'Cum'>>
+			<<horny_reset>>
+			<center>
+				[img[setup.ImagePath+'game/misc/cum.webp']]
+			</center>
+		<</linkreplace>>
+	<</if>>
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[3] = _index + 1>>
+		<<if $player.horny < 100>>		
+			[[Masturbate|passage()][$player.horny += 20]]
+		<</if>>		
+		[[Just watch|passage()]]
+	<</if>>
+	<<link 'Interrupt them'>>
+		<<set _interrupted = true>>
+		<<replace "#choice">>
+			<<for _i = 0; _i < _guestIds.length; _i++>>
+				<<set 
+					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+				>>
+			<</for>>
+				<center>
+					<<actionImageOutput `setup.ImagePath+'actions/lesbians-2/default/caught/'+ either(setup.actions['lesbians-2']['default']['caught'])`>>
+				</center>
+				<br /><br />
+				You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
+				<br /><br />
+			<</replace>>
+	<</link>>
+</div>
+
+<<link 'Leave'>>
+	<<if _orgasm || !_interrupted>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<set 
+				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
+				$guests[_guestIds[_i]].horny = 0
+			>>
+		<</for>>
+	<</if>>
+	<<unset $randEvent, $tmpEvent>>
+	<<goto 'Guest house'>>
+<</link>>
