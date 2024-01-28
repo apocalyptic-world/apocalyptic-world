@@ -9,8 +9,7 @@
 		_isAnalVirgin = ($guests[_guestIds[0]].anal < 20),
 		_isSquirter = ($guests[_guestIds[0]].traits ?? []).includes('squirter'),
 		_hasSmallTits = $guests[_guestIds[0]].breasts == 'small',
-		_index = 0,
-		_names =''
+		_index = 0
 	>>
 
 	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
@@ -23,7 +22,7 @@
 		['pussy_lick','pussy_lick','pussy_lick','anal_fingering','anal_fingering'][random(0, _r)],
 		['pussy','pussy','anal','anal','anal'][random(0, _r)],
 		['pussy','pussy','anal','anal','anal'][random(0, _r)],
-		['cum_on_back','cum_on_stomach','cum_on_tits','cum_on_face','cum_in_mouth'][random(0, 4)]
+		['cum_on_back','cum_on_stomach','cum_on_tits','cum_on_face','cum_in_mouth'][random(0, _r)]
 	]>>
 
 	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
@@ -54,7 +53,6 @@
 
 	<<set $randEvent = [
 		_guestIds,
-		_names,
 		_sexActions,
 		_index
 	]>>
@@ -66,9 +64,8 @@
 	<<addmins 5>>
 	<<set 
 		_guestIds = $randEvent[0],
-		_names = $randEvent[1],
-		_sexActions = $randEvent[2],
-		_index = $randEvent[3]
+		_sexActions = $randEvent[1],
+		_index = $randEvent[2]
 	>>
 <</if>>
 
@@ -80,8 +77,9 @@
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
 
-	<<actionImage $guests[_guestIds[0]] _sexActions[_index]>>
-	
+	<<actionImage $guests[_guestIds[0]] _sexActions[_index] 'no-text'>>
+	<br />
+	<<print _actionText['male_on_female'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
 	<br /><br />
 	<<if $player.horny >= 100>>
 		<<linkreplace 'Cum'>>
@@ -94,8 +92,8 @@
 	<<if _index + 1 == _sexActions.length>>
 		<<set _orgasm = true>>
 	<<else>>
-		<<set $randEvent[3] = _index + 1>>
-		<<if $player.horny < 100>>		
+		<<set $randEvent[2] = _index + 1>>
+		<<if $player.horny < 100>>
 			[[Masturbate|passage()][$player.horny += 20]]
 		<</if>>		
 		[[Just watch|passage()]]
@@ -110,11 +108,11 @@
 				>>
 			<</for>>
 				<center>
-					<<actionImageOutput `setup.ImagePath+'actions/lesbians-2/default/caught/'+ either(setup.actions['lesbians-2']['default']['caught'])`>>
+					<<actionImageOutput `setup.ImagePath+'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
 				</center>
 				<br /><br />
 				You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
-				<br /><br />
+				<br />
 			<</replace>>
 	<</link>>
 </div>
