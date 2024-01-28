@@ -113,6 +113,15 @@
 		<<sleep>>
 		<<goto `passage()`>>
 	<</link>>
+	<<if typeof $tmpGirl !== 'undefined' && (typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined')>>
+		<<link 'Edit NPC'>>
+			<<script>>
+				Dialog.setup("Cheatmenu - edit NPC", "Cheatmenu - edit NPC");
+				Dialog.wiki(Story.get("Cheatmenu - edit NPC").processText());
+				Dialog.open();
+			<</script>>
+		<</link>>
+	<</if>>
   <</if>>
 
 
