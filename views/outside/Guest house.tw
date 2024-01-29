@@ -137,7 +137,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
-	<<elseif setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen]).length > 1 && setup.percentageChance(10)>>
+	<<elseif settings.lesbiansEnabled && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen]).length > 1 && setup.percentageChance(10)>>
 		<<set $tmpEvent = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoWomen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - female on female'>>
@@ -145,11 +145,11 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = [setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoWomen]), setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guests18yoMen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - male on female'>>
-	<<elseif setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoTransWomen]).length > 0 && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+	<<elseif settings.transEnabled && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoTransWomen]).length > 0 && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
 		<<set $tmpEvent = [setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoTransWomen]), setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guests18yoMen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - male on transfemale'>>
-	<<elseif setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoMen]).length > 1 && setup.percentageChance(10)>>
+	<<elseif settings.gaysEnabled && setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoMen]).length > 1 && setup.percentageChance(10)>>
 		<<set $tmpEvent = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guests18yoMen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - male on male'>>
