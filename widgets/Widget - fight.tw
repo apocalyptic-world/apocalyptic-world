@@ -22,21 +22,22 @@
 	<</for>>
 	
 	<<for _ally, _allyId range $player.companions>>
+		<<set _tmpAlly = setup.companionGet(_ally)>>
 		<<set _allyKey = _ally.split(':')>>
 		<<if _allyKey[0] !== 'guest'>>
 			<<continue>>
 		<</if>>
-		<<set _tmpAlly = $guests[_allyKey[1]]>>
-		<<set _tmpAlly.key = _allyKey>>
+		<<set _tmpAlly.key = _ally>>
 		<<set _tmpAlly.hp = 100>>
 		<<run $fight.allies.push(_tmpAlly)>>
 	<</for>>
 
 	<<for _i to 0; _i lt $fight.xtraAllies.length; _i++>>
-		<<set _allyKey = ['guest', $fight.xtraAllies[_i]]>>
-		<<set _tmpAlly = $guests[_allyKey[1]]>>
+		<<set _allyKey = 'guest:'  + $fight.xtraAllies[_i]>>
+		<<set _tmpAlly = $fight.xtraAllies[_i]>>
 		<<set _tmpAlly.key = _allyKey>>
 		<<set _tmpAlly.hp = 100>>
+		<<set _tmpAlly.extra = true>>
 		<<run $fight.allies.push(_tmpAlly)>>
 	<</for>>
 	
@@ -113,17 +114,19 @@
 		<<set _isPlayerTarget = (_randomEnemyTarget === 'you')>>
 		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
 
-		<<if $fight.enemies[_i].inventory>>
-			<<if $fight.enemies[_i].inventory.includes('knife')>>
-				<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 2, 0) + 20>>
-				<<if _isPlayerTarget>>
-					<<if $player.endurance > 0>>
-						<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
-					<</if>>
-					<<perkAdd 'bleeding'>>
+		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
+		<<if _enemyHasKnife>>
+			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 2, 0) + 20>>
+			<<if _isPlayerTarget>>
+				<<if $player.endurance > 0>>
+					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
 				<</if>>
-				<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + $enemyStrength + ')')>>
+				<<perkAdd 'bleeding'>>
+			<<else>>
+				<<set $fight.allies[_randomEnemyTarget].attacks ??= []>>
+				<<set $fight.allies[_randomEnemyTarget].attacks.push('knife')>>
 			<</if>>
+			<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + $enemyStrength + ')')>>
 		<<else>>
 			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 3, 0) + randomInteger(0, 10)>>
 			<<if _isPlayerTarget>>

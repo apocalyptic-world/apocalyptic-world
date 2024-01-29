@@ -17,24 +17,18 @@ You held your breath, assessing the situation.
 You needed to observe, to understand their intent. The forest was your sanctuary, every rustling leaf and hidden trail your allies.
 <br /><br />
 <<link 'Fight them'>>
+    <<set _inventoryKnife = {
+        'knife': 1
+    }>>
     <<set $enemies = []>>
     <<newgirl>>
-    <<set 
-	    $tmpGirl.inventory = [],
-		$tmpGirl.inventory.push('knife')
-	>>
+    <<set $tmpGirl.inventory = _inventoryKnife>>
     <<run $enemies.push($tmpGirl)>>
     <<newguy>>
-     <<set 
-	    $tmpGuy.inventory = [],
-		$tmpGuy.inventory.push('knife')
-	>>
+    <<set $tmpGuy.inventory = _inventoryKnife>>
     <<run $enemies.push($tmpGuy)>>
     <<newguy>>
-     <<set 
-	    $tmpGuy.inventory = [],
-		$tmpGuy.inventory.push('knife')
-	>>
+    <<set $tmpGuy.inventory = _inventoryKnife>>
     <<run $enemies.push($tmpGuy)>>
     <<fight $enemies 'Explore event: Tribe won' 'Outside'>>
 <</link>>
