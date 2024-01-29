@@ -98,7 +98,11 @@ setup.eyesRoll = function(_race, _hair) {
 };
 
 setup.orientationRoll = function(gender) {
-	if (!settings.gaysEnabled) {
+
+	if (!settings.gaysEnabled && [1, 3].includes(gender)) {
+		return 'straight';
+	}
+	if (!settings.lesbiansEnabled && [0, 2].includes(gender)) {
 		return 'straight';
 	}
 	var _orientationRoll = window.randomInteger(1, 100);
@@ -154,9 +158,14 @@ setup.displayOrientation = function(person) {
 
 setup.setSexuality = function(person, orientation) {
 	var _orientation = orientation;
-	if (!settings.gaysEnabled) {
+
+	if (!settings.gaysEnabled && [1, 3].includes(person.gender)) {
 		_orientation = 'straight';
 	}
+	if (!settings.lesbiansEnabled && [0, 2].includes(person.gender)) {
+		_orientation = 'straight';
+	}
+
 	person.likesGuys = false;
 	person.likesGirls = false;
 	person.likesTGuys = false;
@@ -202,6 +211,11 @@ setup.setSexuality = function(person, orientation) {
 		person.likesGirls = true;
 		person.likesTGuys = true;
 		person.likesTGirls = true;
+	}
+
+	if (!settings.transEnabled) {
+		person.likesTGuys = false;
+		person.likesTGirls = false;
 	}
 	
 	if (person.likesGuys) {
