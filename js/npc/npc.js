@@ -391,3 +391,35 @@ setup.personalityTraits = function(count = 1) {
 
 	return traits.slice(0, count).sort();
 };
+
+
+setup.npcClothes = {
+	top: setup.range(1, 11),
+	bot: setup.range(1, 3),
+	panties: setup.range(1, 4),
+    accessories: setup.range(1,3),
+    shoes: setup.range(1, 4)
+};
+
+setup.getRandomNpcClothes = function(npc)
+{
+	if (![0,2].includes(npc.gender)) {
+		return null;
+	}
+
+	return {
+		top: setup.getRandomElement(setup.npcClothes.top),
+		bot: setup.percentageChance(70) ?
+			setup.getRandomElement(setup.npcClothes.bot) : 
+			null,
+		panties: setup.percentageChance(90) ?
+			setup.getRandomElement(setup.npcClothes.panties) : 
+			null,
+		accessories: setup.percentageChance(20) ?
+			setup.getRandomElement(setup.npcClothes.accessories) : 
+			null,
+		shoes: setup.percentageChance(90) ?
+			setup.getRandomElement(setup.npcClothes.shoes) : 
+			null,
+	};
+};

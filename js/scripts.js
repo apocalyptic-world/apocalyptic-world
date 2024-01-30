@@ -725,11 +725,6 @@ setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
 
-setup.range = function (start, end) {
-    return Array.apply(0, Array(end))
-      .map((element, index) => index + start);
-};
-
 setup.sexChance = function (person) {
 	if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
