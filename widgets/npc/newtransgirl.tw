@@ -7,10 +7,7 @@
 	<<set
 		_npc.dick = either('small', 'medium', 'big'),
 		_npc.breasts = either('small', 'medium', 'big'),
-		_npc.clothes = {
-			top: either(1,2,3),
-			bottom: either(1,2,3)
-		}
+		_npc.clothes = setup.getRandomNpcClothes(_npc)
 	>>
 
 	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>

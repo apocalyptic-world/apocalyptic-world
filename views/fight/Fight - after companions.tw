@@ -1,0 +1,25 @@
+:: Fight - after companions
+
+<<for _allyKey, _defeatedAlly range $fight.defeatedAllies>>
+    <<if _defeatedAlly.extra>>
+        <<continue>>
+    <</if>>
+    <<set _attacksCount = {}>>
+    <<for _attackI, _attack range _defeatedAlly.attacks ?? []>>
+        <<set _attacksCount[_attack] ??= 0>>
+        <<set _attacksCount[_attack]++>>
+    <</for>>
+
+    <<if _attacksCount.knife>>
+        <<set _chanceToDie = _attacksCount.knife * 10>>
+        <<if setup.percentageChance(_chanceToDie)>>
+            <<set _someoneDied = true>>
+            <div>
+                <strong>
+                    <<=setup.displayName(_defeatedAlly)>> was stabbed <<=_attacksCount.knife>> times. She bled out on the ground and died.
+                </strong>
+            </div>
+            <<companionRemove _defeatedAlly.key>>
+        <</if>>
+    <</if>>
+<</for>>

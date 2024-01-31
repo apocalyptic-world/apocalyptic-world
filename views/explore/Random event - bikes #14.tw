@@ -20,6 +20,9 @@ After some time you hear some noise in the distance...
 The girl screams for help as they pull her off the road, and they prepare to rape and kill her afterwards.
 <br /><br />
 <<link 'Help her'>>
+	<<set _inventoryKnife = {
+		'knife': 1
+	}>>
 	<<set _isGirl = false>>
 	<<if setup.percentageChance(30)>>
 		<<set _isGirl = true>>
@@ -29,28 +32,19 @@ The girl screams for help as they pull her off the road, and they prepare to rap
   	<<newguy>>
 	<<set $tmpGuy.strength = 6>>
 	<<if randomInteger(0, 10) === 0>>
-		<<set 
-			$tmpGuy.inventory = [],
-			$tmpGuy.inventory.push('knife')
-		>>
+		<<set $tmpGuy.inventory = _inventoryKnife>>
 	<</if>>
 	<<run $enemies.push($tmpGuy)>>
 	<<newguy>>
 	<<set $tmpGuy.strength = 6>>
 	<<if randomInteger(0, 10) === 0>>
-		<<set 
-			$tmpGuy.inventory = [],
-			$tmpGuy.inventory.push('knife')
-		>>
+		<<set $tmpGuy.inventory = _inventoryKnife>>
 	<</if>>
 	<<run $enemies.push($tmpGuy)>>
 	<<newguy>>
 	<<set $tmpGuy.strength = 6>>
 	<<if randomInteger(0, 10) === 0>>
-		<<set 
-			$tmpGuy.inventory = [],
-			$tmpGuy.inventory.push('knife')
-		>>
+		<<set $tmpGuy.inventory = _inventoryKnife>>
 	<</if>>
 	<<run $enemies.push($tmpGuy)>>
 	
@@ -61,10 +55,7 @@ The girl screams for help as they pull her off the road, and they prepare to rap
 		<<newguy>>
 		<<set $tmpGuy.strength = 6>>
 		<<if randomInteger(0, 10) === 0>>
-			<<set 
-				$tmpGuy.inventory = [],
-				$tmpGuy.inventory.push('knife')
-			>>
+			<<set $tmpGuy.inventory = _inventoryKnife>>
 		<</if>>
 		<<run $enemies.push($tmpGuy)>>
 	<</if>>

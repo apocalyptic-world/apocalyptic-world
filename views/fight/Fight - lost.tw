@@ -6,7 +6,7 @@
 <br />
 You wake up after some time.<br />
 You feel dizzy and blood is all over your face and clothes. You were knocked out pretty hard.
-<br />
+<br /><br />
 <<set $capsMissing = ($player.money - 20 > 0 ? 20 : $player.money)>>
 <<if $capsMissing>>
   <<set $player.money -= $capsMissing>>
@@ -15,14 +15,16 @@ You feel dizzy and blood is all over your face and clothes. You were knocked out
   <strong>You lost <<=$capsMissing>> caps</strong>
   <br /><br />
 <</if>>
-<br /><br />
 
+<<include 'Fight - after companions'>>
 <<if $fight.defeatedAllies.length > 0>>
+	<<if _someoneDied>>
+		<br /><br />
+	<</if>>
 	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
 		<<if setup.percentageChance(10)>>
-			<<set _guestKey = _fightAlly.key[1]>>
-			<strong><<=_fightAlly.name>> was taken by enemies</strong>
-			<<guestRemove _guestKey>>
+			<strong><<=setup.displayName(_fightAlly)>> was taken by enemies</strong>
+			<<companionRemove _fightAlly.key>>
 			<br />
 		<</if>>
 	<</for>>

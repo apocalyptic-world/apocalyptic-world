@@ -30,7 +30,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easy')>></strong> win the fight and
 	<</if>>
 	<<if $fight.allies.length > 0>>
 		<<for _fightAllyI, _fightAlly range $fight.allies>>
-			<<set _guestKey = _fightAlly.key[1]>>
+			<<set _guestKey = _fightAlly.key.split(':')[1]>>
 			<<if $guests[_guestKey].strength < 100>>
 				<<set $guests[_guestKey].strength++>>
 				<strong><<=$guests[_guestKey].name>> strength increased by 1</strong><br />
@@ -47,8 +47,8 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easy')>></strong> win the fight and
 	<<for _i, _enemy range $fight.defeatedEnemies>>
 		<<capture _i>>
 			<<if _enemy.inventory>>
-				<<for _enemyInventoryI, _enemyInventory range _enemy.inventory>>
-					<<pickup $backpack _enemyInventory 1>>
+				<<for _enemyInventory, _enemyInventoryCount range _enemy.inventory>>
+					<<pickup $backpack _enemyInventory _enemyInventoryCount>>
 					<div>
 						You picked up <strong><<=Item.get(_enemyInventory).name>></strong> from <strong><<=_enemy.name>></strong>
 					</div>
@@ -117,6 +117,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easy')>></strong> win the fight and
 	</table>
 <</if>>
 
+<<include 'Fight - after companions'>>
 <br /><br />
 <<link 'Leave'>>
 	<<fightEnd true>>
