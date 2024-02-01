@@ -69,7 +69,6 @@ Save.onLoad.add(function (save) {
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null)) {
         for (var saveTmpGirlSkillI = 0; saveTmpGirlSkillI < (save.state.history[save.state.index].variables.tmpGirl.skills ?? []).length; saveTmpGirlSkillI++) {
             if (setup.traits.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.skills[saveTmpGirlSkillI])) {
-                console.log('yes');
                 if (typeof save.state.history[save.state.index].variables.tmpGirl.traits === 'undefined') {
                     save.state.history[save.state.index].variables.tmpGirl.traits = [];
                 }
