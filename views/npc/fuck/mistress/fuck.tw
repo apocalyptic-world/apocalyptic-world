@@ -98,7 +98,7 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
 
-        <<if $sexForced && !$tmpGirl.traits.includes('masochist')>>
+        <<if $sexForced && !$tmpGirl.traits.includes('masochist') && $tmpGirl.sub !== 100>>
             <<set
                 $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
                 $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
