@@ -118,9 +118,13 @@
 <</widget>>
 
 <<widget companionRearange>>
+	<<set _splitOldNpcKey = $args[0].split(':')>>
 	<<for _compR, _compIR range $player.companions>>
 		<<set _compKeyR = _compR.split(':')>>
-		<<if parseInt(_compKeyR[1]) > parseInt($args[0])>>
+		<<if _compKeyR[0] !== _splitOldNpcKey[0]>>
+			<<continue>>
+		<</if>>
+		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
 			<<run delete $player.companions[_compR]>>
 			<<set _compKeyR[1]-->>
 			<<set $player.companions[_compKeyR.join(':')] = true>>
@@ -166,6 +170,7 @@
 
 <<widget companionRemove>>
 	<<set _splitKey = $args[0].split(':')>>
+	<<run console.log($args[0])>>
 	<<if _splitKey[0] === 'guest'>>
 		<<guestRemove _splitKey[1]>>
 	<<else>>
@@ -259,10 +264,12 @@
 	<<if $args[0].kids>>
 		Children: <br />
 		<<for _familyTreeChildI, _familyTreeChild range $args[0].kids>>
+			<div>
 			<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-			<<if _familyMember>>
-				<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
-			<</if>>
+				<<if _familyMember>>
+					<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
+				<</if>>
+			</div>
 		<</for>>
 	<</if>>
 <</widget>>
