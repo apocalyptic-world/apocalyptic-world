@@ -15,11 +15,11 @@
                 <td>Damaged:</td>
                 <td><<= 100 - $player.car.health>>%</td>
                 <td>
-                    <<if $backpack.has('car_part') && $player.car.health < 100>>
+                    <<if setup.cabinInventory.has('car_part') && $player.car.health < 100>>
                         <<link 'Fix'>>
                             <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
                             <<addmins 30>>
-                            <<drop $backpack 'car_part' 1>>
+                            <<run setup.cabinInventory.drop('car_part', 1)>>
                             <<goto `passage()`>>
                         <</link>>
                     <</if>>
@@ -29,11 +29,11 @@
                 <td>Fuel:</td>
                 <td><<=$player.car.fuel>>%</td>
                 <td>
-                    <<if $backpack.has('fuel') && $player.car.fuel < 100>>
+                    <<if setup.cabinInventory.has('fuel') && $player.car.fuel < 100>>
                         <<link 'Fill up'>>
                             <<set $player.car.fuel = Math.min($player.car.fuel + 20, 100)>>
                             <<addmins 5>>
-                            <<drop $backpack 'fuel' 1>>
+                            <<run setup.cabinInventory.drop('fuel', 1)>>
                             <<goto `passage()`>>
                         <</link>>
                     <</if>>
