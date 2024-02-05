@@ -63,13 +63,9 @@
                 <<set _itemcount = 1>>
             <</if>>
 
-            /* special for condom, no need if already pregnant, age >=60, wrong gender, see setup.pregnancyChance(_npc) */
-            <<if _item == 'condom' && (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)>>
-                <<if _itemcount > 0>>
-                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
-                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
-                <</if>>
-
+            <<if _item === 'condom'>>
+                <<continue>>
+            <</if>>
             /* special for dumbbell, baseed on strength not toolbox */
             <<elseif _item == 'dumbbell'>>
                 
