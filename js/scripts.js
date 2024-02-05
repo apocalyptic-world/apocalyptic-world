@@ -1,20 +1,6 @@
 setup.items = {
 
 };
-setup.randomEvents = {
-    travel: {
-        Settlement: [{
-            enabled: true,
-            passage: 'Travel event: tree ambush',
-            percentage: 5
-        }],
-        "Underground city": [{
-            enabled: true,
-            passage: 'Travel event: city ambush',
-            percentage: 5
-        }]
-    }
-};
 
 
 $(document).on(':passagedisplay', function () {
@@ -76,31 +62,6 @@ window.hasTime = function (hours, minutes, max = '23:59') {
     }
 
     return current >= minTime && current <= maxTime;
-};
-
-window.timeBetween = function (from, to) {
-    var current = new Date(variables().gameDate);
-
-    var minTime = new Date(current);
-    var minTimeSplit = from.split(':');
-    minTime.setHours(minTimeSplit[0]);
-    minTime.setMinutes(minTimeSplit[1]);
-    if (current.getHours() < 8) {
-        minTime.setDate(minTime.getDate() - 1);
-    }
-
-    var maxTime = new Date(current);
-    var maxTimeSplit = to.split(':');
-    if (from > to) {
-        maxTime.setDate(maxTime.getDate() + 1);
-    }
-    maxTime.setHours(maxTimeSplit[0]);
-    maxTime.setMinutes(maxTimeSplit[1]);
-    if (current.getHours() < 8) {
-        maxTime.setDate(maxTime.getDate() - 1);
-    }
-
-    return current >= minTime && current < maxTime;
 };
 
 window.isMetChar = function(name) {
