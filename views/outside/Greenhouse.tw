@@ -37,6 +37,10 @@
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
+
+				  	<<if $slaves[_i].pregnancy >= 7>>
+					 (pregnant <<=$slaves[_i].pregnancy>> days)
+					<</if>>
 			</td>
 			<td>
 				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
@@ -77,6 +81,10 @@
                           <<goto `$tmpGirlViewBack`>>
 				  <</link>>
                   </span>
+
+				<<if _gardenGuest.pregnancy >= 7>>
+					 (pregnant <<=_gardenGuest.pregnancy>> days)
+				<</if>>
 			</td>
 			<td>
 				<<if [0,2].includes(_gardenGuest.gender) && setup.getAge(_gardenGuest) >= 17>>

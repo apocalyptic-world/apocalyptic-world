@@ -195,8 +195,8 @@
 	<</if>>
 
 	
-	<<if $guests.length < $guesthouseLimit>>
-		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house cell'>>
+	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
 		<<link `_linkName`>>
 			<<set $tmpGirl.happy += 50>>
 			<<set $tmpGirl.relationship += 20>>
