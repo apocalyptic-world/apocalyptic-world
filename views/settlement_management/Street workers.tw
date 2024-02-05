@@ -37,10 +37,34 @@ Working the streets is a unhappy work. Needs a day off now and then.
     <<for _happyLevel, _object range _workersByHappyLvl>>
         <<for _persons, _npcs range _object>>
             <<if _npcs.length>>
-                <tr>
-                    <td><<happyIcon _happyLevel>></td>
-                    <td>_happyLvlHuman[_happyLevel] _persons</td>
-                </tr>
+                <<capture _npcs>>
+                    <tr>
+                        <td><<happyIcon _happyLevel>></td>
+                        <td>_happyLvlHuman[_happyLevel] _persons</td>
+                        <td/><td/>
+                        <td align="right">
+                            <table><tr><td>
+                                <<button 'Work!'>>
+                                    <<for _npc range _npcs>>
+                                        <<run delete _npc.rest>>
+                                    <</for>>
+                                    <<goto 'Settlement management'>>
+                                <</button>>
+                                </td><td> || </td><td>
+                                <<button 'Rest!'>>
+                                    <<for _npc range _npcs>>
+                                        <<set _npc.rest = {
+                                            days: 1,
+                                            desc: 'Day off resting',
+                                            id: 'resting'
+                                        }>>
+                                    <</for>>
+                                    <<goto 'Settlement management'>>
+                                <</button>>
+                            </td></tr></table>
+                        </td>
+                    </tr>
+                <</capture>>
                 <<for $tmpGirl range _npcs>>
                     <<capture $tmpGirl, _restId, _workId, _statusId>>
                         <tr>
