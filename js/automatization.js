@@ -47,7 +47,7 @@ setup.automatization = {
         none:       [],
         scavenging: ['knife'],
         shop:       [],
-        streets:    ['knife', 'condom'],
+        streets:    ['knife'],
         mc:         ['knife', 'bow', 'gas_mask', 'axe'],
     }
 };
