@@ -14,5 +14,12 @@
 
 <<if $characters.dom.quests.quest5 && !isMetChar('negan')>>
 	<<goto 'Negan introduction'>>
+<<elseif 
+	(
+		(isMetChar('negan') && $characters.negan.quests.quest2) || 
+		(!isMetChar('negan') && ($player.stats.slaves_sold ?? 0) > 20)
+	) && !$characters?.negan?.quests?.fuel_slaves
+>>
+	<<goto 'Negan - fuel slaves repeatable'>>
 <<else>>
 <</if>>

@@ -1,0 +1,49 @@
+:: Negan - fuel slaves repeatable
+<h1 class="ptitle">SANCTUARY</h1>
+<br />
+You enter The Sanctuary main gates, when you spot a figure approaching. It's Negan, leader of a The Sanctuary faction notorious for his ruthless tactics.
+<br /><br />
+<<if isMetChar('negan')>>
+    <<set _alreadyMadeDeal = true>>
+    <<negan>>
+        Well, well, well, if it isn't my favorite trading partner. How's life treating you?
+    <</negan>>
+    <br />
+<<else>>
+    <<if !isMetChar('negan')>>
+        <<newguy>>
+        <<set 
+            $tmpGuy.name = 'Negan',
+            $tmpGuy.orientation = 'straight',
+            $tmpGuy.birthDate = setup.getBirthDate(40),
+            $tmpGuy.likeGirls = false,
+            $tmpGuy.strength = 150,
+            $tmpGuy.hair = 'black',
+            $tmpGuy.race = 'white',
+            $tmpGuy.quests = {}
+        >>
+        <<set $characters.negan = $tmpGuy>>
+    <</if>>
+    
+<</if>>
+
+<<negan>>
+    Cut the small talk. I'll get straight to the point.
+<</negan>>
+<br />
+<<negan>>
+    <<if _alreadyMadeDeal>>
+        Our last deal? That was something special, don't you think? I've been thinking we could make it a regular thing. Keep the gears greased, so to speak.
+    <<else>>
+        I heard that you like to trade slaves. I have a proposition for you.
+    <</if>>
+<</negan>>
+<br />
+<<negan>>
+    Bring me <strong>two slaves, blondes, with 80+ beauty</strong> and in return I will give you <strong>5 fuel cans</strong>.
+<</negan>>
+<br /><br />
+<<link 'Leave'>>
+    <<set $characters.negan.quests.fuel_slaves = true>>
+    <<goto 'Sanctuary'>>
+<</link>>

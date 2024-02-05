@@ -51,18 +51,6 @@ The air is thick with dust as you approach the entrance to the Sanctuary, a make
     <center>
         [img[setup.ImagePath+'places/sanctuary/negan_blowjob_table.webp']]
     </center>
-    <<newguy>>
-    <<set 
-        $tmpGuy.name = 'Negan',
-        $tmpGuy.orientation = 'straight',
-        $tmpGuy.birthDate = setup.getBirthDate(40),
-        $tmpGuy.likeGirls = false,
-        $tmpGuy.strength = 150,
-        $tmpGuy.hair = 'black',
-        $tmpGuy.race = 'white',
-        $tmpGuy.quests = {}
-    >>
-    <<set $characters.negan = $tmpGuy>>
 
     <br />
     <<negan>>
@@ -139,8 +127,23 @@ The air is thick with dust as you approach the entrance to the Sanctuary, a make
             You nod with your head and leave his office without saying a word.
             <br /><br />
             <<link 'Leave'>>
+                <<if !isMetChar('negan')>>
+                    <<newguy>>
+                    <<set 
+                        $tmpGuy.name = 'Negan',
+                        $tmpGuy.orientation = 'straight',
+                        $tmpGuy.birthDate = setup.getBirthDate(40),
+                        $tmpGuy.likeGirls = false,
+                        $tmpGuy.strength = 150,
+                        $tmpGuy.hair = 'black',
+                        $tmpGuy.race = 'white',
+                        $tmpGuy.quests = {}
+                    >>
+                    <<set $characters.negan = $tmpGuy>>
+                <</if>>
                 <<set $characters.negan.quests.quest1 = true>>
                 <<set $characters.negan.quests.quest1_day = $game.day>>
+
                 <<goto 'Sanctuary'>>
             <</link>>
         </div>
