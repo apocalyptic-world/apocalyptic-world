@@ -635,17 +635,17 @@ setup.commonValues = function(allArrays) {
 
 setup.propertyMatchIndexes = function(array, property, value = true, operator = '==') {
 	if (operator == '==') {
-		array = array.map((item, i) => item[property] == value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) == value ? i : -1);
 	} else if (operator == '!=') {
-		array = array.map((item, i) => item[property] != value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) != value ? i : -1);
 	} else if (operator == '>') {
-		array = array.map((item, i) => item[property] > value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) > value ? i : -1);
 	} else if (operator == '<') {
-		array = array.map((item, i) => item[property] < value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) < value ? i : -1);
 	} else if (operator == '>=') {
-		array = array.map((item, i) => item[property] >= value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) >= value ? i : -1);
 	} else if (operator == '<=') {
-		array = array.map((item, i) => item[property] <= value ? i : -1);
+		array = array.map((item, i) => (item[property] ?? false) <= value ? i : -1);
 	} else {
 		array = [];
 	}
