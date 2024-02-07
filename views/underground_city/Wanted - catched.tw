@@ -27,12 +27,14 @@ You beat his ass and cuff him as he lies on the ground.
 <</link>>
 
 <<if !$wanted[$wantedId].gender>>
-	<<link 'Use her'>>
-		<<addmins 30>>
-		<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
-		<<set $wasRaped = true>>
-		<<goto `$wantedPsg`>>
-	<</link>>
+	<<if timeBetween('08:00', '02:00')>>
+		<<link 'Use her'>>
+			<<addmins 30>>
+			<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
+			<<set $wasRaped = true>>
+			<<goto `$wantedPsg`>>
+		<</link>>
+	<</if>>
 	<<if $slaves.length < $basementLimit>>
 		<<link 'Capture her and bring her home as slave'>>
 			<<set $wanted[$wantedId].capture = false>>

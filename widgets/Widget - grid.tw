@@ -1,27 +1,31 @@
 :: Widget - grid  [widget] {"position":"23,748","size":"100,100"}
 <<widget grid>>
 
+<<set _eventHorseCart = {
+        enabled: timeBetween('08:00', '16:00'),
+        passage: 'Travel event - Trapper horse cart',
+        percentage: 5
+}>>
 <<set _randomEvents = {
     Settlement: [{
         enabled: true,
         passage: 'Travel event: tree ambush',
         percentage: 5
     },
-    {
-        enabled: timeBetween('08:00', '16:00'),
-        passage: 'Travel event - Trapper horse cart',
-        percentage: 5
-    }],
+	_eventHorseCart,
+	{
+        enabled: true,
+        passage: 'Travel event - tribe camp',
+        percentage: 100
+    }
+	],
     "Underground city": [{
         enabled: true,
         passage: 'Travel event: city ambush',
         percentage: 5
     },
-    {
-        enabled: timeBetween('08:00', '16:00'),
-        passage: 'Travel event - Trapper horse cart',
-        percentage: 5
-    }]
+	_eventHorseCart
+    ]
 }>>
 
 <div class="menu-col"> 
