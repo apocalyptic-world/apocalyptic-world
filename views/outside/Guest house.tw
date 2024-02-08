@@ -159,7 +159,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<goto 'Guesthouse [Event] - transfemale on female'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
-		<<if !($guests[_npcId].quests ?? {}).take_virginity>>
+		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys>>
 			<<set $locationEvents.guesthouse = true>>
 			<<set $tmpEvent = {
 				id: setup.getRandomElement(_virginList[0])
