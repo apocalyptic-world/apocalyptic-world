@@ -18,6 +18,6 @@
 		sell: false
 	})>>
   <</if>>
-<<shop 'farm' _shopItems 'Farm - shop' '<<if $characters.vincent.relationship < 20>><<set $characters.vincent.relationship += ($characters.vincent.relationship + _shopItems[_i].qty)>><<if $characters.vincent.relationship > 20>><<set $characters.vincent.relationship = 20>><</if>><</if>>'>>
+<<shop 'farm' _shopItems 'Farm - shop' '<<if $characters.vincent.relationship < 20>><<set $characters.vincent.relationship += ($characters.vincent.relationship + Math.min(5, _shopItems[_i].qty))>><</if>>'>>
 <br /><br />
 [[Leave|Farm]]

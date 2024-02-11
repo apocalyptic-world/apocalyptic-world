@@ -1,0 +1,20 @@
+:: NPC customize - chastity belt [girlview no-redirect]
+<h1 class="ptitle">CHASTITY BELT</h1>
+<br />
+<<if $guestId !== null && $tmpGirl.sub < 50>>
+	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
+	<br /><br />
+	<strong>Submission too low</strong>
+<<else>>
+	<<set $tmpGirl.chastityBelt = true>>
+	<<drop $backpack 'chastity_belt' 1>>
+	<br /><br />
+
+	<<=setup.displayName($tmpGirl)>> stands still while you fasten a chastity belt on <<=setup.pronounceWho($tmpGirl)>>.
+	<br /><br />
+	<<addmins 30>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>

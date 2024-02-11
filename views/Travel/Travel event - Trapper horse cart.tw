@@ -1,0 +1,54 @@
+:: Travel event - Trapper horse cart
+<h1 class="ptitle">FOREST</h1>
+<br />
+<center>
+[img[setup.ImagePath+'places/travel/horse_mud.jpg']]
+</center>
+<br />
+As you navigate the dense forest on a rainy day, the sound of raindrops pattering against the leaves fills the air, creating a serene ambiance. 
+Your journey is interrupted by the sight of a lone merchant or traveler struggling with his horse and carriage, stuck deep in the mud.
+<br /><br />
+
+<<linkreplace 'Help him'>>
+    <<if setup.percentageChance(50)>>
+        Despite the harsh conditions, you offer your assistance without hesitation. Together, you work to free the horse and carriage from the thick, unforgiving mud.
+        <br />
+        <br />
+        Once the merchant's carriage is liberated, he expresses his gratitude with a genuine smile. In a gesture of appreciation, he insists on sharing some of his meager possessions with you.
+        <br /><br />
+        <<for _i = 0; _i < 2; _i++>>
+            <<set _item = either('glass', 'plastic', 'rope', 'cloth')>>
+            <<set _count = randomInteger(1, 5)>>
+            <<pickup $backpack _item _count>>
+            <strong>You received <strong class="iitem"><<=_count>> <<=Item.get(_item).name>></strong></strong>
+            <br />
+        <</for>>
+        <br />
+    <<else>>
+        However, as you step closer to lend a hand, a chilling realization dawns upon you. This isn't a mere mishap; it's a carefully orchestrated ambush.
+        <br /><br />
+        Before you can react, shadowy figures emerge from the surrounding foliage, their faces obscured by hoods as they brandish weapons with malicious intent. You find yourself surrounded, trapped between the mud-caked carriage and the menacing figures closing in on you.
+        <br /><br />
+        <<run $('#option_leave').hide()>>
+        <<link 'Fight'>>
+            <<set $enemies = []>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {'knife':1}>>
+            <<run $enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {'knife':1}>>
+            <<run $enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {'knife':1}>>
+            <<run $enemies.push($tmpGuy)>>
+            <<newgirl>>
+            <<run $enemies.push($tmpGirl)>>
+            <<fight $enemies $travelPassage $travelPassage>>
+        <</link>>
+    <</if>>
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto $travelPassage>>
+    <</link>>
+</div>

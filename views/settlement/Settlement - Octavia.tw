@@ -4,14 +4,21 @@
 [img[setup.ImagePath+'places/settlement/octavia_head.jpg']]
 </div>
 <br /><br />
-<<octavia>>
-    Did you bring something for me?
-<</octavia>>
-<br /><br />
-<<if $backpack.has('pelt_wolf')>>
-    <<link 'Give her wolf pelt'>>
-        <<goto 'Octavia - wolf pelt'>>
-    <</link>>
+<<if !$characters.octavia.quests.kidnapped || $characters.octavia.quests.kidnapped_found>>
+    <<octavia>>
+        Did you bring something for me?
+    <</octavia>>
+    <br /><br />
+    <<if $backpack.has('pelt_wolf')>>
+        <<link 'Give her wolf pelt'>>
+            <<goto 'Octavia - wolf pelt'>>
+        <</link>>
+    <</if>>
+    <<if $backpack.has('tribe_medallion')>>
+        <<link 'Give her tribe medallion'>>
+            <<goto 'Octavia - tribe medallion give'>>
+        <</link>>
+    <</if>>
 <</if>>
 <<link 'Leave'>>
     <<addmins 15>>
@@ -21,5 +28,11 @@
 <<if $characters.octavia.relationship >= 40 && !$characters.octavia.quests.ultimatum>>
     <<set $characters.octavia.quests.ultimatum = true>>
     <<goto 'Octavia [Event] - The rival tribe ultimatum'>>
+<<elseif !$characters.octavia.quests.kidnapped && $characters.octavia.relationship >= 60>>
+    <<set $characters.octavia.quests.kidnapped = true>>
+    <<goto 'Octavia [Event] - Kidnapped'>>
+<<elseif $characters.octavia.quests.kidnapped && !$characters.octavia.quests.kidnapped_found && $backpack.count('tribe_medallion') >= 3>>
+    <<set $characters.octavia.quests.kidnapped_found = true>>
+    <<goto 'Octavia [Event] - Rescue'>>
 <</if>>
 

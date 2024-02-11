@@ -1,0 +1,44 @@
+:: Travel event - tribe camp
+<h1 class="ptitle">FOREST</h1>
+<br />
+As you journey through the serene depths of the forest, the rustling leaves above you create a soothing symphony. 
+Amidst this tranquil melody, however, a series of peculiar noises catch your attention. Intrigued, you halt your steps and focus on the source of the sound.
+<br /><br />
+<center>
+[img[setup.ImagePath+'places/travel/tribe_camp.jpg']]
+</center>
+<br />
+With cautious steps, you approach the origin of the disturbance, your senses heightened with anticipation. 
+As you draw closer, the flickering glow of a fire pit illuminates the surroundings, casting dancing shadows upon the trees. 
+Your curiosity piqued, you cautiously part the foliage to reveal a group of tribal people gathered around the crackling flames.
+<br /><br />
+Their presence in this secluded part of the forest surprises you, and you watch in awe as they engage in animated conversation. 
+Their voices resonate through the forest, blending with the natural symphony of chirping crickets and rustling leaves. 
+The rhythmic cadence of their speech, punctuated by occasional laughter, fills the air with an enchanting aura.
+<br /><br />
+
+<<link 'Ambush them'>>
+    <<set $enemies = []>>
+    <<newguy>>
+    <<set $tmpGuy.inventory = {
+        knife: 1
+    }>>
+    <<run $enemies.push($tmpGuy)>>
+    <<newguy>>
+    <<set $tmpGuy.inventory = {
+        knife: 1,
+        tribe_medallion: 1
+    }>>
+    <<run $enemies.push($tmpGuy)>>
+    <<newgirl>>
+    <<set $tmpGirl.inventory = {
+        knife: 1
+    }>>
+    <<run $enemies.push($tmpGirl)>>
+    <<newguy>>
+    <<run $enemies.push($tmpGuy)>>
+    <<fight $enemies $travelPassage $travelPassage>>
+<</link>>
+<<link 'Leave'>>
+    <<goto $travelPassage>>
+<</link>>
