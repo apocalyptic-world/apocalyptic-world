@@ -1,38 +1,53 @@
 /* game modification support */
 setup.automatization = {
     rule: {
+/*
         add: {
             name: 'Add',
-            description: 'Add job tools to settlers, while stocks last.'
+            description: 'Add job tools to settlers, while stocks last. {}'
         },
         subtract: {
             name: 'Subtract',
-            description: 'Add and remove job tools on settlers'
+            description: 'Add and remove job tools on settlers {}'
         },
-        job: {
-            name: 'Job change',
-            description: 'When changing job (companions, assign to ...) update the settlers inventory.'
-        },
+*/
         dup: {
             name: 'No duplicates',
             description: 'Removes duplicates from settler inventory. 2 bows is not better than 1 bow.'
         },
+        job: {
+            name: 'Job change',
+            description: 'When changing job (companions, assign to ...) give the settler a tool box for the new job.'
+        },
+
         hunter: {
             name: 'Hunter with no bow',
-            description: 'Hunter with no bow works as a woodcutter; Might get an axe.'
+            description: 'Hunter with no bow works as a woodcutter; Might get an axe instead.'
         },
         streetworker: {
             name: 'Streetworkers need rest',
             description: 'Very unhappy, sad street workers takes a day off by themselves'
         },
+
+        buttplug: {
+            name: 'Buttplug rotation',
+            description: 'Settlers trade buttplugs between them as needed, thoroughly cleaned of course ;-)'
+        },
+        condom: {
+            name: 'Condom rotation',
+            description: 'Gives condoms to girls who need it and removes from other. Only streetworkers gets condoms for now.'
+        },
+        dumbbell: {
+            name: 'Dumbbell rotation',
+            description: 'Gives dumbbbels to low strength settlers (below 30) and removes from other.'
+        },
+
+/*
         grouptalk: {
             name: 'Group talk',
             description: 'Talk with (almost) all persons in a group. Saves clicks only! (WIP, not in game yet)'
         },
-        buttplug: {
-            name: 'Buttplug rotation',
-            description: 'Settlers trade buttplugs between them as needed, thoroughly cleaned of course ;-)'
-        }
+*/
     },
 
     job_tools: {
