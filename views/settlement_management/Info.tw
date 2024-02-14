@@ -1,14 +1,17 @@
 :: Settlement management - info
 
-<<set _companions = new Map()>>
+<<set _companionGuests = new Map(), _companionSlaves = new Map()>>
 <<for _companionKey, _companion range $player.companions>>
-	<<if _companionKey.split(':')[0] !== 'guest'>>
-		<<continue>>
+	<<set _index = _companionKey.split(':')[1]>>
+	<<if _companionKey.split(':')[0] === 'guest'>>
+		<<set _guest = $guests[_index]>>
+		<<set _npcId = _guest.id>>
+		<<set _companionGuests.set(_npcId, true)>>
+	<<else>>
+		<<set _slave = $slaves[_index]>>
+		<<set _npcId = _slave.id>>
+		<<set _companionSlaves.set(_npcId, true)>>
 	<</if>>
-	<<set _guestIndex = _companionKey.split(':')[1]>>
-	<<set _guest = $guests[_guestIndex]>>
-	<<set _npcId = _guest.id>>
-	<<set _companions.set(_npcId, true)>>
 <</for>>
 
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
@@ -22,6 +25,9 @@
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
 	food: {produce: 0, consume: 0, none: 0},
+	hunt: {food: 0, wolf: 0},
+	scav: 0,
+	streets : 0,
 	wood: 0,
 	birthday: [],
 	pregnant: 0
@@ -29,8 +35,10 @@
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
 		<<set _job = _statsNpc.assignedTo>>
-	<<elseif _companions.has(_statsNpc.id)>>
-		<<set _job = 'companion'>>
+	<<elseif _companionGuests.has(_statsNpc.id)>>
+		<<set _job = 'companionGuest'>>
+	<<elseif _companionSlaves.has(_statsNpc.id)>>
+		<<set _job = 'companionSlave'>>
 	<<elseif setup.getAge(_statsNpc) < 18>>
 		<<set _job = 'child'>>
 	<<else>>
@@ -47,6 +55,28 @@
 	<<elseif _job === 'forest'>>
 		<<set _settlementStatsData.wood +=  (_statsNpc.strength > 30 ? 2 : 1) + 
 			((_statsNpc.skills ?? []).includes('woodcraft') ? 1 : 0) + setup.npcInventoryHas(_statsNpc, 'axe')>>
+	<<elseif _job === 'hunter'>>
+		<<set _percentage = 10 + (_statsNpc.strength > 50 ? 25 : _statsNpc.strength > 10 ? 10 : 0)>>
+		<<set  _settlementStatsData.hunt.wolf += _percentage * 0.2 * 1.5/100,
+			   _settlementStatsData.hunt.food += _percentage * 0.8 * 3.5/100>>
+	<<elseif _job === 'scavenging'>>
+		/* should consider: chance of not coming home == lower average */
+		<<set _settlementStatsData.scav += (_statsNpc.skills ?? []).includes('scavenger') ? 1.5 : 1>>
+	<<elseif _job === 'streets'>>
+		<<set _chanceDeath = ($characters.dom.quests.accepted_deal ? 1 :
+			(_statsNpc.endurance ?? 0) > 20 ? 3 :
+			(_statsNpc.endurance ?? 0) > 10 ? 4 : 5) -
+			(setup.npcInventoryHas(_statsNpc, 'knife') ? 1 : 0)>>
+		<<set _chanceDeath *= !$characters.dom.quests.accepted_deal ? 1 : 0.5>>
+		<<set _chanceLife = 100 - _chanceDeath>>
+		<<set _chanceMoney = 0.5 * _chanceLife>>
+		<<set _percentTax = $characters.dom.quests.accepted_deal ? 80 : 40>>
+		<<set _money = _statsNpc.gender == 0 ? 6 : _statsNpc.gender == 2 ? 4 : 2>>
+		<<set _money = Math.round(_money*(100-_percentTax)/100) +
+	 		Math.round((_statsNpc.sub ?? 0)/25) +
+			Math.round((_statsNpc.pussy ?? 0)/25) +
+			Math.round((_statsNpc.anal ?? 0)/25)>>
+		<<set _settlementStatsData.streets += _money * _chanceMoney/100>>
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
@@ -83,30 +113,45 @@
 
 <<set _avgFoodProduce =     _settlementStatsData.food.produce/3>>
 <<set _avgFoodConsume = 1 + _settlementStatsData.food.consume/3>>
-<<set _avgFoodNet = _avgFoodProduce - _avgFoodConsume>>
+<<set _forestFood = (_settlementStatsData.work.forest ?? 0)/10>>
+<<set _forestText =  _forestFood > 0 ? ' + forest ' +  setup.ppFraction(_forestFood) : ''>>
+<<set _huntFood =  _settlementStatsData.hunt.food>>
+<<set _huntText =  _huntFood > 0 ? ' + hunters ' +  setup.ppFraction(_huntFood) : ''>>
+<<set _avgFoodNet = _avgFoodProduce + _forestFood + _huntFood - _avgFoodConsume>>
 
 <<set _pre = '', _post = ''>>
 <<if _avgFoodNet < 0>>
 	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
 <</if>>
-<<set _avgFoodText = '(Average food/day: + ' +  _garden + ' makes ' + setup.ppFraction(_avgFoodProduce) +  
+<<set _avgFoodText = '(Average food/day: + ' +  _garden + ' makes ' + setup.ppFraction(_avgFoodProduce) +  _forestText + _huntText +
 	' - people eats '                                     + setup.ppFraction(_avgFoodConsume) +  
 	' = net result '                               + _pre + setup.ppFraction(_avgFoodNet) + _post +')'>>
-<<set _avgWood = 'Average production wood/day: ' + _settlementStatsData.wood>>
+<<set _wood =  _settlementStatsData.wood>>
+<<set _avgWood = _wood > 0 ? 'Average production wood/day: ' + _wood : ''>>
+<<set _wolf = _settlementStatsData.hunt.wolf.toFixed(1)>>
+<<set _avgWolf = _wolf > 0 ? 'Average production wolf pelts/day: ' + _wolf : ''>>
+<<set _scav = _settlementStatsData.scav.toFixed(1)>>
+<<set _avgScav = _scav > 0 ? 'Average findings of "stuff"/day: ' + _scav : ''>>
+<<set _streets =  _settlementStatsData.streets.toFixed(1)>>
+<<set _streetsText =  _streets > 0 ? 'Average earnings/day: ' + _streets : ''>>
 
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
 	<tr><td>(people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
+	<tr><td>(kids < 3 years)</td><td><<=_settlementStatsData.food.none>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
-	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td></tr>
-	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td></tr>
+	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
+	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
-	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td></tr>
+	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td><<=_avgWolf>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
-	<tr><td>Working as companion:</td><td><<=_settlementStatsData.work.companion ?? 0>></td></tr>
+	<tr><td>Working as companion (guests+slaves):</td>
+		<td><<=_settlementStatsData.work.companionGuest ?? 0>>+<<=_settlementStatsData.work.companionSlave ?? 0>></td>
+		<td>(Max 6)</td>
+	</tr>
 	<tr><td>Working in kitchen:</td><td><<=_settlementStatsData.work.kitchen ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td><td>(Max 1)</td></tr>
