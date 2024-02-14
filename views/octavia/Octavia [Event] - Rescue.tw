@@ -1,4 +1,60 @@
 :: Octavia \[Event\] - Rescue
 <h1 class="ptitle">OCTAVIA'S CAMP</h1>
 <br /><br />
-todo
+As time passed, you returned to the camp after completing the necessary preparations for the rescue mission. 
+As you approached, you could sense the tension in the air, mingled with a palpable sense of determination. 
+The members of your group were gathered around a makeshift map, discussing strategies and finalizing plans for the rescue.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/rescue1.jpg']]
+</center>
+<br /><br />
+<<newgirl>>
+<<sayNpc $tmpGirl>>
+    Good! You're here. Good job with those medallions. Get your warriors and lets move out.
+<</sayNpc>>
+<br />
+Each member of your group had a specific role to play, from scouts to strategists to fighters. You double-checked your equipment, ensuring everything was in place for the journey. 
+The atmosphere was tense yet focused, as you knew the risks involved in the mission but remained steadfast in your determination to rescue her.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    She's held outside this area. In the desert zone.
+<</sayNpc>>
+<br />
+As the sun was casting a golden hue over the landscape, you set out on your journey. 
+The forest echoed with the sound of your footsteps as you moved swiftly and silently towards your destination. 
+With each step, your resolve grew stronger, fueled by the knowledge that you were on a mission of utmost importance – to rescue her.
+<br /><br />
+<center>
+<center>
+    [img[setup.ImagePath+'people/octavia/rescue2.jpg']]
+</center>
+</center>
+<br /><br />
+Upon reaching the outskirts of the enemy territory, your and Octavia's warrior group paused to assess the situation. The plan was clear: stealth and precision were paramount to success. 
+With practiced ease, you navigated through the dense foliage, relying on your training to evade detection.
+<br /><br />
+As you drew closer to the enemy encampment, adrenaline surged through your veins. 
+Every rustle of leaves and snap of twigs seemed magnified in the stillness. Yet, you pressed on, your determination unwavering.
+<br /><br />
+Finally, you reached the inner sanctum of the enemy's lair, where she was held captive. However, before you could approach her, a sudden noise alerted the enemy to your presence. 
+In a flurry of movement, chaos erupted as the enemy forces swarmed in, catching you off guard.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/rescue3.jpg']]
+</center>
+<br /><br />
+<<link 'Fight'>>
+    <<set $enemies = []>>
+    <<for _i = 0; _i <= 7; _i++>>
+        <<newguy>>
+        <<set $tmpGuy.inventory = {
+            knife: 1
+        }>>
+        <<run $enemies.push($tmpGuy)>>
+    <</for>>
+    <<run console.log($enemies)>>
+    <<set $game.death_reason = 'stabbed wounds'>>
+    <<fight $enemies 'Octavia [Event] - Rescue #2' 'Dead'>>   
+    <<set $fight.canCapture = false>> 
+<</link>>
