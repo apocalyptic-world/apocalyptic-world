@@ -23,7 +23,8 @@
 	},
 	food: {produce: 0, consume: 0, none: 0},
 	wood: 0,
-	birthday: []
+	birthday: [],
+	pregnant: 0
 }>>
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -40,6 +41,7 @@
 	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
 	<<set _settlementStatsData['settlers']++>>
 	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
+	<<set _settlementStatsData['pregnant'] += (typeof _statsNpc.pregnancy !== 'undefined') ? 1 : 0>>
 	<<if _job === 'garden'>>
 		<<set _settlementStatsData.food.produce += _giveFood  + ((_statsNpc.skills ?? []).includes('gardener') ? 2 : 0)>>
 	<<elseif _job === 'forest'>>
@@ -111,6 +113,22 @@
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
 	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><td># pregnant women</td><td><<=_settlementStatsData.pregnant ?? 0>></td>
+		<td>
+			<<if _settlementStatsData.pregnant>>
+				<<set _towelsHave = setup.cabinInventory.count('towel')>>
+				<<set _towelsNeed = 5*_settlementStatsData.pregnant>>
+				<<set _towelsNet  = _towelsHave - _towelsNeed>>
+				<<if _towelsNet >= 0>>
+					(Doctors and towels makes births safer; You have enough towels!)
+				<<else>>
+					(Doctors and towels makes births safer; You don't have enough towels:
+					 + Have <<=_towelsHave>> - need <<=_towelsNeed>> = deficit <span style="color: red; font-weight: bold"><<=_towelsNet>></span>)	
+				<</if>>
+			<</if>>
+		</td>
+	</tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td>
 		<td>(
