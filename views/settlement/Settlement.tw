@@ -1,19 +1,19 @@
 :: Settlement [Place bg-settlement] {"position":"1831,2224","size":"100,100"}
 <h1 class="ptitle">SETTLEMENT</h1>
 <div class="menu-grid">
-   <<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
-  <<grid settlement square 'Main square' 'Main square' 0 $isDisabled>>
+   <<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  <<grid settlement square 'Main square' 'Main square' 0 _isDisabled>>
   <<if ($game.location.settlement_church ?? false)>>
-   	<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
-  	<<grid settlement church 'Church' 'Church' 0 $isDisabled>>
+   	<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  	<<grid settlement church 'Church' 'Church' 0 _isDisabled>>
   <</if>>
   <<if ($game.location.settlement_shop ?? false)>>
-   	<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
-  	<<grid settlement settlement_shop 'Settlement - shop' 'Shop' 0 $isDisabled>>
+   	<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+  	<<grid settlement settlement_shop 'Settlement - shop' 'Shop' 0 _isDisabled>>
   <</if>>
 	<<if isMetChar('octavia') && $characters.octavia.quests.eve_kidnapped>>
-		<<set $isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
-		<<grid settlement octavia 'Settlement - Octavia' 'Octavia' 0 $isDisabled>>
+		<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+		<<grid settlement octavia 'Settlement - Octavia' 'Octavia' 0 _isDisabled>>
 	<</if>>
 </div> 
 <br /><br />

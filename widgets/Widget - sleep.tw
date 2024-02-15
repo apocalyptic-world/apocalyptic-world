@@ -12,19 +12,17 @@
 	<<set $game.sickPeople = []>>
 	<<run delete $tmpGirlViewBack>>
 	<<run delete $tmpGirlBack>>
-	<<set $pregnancyHappening = null>>
-	<<set $pregnancyStreetsHappening = null>>
-	<<set $scavengingDidntReturn = null>>
-	<<set $energyPenalty = 0>>
+	<<unset $pregnancyHappening, $pregnancyStreetsHappening, $scavengingDidntReturn>>
+	<<set _energyPenalty = 0>>
 	<<if $gameDate.getHours() < 8>>
-		<<set $addDay = 0>>
-		<<set $energyPenalty = 8 - $gameDate.getHours()>>
+		<<set _addDay = 0>>
+		<<set _energyPenalty = 8 - $gameDate.getHours()>>
 	<<else>>
-		<<set $addDay = 1>>
+		<<set _addDay = 1>>
 	<</if>>
 	
 	<<run 
-		$gameDate.setDate($gameDate.getDate() + $addDay);
+		$gameDate.setDate($gameDate.getDate() + _addDay);
 		$gameDate.setHours(8);
 		$gameDate.setMinutes(0);
 	>>
@@ -59,7 +57,7 @@
   	<<set $locationEvents[_locationEventI] = false>>
   <</for>>
   
-<<set $giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
+<<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 
 <<set _hasDoctor = setup.hasDoctor()>>
 // Horse
@@ -189,7 +187,7 @@
 			<</if>>
 
 			<<set $slaves[_i].gardenDay++>>
-			<<set _foodGive = $giveFood>>
+			<<set _foodGive = _giveFood>>
 			<<if ($slaves[_i].skills ?? []).includes('gardener')>>
 				<<set _foodGive += 2>>
 			<</if>>
@@ -416,7 +414,7 @@
 			<</if>>
 
 			<<set $guests[_guestI].gardenDay++>>
-			<<set _foodGive = $giveFood>>
+			<<set _foodGive = _giveFood>>
 			<<if ($guests[_guestI].skills ?? []).includes('gardener')>>
 				<<set _foodGive += 2>>
 			<</if>>

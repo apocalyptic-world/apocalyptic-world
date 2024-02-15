@@ -6,7 +6,7 @@ You see some hookers standing against the wall..
 <br /><br />
 
 <h3>Your hookers</h3>
-<<set $assignedToStreets = false>>
+<<set _assignedToStreets = false>>
 <table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
@@ -16,7 +16,7 @@ You see some hookers standing against the wall..
 		<<if $slaves[_i].assignedTo != 'streets' || !timeBetween('12:00', '06:00') || _dayOff>>
 			<<continue>>
 		<</if>>
-		<<set $assignedToStreets = true>>
+		<<set _assignedToStreets = true>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
@@ -56,7 +56,7 @@ You see some hookers standing against the wall..
 			<<continue>>
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
-		<<set $assignedToStreets = true>>
+		<<set _assignedToStreets = true>>
 		<tr>
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">
@@ -88,7 +88,7 @@ You see some hookers standing against the wall..
 	<</for>>
 </table>
 
-<<if !$assignedToStreets>>
+<<if !_assignedToStreets>>
 	No girl is working right now
 <</if>>
 
@@ -109,7 +109,7 @@ You see some hookers standing against the wall..
 [[Leave|Underground city]] 
 
 
-<<if $assignedToStreets && !$warnedAboutStreetHookers>>
+<<if _assignedToStreets && !$warnedAboutStreetHookers>>
 	<<set $warnedAboutStreetHookers = true>>
 	<<goto 'Streets - warning tax'>>
 <<elseif $characters.blair.quests.missing_friend_talked && !$characters.blair.quests.missing_friend_found>>
