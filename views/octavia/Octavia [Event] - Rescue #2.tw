@@ -11,31 +11,81 @@ Their lifeless forms lay motionless, surrounded by the fallen enemy tribe member
 Determined to fulfill your mission, you pushed aside the sorrow weighing on your heart and focused on the task at hand.
 <br /><br />
 <<linkreplace 'Search Octavia'>>
+    You began your search for Octavia, a sense of urgency propelling you forward. As you circled the house, your eyes scanned the surroundings, seeking any sign of her whereabouts. And then, amidst the wreckage, you spotted her.
+    <br /><br />
     <<video 'octavia/rescue1'>>
     <br /><br />
-    #####
+    Octavia was outside, tied to the porch post, her naked form a shocking sight against the backdrop of destruction. 
+    Your heart clenched with a mixture of anger and concern as you hastened to her side, your mind racing with questions about what she had endured.
+    <br /><br />
+    With determined yet gentle hands, you swiftly removed gag from her mouth, careful not to cause her any further discomfort. 
+    Octavia slumped forward, her body trembling with exhaustion and shock.
+    <br /><br />
+    <<octavia>>
+        You? How? Where are my people. Untie me so we can get out of here.
+    <</octavia>>
     <br /><br />
     <div id="option_fuck">
         <<linkreplace 'Put dick into her mouth'>>
             <<set _fuck = true>>
+            <<set $characters.octavia.quests.kidnapped_fucked = true>>
+            <<octavia>>
+                Don't dare to do that! Put it away!
+            <</octavia>>
+            <br />
             <<video 'octavia/rescue2'>>
             <br /><br />
-            ######
+            As you moved closer to Octavia, a you started to slide your fingers through her hair. A moment later you grabbed them with force, pulled her head back and shove your hard dick in her mouth.
             <br /><br />
-            <<linkreplace 'Cum'>>
-                <<horny_reset>>
+            <<octavia>>
+                You fucking.... bast... Oghhhh, ard....
+            <</octavia>>
+            <br /><br />
+            <div id="option_more">
+            <<linkreplace 'Deepthroat her'>>
+                <<set _more = true>>
                 <<video 'octavia/rescue3'>>
                 <br /><br />
-                #####
+                As you still hold hair with forceful movements you start to fuck your dick with her mouth as pocket pussy. She tries to resist for a second but soon gives up as she knows you're the only way she can get away.
+                <br /><br />
+            <</linkreplace>>
+            </div>
+            <<linkreplace 'Cum on her face'>>
+                <<if !_more>>
+                    <<run $('#option_more').hide()>>
+                <</if>>
+                <center>
+                    [img[setup.ImagePath+'people/octavia/cum_face.webp']]
+                </center>
+                <<horny_reset>>
+                <br /><br />
+                You release her hair and start to cum all over her face as she's still on her knees and tied down to the porch post. Her face is covered in your cum as she tries to slowly open her eyes.
+                <br /><br />
+                <<octavia>>
+                    Got your reward? Can we go now.
+                <</octavia>>
                 <br /><br />
             <</linkreplace>>
         <</linkreplace>>
     </div>
     <div id="option_release">
-        <<if !_fuck>>
-            <<run $('#option_fuck').hide()>>
-        <</if>>
-
-        ...
+        <<linkreplace 'Untie her'>>
+            <<if !_fuck>>
+                <<run $('#option_fuck').hide()>>
+            <</if>>
+            With deliberate motion, you reached for the ropes that bound Octavia, untying them strand by strand. 
+            As each restraint fell away, a sense of liberation washed over her, the weight of captivity lifting from her shoulders.
+            <br /><br />
+            <<octavia>>
+                I will get back on my own. Thank you... I guess...
+            <</octavia>>
+            <br /><br />
+            <<link 'Go home'>>
+                <<set $characters.octavia.quests.kidnapped_found = true>>
+                <<set $characters.octavia.relationship += 10>>
+                <<addhours 4>>
+                <<goto 'Wood cabin'>>
+            <</link>>
+        <</linkreplace>>
     </div>
 <</linkreplace>>
