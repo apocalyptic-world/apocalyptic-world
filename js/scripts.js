@@ -1,8 +1,3 @@
-setup.items = {
-
-};
-
-
 $(document).on(':passagedisplay', function () {
     checkVideos();
 
