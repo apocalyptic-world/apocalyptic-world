@@ -4,6 +4,21 @@
 
 <h2>
 <<button "[0|1]">>
+    <<set _showGuide = !(_showGuide ?? false)>>
+    <<if _showGuide>>
+        <<run $('#guide').show()>>
+    <<else>>
+        <<run $('#guide').hide()>>
+    <</if>>
+<</button>>Guide/Hints to playing - or at least a start!</h2>
+<div id="guide" style="display:none;">
+
+<<include 'Help - Guide'>>
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
     <<set _showItems = !(_showItems ?? false)>>
     <<if _showItems>>
         <<run $('#items').show()>>

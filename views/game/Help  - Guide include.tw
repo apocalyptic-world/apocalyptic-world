@@ -1,0 +1,177 @@
+:: Help - Guide [Help include] 
+
+<<set _helpguide = {
+    max_energy: {
+        show:  $player.strength <  140 && $game.location.underground,
+        done:  $player.strength >= 140,
+        category: 'Hint',
+        description: 'Raise max energy and do more things in a day; Have 30 caps; Visit underground - fight cage; exercise; accept drug deal',
+    },
+    recover_energy: {
+        show: true,
+        done: false,
+        category: 'Hint',
+        description: 'Recover energy and do more things in a day; take a shower & take a nap',
+    },
+
+    find_forest: {
+        show: !$game.location.forest,
+        done:  $game.location.forest,
+        category: 'Gameplay',
+        description: 'Explore for the first time and find the forest. There you can find food and wood',
+    },
+    find_vincent: {
+        show: !$game.location.farm && $game.location.forest,
+        done:  $game.location.farm,
+        category: 'Gameplay',
+        description: "Explore for the second time and find Vincent's farm. He is important and involved in many of the quests and putting locations on the map.",
+    },
+    find_workbench: {
+        show: !$game.location.workbench && $game.location.farm,
+        done:  $game.location.workbench,
+        category: 'Gameplay',
+        description: 'From day 5 you have a chance to find a workbench when exploring. This important item will allow you to improve your base and build items',
+    },
+    find_hot_shower: {
+        show: !$backpack.has('blueprint_hot_shower') && $game.location.farm,
+        done:  $backpack.has('blueprint_hot_shower'),
+        category: 'Gameplay',
+        description: 'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
+    },
+    /* <<elseif $randomNumber <= 78 && isMetChar('octavia') && $characters.octavia.quests && $characters.octavia.quests.tribe>> */
+    /* <<elseif $game.day >= 200 && !isMetChar('laura')>> */
+
+    vincent_buy: {
+        show: !isMetChar('blair') && $game.location.farm,
+        done:  isMetChar('blair'),
+        category: 'Quest',
+        description: 'Follow Vincent questline, that is buy from his shop. Meet his daughter Blair',
+    },
+    vincent_delivery: {
+        show: !$characters.vincent.delivery && $game.location.farm,
+        done:  $characters.vincent.delivery_done,
+        category: 'Quest',
+        description: 'From day 10 Vincent wants you to deliver milk to underground city. Go visit underground and then back to farm.',
+    },
+/* // farm
+
+<<elseif isMetChar('blair') && $characters.blair.quests.bj && ($characters.blair.quests.bj_day + 3) < $game.day && !$characters.vincent.quests.new_settlement>>
+	<<set $characters.vincent.quests.new_settlement = true>>
+	<<goto 'Vincent quest - settlement start'>>
+<</if>>
+
+<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
+	<<link 'Talk' 'Settlement - intro'>><</link>>
+
+<<elseif $game.day > 5 && !$characters.vincent.talked_about_girl>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk about girl' 'Farm - talk about girl'>>
+		<<set $characters.vincent.talked_about_girl = true>>
+		<<set $characters.vincent.can_use_girl = true>>
+	<</link>>
+
+<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
+	<<link 'Talk about wanted poster' 'Farm - wanted poster'>>
+		<<set $characters.vincent.wanted_poster = true>>
+	<</link>>
+
+<<elseif $characters.vincent.quests.pregnancy && !$characters.vincent.quests.pregnancy_talked>>
+	<<link 'Talk about pregnant slave'>>
+		<<set $characters.vincent.quests.pregnancy_talked = true>>
+		<<goto 'Vincent quest - pregnancy'>>
+	<</link>>
+
+<<elseif !$characters.vincent.quests.car_talk && $game.cabinName>>
+	<<link 'Talk'>>
+		<<set $characters.vincent.quests.car_talk = true>>
+		<<goto 'Vincent - car talk'>>
+	<</link>>
+
+<<elseif $game.day >= 150 && $characters.blair.relationship >= 90 && !$characters.vincent.quests.wedding_talk>>
+	<<set $characters.vincent.quests.wedding_talk = true>>
+	<<goto 'Vincent - wedding ring'>>
+
+<<elseif $game.day >= 160 && $characters.vincent.quests.wedding_talk && !$characters.vincent.quests.sanctuary_talk && ($characters.vincent.quests.wedding_talk_day + 10) <= $game.day>>
+	<<set $characters.vincent.quests.sanctuary_talk = true>>
+	<<goto 'Vincent - sanctuary talk'>>
+
+<<elseif $characters.vincent.quests.sanctuary_talk && !$characters.vincent.quests.sanctuary_done>>
+	<<link 'Tell Vincent you are ready'>>
+		<<goto 'Vincent - sanctuary check companions'>>
+	<</link>>
+
+<<elseif !($game.location.shop ?? false) && $characters.vincent.quests.sanctuary_done && !$characters.vincent.quests.shop_talk>>
+	<<link 'Talk with Vincent'>>
+		<<set $characters.vincent.quests.shop_talk = true>>
+		<<goto 'Vincent - shop talk'>>
+	<</link>>
+
+<<elseif ($game.location.shop ?? false) && $characters.vincent.quests.shop_talk && !$characters.vincent.quests.sanctuary_car_talk>>
+	<<link 'Talk with Vincent'>>
+		<<set $characters.vincent.quests.sanctuary_car_talk = true>>
+		<<goto 'Vincent - sanctuary car'>>
+	<</link>>
+    
+<<elseif $characters.vincent.quests.sanctuary_car_talk && !$characters.vincent.quests.sanctuary_infiltration && Object.keys($player.companions ?? {}).length === 4>>
+	<<link 'Talk with Vincent'>>
+		<<set $characters.vincent.quests.sanctuary_infiltration = true>>
+		<<goto 'Vincent - Infiltration of The Sanctuary'>>
+	<</link>>
+<</if>>
+ */
+}>>
+
+<<set _guide = {
+    past: {},
+    present: {},
+    future: {},
+}>>
+<<for _item range _helpguide>>
+    <<set _time = _item.done ? 'past' : _item.show ? 'present' : 'future'>>
+    <<set _guide[_time][_item.category] ??= []>>
+    <<set _guide[_time][_item.category].push(_item.description)>>
+<</for>>
+
+<<set _out = {
+    past:    '',
+    present: '',
+    future:  '',
+}>>
+<<for _time, _obj range _guide>>
+    <<for _category, _list range _obj>>
+        <<set _out[_time] +=  '<h4>' + _category +'</h4>' + _list.join('<br/>') + '<br/>'>>
+    <</for>>
+<</for>>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showPast = !(_showPast ?? false)>>
+    <<if _showPast>>
+        <<run $('#past').show()>>
+    <<else>>
+        <<run $('#past').hide()>>
+    <</if>>
+<</button>>Past</h3>
+<div id="past" style="display:none;"><<=_out['past']>><br/><br/></div>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showPresent = !(_showPresent ?? true)>>
+    <<if _showPresent>>
+        <<run $('#present').show()>>
+    <<else>>
+        <<run $('#present').hide()>>
+    <</if>>
+<</button>>Present</h3>
+<div id="present" style="display:block;"><<=_out['present']>><br/><br/></div>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showFuture = !(_showFuture ?? false)>>
+    <<if _showFuture>>
+        <<run $('#future').show()>>
+    <<else>>
+        <<run $('#future').hide()>>
+    <</if>>
+<</button>>Future</h3>
+<div id="future" style="display:none;"><<=_out['future']>><br/><br/></div>
