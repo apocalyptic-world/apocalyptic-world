@@ -1,25 +1,25 @@
 :: Underground city [Place bg-underground] {"position":"1814,1223","size":"100,100"}
 <h1 class="ptitle">UNDERGROUND CITY</h1>
 <div class="menu-grid">
-   <<set $isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 0.5)>>
-  <<grid underground cage 'Fight cage' 'Fight cage' 0 $isDisabled>>
-  <<set $isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
-  <<grid underground nightclub 'Nightclub' 'Nightclub' 0 $isDisabled>>
+   <<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 0.5)>>
+  <<grid underground cage 'Fight cage' 'Fight cage' 0 _isDisabled>>
+  <<set _isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
+  <<grid underground nightclub 'Nightclub' 'Nightclub' 0 _isDisabled>>
   <<if ($game.location.streets ?? false)>>
-    <<set $isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
-  	<<grid underground streets 'Streets' 'Streets' 0 $isDisabled>>
+    <<set _isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
+  	<<grid underground streets 'Streets' 'Streets' 0 _isDisabled>>
   <</if>>
   <<if ($game.location.bar ?? false)>>
-      <<set $isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 0.5)>>
-  	<<grid underground bar 'Bar' 'Bar' 0 $isDisabled>>
+      <<set _isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 0.5)>>
+  	<<grid underground bar 'Bar' 'Bar' 0 _isDisabled>>
   <</if>>
   <<if (($game.location.slave_market ?? false))>>	
-  	<<set $isDisabled = (!timeBetween('13:30', '19:00') ? 30 : 0.5)>>
-  	<<grid underground slave_market 'Slave market' 'Slave market' 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('13:30', '19:00') ? 30 : 0.5)>>
+  	<<grid underground slave_market 'Slave market' 'Slave market' 0 _isDisabled>>
   <</if>>
   
-  <<set $isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
-  <<grid underground shop 'Underground shop' 'Shop' 0 $isDisabled>>
+  <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
+  <<grid underground shop 'Underground shop' 'Shop' 0 _isDisabled>>
 </div> 
 <br /><br />
 [[Leave|Outside]]

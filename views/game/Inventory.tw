@@ -2,16 +2,16 @@
 <div id="inventory">
     <<for _item, _amount range $backpack.table>>
 		<<capture _item, _amount>>
-		  <<set $icon = _item>>
-		  <<if $icon.indexOf("blueprint") !== -1>>
-			  <<set $icon = 'blueprint'>>
+		  <<set _icon = _item>>
+		  <<if _icon.indexOf("blueprint") !== -1>>
+			  <<set _icon = 'blueprint'>>
 		  <</if>>
-		  <<if $icon.indexOf("note") !== -1>>
-			  <<set $icon = 'note'>>
+		  <<if _icon.indexOf("note") !== -1>>
+			  <<set _icon = 'note'>>
 		  <</if>>
 		  <div class='inventory-item tooltip'>
 			  <div class='inventory-img'>
-				  [img[setup.ImagePath+'game/inventory/' + $icon + '.png']]
+				  [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
 			  </div>
 			  <div class='inventory-title'>
 				  <<= Item.get(_item).name>> 

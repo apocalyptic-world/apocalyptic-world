@@ -4,27 +4,27 @@
 	<<set _cabinName = $game.cabinName ?? 'Cabin'>>
 	<<set _cabinImg = $game.cabinName ? 'gate' : 'cabin'>>
   <<grid outside `_cabinImg` 'Wood cabin' `_cabinName`>>
-  <<set $isDisabled = (!timeBetween('08:00', '20:00') ? 60 : 6)>>
-  <<grid outside explore Explore Explore 30 $isDisabled>>
+  <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 60 : 6)>>
+  <<grid outside explore Explore Explore 30 _isDisabled>>
   <<if ($game.location.forest ?? false)>>
-      <<set $isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 1)>>
-	  <<grid outside forest Forest Forest 30 $isDisabled>>
+      <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 1)>>
+	  <<grid outside forest Forest Forest 30 _isDisabled>>
   <</if>>
   <<if ($game.location.farm ?? false)>>
-  	<<set $isDisabled = (!timeBetween('08:00', '17:00') ? 30 : 1)>>
-    <<grid outside farm Farm Farm 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('08:00', '17:00') ? 30 : 1)>>
+    <<grid outside farm Farm Farm 0 _isDisabled>>
   <</if>>
   <<if ($game.location.underground ?? false)>>
-  	<<set $isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 4)>>
-    <<grid outside underground 'Underground city' 'Underground city' 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 4)>>
+    <<grid outside underground 'Underground city' 'Underground city' 0 _isDisabled>>
   <</if>>
   <<if ($game.location.settlement ?? false)>>
-  	<<set $isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
-    <<grid outside settlement 'Settlement' 'Settlement' 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
+    <<grid outside settlement 'Settlement' 'Settlement' 0 _isDisabled>>
   <</if>>
   <<if ($game.location.sanctuary ?? false)>>
-  	<<set $isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
-    <<grid outside sanctuary 'Sanctuary' 'Sanctuary' 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
+    <<grid outside sanctuary 'Sanctuary' 'Sanctuary' 0 _isDisabled>>
   <</if>>
 </div>
 

@@ -7,7 +7,7 @@
 [img[setup.ImagePath+'places/cabin/greenhouse_head.jpg']]
 </div>
 <h3>Workers</h3>
-<<set $assignedToGreenhouse = false>>
+<<set _assignedToGreenhouse = false>>
 <<set _girlsCompetition = []>>
 <<set _guestGirlsInGreenhouse = []>>
 <table id="slaves">
@@ -19,7 +19,7 @@
 		<<if !$slaves[_i].gender>>
 			<<run _girlsCompetition.push('slave:' + _i)>>
 		<</if>>
-		<<set $assignedToGreenhouse = true>>
+		<<set _assignedToGreenhouse = true>>
         <<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
@@ -58,7 +58,7 @@
 		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00')>>
 			<<continue>>
 		<</if>>
-		<<set $assignedToGreenhouse = true>>
+		<<set _assignedToGreenhouse = true>>
 		<<if !_gardenGuest.gender>>
 			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
 			<<run _guestGirlsInGreenhouse.push(_gardenGuestI)>>
@@ -99,7 +99,7 @@
 	<</for>>
 </table>
 
-<<if !$assignedToGreenhouse>>
+<<if !_assignedToGreenhouse>>
 	No girls are working at the moment...
 <</if>>
 <<if isMetChar('laura') && $characters.laura.quests.successful_test && ($characters.laura.quests.lastTestDay + 20) < $game.day && !$characters.laura.quests.breeder_trait>>

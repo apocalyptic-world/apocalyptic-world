@@ -8,24 +8,25 @@
 <<set _companionNames = []>>
 <<set _companionFirst = null>>
 <<for _eventCompanionI, _eventCompanion range $player.companions>>
-	<<run _companionNames.push($guests[_eventCompanionI.split(':')[1]].name)>>
+	<<set _companion = setup.companionGet(_eventCompanionI)>>
+	<<run _companionNames.push(_companion.name)>>
 	<<if !_companionFirst>>
-		<<set _companionFirst = _eventCompanionI.split(':')[1]>>
-		<<set _companionFirstType = _eventCompanionI.split(':')[0]>>
+		<<set _companionFirst = _companion>>
+		<<set _companionFirstKey = _eventCompanionI>>
 	<</if>>
 <</for>>
 
-<<set _pronounceWhat = setup.pronounceWhat($guests[_companionFirst])>>
-<<set _pronounceWhos = setup.pronounceWhos($guests[_companionFirst])>>
-<<set _pronounceWho = setup.pronounceWho($guests[_companionFirst])>>
+<<set _pronounceWhat = setup.pronounceWhat(_companionFirst)>>
+<<set _pronounceWhos = setup.pronounceWhos(_companionFirst)>>
+<<set _pronounceWho = setup.pronounceWho(_companionFirst)>>
 
 Together with <strong><<=_companionNames.join(', ')>></strong> you decide to walk past a chemical factory.
 <br />
 As you approach, you smell a strong and sharp odor, but it's unclear what it really is.
 <br />
-A moment later, you decide not to get any closer, but unexpectedly <strong><<=setup.displayName($guests[_companionFirst])>></strong> slips and falls into a nearby ditch. 
+A moment later, you decide not to get any closer, but unexpectedly <strong><<=setup.displayName(_companionFirst)>></strong> slips and falls into a nearby ditch. 
 <br />
-<strong><<=setup.displayName($guests[_companionFirst])>></strong> is completely wet because <<=_pronounceWhat>> fell face-first into some yellow liquid. Strange-looking barrels are everywhere around.
+<strong><<=setup.displayName(_companionFirst])>></strong> is completely wet because <<=_pronounceWhat>> fell face-first into some yellow liquid. Strange-looking barrels are everywhere around.
 <br /><br />
 
 
@@ -36,7 +37,7 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=se
 	the unknown liquid and said that <<=_pronounceWhat>> was fine. However, after a while, <<=_pronounceWhat>> started to feel nauseous and began to vomit.
 	<br /><br />
 	<center>
-		[img[setup.ImagePath+'places/explore/event_' + ($guests[_companionFirst].gender === 1 ? 'guy' : 'girl') + '_vomit.webp']]
+		[img[setup.ImagePath+'places/explore/event_' + (_companionFirst.gender === 1 ? 'guy' : 'girl') + '_vomit.webp']]
 	</center>
 	<br /><br />
 	<<if $backpack.has('antibiotics')>>
@@ -56,8 +57,7 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=se
 		<div id="option1">
 			<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
 			<<link _linkName>>
-				<<set _eventCompanionKey = _companionFirstType + ':' + _companionFirst>>
-				<<companionRemove _eventCompanionKey>>
+				<<companionRemove _companionFirstKey>>
 				<<goto 'Outside'>>
 			<</link>>
 		</div>
@@ -68,12 +68,7 @@ A moment later, you decide not to get any closer, but unexpectedly <strong><<=se
 		<br /><br />
 		<<set _linkName = 'Leave ' + _pronounceWho + ' to die'>>
 		<<link _linkName>>
-			<<set _eventCompanionKey = _companionFirstType + ':' + _companionFirst>>
-			<<if _companionFirstType === 'guest'>>
-				<<guestRemove _companionFirst>>
-			<<else>>
-				<<slaveRemove _companionFirst>>
-			<</if>>
+			<<companionRemove _companionFirstKey>>
 			<<goto 'Outside'>>
 		<</link>>
 	<</if>>
