@@ -1,0 +1,35 @@
+:: Nightclub - drink with trans girl [nightclub bg-underground] {"position":"2193,1464","size":"100,100"}
+<h1 class="ptitle">NIGHTCLUB</h1>
+
+<<set $tmpGirl = null, $slaveId = null>>
+<<newtransgirl>>
+<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
+She is a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in her <strong class="iitem"><<=setup.agePeriod(_age)>></strong>, she is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/nightclub/girl2.jpg']]
+</center>
+<br /><br />
+<<if $player.money >=3 && $player.energy >= 10>>
+	<<linkreplace 'Offer her a drink (3 caps)'>>
+		<<set $player.money -=3>>
+		<<energy -10>>
+		<<addmins 30>>
+		She presents herself as <<=setup.displayName($tmpGirl)>>, then tells you she is a <strong class="iitem">trans</strong> woman and is looking for a welcoming place to live.
+		<br />
+		<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+			<<linkreplace 'Invite as guest'>>
+					<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
+					<<set $tmpGirl.relationship += 30>>
+					<<run $guests.push($tmpGirl)>>
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			You leave after explaining you have no spare room at your house.
+			<br />
+		<</if>>
+	<</linkreplace>>
+<</if>>
+[[Leave|Nightclub - inside]] 
+
+
