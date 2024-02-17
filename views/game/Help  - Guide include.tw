@@ -53,26 +53,54 @@
         category: 'Quest',
         description: 'From day 10 Vincent wants you to deliver milk to underground city. Go visit underground and then back to farm.',
     },
+    blair_wanted: {
+        show: !$game.location.streets && isMetChar('blair'),
+        done: $characters.vincent.wanted_poster,
+        category: 'Quest',
+        description: 'A few days (3) after meting Blair visit Underground; discover streets; find Blair on wanted poster;  tell Vincent back at farm; and Blair will be sleeping at your place',
+    },
+    blair_befriend: {
+        show: $characters.blair.relationship < 20,
+        done:  $characters.blair.relationship >= 20,
+        category: 'Quest',
+        description: 'Befriend blair; follow journal - Increase relationship by talking to her in kitchen or bedroom (20)',
+    },
+    blair_save_ashley: {
+        show: $characters.blair.relationship >= 20 && !$characters.blair.quests.missing_friend,
+        done: $characters.blair.quests.bj_day,
+        category: 'Quest',
+        description: 
+            '<span style="color: red">Warning: Timed event in this questline!</span> But it is one of only two ways to get a gun in the game' +
+            '<ul><li>In the morning talk to Blair in the kitchen; Goto underground - bar</li>' +
+                '<li>Talk to the bartender. <span style="color: red">Warning: You have only a few days to find Ashley alive once you talked to the bartender.</span></li>' +
+                '<li>Between 22:00 and midnight patrol the streets looking for Ashley. Start directly after you have talked to the bartender. Patrol means: visit streets; leave; repeat</li>' + 
+                '<li>In the morning talk to Blair in the kitchen; Get <strong class="iitem">revolver</strong> if you saved Ashley; Talk to Blair in bedroom at night either way.</li>' +
+                '<li>It may take a few days but eventually Blair will give you a morning bj.</li>' +
+            '</ul>' +
+            '',
+    },
+    vincent_settlement: {
+        show: $characters.blair.quests.bj && $characters.blair.quests.bj_day,
+        done: $game.location.settlement_church,
+        category: 'Quest',
+        description: 
+            'A few days (3) after Blaire\'s morning bj visit the farm and talk to Vincent. For a bonus: Vincent will be impressed if you bring him <strong class="iitem">100 wood</strong> and <strong class="iitem">5 solar panels</strong>. Mind reading?<br/>' +
+            'Collect the materials wanted in journal and bring to Vincent.<br/>' +
+            'Settlement discovered and you meet Rodger and Eve. It seems that Vincent want you to build a church and you "volunteered" the material and time.<br/>' + 
+            'Continue visiting the settlement and building the church. Don\'t forget to bring lots of building material. You will need an additional total of <strong class="iitem">100 wood</strong> and <strong class="iitem">5 rope</strong> to complete the church.<br/>' +
+            'Octavia shows up and interrupts the celebration. You can fight her and four guys if you want.' +
+            '',
+    },
+}>>
+
+
 /* // farm
-
-<<elseif isMetChar('blair') && $characters.blair.quests.bj && ($characters.blair.quests.bj_day + 3) < $game.day && !$characters.vincent.quests.new_settlement>>
-	<<set $characters.vincent.quests.new_settlement = true>>
-	<<goto 'Vincent quest - settlement start'>>
-<</if>>
-
-<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
-	<<link 'Talk' 'Settlement - intro'>><</link>>
 
 <<elseif $game.day > 5 && !$characters.vincent.talked_about_girl>>
 	<<set $characters.vincent.relationship++>>
 	<<link 'Talk about girl' 'Farm - talk about girl'>>
 		<<set $characters.vincent.talked_about_girl = true>>
 		<<set $characters.vincent.can_use_girl = true>>
-	<</link>>
-
-<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
-	<<link 'Talk about wanted poster' 'Farm - wanted poster'>>
-		<<set $characters.vincent.wanted_poster = true>>
 	<</link>>
 
 <<elseif $characters.vincent.quests.pregnancy && !$characters.vincent.quests.pregnancy_talked>>
@@ -119,7 +147,6 @@
 	<</link>>
 <</if>>
  */
-}>>
 
 <<set _guide = {
     past: {},
@@ -139,7 +166,7 @@
 }>>
 <<for _time, _obj range _guide>>
     <<for _category, _list range _obj>>
-        <<set _out[_time] +=  '<h4>' + _category +'</h4>' + _list.join('<br/>') + '<br/>'>>
+        <<set _out[_time] +=  '<h4>' + _category +'</h4>' + _list.join('<br/><br/>') + '<br/>'>>
     <</for>>
 <</for>>
 
