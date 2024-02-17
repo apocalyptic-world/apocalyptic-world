@@ -1,11 +1,36 @@
 :: Nightclub - drink [nightclub bg-underground] {"position":"2193,1464","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
+
 <center>
-	[img[setup.ImagePath+'places/nightclub/club-drink.webp']]
+[img[setup.ImagePath+'places/nightclub/club-drink.webp']]
 </center>
 <br /><br />
 You order a beer at the bar and start drinking it.
-<br /><br />
+<br />
+
+<<set $player.money -=3>>
+<<set $player = setup.drink($player)>>
+<<if $player.drunk > 75>>
+	<<perkAdd 'drunk'>>
+<</if>>
+<<energy -10>>
+<<addmins 10>>
+
+<<if settings.transEnabled && !$player.metTransGirl>>
+	You see an <strong class="iitem">odd</strong> looking girl sitting alone at the bar.
+	<br />
+	<<set $player.metTransGirl = true>>
+	<<linkreplace 'Go sit next to her'>>
+		<<if setup.percentageChance($player.reputation)>>
+			<<goto 'Nightclub - drink with trans girl'>>
+		<<else>>
+			You present yourself, but she doesn't seem interested, up close you realize she is a <strong class="iitem">trans</strong> woman.
+			<br />
+			Maybe once you have a high reputation she will be more trustfull.
+			<br />
+		<</if>>
+	<</linkreplace>>
+<</if>>
 
 <<if $player.reputation > 70 && setup.percentageChance(40)>>
 	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. You turn around and in front of you, you see a girl dressed all in pink. She asks if you'd like to dance in a quieter corner.
@@ -19,37 +44,13 @@ You order a beer at the bar and start drinking it.
 	<</link>>
 <<elseif $player.reputation > 100 && setup.percentageChance(20)>>
 	<<goto 'Nightclub - buy drinks for girls'>>
-<<elseif settings.transEnabled && $player.reputation > 30 && setup.percentageChance(20) && !$player.metTransGirl>>
-	<<set $player.metTransGirl = true>>
-	<<set $tmpGirl = null, $slaveId = null>>
-	<<newtransgirl>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
-	A <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in her <strong class="iitem"><<=setup.agePeriod(_age)>></strong> is shyly looking at you, <<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts.
-	<br />
-	It is hard to pinpoint but something about her seems <strong class="iitem">unusual</strong>. 
-	<br /><br />
-	<center>
-		[img[setup.ImagePath+'places/nightclub/girl2.jpg']]
-	</center>
-	<br /><br />
-	<<linkreplace 'Go talk to her'>>
-		She presents herself as <<=setup.displayName($tmpGirl)>>, then tells you she is a <strong class="iitem">trans</strong> woman and is looking for a welcoming place to live.
-		<br /><br />
-		<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
-			<<linkreplace 'Invite as guest'>>
-					<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
-					<<run $guests.push($tmpGirl)>>
-				<br /><br />
-			<</linkreplace>>
-		<</if>>
-	<</linkreplace>>
 <</if>>
-[[Continue|Nightclub - inside]] 
-<<addmins 15>>
 
-<<set $player = setup.drink($player)>>
-<<if $player.drunk > 75>>
-	<<perkAdd 'drunk'>>
+<<if $player.money >=3 && $player.energy >= 10>>
+	<<link 'Have another drink (3 caps)'>>
+		<<goto `passage()`>> 
+	<</link>>
 <</if>>
+[[Leave|Nightclub - inside]] 
 
 

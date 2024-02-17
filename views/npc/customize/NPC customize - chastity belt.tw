@@ -9,7 +9,15 @@
 	<<set $tmpGirl.chastityBelt = true>>
 	<<drop $backpack 'chastity_belt' 1>>
 	<br /><br />
-
+	<<if [0,2].includes($tmpGirl.gender)>>
+		<center>
+			[img[setup.ImagePath+'game/misc/customize/chastity_belt_female.webp']]
+		</center>
+	<<else>>
+		<center>
+			[img[setup.ImagePath+'game/misc/customize/chastity_belt_male.webp']]
+		</center>
+	<</if>>
 	<<=setup.displayName($tmpGirl)>> stands still while you fasten a chastity belt on <<=setup.pronounceWho($tmpGirl)>>.
 	<br /><br />
 	<<addmins 30>>
