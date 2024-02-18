@@ -47,11 +47,29 @@ With a nod of acknowledgment, she accepted the medallion, deftly turning it over
         <br /><br />
         After continuing for some time, she decides to deepthroat and finish with an aggressive and fast handjob as she looks straight at your dick.
         <br /><br />
-        <<octavia>>
-            Cum for me!
-        <</octavia>>
+        <<if $characters.octavia.quests.kidnapped_found>>
+            <<octavia>>
+                Fuck me!
+            <</octavia>>
+        <<else>>
+            <<octavia>>
+                Cum for me!
+            <</octavia>>
+        <</if>>
         <br />
+        <div id="option_fuck">
+            <<link 'Fuck her'>>
+                <<set $charId = 'octavia'>>
+                <<set $tmpGirl = $characters.octavia>>
+                <<set $tmpGirl.location = 'bedroom'>>
+                <<set $sexCanForce = false>>
+                <<fuck $tmpGirl>>
+                <<set $tmpGirlBack = 'Settlement - Octavia'>>
+                <<set $tmpGirlViewBack = 'Settlement - Octavia'>>
+            <</link>>
+        </div>
         <<linkreplace 'Cum'>>
+            <<run $('#option_fuck').hide()>>
             <<horny_reset>>
             <center>
                 [img[setup.ImagePath+'people/octavia/cum_face.webp']]
