@@ -1,9 +1,9 @@
 :: Wanted - catched {"position":"2995,1901","size":"100,100"}
 <h1 class="ptitle">STREETS</h1>
-<<set $wantedPron2 = ($wanted[$wantedId].gender ? 'him' : 'her')>>
-<<set $wantedGender = ($wanted[$wantedId].gender ? 'guy' : 'girl')>>
+<<set _wantedPron = setup.pronounceWho($wanted[$wantedId].gender)>>
+<<set _wantedGender = ($wanted[$wantedId].gender ? 'guy' : 'girl')>>
 <center>
-[img[setup.ImagePath+'places/bar/catch_' + $wantedGender + '.webp']]
+[img[setup.ImagePath+'places/bar/catch_' + _wantedGender + '.webp']]
 </center>
 <br /><br />
 <<if !$wanted[$wantedId].gender>>
@@ -21,7 +21,7 @@ You beat his ass and cuff him as he lies on the ground.
 	</table>
 <</if>>
 <br /><br />
-<<set $wantedLink = 'Bring ' + $wantedPron2 + ' in'>>
+<<set $wantedLink = 'Bring ' + _wantedPron2 + ' in'>>
 <<link `$wantedLink`>>
 	<<goto 'Wanted - collect reward'>>
 <</link>>
@@ -30,9 +30,9 @@ You beat his ass and cuff him as he lies on the ground.
 	<<if timeBetween('08:00', '02:00')>>
 		<<link 'Use her'>>
 			<<addmins 30>>
-			<<set $wantedPsg = 'Wanted - fuck ' + random(1,2)>>
-			<<set $wasRaped = true>>
-			<<goto `$wantedPsg`>>
+			<<set _wantedPsg = 'Wanted - fuck ' + random(1,2)>>
+			<<set _wasRaped = true>>
+			<<goto `_wantedPsg`>>
 		<</link>>
 	<</if>>
 	<<if $slaves.length < $basementLimit>>
@@ -70,8 +70,8 @@ You beat his ass and cuff him as he lies on the ground.
         	<<set _countComp  = $player.companions.length ?? 0>>
         	<<set _reputation = $player.reputation ?? 0>>
         	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-        	<<set _no = !_yes || ($wasRaped ?? false) || (_relation <= 0)>>
-			<<unset $wasRaped>>
+        	<<set _no = !_yes || (_wasRaped ?? false) || (_relation <= 0)>>
+			<<unset _wasRaped>>
        		 <<if _no>>
 				<br />
 				<<sayNpc $tmpGirl>>
