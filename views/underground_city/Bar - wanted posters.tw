@@ -18,21 +18,21 @@
 		>>
 		<<set $player.quests.wanted.u1 = true>>
 		<<set _additionalAward = 200>>
-		<<set $wantedPerson = $tmpGuy>>
+		<<set _wantedPerson = $tmpGuy>>
 	<<elseif random(0,2) == 2>>
 		<<newgirl>>
-		<<set $wantedPerson = $tmpGirl>>	
+		<<set _wantedPerson = $tmpGirl>>	
 	<<else>>
 		<<newguy>>
-		<<set $wantedPerson = $tmpGuy>>
+		<<set _wantedPerson = $tmpGuy>>
 	<</if>>
 	
-	<<set $wantedPerson.wanted = {
+	<<set _wantedPerson.wanted = {
 		value: randomInteger(20, 70) + ($player.hunterRating ?? 0) + _additionalAward,
 		progress: 0
 	}>>
-	<<set $wantedPerson.strength += 50>>
-	<<run $wanted.push($wantedPerson)>>
+	<<set _wantedPerson.strength += 50>>
+	<<run $wanted.push(_wantedPerson)>>
 <</for>>
 
 <div id="wanted-list">

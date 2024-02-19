@@ -1,22 +1,22 @@
 :: Wanted - found {"position":"2885,1899","size":"100,100"}
 <h1 class="ptitle">STREETS</h1>
-<<set $wantedGender = ($wanted[$wantedId].gender ? 'guy' : 'girl')>>
-<<set $wantedPron = ($wanted[$wantedId].gender ? 'he' : 'she')>>
-<<set $wantedPron2 = ($wanted[$wantedId].gender ? 'him' : 'her')>>
+<<set _wantedGender = ($wanted[$wantedId].gender ? 'guy' : 'girl')>>
+<<set _wantedPron = ($wanted[$wantedId].gender ? 'he' : 'she')>>
+<<set _wantedPron2 = ($wanted[$wantedId].gender ? 'him' : 'her')>>
 
 <center>
 [img[setup.ImagePath+'places/bar/wanted_found.webp']]
 </center>
 <br /><br />
-After gathering all information you knew exactly  where to find <<=$wantedPron2>>.
+After gathering all information you knew exactly  where to find <<=_wantedPron2>>.
 <br />
-You waited for some time and it paid off. <strong>You see <<=$wantedPron2>>!</strong>
+You waited for some time and it paid off. <strong>You see <<=_wantedPron2>>!</strong>
 <br /><br />
 
 
-<<set $wantedPsg = 'Catch ' + $wantedPron2>>
+<<set _wantedPsg = 'Catch ' + _wantedPron2>>
 
-<<link `$wantedPsg`>>
+<<link `_wantedPsg`>>
 	<<if $wanted[$wantedId].strength < $player.strength>>
 		<<if $wanted[$wantedId].unique>>
 			<<set _gotoLink = 'Wanted - unique #' + $wanted[$wantedId].uniqueKey>>

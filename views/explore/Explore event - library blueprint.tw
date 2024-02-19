@@ -1,0 +1,40 @@
+:: Explore event - library blueprint 
+<h1 class="ptitle">CITY</h1>
+<br />
+As you traverse the outskirts of the city, the skyline dominated by skeletal structures and crumbling buildings, a lone house nestled on the periphery catches your eye. 
+Its presence amidst the urban decay is a stark contrast, a beacon of intrigue amid the desolation.
+<br /><br />
+<<linkreplace 'Approach it'>>
+    <<run $('#option_leave').hide()>>
+    Approaching cautiously, you navigate through the debris-strewn streets, your senses attuned to the slightest hint of danger. 
+    The house stands as a silent sentinel, its weathered façade bearing witness to the ravages of time. 
+    With each step closer, the weight of history presses down upon you, a palpable reminder of the world that once thrived within these walls.
+    <br /><br />
+    Entering the abandoned dwelling, a sense of unease settles over you like a shroud. The interior is cloaked in darkness, broken only by shafts of light filtering through cracks in the decaying roof. 
+    The air is thick with the scent of mildew and decay, a testament to years of neglect.
+    <br /><br />
+    <center>
+      [img[setup.ImagePath+'places/explore/library_blueprint.jpg']]
+    </center>
+    <br />
+    Suddenly, a shuffling sound echoes from the shadows, and you tense, instinctively reaching for your weapon. From the darkness emerge two scavengers, their ragged appearance a testament to their struggle for survival. With a mixture of fear and desperation in their eyes, they brandish makeshift weapons, ready to defend their territory.
+    <br /><br />
+    Heart pounding, you brace yourself for the confrontation, adrenaline coursing through your veins. With practiced precision, you engage in a deadly dance, each movement calculated to evade the scavengers' vicious onslaught. The battle is fierce and unforgiving, the air thick with the clang of metal and the scent of blood.
+    <br /><br />
+    <<link 'Fight'>>
+        <<set $enemies = []>>
+        <<newguy>>
+        <<set $tmpGuy.inventory = {
+            knife: 1
+        }>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<fight $enemies 'Explore event - library blueprint won' 'Outside'>>
+    <</link>>
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto 'Outside'>>
+    <</link>>
+</div>
