@@ -102,6 +102,8 @@
 		<<goto 'Event: Late dance'>>
 	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
 		<<goto 'Vincent - Strange note'>>
+	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
+		<<goto 'Eve - shower visit'>>
 	<<else>>
 		
 	<</if>>
