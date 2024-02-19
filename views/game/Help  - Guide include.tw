@@ -1,0 +1,355 @@
+:: Help - Guide [Help include] 
+
+This game is a combination of a little storytelling and the rest is sandbox.<br/>
+Follow the story and do the quests to unlock places in game and important characters etc.<br/>
+<br/>
+Most importantly, it's a sexual game. (-; So gather your harem and shag everyone... ;-) Have fun!<br/>
+<br/>
+<<linkdesc>>(By the way, story and gameplay is intertwined so mistakes will be made.)<</linkdesc>>
+
+<<set _chanceFCpercent = Math.round(($player.strength - 125 + ($player.fighter_rank ?? 100))*100/26)>>
+<<set _chanceFCtext = _chanceFCpercent <= 0 ? 'none!' : _chanceFCpercent >=100 ? 'auto!' : _chanceFCpercent + '%'>>
+
+<<set _helpguide = {
+/*  template
+    x: {
+        show: x,
+        done: x,
+        category: '',
+        title: '',
+        description: '',
+    },
+ */
+    max_energy: {
+        show:  $player.maxEnergy <  140 && $game.location?.underground,
+        done:  $player.maxEnergy >= 140,
+        category: 'Hint',
+        title: 'Energy',
+        description: 'Raise max energy and do more things in a day; Have 30 caps; Visit underground - fight cage; exercise; accept drug deal',
+    },
+    recover_energy: {
+        show: true,
+        done: false,
+        category: 'Hint',
+        title: 'Energy',
+        description: 'Recover energy and do more things in a day; take a shower & take a nap',
+    },
+    strength_endurance : {
+        show: $player.strength <  100 && $player.endurance <  50 && $game.location?.underground,
+        done: $player.strength >= 100 || $player.endurance >= 50,
+        category: 'Hint',
+        title: 'Strength & endurance',
+        description: 'You can train both strength endurance simultaneously by exercising at the Underground fight cage',
+    },
+    strength : {
+        show: $player.strength <  300,
+        done: $player.strength >= 300,
+        category: 'Hint',
+        title: 'Strength',
+        description: 'You can increase your strength by:<ul>' +
+            ($player.strength <  100 && $game.location?.underground ? '<li>exercising at the Underground fight cage (+2)</li>' : '') +
+            ($player.strength <  100 ? '<li>working out together with one of your settlers</li>' : '') +
+            ($player.strength <  100 ? '<li>winning (random) fights</li>' : '') +
+            ($player.strength <   50 ? '<li>training strength by the fireplace at your home</li>' : '') +
+            ($game.location?.underground ? '<li>fighting at the Underground fight cage. Approximate chance to win: ' + _chanceFCtext +' </li>'  : '') +
+            '<li>and some random events - if you are lucky to get them</li>' +
+            '</ul>',
+    },
+    endurance: {
+        show: true,
+        done: false,
+        category: 'Hint',
+        title: 'Endurance',
+        description: 'You can increase your endurance by:<ul>' +
+            ($player.endurance <  50 && $game.location?.underground ? '<li>exercising at the Underground fight cage</li>' : '') +
+            '<li>training endurance by the fireplace at your home</li>' +
+            '</ul>',
+    },
+    intelligence: {
+        show: $characters.rodger.quests?.book,
+        done: $player.int > 100,
+        category: 'Hint',
+        title: 'Intelligence',
+        description: 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence.<br/>Some random explore events can also give you points.',
+    },
+
+    find_workbench: {
+        show: !$game.location?.workbench && $game.location?.farm,
+        done:  $game.location?.workbench,
+        category: 'Gameplay',
+        title: 'Home improvement',
+        description: 'From day 5 you have a chance to find a workbench when exploring. This important item will allow you to improve your base and build items',
+    },
+    girl_in_cage: {
+        show: !$characters.vincent?.talked_about_girl && $game.location?.farm,
+        done:  $characters.vincent?.talked_about_girl,
+        category: 'Gameplay',
+        title: 'Girl in cage',
+        description: 'From day 5 you can ask Vincent about the strange girl in the cage. You get a little background history of the world and permission to have fun with her.',
+    },
+    find_hot_shower: {
+        show: !$backpack.has('blueprint_hot_shower') && $game.location?.farm,
+        done:  $backpack.has('blueprint_hot_shower'),
+        category: 'Gameplay',
+        title: 'Home improvement',
+        description: 'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
+    },
+    first_pregnancy: {
+        show: !$characters.vincent?.quests?.pregnancy_talked && $characters.vincent?.quests?.pregnancy,
+        done:  $characters.vincent?.quests?.pregnancy_talked,
+        category: 'Gameplay',
+        title: 'First pregnancy',
+        description: 'Plant your seed and make a woman pregnant (slave, guest or important woman). Vincent will tell you how to terminate unwanted pregnancies and provide the means to do it.',
+    },
+    find_book : {
+        show: !$characters.rodger.quests?.book && $game.location?.settlement_church,
+        done:  $characters.rodger.quests?.book,
+        category: 'Gameplay',
+        title: 'Book of Knowledge',
+        description: 'Visit settlement church; Talk with Rodger; He might ask you to go find the <strong>Book of Knowledge</strong>.',
+    },
+    blair_wedding : {
+        show: !$characters.vincent?.quests?.wedding_talk  && $characters.vincent?.quests?.car_talk,
+        done: ($characters.vincent?.quests?.wedding_talk_day + 10) <= $game.day || $characters.blair.quests?.married,
+        category: 'Gameplay',
+        title: 'Wedding with Blair perhaps?',
+        description: 'Work on your relation with Blair. Increase relation(90) by talking with her, kissing her, (dating her) and even fucking her. You find her in your kitchen in the mornings, working on her father\'s farm in the days and in your bedroom at nights.<br/>' +
+        'After spending a long time with her, Vincent wants you to make her an honorable woman. Visit Vincent after day 150 and talk about wedding plans.' +
+        /* $game.canMarry, $characters.vincent?.quests?.wedding_talk_day */
+        'If you want you can marry Blair or choose not to. Don\'t worry - you can have as many wives as you want. <div class="tooltip">By the way, do you know the similarity between wives and birds?<span class="tooltiptext">Both can be ringed...</span></div>' +
+        /* $characters.blair.quests?.married */
+        '',
+    },
+
+    /* // Explore */
+    /* <<elseif $randomNumber <= 78 && isMetChar('octavia') && $characters.octavia.quests && $characters.octavia.quests?.tribe>> */
+    /* <<elseif $game.day >= 200 && !isMetChar('laura')>> */
+
+    find_forest: {
+        show: !$game.location?.forest,
+        done:  $game.location?.forest,
+        category: 'Story',
+        title: 'Explore - find forest',
+        description: 'Explore for the first time and find the forest. There you can find food and wood',
+    },
+    find_vincent: {
+        show: !$game.location?.farm && $game.location?.forest,
+        done:  $game.location?.farm,
+        category: 'Story',
+        title: 'Explore - find neighbour',
+        description: "Explore for the second time and find Vincent's farm. He is important and involved in many of the quests and putting locations on the map.",
+    },
+    vincent_buy: {
+        show: !isMetChar('blair') && $game.location?.farm,
+        done:  isMetChar('blair'),
+        category: 'Story',
+        title: 'Meet Blair',
+        description: 'Follow Vincent questline, that is buy from his shop. Meet his daughter Blair',
+    },
+    vincent_delivery: {
+        show: !$characters.vincent?.delivery && $game.location?.farm,
+        done:  $characters.vincent?.delivery_done,
+        category: 'Story',
+        title: 'Doing a milk-run',
+        description: 'From day 10 Vincent wants you to deliver milk to underground city. Go visit underground and then back to farm.',
+    },
+    blair_wanted: {
+        show: isMetChar('blair'),
+        done: $characters.vincent?.wanted_poster,
+        category: 'Story',
+        title: 'A girl wanted',
+        description: 'A few days (3) after meting Blair visit Underground; discover streets; find Blair on wanted poster;  tell Vincent back at farm; and Blair will be sleeping at your place',
+    },
+    blair_befriend: {
+        show: $characters.blair.relationship < 20 && $characters.vincent?.wanted_poster,
+        done:  $characters.blair.relationship >= 20,
+        category: 'Story',
+        title: 'Making friends',
+        description: 'Befriend blair; follow journal - Increase relationship by talking to her in kitchen or bedroom (20)',
+    },
+    blair_save_ashley: {
+        show: $characters.blair.relationship >= 20 && !$characters.blair.quests?.bj_day,
+        done: $characters.blair.quests?.bj_day,
+        category: 'Story',
+        title: 'A girl in trouble',
+        description: 
+            '<span style="color: red">Warning: Timed event in this questline!</span> But it is one of only two ways to get a gun in the game' +
+            '<ul><li>In the morning talk to Blair in the kitchen; Goto underground - bar</li>' +
+                '<li>Talk to the bartender. <span style="color: red">Warning: You have only a few days to find Ashley alive once you talked to the bartender.</span></li>' +
+                '<li>Between 22:00 and midnight patrol the streets looking for Ashley. Start directly after you have talked to the bartender. Patrol means: visit streets; leave; repeat until Ashley is found</li>' + 
+                '<li>In the morning talk to Blair in the kitchen; Get <strong class="iitem">revolver</strong> if you saved Ashley; Talk to Blair in bedroom at night either way.</li>' +
+                '<li>It may take a few days but eventually Blair will give you a morning bj.</li>' +
+            '</ul>',
+    },
+    vincent_settlement: {
+        show: $characters.blair.quests?.bj && $characters.blair.quests?.bj_day,
+        done: $game.location?.settlement_church,
+        category: 'Story',
+        title: 'Church',
+        description: 
+            'A few days (3) after Blaire\'s morning bj visit the farm and talk to Vincent. For a bonus: Vincent will be impressed if you bring him <strong class="iitem">100 wood</strong> and <strong class="iitem">5 solar panels</strong>. Mind reading?<br/>' +
+            'Collect the materials wanted in journal and bring to Vincent.<br/>' +
+            'Settlement discovered and you meet Rodger and Eve. It seems that Vincent want you to build a church and you "volunteered" the material and time.<br/>' + 
+            'Continue visiting the settlement and building the church. Don\'t forget to bring lots of building material. You will need an additional total of <strong class="iitem">100 wood</strong> and <strong class="iitem">5 rope</strong> to complete the church.<br/>' +
+            'Octavia shows up and interrupts the celebration. You can fight her and four guys if you want. <strong>Note!</strong> Octavia is a strong person. So eat your carrots and train before trying.',
+    },
+    first_party: {
+        show: !$characters.rodger.quests?.champagne && $game.location?.settlement_church,
+        done:  $characters.blair.quests?.house_party_finished,
+        category: 'Story',
+        title: 'Party time with bubbles',
+        description: 'Visit settlement church; Talk with Rodger; He might ask you to look for wine in an old tavern in the city. Find <span class="iitem">champagne</span><br/>' +
+            'In the morning, talk to Blair in the kitchen. She has ideas what to do with the bubbles. You will need <span class="iitem">20 food</span> and <span class="ittem">1 champagne</span>.<br/>' +
+            'In the evening, throw a houseparty at the fire place. Invite any guest to your bedroom for after party fun.',
+    },
+    making_community: {
+        show: !$characters.blair.quests?.gate && $characters.blair.quests?.house_party_finished,
+        done: $characters.vincent?.quests?.car_talk,
+        category: 'Story',
+        title: 'Making a community',
+        description: 'After the first house party we quickly move on to the next adventure 8-|.<ul>' + 
+                '<li>It all starts with you having a chat with Blair in the morning. Being a good(?) daughter she wants you to fulfill one of her father\' old dreaams. A dream he since then abandoned.</li>' +
+                /* $characters.blair.quests?.gate */
+                '<li>Use your workbench to build a <strong>Settlement gate</strong>.' + ($game.location?.workbench ? '' : 'But first you have to go exploring until you find a workbench!') + '</li>' +
+                /* $game.cabinName */
+                '<li>Visit Vincent at his farm. He has very strong opinions about this project.</li>' +
+                /* $characters.vincent?.quests?.car_talk */
+            '</ul>',
+    },
+    sanctuary_reconnaissance: {
+        show: $characters.vincent?.quests?.wedding_talk,
+        done: $characters.vincent?.quests?.sanctuary_done,
+        category: 'Story',
+        title: 'Reconnaissance',
+        description: 'Ten days after you have discussed the wedding plans, Vincent opens up and want to talk about <strong>The Sancturary</strong>. He is clearly obsessed with that place!<br/>' +
+            /* $characters.vincent?.quests?.sanctuary_talk */
+            'Prepare your party; You can bring two and only two companions, both with strength at least 40; Follow Vincent and spy on that place (and fail)',
+            /* $characters.vincent?.quests?.sanctuary_done */
+    },
+    home_shopping: {
+        show: !$game.location?.shop && !$characters.vincent?.quests?.shop_talk  && $characters.vincent?.quests?.sanctuary_done,
+        done:  $game.location?.shop,
+        category: 'Story',
+        title: 'Home shopping',
+        description: 'Vincent suggests that you build a small shop in your place.<br/>' +
+            /* $characters.vincent?.quests?.shop_talk */
+            'Use your workbench to build the <strong>Shop</strong>.' + ($game.location?.workbench ? '' : 'But first you have to go exploring until you find a workbench!'),
+    },
+    sanctuary_infiltration: {
+        show: !$characters.vincent?.quests?.sanctuary_car_talk && $characters.vincent?.quests?.shop_talk && $game.location?.shop,
+        done:  $game.location?.garage,
+        category: 'Story',
+        title: 'Infiltration',
+        description: 'Vincent have found a way to get into the sanctuary.' +
+            /* $characters.vincent?.quests?.sanctuary_car_talk */
+            'Prepare your party for the Sanctuary visit; You can bring four and only four companions. <span style="color: red">Warning: All companions will die!</span>',
+            /* $game.location?.garage, $characters.vincent?.car_get_day, $characters.vincent?.quests?.sanctuary_infiltration */
+    },
+    car: {
+        show: !$player.car?.explore && $game.location?.garage,
+        done:  $player.car?.explore,
+        category: 'Story',
+        title: 'Testing car',
+        description: 'Collect car parts and fuel and repair the wreck in the garage; Vincent will show up for the testrun',
+    },
+    vincent_future: {
+        show: false,
+        done: false,
+        category: 'Story',
+        title: 'End of Vincent\'s quest',
+        description: 'This is the end of Vincent\'s quest as of version v0.32. Just be patient and wait for game updates.',
+    },
+}>>
+
+/* blair journal
+		<<elseif !$characters.blair.quests?.nursery>>
+			Talk with Blair in the kitchen
+		<<elseif ($game.cabinName ?? false) && !$characters.blair.quests?.basement>>
+			<<if $characters.blair.relationship >= 80>>
+				Talk with her in the bedroom
+			<<else>>
+				Increase relationship
+			<</if>>
+ */
+/* rodger journal
+		<<elseif $characters.rodger.quests?.champagne && !$characters.eve.quests?.sex>>
+			<<if $game.cabinName>>
+				Talk with him in the church
+			<<else>>
+				Progress with Blair
+			<</if>>
+		<<elseif !($game.location?.settlement_shop ?? false)>>
+			<<if !$characters.rodger.quests?.shop_talk>>
+				Talk with him in the church
+			<<else>>
+				Help him build shop
+			<</if>>
+		<<elseif ($game.location?.settlement_shop ?? false) && !$characters.rodger.quests?.horse>>
+			Talk with him in the church
+		<<elseif $characters.rodger.quests?.horse && !$characters.rodger.quests?.faith>>
+			<<if $game.day < 80>>
+				Continue living for a while (reach 80 days)
+			<<else>>
+				Go to the Rodger's settlement
+			<</if>>
+		<<else>>
+			That's all for now
+		<</if>>
+		<br /><br />
+	<</if>>
+ */
+
+<<set _guide = {
+    past: {},
+    present: {},
+    future: {},
+}>>
+<<for _item range _helpguide>>
+    <<set _time = _item.done ? 'past' : _item.show ? 'present' : 'future'>>
+    <<set _guide[_time][_item.category] ??= []>>
+    <<set _guide[_time][_item.category].push('<span style="color: #ccc">' + _item.title + '</span><br/>' + _item.description)>>
+<</for>>
+
+<<set _out = {
+    past:    '',
+    present: '',
+    future:  '',
+}>>
+<<for _time, _obj range _guide>>
+    <<for _category, _list range _obj>>
+        <<set _out[_time] +=  '<h4>' + _category +'</h4>' + _list.join('<br/><br/>') + '<br/>'>>
+    <</for>>
+<</for>>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showPast = !(_showPast ?? false)>>
+    <<if _showPast>>
+        <<run $('#past').show()>>
+    <<else>>
+        <<run $('#past').hide()>>
+    <</if>>
+<</button>>Past</h3>
+<div id="past" style="display:none;"><<=_out['past']>><br/><br/></div>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showPresent = !(_showPresent ?? true)>>
+    <<if _showPresent>>
+        <<run $('#present').show()>>
+    <<else>>
+        <<run $('#present').hide()>>
+    <</if>>
+<</button>>Present</h3>
+<div id="present" style="display:block;"><<=_out['present']>><br/><br/></div>
+
+<h3>
+<<button "[0|1]">>
+    <<set _showFuture = !(_showFuture ?? false)>>
+    <<if _showFuture>>
+        <<run $('#future').show()>>
+    <<else>>
+        <<run $('#future').hide()>>
+    <</if>>
+<</button>>Future</h3>
+<div id="future" style="display:none;"><<=_out['future']>><br/><br/></div>

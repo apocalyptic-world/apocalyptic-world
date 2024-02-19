@@ -24,6 +24,7 @@
 /* sold in shops, manual */
 /* _shopItems in different shops,
    should perhaps be setup.shopitems{shop} ? */
+   /*
 <<set _shops = [
     {
         name: 'Farm',        
@@ -42,14 +43,21 @@
         sells: ['metal','bullet_revolver','piercing', 'wedding_ring'],
     },
 ]>>
-
+*/
+/*
 <<set _shopSells = {}>>
-
 <<for _shop range _shops>>
     <<set _shopname = _shop.name>>
     <<for _itemID range _shop.sells>>
         <<set _shopSells[_itemID] ??= []>>
-        /*<<set _shopSells[_itemID] = (_shopSells[_itemID] ?? []).push(_shopname)>>*/
+        <<run _shopSells[_itemID].push(_shopname)>>
+    <</for>>
+<</for>>
+*/
+<<set _shopSells = {}>>
+<<for _shopname, _items range setup.items.shopSells()>>
+    <<for _itemID range _items>>
+        <<set _shopSells[_itemID] ??= []>>
         <<run _shopSells[_itemID].push(_shopname)>>
     <</for>>
 <</for>>
@@ -94,7 +102,7 @@
     <<if ['food', 'wood', 'glowing_mushroom', 'pelt_wolf'].includes(_itemID)>>
         <<run _helpItem.sources.push('Forest')>>
     <</if>>    
-    <<if ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth'].includes(_itemID)>>
+    <<if setup.items.scavenging.includes(_itemID)>>
         <<run _helpItem.sources.push('Scavenging')>>
     <</if>>    
     <<if setup.inventoryManageable[_itemID] ?? false>>

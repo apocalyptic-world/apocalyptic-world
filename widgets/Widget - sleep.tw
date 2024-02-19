@@ -203,10 +203,10 @@
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
-			<<if ($slaves[_i].endurance ?? 0) > 10>>
-				<<set _girlChanceToDie = 4>>
-			<<elseif ($slaves[_i].endurance ?? 0) > 20>>
+			<<if ($slaves[_i].endurance ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
+			<<elseif ($slaves[_i].endurance ?? 0) > 10>>
+				<<set _girlChanceToDie = 4>>
 			<</if>>
 			
 			<<if $characters.dom.quests.accepted_deal>>
@@ -432,10 +432,10 @@
 		
 		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
-			<<if ($guests[_guestI].endurance ?? 0) > 10>>
-				<<set _girlChanceToDie = 4>>
-			<<elseif ($guests[_guestI].endurance ?? 0) > 20>>
+			<<if ($guests[_guestI].endurance ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
+			<<elseif ($guests[_guestI].endurance ?? 0) > 10>>
+				<<set _girlChanceToDie = 4>>
 			<</if>>
 			
 			<<if $characters.dom.quests.accepted_deal>>
@@ -570,7 +570,7 @@
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
-			  <<set _randomItem = either('plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth', 'metal', 'fuel')>>
+			  <<set _randomItem = either(setup.items.scavenging)>>
 			  <<set _giveCount = 1>>
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
