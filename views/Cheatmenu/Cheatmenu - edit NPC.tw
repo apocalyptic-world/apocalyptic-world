@@ -67,7 +67,7 @@
             <<for _traitKey, _trait range setup.traits>>
                 <<capture _traitsLocked, _traitKey>>
                     <div>
-                        <<set _checked = $tmpGirl.traitsLocked.includes(_traitKey) ? 'checked' : null>>
+                        <<set _checked = ($tmpGirl.traitsLocked ?? []).includes(_traitKey) ? 'checked' : null>>
                         <<checkbox "_traitsLocked[_traitKey]" false true _checked>> <<=setup.traits[_traitKey].title>>
                     </div>
                 <</capture>>
