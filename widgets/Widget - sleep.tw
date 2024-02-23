@@ -133,12 +133,12 @@
 				<<set _pregnantMsg = $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $slaves[_i].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
-					<<if !$pregnancyStreetsHappening>>
-						<<set $pregnancyStreetsHappening = {
-							type: 'slave',
-							id: _i
-						}>>
-					<</if>>
+						<<if !$pregnancyStreetsHappening && $slaves[_i].pregnancy_event === 'streets'>>
+							<<set $pregnancyStreetsHappening = {
+								type: 'slave',
+								id: _i
+							}>>
+						<</if>>
 				<</if>>
 				
 				<<set $morningMessages.main.push(_pregnantMsg)>>
@@ -250,6 +250,7 @@
 					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom')>>
 						<<set $slaves[_i].pregnancy = 0>>
 						<<set $slaves[_i].pregnancy_father = 'unknown'>>
+						<<set $slaves[_i].pregnancy_event = 'streets'>>
 					<</if>>
 				<</if>>
 			<</if>>
@@ -360,7 +361,7 @@
 				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
 				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father</strong>'>>
-					<<if !$pregnancyStreetsHappening>>
+					<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
 						<<set $pregnancyStreetsHappening = {
 							type: 'guest',
 							id: _guestI
@@ -478,6 +479,7 @@
 					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom')>>
 						<<set $guests[_guestI].pregnancy = 0>>
 						<<set $guests[_guestI].pregnancy_father = 'unknown'>>
+						<<set $guests[_guestI].pregnancy_event = 'streets'>>
 					<</if>>
 				<</if>>
 			<</if>>
