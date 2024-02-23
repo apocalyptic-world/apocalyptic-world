@@ -16,8 +16,12 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
     <</octavia>>
     <br /><br />
     <<if $characters.octavia.relationship < 40>>
+        <<set _relationshipBefore = $characters.octavia.relationship>>
         <<set $characters.octavia.relationship = Math.min(40, ($characters.octavia.relationship + _peltCount))>>
-        <strong>Relationship increased by <<=_peltCount>></strong>
+        <strong>Relationship increased by <<=($characters.octavia.relationship - _relationshipBefore)>></strong>
+        <br /><br />
+    <<else>>
+        <strong>You can't increase your relationship with Octavia with this action anymore.</strong>
         <br /><br />
     <</if>>
     <<link 'Leave'>>
@@ -30,8 +34,9 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
     <</octavia>>
     <br /><br />
     <<if $characters.octavia.relationship < 45>>
+        <<set _relationshipBefore = $characters.octavia.relationship>>
         <<set $characters.octavia.relationship = Math.min(45, ($characters.octavia.relationship + _peltCount))>>
-        <strong>Relationship increased by <<=_peltCount>></strong>
+        <strong>Relationship increased by <<=($characters.octavia.relationship - _relationshipBefore)>></strong>
         <br /><br />
     <<else>>
         <strong>You can't increase your relationship with Octavia with this action anymore.</strong>
