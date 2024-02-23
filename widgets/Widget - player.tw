@@ -261,6 +261,17 @@
 			<<=setup.getNpcById($args[0].husband)?.name ??  '????'>>
 		<</if>>
 	<</if>>
+	<<if $args[0].wives>>
+		Wives: <br />
+		<<for _familyTreeWifeI, _familyTreeWife range $args[0].wives>>
+			<div>
+			<<set _familyMember = setup.getNpcById(_familyTreeWife)>>
+				<<if _familyMember>>
+					<<=_familyMember.name>>
+				<</if>>
+			</div>
+		<</for>>
+	<</if>>
 	<<if $args[0].kids>>
 		Children: <br />
 		<<for _familyTreeChildI, _familyTreeChild range $args[0].kids>>
