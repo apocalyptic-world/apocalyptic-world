@@ -10,19 +10,25 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 <<set _chanceFCpercent = Math.round(($player.strength - 125 + ($player.fighter_rank ?? 100))*100/26)>>
 <<set _chanceFCtext = _chanceFCpercent <= 0 ? 'none!' : _chanceFCpercent >=100 ? 'auto!' : _chanceFCpercent + '%'>>
 
+<<set _closed = {
+    dom: ($characters.dom.quests?.invite && !$characters.dom.quests?.accepted_deal),
+}>>
 <<set _done = {
     vincent: $player.car?.explore,
     blair:   $characters.blair.quests?.basement,
     rodger:  $characters.rodger.quests?.horse,
     eve:     false,
     octavia: $characters.octavia.quests?.kidnapped_found,
-    Dom:     false,
+    dom:     false,
     Isabel:  false,
     Negan:   false,
     Laura:   false,
 }>>
-<<set _doneSome = _done.vincent || _done.blair || _done.rodger || _done.eve || _done.octavia || _done.dom || _done.isabel || _done.negan || _done.laura>>
-<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && _done.dom && _done.isabel && _done.negan && _done.laura>>
+<<set _closed = {
+
+}>>
+<<set _doneSome = _done.vincent || _done.blair || _done.rodger || _done.eve || _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura>>
+<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura>>
 
 <<set _helpguide = {
 /*  template
@@ -70,8 +76,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '</ul>',
     },
     endurance: {
-        show: true,
-        done: false,
+        show: $player.endurance <  1000,
+        done: $player.endurance >= 1000,
         category: 'Hint',
         title: 'Endurance',
         description: 'You can increase your endurance by:<ul>' +
@@ -339,7 +345,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                 /* !$characters.octavia.quests.kidnapped */
                 'A mountain tribe has attacked the camp and taken Octavia.<br/>' +
                 ($backpack.count('tribe_medallion') < 3 ? 'Weaken the oppositon - Get more tribe medallions (3)' : '<s>Have weakened the opposition</s>') +
-                '<span style="color: red">Warning: Hard fight with many enemies!</span> Before rescuing her make sure you have trained your strength and endurance really hard. Bring maximium number of fighting companions. The stronger the better' : 
+                '<span style="color: red">Warning: Hard fight with many enemies (with knives)!</span> Before rescuing her make sure you have trained your strength and endurance really hard. Bring maximium number of fighting companions. The stronger the better' : 
                 '<s>Octavia kidnapped and rescued.</s>'),
     },
     faith: {
@@ -351,34 +357,79 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Vist the settlement. Some bandits have blocked the water supply. Fix!',
     },
 
-    vincent_future: {
-        show: _done.vincent,
-        done: false,
+    dom_taxes: {
+        show: $game.location?.streets,
+        done: $warnedAboutStreetHookers,
         category: 'Story',
-        title: 'End of Vincent\'s quest',
-        description: 'This is the end of Vincent\'s quest as of version v0.32. Just be patient and wait for game updates.',
+        title: 'Dom and taxes',
+        description: 
+            'Assign at least one worker to work the streets. Visit the Underground streets. Dom will inform you of the tax rules.' +
+            'If you don\'t  want streetworkers you can remove them after the briefing.',
     },
-    blair_future: {
-        show: _done.blair,
-        done: false,
+    dom_invite: {
+        show: $warnedAboutStreetHookers,
+        done: $characters.dom?.quests?.invite,
         category: 'Story',
-        title: 'End of Blair\'s quest',
-        description: 'This is the end of Blair\'s quest as of version v0.32. Just be patient and wait for game updates.',
+        title: 'An invitation from Dom',
+        description: 'Dom will invite you to a meeting if you impress him. To do this you have to do:<ul>' +
+            '<li>' + ($game.day < 100 ? 'Wait untill day 100 (as a trial period)' : '<s>Trial period over.</s>') + '</li>' +
+            '<li>' + ($player.reputation < 100 ? 'Have 100 reputation to  be respected.' : '<s>Being respected in various communities.</s>') + '</li>' +
+            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
+            '</ul>' +
+            ($characters.dom?.quests?.invite ? 
+                'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
+                '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deals ends the Dom quest line.</span> <span style="color: green">Accepting the deal opens it.</span>'
+            : '<s>Have been invited to Dom\'s place.</s>'),
     },
-    rodger_future: {
-        show: _done.rodger,
-        done: false,
+    dom_champagne: {
+        show: $characters.dom?.quests?.invite,
+        done: $characters.dom.quests?.quest1_done || _closed.dom,
         category: 'Story',
-        title: 'End of Rodger\'s quest',
-        description: 'This is the end of Rodger\'s quest as of version v0.32. Just be patient and wait for game updates.',
+        title: 'Bubbles for Dom',
+        description: 
+            (($characters.dom.quests.day + 10) >= $game.day ? '10 days after accepting the deal Dom have the first quest for you. ' : 'Dom first quest: ') + 
+            (!$characters.dom.quests?.quest1 ? 'Visit Underground streets and meet Dom. ' : '<s>Have met Dom.</s> ')  +
+            (!$characters.dom.quests?.quest1_done ? 
+                ($backpack.count('champagne') < 10 ? 'He wants <strong class="iitem">10 bottles of champagne</strong>. ' : '<s>Have champagne!</s> ') +
+                'Bring the bubbles to him (streets)' : '<s>Brought bubbles</s>'),
     },
-    octavia_future: {
-        show: _done.octavia,
-        done: false,
+
+    dom_employee: {
+        show: $characters.dom.quests?.quest1_done,
+        done: $characters.dom.quests?.quest2_done || _closed.dom,
         category: 'Story',
-        title: 'End of Octavia\'s quest',
-        description: 'This is the end of Octavia\'s quest as of version v0.32. Just be patient and wait for game updates.',
+        title: 'Punishment for emplyee',
+        description: 
+            ($player.strength < 100 ? 'Increase your strength (100+). ' : '<s>Enough strength! </s> ') +
+            (!$characters.dom.quests?.quest2 ? 
+                ('Meet Dom in the streets (as usual). He is angry on an employee and want her "punished". Go visit her. Free choice to follow order to punish or not follow order.<br/>' +
+                'If you follow order Dom will be pleased and Isabel unhappy but if you don\'t Dom will be very angry with you and Isabel happy.') : 
+                ('<s>Have met Dom. ' + ($characters.dom.quests?.quest2_killed ? 'Punished' : 'Didn\'t punish') + ' employee!</s>')),
     },
+    dom_fuel: {
+        show: $characters.dom.quests?.quest2_done,
+        done: $characters.dom.quests?.quest3_done || _closed.dom,
+        category: 'Story',
+        title: 'Diplomacy for fuel to the city',
+        description: 'A week or two after the inccident meet Dom in the streets (as usual).He is in need of you. The underground is near a fuel crisis and the diplomatic envoy from a trading partner hasn\'t showed up as expected. Follow Dom and his entourage to the trading partner.',
+    },
+             
+            /* 
+
+// nightclub
+<<if isMetChar('dom') && $characters.dom.quests.quest3_done_day && ($characters.dom.quests.quest3_done_day + 10) < $game.day && !$characters.dom.quests.quest4>>
+	<<set $characters.dom.quests.quest4 = true>>
+	<<set $characters.dom.quests.quest4_done_day = $game.day>>
+	<<goto 'Isabel - gas shortage'>>
+
+// street
+<<elseif $characters.dom.quests.quest4_done_day && !$characters.dom.quests.quest5 && ($characters.dom.quests.quest4_done_day + 10) < $game.day>>
+	<<set $characters.dom.quests.quest5 = true>>
+	<<goto 'Dom - quest #5 The Sanctuary'>>
+
+                <<set $game.location.sanctuary = true>>
+
+            */
 
     all_future: {
         show: _doneSome,
@@ -386,15 +437,16 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'End of questlines',
         description: 'This is the end of some characters quests as of version v0.32. Just be patient and wait for game updates.<br/>' +
-            'Vincent: ' + (_done.vincent ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Blair: '   + (_done.blair   ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Rodger: '  + (_done.rodger  ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Eve: '     + (_done.eve     ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Octavia: ' + (_done.octavia ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Dom: '     + (_done.dom     ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Isabel: '  + (_done.isabel  ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Negan:   ' + (_done.negan   ? 'Done!' : 'More quests to do!') + '<br/>' +
-            'Laura: '   + (_done.laura   ? 'Done!' : 'More quests to do!'),
+            'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Rodger: '  + (_done.rodger  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Dom: '     + (_done.dom     ? '<span style="color: green">Done!</span>' : 
+              (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!'))+ '<br/>' +
+            'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Negan:   ' + (_done.negan   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Laura: '   + (_done.laura   ? '<span style="color: green">Done!</span>' : 'More quests to do!'),
     },
 
     internal: {
