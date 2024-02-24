@@ -25,13 +25,7 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 <<set _linkRelease = 'Release ' + setup.pronounceWho($tmpGirl)>>
 <<if $tmpGirl.relationship >= 30 && ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
 	<<link `_linkMove`>>
-		<<if typeof $guests === 'undefined'>>
-			<<set $guests = []>>
-		<</if>>
-		<<assignedTo $tmpGirl 'none'>>
-		<<set $tmpGirl.happy += 20>>
-		<<set $guests.push($tmpGirl)>>
-		<<run $slaves.splice($slaveId, 1)>>		
+		<<moveSlaveToGuest $tmpGirl $slaveId>>
 		<<goto 'Guest house'>>
 	<</link>>
 <</if>>
@@ -39,6 +33,8 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 	<<goto 'Basement'>>
 <</link>>
 <<link `_linkRelease`>>
+	<<set _compKey = 'slave:' + $slaveId>>
+	<<companionRemoveItem _compKey>>
 	<<run $slaves.splice($slaveId, 1)>>
 	<<statsAdd 'slaves_released'>>
 	<<goto 'Basement'>>

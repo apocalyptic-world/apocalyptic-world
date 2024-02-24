@@ -1,0 +1,32 @@
+:: NPC move [widget]
+
+<<widget moveSlaveToGuest>>
+    <<set $args[0].happy += 50>>
+	<<set $args[0].relationship += 20>>
+
+    <<if typeof $guests === 'undefined'>>
+        <<set $guests = []>>
+    <</if>>
+	<<set _companionKey = 'slave:' + $args[1]>>
+	<<if ($player.companions ?? {})[_companionKey]>>
+		<<companionRemoveItem _companionKey>>
+		<<companionAdd 'guest' $guests.length>>
+	<</if>>
+
+	<<run $slaves.splice($args[1], 1)>>
+	<<run $guests.push($args[0])>>
+<</widget>>
+
+<<widget moveGuestToSlave>>
+    <<set $args[0].happy -= 50>>
+	<<set $args[0].relationship -= 20>>
+
+	<<set _companionKey = 'guest:' + $args[1]>>
+	<<if ($player.companions ?? {})[_companionKey]>>
+		<<companionRemoveItem _companionKey>>
+		<<companionAdd 'slave' $slaves.length>>
+	<</if>>
+
+	<<run $guests.splice($args[1], 1)>>
+	<<run $slaves.push($args[0])>>
+<</widget>>
