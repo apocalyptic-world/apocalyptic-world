@@ -19,11 +19,11 @@
 <br /><br />
 [[Leave|Outside]]
 
-<<if isMetChar('octavia') && !$characters.octavia.quests.burned_settlement && $game.day >= 80 && setup.percentageChance(40)>>
+<<if isMetChar('octavia') && ($game.location.settlement_church ?? false) && !$characters.octavia.quests.burned_settlement && $game.day >= 80 && setup.percentageChance(40)>>
 	<<goto 'Octavia - burn settlement'>>
-<<elseif isMetChar('octavia') && $characters.octavia.quests.burned_settlement && !$characters.octavia.quests.eve_kidnapped && ($characters.octavia.quests.burn_day + 5) < $game.day>>
+<<elseif isMetChar('octavia') && ($game.location.settlement_church ?? false) && $characters.octavia.quests.burned_settlement && !$characters.octavia.quests.eve_kidnapped && ($characters.octavia.quests.burn_day + 5) < $game.day>>
 	<<goto 'Octavia - eve kidnapped'>>
-<<elseif isMetChar('octavia') && $characters.octavia.quests.eve_kidnapped && $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
+<<elseif isMetChar('octavia') && ($game.location.settlement_church ?? false) && $characters.octavia.quests.eve_kidnapped && $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
 	<<set $characters.rodger.quests.faith = true>>
 	<<goto 'Settlement - [Event] The Testing of Faith'>>
 <<else>>

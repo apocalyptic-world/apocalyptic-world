@@ -1,5 +1,6 @@
 :: NPC - workout together {"position":"3081,583","size":"100,100"}
 <h1 class="ptitle"><<cabinName>></h1>
+<<set $oldTmpGirlLocation = $tmpGirl.location>>
 <<set $tmpGirl.location = 'workout'>>
 <<addmins 30>>
 <<actionImage $tmpGirl workout>>
@@ -54,5 +55,7 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 	<</if>>
 <</linkreplace>>
 <<link 'Finish'>>
+	<<set $tmpGirl.location = $oldTmpGirlLocation>>
+	<<unset $oldTmpGirlLocation>>
 	<<goto $tmpGirlViewBack>>
 <</link>>
