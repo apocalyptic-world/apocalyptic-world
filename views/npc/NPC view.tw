@@ -198,10 +198,7 @@
 	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
 		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
 		<<link `_linkName`>>
-			<<set $tmpGirl.happy += 50>>
-			<<set $tmpGirl.relationship += 20>>
-			<<run $slaves.splice($slaveId, 1)>>
-			<<run $guests.push($tmpGirl)>>
+			<<moveSlaveToGuest $tmpGirl $slaveId>>
 			<<goto 'Guest house'>>
 		<</link>>
 	<</if>>
