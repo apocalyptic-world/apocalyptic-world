@@ -64,8 +64,8 @@
 		<<set _settlementStatsData.scav += (_statsNpc.skills ?? []).includes('scavenger') ? 1.5 : 1>>
 	<<elseif _job === 'streets'>>
 		<<set _chanceDeath = ($characters.dom.quests.accepted_deal ? 1 :
-			(_statsNpc.endurance ?? 0) > 20 ? 3 :
-			(_statsNpc.endurance ?? 0) > 10 ? 4 : 5) -
+			(_statsNpc.strength ?? 0) > 20 ? 3 :
+			(_statsNpc.strength ?? 0) > 10 ? 4 : 5) -
 			(setup.npcInventoryHas(_statsNpc, 'knife') ? 1 : 0)>>
 		<<set _chanceDeath *= !$characters.dom.quests.accepted_deal ? 1 : 0.5>>
 		<<set _chanceLife = 100 - _chanceDeath>>

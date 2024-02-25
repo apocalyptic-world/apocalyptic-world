@@ -40,14 +40,14 @@
     pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
-        show: !$tmpGirl.gender,
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt,
         maxCorruption: 40,
         positive: !($tmpGirl.traits ?? []).includes('analslut')
     },
     pussy: {
         title: 'Fuck pussy',
         minAction: 40,
-        show: !$tmpGirl.gender,
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt,
         horny: 20,
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
@@ -104,7 +104,13 @@
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
-
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+        <</if>>
+        <<set _npcHorny = clone($tmpGirl.horny)>>
+        <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
+        <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
+        <br />
         <<if $sexForced && !$tmpGirl.traits.includes('masochist')>>
             <<set
                 $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
@@ -129,7 +135,6 @@
     <</if>>
 
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-        <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
 		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + 20)</strong>
 		<br />
 		
@@ -137,7 +142,7 @@
 			<<include 'Mc fuck squirt'>>
 			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
-			<<set $tmpGirl.horny = 0,
+			<<set
 				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
 				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
             <<set $tmpGirl.orgasms ??= 0>>
@@ -157,6 +162,14 @@
 	<<if $sexAction == 'cum_in_pussy'>>
         <<include 'Mc fuck cum in pussy'>>
 	<</if>>
+
+    <<if $tmpGirl.horny >= 100>>
+        <<script>>
+        setTimeout(function () {
+            variables().tmpGirl.horny = 0;
+        }, 1000);
+        <</script>>
+    <</if>>
 <</if>>
 <br />
 <<include 'Mc fuck buttons'>>
