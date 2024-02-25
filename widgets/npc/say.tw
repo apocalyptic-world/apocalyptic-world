@@ -5,7 +5,14 @@
         <div class="npc-say-visual" @data-id="$args[0].id">
             <div class="girl_info_picture">
                 <<set _girlVisual = $args[0]>>
-                <<include 'NPC visual'>>
+                <<if _girlVisual.portrait>>
+                    <div class="say_custom_portrait">
+                        <<include 'NPC visual'>>
+                    </div>
+                <<else>>
+                    <<include 'NPC visual'>>
+                <</if>>                
+
             </div>
         </div>
         <div class="npc-say-container">
