@@ -11,11 +11,11 @@
 		<</if>>
 	<</if>>
 
-	<<set _isMod = (($mods ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
 	<<set _defaultActionsPath = 'images/actions'>>
-	<<set _actionsPath = _isMod ? 'mods'  : _defaultActionsPath>>
+	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
-	<<if _isMod>>
+	<<if _isPack>>
 		<<set _subActionsPath = '/actions'>>
 	<</if>>
 
@@ -78,7 +78,7 @@
 			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-				<<if _isMod && ![_morphs[_i]].includes($args[0].name)>>
+				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
 					<<set _actionsPath = _defaultActionsPath>>
 					<<set _subActionsPath = ''>>
 				<</if>>
@@ -88,7 +88,7 @@
 			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-				<<if _isMod && ![_morphs[_i]].includes($args[0].name)>>
+				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
 					<<set _actionsPath = _defaultActionsPath>>
 					<<set _subActionsPath = ''>>
 				<</if>>

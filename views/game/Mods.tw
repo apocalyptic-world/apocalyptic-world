@@ -1,22 +1,22 @@
-:: Mods 
-<h1 class="ptitle">MODS</h1>
+:: Packs 
+<h1 class="ptitle">PACKS</h1>
 <table>
-    <<set $mods ??= {}>>
-    <<for _modKey, _mod range setup.mods>>
-        <<capture _modKey, _mod>>
-            <<set $mods[_modKey] ??= false>>
+    <<set $packs ??= {}>>
+    <<for _packKey, _pack range setup.packs>>
+        <<capture _packKey, _pack>>
+            <<set $packs[_pack] ??= false>>
             <tr>
                 <td>
-                    <<checkbox '$mods[_modKey]' false true autocheck>>
+                    <<checkbox '$packs[_packKey]' false true autocheck>>
                 </td>
                 <td>
-                    <<= _mod.name>>
+                    <<= _pack.name>>
                 </td>
                 <td>
-                    <<= _mod.description>>
+                    <<= _pack.description>>
                 </td>
                 <td>
-                    <<= _mod.download>>
+                    <<= _pack.download>>
                 </td>
             </tr>
         <</capture>>

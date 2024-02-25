@@ -39,7 +39,9 @@ For a moment, time stood still as you locked eyes, neither predator nor prey. Th
 			<strong class="iitem">You collected <<=_wolvesKilled>> wolf pelt<<=(_wolvesKilled > 1 ? 's' : '')>></strong>
 			<br /><br />
 		<</if>>
-		<<perkAdd 'bleeding'>>
+		<<if _wolvesKilled < 3>>
+			<<perkAdd 'bleeding'>>
+		<</if>>
 		
 		
 		<<if setup.percentageChance(40) && Object.keys($player.companions ?? {}).length > 0>>
