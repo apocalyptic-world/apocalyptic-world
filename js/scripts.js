@@ -476,7 +476,7 @@ setup.getNpcById = function(id) {
     }
 
     if (id === 'mc') {
-        return variables().plyer;
+        return variables().player;
     }
 
     return null;
