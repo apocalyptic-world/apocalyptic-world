@@ -5,7 +5,7 @@ Follow the story and do the quests to unlock places in game and important charac
 <br/>
 Most importantly, it's a sexual game. (-; So gather your harem and shag everyone... ;-) Have fun!<br/>
 <br/>
-<<linkdesc>>(By the way, story and gameplay is intertwined so mistakes will be made.)<</linkdesc>>
+<<linkdesc>>(By the way, story and gameplay is intertwined so mistakes will be made. Also this guide needs reformating, rewording and other re- but most of the information is there.)<</linkdesc>>
 
 <<set _chanceFCpercent = Math.round(($player.strength - 125 + ($player.fighter_rank ?? 100))*100/26)>>
 <<set _chanceFCtext = _chanceFCpercent <= 0 ? 'none!' : _chanceFCpercent >=100 ? 'auto!' : _chanceFCpercent + '%'>>
@@ -19,7 +19,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     rodger:  $characters.rodger.quests?.horse,
     eve:     false,
     octavia: $characters.octavia.quests?.kidnapped_found,
-    dom:     false,
+    dom:     $characters.dom.quests?.quest6,
     Isabel:  false,
     Negan:   false,
     Laura:   false,
@@ -91,6 +91,27 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Hint',
         title: 'Intelligence',
         description: 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence.<br/>Some random explore events can also give you points.',
+    },
+    reputation: {
+        show: true,
+        done: $player.reputation >= 100,
+        category: 'Hint',
+        title: 'Reputation',
+        description: 'Gained and lost by doing stuff, too many to list. Mostly gained by winning fights and buying round of beers.',
+    },
+    goodwill: {
+        show: false,
+        done: true,
+        category: 'Hint',
+        title: 'Goodwill',
+        description: '<span style="color: yellow">Not used (yet)!</span> This is how nice person you appears to be. Gained by doing good deeds, sparing enemys, helping people etc. and lost doing the opposite.',
+    },
+    reputation_bounty: {
+        show: $game.location?.bar,
+        done: $player.reputation_bounty_hunter >= 20,
+        category: 'Hint',
+        title: 'Bounty hunter reputation',
+        description: 'Your reputation within the bounty hunter community. Gained by turn-ins and lost if you don\' follow the the BH code. Your bounty reward increases with this rep.',
     },
 
     find_workbench: {
@@ -413,24 +434,28 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Diplomacy for fuel to the city',
         description: 'A week or two after the inccident meet Dom in the streets (as usual).He is in need of you. The underground is near a fuel crisis and the diplomatic envoy from a trading partner hasn\'t showed up as expected. Follow Dom and his entourage to the trading partner.',
     },
-             
-            /* 
-
-// nightclub
-<<if isMetChar('dom') && $characters.dom.quests.quest3_done_day && ($characters.dom.quests.quest3_done_day + 10) < $game.day && !$characters.dom.quests.quest4>>
-	<<set $characters.dom.quests.quest4 = true>>
-	<<set $characters.dom.quests.quest4_done_day = $game.day>>
-	<<goto 'Isabel - gas shortage'>>
-
-// street
-<<elseif $characters.dom.quests.quest4_done_day && !$characters.dom.quests.quest5 && ($characters.dom.quests.quest4_done_day + 10) < $game.day>>
-	<<set $characters.dom.quests.quest5 = true>>
-	<<goto 'Dom - quest #5 The Sanctuary'>>
-
-                <<set $game.location.sanctuary = true>>
-
-            */
-
+    isabel_try: {
+        show: $characters.dom.quests?.quest3_done,
+        /* no $characters.dom.quests?.quest4_done */
+        done: $characters.dom.quests?.quest4_done_day|| _closed.dom,
+        category: 'Story',
+        title: 'Isabel\'s turn for fuel',
+        description: 'Ten days after the last attempt to get fuel to city meet up with Isabel in the nightclub. She know someone that runs an old oil and gas refinery. The only transport available is a bike with sidecar so you have to leave your companions behind at your home. Enjoy your solo adventure with Isolde.<br/>' +
+            '<<linkdesc>>(You have an option to use stealth in this quest. Stealth uses intelligence. For best result have a high stat!)><</linkdesc>>',
+    },
+    isabel_sanctuary: {
+        show: $characters.dom.quests?.quest4_done_day,
+        done: $characters.dom.quests?.quest6 || _closed.dom,
+        category: 'Story',
+        title: 'The Sanctuary contact',
+        description: 'After another ten days meet Isabel in the streets. She has made a deal with the Sanctury and want you to go and do the negoiation.<br/>' +
+            'You can now visit the Sanctuary. Go there and visit Negan. Depending on choices you might need 400 caps.<br/>' +
+            'The real price is that Negan wants four blonde girls, very beautiful (80+) for fuel.<br/>' +
+            '<span style="color: red">Warning: You will loose the four blondes.</span> Have the girls among the companions. If you don\'t have enough blondes you can use hair dye kit. Visit Negan\'s office and deliver the girls.<br/>' +
+            '(You can now repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> by visiting Negan in his office.)<br/>' +
+            'Go back to the Underground city where Isabel eagerly awaits the fuel.',
+    },
+    
     all_future: {
         show: _doneSome,
         done: _doneAll,
@@ -439,12 +464,12 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'This is the end of some characters quests as of version v0.32. Just be patient and wait for game updates.<br/>' +
             'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-            'Rodger: '  + (_done.rodger  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-            'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+        /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
             'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-            'Dom: '     + (_done.dom     ? '<span style="color: green">Done!</span>' : 
+            'Dom & Isabel: ' + (_done.dom ? '<span style="color: green">Done!</span>' : 
               (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!'))+ '<br/>' +
-            'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+        /*  'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
             'Negan:   ' + (_done.negan   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Laura: '   + (_done.laura   ? '<span style="color: green">Done!</span>' : 'More quests to do!'),
     },
