@@ -63,16 +63,16 @@
 	<</script>>
 <</if>>
 <<script>>
-	Object.keys(variables().mods ?? {}).forEach(key => {
-		if (!variables().mods[key]) {
+	Object.keys(variables().packs ?? {}).forEach(key => {
+		if (!variables().packs[key]) {
 			return;
 		}
 
-		importScripts(setup.Path + "mods/" + key + "/actions.js")
+		importScripts(setup.Path + "packs/" + key + "/actions.js")
             .then(function() {
                 memorize('actions', setup.actions);
             }).catch(function(error) {  // eslint-disable-line
-                alert("Error: Could not load mod '" + key + ".js'.");
+                alert("Error: Could not load pack '" + key + ".js'.");
             }
         );
 	});

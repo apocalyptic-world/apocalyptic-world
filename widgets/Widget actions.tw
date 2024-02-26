@@ -11,11 +11,11 @@
 		<</if>>
 	<</if>>
 
-	<<set _isMod = (($mods ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
 	<<set _defaultActionsPath = 'images/actions'>>
-	<<set _actionsPath = _isMod ? 'mods'  : _defaultActionsPath>>
+	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
-	<<if _isMod>>
+	<<if _isPack>>
 		<<set _subActionsPath = '/actions'>>
 	<</if>>
 
@@ -27,79 +27,75 @@
 				<<set $args[1] = $args[1].replace('mistress_', '') >>
 		<</if>>
 
-		<<if typeof setup.actions === 'undefined'>>
-		<<elseif $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
-			[img[setup.ImagePath+'game/misc/deflower_strapon.webp']]
+		<<if $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
+			<<set $args[1] = 'deflower_strapon'>>
 		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
-			[img[setup.ImagePath+'game/misc/deflower.webp']]
-		<<else>>
-		
-			<<set _genderDesc = setup.genderPath($args[0])>>
-			<<set _race = '.' + $args[0].race>>
-			<<set _hair = '.' + $args[0].hair + 'hair'>>
-
-			<<if ($args[0].pregnancy ?? 0) > 100 >>
-				<<set _pregnancyDesc = '.pregnant'>>
-			<<else>>
-				<<set _pregnancyDesc = '.notpregnant'>>				
-			<</if>>
-			
-			<<if setup.getAge($args[0]) <= 24 >>
-				<<set _ageDesc = '.young'>>
-			<<elseif setup.getAge($args[0]) <= 39 >>
-				<<set _ageDesc = ''>>		
-			<<elseif setup.getAge($args[0]) <= 59 >>
-				<<set _ageDesc = '.mature'>>
-			<<else>>
-				<<set _ageDesc = '.old'>>				
-			<</if>>
-			
-			<<set _morphs = [
-			$args[0].name + _pregnancyDesc,
-			$args[0].name,
-			_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _race + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _race + _hair + _pregnancyDesc,		
-			_genderDesc + _race + _pregnancyDesc,		
-			_genderDesc + _race + _hair + _ageDesc,
-			_genderDesc + _race + _ageDesc,
-			_genderDesc + _race + _hair,
-			_genderDesc + _race,
-			_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _hair + _pregnancyDesc,		
-			_genderDesc + _pregnancyDesc,		
-			_genderDesc + _hair + _ageDesc,
-			_genderDesc + _ageDesc,
-			_genderDesc + _hair,
-			_genderDesc
-			]>>
-			
-			<<for _i to 0; _i < _morphs.length; _i++>>
-				<<if
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-					<<if _isMod && ![_morphs[_i]].includes($args[0].name)>>
-						<<set _actionsPath = _defaultActionsPath>>
-						<<set _subActionsPath = ''>>
-					<</if>>
-					<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
-					<<break>>
-				<<elseif
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-					<<if _isMod && ![_morphs[_i]].includes($args[0].name)>>
-						<<set _actionsPath = _defaultActionsPath>>
-						<<set _subActionsPath = ''>>
-					<</if>>
-						<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
-					<<break>>
-				<</if>>	
-			<</for>>
-			
+			<<set $args[1] = 'deflower'>>
 		<</if>>
+		
+		<<set _genderDesc = setup.genderPath($args[0])>>
+		<<set _race = '.' + $args[0].race>>
+		<<set _hair = '.' + $args[0].hair + 'hair'>>
+		<<if ($args[0].pregnancy ?? 0) > 100 >>
+			<<set _pregnancyDesc = '.pregnant'>>
+		<<else>>
+			<<set _pregnancyDesc = '.notpregnant'>>				
+		<</if>>
+		
+		<<if setup.getAge($args[0]) <= 24 >>
+			<<set _ageDesc = '.young'>>
+		<<elseif setup.getAge($args[0]) <= 39 >>
+			<<set _ageDesc = ''>>		
+		<<elseif setup.getAge($args[0]) <= 59 >>
+			<<set _ageDesc = '.mature'>>
+		<<else>>
+			<<set _ageDesc = '.old'>>				
+		<</if>>
+		
+		<<set _morphs = [
+		$args[0].name + _pregnancyDesc,
+		$args[0].name,
+		_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _race + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _race + _hair + _pregnancyDesc,		
+		_genderDesc + _race + _pregnancyDesc,		
+		_genderDesc + _race + _hair + _ageDesc,
+		_genderDesc + _race + _ageDesc,
+		_genderDesc + _race + _hair,
+		_genderDesc + _race,
+		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _hair + _pregnancyDesc,		
+		_genderDesc + _pregnancyDesc,		
+		_genderDesc + _hair + _ageDesc,
+		_genderDesc + _ageDesc,
+		_genderDesc + _hair,
+		_genderDesc
+		]>>
+		
+		<<for _i to 0; _i < _morphs.length; _i++>>
+			<<if
+			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
+			typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
+			typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
+				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
+					<<set _actionsPath = _defaultActionsPath>>
+					<<set _subActionsPath = ''>>
+				<</if>>
+				<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
+				<<break>>
+			<<elseif
+			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
+			typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
+			typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
+				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
+					<<set _actionsPath = _defaultActionsPath>>
+					<<set _subActionsPath = ''>>
+				<</if>>
+					<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
+				<<break>>
+			<</if>>	
+		<</for>>
 	</div>
 
 	<<if ($args[2] ?? 'with-text') != 'no-text'>>

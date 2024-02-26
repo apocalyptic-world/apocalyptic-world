@@ -1,0 +1,83 @@
+:: NPC customize - portrait [girlview no-redirect]
+
+<<set _portraits = {
+    asian: {
+		black: setup.range(1, 5)
+	},
+	white:{
+		black:		setup.range(1, 5),
+		blonde:		setup.range(1, 5),
+		brun:		setup.range(1, 5),
+		red:		setup.range(1, 5)
+	},
+	latina:{
+		black:		setup.range(1, 5),
+		blonde:		setup.range(1, 5),
+		brun:		setup.range(1, 5),
+		red:		setup.range(1, 5)
+	}
+}>>
+<<set _availablePortraits = ((_portraits[$tmpGirl.race] ?? {})[$tmpGirl.hair] ?? [])>>
+<div id="custom_portraits">
+    <div class="custom_portrait_item">
+            <div class="custom_portrait_item_img">
+                <div class="custom_portrait_item_default">
+                    <div style="position:relative">
+                        <<set _girlVisual = $tmpGirl>>
+                        <<set _ignoreCustomPortrait = true>>
+                        <<include 'NPC visual'>>
+                    </div>
+                </div>
+            </div>
+            <div class="custom_portrait_item_link">
+                <<link 'Choose'>>
+                    <<run delete $tmpGirl.portrait>>
+                    <<dialogclose>>
+                    <<goto `passage()`>>
+                <</link>>
+            </div>
+	</div>
+    <<for _key = 1; _key <= _availablePortraits.length; _key++>>
+        <<capture _key, _portraitUrl>>
+            <div class="custom_portrait_item">
+                <div class="custom_portrait_item_img">
+                    <<set _portraitUrl = $tmpGirl.race + "/hair_" + $tmpGirl.hair + "/" + _key + ".png">>
+                    [img[setup.ImagePath+'custom_portraits/female/' +_portraitUrl]]
+                </div>
+                <div class="custom_portrait_item_link">
+                    <<link 'Choose'>>
+                        <<set $tmpGirl.portrait = _portraitUrl>>
+                        <<dialogclose>>
+                        <<goto `passage()`>>
+                    <</link>>
+                </div>
+            <br />
+            </div>
+        <</capture>>
+    <</for>>
+</div>
+
+<style>
+    #custom_portraits {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap
+    }
+    .custom_portrait_item {
+        width: 200px;
+        padding: 10px;
+    }
+    .custom_portrait_item img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .custom_portrait_item_img {
+        position: relative;
+        height: 200px;
+    }
+
+    .custom_portrait_item_default {
+        margin-left: 42px;
+    }
+</style>

@@ -149,6 +149,8 @@
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
 				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<set $slaves[_i].happy -= 20>>
+				<<set $slaves[_i].relationship -= 10>>
 				<<run delete $slaves[_i].pregnancy>>
 			<</if>>
 			
@@ -203,9 +205,9 @@
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
-			<<if ($slaves[_i].endurance ?? 0) > 20>>
+			<<if ($slaves[_i].strength ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
-			<<elseif ($slaves[_i].endurance ?? 0) > 10>>
+			<<elseif ($slaves[_i].strength ?? 0) > 10>>
 				<<set _girlChanceToDie = 4>>
 			<</if>>
 			
@@ -377,6 +379,8 @@
 			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
 				<<set $morningMessages.main.push($guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had miscarriage</strong>')>>
+				<<set $guests[_guestI].happy -= 20>>
+				<<set $guests[_guestI].relationship -= 10>>
 				<<run delete $guests[_guestI].pregnancy>>
 			<</if>>
 			
@@ -433,9 +437,9 @@
 		
 		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<set _girlChanceToDie = 5>>
-			<<if ($guests[_guestI].endurance ?? 0) > 20>>
+			<<if ($guests[_guestI].strength ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
-			<<elseif ($guests[_guestI].endurance ?? 0) > 10>>
+			<<elseif ($guests[_guestI].strength ?? 0) > 10>>
 				<<set _girlChanceToDie = 4>>
 			<</if>>
 			

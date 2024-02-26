@@ -2,13 +2,9 @@
 
 <<if $tmpGirl.anal < 20>>
 	<center>
-	<<if [0].includes($tmpGirl.gender)>>
-		[img[setup.ImagePath+'game/misc/no_anal.webp']]
-	<<elseif [1,2].includes($tmpGirl.gender)>>
-		[img[setup.ImagePath+'game/misc/no_anal_guy.webp']]
-	<</if>>
+	<<actionImage $tmpGirl 'no_anal'>>
 	</center>
-	<br /><br />
+	<br />
 	You tried to fuck <<=setup.pronounceWho($tmpGirl)>> in the ass but your dick is too big for <<=setup.pronounceWho($tmpGirl)>> and <<=setup.pronounceWhat($tmpGirl)>> can't relax. 
 	<br />
 	
@@ -30,4 +26,5 @@
 			$tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
 		>>
 	<</if>>
+	<br />
 <</if>>
