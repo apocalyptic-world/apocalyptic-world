@@ -162,6 +162,10 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = [setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - transfemale on female'>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen]).length > 1 && setup.percentageChance(5)>>
+		<<set $tmpEvent = setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen])>>
+		<<set $locationEvents.guesthouse = true>>
+		<<goto 'Guesthouse [Event] - transfemale on transfemale'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
 		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys>>

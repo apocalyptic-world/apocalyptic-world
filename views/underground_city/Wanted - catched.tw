@@ -11,16 +11,10 @@ You put cuffs around her and push her against the wall.
 <<else>>
 You beat his ass and cuff him as he lies on the ground.
 <</if>>
-
-<<if !$wanted[$wantedId].gender>>
-	<table>
-		<tr>
-			<td>Beauty:</td><td><<=$wanted[$wantedId].beauty>></td>
-			<td>Age:</td><td><<=setup.getAge($wanted[$wantedId], true)>></td>
-		</tr>
-	</table>
-<</if>>
 <br /><br />
+<<set _girlVisual = $wanted[$wantedId]>>
+<<include 'NPC info'>>
+<br />
 <<set $wantedLink = 'Bring ' + _wantedPron + ' in'>>
 <<link `$wantedLink`>>
 	<<goto 'Wanted - collect reward'>>
