@@ -21,14 +21,14 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     octavia: $characters.octavia.quests?.kidnapped_found,
     dom:     $characters.dom.quests?.quest6,
     Isabel:  false,
-    Negan:   false,
-    Laura:   false,
+    negan:   $characters.negan.quests?.quest2,
+    laura:   $characters.laura.quests.breeder_trait,
 }>>
 <<set _closed = {
 
 }>>
-<<set _doneSome = _done.vincent || _done.blair || _done.rodger || _done.eve || _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura>>
-<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura>>
+<<set _doneSome = _done.vincent || _done.blair || _done.rodger || /*_done.eve ||*/ _done.octavia ||  _done.dom || _closed.dom  || /*_done.isabel ||*/ _done.negan || _done.laura>>
+<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && /*_done.eve &&*/ _done.octavia && (_done.dom || _closed.dom) && /*_done.isabel &&*/ _done.negan && _done.laura>>
 
 <<set _helpguide = {
 /*  template
@@ -456,6 +456,50 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Go back to the Underground city where Isabel eagerly awaits the fuel.',
     },
     
+    negan: {
+        show: $game.location?.slave_market || $characters.dom.quests?.quest4_done_day,
+        done: $characters.negan.quests?.quest2,
+        category: 'Story',
+        title: 'Negan and the babes',
+        description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
+            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">5 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
+            'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
+    },
+
+    laura_meet: {
+        show: true,
+        done: $characters.laura.quests.lab_workbench,
+        category: 'Story',
+        title: 'Dr. Laura Finch',
+        description: 
+            'Meet up with Laura:<ul>' +
+                '<li>' + (!isMetChar('laura') ? ( $game.day < 200 ? 'Wait for day 200; ' : 'Go exploring; Encounter toxic rain, find shelter and meet Laura. Give her a sample.' ) : '<s>First meeting with Laura</s>' ) + '</li>' +
+                '<li>' + (!$characters.laura.quests?.successful_test ? 
+                    (($characters.laura.quests?.metOnDay) >= ($game.day - 3) ? 'Three days after the first meeting, ' : '')  + 'Laura shows up outside your cabin. Talk with her and give new sample.' : '<s>Second meeting with Laura</s>' ) + '</li>' +
+                '<li>' + (!$characters.laura.quests.first_vials ? 
+                    (($characters.laura.quests?.lastTestDay) >= ($game.day - 5) ? 'Science takes time. Five days after the last meeting,' : '') + 'Laura shows up outside your cabin. She has good news about her potions.' : '<s>Third meeting with Laura</s>') + '</li>' +
+                '<li>' + (!$characters.laura.quests.lab_workbench ? 
+                    (($characters.laura.quests?.lastTestDay) >= ($game.day - 7) ? 'All this waiting... A full week after the last meeting,' : '') + 'Laura shows up outside your cabin. Bad news: Raiders have destroyed her lab.' : '<s>Fourth meeting with Laura</s>') + '</li>' +
+            '</ul>',
+    },
+    laura_move: {
+        show: $characters.laura.quests.lab_workbench,
+        done: $characters.laura.quests.breeder_trait,
+        category: 'Story',
+        title: 'Laura moving in',
+        description: 
+            'Laura settles in at her new lab:<ul>' +
+                '<li>' + (!$characters.laura.quests.living ? 
+                    (!$game.location.workbench ? 'Explore to find the workbench → ' : '') +
+                    (!$game.location.guest_house ? 'Build guest house → ' : '') +
+                    (!$game.location.lab ? 'Build lab → ' : '') + 'Laura shows up outside your cabin, ready to move in.'
+                    : '<s>Laura moved in</s>') + '</li>' +
+                '<li>' + (!$characters.laura.quests.breeder_trait ? 
+                    ($characters.laura.quests.lastTestDay + 20 >= $game.day ? 'Wait for three weeks. ' : '') + 'Meet Laura in the greeenhouse.'
+                    : '<s>Laura invented breeder serum.</s>') + '</li>' +
+            '</ul>',
+    },
+
     all_future: {
         show: _doneSome,
         done: _doneAll,
