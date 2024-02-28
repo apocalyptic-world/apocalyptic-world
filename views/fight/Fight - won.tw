@@ -68,7 +68,8 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 <<if !$fight.enemiesAlive>>
 	<strong>You look at them and noone of them is breathing. All of them are dead.</strong>
 <<else>>
-	<strong>You look down at <<=($fight.defeatedEnemies.length > 1 ? 'them' : ($fight.defeatedEnemies[0].gender ? 'him' : 'her'))>> lying unconscious and you're deciding what to do with them</strong>
+	<strong>You look down at <<=($fight.defeatedEnemies.length > 1 ? 'their' : ($fight.defeatedEnemies[0].gender ? 'his' : 'her'))>> <<=($fight.defeatedEnemies.length > 1 ? 'bodies' : 'body')>>, 
+	lying on the floor and you're deciding...</strong>
 	<table id="fight-table">
 	  <<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
 		  <<capture _i>>
