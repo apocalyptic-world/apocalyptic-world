@@ -58,7 +58,7 @@
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('knife')>>
-		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in chest (-' + Math.round($player.strength / 2, 0) + ')')>>
+		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in the chest (-' + Math.round($player.strength / 2, 0) + ')')>>
 	<<elseif $args[1] === 'revolver'>>
 		<<drop $backpack 'bullet_revolver' 1>>
 		<<set $fight.enemies[$args[0]].hp = 0>>
@@ -72,7 +72,7 @@
 	
 	<<if $fight.enemies[$args[0]].hp <= 0>>
 		<<if (typeof $args[1] === 'undefined')>>
-			<<set $fight.messages.push($fight.enemies[$args[0]].name + ' fall to the ground knocked out')>>
+			<<set $fight.messages.push($fight.enemies[$args[0]].name + ' falls to the ground and is knocked out')>>
 		<</if>>
 		<<run $fight.defeatedEnemies.push($fight.enemies[$args[0]])>>
 		<<run $fight.enemies.splice(_i, 1)>>
@@ -137,7 +137,7 @@
 			<<run $fight.messages.push($fight.enemies[_i].name + ' ' + either(
 			  'punched ' + _targetName + ' in the head', 
 			  'kicked ' + _targetName + ' in the stomach', 
-			  'hit ' + _targetName + ' with elbow'
+			  'hit ' + _targetName + ' with an elbow'
 			) + ' (- ' + $enemyStrength + ')')>>
 		<</if>>
 		
