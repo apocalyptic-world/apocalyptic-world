@@ -148,7 +148,7 @@
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
-				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="item">She had a miscarriage.</strong>')>>
+				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage.</strong>')>>
 				<<set $slaves[_i].happy -= 20>>
 				<<set $slaves[_i].relationship -= 10>>
 				<<run delete $slaves[_i].pregnancy>>
@@ -271,7 +271,7 @@
 			<</if>>
 
 			<<if $slaves[_i].food <= -20>>
-				<<set $morningMessages.main.push('<span class="dead">' + $slaves[_i].name + ' died of hunger. You dont have enough food!/span>')>>
+				<<set $morningMessages.main.push('<span class="dead">' + $slaves[_i].name + ' died of hunger. You dont have enough food!</span>')>>
 				<<set $slaves.splice(_i, 1)>>
 				<<set _i-->>
 				<<continue>>
