@@ -323,7 +323,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     },
 
     burn_settlement: {
-        show: isMetChar('octavia'),
+        show: isMetChar('octavia') && $game.location?.settlement,
         done: $characters.octavia.quests?.burned_settlement,
         category: 'Story',
         title: 'Settlement on fire',
@@ -380,11 +380,11 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '<li>' + ($game.day < 100 ? 'Wait untill day 100 (as a trial period)' : '<s>Trial period over.</s>') + '</li>' +
             '<li>' + ($player.reputation < 100 ? 'Have 100 reputation to  be respected.' : '<s>Being respected in various communities.</s>') + '</li>' +
             '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
-            '</ul>' +
-            ($characters.dom?.quests?.invite ? 
+            '<li>' + (!($characters.dom?.quests?.invite ?? false) ? 
                 'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
                 '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deals ends the Dom quest line.</span> <span style="color: green">Accepting the deal opens it.</span>'
-            : '<s>Have been invited to Dom\'s place.</s>'),
+            : '<s>Have been invited to Dom\'s place.</s>')  + '</li>' +
+            '</ul>',
     },
     dom_champagne: {
         show: $characters.dom?.quests?.invite,
@@ -444,18 +444,18 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Negan and the blondes',
         description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
-            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">5 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
+            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">4 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
             'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
     },
 
     laura_meet: {
-        show: true,
+        show: $game.day >= 150,
         done: $characters?.laura?.quests?.lab?._workbench ?? false,
         category: 'Story',
         title: 'Dr. Laura Finch',
         description: 
             'Meet up with Laura:<ul>' +
-                '<li>' + (!isMetChar('laura') ? ( $game.day < 200 ? 'Wait for day 200; ' : 'Go exploring; Encounter toxic rain, find shelter and meet Laura. Give her a sample.' ) : '<s>First meeting with Laura</s>' ) + '</li>' +
+                '<li>' + (!isMetChar('laura') ? ( $game.day < 200 ? 'Wait for day 200; Go exploring.' : 'Go exploring; Encounter toxic rain, find shelter and meet Laura. Give her a sample.' ) : '<s>First meeting with Laura</s>' ) + '</li>' +
                 '<li>' + ((!$characters?.laura?.quests?.successful_test ?? false) ? 
                     (($characters?.laura?.quests?.metOnDay ?? -1) >= ($game.day - 3) ? 'Three days after the first meeting, ' : '')  + 'Laura shows up outside your cabin. Talk with her and give new sample.' : '<s>Second meeting with Laura</s>' ) + '</li>' +
                 '<li>' + ((!$characters?.laura?.quests?.first_vials ?? false) ? 
