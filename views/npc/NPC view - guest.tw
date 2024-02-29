@@ -113,6 +113,20 @@
 <<link 'Customize'>>
 	<<goto 'NPC customize'>>
 <</link>>
+
+<<link 'Throw out'>>
+	<<dialog 'Throw out'>>
+		  Are you sure you want to throw <<=($tmpGirl.gender ? 'him' : 'her')>> out?
+		  <br />
+		  <<link 'Yes' 'Guest house'>>
+			  <<assignedTo $tmpGirl 'none'>>
+			  <<guestRemove $guestId>>
+			  <<dialogclose>>
+			  <<set $player.reputation-->>
+			  <<set $player.goodwill-->>
+		  <</link>>	
+	<</dialog>>
+<</link>>
 	
  <<link 'Go back'>>
 	<<if typeof $slaveId !== 'undefined'>>
