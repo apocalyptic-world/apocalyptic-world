@@ -40,7 +40,7 @@ You beat his ass and cuff him as he lies on the ground.
 	<</if>>
 	<<slaveValue $wanted[$wantedId]>>
 	<<if $wanted[$wantedId].value > $wanted[$wantedId].wanted.value && timeBetween('14:00', '19:00')>>
-		You think she is worth more on the slave market than bounty. She's your property now since you catched her.<br/>
+		You think she is worth more on the slave market than the bounty. She's your property now since you catched her.<br/>
 		<<link 'Sell her on the slave market'>>
 			<<set $wanted[$wantedId].capture = false>>
 			<<addmins 30>>
@@ -60,7 +60,7 @@ You beat his ass and cuff him as he lies on the ground.
 
 			<<set $tmpGirlInvite = false>>
         	<<set _strongGirl = false>>
-        	<<set _relation   = $tmpGirl.relationship ?? 0>>
+        	<<set _relation   = $wanted[$wantedId].relationship ?? 0>>
         	<<set _countComp  = $player.companions.length ?? 0>>
         	<<set _reputation = $player.reputation ?? 0>>
         	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
@@ -68,7 +68,7 @@ You beat his ass and cuff him as he lies on the ground.
 			<<unset _wasRaped>>
        		 <<if _no>>
 				<br />
-				<<sayNpc $tmpGirl>>
+				<<sayNpc $wanted[$wantedId]>>
                 	No, I don't want to come to live with you. Please let me go!
 				<</sayNpc>>
         	<<else>>
@@ -77,9 +77,6 @@ You beat his ass and cuff him as he lies on the ground.
 				<<set $wanted.splice($wantedId, 1)>>
 				<<set $player.reputation_bounty_hunter-->>
 				<<set $player.goodwill++>>
-				<<addhours 1>>
-				<<set $tmpGirl.capture = false>>
-				<<set $guests.push($tmpGirl)>>
 				<<addhours 1>>
 				<<goto 'Guest house'>>
 			<</if>>

@@ -5,10 +5,27 @@ Follow the story and do the quests to unlock places in game and important charac
 <br/>
 Most importantly, it's a sexual game. (-; So gather your harem and shag everyone... ;-) Have fun!<br/>
 <br/>
-<<linkdesc>>(By the way, story and gameplay is intertwined so mistakes will be made.)<</linkdesc>>
+<<linkdesc>>(By the way, story and gameplay is intertwined so mistakes will be made. Also this guide needs reformating, rewording and other re- but most of the information is there.)<</linkdesc>>
 
 <<set _chanceFCpercent = Math.round(($player.strength - 125 + ($player.fighter_rank ?? 100))*100/26)>>
 <<set _chanceFCtext = _chanceFCpercent <= 0 ? 'none!' : _chanceFCpercent >=100 ? 'auto!' : _chanceFCpercent + '%'>>
+
+<<set _closed = {
+    dom: ($characters.dom.quests?.invite && !$characters.dom.quests?.accepted_deal),
+}>>
+<<set _done = {
+    vincent: $player.car?.explore,
+    blair:   $characters.blair.quests?.basement,
+    rodger:  $characters.rodger.quests?.horse,
+    eve:     false,
+    octavia: $characters.octavia.quests?.kidnapped_found,
+    dom:     $characters.dom.quests?.quest6,
+    Isabel:  false,
+    negan:   $characters?.negan?.quests?.quest2 ?? false,
+    laura:   $characters?.laura?.quests?.breeder_trait ?? false,
+}>>
+<<set _doneSome = _done.vincent || _done.blair || _done.rodger || /*_done.eve ||*/ _done.octavia ||  _done.dom || _closed.dom  || /*_done.isabel ||*/ _done.negan || _done.laura>>
+<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && /*_done.eve &&*/ _done.octavia && (_done.dom || _closed.dom) && /*_done.isabel &&*/ _done.negan && _done.laura>>
 
 <<set _helpguide = {
 /*  template
@@ -48,20 +65,21 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Strength',
         description: 'You can increase your strength by:<ul>' +
             ($player.strength <  100 && $game.location?.underground ? '<li>exercising at the Underground fight cage (+2)</li>' : '') +
-            ($player.strength <  100 ? '<li>working out together with one of your settlers</li>' : '') +
-            ($player.strength <  100 ? '<li>winning (random) fights</li>' : '') +
-            ($player.strength <   50 ? '<li>training strength by the fireplace at your home</li>' : '') +
+            ($player.strength <  100 ? '<li>working out together with one of your settlers</li>' : '<li><s>Workout with settlers</s></li>') +
+            ($player.strength <  100 ? '<li>winning (random) fights</li>' : '<li><s>(random) fights</s></li>') +
+            ($player.strength <   50 ? '<li>training strength by the fireplace at your home</li>' : '<li><s>Fireplace training</s></li>') +
             ($game.location?.underground ? '<li>fighting at the Underground fight cage. Approximate chance to win: ' + _chanceFCtext +' </li>'  : '') +
-            '<li>and some random events - if you are lucky to get them</li>' +
+            '<li>and some very few random events - if you are lucky to get them</li>' +
             '</ul>',
     },
     endurance: {
-        show: true,
-        done: false,
+        show: $player.endurance <  1000,
+        done: $player.endurance >= 1000,
         category: 'Hint',
         title: 'Endurance',
         description: 'You can increase your endurance by:<ul>' +
-            ($player.endurance <  50 && $game.location?.underground ? '<li>exercising at the Underground fight cage</li>' : '') +
+            (!$game.location?.underground ? ''
+                : ($player.endurance < 50 ? '<li>exercising at the Underground fight cage</li>' : '<li><s>Fight cage exercise</s></li>')) +            
             '<li>training endurance by the fireplace at your home</li>' +
             '</ul>',
     },
@@ -71,6 +89,27 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Hint',
         title: 'Intelligence',
         description: 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence.<br/>Some random explore events can also give you points.',
+    },
+    reputation: {
+        show: true,
+        done: $player.reputation >= 100,
+        category: 'Hint',
+        title: 'Reputation',
+        description: 'Gained and lost by doing stuff, too many to list. Mostly gained by winning fights and buying round of beers.',
+    },
+    goodwill: {
+        show: false,
+        done: true,
+        category: 'Hint',
+        title: 'Goodwill',
+        description: '<span style="color: yellow">Not used (yet)!</span> This is how nice person you appears to be. Gained by doing good deeds, sparing enemys, helping people etc. and lost doing the opposite.',
+    },
+    reputation_bounty: {
+        show: $game.location?.bar,
+        done: $player.reputation_bounty_hunter >= 20,
+        category: 'Hint',
+        title: 'Bounty hunter reputation',
+        description: 'Your reputation within the bounty hunter community. Gained by turn-ins and lost if you don\' follow the the BH code. Your bounty reward increases with this rep.',
     },
 
     find_workbench: {
@@ -115,15 +154,20 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Wedding with Blair perhaps?',
         description: 'Work on your relation with Blair. Increase relation(90) by talking with her, kissing her, (dating her) and even fucking her. You find her in your kitchen in the mornings, working on her father\'s farm in the days and in your bedroom at nights.<br/>' +
         'After spending a long time with her, Vincent wants you to make her an honorable woman. Visit Vincent after day 150 and talk about wedding plans.' +
-        /* $game.canMarry, $characters.vincent?.quests?.wedding_talk_day */
-        'If you want you can marry Blair or choose not to. Don\'t worry - you can have as many wives as you want. <div class="tooltip">By the way, do you know the similarity between wives and birds?<span class="tooltiptext">Both can be ringed...</span></div>' +
-        /* $characters.blair.quests?.married */
+        'If you want you can marry Blair or choose not to. Don\'t worry - you can have as many or few wives as you want. <div class="tooltip">By the way, do you know the similarity between wives and birds?<span class="tooltiptext">Both can be ringed...</span></div>' +
         '',
     },
-
-    /* // Explore */
-    /* <<elseif $randomNumber <= 78 && isMetChar('octavia') && $characters.octavia.quests && $characters.octavia.quests?.tribe>> */
-    /* <<elseif $game.day >= 200 && !isMetChar('laura')>> */
+    basement_fun: {
+        show: !$characters.blair.quests?.basement  &&  $game?.cabinName,
+        done:  $characters.blair.quests?.basement,
+        category: 'Gameplay',
+        title: 'Basement fun',
+        description: 
+            (!$characters.blair.quests?.basement ? 
+                ($characters.blair.relationship < 80 ? 'Raise relationship with Blaire (80)' : '<s>Blair relations done!</s>') + 
+                'Talk with her in the bedroom for a reward' :
+                '<s>Have fun with Blair in the basement</s>'),
+    },
 
     find_forest: {
         show: !$game.location?.forest,
@@ -174,7 +218,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'A girl in trouble',
         description: 
             '<span style="color: red">Warning: Timed event in this questline!</span> But it is one of only two ways to get a gun in the game' +
-            '<ul><li>In the morning talk to Blair in the kitchen; Goto underground - bar</li>' +
+            '<ul>' +
+                '<li>In the morning talk to Blair in the kitchen; Goto underground - bar</li>' +
                 '<li>Talk to the bartender. <span style="color: red">Warning: You have only a few days to find Ashley alive once you talked to the bartender.</span></li>' +
                 '<li>Between 22:00 and midnight patrol the streets looking for Ashley. Start directly after you have talked to the bartender. Patrol means: visit streets; leave; repeat until Ashley is found</li>' + 
                 '<li>In the morning talk to Blair in the kitchen; Get <strong class="iitem">revolver</strong> if you saved Ashley; Talk to Blair in bedroom at night either way.</li>' +
@@ -191,16 +236,19 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Collect the materials wanted in journal and bring to Vincent.<br/>' +
             'Settlement discovered and you meet Rodger and Eve. It seems that Vincent want you to build a church and you "volunteered" the material and time.<br/>' + 
             'Continue visiting the settlement and building the church. Don\'t forget to bring lots of building material. You will need an additional total of <strong class="iitem">100 wood</strong> and <strong class="iitem">5 rope</strong> to complete the church.<br/>' +
-            'Octavia shows up and interrupts the celebration. You can fight her and four guys if you want. <strong>Note!</strong> Octavia is a strong person. So eat your carrots and train before trying.',
+            'Octavia shows up and interrupts the celebration. You can fight her four guys if you want.',
     },
     first_party: {
-        show: !$characters.rodger.quests?.champagne && $game.location?.settlement_church,
-        done:  $characters.blair.quests?.house_party_finished,
+        show:  $game.location?.settlement_church,
+        done:  $characters.eve.quests.sex  &&  $characters.blair.quests?.house_party_finished,
         category: 'Story',
         title: 'Party time with bubbles',
-        description: 'Visit settlement church; Talk with Rodger; He might ask you to look for wine in an old tavern in the city. Find <span class="iitem">champagne</span><br/>' +
-            'In the morning, talk to Blair in the kitchen. She has ideas what to do with the bubbles. You will need <span class="iitem">20 food</span> and <span class="ittem">1 champagne</span>.<br/>' +
-            'In the evening, throw a houseparty at the fire place. Invite any guest to your bedroom for after party fun.',
+        description: 
+            (!$characters.rodger.quests?.champagne ? 'Visit settlement church and talk with Rodger; He might ask you to look for wine in an old tavern in the city. Gets <span class="iitem">champagne</span><br/>' : '<s>First chammpagne-run</s>') +
+            ( $characters.rodger.quests?.champagne ? 'After you have built the cabin, you can go on anther champagne-run with Eve every few weeks.' : '') +
+            (!$characters.blair.quests?.house_party ? 'In the morning, talk to Blair in the kitchen. She has ideas what to do with the bubbles. <br/>' : '<s>Morning talk</s>') +
+            (!$characters.blair.quests?.house_party_finished ? 'In the evening, throw a houseparty at the fire place. Invite any guest to your bedroom for after party fun. You will need <span class="iitem">20 food</span> and <span class="ittem">1 champagne</span>.' : '<s>First house party</s>') +
+            ( $characters.blair.quests?.house_party_finished ? 'You can now hold house partys' : ''),
     },
     making_community: {
         show: !$characters.blair.quests?.gate && $characters.blair.quests?.house_party_finished,
@@ -209,11 +257,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Making a community',
         description: 'After the first house party we quickly move on to the next adventure 8-|.<ul>' + 
                 '<li>It all starts with you having a chat with Blair in the morning. Being a good(?) daughter she wants you to fulfill one of her father\' old dreaams. A dream he since then abandoned.</li>' +
-                /* $characters.blair.quests?.gate */
-                '<li>Use your workbench to build a <strong>Settlement gate</strong>.' + ($game.location?.workbench ? '' : 'But first you have to go exploring until you find a workbench!') + '</li>' +
-                /* $game.cabinName */
+                '<li>Use your workbench to build a <strong>Settlement gate</strong>.' + ($game.location?.workbench ? 'But first you have to go exploring until you find a workbench!' : '') + '</li>' +
                 '<li>Visit Vincent at his farm. He has very strong opinions about this project.</li>' +
-                /* $characters.vincent?.quests?.car_talk */
             '</ul>',
     },
     sanctuary_reconnaissance: {
@@ -222,9 +267,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Reconnaissance',
         description: 'Ten days after you have discussed the wedding plans, Vincent opens up and want to talk about <strong>The Sancturary</strong>. He is clearly obsessed with that place!<br/>' +
-            /* $characters.vincent?.quests?.sanctuary_talk */
             'Prepare your party; You can bring two and only two companions, both with strength at least 40; Follow Vincent and spy on that place (and fail)',
-            /* $characters.vincent?.quests?.sanctuary_done */
     },
     home_shopping: {
         show: !$game.location?.shop && !$characters.vincent?.quests?.shop_talk  && $characters.vincent?.quests?.sanctuary_done,
@@ -232,7 +275,6 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Home shopping',
         description: 'Vincent suggests that you build a small shop in your place.<br/>' +
-            /* $characters.vincent?.quests?.shop_talk */
             'Use your workbench to build the <strong>Shop</strong>.' + ($game.location?.workbench ? '' : 'But first you have to go exploring until you find a workbench!'),
     },
     sanctuary_infiltration: {
@@ -241,9 +283,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Infiltration',
         description: 'Vincent have found a way to get into the sanctuary.' +
-            /* $characters.vincent?.quests?.sanctuary_car_talk */
             'Prepare your party for the Sanctuary visit; You can bring four and only four companions. <span style="color: red">Warning: All companions will die!</span>',
-            /* $game.location?.garage, $characters.vincent?.car_get_day, $characters.vincent?.quests?.sanctuary_infiltration */
     },
     car: {
         show: !$player.car?.explore && $game.location?.garage,
@@ -252,52 +292,225 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Testing car',
         description: 'Collect car parts and fuel and repair the wreck in the garage; Vincent will show up for the testrun',
     },
-    vincent_future: {
+
+    nursery: {
+        show: !$characters.blair.quests?.nursery && $game?.cabinName,
+        done:  $game.location?.nursery,
+        category: 'Story',
+        title: 'Nursery',
+        description: 
+            (!$characters.blair.quests?.nursery ? 'Talk with Blair in the kitchen. She want you to build a nursery for the children.<br>' : '<s>Talked with Blair!</s>') +
+            (!$game.location?.nursery           ? 'Use your workbench and build the nursery' : '<s>Nursery built!k</s>'),
+    },
+
+    settlement_shop: {
+        show: !$game.location?.settlement_shop && $game?.cabinName,
+        done:  $game.location?.settlement_shop,
+        category: 'Story',
+        title: 'A shop for the settlement',
+        description: 
+            (!$characters.rodger.quests?.shop_talk ? 'Rodger wants you to build a shop in his little settlement<br/>Visit main square and build shop.' : '<s>Talked with Rodger about shop!</s><br/>' +
+                (!$game.location?.settlement_shop ? 'Visit the settlement\'s main square and build the shop.' : '<s>Built Settlement shop!</s>')),
+    },
+    horse: {
+        show: !$characters.rodger.quests?.horse && $game.location?.settlement_shop,
+        done: $player?.horse,
+        category: 'Story',
+        title: 'Horse',
+        description: 
+            (!$characters.rodger.quests?.horse ? 'Rodger tells you that a person called Harper might have a horse to sell. Go find him.<br/>' : '<s>Harper visited!</s><br/>') +
+            (!$player?.horse ? 'Barnaby, the horse traveling merchant comes by your place now and then if you don\' get the horse from Harper, give it to Rodger or loose it somehow.' : '<s>My horse, ' + $player?.horse + '!</s>'),
+    },
+
+    burn_settlement: {
+        show: isMetChar('octavia') && $game.location?.settlement,
+        done: $characters.octavia.quests?.burned_settlement,
+        category: 'Story',
+        title: 'Settlement on fire',
+        description: 
+            ($game.day < 80 ? 'From day 80 there is a chance you find something burning in the settlement.<br/>' : '') +
+            (!$characters.octavia.quests.burned_settlement ? 'Octavia is burning the settlement! Resolve the situation.' : '<s>Octavia tried to burn the settlement.</s>' ),
+    },
+    eve_kidnapped: {
+        show: $characters.octavia.quests?.burned_settlement,
+        done: $characters.octavia.quests?.canTalk ,
+        category: 'Story',
+        title: 'Eve kidnapped',
+        description: 'A few days (5) after the burning, visit the Settlement and find that Octavia has misbehaved again. This time Eve has ben taken. Resolve the situation.',
+    },
+    octavia_rivals: {
+        show: $characters.octavia.quests.eve_kidnapped,
+        done: $characters.octavia.quests.kidnapped_found,
+        category: 'Story',
+        title: 'Octavia and her rivals',
+        description: 'Octavia has set up camp next to the settlement. Visit her!<br>' +
+            ($characters.octavia.relationship < 40 ? 'Octavia wants wolf pelts for her tribe. Give pelts and raise her relations to 40. <span style="color: yellow">Tip!</span> Give her 3 wolf pelts at a time for the most action.' : 'You can continue to give Octavia 3 wolf pelts at a time for fun if you want.') + '<br/>' +
+            (!$characters.octavia.quests.ultimatum ? 'A messenger from a rival tribe gives Octavia an ultimatum. She asks you for advice!' : '<s>Rival tribe ultimatum</s>') + '<br/>' +
+            ($characters.octavia.relationship < 60 ? 'Octavia wants medallions carried by high-level members of the rival tribe. You can encounter groups from the rival tribe by going exploring' : 'You can continue to give Octavia medallions for fun if you want.') + '<br/>' +
+            (!$characters.octavia.quests.kidnapped_found ?
+                'A mountain tribe has attacked the camp and taken Octavia.<br/>' +
+                ($backpack.count('tribe_medallion') < 3 ? 'Weaken the oppositon - Get more tribe medallions (3)' : '<s>Have weakened the opposition</s>') +
+                '<span style="color: red">Warning: Hard fight with many enemies (with knives)!</span> Before rescuing her make sure you have trained your strength and endurance really hard. Bring maximium number of fighting companions. The stronger the better' : 
+                '<s>Octavia kidnapped and rescued.</s>'),
+    },
+    faith: {
+        show: $characters.rodger.quests?.horse && $characters.octavia.quests.eve_kidnapped,
+        done: $characters.rodger.quests?.faith,
+        category: 'Story',
+        title: 'Testing of the Faith',
+        description: 
+            'Vist the settlement. Some bandits have blocked the water supply. Fix!',
+    },
+
+    dom_taxes: {
+        show: $game.location?.streets,
+        done: $warnedAboutStreetHookers,
+        category: 'Story',
+        title: 'Dom and taxes',
+        description: 
+            'Assign at least one worker to work the streets. Visit the Underground streets. Dom will inform you of the tax rules.' +
+            'If you don\'t  want streetworkers you can remove them after the briefing.',
+    },
+    dom_invite: {
+        show: $warnedAboutStreetHookers,
+        done: $characters.dom?.quests?.invite,
+        category: 'Story',
+        title: 'An invitation from Dom',
+        description: 'Dom will invite you to a meeting if you impress him. To do this you have to do:<ul>' +
+            '<li>' + ($game.day < 100 ? 'Wait untill day 100 (as a trial period)' : '<s>Trial period over.</s>') + '</li>' +
+            '<li>' + ($player.reputation < 100 ? 'Have 100 reputation to  be respected.' : '<s>Being respected in various communities.</s>') + '</li>' +
+            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
+            '<li>' + (!($characters.dom?.quests?.invite ?? false) ? 
+                'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
+                '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deals ends the Dom quest line.</span> <span style="color: green">Accepting the deal opens it.</span>'
+            : '<s>Have been invited to Dom\'s place.</s>')  + '</li>' +
+            '</ul>',
+    },
+    dom_champagne: {
+        show: $characters.dom?.quests?.invite,
+        done: $characters.dom.quests?.quest1_done || _closed.dom,
+        category: 'Story',
+        title: 'Bubbles for Dom',
+        description: 
+            (($characters.dom.quests.day + 10) >= $game.day ? '10 days after accepting the deal Dom have the first quest for you. ' : 'Dom first quest: ') + 
+            (!$characters.dom.quests?.quest1 ? 'Visit Underground streets and meet Dom. ' : '<s>Have met Dom.</s> ')  +
+            (!$characters.dom.quests?.quest1_done ? 
+                ($backpack.count('champagne') < 10 ? 'He wants <strong class="iitem">10 bottles of champagne</strong>. ' : '<s>Have champagne!</s> ') +
+                'Bring the bubbles to him (streets)' : '<s>Brought bubbles</s>'),
+    },
+    dom_employee: {
+        show: $characters.dom.quests?.quest1_done,
+        done: $characters.dom.quests?.quest2_done || _closed.dom,
+        category: 'Story',
+        title: 'Punishment for emplyee',
+        description: 
+            ($player.strength < 100 ? 'Increase your strength (100+). ' : '<s>Enough strength! </s> ') +
+            (!$characters.dom.quests?.quest2 ? 
+                ('Meet Dom in the streets (as usual). He is angry on an employee and want her "punished". Go visit her. Free choice to follow order to punish or not follow order.<br/>' +
+                'If you follow order Dom will be pleased and Isabel unhappy but if you don\'t Dom will be very angry with you and Isabel happy.') : 
+                ('<s>Have met Dom. ' + ($characters.dom.quests?.quest2_killed ? 'Punished' : 'Didn\'t punish') + ' employee!</s>')),
+    },
+    dom_fuel: {
+        show: $characters.dom.quests?.quest2_done,
+        done: $characters.dom.quests?.quest3_done || _closed.dom,
+        category: 'Story',
+        title: 'Diplomacy for fuel to the city',
+        description: 'A week or two after the inccident meet Dom in the streets (as usual).He is in need of you. The underground is near a fuel crisis and the diplomatic envoy from a trading partner hasn\'t showed up as expected. Follow Dom and his entourage to the trading partner.',
+    },
+    isabel_try: {
+        show: $characters.dom.quests?.quest3_done,
+        done: $characters.dom.quests?.quest4_done_day|| _closed.dom,
+        category: 'Story',
+        title: 'Isabel\'s turn for fuel',
+        description: 'Ten days after the last attempt to get fuel to city meet up with Isabel in the nightclub. She know someone that runs an old oil and gas refinery. The only transport available is a bike with sidecar so you have to leave your companions behind at your home. Enjoy your solo adventure with Isolde.<br/>' +
+            '<<linkdesc>>(You have an option to use stealth in this quest. Stealth uses intelligence. For best result have a high stat!)><</linkdesc>>',
+    },
+    isabel_sanctuary: {
+        show: $characters.dom.quests?.quest4_done_day,
+        done: $characters.dom.quests?.quest6 || _closed.dom,
+        category: 'Story',
+        title: 'The Sanctuary contact',
+        description: 'After another ten days meet Isabel in the streets. She has made a deal with the Sanctury and want you to go and do the negoiation.<br/>' +
+            'You can now visit the Sanctuary. Go there and visit Negan. Depending on choices you might need 400 caps.<br/>' +
+            'The real price is that Negan wants four blonde girls, very beautiful (80+) for fuel.<br/>' +
+            '<span style="color: red">Warning: You will loose the four blondes.</span> Have the girls among the companions. If you don\'t have enough blondes you can use hair dye kit. Visit Negan\'s office and deliver the girls.<br/>' +
+            '(You can now repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> by visiting Negan in his office.)<br/>' +
+            'Go back to the Underground city where Isabel eagerly awaits the fuel.',
+    },
+
+    negan: {
+        show: $game.location?.slave_market || $characters.dom.quests?.quest4_done_day,
+        done: $characters?.negan?.quests?.quest2 ?? false,
+        category: 'Story',
+        title: 'Negan and the blondes',
+        description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
+            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">4 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
+            'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
+    },
+
+    laura_meet: {
+        show: $game.day >= 150,
+        done: $characters?.laura?.quests?.lab?._workbench ?? false,
+        category: 'Story',
+        title: 'Dr. Laura Finch',
+        description: 
+            'Meet up with Laura:<ul>' +
+                '<li>' + (!isMetChar('laura') ? ( $game.day < 200 ? 'Wait for day 200; Go exploring.' : 'Go exploring; Encounter toxic rain, find shelter and meet Laura. Give her a sample.' ) : '<s>First meeting with Laura</s>' ) + '</li>' +
+                '<li>' + ((!$characters?.laura?.quests?.successful_test ?? false) ? 
+                    (($characters?.laura?.quests?.metOnDay ?? -1) >= ($game.day - 3) ? 'Three days after the first meeting, ' : '')  + 'Laura shows up outside your cabin. Talk with her and give new sample.' : '<s>Second meeting with Laura</s>' ) + '</li>' +
+                '<li>' + ((!$characters?.laura?.quests?.first_vials ?? false) ? 
+                    (($characters?.laura?.quests?.lastTestDay ?? -1) >= ($game.day - 5) ? 'Science takes time. Five days after the last meeting,' : '') + 'Laura shows up outside your cabin. She has good news about her potions.' : '<s>Third meeting with Laura</s>') + '</li>' +
+                '<li>' + ((!$characters?.laura?.quests?.lab_workbench ?? false) ? 
+                    (($characters?.laura?.quests?.lastTestDay ?? -1) >= ($game.day - 7) ? 'All this waiting... A full week after the last meeting,' : '') + 'Laura shows up outside your cabin. Bad news: Raiders have destroyed her lab.' : '<s>Fourth meeting with Laura</s>') + '</li>' +
+            '</ul>',
+    },
+    laura_move: {
+        show: $characters?.laura?.quests?.lab_workbench ?? false,
+        done: $characters?.laura?.quests?.breeder_trait ?? false,
+        category: 'Story',
+        title: 'Laura moving in',
+        description: 
+            'Laura settles in at her new lab:<ul>' +
+
+                '<li>' + ((!$characters?.laura?.quests?.living ?? false) ? 
+                    (!$game.location.workbench ?? false ? 'Explore to find the workbench → ' : '') +
+                    (!$game.location.guest_house ?? false ? 'Build guest house → ' : '') +
+                    (!$game.location.lab ?? false ? 'Build lab → ' : '') + 'Laura shows up outside your cabin, ready to move in.'
+                    : '<s>Laura moved in</s>') + '</li>' +
+                '<li>' + ((!$characters?.laura?.quests?.breeder_trait ?? false) ? 
+                    (($characters?.laura?.quests?.lastTestDay ?? -1) + 20 >= $game.day ? 'Wait for three weeks. ' : '') + 'Meet Laura in the greeenhouse.'
+                    : '<s>Laura invented breeder serum.</s>') + '</li>' +
+
+            '</ul>',
+    },
+
+    all_future: {
+        show: _doneSome,
+        done: _doneAll,
+        category: 'Story',
+        title: 'End of questlines',
+        description: 'This is the end of some characters quests as of version v0.32. Just be patient and wait for game updates.<br/>' +
+            'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+        /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
+            'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Dom & Isabel: ' + (_done.dom ? '<span style="color: green">Done!</span>': 'More quests to do!') + '<br/>' +
+              (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!') + '<br/>' +
+        /*  'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
+            'Negan:   ' + (_done.negan   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
+            'Laura: '   + (_done.laura   ? '<span style="color: green">Done!</span>' : 'More quests to do!'),
+    },
+
+    internal: {
         show: false,
         done: false,
-        category: 'Story',
-        title: 'End of Vincent\'s quest',
-        description: 'This is the end of Vincent\'s quest as of version v0.32. Just be patient and wait for game updates.',
+        category: 'Internal',
+        title: 'Notes for guide writer',
+        description: 'This is a reminder for the writer of this game guide of things to do.<br/>Characters: Dom, Isabel, Negan, Laura<br/>More hints, gameplay etc. Improving the format<br/>Check f5-forum for suggestions.',
     },
-}>>
 
-/* blair journal
-		<<elseif !$characters.blair.quests?.nursery>>
-			Talk with Blair in the kitchen
-		<<elseif ($game.cabinName ?? false) && !$characters.blair.quests?.basement>>
-			<<if $characters.blair.relationship >= 80>>
-				Talk with her in the bedroom
-			<<else>>
-				Increase relationship
-			<</if>>
- */
-/* rodger journal
-		<<elseif $characters.rodger.quests?.champagne && !$characters.eve.quests?.sex>>
-			<<if $game.cabinName>>
-				Talk with him in the church
-			<<else>>
-				Progress with Blair
-			<</if>>
-		<<elseif !($game.location?.settlement_shop ?? false)>>
-			<<if !$characters.rodger.quests?.shop_talk>>
-				Talk with him in the church
-			<<else>>
-				Help him build shop
-			<</if>>
-		<<elseif ($game.location?.settlement_shop ?? false) && !$characters.rodger.quests?.horse>>
-			Talk with him in the church
-		<<elseif $characters.rodger.quests?.horse && !$characters.rodger.quests?.faith>>
-			<<if $game.day < 80>>
-				Continue living for a while (reach 80 days)
-			<<else>>
-				Go to the Rodger's settlement
-			<</if>>
-		<<else>>
-			That's all for now
-		<</if>>
-		<br /><br />
-	<</if>>
- */
+}>>
 
 <<set _guide = {
     past: {},

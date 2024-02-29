@@ -261,6 +261,16 @@ setup.inventoryManageable = {
         price: 1,
         range: [1, 10],
         chance: 90
+    },
+    towel: {
+        price: 10,
+        range: [1, 5],
+        chance: 60
+    },
+    cloth: {
+        price: 6,
+        range: [1, 5],
+        chance: 50
     }
 };
 
@@ -475,7 +485,9 @@ setup.getNpcById = function(id) {
         }
     }
 
-
+    if (id === 'mc') {
+        return variables().player;
+    }
 
     return null;
 };

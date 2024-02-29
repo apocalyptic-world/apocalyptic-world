@@ -28,7 +28,7 @@
 	</div>
 <</if>>
 <br /><br />
-Slave cost <strong><<=$tmpGirl.value>></strong> caps
+Slave cost <strong><<=$tmpGirl.value>></strong> caps.
 <br /><br />
 
 <<if timeBetween('14:00', '19:00')>>
@@ -42,14 +42,16 @@ Slave cost <strong><<=$tmpGirl.value>></strong> caps
 	<</link>>
   <<else>>
 	  <<if $slaves.length >= $basementLimit>>
-		  <strong>You don't have free room in basement</strong>
+		  <strong>You don't have free room in the basement!</strong>
 	  <</if>>
 	  <br /><br />
   <</if>>
-  [[Watch another slave|Slave market - buy]]
+  <<if timeBetween('14:00', '18:40')>>
+  	[[Watch another slave|Slave market - buy]]
+  <</if>>
 <</if>>
 [[Leave|Slave market]]
 
-<<addmins 30>>
+<<addmins 20>>
 
 

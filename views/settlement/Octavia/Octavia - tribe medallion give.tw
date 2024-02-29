@@ -17,11 +17,14 @@ With a nod of acknowledgment, she accepted the medallion, deftly turning it over
 <br />
 
 <<if $characters.octavia.relationship < 60>>
-    <<set $characters.octavia.relationship = Math.min(60, ($characters.octavia.relationship + 5))>>
-    <strong>Relationship increased by 5</strong>
-<<else>>
-    <strong>You can't increase your relationship with Octavia with this action anymore.</strong>
-<</if>>
+        <<set _relationshipBefore = $characters.octavia.relationship>>
+        <<set $characters.octavia.relationship = Math.min(60, ($characters.octavia.relationship + 5))>>
+        <strong>Relationship increased by <<=($characters.octavia.relationship - _relationshipBefore)>></strong>
+        <br /><br />
+    <<else>>
+        <strong>You can't increase your relationship with Octavia with this action anymore.</strong>
+        <br /><br />
+    <</if>>
 <br /><br />
 <<linkreplace 'Leave'>>
     <<octavia>>
