@@ -33,6 +33,16 @@
 	<</link>>
 <</if>>
 
+
+<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
+<<link `_linkName`>>
+	<<script>>
+		Dialog.setup("Guesthouse - Ask to fuck", "Guesthouse - Ask to fuck");
+		Dialog.wiki(Story.get("Guesthouse - Ask to fuck someone choose").processText());
+		Dialog.open();
+  	<</script>>
+<</link>>
+
 <<if !($player.companions['guest:' + $guestId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
 	<<link 'Add as companion'>>
 		<<companionAdd 'guest' $guestId>>

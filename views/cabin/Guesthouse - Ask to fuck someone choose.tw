@@ -1,0 +1,85 @@
+:: Guesthouse - Ask to fuck someone choose {"position":"2307,223","size":"100,100"}
+
+<<set
+	_likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'],
+	_interestedGuests = setup.propertyMatchIndexes($guests, _likesList[$tmpGirl.gender]),
+	_subGuests = setup.propertyMatchIndexes($guests, 'sub', 75, '>='),
+	_availableGuests = setup.distinctValues([_interestedGuests, _subGuests]),
+	_k = setup.getGuestIndexById($tmpGirl.id)
+>>
+<<run _availableGuests.deleteAt(_availableGuests.indexOf(setup.getGuestIndexById($tmpGirl.id)))>>
+
+<<for _i to 0; _i lt _availableGuests.length; _i++>>
+	<<capture _i, _j>>
+		<<set
+			_guest = $guests[_availableGuests[_i]],
+			_genderClass = 'gender-' + setup.genderClass(_guest),
+			_j = _availableGuests[_i]
+		>>
+		<div>
+			<span @class="''+_genderClass+''">
+				<<if $tmpGirl[_likesList[_guest.gender]] || $tmpEvent == 'all'>>
+					<<link _guest.name>>
+						<<set $locationEvents.guesthouse = true>>
+						<<dialogclose>>
+
+						<<if $tmpEvent == 'all' && !setup.percentageChance($guests[_k].sub)>>
+							<<set $guests[_k].relationship -= 30>>
+							<<set $guests[_k].happy -= 30>>
+						<</if>>
+
+						<<if ($guests[_j].gender == 0 && $guests[_k].gender == 0)>>
+							<<set $tmpEvent = [_j, _k]>>
+							<<goto 'Guesthouse [Event] - female on female'>>
+						<<elseif ($guests[_j].gender == 0 && $guests[_k].gender == 1)>>
+							<<set $tmpEvent = [[_j], [_k]]>>
+							<<goto 'Guesthouse [Event] - male on female'>>
+						<<elseif ($guests[_k].gender == 0 && $guests[_j].gender == 1)>>
+							<<set $tmpEvent = [[_k], [_j]]>>
+							<<goto 'Guesthouse [Event] - male on female'>>
+						<<elseif ($guests[_j].gender == 1 && $guests[_k].gender == 1)>>
+							<<set $tmpEvent = [_j, _k]>>
+							<<goto 'Guesthouse [Event] - male on male'>>					
+						<<elseif ($guests[_j].gender == 2 && $guests[_k].gender == 1)>>
+							<<set $tmpEvent = [[_j], [_k]]>>					
+							<<goto 'Guesthouse [Event] - male on transfemale'>>					
+						<<elseif ($guests[_k].gender == 2 && $guests[_j].gender == 1)>>
+							<<set $tmpEvent = [[_k], [_j]]>>		
+							<<goto 'Guesthouse [Event] - male on transfemale'>>	
+						<<elseif ($guests[_j].gender == 0 && $guests[_k].gender == 2)>>
+							<<set $tmpEvent = [[_j], [_k]]>>
+							<<goto 'Guesthouse [Event] - transfemale on female'>>
+						<<elseif ($guests[_k].gender == 0 && $guests[_j].gender == 2)>>
+							<<set $tmpEvent = [[_k], [_j]]>>
+							<<goto 'Guesthouse [Event] - transfemale on female'>>
+						<<elseif ($guests[_j].gender == 2 && $guests[_k].gender == 2)>>
+							<<set $tmpEvent = [_j, _k]>>
+							<<goto 'Guesthouse [Event] - transfemale on transfemale'>>
+						<</if>>
+					<</link>>
+				<</if>>
+			</span>
+		</div>
+	<</capture>>
+<</for>>
+
+<br />
+<<if $tmpEvent !== 'all' >>
+	<<link 'Force more'>>
+		<<dialogclose>>
+		<<set $tmpEvent = 'all'>>
+		<<script>>
+			Dialog.setup("Guesthouse - Ask to fuck", "Guesthouse - Ask to fuck");
+			Dialog.wiki(Story.get("Guesthouse - Ask to fuck someone choose").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+	<br />
+<</if>>
+
+<<link 'Back'>>
+	<<dialogclose>>
+	<<unset $tmpEvent>>
+<</link>>
+
+

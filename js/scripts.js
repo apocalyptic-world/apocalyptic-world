@@ -480,6 +480,16 @@ setup.getNpcById = function(id) {
     return null;
 };
 
+setup.getGuestIndexById = function(id) {
+    var guests = variables().guests;
+    for (var i = 0; i < guests.length; i++) {
+        if (guests[i].id === id) {
+            return i;
+        }
+    }
+    return null;
+};
+
 window.ucfirst = function (text) {
     return text.slice(0,1).toUpperCase() + text.slice(1);
 };
@@ -625,6 +635,24 @@ setup.commonValues = function(allArrays) {
 	for (var i = 1; i < length; i++) {
 		array = array.filter(value => allArrays[i].includes(value));
 	}
+    return array;
+};
+
+setup.distinctValues = function(allArrays) {
+	var array = allArrays[0] ?? [];
+	var length = allArrays.length;
+
+	for (var i = 0; i < length; i++) {
+        var arrayLength = allArrays[i].length;
+
+        for (var j = 0; j < arrayLength; j++) {
+            var value = allArrays[i][j];
+
+            if (!array.includes(value)){
+                array.push(allArrays[i][j]);
+            }
+        }   
+    }
     return array;
 };
 
