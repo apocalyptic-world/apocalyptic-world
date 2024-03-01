@@ -1,27 +1,27 @@
 setup.skills = {
     gardener: {
         title: 'Gardener',
-        description: 'Gives additional bonus while assigned to garden'
+        description: 'Gives additional bonus while assigned to the garden.'
     },
     woodcraft: {
         title: 'Woodcraft',
-        description: 'Can gather more wood'
+        description: 'Can gather more wood.'
     },
     scavenger: {
         title: 'Scavenger',
-        description: 'More likely to find stuff, and less likely to get into trouble'
+        description: 'More likely to find stuff, and less likely to get into trouble.'
     },
     shopkeeper: {
         title: 'Shopkeeper',
-        description: 'Can work in shop and manage your goods'
+        description: 'Can work in shop and manage your goods.'
     },
     cook: {
         title: 'Cook',
-        description: 'Decreases chance of rotten food'
+        description: 'Decreases chance of rotten food.'
     },
     doctor: {
         title: 'Doctor',
-        description: 'Decreases chance of miscarriage and sickness days goes x2 faster'
+        description: 'Decreases chance of miscarriage and heals people twice as fast.'
     }
 };
 

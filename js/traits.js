@@ -1,37 +1,37 @@
 setup.traits = {
     analslut: {
         title: 'Anal slut',
-        description: 'Gets orgasm only from anal sex'
+        description: 'Gets an orgasm only from anal sex.'
     },
     cumslut: {
         title: 'Cumslut',
-        description: 'Loves cum in mouth'
+        description: 'Loves cum in mouth.'
     },
     masochist: {
         title: 'Masochist',
-        description: 'Likes to be punished'
+        description: 'Likes to be punished.'
     },
     deepthroat: {
         title: 'Deepthroat',
-        description: 'Likes to get deepthroated'
+        description: 'Likes to get deep-throated.'
     },
     breeder: {
         title: 'Breeder',
-        description: 'Doubles chance to get pregnant and pregnancy goes x2',
+        description: 'Double chance to get pregnant and pregnancy twice as fast.',
         gender: [0]
     },
     sadistic: {
         title: 'Sadistic',
-        description: 'Display recurrent cruel behavior and aggression. Can be assigned as mistress if woman'
+        description: 'Display recurrent cruel behavior and aggression. Can be assigned as mistress if woman.'
     },
     squirter: {
         title: 'Squirter',
-        description: 'Ejaculates when gets orgasm',
+        description: 'Ejaculates when gets orgasm.',
         gender: [0]
     },
     nymphomaniac: {
         title: 'Nymphomaniac',
-        description: 'Never says no, and earn double on street'
+        description: 'Never says no, and earns double on street.'
     }
 };
 
