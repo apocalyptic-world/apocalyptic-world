@@ -51,7 +51,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 				<<continue>>
 			<</if>>
 			<tr>
-				<td style="width: 300px">
+				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>
 						<span @class="''+_genderClass+''">
 							<<link _guest.name>>
@@ -84,20 +84,13 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 							  <<goto `$tmpGirlViewBack`>>
 							<</link>>
 						</span>
-						
-						<<if _guest.pregnancy >= 7>>
-						  (pregnant <<=_guest.pregnancy>> days)
-						<</if>>
-						<<if _isSick>>
-							 (sick)
-				  		<<elseif _isRest>>
-							 (resting)
-						<</if>>
+
+						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
 					<</if>>
 				</td>
 				<td>
 					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
-						Beauty score: <<=_guest.beauty>>
+						Beauty: <<=_guest.beauty>>
 					<</if>>
 				</td>
 				<td>
@@ -109,21 +102,6 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
 						(companion)
 				 	 <</if>>
-				</td>
-				<td>
-					<<link 'Throw out'>>
-					  <<dialog 'Throw out'>>
-						  Are you sure you want to throw <<=(_guest.gender ? 'him' : 'her')>> out?
-						  <br />
-						  <<link 'Yes' 'Guest house'>>
-							  <<assignedTo _guest 'none'>>
-							  <<guestRemove _guestI>>
-							  <<dialogclose>>
-							  <<set $player.reputation-->>
-							  <<set $player.goodwill-->>
-						  <</link>>	
-					  <</dialog>>
-					<</link>>
 				</td>
 			</tr>
 		<</capture>>

@@ -1,7 +1,7 @@
 :: Basement [Place bg-basement] {"position":"1202,389","size":"100,100"}
-<<set $workingInGarden = 0>>
+<<set _workingInGarden = 0>>
 <<set $workingOnStreets = 0>>
-<<set $showSlavesCount = 0>>
+<<set _showSlavesCount = 0>>
 
 <h1 class="ptitle">
 	<<backButton 'Wood cabin'>>		
@@ -22,16 +22,15 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 	<<set _dayOff = _isSick || _isRest>>
 	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
-		<<set $workingInGarden++>>
+		<<set _workingInGarden++>>
 		<<continue>>
 	<</if>>
 	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff>>
-		<<set $workingOnStreets++>>
+		<<set _workingOnStreets++>>
 		<<continue>>
 	<</if>>
 	<<set _isSlaveInBasement = true>>
 <</for>>
-<<set $cellSlaveIds = []>>
 <<set _hornySlaveId = null>>
 <<if $slaves.length < 1>>
 	<div style="margin-top: 20px;">
@@ -68,7 +67,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _dayOff = _isSick || _isRest>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
-			<<set $workingInGarden++>>
+			<<set _workingInGarden++>>
 			<<continue>>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff>>
@@ -79,7 +78,6 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<<set _hornySlaveId = _i>>
 		<</if>>
 		<<set $showSlavesCount++>>
-		<<set $cellSlaveIds.push(_i)>>
 		<<if $slaves[_i].happy < -70>>
 			<<run _suicidalSlaves.push(_i)>>
 		<</if>>
@@ -176,12 +174,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	</table>
 <</if>>
 
-<<if !$showSlavesCount && $workingInGarden>>
-	<<if($game.location.greenhouse ?? false)>>
-		<<set $workingPlace = 'greenhouse'>>
-	<<else>>
-		<<set $workingPlace = 'garden'>>
-	<</if>>
+<<if !_showSlavesCount && _workingInGarden>>
 	All your slaves are at assigned jobs...
 <</if>>
 <br /><br />
