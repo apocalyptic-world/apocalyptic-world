@@ -127,7 +127,12 @@
 							<</for>>
 							<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
 						<<else>>
-							<<print _actionText[$args[1]][0].replace('%name%', $args[0].name)>>
+							<<if Array.isArray(_actionText[$args[1]][0])>>
+								<<set _Index = random(_actionText[$args[1]][0].length -1)>>
+								<<print _actionText[$args[1]][0][_Index].replace('%name%', $args[0].name)>>
+							<<else>>
+								<<print _actionText[$args[1]][0].replace('%name%', $args[0].name)>>
+							<</if>>
 						<</if>>
 					<</if>>
 				<</if>>
