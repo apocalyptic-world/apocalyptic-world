@@ -651,7 +651,7 @@ setup.commonValues = function(allArrays) {
 };
 
 setup.distinctValues = function(allArrays) {
-	var array = allArrays[0] ?? [];
+	var array = [];
 	var length = allArrays.length;
 
 	for (var i = 0; i < length; i++) {
@@ -661,7 +661,7 @@ setup.distinctValues = function(allArrays) {
             var value = allArrays[i][j];
 
             if (!array.includes(value)){
-                array.push(allArrays[i][j]);
+                array.push(value);
             }
         }   
     }
@@ -681,6 +681,10 @@ setup.propertyMatchIndexes = function(array, property, value = true, operator = 
 		array = array.map((item, i) => (item[property] ?? false) >= value ? i : -1);
 	} else if (operator == '<=') {
 		array = array.map((item, i) => (item[property] ?? false) <= value ? i : -1);
+	} else if (operator == 'includes') {
+		array = array.map((item, i) => (item[property] ?? []).includes(value) ? i : -1);
+	} else if (operator == '!includes') {
+		array = array.map((item, i) => !(item[property] ?? []).includes(value) ? i : -1);
 	} else {
 		array = [];
 	}
@@ -721,13 +725,16 @@ setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
 
-setup.sexChance = function (person) {
+setup.sexChance = function (person, gender = 1, beauty) {
+    var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
+    var appeal = (beauty ?? person.relationship);
+
 	if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
-	} else if (!person.likesGuys) {
+	} else if (!person[likesList[gender]]) {
 		return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
 	} else {
-		return Math.max(person.relationship, person.horny, person.sub, person.drunk ?? 0);
+		return Math.max(appeal, person.horny, person.sub, person.drunk ?? 0);
 	}
 };
 

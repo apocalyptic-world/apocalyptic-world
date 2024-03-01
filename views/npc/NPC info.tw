@@ -107,15 +107,21 @@
   	<<linkreplace 'More info'>>
 		<div id="additional-npc-info">
 			<div id="additional-npc-info-single">
-				<div>Corruption: <<= $tmpGirl.corruption ?? 0>></div>
-				<div>Drunkenness: <<=setup.drunkDescription($tmpGirl)>></div>
+				<<if _isLegalAge>>
+					<div>Corruption: <<= $tmpGirl.corruption ?? 0>></div>
+					<div>Drunkenness: <<=setup.drunkDescription($tmpGirl)>></div>
+					<div>Horny: <<= $tmpGirl.horny ?? 0>></div>
+				<</if>>
+
 				<<if !$tmpGirl.gender>>
 					<div>
 						Orgasms: <<=$tmpGirl.orgasms>>
 					</div>
 				<</if>>
 				<<if !$tmpGirl.gender>>
-					Creampies: <<=$tmpGirl?.sexStats?.creampies ?? 0;>>
+					<div>
+						Creampies: <<=$tmpGirl?.sexStats?.creampies ?? 0;>>
+					</div>
 				<</if>>
 				<div>
 					Gender: <<=setup.genderDescription($tmpGirl)>>

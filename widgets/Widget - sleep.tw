@@ -319,8 +319,10 @@
 		<<set $guests[_guestI].gift = false>>
 		<<set $guests[_guestI].washedBathhouse = false>>
 		<<set $guests[_guestI].drunk = 0>>
-		<<if $guests[_guestI].horny < 80>>
-			<<set $guests[_guestI].horny++>>
+		<<if $guests[_guestI].horny <= 90>>
+			<<set $guests[_guestI].horny += window.randomInteger(1, 9)>>
+		<<else>>
+			<<set $guests[_guestI].horny = 0>>
 		<</if>>
 		<<if typeof $guests[_guestI].stats  === 'undefined'>>
 			<<set $guests[_guestI].stats = {}>>
