@@ -31,7 +31,7 @@ setup.automatization = {
 
         buttplug: {
             name: 'Butt plug rotation',
-            description: 'Settlers trade but plugs between them as needed, thoroughly cleaned of course ;-)'
+            description: 'Settlers trade butt plugs between them as needed, thoroughly cleaned of course ;-)'
         },
         condom: {
             name: 'Condom rotation',
