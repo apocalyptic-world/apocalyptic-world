@@ -745,7 +745,7 @@
 <</if>>
 
 
-<<set $sleepDead = null>>
+<<set _sleepDead = null>>
 // Perks
 <<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
 	<<capture _playerPerkDay, _playerPerk>>
@@ -770,7 +770,7 @@
 
 		<<if _playerPerkDay < $game.day>>
 			<<if _playerPerk === 'bleeding'>>
-				<<set $sleepDead = 'bleed out'>>
+				<<set _sleepDead = 'bleed out'>>
 			<</if>>
 			<<run delete $player.perks[_playerPerk]>>
 			<<continue>>
@@ -849,10 +849,10 @@
 	<<set $morningMessages.moon.push('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!') >>
 <</if>>
 
-<<if $player.hunger <= 0 && !$sleepDead>>
-	<<set $sleepDead = 'hunger'>>
+<<if $player.hunger <= 0 && !_sleepDead>>
+	<<set _sleepDead = 'hunger'>>
 <</if>>
-<<if !$sleepDead>>
+<<if !_sleepDead>>
 <<set $player.showered to false>>
 	<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
 	<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
@@ -863,7 +863,7 @@
 		<<goto "Bedroom-sleep">>
 	<</if>>
 <<else>>
-	<<set $game.death_reason = $sleepDead>>
+	<<set $game.death_reason = _sleepDead>>
 	<<goto "Dead">>
 <</if>>
 

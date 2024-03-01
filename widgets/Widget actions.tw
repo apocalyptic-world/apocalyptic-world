@@ -137,14 +137,14 @@
 <</widget>>
 
 <<widget actionDream>>
-	<<set $sleepAction = {
+	<<set _sleepAction = {
 		place: either(['basement', 'bathhouse', 'default', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
 		type: either('pussy', 'anal', 'bj', 'dp')
 	}>>
 	<<if typeof setup.actions !== 'undefined'>>
-		<<set _dreamImg = setup.ImagePath+'actions/female/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.female[$sleepAction.place][$sleepAction.type])>>
+		<<set _dreamImg = setup.ImagePath+'actions/female/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions.female[_sleepAction.place][_sleepAction.type])>>
 	<<else>>
-		<<set _dreamImg = setup.ImagePath+'actions/female/default/' + $sleepAction.type  + '/' + either(setup.actions.female.default[$sleepAction.type])>>
+		<<set _dreamImg = setup.ImagePath+'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
 	<</if>>
 
 	<<actionImageOutput _dreamImg>>
@@ -154,9 +154,9 @@
 	<<set _extension = $args[0].split('.').pop()>>
 	<<if ['mp4', 'webm'].includes(_extension)>>
 		<<set _videoType = 'video/' + _extension>>
-		<<set $url to $args[0]>>
+		<<set _url to $args[0]>>
 		<video controls autoplay loop>
-  			<source @src="$url" @type="_videoType">
+  			<source @src="_url" @type="_videoType">
 		</video>
 	<<else>>
 		[img[$args[0]]]

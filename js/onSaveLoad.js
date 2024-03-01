@@ -1,4 +1,44 @@
 Save.onLoad.add(function (save) {
+
+    // Cleanup old variables
+    var _oldVariables = [
+        'cellSlaveIds',
+        'assignedToStreets',
+        'assignedToGreenhouse',
+        'addHorny',
+        'addDay',
+        'charsInGrid',
+        'energyPenalty',
+        'foundItem',
+        'giveFood',
+        'icon',
+        'isDisabled',
+        'randomEnemy',
+        'workingInGarden',
+        'showSlavesCount',
+        'sleepAction',
+        'sleepDead',
+        'talkedAbout',
+        'tmpGirlkey',
+        'undergroundEvent',
+        'url',
+        'wantedGender',
+        'wantedLink',
+        'wantedPerson',
+        'wantedPron',
+        'wantedPron2',
+        'wantedPsg',
+    ];
+    for (var _i = 0; _i <= _oldVariables.length; _i++) {
+        if (typeof save.state.history[save.state.index].variables[_oldVariables[_i]] !== 'undefined') {
+            delete save.state.history[save.state.index].variables[_oldVariables[_i]];
+            console.log('clean', _oldVariables[_i]);
+        }
+    }
+
+
+    // Default
+
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
         save.state.history[save.state.index].variables.characters.dom = {
             quests: {},
