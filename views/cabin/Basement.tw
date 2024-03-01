@@ -159,7 +159,8 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						Are you sure you want to kill <<=setup.pronounceWho($slaves[_i])>>?
 						<br />
 						<<link 'Yes' 'Basement'>>
-							<<run $slaves.splice(_i, 1)>>
+							<<assignedTo $slaves[_i] 'none'>>
+							<<slaveRemove _i>>
 							<<dialogclose>>
 							<<set $player.reputation++>>
 							<<set $player.goodwill-->>

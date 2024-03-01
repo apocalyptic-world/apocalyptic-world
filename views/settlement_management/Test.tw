@@ -1,0 +1,37 @@
+:: Settlement management - Test
+
+<h1>Just a teaser for things in coming versions</h1>
+
+<h2><<=$player.name>>'s family tree (Test)</h2>
+<<run setup.player.updateFamily()>>
+<table class="mc-stats-table">
+	<<set _wivesTexts = []>>
+	<<for _wifeId range $player.family.wives ?? []>>
+		<<set _wifeText = setup.player.npcRelationText(_wifeId)>>
+		<<if _wifeText>>
+			<<set _wivesTexts.push(_wifeText)>>
+		<</if>>
+	<</for>>
+	<<if _wivesTexts.length>>
+		<tr>
+			<td>Wives you married</td>
+			<td><<=_wivesTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+
+	<<set _kidsTexts = []>>
+	<<for _kidId range $player.family.kids ?? []>>
+		<<set _kidText = setup.player.npcRelationText(_kidId)>>
+		<<if _kidText>>
+			<<set _kidsTexts.push(_kidText)>>
+		<</if>>
+	<</for>>
+	<<if _kidsTexts.length>>
+		<tr>
+			<td>Children you fathered</td>
+			<td><<=_kidsTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+</table>
