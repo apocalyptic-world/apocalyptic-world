@@ -492,16 +492,6 @@ setup.getNpcById = function(id) {
     return null;
 };
 
-setup.getGuestIndexById = function(id) {
-    var guests = variables().guests;
-    for (var i = 0; i < guests.length; i++) {
-        if (guests[i].id === id) {
-            return i;
-        }
-    }
-    return null;
-};
-
 window.ucfirst = function (text) {
     return text.slice(0,1).toUpperCase() + text.slice(1);
 };

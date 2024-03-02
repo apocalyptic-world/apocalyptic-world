@@ -5,9 +5,9 @@
 	_nymphoGuests = setup.propertyMatchIndexes($guests, 'traits', 'nymphomaniac', 'includes'),
 	_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
 	_prospects = 0,
-	_k = setup.getGuestIndexById($tmpGirl.id)
+	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id)
 >>
-<<run _interestedGuests.deleteAt(_interestedGuests.indexOf(setup.getGuestIndexById($tmpGirl.id)))>>
+<<run _interestedGuests.delete(_k)>>
 
 <<if ($tmpGirl.horny < 20 && !($tmpGirl.traits ?? []).includes('nymphomaniac'))>>
 	I'm not in the mood, maybe some other time.
