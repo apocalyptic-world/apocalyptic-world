@@ -1,6 +1,6 @@
 setup.actionText ??= {};
 setup.actionText.mistress_pussy = {
     texts: [
-        "%name% starts moaning while being pounded in the pussy!",
+        "%name% is forced into giving a handjob.",
     ]
 }
