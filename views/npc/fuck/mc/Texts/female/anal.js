@@ -21,7 +21,7 @@ setup.actionText.anal = {
                 "%name%'s cries of pleasure fill the air as you go so deep inside her ass.",
                 "With each thrust, %name% gasps for breath, completely lost in the moment.",
                 "%name% bites down on her lip, trying to contain the sensations as she enjoys you pounding her in her ass.",
-                "You dominate %name%, fucking her ass harder and deeper.",
+                "You dominate %name%, fucking her ass harder and deeper."
             ]
         },
     ]
