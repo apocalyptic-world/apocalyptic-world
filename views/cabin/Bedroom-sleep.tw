@@ -18,12 +18,12 @@
 		You wake up fully rested and ready to conquer the world.
 	<</if>>
 	<br /><br />
-	<<if ($morningMessages.main.length + $morningMessages.shop.length) >= 8>>
+	<<if ($morningMessages?.main.length + $morningMessages?.shop.length) >= 8>>
 		<<link 'Wake up'>>
 			<<wakeUp>>
 		<</link>>
 	<</if>>
-	<<if $morningMessages.main.length > 0 || $morningMessages.shop.length > 0>>
+	<<if $morningMessages?.main.length > 0 || $morningMessages?.shop.length > 0>>
 		<h3>Some things have happened</h3>
 		<br />
 		<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
