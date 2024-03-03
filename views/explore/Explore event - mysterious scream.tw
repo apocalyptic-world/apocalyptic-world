@@ -1,0 +1,41 @@
+:: Explore event - mysterious scream
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+As you roamed the desolate city ruins, the echoes of your footsteps mingled with the eerie silence of a world long abandoned.
+The buildings stood as decaying monuments to a civilization lost to time and catastrophe. 
+Amidst the rubble and overgrown vegetation, you heard piercing scream tearing through the stagnant air.
+<br /><br />
+Without a moment's hesitation, you bolted towards the source of the distress, your senses heightened by the adrenaline coursing through your veins. The sound led you to a partially collapsed building, its five floors looming like ancient guardians over the desolation below.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore/mysterious_scream1.jpg']]
+</center>
+<br />
+You noticed how three men rushed inside the house, their hurried footsteps echoing through the desolate streets. The scream that followed pierced the silence of the ruins, sending shivers down your spine. Without a second thought, you hastened towards the half-ruined building, drawn by a mix of curiosity and a sense of duty to help those in distress.
+<br /><br />
+<<linkreplace 'Follow them inside'>>
+    <<run $('#option_leave').hide()>>
+    The air was thick with the scent of decay and dust, and the only sound was the faint rustling of debris under your feet as you cautiously made your way forward. Every step felt like a weighted decision, each corner held the possibility of a lurking threat.
+    <br /><br />
+    As you ventured deeper into the building, your senses heightened, alert for any sign of movement or danger. But before you could react, you were suddenly ambushed by unseen assailants, their presence revealed only by the swift and brutal attack that followed.
+    <br /><br />
+    <<newguy>>
+    <<sayNpc $tmpGuy>>
+        Get him! That must be him who screamed like a girl!
+    <</sayNpc>>
+    <br /><br />
+    <<link 'Fight them'>>
+        <<set $enemies = []>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<newguy>>
+        <<run $enemies.push($tmpGuy)>>
+        <<fight $enemies 'Explore event - mysterious scream won' 'Outside'>>
+    <</link>>
+<</linkreplace>>
+<div id="option_leave">
+    <<link 'Leave'>>
+        <<goto 'Outside'>>
+    <</link>>
+</div>

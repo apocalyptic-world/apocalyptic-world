@@ -1,0 +1,118 @@
+:: Explore event - mysterious scream won
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+Amidst the chaos of overturned furniture and shattered remnants of the building's former inhabitants, your eyes caught sight of a glint of metal tucked away in a corner. 
+Curiosity piqued, you cautiously approached and reached out to investigate.
+<br /><br />
+<<pickup $backpack 'fuel' 1>>
+<strong>You found <strong class="iitem">1 fuel can</strong></strong>
+<br /><br />
+<<if recall($suppCode)>>
+	<<linkreplace 'Check other rooms'>>
+        Suddenly, a movement caught your attention—a fleeting shadow darting across the wall of one of the adjacent rooms. Instinctively, you froze, muscles tense as you prepared for a potential confrontation. With a cautious step forward, you peered into the room, heart pounding in your chest.
+        <br /><br />
+        <<video 'explore/mysterious_scream1'>>
+        <br /><br />
+        <<newgirl>>
+        To your surprise, you discovered a woman huddled in the corner, her eyes wide with fear as she cowered away from your gaze. She was dressed in tattered clothing, her face smudged with dirt and exhaustion evident in every line of her weary frame.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Please don't give me up! They will kill me!
+        <</sayNpc>>
+        <br />
+        <div id="option_slave">
+            <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
+                <<link 'Capture her'>>
+                <<run $slaves.push($tmpGirl)>>
+                    <<statsAdd 'people_captured'>>
+                    <<goto 'Basement'>>
+                <</link>>
+            <</if>>
+        </div>
+        <<linkreplace 'Unzip her jacket'>>
+            <<run $('#option_slave').hide()>>
+            <<sayNpc $tmpGirl>>
+                What are you doing? Will this keep you quiet?
+            <</sayNpc>>
+            <br />
+            <<video 'explore/mysterious_scream2'>>
+            <br /><br />
+            You slowly grab her jacket's zipper and slide it down, opening her bare chest. As you continue your movements of you her tits fall out and your squeeze it.
+            <br /><br />        
+            <<sayNpc $tmpGirl>>
+                I can suck your dick, if you promise not to give away my position to those men.
+            <</sayNpc>>
+            <br />
+            <<video 'explore/mysterious_scream3'>>
+            <br /><br />
+            She quietly drops on her knees, and while holding your balls in one hand she slowly slides her mouth into your dick and starts to suck it. It continues for few minutes before she gets up.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                That should be enough. Now let me leave.
+            <</sayNpc>>
+            <br />
+            <<linkreplace 'Force her to turn around'>>
+                <<set $player.goodwill-= 5>>
+                <<sayNpc $tmpGirl>>
+                    What? No! That wasn't the deal.
+                <</sayNpc>>
+                <br />
+                You grab her hand firmly before turning her around. She wants to scream but she knows she might attract the attention so she decides to keep quiet.
+                <br /><br />
+                <<video 'explore/mysterious_scream4'>>
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    We had a deal... Oh...
+                <</sayNpc>>
+                <br />
+                As you slide your dick inside her dry pussy she slowly gets relaxed and you feel her pussy getting wet too. She doesn't resist anymore and look like have decided to enjoy the moment as she doesn't have other options anyway...
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    Oh too late to stop. A bit faster.
+                <</sayNpc>>
+                <br />
+                She quietly whispers to you as your hand grabs her firm ass while you thrust inside her pussy.
+                <br /><br />
+                <<video 'explore/mysterious_scream5'>>
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    Let me swollow it! I don't want a mess.
+                <</sayNpc>>
+                <br />
+                She quietly lets out few moans and you notice that in any moment she's ready to jump off your dick and put it in her mouth.
+                <br /><br />
+                <<linkreplace 'Pull out'>>
+                    <<video 'explore/mysterious_scream6'>>
+                    <br /><br />
+                    As you pull out while still on her knees she turns around, puts just the tip of your dick in her mouth and jerks you off till you cum inside her mouth. 
+                    Her movements are getting slower and in the end she lets out smile as small amount of your cum drips out of her mouth.
+                    <br /><br />
+                    <<sayNpc $tmpGirl>>
+                        Wasn't that bad after all...
+                    <</sayNpc>>
+                    <br /><br />
+                    <<horny_reset>>
+                    <<addmins 20>>
+                    <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
+                        <<link 'Capture her'>>
+                        <<run $slaves.push($tmpGirl)>>
+                            <<statsAdd 'people_captured'>>
+                            <<goto 'Basement'>>
+                        <</link>>
+                    <</if>>
+                <</linkreplace>>
+            <</linkreplace>>
+        <</linkreplace>>
+    
+	<</linkreplace>>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Check other rooms
+		<<notPatreonIcon>>
+	</div>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>
+
+
