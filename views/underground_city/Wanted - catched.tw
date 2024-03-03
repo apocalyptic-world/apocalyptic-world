@@ -25,7 +25,7 @@ You beat his ass and cuff him as he lies on the ground.
 		<<link 'Use her'>>
 			<<addmins 30>>
 			<<set _wantedPsg = 'Wanted - fuck ' + random(1,2)>>
-			<<set _wasRaped = true>>
+			<<set $wasRaped = true>>
 			<<goto `_wantedPsg`>>
 		<</link>>
 	<</if>>
@@ -64,8 +64,8 @@ You beat his ass and cuff him as he lies on the ground.
         	<<set _countComp  = $player.companions.length ?? 0>>
         	<<set _reputation = $player.reputation ?? 0>>
         	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-        	<<set _no = !_yes || (_wasRaped ?? false) || (_relation <= 0)>>
-			<<unset _wasRaped>>
+        	<<set _no = !_yes || ($wasRaped ?? false) || (_relation <= 0)>>
+			<<unset $wasRaped>>
        		 <<if _no>>
 				<br />
 				<<sayNpc $wanted[$wantedId]>>

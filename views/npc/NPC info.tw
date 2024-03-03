@@ -20,7 +20,7 @@
 		<</if>>
 		<strong class="iitem"><<= $tmpGirl.race>> <<=setup.getNpcAgeDescription($tmpGirl)>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> 
 		<<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
-			hair and <strong class="iitem"><<=$tmpGirl.breasts>></strong> 
+			<<=$tmpGirl.hair === 'bald' ? 'head' : 'hair'>> and <strong class="iitem"><<=$tmpGirl.breasts>></strong> 
 			<<if $tmpGirl.piercedBoobs>>
 				pierced 
 			<</if>>
@@ -29,7 +29,7 @@
 			 	<strong class="iitem" style="font-weight: normal;">She's a virgin.</strong>
 			<</if>>
 		<<else>>
-			hair.
+			<<=$tmpGirl.hair === 'bald' ? 'head' : 'hair'>>.
 		<</if>>
 		 <<if $tmpGirl.buttplug>>
 			<strong class="iitem" style="font-weight: normal;">With buttplug.</strong>
