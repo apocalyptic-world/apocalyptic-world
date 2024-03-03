@@ -1,5 +1,5 @@
 setup.actionText ??= {};
-setup.actionText.lesbians = {
+setup.actionText.female_on_female = {
     kissing: [
         "%names% kiss each other playfully, you can feel their desire rising."
     ],
