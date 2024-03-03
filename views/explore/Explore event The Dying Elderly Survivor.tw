@@ -13,29 +13,54 @@ In the corner of the room, near the window, there lies an old man... He appears 
 <br /><br />
 You sat down next to him, and he spoke quietly but clearly, explaining that his grandson went out over a week ago to find something to eat. He understood what had likely happened after a few days. His grandson was most likely dead... And he saw no reason to live anymore, neither before nor now... But his grandson insisted and was too weak to end his life... That's why he's asking for your help.
 <br /><br />
+<div id="option4">
+	<<if Object.keys($player.companions ?? {}).length>>
+		<<linkreplace 'Ask your companions for advice'>>	
+			<<set _doctors = setup.companions.getDoctors()>>
+			<<if _doctors.length>>
+				<<set _doctor = either(_doctors)>>
+				<<set _doctorName = _doctor.name>>
+				<<set _what = setup.pronounceWhat(_doctor, true)>> /* He/She */
+				<<if $backpack.has('food') && $backpack.has('glowing_mushroom')>>
+					<<=_doctorName>> suggests easing his pains for a easier transition by making a concoction of food and glowing mushrooms.
+					<br /><br />
+					<<linkreplace 'Make the concoction'>>
+						<<run $('#option1, #option2, #option3, #option4_cost').hide()>>
+						<<drop $backpack 'food' 1 'glowing_mushroom' 1>>
+						<<=_what>> locates what goes as the kitchen, boils water and mixes the components into a soup. Now the hard part! Will the old man accept the pain killer?
+						<br/><br/>
+						Using <<=setup.pronounceWhos(_doctor)>> best bed-side manner the old man accepts a little soup. It seems to work. He seems to breath more easily and free of pain.
+						<br/><br/>
+						A whispered thank you and the old man drifts off to sleep with a peaceful face. With a last breath the sleep becomes permanent. A death without pain is the best you can hope for in this world.
+						<br /><br />
+						<<run $('#option_end').show()>>
+					<</linkreplace>>
+					<div id="option4_cost">
+						<<linkdesc>>(-1 food, -1 glowing mushroom)<</linkdesc>>
+					</div>
+				<<else>>
+					"If we had food and glowing mushrooms we could make something to ease the pain. We have not!", says <<=_doctorName>>.
+					<br/><br/>
+				<</if>>
+			<<else>>
+				No suggestions are forthcoming!
+				<br/><br/>
+			<</if>>
+		<</linkreplace>>
+	<</if>>
+</div>
 <div id="option1">
 	<<linkreplace 'Kill him with pillow'>>
 		<<statsAdd 'people_killed'>>
 		<<set $player.goodwill -=5>>
-		<<run $('#option2, #option3').hide()>>
+		<<run $('#option2, #option3, #option4').hide()>>
 		<center>
 			[img[setup.ImagePath+'places/explore/event_old_ill_man_pillow.gif']]
 		</center>
 		<br /><br />
 		You took the pillow that was standing on the chair next to the bed, raised your legs, and placed it on the old man's head. He didn't resist, but after a moment, reflexes kicked in, and he weakly struck your hands a few times. After a while, he had passed away.
 		<br /><br />
-		<<linkreplace 'Search the house'>>
-			<<if setup.percentageChance(40)>>
-				<strong class="iitem">You found 4 .38 bullets</strong>
-				<<pickup $backpack 'bullet_revolver' 4>>
-			<<else>>
-				You found nothing...
-			<</if>>
-			<br /><br />
-		<</linkreplace>>
-		<<link 'Leave'>>
-			<<goto 'Outside'>>
-		<</link>>
+		<<run $('#option_end').show()>>
 	<</linkreplace>>
 </div>
 <<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
@@ -44,31 +69,20 @@ You sat down next to him, and he spoke quietly but clearly, explaining that his 
 			<<drop $backpack 'bullet_revolver' 1>>
 			<<statsAdd 'people_killed'>>
 			<<set $player.goodwill -=5>>
-			<<run $('#option1, #option2').hide()>>
+			<<run $('#option1, #option2, #option4').hide()>>
 			<center>
 				[img[setup.ImagePath+'places/explore/eldery_man_gun.gif']]
 			</center>
 			<br /><br />
 			You take out your revolver from the pocket and with trembling hands aim at the old man. You fire... Silence... The entire pillow suddenly gets stained in red.
 			<br /><br />
-			<<linkreplace 'Search the house'>>
-				<<if setup.percentageChance(40)>>
-					<strong class="iitem">You found 4 .38 bullets</strong>
-					<<pickup $backpack 'bullet_revolver' 4>>
-				<<else>>
-					You found nothing...
-				<</if>>
-				<br /><br />
-			<</linkreplace>>
-			<<link 'Leave'>>
-				<<goto 'Outside'>>
-			<</link>>
+			<<run $('#option_end').show()>>
 		<</linkreplace>>
 	</div>
 <</if>>
 <div id="option2">
 	<<linkreplace 'Say no and leave'>>
-		<<run $('#option1, #option3').hide()>>
+		<<run $('#option1, #option3, #option4').hide()>>
 		He barely manages to sit up from the bed and starts shouting at you.
 		<br /><br />
 		<strong>"YOU ARE ALL THE SAME! COWARDS! JUST LIKE JOHN! GET OUT!"</strong>
@@ -79,4 +93,18 @@ You sat down next to him, and he spoke quietly but clearly, explaining that his 
 	<</linkreplace>>
 </div>
 
+<div id="option_end" style="display:none;">
+	<<linkreplace 'Search the house'>>
+		<<if setup.percentageChance(40)>>
+			<strong class="iitem">You found 4 .38 bullets</strong>
+			<<pickup $backpack 'bullet_revolver' 4>>
+		<<else>>
+			You found nothing...
+		<</if>>
+		<br /><br />
+	<</linkreplace>>
+	<<link 'Leave'>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
 
