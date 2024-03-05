@@ -1,5 +1,5 @@
 setup.actionText ??= {};
-setup.actionText.male_on_transtransfemale = {
+setup.actionText.male_on_transfemale = {
     handjob: [
         "%transfemale% is giving %male% a nice handjob, a good start!"
     ],
