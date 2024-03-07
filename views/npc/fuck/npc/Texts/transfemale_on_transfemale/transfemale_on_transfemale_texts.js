@@ -34,7 +34,7 @@ setup.actionText.transfemale_on_transfemale = {
         "%transfemale0% and %transfemale% moan as a double dildo is deep inside their asses."
     ],
     anal_dildo: [
-        "%transfemale0% moans softly as %transfemale% inserts a dildo in her ass, looks like the tgirl is enjoying it."
+        "%transfemale0% moans softly as %transfemale% inserts a dildo in her ass, looks like %transfemale0% is enjoying it."
     ],
     anal: [
         "%transfemale0% moans softly as %transfemale% fucks her ass, looks like the tgirl is enjoying it."

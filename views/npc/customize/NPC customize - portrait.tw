@@ -17,7 +17,8 @@
 		red:		setup.range(1, 5)
 	}
 }>>
-<<set _availablePortraits = ((_portraits[$tmpGirl.race] ?? {})[$tmpGirl.hair] ?? [])>>
+<<set _hair = ($tmpGirl.hair === 'brown' ? 'brun' : $tmpGirl.hair ?? '')>>
+<<set _availablePortraits = ((_portraits[$tmpGirl.race] ?? {})[_hair] ?? [])>>
 <div id="custom_portraits">
     <div class="custom_portrait_item">
             <div class="custom_portrait_item_img">
@@ -41,7 +42,7 @@
         <<capture _key, _portraitUrl>>
             <div class="custom_portrait_item">
                 <div class="custom_portrait_item_img">
-                    <<set _portraitUrl = $tmpGirl.race + "/hair_" + $tmpGirl.hair + "/" + _key + ".png">>
+                    <<set _portraitUrl = $tmpGirl.race + "/hair_" + _hair + "/" + _key + ".png">>
                     [img[setup.ImagePath+'custom_portraits/female/' +_portraitUrl]]
                 </div>
                 <div class="custom_portrait_item_link">
