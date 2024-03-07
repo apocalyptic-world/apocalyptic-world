@@ -133,6 +133,24 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Home improvement',
         description: 'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
     },
+    blueprints: {
+        show: $game.location?.workbench,
+        done:  $backpack.hasAll('blueprint_hot_shower','blueprint_hot_tub', 'blueprint_library') && ($game.hotShower ?? false) && ($game.location.hottub ?? false) && ($game.location.library ?? false),
+        category: 'Gameplay',
+        title: 'Blueprints for home improvement',
+        description:
+            '<dl>' +
+                (!$backpack.has('blueprint_hot_shower') 
+                    ? '<dt>Hot shower</dt><dd>From day 10 you have a chance to find the blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers.</dd>'
+                    : (!($game.hotShower ?? false) ? '<dt>Hot shower</dt><dd>Have blueprint so build at your leisure.</dd>' : '<dt><s>Hot shower</s></dt>' )) +
+                (!$backpack.has('blueprint_hot_tub')
+                    ? '<dt>Hot tub</dt><dd>Visit bathhouse and the guests may suggest a hot tub. <span style="color: yellow">Hot tub not in game yet!</span></dd>'
+                    : (!($game.location.hottub ?? false) ? 'Have blueprint but <span style="color: yellow">hot tub not in game yet!</span></dd>' : '<dt><s>Hot tub</s></dt>')) +
+                (!$backpack.has('blueprint_library') 
+                    ? '<dt>Library</dt><dd>Go exploring for a chance to find the blueprint. <span style="color: yellow">Library not in game yet!</span></dd>'
+                    : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint but <span style="color: yellow">library not in game yet!</span></dd>' : '<dt><s>Library</s></dt>')) +
+            '</dl>',
+    },
     first_pregnancy: {
         show: !$characters.vincent?.quests?.pregnancy_talked && $characters.vincent?.quests?.pregnancy,
         done:  $characters.vincent?.quests?.pregnancy_talked,
@@ -299,7 +317,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Nursery',
         description: 
-            (!$characters.blair.quests?.nursery ? 'Talk with Blair in the kitchen. She want you to build a nursery for the children.<br>' : '<s>Talked with Blair!</s>') +
+            (!$characters.blair.quests?.nursery ? 'Talk with Blair in the kitchen. She want you to build a nursery for the children.<br>' : '<s>Talked with Blair!</s> ') +
             (!$game.location?.nursery           ? 'Use your workbench and build the nursery' : '<s>Nursery built!k</s>'),
     },
 
@@ -450,7 +468,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     laura_meet: {
         show: $game.day >= 150,
-        done: $characters?.laura?.quests?.lab?._workbench ?? false,
+        done: $characters?.laura?.quests?.lab_workbench ?? false,
         category: 'Story',
         title: 'Dr. Laura Finch',
         description: 
@@ -489,14 +507,14 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: _doneAll,
         category: 'Story',
         title: 'End of questlines',
-        description: 'This is the end of some characters quests as of version v0.32. Just be patient and wait for game updates.<br/>' +
+        description: 'This is the end of some characters quests as of version v0.33. Just be patient and wait for game updates.<br/>' +
             'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
         /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
             'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-            'Dom & Isabel: ' + (_done.dom ? '<span style="color: green">Done!</span>': 'More quests to do!') + '<br/>' +
-              (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!') + '<br/>' +
+            'Dom & Isabel: ' + (_done.dom ? '<span style="color: green">Done!</span>':
+                (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!')) + '<br/>' +
         /*  'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
             'Negan:   ' + (_done.negan   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Laura: '   + (_done.laura   ? '<span style="color: green">Done!</span>' : 'More quests to do!'),
@@ -507,7 +525,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: false,
         category: 'Internal',
         title: 'Notes for guide writer',
-        description: 'This is a reminder for the writer of this game guide of things to do.<br/>Characters: Dom, Isabel, Negan, Laura<br/>More hints, gameplay etc. Improving the format<br/>Check f5-forum for suggestions.',
+        description: 'This is a reminder for the writer of this game guide of things to do.<br/>Player<br/>Characters<br/>More hints, gameplay etc. Improving the format<br/>Check f95-forum for suggestions.',
     },
 
 }>>
