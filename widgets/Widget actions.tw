@@ -111,11 +111,11 @@
 			<<set _npcStat = _StatsMapping[$args[1]] ?? $args[1]>>
 			<<set _actionText = setup.actionText>>
 			<<if $args[0].virgin && typeof _actionText[$args[1]] !== 'undefined' && typeof _actionText[$args[1]]['v'] !== 'undefined'>>
-				<<print _actionText[$args[1]]['v'].replace(/\%name\%/g, $args[0].name)>>
+				<<print _actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
 			<<else>>
 				<<if $args[0].gender>>
 					<<if _actionText[setup.genderPath($args[0])][$args[1]] !== undefined>>
-						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/\%name\%/g, $args[0].name)>>
+						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace('%name%', $args[0].name)>>
 					<</if>>
 				<<else>>
 					<<if _actionText[$args[1]] !== undefined>>
@@ -125,9 +125,9 @@
 									<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
 								<</if>>
 							<</for>>
-							<<print _randomSortedText.replace(/\%name\%/g, setup.displayName($args[0]))>>
+							<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
 						<<else>>
-							<<= _actionText[$args[1]].texts[Math.floor(Math.random()*_actionText[$args[1]].texts.length)].replace(/\%name\%/g, setup.displayName($args[0]))>>
+							<<= _actionText[$args[1]].texts[Math.floor(Math.random()*_actionText[$args[1]].texts.length)].replace('%name%', setup.displayName($args[0]))>>
 						<</if>>
 					<</if>>
 				<</if>>
