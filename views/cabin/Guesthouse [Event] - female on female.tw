@@ -97,7 +97,8 @@
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
 	<center>
-		<<actionImageOutput `setup.ImagePath+'actions/female_on_female-'+_guestIds.length+'/default/'+_sexActions[_index]+'/'+ either(setup.actions['female_on_female-'+_guestIds.length]['default'][_sexActions[_index]])`>><br />
+		<<set _url = setup.ImagePath+'actions/female_on_female-'+_guestIds.length+'/default/'+_sexActions[_index]+'/'+ either(setup.actions['female_on_female-'+_guestIds.length]['default'][_sexActions[_index]])>>
+		<<actionImageOutput _url>><br />
 	</center>
 	<br />
 	<<print _actionText['female_on_female'][_sexActions[_index]][0].replace('%names%', _girlNames).replace('%name1%', $guests[_guestIds[0]].name).replace('%name2%', $guests[_guestIds[1]].name)>>

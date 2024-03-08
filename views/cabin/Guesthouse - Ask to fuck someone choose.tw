@@ -24,6 +24,9 @@
 				_guestYes = (setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty))),
 				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)))
 			>>
+			<<if setup.getAge(_guest) < 18>>
+				<<continue>>
+			<</if>>
 
 			<<if _guestYes && _mainYes && !$tmpGirl.gender && !_guest.gender>>
 				<<set _lesbians.push(_j)>>
