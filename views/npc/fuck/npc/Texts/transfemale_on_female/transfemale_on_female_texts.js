@@ -33,6 +33,9 @@ setup.actionText.transfemale_on_female = {
     cum_in_mouth: [
         "%transfemale% fills %female%'s mouth with her cum."
     ],
+    cum_in_pussy: [
+        "%transfemale% fills %female%'s pussy with her cum."
+    ],
     squirt: [
         "%female% screams of pleasure and starts squirting."
     ],

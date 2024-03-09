@@ -112,6 +112,42 @@
 				<br /><br />
 				You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
 				<br />
+				<<linkreplace 'Ask for a creampie'>>
+					<<if setup.percentageChance(setup.sexChance($guests[_guestIds[0]]))>>
+						<<if $guests[_guestIds[0]].virgin = true>>
+							<center>
+								<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text'>>
+							</center>
+							<br />
+							<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+							<br /><br />
+							<<set $guests[_guestIds[0]].virgin = false>>
+						<</if>>
+						<center>
+							<<actionImageOutput `setup.ImagePath+'actions/transfemale_on_female/default/pussy/'+ either(setup.actions['transfemale_on_female']['default']['pussy'])`>><br />
+						</center>
+						<br />
+						<<print _actionText['transfemale_on_female']['pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name)>>
+						<br /><br />
+
+						<<linkreplace 'Continue'>>
+							<<set _orgasm = true>>
+							<center>
+								<<actionImageOutput `setup.ImagePath+'actions/transfemale_on_female/default/cum_in_pussy/'+ either(setup.actions['transfemale_on_female']['default']['cum_in_pussy'])`>><br />
+							</center>
+							<br />
+							<<print _actionText['transfemale_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name)>>
+							<br /><br />
+							<<if setup.percentageChance(setup.pregnancyChance($guests[_guestIds[0]]))>>
+								<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+								<<set $guests[_guestIds[0]].pregnancy = 0>>
+							<</if>>
+						<</linkreplace>>
+					<<else>>
+						<<=setup.displayName($guests[_guestIds[0]])>> says no and leaves the room half naked.
+						<br /><br />					
+					<</if>>
+				<</linkreplace>>
 			<</replace>>
 	<</link>>
 </div>
