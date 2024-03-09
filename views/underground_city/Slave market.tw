@@ -21,7 +21,10 @@ Easy way to get some extra caps, but at what cost?
   <</if>>
 <</if>>
 
-<<if ($player.stats.slaves_sold ?? 0) >= 30 && !$player.quests.slave_market_vip>>
+<<if ($player.stats.slaves_sold ?? 0) >= 20 && !$game.location.sanctuary>>
+	<<set $game.location.sanctuary = true>>
+	<<goto 'Slave market - Sanctuary'>>
+<<elseif ($player.stats.slaves_sold ?? 0) >= 30 && !$player.quests.slave_market_vip>>
 	<<set $player.quests.slave_market_vip = true>>
 	<<goto 'Slave market - VIP introduction'>>
 <<elseif ($player.stats.slaves_sold ?? 0) >= 40 && !$player.quests.slave_market_vip_room>>
