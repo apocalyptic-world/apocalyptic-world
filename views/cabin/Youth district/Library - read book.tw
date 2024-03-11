@@ -1,0 +1,80 @@
+:: Library - read book [Place]
+<h1 class="ptitle">LIBRARY</h1>
+<br />
+<<run setup.cabinInventory.drop('book', 1)>>
+<center>
+    [img[setup.ImagePath+'places/library/read.jpg']]
+</center>
+<br />
+
+Amidst the dimly lit confines of our post-apocalyptic sanctuary, you find solace in the pages of a weathered tome salvaged from the remnants of civilization. 
+With each word absorbed, you feel a spark of intellect flicker within you, a glimmer of hope amidst the desolation that surrounds you.
+<br /><br />
+<<set _giveInt = 1>>
+<<if $player.int < 50>>
+    <<set _giveInt += 2>>
+<<elseif $player.int < 100>>
+    <<set _giveInt++>>
+<</if>>
+<<set $player.int += _giveInt>>
+<strong>
+Your intelligence increased by <<=_giveInt>>.
+</strong>
+
+<<set _guests = setup.getAvailablePersons18yo($guests)>>
+<<if _guests[0].length>>
+    <<set _randomGuest = $guests[setup.getRandomElement(_guests[0])]>>
+    <<if _randomGuest.horny > 50>>
+        <<set _npc = _randomGuest>>
+    <</if>>
+<</if>>
+<br /><br />
+<<if _npc && setup.percentageChance(100)>>
+    <<sayNpc _npc>>
+        Lost in another world, I see.
+    <</sayNpc>>
+    <br />
+    She moves closer, her presence enveloping you like a warm embrace.
+    <br /><br />
+    <<sayNpc _npc>>
+        Perhaps we could navigate it together.
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Unzip your pants'>>
+        <center>
+            [img[setup.ImagePath+'places/library/bj.webp']]
+        </center>
+        <br />
+        As you continue to immerse yourself in the book's world, you barely notice <<=setup.displayName(_npc)>> graceful movement as she crawls under the table and grabs your dick while you keep reading it.
+        <br />
+        A soft chuckle escapes her lips as she continues.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/library/bj2.webp']]
+        </center>
+        <br />
+         <<sayNpc _npc>>
+            I hope I'm not distracting you too much from your book.
+        <</sayNpc>>
+        <br />
+        <center>
+            [img[setup.ImagePath+'places/library/bj.webp']]
+        </center>
+        <br />
+        She continues to suck your hard dick as you still hold book in your hands. Look like she wants more attention from you.
+        <br /><br />
+        <<horny 20>>
+        <<linkreplace 'Cum'>>
+            <<horny_reset>>
+            <center>
+                [img[setup.ImagePath+'places/library/cum.webp']]
+            </center>
+            <br />
+            As you are ready to cum she pushes herself back from you and opens her mouth, letting her tongue out. With naughty smile in her eyes she catches each drop of your cum.
+            <br /><br />
+        <</linkreplace>>
+    <</linkreplace>>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Library'>>
+<</link>>
