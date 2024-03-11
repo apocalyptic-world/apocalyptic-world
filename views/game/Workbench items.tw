@@ -27,6 +27,21 @@
 				variables().game.hotShower = true;
 			},
 		},
+		library: {
+			show: $backpack.has('blueprint_library') && !$game.location.library,
+			title: 'Library',
+			description: 'Increase intelligence by reading found books',
+			required: {
+				'wood': 50,
+				'rope': 10,
+				'solar_panel': 1,
+				'metal': 5,
+				'glass': 10
+			},
+			energy: 60,
+			goto: 'Library built',
+			after: function() {}
+		},
 		basement_cell: {
 			show: $basementLimit < 30,
 			title: 'Basement cell',

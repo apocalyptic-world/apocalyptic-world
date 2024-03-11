@@ -1,0 +1,11 @@
+:: Youth district [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<div class="menu-grid">
+	<<set _cabinName = $game.cabinName ?? 'Cabin'>>
+	<<set _cabinImg = $game.cabinName ? 'gate' : 'cabin'>>
+    <<grid outside `_cabinImg` 'Wood cabin' `_cabinName`>>    
+    <<if ($game.location.nursery ?? false) && hasTime(0, 30)>>
+      <<grid cabin nursery 'Nursery' 'Nursery' false 1>>
+    <</if>>
+</div>

@@ -1,12 +1,14 @@
 :: Car - Explore [Place bg-garage]
-<<set $randomNumber to Math.floor(Math.random() * 100) + 1>>
+<<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<energy -30>>
 <<carFuel 20>>
 
-<<if $randomNumber <= 20>>
+<<if _randomNumber <= 20>>
 	<<goto 'Car explore event - girl gas station'>>
-<<elseif $randomNumber <= 40>>
+<<elseif _randomNumber <= 40>>
 	<<goto 'Car explore event - injured guy'>>
+<<elseif _randomNumber <= 60>>
+	<<goto 'Car explore event - attack car'>>
 <<else>>
     <<include 'Car explore - nothing found'>>
 <</if>>

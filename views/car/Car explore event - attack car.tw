@@ -1,0 +1,80 @@
+:: Car explore event - attack car
+<h1 class="ptitle">DESERT</h1>
+<br />
+As the scorching sun beat down upon the endless expanse of desert wasteland, you navigated your rugged post-apocalyptic car across the unforgiving terrain. The distant horizon shimmered with heat waves, mirages teasing your weary eyes as you searched for valuable salvage among the sands.
+<br /><br />
+Suddenly, the tranquility of the desert was shattered by the roar of engines. Your heart raced as you spotted another scavenger car barreling towards you from a distant dune. Instinctively, you tightened your grip on the steering wheel, preparing for whatever confrontation lay ahead.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/car_attack.webp']]
+</center>
+<br />
+With a deafening crunch, the opposing vehicle slammed into the side of your car, sending metal screeching and glass shattering. 
+The impact jolted you violently, threatening to throw you off course as the two vehicles careened dangerously across the sand.
+<br /><br />
+Cursing and shouting erupted from the other car as <strong>four</strong> figures emerged, their faces hidden behind makeshift masks and goggles. 
+They brandished makeshift weapons, their intentions clear as they yelled at you to stop.
+<br /><br />
+<<set $player.car.health -=20>>
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    Stop the car now or die!
+<</sayNpc>>
+<br />
+<div id="option_stop">
+    <<linkreplace 'Stop the car'>>
+        <<run $('#option_run').hide()>>
+        As you bring your car to a screeching halt in the gritty sand, the other vehicle pulls up just meters ahead, kicking up clouds of dust in its wake. 
+        With a tense silence hanging in the air, the <strong>three</strong> scavengers leap out of their battered car, their boots thudding against the ground as they approach you.
+        <br /><br />
+            <<sayNpc $tmpGuy>>
+                Oh you are so dead!
+            <</sayNpc>>
+        <br />
+        <<link 'Fight them'>>
+            <<set _enemies = []>>
+            <<run _enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {
+                knife: 1
+            }>>
+            <<run _enemies.push($tmpGuy)>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {
+                knife: 1
+            }>>
+            <<run _enemies.push($tmpGuy)>>
+            <<fight _enemies 'Car explore event - attack car won' 'Car explore event - attack car lost'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_run">
+    <<linkreplace 'Try to run away'>>
+        <<run $('#option_stop').hide()>>
+        <<set _chanceOfDamage = 100>>
+        <<if $player.int > 50>>
+            <<set _chanceOfDamage -= 20>>
+        <</if>>
+        <<if $player.int > 100>>
+            <<set _chanceOfDamage -= 30>>
+        <</if>>
+        <<if setup.percentageChance(_chanceOfDamage)>>
+            <<set $player.car.health -=20>>
+            As the other scavenger car bears down on you, you grit your teeth and press down hard on the accelerator, determined to escape the looming threat. With a roar of engines, your car lurches forward, kicking up a cloud of sand in its wake as you veer off course, desperately trying to evade the incoming collision.
+            <br /><br />
+            <center>
+	            [img[setup.ImagePath+'places/explore_car/car_attack_crash.jpg']]
+            </center>
+            <br />
+            But the scavenger car is relentless, its drivers skilled in the art of pursuit amidst the harsh desert terrain. With a sickening jolt, the other vehicle slams into the side of your car once again, sending shocks of pain reverberating through your body as metal grinds against metal.
+        <<else>>
+            With quick thinking and a keen eye, you deftly maneuver your car, anticipating the scavenger's next move. As their vehicle barrels towards you for another collision, you swiftly veer to the side, narrowly avoiding the impact. The scavenger car zooms past, the roar of its engine fading into the distance as you breathe a sigh of relief.
+        <</if>>
+        <br /><br />
+        With a final burst of speed, you manage to break free from the scavenger car's clutches, leaving it behind in a cloud of dust and debris as you race away into the vast expanse of the desert. Adrenaline courses through your veins as you push your car to its limits, putting as much distance as possible between you and the dangerous foes hot on your tail.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
