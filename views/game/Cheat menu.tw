@@ -23,6 +23,24 @@
 		<<goto `passage()`>> 
   <</link>>
   <<if recall($suppCode)>>
+	<<link 'Set all slave corruption to max'>>
+  		<<for _cheatslaveI, _cheatSlave range $slaves>>
+			<<set $slaves[_cheatslaveI].corruption = 100>>
+		<</for>>
+		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.corruption = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  	<</link>>
+	<<link 'Set all guest corruption to max'>>
+  		<<for _cheatGuestI, _cheatGuest range $guests>>
+			<<set $guests[_cheatGuestI].corruption = 100>>
+		<</for>>
+		<<if typeof $guestId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.corruption = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  	<</link>>
     <<link 'Set all slave relationship to max'>>
   		<<for _cheatslaveI, _cheatSlave range $slaves>>
 			<<set $slaves[_cheatslaveI].relationship = 100>>
