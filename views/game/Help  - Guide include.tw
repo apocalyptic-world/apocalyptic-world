@@ -84,11 +84,21 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '</ul>',
     },
     intelligence: {
-        show: $characters.rodger.quests?.book,
+        show: $characters.rodger.quests?.book || ($game.location.library ?? false),
         done: $player.int > 100,
         category: 'Hint',
         title: 'Intelligence',
-        description: 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence.<br/>Some random explore events can also give you points.',
+        description:
+            '<ul><li>Read a book in your library. ' +
+            (!$backpack.has('blueprint_library') 
+                ? 'But first you have to go exploring to find a blueprint for it, and then you have to build it.'
+                : !($game.location.library ?? false) ? 'After you have built it!' : '') + '</li>' +
+            '<li>' + ($player.int < 50 
+                ? 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence. ' +
+                    (!($characters.rodger.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
+                : '<s>Reading book in settlement church.</s>') + '</li>' +
+            '<li>Some random explore events can also give you points.</li>' +
+            '</ul>',
     },
     reputation: {
         show: true,
