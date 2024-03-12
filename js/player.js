@@ -42,7 +42,7 @@ setup.player = {
      * @param {*} npcID 
      * @returns         string
      */
-    npcRelationText: function(npcID) {
+    npcRelationText: function(npcID, pregCheck = true) {
         if((npcID ?? 'mc') === 'mc') { /* ignore undef and mc */
             return '';
         }
@@ -74,6 +74,14 @@ setup.player = {
                         npcText += relation + ': ' + setup.player.npcNameColor(rel) + '; ';
                     }
                 }
+            }
+        }
+        if(pregCheck && typeof npc.pregnancy !== 'undefined') {
+            const fatherId = npc.pregnancy_father ?? 'unknown';
+            if(fatherId === 'mc') {
+                npcText += 'Pregnant with your child';
+            } else {
+                npcText += 'Pregnant with another guys child';
             }
         }
         npcText += ')';

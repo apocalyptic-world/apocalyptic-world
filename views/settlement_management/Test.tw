@@ -34,4 +34,30 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
+
+	<<set _pregTexts = []>>
+	<<set _characters = []>>
+	<<for _npcId, _npc range $characters>>
+		<<if (typeof _npc.pregnancy !== 'undefined')>>
+			<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
+			<<if _fatherId === 'mc'>>
+				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
+			<</if>>
+		<</if>>
+	<</for>>
+	<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+		<<if (typeof _npc.pregnancy !== 'undefined')>>
+			<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
+			<<if _fatherId === 'mc'>>
+				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
+			<</if>>
+		<</if>>
+	<</for>>
+	<<if _pregTexts.length>>
+		<tr>
+			<td>Pregnant carrying your child</td>
+			<td><<=_pregTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
 </table>
