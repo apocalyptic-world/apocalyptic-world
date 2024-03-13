@@ -1,5 +1,7 @@
 Save.onLoad.add(function (save) {
 
+    let variables = save.state.history[save.state.index].variables; // shortcut to be used when we cleanup
+
     // Cleanup old variables
     var _oldVariables = [
         'cellSlaveIds',
@@ -428,6 +430,11 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.wanted[saveWantedI].likes = setup.getRandomGifts(either(1, 2));
             save.state.history[save.state.index].variables.wanted[saveWantedI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.wanted[saveWantedI].likes);
         } 
+    }
+
+    if ((variables.locationEvents.bathhouse ?? false) && !variables.backpack.has('blueprint_hot_tub')) {
+        /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
+        variables.backpack.pickup('blueprint_hot_tub', 1);
     }
 
     /* obselete variables */
