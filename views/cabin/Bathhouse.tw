@@ -1,43 +1,11 @@
-:: Bathhouse [Place] {"position":"1507,773","size":"100,100"}
-<<set _bathSchedule = {
-	garden: {
-		from: '16:00',
-		to: '20:00',
-		p: 30
-	},
-	forest: {
-		from: '16:00',
-		to: '08:00',
-		p: 30
-	},
-	kitchen: {
-		from: '12:00',
-		to: '20:00',
-		p: 10
-	},
-	scavenging: {
-		from: '20:00',
-		to: '23:00',
-		p: 50
-	},
-	mistress: {
-		from: '23:00',
-		to: '24:00',
-		p: 100
-	},
-	streets: {
-		from: '08:00',
-		to: '12:00',
-		p: 50
-	}
-}>>
-
+:: Bathhouse [Place bg-bathhouse]
 <h1 class="ptitle">BATHHOUSE</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/bathhouse_head.jpg']]
+<br />
+<<if $game.location.hottub ?? false>>
+<div class="menu-grid">   
+  <<grid bathhouse hottub 'Hottub' 'Hottub'>>
 </div>
-<br /><br />
-
+<</if>>
 <<set _peopleInBathhouse = {}>>
 <table id="slaves">
 	<<for _bathGuestI, _bathGuest range $guests>>
