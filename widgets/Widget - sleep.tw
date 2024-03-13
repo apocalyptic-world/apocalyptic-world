@@ -33,6 +33,7 @@
 	<<set _isStorageAvailable = ($game.location.shop ?? false)>>
 
   <<set $player.energy = $player.maxEnergy>>
+  <<run delete $player?.quests.hottub>>
   <<if $storage.has('food')>>
   		<<drop $storage 'food' 1>>
 		<<set $player.hunger = 100>>

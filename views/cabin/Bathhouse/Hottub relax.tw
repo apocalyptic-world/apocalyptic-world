@@ -1,0 +1,35 @@
+:: Hottub relax [bg-bathhouse]
+<h1 class="ptitle">HOT TUB</h1>
+
+<br />
+<<addmins 30>>
+<<set $player.quests.hottub = true>>
+<center>
+	[img[setup.ImagePath+'places/bathhouse/hottub_relax.jpg']]
+</center>
+<br />
+As you sink into the warm embrace of the hot tub outside the bathhouse, the cares of the day melt away like snow under a spring sun. 
+The bubbling water envelops you, massaging away tension and leaving you weightless as if you're floating on a cloud. 
+The scent of cedar from nearby trees fills the air, mingling with the steam rising from the tub.
+
+<<if setup.perkHas('beaten') && setup.percentageChance(30)>>
+    <br /><br />
+    And then, as you soak, something remarkable happens. It's as if the hot tub has a healing touch, targeting the sore spots and easing your discomfort. 
+    You feel a sense of relief wash over you as the aches and pains in your body begin to dissipate, leaving you feeling refreshed and rejuvenated.
+    <br /><br />
+    <strong>Your body doesn't hurt anymore!</strong>
+    <<run delete $player.perks.beaten>>
+<<elseif $player.maxEnergy < 140 && setup.percentageChance(40)>>
+    <<set $player.maxEnergy += 10>>
+    <br /><br />
+    And then, unexpectedly, a surge of energy courses through you. It's as if the warmth of the water has awakened something dormant within you, filling you with renewed vigor and vitality. 
+    Your senses sharpen, and you feel more alive than ever before.
+    <br /><br />
+    <strong>Max energy increased to <<=$player.maxEnergy>>!</strong>
+<</if>>
+
+<<energy 10>>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Bathhouse'>>
+<</link>>
