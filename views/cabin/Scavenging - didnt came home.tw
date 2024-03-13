@@ -5,10 +5,11 @@
   [img[setup.ImagePath+'places/outside/scavenging_empty_bed.png']]
 </center>
 You went to the guest house and noticed that
-<strong><<=$guests[$scavengingDidntReturn].name>></strong> didn't came home from the scavenging last night
+<strong><<=setup.displayName($guests[$scavengingDidntReturn])>></strong> didn't came home from the scavenging last night.
+<<set _goLookLink = 'Go look for ' + setup.pronounceWho($guests[$scavengingDidntReturn])>>
 <br /><br />
-<<link 'Go look for her'>>
-	<<goto 'Scavenging - look for girl'>>
+<<link _goLookLink>>
+	<<goto 'Scavenging - look for'>>
 <</link>>
 <<link 'Ignore'>>
 	<<if randomInteger(0,1) === 1>>

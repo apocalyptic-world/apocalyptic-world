@@ -1,15 +1,18 @@
-:: Event: Base attack {"position":"343,959","size":"100,100"}
+:: Event: Base attack
 <h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
 <br /><br />
 <center>						
 	[img[setup.ImagePath+'places/cabin/event_base_attack.jpg']]
 </center>
+<<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
+<<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
 <br /><br />
 As you stroll through your village, enjoying the warm sunshine on your face, a sudden commotion catches your attention. One of your girls, sprints towards you, her face contorted with fear and her eyes wide with panic. She screams at the top of her lungs, "Help! Help! They're attacking our base!"
 <br /><br />
 Between gasps for breath, the girl manages to respond, her voice trembling, "A group of bandits! They stormed our gates and managed to break through! They're wreaking havoc inside!"
 <br /><br />
-As you arrive at the gate, the sight that greets you is one of chaos. Gates lie broken and splintered, remnants of a violent struggle and in front of you are standing 4 guys and one girl.
+As you arrive at the gate, the sight that greets you is one of chaos. 
+Gates lie broken and splintered, remnants of a violent struggle and in front of you are standing <<=_enemyGuyCount>> guys and <<=_enemyGirlCount>> <<=(_enemyGirlCount > 1 : 'women' : 'woman')>>.
 <br /><br />
 <<set $prevFight = {}>>
 <div id="option1">
