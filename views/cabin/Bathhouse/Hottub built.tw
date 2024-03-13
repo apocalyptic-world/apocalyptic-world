@@ -1,0 +1,53 @@
+:: Hottub built
+<h1 class="ptitle">HOT TUB</h1>
+<br />
+<<set $game.location.hottub = true>>
+Hours pass as you labor tirelessly, welding and reinforcing the structure, fashioning it into a crude but functional vessel for warmth and relaxation.
+Finally, as the last bolt is tightened and the final sealant applied, the hot tub stands ready, a testament to your ingenuity amidst the chaos.
+<br /><br />
+<<set _guests = setup.getAvailablePersons18yo($guests)>>
+<<if _guests[0].length>>
+    <<set _randomGuest = $guests[setup.getRandomElement(_guests[0])]>>
+    <<if _randomGuest.horny > 50>>
+        <<set _npc = _randomGuest>>
+    <</if>>
+<</if>>
+<<if _npc>>
+    As you step back to admire your handiwork, one of your female guests approaches with a smile that lights up her face.
+    <br /><br />
+    <<sayNpc _npc>>
+        Congratulations on your masterpiece. Care if I am first one to test it out?
+    <</sayNpc>>
+    <br />
+    Before you even manage to reply to her, with a mischievous smile, she meets your gaze and begins to untie the fabric, revealing more of her sun-kissed skin with each tantalizing movement.
+    <br /><br />
+    <<set $tmpGirl = _npc>>
+    <<set $tmpGirl.location = 'hottub'>>
+    <<actionImage $tmpGirl 'undress'>>
+    <br /><br />
+    <<=setup.displayName($tmpGirl)>> gets into hot tub and as her shirt slips from her shoulders, she meets my gaze with a coy grin.
+    <br /><br />
+    <<sayNpc _npc>>
+        Care to join me?
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Join her'>>
+        You take of your clothes and slowly climb into hot tub. Before you even manage to sit down, she's already right between your legs with your dick in her mouth.
+        <br /><br />
+        <<actionImage $tmpGirl 'bj'>>
+        <br />
+        <<sayNpc $tmpGirl>>
+            I just wanted to than you for your hard work.
+        <</sayNpc>>
+        <br /><br />
+        <<linkreplace 'Cum'>>
+            <<horny_reset>>
+            <<actionImage $tmpGirl 'cum_in_mouth'>>
+            <br /><br />
+        <</linkreplace>>
+    <</linkreplace>>
+<</if>>
+
+<<link 'Leave'>>
+    <<goto 'Bathhouse'>>
+<</link>>
