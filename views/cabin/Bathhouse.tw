@@ -82,7 +82,6 @@
                         <<run delete $guestId>>
 						<<run delete $charId>>
                         <<set $slaveId = _bathSlaveI>>
-                        <<set $tmpGirlViewBack = 'NPC view'>>
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
@@ -112,6 +111,12 @@
 		ids: [Object.keys(_peopleInBathhouse[0])[0], Object.keys(_peopleInBathhouse[0])[1]]
 	}>>
 	<<goto 'Bathhouse - hot tub talk'>>
+<</if>>
+<<if !$player.showered>>
+	<<link 'Take a shower'>>
+		<<set $isBathhouse = true>>
+		<<goto 'Shower-action'>>
+	<</link>>
 <</if>>
 <<if hasTime(1)>>
 	<<link 'Wait 30 minutes'>>

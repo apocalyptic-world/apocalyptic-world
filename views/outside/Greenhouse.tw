@@ -37,14 +37,11 @@
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
-
-				  	<<if $slaves[_i].pregnancy >= 7>>
-					 (pregnant <<=$slaves[_i].pregnancy>> days)
-					<</if>>
+				<<=setup.npcListInfo($slaves[_i])>>
 			</td>
 			<td>
 				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-					Beauty score: <<print $slaves[_i].beauty>>
+					Beauty: <<print $slaves[_i].beauty>>
 				<</if>>
 			</td>
 			<td>
@@ -81,14 +78,11 @@
                           <<goto `$tmpGirlViewBack`>>
 				  <</link>>
                   </span>
-
-				<<if _gardenGuest.pregnancy >= 7>>
-					 (pregnant <<=_gardenGuest.pregnancy>> days)
-				<</if>>
+				<<=setup.npcListInfo(_gardenGuest)>>
 			</td>
 			<td>
 				<<if [0,2].includes(_gardenGuest.gender) && setup.getAge(_gardenGuest) >= 17>>
-					Beauty score: <<print _gardenGuest.beauty>>
+					Beauty: <<print _gardenGuest.beauty>>
 				<</if>>
 			</td>
 			<td>

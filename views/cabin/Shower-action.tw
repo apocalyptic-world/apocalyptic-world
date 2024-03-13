@@ -1,7 +1,7 @@
 :: Shower-action {"position":"964,390","size":"100,100"}
 <h1 class="ptitle">SHOWER</h1>
 <<set $player.showered to true>>
-<<if $game.hotShower is true>>
+<<if $game.hotShower is true ||	$isBathhouse>>
     <center>[img[setup.ImagePath+'places/cabin/hot_shower.webp']]</center>
 	<br /><br />
 	<strong>Your energy increased by 20</strong>
@@ -13,9 +13,36 @@
 	<strong>Your energy increased by 10</strong>
 <</if>>
 <br /><br />
+<<if $isBathhouse>>
+	<<for _bathGuestI, _bathGuest range $guests>>
+		<<capture _bathGuestI, _bathGuest>>
+			<<if _bathGuest.location !== 'bathhouse'>>
+				<<continue>>
+			<</if>>
+			<<if setup.sexChance(_bathGuest) && !_bathGuest.gender || true>>
+				<<sayNpc _bathGuest>>
+					Oh, it's taken already. Mind if I join?
+				<</sayNpc>>
+				<br /><br />
+				<<link 'Agree'>>
+					<<set $tmpGirl = _bathGuest>>
+					<<set $guestId = _bathGuestI>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+					<<set $tmpGirl.location = 'shower'>>
+                    <<set $tmpGirlBack = 'Bathhouse'>>
+					<<fuck $tmpGirl>>
+				<</link>>
+				<<break>>
+			<</if>>
+		<</capture>>
+	<</for>>
+<</if>>
 
-<center>
-[[Back|Shower-room]]
-</center>
-
-
+<<link 'Back'>>
+	<<if $isBathhouse>>
+		<<goto 'Bathhouse'>>
+	<<else>>
+		<<goto 'Shower-room'>>
+	<</if>>
+	<<unset $isBathhouse>>
+<</link>>
