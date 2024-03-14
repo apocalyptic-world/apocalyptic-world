@@ -84,11 +84,21 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '</ul>',
     },
     intelligence: {
-        show: $characters.rodger.quests?.book,
+        show: $characters.rodger.quests?.book || ($game.location.library ?? false),
         done: $player.int > 100,
         category: 'Hint',
         title: 'Intelligence',
-        description: 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence.<br/>Some random explore events can also give you points.',
+        description:
+            '<ul><li>Read a book in your library. ' +
+            (!$backpack.has('blueprint_library') 
+                ? 'But first you have to go exploring to find a blueprint for it, and then you have to build it.'
+                : !($game.location.library ?? false) ? 'After you have built it!' : '') + '</li>' +
+            '<li>' + ($player.int < 50 
+                ? 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence. ' +
+                    (!($characters.rodger.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
+                : '<s>Reading book in settlement church.</s>') + '</li>' +
+            '<li>Some random explore events can also give you points.</li>' +
+            '</ul>',
     },
     reputation: {
         show: true,
@@ -144,11 +154,11 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                     ? '<dt>Hot shower</dt><dd>From day 10 you have a chance to find the blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers.</dd>'
                     : (!($game.hotShower ?? false) ? '<dt>Hot shower</dt><dd>Have blueprint so build at your leisure.</dd>' : '<dt><s>Hot shower</s></dt>' )) +
                 (!$backpack.has('blueprint_hot_tub')
-                    ? '<dt>Hot tub</dt><dd>Visit bathhouse and the guests may suggest a hot tub. <span style="color: yellow">Hot tub not in game yet!</span></dd>'
-                    : (!($game.location.hottub ?? false) ? 'Have blueprint but <span style="color: yellow">hot tub not in game yet!</span></dd>' : '<dt><s>Hot tub</s></dt>')) +
+                    ? '<dt>Hot tub</dt><dd>Visit bathhouse and the guests may suggest a hot tub. </dd>'
+                    : (!($game.location.hottub ?? false) ? 'Have blueprint, build in workbench</dd>' : '<dt><s>Hot tub</s></dt>')) +
                 (!$backpack.has('blueprint_library') 
-                    ? '<dt>Library</dt><dd>Go exploring for a chance to find the blueprint. <span style="color: yellow">Library not in game yet!</span></dd>'
-                    : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint but <span style="color: yellow">library not in game yet!</span></dd>' : '<dt><s>Library</s></dt>')) +
+                    ? '<dt>Library</dt><dd>Go exploring for a chance to find the blueprint. </dd>'
+                    : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint, build away. </dd>' : '<dt><s>Library</s></dt>')) +
             '</dl>',
     },
     first_pregnancy: {
