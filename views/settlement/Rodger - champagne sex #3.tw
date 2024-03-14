@@ -6,9 +6,15 @@
 </center>
 
 <<set _isGirlAlive = true>>
+<<set _isGirlCaptured = false>>
 <<for _killedEnemyI, _killedEnemy range $prevFight.killedEnemies>>
 	<<if !_killedEnemy.gender>>
 		<<set _isGirlAlive = false>>
+	<</if>>
+<</for>>
+<<for _defeatedEnemyI, _defeatedEnemy range $prevFight.defeatedEnemies>>
+	<<if !_defeatedEnemy.gender && _defeatedEnemy.captured>>
+		<<set _isGirlCaptured = true>>
 	<</if>>
 <</for>>
 
@@ -57,6 +63,9 @@
 		<<set $characters.eve.corruption +=5>>
 		Eve corruption increased by 5
 		<br /><br />
+		<<if _isGirlCaptured>>
+			<<set $slaves[$slaves.length -1].virgin = false>>
+		<</if>>
 	<</linkreplace>>
 <</if>>
 <<link 'Go back to Eve'>>
