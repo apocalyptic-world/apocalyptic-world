@@ -27,14 +27,12 @@
 						  <<goto 'NPC view - guest'>>
 					  	<</link>>
 						</span>
-						<<if _guest.pregnancy >= 7>>
-						  (pregnant <<=_guest.pregnancy>> days)
-						<</if>>
 					<</if>>
+					<<=setup.npcListInfo(_guest)>>
 				</td>
 				<td>
 					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
-						Beauty score: <<=_guest.beauty>>
+						Beauty: <<=_guest.beauty>>
 					<</if>>
 				</td>
 				<td>

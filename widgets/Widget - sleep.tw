@@ -573,9 +573,6 @@
 			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
 				<<set _chanceOfNotComingHome -=1>>
 			<</if>>
-			<<if $guests[_guestI].gender>>
-				<<set _chanceOfNotComingHome = 0>>
-			<</if>>
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>

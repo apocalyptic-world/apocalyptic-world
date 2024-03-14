@@ -120,20 +120,11 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 					  <</link>>
 					</span>
 				  <</if>>
-				  
-				  <<if $slaves[_i].pregnancy >= 7>>
-					(pregnant <<=$slaves[_i].pregnancy>> days)
-				  <</if>>
-				  
-				  <<if _isSick>>
-				  	(sick)
-				  <<elseif _isRest>>
-					(resting)
-			  	  <</if>>
+				  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
 			</td>
 			<td>
 				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-						Beauty score: <<=$slaves[_i].beauty>>
+						Beauty: <<=$slaves[_i].beauty>>
 				<</if>>
 			</td>
 			<td>
