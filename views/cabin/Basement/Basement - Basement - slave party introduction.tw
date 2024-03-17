@@ -1,0 +1,70 @@
+:: Basement - slave party introduction [bg-basement]
+<h1 class="ptitle">BASEMENT</h1>
+<br />
+
+<<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set _mistress = $guests[_mistress[0]]>>
+<<set _guests = setup.getAvailablePersons18yo($guests)>>
+<<if _guests[0].length>>
+    <<set _randomGuest = $guests[setup.getRandomElement(_guests[0])]>>
+     <<set _npc = _randomGuest>>
+<</if>>
+
+<<set _url = _npc.gender == 1 ? 'male' : 'female'>>
+<center>
+    [img[setup.ImagePath+'places/basement/mistress_' + _url + '.jpg']]
+</center>
+<br />
+As you descended into the dank basement, the <<=setup.displayName(_mistress)>>'s chilling presence hung heavy in the air, casting long shadows across the stone walls. 
+<<=setup.pronounceWho(_mistress, true)>> piercing gaze met yours as you approached.
+<br /><br />
+<<sayNpc _mistress>>
+    I have an idea. A way to tighten our grip on these wretched souls.
+<</sayNpc>>
+<br />
+You braced yourself for what was to come, knowing all too well the depths of her depravity.
+<br /><br />
+<<you>>
+    Go on
+<</you>>
+<br />
+<<sayNpc _mistress>>
+    We shall host a feast. A celebration of their submission, a testament to our absolute control.
+<</sayNpc>>
+<br />
+Your stomach churned at the thought, but you dared not show weakness in the presence of such malevolence.
+<br /><br />
+<<you>>
+    And what purpose will this serve?
+<</you>>
+<br />
+<<=setup.pronounceWho(_mistress, true)>> laughter echoed off the walls, a discordant symphony of madness and malice.
+<br /><br />
+<<sayNpc _mistress>>
+    To break them or to make them more happy?... Your choice.
+<</sayNpc>>
+<br />
+You swallowed hard, the bitter taste of fear coating your tongue like poison.
+<br /><br />
+<<if _npc>>
+    <center>
+        [img[setup.ImagePath+'places/basement/horny_slave_beg.webp']]
+    </center>
+    <br />
+    <<sayNpc _npc>>
+        Please sir! We would do anything for a decent meal and something outside these cages.
+    <</sayNpc>>
+    <br />
+<</if>>
+<<linkreplace 'Leave'>>
+    As you turned to leave, the Mistress's laughter followed you like a ghostly specter, a haunting reminder of the darkness that dwelled within us all. 
+    And in the depths of that desolate basement, where shadows danced with the echoes of suffering, you knew that the true horrors had only just begun.
+    <<set $player.quests.slave_party = true>>
+    <<set $locationEvents.basement = true>>
+    <br /><br />
+    <strong>Now you can throw parties for slaves.</strong>
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Basement'>>
+    <</link>>
+<</linkreplace>>
