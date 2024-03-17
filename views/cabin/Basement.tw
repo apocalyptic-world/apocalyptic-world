@@ -29,6 +29,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _workingOnStreets++>>
 		<<continue>>
 	<</if>>
+	<<set _showSlavesCount++>>
 	<<set _isSlaveInBasement = true>>
 <</for>>
 <<set _hornySlaveId = null>>
@@ -57,6 +58,25 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<<unset $slaveId, $charId, $childId>>
 			<<goto 'NPC view - guest'>>
 		<</link>>
+		<<set _mistressId = _girlGuest[0]>>
+	<</if>>
+
+	<<if _mistressId && $player.quests.slave_party>>
+		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4>>
+			<<link 'Throw a party'>>
+				<<goto 'Basement - slave party'>>
+			<</link>>
+			<<linkdesc>>
+			-20 food, -1 champagne
+			<</linkdesc>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				Throw a party
+			</div>
+			<<linkdesc>>
+				20 food, 1 champagne and time between 15:00 - 22:00 and at least 4 women as slaves.
+			<</linkdesc>>
+		<</if>>
 	<</if>>
 
 	<table id="slaves">
@@ -170,7 +190,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 <</if>>
 <br /><br />
 
-<<if $showSlavesCount &&  !$locationEvents.basement>>
+<<if _showSlavesCount &&  !$locationEvents.basement>>
 	<<set $randomNumber = randomInteger(1, 10)>>
 	<<if $randomNumber === 0 && _lowSubmissionSlaves.length>>
 		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
@@ -193,6 +213,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $slaveId = _suicidalSlaves[0]>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave hangman'>>
+	<<elseif typeof _mistressId !== 'undefined' && $guests[_mistressId].relationship >= 90 && !$player.quests.slave_party && $slaves.length >= 10 && $guests.length >= 10>>
+		<<set $guestId = _mistressId>>
+		<<goto 'Basement - slave party introduction'>>
 	<</if>>
 <</if>>
 [[Back|Wood cabin]]
