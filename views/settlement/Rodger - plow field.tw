@@ -1,0 +1,44 @@
+:: Rodger - plow field
+<h1 class="ptitle">FIELD</h1>
+<br /><br />
+<<addhours 4>>
+The solitude of the task allows for deep contemplation as you navigate the rugged terrain, your horse trotting steadily beside you. 
+The landscape bears witness to the scars of the catastrophe that reshaped the world, yet amidst the desolation, you find pockets of fertile soil awaiting cultivation.
+<br /><br />
+[img[setup.ImagePath+'places/settlement/plow_field.jpg']]
+<br /><br />
+As you toil under the open sky, thoughts drift to the challenges of survival in this harsh new reality. 
+Resources are scarce, and every harvest is a triumph against the odds. 
+Yet, there is a sense of freedom in the simplicity of your existence, a connection to the land and its timeless cycles that transcends the chaos of the world around you.
+<br /><br />
+<<if setup.percentageChance(30)>>
+    As you finish last field, a girl approaches you.
+    <br /><br />
+    <<newgirl>>
+    <<sayNpc $tmpGirl>>
+        Thank you so much! Maybe you could give me a ride? 
+    <</sayNpc>>
+    <br />
+    <div id="option_offer">
+        <<link 'Accept her offer'>>
+            <<run delete $horseRideAction>>
+            <<goto 'Event: Settlement - horse ride'>>
+            <<set _money = randomInteger(10, 20)>>
+            <<set $player.money += _money>>
+        <</link>>
+    </div>
+<</if>>
+<<linkreplace 'Finish'>>
+    <<run $('#option_offer').hide()>>
+    <<rodger>>
+        Thank you so much! It's not much but here - for your hard work.
+    <</rodger>>
+    <br />
+    <<set _money = randomInteger(10, 20)>>
+    <<set $player.money += _money>>
+    <strong>You received <<=_money>> caps.</strong>
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Settlement'>>
+    <</link>>
+<</linkreplace>>
