@@ -23,7 +23,8 @@ Your intelligence increased by <<=_giveInt>>.
 
 <<set _guests = setup.getAvailablePersons18yo($guests)>>
 <<if _guests[0].length>>
-    <<set _randomGuest = $guests[setup.getRandomElement(_guests[0])]>>
+    <<set _randomGuestId = setup.getRandomElement(_guests[0])>>
+    <<set _randomGuest = $guests[_randomGuestId]>>
     <<if _randomGuest.horny > 50>>
         <<set _npc = _randomGuest>>
     <</if>>
@@ -73,6 +74,21 @@ Your intelligence increased by <<=_giveInt>>.
             As you are ready to cum she pushes herself back from you and opens her mouth, letting her tongue out. With naughty smile in her eyes she catches each drop of your cum.
             <br /><br />
         <</linkreplace>>
+        <div id="option_fuck">
+            <<if recall($suppCode)>>
+                <<link 'Have more fun'>>
+                    <<set $tmpEvent = {
+                        id: _randomGuestId
+                    }>>
+                    <<goto 'Library - read book extended'>>
+                <</link>>
+            <<else>>
+                <div class="link-internal disabled" style="background: #ccc">
+                    Have more fun
+                    <<notPatreonIcon>>
+                </div>
+            <</if>>
+        </div>
     <</linkreplace>>
 <</if>>
 <<link 'Leave'>>
