@@ -1,3 +1,135 @@
 :: Basement - slave party
 <h1 class="ptitle">BASEMENT</h1>
 <br />
+<<addhours 6>>
+As the slaves gathered, their weary faces lit up with anticipation. Some wore patched-up clothing, bearing the stains of labor and hardship, while others sported makeshift adornments or half naked, a feeble attempt to inject color into their bleak existence. 
+They all awaited the Overseer's signal, a nod from the shadowy figure who ruled their lives.
+<br /><br />
+With a gesture, the Overseer signaled the commencement of the festivities. Slaves sit down at the table.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/basement/slave_party.jpg']]
+</center>
+<br /><br />
+The air filled with the aroma of roasted meat and grilled vegetables, a rare treat in a world where sustenance was often meager and flavorless. 
+The slaves hesitated at first, unsure whether to embrace this moment of reprieve or remain cautious, conditioned by years of adversity.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/cabin/house_party_champagne.webp']]
+</center>
+<br /><br />
+With each sip, the tension of survival ebbed away, replaced by a sense of camaraderie and fleeting joy. 
+Slaves who had once been strangers found themselves sharing stories and laughter, momentarily forgetting the harsh realities that awaited them after the party.
+<br /><br />
+
+<<for _slaveI, _slave range $slaves>>
+    <<set $slaves[_slaveI].happy += 20>>
+    <<set $slaves[_slaveI].relationship += 10>>
+<</for>>
+<<if setup.cabinInventory.count('champagne')>>
+    <div id="option_champagne">
+        <<linkreplace 'Bring another champagne'>>
+            <<set _champagne = true>>
+            <center>
+                [img[setup.ImagePath+'places/basement/slave_party_kiss.webp']]
+            </center>
+            <br /><br />
+            As the night progressed and the champagne continued to flow, the atmosphere grew increasingly charged with excitement and desire. 
+            Slaves, emboldened by the heady concoction, cast aside their reservations and embraced one another with newfound fervor.
+            <br /><br />
+            <<for _slaveI, _slave range $slaves>>
+                <<set $slaves[_slaveI].happy += 10>>
+                <<set $slaves[_slaveI].relationship += 5>>
+            <</for>>
+        <</linkreplace>>
+    </div>
+<</if>>
+<<linkreplace 'Nod at your overseer'>>
+    <<if !_champagne>>
+        <<run $('#option_champagne').hide()>>
+    <</if>>
+    <<video 'basement/slave_party1'>>
+    <br /><br />
+    <<set _girlSlaves = setup.getRandomPersonIdsGirls($slaves, 2)>>
+    <<set _npc1 = $slaves[_girlSlaves[0]]>>
+    <<set _npc2 = $slaves[_girlSlaves[0]]>>
+    <<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
+    <<set _mistress = $guests[_mistress[0]]>>
+    With a commanding gesture, <<=setup.displayName(_mistress)>> presented the <<=setup.displayName(_npc1)>> before you, a silent offering in the midst of revelry. 
+    The air grew heavy with anticipation as the settlers around you fell silent, their whispers hushed in anticipation of what would unfold.
+    <br /><br />
+    As you unzipped your pants and pulled out your dick another girl from back of the room shouted.
+    <br /><br />
+    <<sayNpc _npc2>>
+        I want to help her!
+    <</sayNpc>>
+    <br />
+    <<video 'basement/slave_party2'>>
+    <br /><br />
+    As they both were on their knees, they took turn on sucking your dick. In their eyes you noticed that they are drunk and probably almost for anything.
+    <br /><br />
+    <<video 'basement/slave_party3'>>
+    <br /><br />
+    So you spread <<=setup.displayName(_npc1)>> legs and slide your dick inside her ass. Meanwhile <<=setup.displayName(_npc2)>> leans closer and waits her turn when she will be able to suck your dick agian...
+    <br />
+    And that happens some thrusts later as you move your dick from ass to mouth and let her do her job.
+    <br /><br />
+    <<video 'basement/slave_party4'>>
+    <br /><br />
+    As <<=setup.displayName(_npc2)>> keeps sucking your hard dick, another slave decides to join for a taste. She instantly pushes both girls aside and takes the lead as other girls try to focus on other your body parts.
+    <br /><br />
+    <<linkreplace 'Cum'>>
+        <<horny_reset>>
+        <center>
+            [img[setup.ImagePath+'places/basement/slave_party_cum.webp']]
+        </center>
+        <br />
+        As you cum on <<=setup.displayName(_npc1)>> face, <<=setup.displayName(_npc2)>> wants some of you and decides to lick your cum off her face.
+        <br /><br />
+    <</linkreplace>>
+<</linkreplace>>
+<<linkreplace 'Bring slave to your bedroom'>>
+    <table id="slaves">
+		<<for _slaveI, _slave range $slaves>>
+			<<if setup.getAge(_slave) < 18>>
+				<<continue>>
+			<</if>>
+			<<capture _slaveI, _slave>>
+                <<set _genderClass = 'gender-' + setup.genderClass(_slave)>>
+				<tr>
+				  <td>
+                        <span @class="''+_genderClass+''">
+                            <<link _slave.name>>
+                                <<set $slaveId = _slaveI>>
+                                <<set $tmpGirl = _slave>>
+                                <<set $tmpGirl.location = 'bedroom'>>
+                                <<set $tmpGirlBack = 'Bedroom'>>
+                                <<set $tmpGirl.rape to false>>
+                                <<set $tmpGirlCapture to false>>
+                                <<set $tmpGirlInvite to false>>
+                                <<set $tmpGirlViewBack = 'Bedroom'>>
+                                <<set $tmpGirl.corruption += 20>>
+                                <<set $tmpGirl.submission += 20>>
+                                <<set $tmpGirl.happy += 20>>
+                                <<set $tmpGirl.drunk = randomInteger(50, 100)>>
+                                <<fuck $tmpGirl>>
+                            <</link>>
+                        </span>
+                        <<=setup.npcListInfo(_slave)>>
+				  </td>
+
+				  <td>
+						Beauty: <<print _slave.beauty>>
+				  </td>
+				  <td>
+						Age: <<=setup.getAge(_slave)>>
+				  </td>
+				</tr>
+			<</capture>>
+		<</for>>
+	</table>
+<</linkreplace>>
+<<link 'Leave'>>
+    <<goto 'Wood cabin'>>
+<</link>>
+
