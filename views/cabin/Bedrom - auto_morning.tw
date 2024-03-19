@@ -75,7 +75,8 @@
                 <</if>>
 
                 /* special for condom, no need if already pregnant, age >=60, wrong gender, see setup.pregnancyChance(_npc) */
-                <<if (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)>>
+                /* < <if (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)> > */
+                <<if !setup.pregnancyChance(_npc)>>
                     <<if _itemcount > 0>>
                         <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
                         <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
