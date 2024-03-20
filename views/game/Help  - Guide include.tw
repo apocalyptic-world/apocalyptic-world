@@ -42,7 +42,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done:  $player.maxEnergy >= 140,
         category: 'Hint',
         title: 'Energy',
-        description: 'Raise max energy and do more things in a day; Have 30 caps; Visit underground - fight cage; exercise; accept drug deal',
+        description: 
+            $player.maxEnergy <  140 ? 'Raise max energy and do more things in a day; Have 30 caps; Visit underground - fight cage; exercise; accept drug deal' : '<s>Maximium of max energy reached</s>',
     },
     recover_energy: {
         show: true,
@@ -56,7 +57,12 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: $player.strength >= 100 || $player.endurance >= 50,
         category: 'Hint',
         title: 'Strength & endurance',
-        description: 'You can train both strength endurance simultaneously by exercising at the Underground fight cage',
+        description: 
+            $player.strength >= 100 || $player.endurance >= 50 
+            ? '<s>You can\'t train strength or endurance by exercising at the Underground fight cage.</s>'
+            : $player.strength <  100 && $player.endurance <  50 
+                ? 'You can train both strength endurance simultaneously by exercising at the Underground fight cage'
+                : 'Training possible by exercising at Underground fight cage',
     },
     strength : {
         show: $player.strength <  300,
@@ -91,8 +97,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description:
             '<ul><li>Read a book in your library. ' +
             (!$backpack.has('blueprint_library') 
-                ? 'But first you have to go exploring to find a blueprint for it, and then you have to build it.'
-                : !($game.location.library ?? false) ? 'After you have built it!' : '') + '</li>' +
+                ? 'But first you have to go exploring to find a blueprint for it, and then you have to build it. '
+                : !($game.location.library ?? false) ? 'After you have built it! ' : '') + 'Find books to read.</li>' +
             '<li>' + ($player.int < 50 
                 ? 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence. ' +
                     (!($characters.rodger.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
@@ -272,10 +278,10 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Party time with bubbles',
         description: 
-            (!$characters.rodger.quests?.champagne ? 'Visit settlement church and talk with Rodger; He might ask you to look for wine in an old tavern in the city. Gets <span class="iitem">champagne</span><br/>' : '<s>First chammpagne-run</s>') +
-            ( $characters.rodger.quests?.champagne ? 'After you have built the cabin, you can go on anther champagne-run with Eve every few weeks.' : '') +
-            (!$characters.blair.quests?.house_party ? 'In the morning, talk to Blair in the kitchen. She has ideas what to do with the bubbles. <br/>' : '<s>Morning talk</s>') +
-            (!$characters.blair.quests?.house_party_finished ? 'In the evening, throw a houseparty at the fire place. Invite any guest to your bedroom for after party fun. You will need <span class="iitem">20 food</span> and <span class="ittem">1 champagne</span>.' : '<s>First house party</s>') +
+            (!$characters.rodger.quests?.champagne ? 'Visit settlement church and talk with Rodger; He might ask you to look for wine in an old tavern in the city. Gets <span class="iitem">champagne</span>' : '<s>First chammpagne-run</s>') + '<br/>' +
+            ( $characters.rodger.quests?.champagne ? 'After you have built the cabin, you can go on anther champagne-run with Eve every few weeks.' : '') + '<br/>' +
+            (!$characters.blair.quests?.house_party ? 'In the morning, talk to Blair in the kitchen. She has ideas what to do with the bubbles. <br/>' : '<s>Morning talk</s>') + '<br/>' +
+            (!$characters.blair.quests?.house_party_finished ? 'In the evening, throw a houseparty at the fire place. Invite any guest to your bedroom for after party fun. You will need <span class="iitem">20 food</span> and <span class="ittem">1 champagne</span>.' : '<s>First house party</s>') + '<br/>' +
             ( $characters.blair.quests?.house_party_finished ? 'You can now hold house partys' : ''),
     },
     making_community: {
@@ -327,8 +333,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Nursery',
         description: 
-            (!$characters.blair.quests?.nursery ? 'Talk with Blair in the kitchen. She want you to build a nursery for the children.<br>' : '<s>Talked with Blair!</s> ') +
-            (!$game.location?.nursery           ? 'Use your workbench and build the nursery' : '<s>Nursery built!k</s>'),
+            (!$characters.blair.quests?.nursery ? 'Talk with Blair in the kitchen. She want you to build a nursery for the children.<br>' : '<s>Talked with Blair!</s> ') + '<br/>' + 
+            (!$game.location?.nursery           ? 'Use your workbench and build the nursery' : '<s>Nursery built!</s>'),
     },
 
     settlement_shop: {
