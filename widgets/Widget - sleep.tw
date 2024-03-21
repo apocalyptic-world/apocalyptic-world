@@ -119,7 +119,7 @@
 		<<if typeof $slaves[_i].washDays !== 'undefined'>>
 			<<set $slaves[_i].washDays-->>
 			<<set $slaves[_i].beauty -= $slaves[_i].washBeauty>>
-			<<if $slaves[_i].washDays>>
+			<<if $slaves[_i].washDays <= 0>>
 				<<run delete $slaves[_i].washDays>>
 			<</if>>
 		<</if>>
@@ -343,7 +343,7 @@
 		<<if typeof $guests[_guestI].washDays !== 'undefined'>>
 			<<set $guests[_guestI].washDays-->>
 			<<set $guests[_guestI].beauty -= $guests[_guestI].washBeauty>>
-			<<if $guests[_guestI].washDays>>
+			<<if $guests[_guestI].washDays <= 0>>
 				<<run delete $guests[_guestI].washDays>>
 			<</if>>
 		<</if>>
