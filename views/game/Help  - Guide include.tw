@@ -38,19 +38,26 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     },
  */
     max_energy: {
-        show:  $player.maxEnergy <  140 && $game.location?.underground,
+        show:  $player.maxEnergy <  140 && ($game.location?.underground || $game.location?.hottub),
         done:  $player.maxEnergy >= 140,
         category: 'Hint',
         title: 'Energy',
-        description: 
-            $player.maxEnergy <  140 ? 'Raise max energy and do more things in a day; Have 30 caps; Visit underground - fight cage; exercise; accept drug deal' : '<s>Maximium of max energy reached</s>',
+        description: ($player.maxEnergy <  140 
+            ? 'Raise max energy and do more things in a day<ul>' + 
+                    '<li>' + (!($game.location.underground ?? false) ? 'Find Underground city → ' : '') +
+                        'Have 30 caps; Visit Underground fight cage; exercise; accept drug deal</li>' +
+                    '<li>' + (!($game.location.hottub ?? false) ? 'Build a hot tub next to your bathhouse → ' : '') +
+                        'Relax in your hot tub for a chance of raising max energy</li>' +
+                '</ul>'
+            : '<s>Maximium of max energy reached (140)</s>'),
     },
     recover_energy: {
         show: true,
         done: false,
         category: 'Hint',
         title: 'Energy',
-        description: 'Recover energy and do more things in a day; take a shower & take a nap',
+        description: 'Recover energy and do more things in a day; take a shower, take a nap & take a relaxing bath in the hot tub.<br/>Use the day to the fullest. Low on energy but have time? Go exploring! Have energy but little time? Find tasks to do!',
+        /* details: bedroom with maid +40, 1 h; bedroom without maid +20, 1 h; hot shower +20, ½ h; cold shower +10 ½ h; hot tub +10, ½ h but infinite use */
     },
     strength_endurance : {
         show: $player.strength <  100 && $player.endurance <  50 && $game.location?.underground,
@@ -59,7 +66,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Strength & endurance',
         description: 
             $player.strength >= 100 || $player.endurance >= 50 
-            ? '<s>You can\'t train strength or endurance by exercising at the Underground fight cage.</s>'
+            ? '<s>You can\'t train strength or endurance by exercising at the Underground fight cage any more.</s>'
             : $player.strength <  100 && $player.endurance <  50 
                 ? 'You can train both strength endurance simultaneously by exercising at the Underground fight cage'
                 : 'Training possible by exercising at Underground fight cage',
@@ -76,7 +83,14 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             ($player.strength <   50 ? '<li>training strength by the fireplace at your home</li>' : '<li><s>Fireplace training</s></li>') +
             ($game.location?.underground ? '<li>fighting at the Underground fight cage. Approximate chance to win: ' + _chanceFCtext +' </li>'  : '') +
             '<li>and some very few random events - if you are lucky to get them</li>' +
-            '</ul>',
+            '</ul>' +
+            ( $player.strength >= 300 ? 'You might be one of the strongest <strong>monsters</strong> in this part of the world (With the exception of the travelling teacher of course). One punch equals one enemy down.'  : 
+            $player.strength >= 200 ? 'You can stand your ground in a fight. One stab with the knife downs one enemy.' : 
+            $player.strength >= 150 ? 'You can probably beat Negan in arm wrestling. If you can get him to accept such challenge.' : 
+            $player.strength >= 100 ? 'You are stronger than many enemies you can fight with. A good set of companions might come in handy when there is many of them.' :
+            $player.strength >= 50 ? 'Try fighting in the fight cage. You might even win!' : 
+            'You are a weakling! Try to avoid strong winds and other dangers like angry girls or quicksand...'),
+            /* negan 150, octavia 100, beak humans, waterfall 50..100; base attack, randomInteger(40, 70) */
     },
     endurance: {
         show: $player.endurance <  1000,
