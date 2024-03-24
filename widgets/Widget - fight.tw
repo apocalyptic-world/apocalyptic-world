@@ -85,7 +85,7 @@
 			<</if>>
 			<<set _allyHasKnife = setup.npcInventoryHas($fight.allies[_i], 'knife')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
-			<<set _allyStrength = Math.round($fight.allies[_i].strength / 3, 0)>>
+			<<set _allyStrength = Math.round($fight.allies[_i].strength ?? 5 / 3, 0)>>
 			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
 				<<set $fight.enemies[_randomEnemyKey].attacks = []>>
 			<</if>>
@@ -93,6 +93,9 @@
 			<<if _allyHasKnife>>
 				<<set _allyStrength += randomInteger(2, 5)>>
 			<</if>>
+			<<if $fight.enemies[_randomEnemyKey].hp === null>>
+				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
+			<</if >>
 			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
 			<<if _allyHasKnife>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
