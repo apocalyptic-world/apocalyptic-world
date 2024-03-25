@@ -20,6 +20,7 @@
 	<<else>>
 		<<set _addDay = 1>>
 	<</if>>
+	<<set _totals = {caps: 0, food: 0, hay: 0, wood: 0}>>
 	
 	<<run 
 		$gameDate.setDate($gameDate.getDate() + _addDay);
@@ -34,6 +35,7 @@
 
   <<set $player.energy = $player.maxEnergy>>
   <<run delete $player?.quests.hottub>>
+  <<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
   <<if $storage.has('food')>>
   		<<drop $storage 'food' 1>>
 		<<set $player.hunger = 100>>
@@ -70,6 +72,7 @@
 		}>>
 	<</if>>
 	<<set $characters.horse.food -= 40>>
+  	<<set _totals.hay -= setup.cabinInventory.has('hay') ? 1 : 0>>
 	<<if $storage.has('hay')>>
 		<<drop $storage 'hay' 1>>
 		<<set $characters.horse.food = 100>>
@@ -157,6 +160,7 @@
 			<</if>>
 			<<if $slaves[_i].gardenDay == 3>>
 				<<set $slaves[_i].gardenDay = 0>>
+				<<set _totals.food += _foodGive>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' _foodGive>>
 				<<else>>
@@ -209,6 +213,7 @@
 					<</if>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
+					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($slaves[_i].name + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				
 					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom')>>
@@ -222,6 +227,7 @@
 		
 		// Starvation
 		<<if $slaves[_i].food <= 10>>
+			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
 				<<drop $storage 'food' 1>> 
 				<<set $slaves[_i].food to 100>>
@@ -390,6 +396,7 @@
 			<</if>>
 			<<if $guests[_guestI].gardenDay == 3>>
 				<<set $guests[_guestI].gardenDay = 0>>
+				<<set _totals.food += _foodGive>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' _foodGive>>
 				<<else>>
@@ -443,6 +450,7 @@
 					<</if>>
 					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
 					<<set $player.money += _moneyEarned>>
+					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($guests[_guestI].name + ' had a client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
 					<<set $guests[_guestI].virgin = false>>
 					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom')>>
@@ -478,6 +486,7 @@
 			<<if setup.npcInventoryHas($guests[_guestI], 'axe')>>
 				<<set _giveWood++>>
 			<</if>>
+			<<set _totals.wood += _giveWood>>
 			<<if _isStorageAvailable>>
 				<<pickup $storage 'wood' _giveWood>>
 			<<else>>
@@ -485,6 +494,7 @@
 			<</if>>
 			<<set $morningMessages.main.push($guests[_guestI].name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest')>>
 			<<if setup.percentageChance(10)>>
+				<<set _totals.food++>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' 1>>
 				<<else>>
@@ -543,6 +553,7 @@
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
 			  <</if>>
+			  <<set _totals[_randomItem] = (_totals[_randomItem] ?? 0) + _giveCount>>
 			  <<if _isStorageAvailable>>
 			  	<<pickup $storage _randomItem _giveCount>>
 			  <<else>>
@@ -580,6 +591,7 @@
 			<</if>>
 
 			<<if setup.percentageChance(_percentageHunter)>>
+				<<set _totals[_hunterItem] = (_totals[_hunterItem] ?? 0) + _giveCount>>
 				<<if _isStorageAvailable>>
 			  		<<pickup $storage _hunterItem _giveCount>>
 			  	<<else>>
@@ -631,6 +643,7 @@
 		
 		// Starvation
 		<<if $guests[_guestI].food <= 10>>
+  			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
 				<<drop $storage 'food' 1>> 
 				<<set $guests[_guestI].food to 100>>
@@ -681,6 +694,7 @@
 	<<capture _nurseryI>>
 		// Starvation
 		<<if $nursery[_nurseryI].food <= 10>>
+  			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
 				<<drop $storage 'food' 1>> 
 				<<set $nursery[_nurseryI].food to 100>>
@@ -757,13 +771,9 @@
 				<<set $morningMessages.main.push(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon.')>>
 				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
-			<<elseif $storage.has(_item, 1)>>
-			    <<drop $storage _item 1>>
-				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
-				<<run delete $player.perks[_playerPerk]>>
-				<<continue>>
-			<<elseif $backpack.has(_item, 1)>>
-				<<drop $backpack _item 1>>
+			<<elseif setup.cabinInventory.has(_item, 1)>>
+				<<set setup.cabinInventory.drop(_item, 1)>>
+			    <<set _totals[_item] = (_totals[_item] ?? 0)-1>>
 				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
 				<<run delete $player.perks[_playerPerk]>>
 				<<continue>>
@@ -810,6 +820,17 @@
 		<<set $morningMessages.main.push($slaves[_rottenFoodId].name + ' got sick with food poisoning.')>>
 	<</for>>
 	<<run delete $game.foodRotten>>
+<</if>>
+
+<<set _out = []>>
+<<for _item, _count range _totals>>
+	<<if _count != 0>>
+		<<set _name = _item === 'caps' ? _item : Item.get(_item).name>>
+		<<set _out.push((_count > 0 ? '+' : '') + _count + ' ' + _name)>>
+	<</if>>
+<</for>>
+<<if _out.length>>
+	<<set $morningMessages.main.push('Totals produced & consumed: ' + _out.join(', '))>>
 <</if>>
 
 // Manage goods
