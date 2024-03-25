@@ -20,7 +20,7 @@ She is a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong
 		<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
 			<<linkreplace 'Invite as guest'>>
 					<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
-					<<set $tmpGirl.relationship += 30>>
+					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>
 					<<run $guests.push($tmpGirl)>>
 				<br /><br />
 			<</linkreplace>>
