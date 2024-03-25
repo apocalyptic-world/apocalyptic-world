@@ -279,6 +279,10 @@ Save.onLoad.add(function (save) {
     }
 
     for(var saveGuestI = 0; saveGuestI < save.state.history[save.state.index].variables.guests.length; saveGuestI++) {
+        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].strength === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].strength = 0;
+        }
+
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].birthDate === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].birthDate = setup.getBirthDate(save.state.history[save.state.index].variables.guests[saveGuestI].age);
             delete save.state.history[save.state.index].variables.guests[saveGuestI].age;

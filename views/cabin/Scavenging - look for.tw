@@ -8,22 +8,24 @@
 <br /><br />
 You took your stuff and decided to walk in the direction you thought <<=setup.pronounceWho($guests[$scavengingDidntReturn])>> would go. You walk for a few hours till you reached crossroads and you had to decide where to go next.
 <br /><br />
-
-<<set _crossroadOptions = either(
+<<set _crossroadOptions = [
 	'Scavenging - look for - dead',
 	'Scavenging - look for - alive',
-	'Scavenging - look for girl fight',
 	'Scavenging - look for - not found'
-)>>
+]>>
+<<if [0, 1].includes($guests[$scavengingDidntReturn].gender)>>
+	<<run _crossroadOptions.push('Scavenging - look for girl fight')>>
+<</if>>
+<<set _crossroadOption = either(_crossroadOptions)>>
 <<addhours 3>>
 <<link 'Go left'>>
-	<<goto `_crossroadOptions`>>
+	<<goto `_crossroadOption`>>
 <</link>>
 <<link 'Go straight'>>
-	<<goto `_crossroadOptions`>>
+	<<goto `_crossroadOption`>>
 <</link>>
 <<link 'Go right'>>
-	<<goto `_crossroadOptions`>>
+	<<goto `_crossroadOption`>>
 <</link>>
 
 

@@ -123,46 +123,7 @@
 				<<run delete $slaves[_i].washDays>>
 			<</if>>
 		<</if>>
-		
-		// Pregnancy
-		<<if typeof $slaves[_i].pregnancy !== 'undefined'>>
-			<<set $slaves[_i].pregnancy++>>
-			<<if ($slaves[_i].traits ?? []).includes('breeder')>>
-				<<set $slaves[_i].pregnancy++>>
-			<</if>>
-			<<if $slaves[_i].pregnancy == 8>>
-				<<set _pregnantMsg = $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
-				<<if $slaves[_i].pregnancy_father !== 'mc'>>
-					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
-						<<if !$pregnancyStreetsHappening && $slaves[_i].pregnancy_event === 'streets'>>
-							<<set $pregnancyStreetsHappening = {
-								type: 'slave',
-								id: _i
-							}>>
-						<</if>>
-				<</if>>
-				
-				<<set $morningMessages.main.push(_pregnantMsg)>>
-				<<set $characters.vincent.quests.pregnancy = true>>
-			<</if>>
-			
-			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
-			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
-			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
-				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage.</strong>')>>
-				<<set $slaves[_i].happy -= 20>>
-				<<set $slaves[_i].relationship -= 10>>
-				<<run delete $slaves[_i].pregnancy>>
-			<</if>>
-			
-			<<if !$pregnancyHappening && $slaves[_i].pregnancy > 260 && ($slaves[_i].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<set $tmpGirl = $slaves[_i]>>
-				<<set $pregnancyHappening = {
-					type: 'slave',
-					id: _i
-				}>>
-			<</if>>
-		<</if>>
+
 		<<if typeof $slaves[_i].noPregnancyDays !== 'undefined'>>
 			<<set $slaves[_i].noPregnancyDays-->>
 			<<if $slaves[_i].noPregnancyDays <= 0>>
@@ -283,6 +244,46 @@
 		<<if setup.getAge($slaves[_i]) > 3>>
 			<<set $slaves[_i].food -= 30>>
 		<</if>>
+
+		// Pregnancy
+		<<if typeof $slaves[_i].pregnancy !== 'undefined'>>
+			<<set $slaves[_i].pregnancy++>>
+			<<if ($slaves[_i].traits ?? []).includes('breeder')>>
+				<<set $slaves[_i].pregnancy++>>
+			<</if>>
+			<<if $slaves[_i].pregnancy == 8>>
+				<<set _pregnantMsg = $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<if $slaves[_i].pregnancy_father !== 'mc'>>
+					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
+						<<if !$pregnancyStreetsHappening && $slaves[_i].pregnancy_event === 'streets'>>
+							<<set $pregnancyStreetsHappening = {
+								type: 'slave',
+								id: _i
+							}>>
+						<</if>>
+				<</if>>
+				
+				<<set $morningMessages.main.push(_pregnantMsg)>>
+				<<set $characters.vincent.quests.pregnancy = true>>
+			<</if>>
+			
+			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
+			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
+				<<set $morningMessages.main.push($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage.</strong>')>>
+				<<set $slaves[_i].happy -= 20>>
+				<<set $slaves[_i].relationship -= 10>>
+				<<run delete $slaves[_i].pregnancy>>
+			<</if>>
+			
+			<<if !$pregnancyHappening && $slaves[_i].pregnancy > 260 && ($slaves[_i].pregnancy > 280 || randomInteger(1,3) === 3)>>
+				<<set $tmpGirl = $slaves[_i]>>
+				<<set $pregnancyHappening = {
+					type: 'slave',
+					id: _i
+				}>>
+			<</if>>
+		<</if>>
 		
 		// Sick
 		<<if _isSick>>
@@ -355,46 +356,7 @@
 			<<set _guestI-->>
 			<<continue>>
 		<</if>>
-		
-		// Pregnancy
-		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
-			<<set $guests[_guestI].pregnancy++>>
-			<<if ($guests[_guestI].traits ?? []).includes('breeder')>>
-				<<set $guests[_guestI].pregnancy++>>
-			<</if>>
-			<<if $guests[_guestI].pregnancy == 8>>
-				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
-				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
-					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
-					<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
-						<<set $pregnancyStreetsHappening = {
-							type: 'guest',
-							id: _guestI
-						}>>
-					<</if>>
-				<</if>>
-				
-				<<set $morningMessages.main.push(_pregnantMsg)>>
-				<<set $characters.vincent.quests.pregnancy = true>>
-			<</if>>
-			
-			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
-			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
-			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
-				<<set $morningMessages.main.push($guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage</strong>')>>
-				<<set $guests[_guestI].happy -= 20>>
-				<<set $guests[_guestI].relationship -= 10>>
-				<<run delete $guests[_guestI].pregnancy>>
-			<</if>>
-			
-			<<if !$pregnancyHappening && $guests[_guestI].pregnancy > 260 && ($guests[_guestI].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<set $tmpGirl = $guests[_guestI]>>
-				<<set $pregnancyHappening = {
-					type: 'guest',
-					id: _guestI
-				}>>
-			<</if>>
-		<</if>>
+
 		<<if typeof $guests[_guestI].noPregnancyDays !== 'undefined'>>
 			<<set $guests[_guestI].noPregnancyDays-->>
 			<<if $guests[_guestI].noPregnancyDays <= 0>>
@@ -624,6 +586,46 @@
 			  		<<pickup $backpack _hunterItem _giveCount>>
 			  	<</if>>
 				<<set $morningMessages.main.push($guests[_guestI].name + ' managed to get ' + _giveCount  + ' ' + Item.get(_hunterItem).name + ' while hunting.')>>
+			<</if>>
+		<</if>>
+
+		// Pregnancy
+		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
+			<<set $guests[_guestI].pregnancy++>>
+			<<if ($guests[_guestI].traits ?? []).includes('breeder')>>
+				<<set $guests[_guestI].pregnancy++>>
+			<</if>>
+			<<if $guests[_guestI].pregnancy == 8>>
+				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
+				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
+					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
+					<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
+						<<set $pregnancyStreetsHappening = {
+							type: 'guest',
+							id: _guestI
+						}>>
+					<</if>>
+				<</if>>
+				
+				<<set $morningMessages.main.push(_pregnantMsg)>>
+				<<set $characters.vincent.quests.pregnancy = true>>
+			<</if>>
+			
+			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
+			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
+				<<set $morningMessages.main.push($guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage</strong>')>>
+				<<set $guests[_guestI].happy -= 20>>
+				<<set $guests[_guestI].relationship -= 10>>
+				<<run delete $guests[_guestI].pregnancy>>
+			<</if>>
+			
+			<<if !$pregnancyHappening && $guests[_guestI].pregnancy > 260 && ($guests[_guestI].pregnancy > 280 || randomInteger(1,3) === 3)>>
+				<<set $tmpGirl = $guests[_guestI]>>
+				<<set $pregnancyHappening = {
+					type: 'guest',
+					id: _guestI
+				}>>
 			<</if>>
 		<</if>>
 		
