@@ -18,6 +18,18 @@
     }
 }>>
 
+<<link 'Remove all clothes'>>
+    <<script>>
+        Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+        Dialog.wiki(Story.get("NPC Wardrobe").processText());
+        Dialog.open();
+    <</script>>
+    <<for _category, _cloth range $tmpGirl.clothes>>
+        <<run delete $tmpGirl.clothes[_category]>>
+    <</for>>
+    <<goto `passage()`>>
+<</link>>
+
 <<for _wardrobeCategory, _wardrobeCategoryItems range _wardrobe>>
     <<capture _wardrobeCategory>>
         <fieldset>

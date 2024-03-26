@@ -198,7 +198,8 @@ setup.inventoryNpc = [
     'gas_mask',
     'axe',
     'dumbbell',
-    'condom'
+    'condom',
+    'body_armor'
 ];
 
 setup.inventoryManageable = {

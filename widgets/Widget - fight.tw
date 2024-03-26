@@ -126,8 +126,14 @@
 				<<if $player.endurance > 0>>
 					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
 				<</if>>
+				<<if $backpack.has('body_armor')>>
+					<<set $enemyStrength = Math.round($enemyStrength / 2, 0)>>
+				<</if>>
 				<<perkAdd 'bleeding'>>
 			<<else>>
+				<<if setup.npcInventoryHas($fight.allies[_randomEnemyTarget], 'body_armor')>>
+					<<set $enemyStrength = Math.round($enemyStrength / 2, 0)>>
+				<</if>>
 				<<set $fight.allies[_randomEnemyTarget].attacks ??= []>>
 				<<set $fight.allies[_randomEnemyTarget].attacks.push('knife')>>
 			<</if>>

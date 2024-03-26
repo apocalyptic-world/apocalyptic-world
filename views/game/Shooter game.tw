@@ -19,6 +19,18 @@
 		</div>
 	  </div>
 </div>
+<center>
+	<<if $player.int > 50>>
+		<br /><br />
+		<<link 'Skip'>>
+			<<set $shooter = {
+				score: randomInteger(8,9),
+				target: either('deer', 'wolf')
+			}>>
+			<<goto 'Forest - hunt'>>
+		<</link>>
+	<</if>>
+</center>
 <<script>>
 $(document).one(':passagedisplay', function (eventObject) {	
 	var startBtn = document.querySelector("#start"),
