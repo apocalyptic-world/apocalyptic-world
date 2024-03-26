@@ -9,7 +9,7 @@
 <</if>>
 
 
-While walking close to the city border <strong>two</strong> attackers jump out of the corner while holding <strong><<print _ambushWeapon>></strong> in their hand.
+While walking close to the city border <strong>three</strong> attackers jump out of the corner while holding <strong><<print _ambushWeapon>></strong> in their hand.
 They yell at you and asks where you're going before demanding do give something to them so they do not kill you. 
 <br /><br />
 <<if $backpack.has('food')>>
@@ -44,6 +44,16 @@ They yell at you and asks where you're going before demanding do give something 
 		<<newguy>>
   		<<run $enemies.push($tmpGuy)>>
 	<</if>>
+
+	<<if (_isGirl && setup.percentageChance(42)) || (!_isGirl && setup.percentageChance(21))>>
+		<<newgirl>>
+		<<run $enemies.push($tmpGirl)>>
+	<<else>>
+		<<newguy>>
+		<<set $tmpGuy.strength -= 10>>
+  		<<run $enemies.push($tmpGuy)>>
+	<</if>>
+
   	<<fight $enemies 'Outside' 'Outside'>>
 <</link>>
 <<link 'Try to run away'>>

@@ -7,12 +7,13 @@
 	</center>
 <</if>>
 <br /><br />
+<<set _baseBeauty = $tmpGirl.beauty - ($tmpGirl.washDay ?? 0) * ($tmpGirl.washBeauty ?? 0)>>
 <<drop $backpack 'cosmetics' 1>>
 <<=setup.displayName($tmpGirl)>>  opens the jar of cream and applies a small layer to <<=setup.pronounceWhos($tmpGirl)>> face, carefully spreading it all over.
 <br /><br />
 After a few minutes, <<=setup.pronounceWhat($tmpGirl)>> rinses off the cream.
 <br /><br />
-<<if $tmpGirl.beauty < 80>>
+<<if _baseBeauty < 80>>
     <strong><<=setup.displayName($tmpGirl)>>  beauty increased by 1</strong>
     <<set $tmpGirl.beauty++>>
 <<else>>
