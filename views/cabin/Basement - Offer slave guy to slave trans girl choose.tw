@@ -3,18 +3,21 @@
 <<if (_availableGuySlaves[1] ?? []).length>>
 	<<for _offerSlaveSlaveI, _offerSlaveSlave range _availableGuySlaves[1]>>
 		<<capture _offerSlaveSlaveI, _offerSlaveSlave>>
-        <<if  $tmpGirl.id !== $slaves[_offerSlaveSlave].id>>
-			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_offerSlaveSlave])>>
-			<div>
-				<span @class="''+_genderClass+''">
-					<<link $slaves[_offerSlaveSlave].name>>
-						<<set $slaveOfferId = _offerSlaveSlave>>
-						<<set $tmpGirl.offerSlave = true>>
-						<<dialogclose>>
-						<<goto 'Basement - Offer slave guy to slave trans girl: fuck'>>
-					<</link>>
-				</span>
-			</div>
+			<<if _offerSlaveSlave.chastityBelt>>
+				<<continue>>
+			<</if>>
+        	<<if  $tmpGirl.id !== $slaves[_offerSlaveSlave].id>>
+				<<set _genderClass = 'gender-' + setup.genderClass($slaves[_offerSlaveSlave])>>
+				<div>
+					<span @class="''+_genderClass+''">
+						<<link $slaves[_offerSlaveSlave].name>>
+							<<set $slaveOfferId = _offerSlaveSlave>>
+							<<set $tmpGirl.offerSlave = true>>
+							<<dialogclose>>
+							<<goto 'Basement - Offer slave guy to slave trans girl: fuck'>>
+						<</link>>
+					</span>
+				</div>
             <</if>>
 		<</capture>>
 	<</for>>

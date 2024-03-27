@@ -60,10 +60,11 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
   <</link>> (Provides you with wood)
 </div>
 
-<<set $automatization ??= {}>>
-<<set _itemcount = setup.automatization.job_tools.mc.includes('bow') ? 2 : 1>> /* save one for the MC */
-<<if ($tmpGirl.skills ?? []).includes('woodcraft') && setup.npcInventoryHas($tmpGirl, 'bow')>>
+<<if ($tmpGirl.skills ?? []).includes('woodcraft') && setup.cabinInventory.count('bow')>>
 	<<link 'Assign as hunter'>>
+		<<if !setup.npcInventoryHas($tmpGirl, 'bow')>>
+			<<run setup.cabinInventory.to_npc($tmpGirl, 'bow', 1)>>
+		<</if>>
 		<<assignedTo $tmpGirl 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>

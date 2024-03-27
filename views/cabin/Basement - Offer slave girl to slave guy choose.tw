@@ -3,6 +3,9 @@
 <<if (_availableGirlSlaves[0] ?? []).length>>
 	<<for _offerSlaveSlaveI, _offerSlaveSlave range _availableGirlSlaves[0]>>
 		<<capture _offerSlaveSlaveI, _offerSlaveSlave>>
+			<<if _offerSlaveSlave.chastityBelt>>
+				<<continue>>
+			<</if>>
 			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_offerSlaveSlave])>>
 			<div>
 				<span @class="''+_genderClass+''">
