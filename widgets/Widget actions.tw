@@ -11,7 +11,12 @@
 		<</if>>
 	<</if>>
 
-	<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<<if $args[0].pack>>
+		<<set _isPack = (($packs ?? {})[$args[0].pack] ?? false) && typeof setup.actions[$args[0].pack] !== 'undefined'>>
+	<</if>>
+	<<if !_isPack>>
+		<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<</if>>
 	<<set _defaultActionsPath = 'images/actions'>>
 	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
@@ -72,26 +77,22 @@
 		_genderDesc + _hair,
 		_genderDesc
 		]>>
+
+		<<if $args[0].pack>>
+			<<run _morphs.unshift($args[0].pack + _pregnancyDesc, $args[0].pack)>>
+		<</if>>
 		
 		<<for _i to 0; _i < _morphs.length; _i++>>
 			<<if
 			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
-					<<set _actionsPath = _defaultActionsPath>>
-					<<set _subActionsPath = ''>>
-				<</if>>
 				<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
 				<<break>>
 			<<elseif
 			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
 			typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-				<<if _isPack && ![_morphs[_i]].includes($args[0].name)>>
-					<<set _actionsPath = _defaultActionsPath>>
-					<<set _subActionsPath = ''>>
-				<</if>>
 					<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
 				<<break>>
 			<</if>>	
