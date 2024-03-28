@@ -1,0 +1,41 @@
+:: NPC customize - custom pack [girlview no-redirect]
+<h1 class="ptitle">CUSTOM PACK</h1>
+<br /><br />
+<<set _customPack = $tmpGirl.pack ?? 'none'>>
+<table id="custom_pack">
+    <tr>
+        <td>
+            <<radiobutton "_customPack" "none" autocheck>>
+        </td>
+        <td>
+            None
+        </td>
+    </tr>
+    <<for _packKey, _pack range setup.packs>>
+        <<capture _packKey, _pack>>
+            <tr>
+                <td>
+                    <<radiobutton "_customPack" _packKey autocheck>>
+                </td>
+                <td>
+                    <<= _pack.name>> 
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+<br /><br />
+<<link 'Save'>>
+    <<if _customPack === 'none'>>
+        <<run delete $tmpGirl.pack>>
+    <<else>>
+        <<set $tmpGirl.pack = _customPack>>
+    <</if>>
+    <<dialogclose>>
+    <<goto `passage()`>>
+<</link>>
+<style>
+    #custom_pack td {
+        padding: 5px;
+    }
+</style>
