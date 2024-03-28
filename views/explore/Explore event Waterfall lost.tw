@@ -1,5 +1,6 @@
 :: Explore event: Waterfall lost {"position":"6319,578","size":"100,100"}
 <h1 class="ptitle">FOREST</h1>
+<<set $statistics.waterfall.losts++>>
 <br /><br />
 <center>
 	[img[setup.ImagePath+'places/explore/waterfall_wakeup.webp']]
@@ -12,23 +13,23 @@ are long gone and have taken what they wanted from your pack. Thankfully they di
 stealing your clothes
 <br /><br />
 <<if $backpack.has('knife')>>
-				<<drop $backpack 'knife' 1>>
-				You lost <strong class="iitem">1 knife</strong><br />
-			<</if>>
-			<<set _lostFood = Math.min($backpack.count('food'), 100)>>
-			<<if _lostFood>>
-				<<drop $backpack 'food' _lostFood>>
-				You lost <strong class="iitem"><<=_lostFood>> food</strong><br />
-			<</if>>
-			<<set _lostPlastic = Math.min($backpack.count('plastic'), 100)>>
-			<<if _lostPlastic>>
-				<<drop $backpack 'plastic' _lostPlastic>>
-				You lost <strong class="iitem"><<=_lostPlastic>> plastic</strong><br />
-			<</if>>
-			<<set _lostMoney = Math.min($player.money, 200)>>
-			<<if _lostMoney>>
-				You lost <strong class="iitem"><<=_lostMoney>> caps</strong>
-			<</if>>
+	<<drop $backpack 'knife' 1>>
+	You lost <strong class="iitem">1 knife</strong><br />
+<</if>>
+<<set _lostFood = Math.min($backpack.count('food'), 100)>>
+<<if _lostFood>>
+	<<drop $backpack 'food' _lostFood>>
+	You lost <strong class="iitem"><<=_lostFood>> food</strong><br />
+<</if>>
+<<set _lostPlastic = Math.min($backpack.count('plastic'), 100)>>
+<<if _lostPlastic>>
+	<<drop $backpack 'plastic' _lostPlastic>>
+	You lost <strong class="iitem"><<=_lostPlastic>> plastic</strong><br />
+<</if>>
+<<set _lostMoney = Math.min($player.money, 200)>>
+<<if _lostMoney>>
+	You lost <strong class="iitem"><<=_lostMoney>> caps</strong>
+<</if>>
 <br /><br />
 <<link 'Leave'>>
 	<<goto 'Outside'>>

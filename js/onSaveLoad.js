@@ -440,6 +440,7 @@ Save.onLoad.add(function (save) {
         /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
         variables.backpack.pickup('blueprint_hot_tub', 1);
     }
+    variables.statistics ??= {};
 
     /* obselete variables */
     delete 
