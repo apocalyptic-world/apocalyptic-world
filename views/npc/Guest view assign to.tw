@@ -65,6 +65,9 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<set _autoHunterOk = ($automatization.hunter ?? false) && setup.cabinInventory.has('bow', _itemcount)>>
 <<if ($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk)>>
 	<<link 'Assign as hunter'>>
+		<<if !setup.npcInventoryHas($tmpGirl, 'bow')>>
+			<<run setup.cabinInventory.to_npc($tmpGirl, 'bow', 1)>>
+		<</if>>
 		<<assignedTo $tmpGirl 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>

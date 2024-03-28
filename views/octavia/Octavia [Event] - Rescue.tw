@@ -48,9 +48,11 @@ In a flurry of movement, chaos erupted as the enemy forces swarmed in, catching 
     <<set $enemies = []>>
     <<for _i = 0; _i <= 6; _i++>>
         <<newguy>>
-        <<set $tmpGuy.inventory = {
-            knife: 1
-        }>>
+        <<if setup.percentageChance(80)>>
+            <<set $tmpGuy.inventory = {
+                knife: 1
+            }>>
+        <</if>>
         <<run $enemies.push($tmpGuy)>>
     <</for>>
     <<run console.log($enemies)>>
