@@ -5,7 +5,7 @@ setup.items = {
     /**
      * what scavening can find
      */
-    scavenging : ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth', 'metal', 'fuel'],
+    scavenging : ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth', 'metal', 'fuel', 'book'],
     /**
      * sold/bought in shops
      */
