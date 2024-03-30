@@ -13,7 +13,7 @@ setup.companionGet = function(key)
  */
 setup.companions = {
     /**
-     * All compannions who has a certain skills
+     * All companions who has a certain skills
      * @param {companion} companions
      * @param {string} skill                   
      * @returns [npc]  npcs                      
@@ -39,5 +39,14 @@ setup.companions = {
      */
     getDoctors: function(companions = variables().player.companions) {
         return setup.companions.getBySkill(companions, 'doctor');
+    },
+
+    /**
+     * count companions
+     * @param {companions}   companions 
+     * @returns {int} number of companions
+     */
+    count: function(companions = variables().player.companions) {
+        return Object.keys(companions).length;
     },
 };
