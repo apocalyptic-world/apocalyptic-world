@@ -54,6 +54,16 @@ You talked about <<=_talkedAbout>>.
 			<<goto 'Blair - marry #1'>>
 		<</link>>
 	<</if>>
+	<<if $characters.blair.pregnancy >= 8 && $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<set $tmpGirl = $characters.blair>>
+			<<set $characters.blair.pregnancy += 100>>
+			<<addmins 30>>
+			<<set $pregnancyPotionBackLink = 'Blair - kitchen talk'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+
 <<else>>
 	<<addmins 30>>
 <</if>>
