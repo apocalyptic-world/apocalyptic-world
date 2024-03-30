@@ -6,6 +6,9 @@ setup.items = {
      * what scavening can find
      */
     scavenging : ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth', 'metal', 'fuel', 'book'],
+    scavenging_chance: {
+        'gas_mask': 50
+    },
     /**
      * sold/bought in shops
      */

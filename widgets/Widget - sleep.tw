@@ -87,6 +87,13 @@
 	<</if>>
 <</if>>
 
+<<set _randomScavengingItems = clone(setup.items.scavenging)>>
+<<for _scavengingItemKey, _scaveningItemChance range setup.items.scavenging_chance>>
+	<<if setup.percentageChance(_scaveningItemChance)>>
+		<<run _randomScavengingItems.push(_scavengingItemKey)>>
+	<</if>>
+<</for>>
+
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<capture _i>>
 		<<set $slaves[_i].talked to false>>
@@ -540,7 +547,7 @@
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
-			  <<set _randomItem = either(setup.items.scavenging)>>
+			  <<set _randomItem = either(_randomScaveningItems)>>
 			  <<set _giveCount = 1>>
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
@@ -873,9 +880,8 @@
 
 <<shopMerchantUpdate>>
 <<set _t1 = performance.now()>>
-<!-- 
+ 
 <<run console.log(`Call to doSomething took ${_t1 - _t0} milliseconds.`)>>
--->
 <</widget>>
 
 
