@@ -7,7 +7,11 @@
 You wake up after some time.<br />
 You feel dizzy and blood is all over your face and clothes. You were knocked out pretty hard.
 <br /><br />
-<<set _capsMissing = ($player.money - 20 > 0 ? 20 : $player.money)>>
+<<set _maxLost = 20>>
+<<if $player.money > 500>>
+	<<set _maxLost = 100>>
+<</if>>
+<<set _capsMissing = ($player.money - _maxLost > 0 ? _maxLost : $player.money)>>
 <<if _capsMissing>>
   <<set $player.money -= _capsMissing>>
   You check pockets and some caps are also missing.
