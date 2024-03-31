@@ -1,0 +1,38 @@
+:: sleepPerks [include]
+
+<<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
+    <<capture _playerPerkDay, _playerPerk>>
+        <<if _playerPerk === 'bleeding'>>
+            <<set _item = 'bandage'>>
+            <<if _hasDoctor>>
+                <<set $morningMessages.main.push(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon.')>>
+                <<run delete $player.perks[_playerPerk]>>
+                <<continue>>
+            <<elseif $storage.has(_item, 1)>>
+                <<drop $storage _item 1>>
+                <<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
+                <<run delete $player.perks[_playerPerk]>>
+                <<continue>>
+            <<elseif $backpack.has(_item, 1)>>
+                <<drop $backpack _item 1>>
+                <<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
+                <<run delete $player.perks[_playerPerk]>>
+                <<continue>>
+            <</if>>
+        <</if>>
+        <<if _playerPerkDay < $game.day>>
+            <<if _playerPerk === 'bleeding'>>
+                <<set _sleepDead = 'bleed out'>>
+            <</if>>
+            <<run delete $player.perks[_playerPerk]>>
+            <<continue>>
+        <</if>>
+        <<if _playerPerk === 'bleeding'>>
+        <<set $morningMessages.main.unshift('<span class="starving">You are bleeding!</span>')>>
+        <</if>>
+        <<if _playerPerk === 'beaten'>>
+            <<set $player.energy -= 50>>
+            <<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+        <</if>>
+    <</capture>>
+<</for>>

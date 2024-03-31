@@ -557,7 +557,7 @@
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
-			  <<set _randomItem = either(_randomScaveningItems)>>
+			  <<set _randomItem = either(_randomScavengingItems)>>
 			  <<set _giveCount = 1>>
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
@@ -771,103 +771,10 @@
 
 
 <<set _sleepDead = null>>
-// Perks
-<<for _playerPerk, _playerPerkDay range ($player.perks ?? {})>>
-	<<capture _playerPerkDay, _playerPerk>>
-		<<if _playerPerk === 'bleeding'>>
-			<<set _item = 'bandage'>>
-			<<if _hasDoctor>>
-				<<set $morningMessages.main.push(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon.')>>
-				<<run delete $player.perks[_playerPerk]>>
-				<<continue>>
-			<<elseif setup.cabinInventory.has(_item, 1)>>
-				<<set setup.cabinInventory.drop(_item, 1)>>
-			    <<set _totals[_item] = (_totals[_item] ?? 0)-1>>
-				<<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
-				<<run delete $player.perks[_playerPerk]>>
-				<<continue>>
-			<</if>>
-		<</if>>
 
-		<<if _playerPerkDay < $game.day>>
-			<<if _playerPerk === 'bleeding'>>
-				<<set _sleepDead = 'bleed out'>>
-			<</if>>
-			<<run delete $player.perks[_playerPerk]>>
-			<<continue>>
-		<</if>>
-
-		<<if _playerPerk === 'bleeding'>>
-	  	  <<set $morningMessages.main.unshift('<span class="starving">You are bleeding!</span>')>>
-		<</if>>
-
-		<<if _playerPerk === 'beaten'>>
-			<<set $player.energy -= 50>>
-			<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
-		<</if>>
-	<</capture>>
-<</for>>
-
-// Sick (Rotten food)
-<<if $game.foodRotten>>
-	<<set _foodRottenGuests = setup.getRandomPersonIds($guests, randomInteger(1,3))>>
-	<<for _rottenFoodKey, _rottenFoodId range _foodRottenGuests>>
-		<<set $guests[_rottenFoodId].sick = {
-			days: 2,
-			desc: 'Food poisoning',
-			id: 'food_poisoning'
-		}>>
-		<<set $morningMessages.main.push($guests[_rottenFoodId].name + ' got sick with food poisoning.')>>
-	<</for>>
-	<<set _foodRottenSlaves = setup.getRandomPersonIds($slaves, randomInteger(1,3))>>
-	<<for _rottenFoodKey, _rottenFoodId range _foodRottenSlaves>>
-		<<set $slaves[_rottenFoodId].sick = {
-			days: 2,
-			desc: 'Food poisoning',
-			id: 'food_poisoning'
-		}>>
-		<<set $morningMessages.main.push($slaves[_rottenFoodId].name + ' got sick with food poisoning.')>>
-	<</for>>
-	<<run delete $game.foodRotten>>
-<</if>>
-
-<<set _out = []>>
-<<for _item, _count range _totals>>
-	<<if _count != 0>>
-		<<set _name = _item === 'caps' ? _item : Item.get(_item).name>>
-		<<set _out.push((_count > 0 ? '+' : '') + _count + ' ' + _name)>>
-	<</if>>
-<</for>>
-<<if _out.length>>
-	<<set $morningMessages.main.push('Totals produced & consumed: ' + _out.join(', '))>>
-<</if>>
-
-// Manage goods
-<<set _shopKeeperId = setup.getPersonsForLocation($guests, 'shop')>>
-<<if _shopKeeperId.length>>
-	<<set _shopKeeper = $guests[_shopKeeperId[0]]>>
-	<<for _manageGoodsName, _manageGoods range ($player.manageGoods ?? {})>>
-		<<if _manageGoods.min && $storage.count(_manageGoodsName) < _manageGoods.min>>
-			<<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
-				<<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
-				<<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
-				<<if $player.money >= _totalPrice>>
-					<<pickup $storage _manageGoodsName _amount>>
-					<<set $player.money -= _totalPrice>>
-					<<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
-				<</if>>
-			<</if>>
-		<</if>>
-		<<if _manageGoods.max && $storage.count(_manageGoodsName) > _manageGoods.max>>
-			<<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
-				<<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
-				<<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
-				<<set $player.money += _totalPrice>>
-				<<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
-			<</if>>
-		<</if>>
-	<</for>>
-<</if>>
+<<include 'sleepPerks'>>
+<<include 'sleepRottenFood'>>
+<<include 'sleepManageGoods'>>
 
 // moon
 <<set $morningMessages.moon =  []>>

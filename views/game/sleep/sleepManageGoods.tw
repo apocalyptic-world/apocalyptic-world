@@ -1,0 +1,27 @@
+:: sleepManageGoods [include]
+
+<<set _shopKeeperId = setup.getPersonsForLocation($guests, 'shop')>>
+    <<if _shopKeeperId.length>>
+        <<set _shopKeeper = $guests[_shopKeeperId[0]]>>
+        <<for _manageGoodsName, _manageGoods range ($player.manageGoods ?? {})>>
+            <<if _manageGoods.min && $storage.count(_manageGoodsName) < _manageGoods.min>>
+                <<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
+                    <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
+                    <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+                    <<if $player.money >= _totalPrice>>
+                        <<pickup $storage _manageGoodsName _amount>>
+                        <<set $player.money -= _totalPrice>>
+                        <<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+                    <</if>>
+                <</if>>
+            <</if>>
+            <<if _manageGoods.max && $storage.count(_manageGoodsName) > _manageGoods.max>>
+                <<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
+                    <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
+                    <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+                    <<set $player.money += _totalPrice>>
+                    <<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+                <</if>>
+            <</if>>
+        <</for>>
+    <</if>>
