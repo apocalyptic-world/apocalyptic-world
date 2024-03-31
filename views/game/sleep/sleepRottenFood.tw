@@ -1,0 +1,23 @@
+:: sleepRottenFood [include]
+
+<<if $game.foodRotten>>
+    <<set _foodRottenGuests = setup.getRandomPersonIds($guests, randomInteger(1,3))>>
+    <<for _rottenFoodKey, _rottenFoodId range _foodRottenGuests>>
+        <<set $guests[_rottenFoodId].sick = {
+            days: 2,
+            desc: 'Food poisoning',
+            id: 'food_poisoning'
+        }>>
+        <<set $morningMessages.main.push($guests[_rottenFoodId].name + ' got sick with food poisoning.')>>
+    <</for>>
+    <<set _foodRottenSlaves = setup.getRandomPersonIds($slaves, randomInteger(1,3))>>
+    <<for _rottenFoodKey, _rottenFoodId range _foodRottenSlaves>>
+        <<set $slaves[_rottenFoodId].sick = {
+            days: 2,
+            desc: 'Food poisoning',
+            id: 'food_poisoning'
+        }>>
+        <<set $morningMessages.main.push($slaves[_rottenFoodId].name + ' got sick with food poisoning.')>>
+    <</for>>
+    <<run delete $game.foodRotten>>
+<</if>>
