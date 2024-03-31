@@ -272,7 +272,17 @@ setup.inventoryManageable = {
         price: 6,
         range: [1, 5],
         chance: 50
-    }
+    },
+    metal: {
+        price: 10,
+        range: [1, 3],
+        chance: 10
+    },
+    necklace_cheap: {
+        price: 7,
+        range: [1, 3],
+        chance: 30
+    },
 };
 
 setup.getPersonsForLocation = function (persons, location) {
