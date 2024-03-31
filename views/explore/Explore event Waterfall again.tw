@@ -1,6 +1,6 @@
 :: Explore event: Waterfall again 
 
-<<set $statistics.waterfall ??= {
+<<set $player.stats.waterfall ??= {
 	visits: 0,
 	tricked: 0,
 	losts: 0,
@@ -9,8 +9,8 @@
 
 <<set _weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][$gameDate.getDay()]>>
 /* mc joke. The old swedish name for Saturday means something like washing day */
-<<if !$statistics.waterfall.visits || 
-        ( _weekday === 'Saturday' && setup.percentageChance(100-$statistics.waterfall.visits))>>
+<<if !$player.stats.waterfall.visits || 
+        ( _weekday === 'Saturday' && setup.percentageChance(100-$player.stats.waterfall.visits))>>
     <<include 'Explore event: Waterfall'>>
 <<else>>
     <h1 class="ptitle">FOREST</h1>
@@ -25,9 +25,9 @@
     The kind of waterfall that isn't complete without a water nymph bathing. Is there one?
     <br /><br />
     With a sense of déjà vu you remember another waterfall with a girl as bait to draw you in and then the ambush...<br/>
-    <<if $statistics.waterfall.wins>>
+    <<if $player.stats.waterfall.wins>>
         ... And the win.
-    <<elseif $statistics.waterfall.tricked || $statistics.waterfall.losts>>
+    <<elseif $player.stats.waterfall.tricked || $player.stats.waterfall.losts>>
         ... And the bumps on the head and being plundered.
     <</if>> 
     <br /><br />
