@@ -51,10 +51,11 @@ setup.automatization = {
     },
 
     job_tools: {
-        companion: ['knife', 'gas_mask'],
+        companion: ['knife', 'gas_mask', 'body_armor'],
+        companion_slave: ['gas_mask'],
         forest: ['axe'],
         garden: [],
-        guard: ['knife'],
+        guard: ['knife', 'body_armor'],
         hunter: ['bow'],
         kitchen: [],
         maid: [],
@@ -63,6 +64,6 @@ setup.automatization = {
         scavenging: ['knife'],
         shop: [],
         streets: ['knife'],
-        mc: ['knife', 'bow', 'gas_mask', 'axe'],
+        mc: ['knife', 'bow', 'gas_mask', 'axe', 'body_armor'],
     }
 };

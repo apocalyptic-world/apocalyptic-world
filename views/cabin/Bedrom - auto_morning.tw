@@ -15,22 +15,26 @@
     <<set _isStorageAvailable = ($game.location.shop ?? false)>>
     <<set _npcs = $slaves.concat($guests)>> 
     <<set _want = {}>>
-    <<set _companions = new Map()>>
+    <<set _companions = new Map(), _companionSlaves = new Map()>>
     <<for _companionKey, _companion range $player.companions>>
         <<set _guestType = _companionKey.split(':')[0]>>>
-        <<set _guestIndex = _companionKey.split(':')[1]>>
+        <<set _npcIndex = _companionKey.split(':')[1]>>
         <<if _guestType !== 'guest'>>
-            <<continue>>
+            <<set _slave = $slaves[_npcIndex]>>
+            <<set _npcId = _slave.id>>
+            <<set _companionSlaves.set(_npcId, true)>>
+        <<else>>
+            <<set _guest = $guests[_npcIndex]>>
+            <<set _npcId = _guest.id>>
+            <<set _companions.set(_npcId, true)>>
         <</if>>
-        <<set _guest = $guests[_guestIndex]>>
-        <<set _npcId = _guest.id>>
-        <<set _companions.set(_npcId, true)>>
     <</for>>
     <<set _outDupNpcs = []>>
     <<set _outMinusNpcs = []>>
     <<set _bp_plus  = [], _bp_minus = []>>
     <<for _npcI, _npc range _npcs>>
-        <<set _job = _companions.has(_npc.id) ? 'companion' : (_npc.assignedTo ?? 'none')>>
+        <<set _job = _companions.has(_npc.id) ? 'companion' :
+                 _companionSlaves.has(_npc.id) ? 'companion_slave': (_npc.assignedTo ?? 'none')>>
         <<set _outDupItems = []>>
         <<set _outMinusItems = []>>
 
@@ -75,7 +79,8 @@
                 <</if>>
 
                 /* special for condom, no need if already pregnant, age >=60, wrong gender, see setup.pregnancyChance(_npc) */
-                <<if (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)>>
+                /* < <if (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)> > */
+                <<if !setup.pregnancyChance(_npc)>>
                     <<if _itemcount > 0>>
                         <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
                         <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
