@@ -27,7 +27,7 @@
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
 	scav: 0,
-	streets : 0,
+	streets: 0, streets_die: 0,
 	wood: 0,
 	birthday: [],
 	pregnant: 0
@@ -77,6 +77,7 @@
 			Math.round((_statsNpc.pussy ?? 0)/25) +
 			Math.round((_statsNpc.anal ?? 0)/25)>>
 		<<set _settlementStatsData.streets += _money * _chanceMoney/100>>
+		<<set _settlementStatsData.streets_die += _chanceDeath>>
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
@@ -133,7 +134,9 @@
 <<set _scav = _settlementStatsData.scav.toFixed(1)>>
 <<set _avgScav = _scav > 0 ? 'Average findings of "stuff"/day: ' + _scav : ''>>
 <<set _streets =  _settlementStatsData.streets.toFixed(1)>>
-<<set _streetsText =  _streets > 0 ? 'Average earnings/day: ' + _streets : ''>>
+<<set _streets_die = _settlementStatsData.streets_die>>
+<<set _streets_die_fraction = setup.ppFraction(_streets_die, 2)>>
+<<set _streetsText =  (_streets > 0 ? 'Average earnings/day: ' + _streets : '') + (_streets_die > 0 ? '; Average deaths/day: ' + _streets_die_fraction + ' %': '')>>
 
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
