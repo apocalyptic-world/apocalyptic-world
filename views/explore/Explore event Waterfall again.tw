@@ -1,0 +1,60 @@
+:: Explore event: Waterfall again 
+
+<<set $player.stats.waterfall ??= {
+	visits: 0,
+	tricked: 0,
+	losts: 0,
+	wins: 0
+}>>
+
+<<set _weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][$gameDate.getDay()]>>
+/* mc joke. The old swedish name for Saturday means something like washing day */
+<<if !$player.stats.waterfall.visits || 
+        ( _weekday === 'Saturday' && setup.percentageChance(100-$player.stats.waterfall.visits))>>
+    <<include 'Explore event: Waterfall'>>
+<<else>>
+    <h1 class="ptitle">FOREST</h1>
+    <br /><br />
+
+    <center>
+    [img[setup.ImagePath+'places/explore/waterfall_girl.jpg']]
+    </center>
+    <br /><br />
+    As you make your way through an area of the wilderness you hear the faint sounds of
+    flowing water. Moving closer you come upon a waterfall.<br/>
+    The kind of waterfall that isn't complete without a water nymph bathing. Is there one?
+    <br /><br />
+    With a sense of déjà vu you remember another waterfall with a girl as bait to draw you in and then the ambush...<br/>
+    <<if $player.stats.waterfall.wins>>
+        ... And the win.
+    <<elseif $player.stats.waterfall.tricked || $player.stats.waterfall.losts>>
+        ... And the bumps on the head and being plundered.
+    <</if>> 
+    <br /><br />
+    You draw closer to the waterfall. Unfortunately nobody is home.
+    <br /><br />
+    At least there seems to be fish in the little creek that runs off the pond from under the waterfall. Perhaps not a wasted exploration.
+    <br /><br />
+    <<linkreplace 'Go fishing'>>
+        You <<=setup.companions.count() ? 'and your companions ' : ''>> decide to fish with make-shift rods.
+        <br /><br />
+        Success - of sorts! The world ended but plastic remains forever? You hook <strong class="iitem">5 plastic</strong> but no fish.
+        <<pickup $backpack 'plastic' 5>>
+        <br /><br />
+    <</linkreplace>>
+
+    <<link 'Leave'>>
+        <<goto 'Outside'>>
+    <</link>>
+<</if>>
+
+/* drunk, add to fight */
+/* 
+    monday      stew pan, leftovers
+    tuesday     fish -- raggmunk= potato pancake, fisk=onsdag
+    wednesday               
+    thursday    pea soup with pork
+    friday      meat
+    saturday
+    sunday
+     */
