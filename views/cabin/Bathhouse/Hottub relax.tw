@@ -11,25 +11,57 @@
 As you sink into the warm embrace of the hot tub outside the bathhouse, the cares of the day melt away like snow under a spring sun. 
 The bubbling water envelops you, massaging away tension and leaving you weightless as if you're floating on a cloud. 
 The scent of cedar from nearby trees fills the air, mingling with the steam rising from the tub.
-
+<br /><br />
 <<if setup.perkHas('beaten') && setup.percentageChance(30)>>
-    <br /><br />
     And then, as you soak, something remarkable happens. It's as if the hot tub has a healing touch, targeting the sore spots and easing your discomfort. 
     You feel a sense of relief wash over you as the aches and pains in your body begin to dissipate, leaving you feeling refreshed and rejuvenated.
     <br /><br />
     <strong>Your body doesn't hurt anymore!</strong>
     <<run delete $player.perks.beaten>>
+    <br /><br />
 <<elseif $player.maxEnergy < 140 && setup.percentageChance(40)>>
     <<set $player.maxEnergy += 10>>
-    <br /><br />
     And then, unexpectedly, a surge of energy courses through you. It's as if the warmth of the water has awakened something dormant within you, filling you with renewed vigor and vitality. 
     Your senses sharpen, and you feel more alive than ever before.
     <br /><br />
     <strong>Max energy increased to <<=$player.maxEnergy>>!</strong>
+    <br /><br />
+<</if>>
+<<if recall($suppCode)>>
+    <<set _guests = setup.getAvailablePersons18yo($guests)>>
+    <<if _guests[0].length>>
+        <<set _randomGuestId = setup.getRandomElement(_guests[0])>>
+        <<set _randomGuest = $guests[_randomGuestId]>>
+        <<if _randomGuest.horny > 50 && _randomGuest.relationship >= 60>>
+            <<set _npc = _randomGuest>>
+        <</if>>
+    <</if>>
+<</if>>
+
+<<if _npc>>
+    As you relax in the hot tub outside, the dim glow of flickering torches casting eerie shadows around you, you find a moment of respite from the harsh realities of the post-apocalyptic world. 
+    <br />
+    Suddenly, one of your female guests, her eyes reflecting a mixture of desire and desperation, approaches you hesitantly.
+    <br /><br />
+    <<sayNpc _npc>>
+        Mind if I join you
+    <</sayNpc>>
+    <br />
+    <<set $tmpGirl = _npc>>
+    <<set $tmpGirl.location = 'hottub'>>
+    <<actionImage $tmpGirl 'undress'>>
+    <br />
+    Before you can respond, she begins to unfasten the tattered remnants of her clothing, her movements a mixture of determination and vulnerability. 
+    The cold wind whips through the remnants of civilization, carrying with it a haunting reminder of the world that once was.
+    <br /><br />
+    <<link 'Sure'>>
+        <<set $tmpEvent.id = _randomGuestId>>
+        <<goto 'Hottub relax - join'>>
+    <</link>>
 <</if>>
 
 <<energy 10>>
-<br /><br />
+
 <<link 'Leave'>>
     <<goto 'Bathhouse'>>
 <</link>>
