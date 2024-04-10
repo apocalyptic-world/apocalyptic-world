@@ -153,7 +153,9 @@ setup.displayOrientation = function(person) {
 	}	
 	else if ((person.gender == 0 || person.gender == 2) && person.likesGirls == true) {
 		return 'lesbian';
-	}	
+	}
+	
+	return 'straight';
 };
 
 setup.setSexuality = function(person, orientation) {

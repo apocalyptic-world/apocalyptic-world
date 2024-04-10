@@ -1,0 +1,28 @@
+:: Isabel room [bg-guesthouse]
+<h1 class="ptitle">ISABEL</h1>
+<br /><br />
+
+<<if !$characters.isabel.quests.temp_home>>
+    <<goto 'Isabel - new home'>>
+<</if>>
+
+<<isabel>>
+    Hey! How it's going?
+<</isabel>>
+<br /><br />
+<<link 'Fuck'>>
+    <<set $tmpGirl = $characters.isabel>>
+    <<set $tmpGirl.location = 'bedroom'>>
+    <<set $tmpGirlCapture to false>>
+    <<set $tmpGirlInvite to false>>
+    <<set $tmpGirl.rape to false>>
+    <<unset $slaveId, $guestId, $childId>>
+    <<set $charId = 'isabel'>>
+    <<set $tmpGirlViewBack = 'Isabel room'>>
+    <<set $tmpGirlBack = 'Isabel room'>>
+    <<fuck $tmpGirl>>
+<</link>>
+
+<<link 'Leave'>>
+    <<goto 'Guest house'>>
+<</link>>

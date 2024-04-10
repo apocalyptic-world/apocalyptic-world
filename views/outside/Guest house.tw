@@ -3,8 +3,15 @@
 	<<backButton 'Wood cabin'>>		
 	GUEST HOUSE
 </h1>
+<div id="characters-in-location">
+	<<if ($charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Isabel room'>>
+		<</link>>
+	<</if>>
+</div>
 <<if ($game.location.lab ?? false)>>
-	<br /><br />
+	<br />
 	<<link 'Lab'>>
 		<<goto 'Lab'>>
 	<</link>>
