@@ -30,6 +30,8 @@
 <<elseif isMetChar('negan') && $characters.dom.quests.quest5 && $characters.negan.quests.quest2 && !$characters.dom.quests.quest6 && $backpack.count('fuel') >= 15>>
 	<<set $characters.dom.quests.quest6>>
 	<<goto 'Dom - quest #6 isabel fuel'>>
+<<elseif isMetChar('dom') && $characters.dom.quests.isabel_beg && ($characters.dom.quests.isabel_beg_day + 5) <= $game.day && !$characters.dom.quests.isabel_beg_fuel && $backpack.count('fuel') >= 10>>
+	<<goto 'Dom - isabel riot'>>
 <<else>>
 	<<if !$locationEvents.underground>>
 		<<set $randomNumber = randomInteger(0, 100)>>
