@@ -104,7 +104,7 @@
 		<<goto 'Vincent - Strange note'>>
 	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
 		<<goto 'Eve - shower visit'>>
-	<<elseif timeBetween('20:00', '24:00') && $game.lone_survivor && setup.percentageChance(50) && setup.getAvailablePersons18yo($slaves)[0] ?? []).length>>
+	<<elseif timeBetween('20:00', '24:00') && $game.lone_survivor && setup.percentageChance(50) && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - A lone survivor fuck'>>
 	<<else>>

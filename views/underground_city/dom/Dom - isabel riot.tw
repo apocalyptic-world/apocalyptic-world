@@ -4,6 +4,7 @@
 <center>
 	[img[setup.ImagePath+'people/dom/isabel_riot1.jpg']]
 </center>
+<<set $characters.dom.quests.isabel_beg_fuel = true>>
 <br />
 As you descended into the underground city, a sense of unease settled over you. 
 The usual bustle and activity had been replaced by chaos and fear. 
@@ -73,11 +74,13 @@ As you navigated the labyrinthine corridors, dodging Dom's enforcers and weaving
         <<sayNpc _npc>>
             GET HIM!
         <</sayNpc>>
+        <br />
     <</linkreplace>>
     <<link 'Attack them'>>
         <<addhours 6>>
         <<set $game.death_reason = 'internal bleeding'>>
         <<fight $enemies 'Dom - isabel riot #2' 'Dead'>>
+        <<set $fight.canRunAway = false>>
         <<set $fight.skipEnding = true>>
     <</link>>
 <</linkreplace>>
