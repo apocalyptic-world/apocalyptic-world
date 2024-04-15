@@ -43,6 +43,9 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.game.location.nursery !== 'undefined') {
         save.state.history[save.state.index].variables.game.location.youth_district = true;
     }
+    if ((variables.game.location.nursery ?? false) || (variables.game.location.library ?? false)) {
+        variables.game.location.youth_district = true;
+    }
 
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
         save.state.history[save.state.index].variables.characters.dom = {
