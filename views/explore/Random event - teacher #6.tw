@@ -1,4 +1,6 @@
 :: Random event - teacher #6 {"position":"6103,16","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
 <center>
 [img[setup.ImagePath+'places/explore/teacher_walking.webp']]
 </center>
@@ -7,11 +9,14 @@
 You notice some lone traveler walking in front of you. By his movements he hears you too. You see a machete strapped to his back as he slowly walks away from you.
 
 <br /><br />
+<<set $player.goodwill -= 50>>
 <<link 'Attack him'>>
-	<<if $player.strength < 1000>>
-		<<goto 'Random event - teacher #6 killed'>>
-	<<else>>
+	<<if $player.strength >= 100>>
+		<<goto 'Random event - teacher #6 kill him'>>
+	<<elseif $player.strength > 75>>
 		<<goto 'Random event - teacher #6 escaped'>>
+	<<else>>
+		<<goto 'Random event - teacher #6 killed'>>
 	<</if>>
 <</link>>
 

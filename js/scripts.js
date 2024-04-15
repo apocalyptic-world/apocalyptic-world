@@ -558,6 +558,7 @@ setup.blinkScreen = function()
 };
 
 setup.displayName = function (npc) {
+    console.log(npc);
     return '<span class="gender-' + setup.genderClass(npc) + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+' ' + (npc.virgin ? ', (Virgin)' : '') + '" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
 };
 
