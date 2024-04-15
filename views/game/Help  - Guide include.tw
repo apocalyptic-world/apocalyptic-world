@@ -85,7 +85,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '<li>and some very few random events - if you are lucky to get them</li>' +
             '</ul>' +
             ( $player.strength >= 300 ? 'You might be one of the strongest <strong>monsters</strong> in this part of the world (With the exception of the travelling teacher of course). One punch equals one enemy down.'  : 
-            $player.strength >= 200 ? 'You can stand your ground in a fight. One stab with the knife downs one enemy.' : 
+            $player.strength >= 200 ? 'You can stand your ground in a fight. One stab (or two if the enemy has body armor) with the knife downs one enemy.' : 
             $player.strength >= 150 ? 'You can probably beat Negan in arm wrestling. If you can get him to accept such challenge.' : 
             $player.strength >= 100 ? 'You are stronger than many enemies you can fight with. A good set of companions might come in handy when there is many of them.' :
             $player.strength >= 50 ? 'Try fighting in the fight cage. You might even win!' : 
@@ -113,6 +113,11 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             (!$backpack.has('blueprint_library') 
                 ? 'But first you have to go exploring to find a blueprint for it, and then you have to build it. '
                 : !($game.location.library ?? false) ? 'After you have built it! ' : '') + 'Find books to read.</li>' +
+            '<li>' + ($player.int < 60
+                ? (!$player?.quests?.teacher_killed 
+                    ? 'If you find a lone traveller when exploring be nice to him. He might be a teacher full of knowledge!'
+                    : '<s>You have killed the lone travelling teacher</s>')
+                : '<s>Done with the lone travelling teacher</s>') + '</li>' +
             '<li>' + ($player.int < 50 
                 ? 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence. ' +
                     (!($characters.rodger.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
