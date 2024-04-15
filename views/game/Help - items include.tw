@@ -102,7 +102,7 @@
     <<if ['food', 'wood', 'glowing_mushroom', 'pelt_wolf'].includes(_itemID)>>
         <<run _helpItem.sources.push('Forest')>>
     <</if>>    
-    <<if setup.items.scavenging.includes(_itemID)>>
+    <<if setup.items.scavenging.includes(_itemID) || typeof setup.items.scavenging_chance[_itemID] !== 'undefined'>>
         <<run _helpItem.sources.push('Scavenging')>>
     <</if>>    
     <<if setup.inventoryManageable[_itemID] ?? false>>
@@ -151,7 +151,7 @@
     /* <<if /building|crafting/i.test(_helpItem.desc) ||
       _item.hasAnyTag('building', 'crafting') || _crafting.includes(_itemID) >> */
     <<if /building|crafting/i.test(_helpItem.desc) ||
-      setup.includesAny(_tags, ['building', 'crafting']) || _crafting.includes(_itemID) >>   
+      setup.includesAny(_tags, ['building', 'crafting', 'part']) || _crafting.includes(_itemID) >>   
         <<run _catHelpItems['crafting'].set(_itemID, _helpItem)>>
         <<set _catCount++>>
     <</if>>

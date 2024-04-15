@@ -6,7 +6,7 @@
 <<run setup.player.updateFamily()>>
 <table class="mc-stats-table">
 	<<set _wivesTexts = []>>
-	<<for _wifeId range $player.family.wives ?? []>>
+	<<for _wifeId range $player.family?.wives ?? []>>
 		<<set _wifeText = setup.player.npcRelationText(_wifeId)>>
 		<<if _wifeText>>
 			<<set _wivesTexts.push(_wifeText)>>
@@ -21,7 +21,7 @@
 	<</if>>
 
 	<<set _kidsTexts = []>>
-	<<for _kidId range $player.family.kids ?? []>>
+	<<for _kidId range $player.family?.kids ?? []>>
 		<<set _kidText = setup.player.npcRelationText(_kidId)>>
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
