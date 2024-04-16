@@ -222,7 +222,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave party introduction'>>
 	<<elseif setup.percentageChance(5)>>
-		<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls')])>>
+		<<set _guestsLikesGirls = setup.commonValues([setup.getAvailablePersons18yo($guests)[1] ?? [], setup.propertyMatchIndexes($guests, 'likesGirls')])>>
 		<<set _slavesForFuck = setup.commonValues([setup.getAvailablePersons18yo($slaves)[0] ?? [], _slavesInBasement])>>
 		<<if _slavesForFuck.length && _guestsLikesGirls.length>>
 			<<set $locationEvents.basement = true>>
