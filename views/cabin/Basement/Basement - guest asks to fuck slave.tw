@@ -1,0 +1,60 @@
+:: Basement - guest asks to fuck slave [bg-basement]
+<h1 class="ptitle">BASEMENT</h1>
+<br />
+<<addmins 30>>
+
+<<set _guest = $guests[$tmpEvent.guestId]>>
+<<set _slave = $slaves[$tmpEvent.slaveId]>>
+
+A soft shuffle catches your attention, and you turn to see <<=setup.displayName(_guest)>>, one of your guests, peering cautiously around the corner. 
+His eyes fixated on <<=setup.displayName(_slave)>>. There's hunger and longing in his gaze, tinged with desperation that mirrors the bleakness of your existence.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/basement/guests_asks_fuck_slave.jpg']]
+</center>
+<br />
+When he finally notices you, his body jolts in surprise, and his request hangs heavy in the air.
+You study his face, the lines of exhaustion etched deep into his skin, the fear and uncertainty in his eyes. 
+The post-apocalyptic world has stripped you of many things, but it seems some desires remain untouched by the ravages of time.
+<br /><br />
+<<sayNpc _guest>>
+    Sorry, <<=$player.name>>...
+<</sayNpc>>
+<<sayNpc _guest>>
+    It's just... it's been so long since...
+<</sayNpc>>
+<br />
+His words trail off, lost in the abyss of unspoken yearning.
+<br /><br />
+<<sayNpc _guest>>
+    Maybe I can have sex with her? Just once.
+<</sayNpc>>
+<br />
+<div id="option_allow">>
+    <<link 'Allow him'>>
+        <<goto 'Basement - guest asks to fuck slave - allow'>>
+    <</link>>
+</div>
+<div id="option_threesome">
+    <<if recall($suppCode)>>
+        <<link "Let's do it together">>
+            <<goto 'Basement - guest asks to fuck slave - threesome'>>
+        <</link>>
+    <<else>>
+        <div class="link-internal disabled" style="background: #ccc">
+            Let's do it together
+            <<notPatreonIcon>>
+        </div>
+    <</if>>
+</div>
+<<linkreplace 'No'>>
+    <<run $('#option_allow, #option_threesome').hide()>>
+    <br /><br />
+    As <<=setup.displayName(_guest)>> nods silently, retreating into the shadows of the basement, you can't help but wonder how much of your humanity you have already sacrificed in the name of survival. 
+    The line between right and wrong blurs in the harsh light of a world that has crumbled, leaving you to pick up the shattered pieces of your existence.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Basement'>>
+    <</link>>
+<</linkreplace>>
+
