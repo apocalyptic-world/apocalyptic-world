@@ -1,0 +1,13 @@
+:: sleepShowTotals [include]
+
+<<set _output = []>>
+<<for _itemID, _count range _totals>>
+    <<if _count != 0>>
+        <<set _name = Item.has(_itemID) ? Item.get(_itemID)?.name : _itemID>>
+        <<set _out = (_count > 0 ? '+' : '') + _count + ' ' + _name>>
+        <<set _output.push(_out)>>
+    <</if>>
+<</for>>
+<<if _output.length>>
+    <<set $morningMessages.main.push('Net change, produced(+) and consumed(-): ' + _output.join(', ')) + ';'>>
+<</if>>
