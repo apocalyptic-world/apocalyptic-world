@@ -1,0 +1,54 @@
+:: Event - virgin merchant sell
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/old_merchant.jpg']]
+</center>
+<br /><br />
+<<anonguy>>
+Let me take a look... I am ready to pay 100 caps for one.
+<</anonguy>>
+<br />
+<<set _hasVirgins = false>>
+<table id="slaves">
+<<for _slaveI, _slave range ($slaves ?? [])>>
+	<<capture _slaveI, _slave>>
+        <<if !_slave.virgin || _slave.gender>>
+            <<continue>>
+        <</if>>
+        <<set _hasVirgins = true>>
+		<tr>
+			<td style="width: 300px">
+				<span class="name-no-click"><<=setup.displayName(_slave)>></span>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_slave)>>
+			</td>
+			<td>
+				<<link 'Sell'>>
+				  <<dialog 'Throw out'>>
+					  Are you sure you want to sell <<=(_slave.gender ? 'him' : 'her')>>?
+					  <br />
+					  <<link 'Yes' 'Event - virgin merchant sell'>>
+						  <<run $slaves.splice(_slaveI, 1)>>
+						  <<dialogclose>>
+						  <<set $player.goodwill -= 5>>
+						  <<set $player.money += 100>>
+					  <</link>>	
+				  <</dialog>>
+				<</link>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+<<if !_hasVirgins>>
+	<strong>You have nothing to sell...</strong>
+<</if>>
+
+<br /><br />
+<<link 'Finish trading'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+
