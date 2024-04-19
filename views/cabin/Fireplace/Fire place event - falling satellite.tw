@@ -1,0 +1,53 @@
+:: Fire place event - falling satellite
+<h1 class="ptitle">FIRE PLACE</h1>
+<br />
+
+<<set _randomGuests = setup.getRandomPersonIds($guests, 6)>>
+<<set _npc1 = $guests[_randomGuests[0]]>>
+<<set _npc2 = $guests[_randomGuests[1]]>>
+<<set _npc3 = $guests[_randomGuests[2]]>>
+
+As you walked past the flickering fire, a brilliant streak of light caught your eye. At first, you thought it was just another shooting star in the post-apocalyptic sky, a fleeting sparkle of cosmic wonder amidst the chaos of your world. But then, the light multiplied, fragmenting into smaller pieces that rained down in a mesmerizing display of celestial chaos.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/cabin/falling_satellite.jpg']]
+</center>
+<br /><br />
+You tilted your head back, squinting against the glare, trying to make sense of what you were seeing.
+<br /><br />
+<<you>>
+    Hey, look up!
+<</you>>
+<br />
+You called out to the others gathered around the fire, their faces etched with weariness from another day of survival.
+<br /><br />
+As more fragments streaked across the sky, leaving glowing trails of debris in their wake, a sense of wonder and apprehension mingled in the air. The fire crackled softly, a counterpoint to the celestial spectacle unfolding above you.
+<br /><br />
+<<sayNpc _npc2>>
+    It's beautiful.
+<</sayNpc>>
+<br />
+As more fragments streaked across the sky, leaving glowing trails of debris in their wake, a sense of wonder and apprehension mingled in the air. 
+The fire crackled softly, a counterpoint to the celestial spectacle unfolding above you.
+<br /><br />
+<<sayNpc _npc1>>
+    Oh that's another satellite.
+<</sayNpc>>
+<br />
+<<sayNpc _npc3>>
+    We used to send those things up there, thinking we could conquer the heavens.
+<</sayNpc>> 
+<br />
+You stood there in silence for a while, watching as the remnants of human ambition burned bright in the night sky, a poignant reminder of a world that once was. And as the last glimmers faded into the darkness, you returned to the warmth of the fire, grateful for the simple comfort of companionship amid the ruins of your past.
+<br /><br />
+<<for _randomGuestI, _randomGuestId range _randomGuests>>
+    <<set _happyInc = randomInteger(7, 15)>>
+    <div>
+        <strong><<=setup.displayName($guests[_randomGuestI])>> happiness increased by <<=_happyInc>></strong>
+        <<set $guests[_randomGuestI].happy += _happyInc>>
+    </div>
+<</for>>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>
