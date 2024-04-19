@@ -2,19 +2,28 @@
 <<energy -30>>
 <<addmins 15>>
 <<set $tmpGirl.milked = true>>
-<<if randomInteger(0, 3) === 0>>
-	<<pickup $backpack 'milk' 1>>
-	<strong>You managed to get one bottle of milk.</strong>
-<</if>>
 <center>
 	<<actionImage $tmpGirl 'milking'>>
 </center>
 <br /><br />
-<<print $tmpGirl.name>> moans as you milk her. 
+<<if $tmpGirl.location == 'basement'>>
+	<<=setup.displayName($tmpGirl)>> moans as you milk her.
+<<else>>
+	You attach breast pump to <<=setup.displayName($tmpGirl)>>'s nipples and start to milk her. 
+<</if>> 
 <br /><br />
-<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
-<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
-<br /><br />
-[[Back|NPC view]]
+<<if $tmpGirl.relationship < 100>>
+	<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+	<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
+	<br /><br />
+<</if>>
+<<if randomInteger(0, 3) === 0>>
+	<<pickup $backpack 'milk' 1>>
+	<strong>You managed to get one bottle of milk.</strong>
+	<br /><br />
+<</if>>
+<<link 'Back'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>
 
 

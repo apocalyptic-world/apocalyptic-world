@@ -79,6 +79,13 @@
 
 <<include 'Button - rest or work'>>
 
+<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy > 30 && $backpack.has('breast_pump') && $tmpGirl.pregnancy > 60>>
+	  <<link 'Milk her'>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		  	<<goto 'Girl milk'>> 
+	  <</link>>
+	<</if>>	
+
 <<if [0, 1].includes($tmpGirl.gender) && !$tmpGirl.workout && $player.energy >= 10>>
 	<<link 'Workout together'>>
 		<<set $tmpGirl.workout = true>>

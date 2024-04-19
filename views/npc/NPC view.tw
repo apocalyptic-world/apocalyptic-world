@@ -137,9 +137,10 @@
 
 <<if $tmpGirl.location === 'basement'>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
-	<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy > 30 && $backpack.has('breast_pump')>>
+	<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy > 30 && $backpack.has('breast_pump') && $tmpGirl.pregnancy >= 60>>
 	  <<link 'Milk her'>>
-		  <<goto 'Girl milk'>> 
+			<<set $tmpGirlViewBack = 'NPC view'>>
+		 	<<goto 'Girl milk'>> 
 	  <</link>>
 	<</if>>	
 	<<if $player.energy >= 10 && hasTime(1)>>
