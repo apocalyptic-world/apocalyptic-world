@@ -1,8 +1,6 @@
 :: Dom - isabel riot #2
 <h1 class="ptitle">STREETS</h1>
 <br /><br />
-<<set $characters.isabel.quests.saved = true>>
-<<set $characters.isabel.livingLocation = 'guesthouse'>>
 
 <center>
 	[img[setup.ImagePath+'people/dom/isabel_riot3.jpg']]
@@ -59,9 +57,6 @@ Isabel nodded gratefully, a mixture of exhaustion and gratitude evident in her e
 <</isabel>>
 <br />
 <<link 'Leave'>>
-    <<set $characters.isabel.quests.riotDay = $game.day>>
-    <<set $characters.isabel.relationship = Math.min($characters.isabel.relationship + 60, 100)>>
-
     <<newgirl>>
     <<set 
         $tmpGirl.id = 'isabel',
@@ -73,11 +68,16 @@ Isabel nodded gratefully, a mixture of exhaustion and gratitude evident in her e
         $tmpGirl.beauty = 94,
         $tmpGirl.anal = 60,
         $tmpGirl.traits = ['cumslut'],
-        $tmpGirl.likesGuys = true
+        $tmpGirl.likesGuys = true,
+        $tmpGirl.quests = {}
     >>
 
-    <<set $characters.isabel = Object.assign($tmpGirl, $characters.isabel)>>
+    <<set $characters.isabel = Object.assign($tmpGirl, ($characters.isabel ?? {}))>>
     <<set $characters.isabel.corruption = 70>>
     <<set $characters.isabel.submission = 60>>
+    <<set $characters.isabel.quests.saved = true>>
+    <<set $characters.isabel.livingLocation = 'guesthouse'>>
+    <<set $characters.isabel.quests.riotDay = $game.day>>
+    <<set $characters.isabel.relationship = Math.min($characters.isabel.relationship + 60, 100)>>
     <<goto 'Sleep eval'>>
 <</link>>
