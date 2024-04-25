@@ -1,0 +1,53 @@
+:: NPC customize - name color [girlview no-redirect]
+
+<<set _colors = [
+  "White",
+  "Yellow",
+  "LightSkyBlue",
+  "Orange",
+  "LightGreen",
+  "Pink",
+  "LightGoldenRodYellow",
+  "LightCyan",
+  "Lavender",
+  "Turquoise"
+];>>
+<<set _customColor = $tmpGirl.color ?? 'none'>>
+
+<table id="custom_name_colors">
+    <tr>
+        <td>
+            <<radiobutton "_customColor" "none" autocheck>>
+        </td>
+        <td>
+            None
+        </td>
+    </tr>
+    <<for _colorKey, _colorName range _colors>>
+        <<capture _colorKey, _colorName>>
+            <tr>
+                <td>
+                    <<radiobutton "_customColor" _colorName autocheck>>
+                </td>
+                <td>
+                    <<= _colorName>> 
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+<br /><br />
+<<link 'Save'>>
+    <<if _customColor === 'none'>>
+        <<run delete $tmpGirl.color>>
+    <<else>>
+        <<set $tmpGirl.color = _customColor>>
+    <</if>>
+    <<dialogclose>>
+    <<goto `passage()`>>
+<</link>>
+<style>
+    #custom_name_colors td {
+        padding: 5px;
+    }
+</style>

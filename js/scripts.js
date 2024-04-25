@@ -558,7 +558,11 @@ setup.blinkScreen = function()
 };
 
 setup.displayName = function (npc) {
-    return '<span class="gender-' + setup.genderClass(npc) + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+' ' + (npc.virgin ? ', (Virgin)' : '') + '" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
+    var _style = '';
+    if (npc.color) {
+        _style += 'color: ' + npc.color;
+    }
+    return '<span class="gender-' + setup.genderClass(npc) + '" style="' + _style  + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+' ' + (npc.virgin ? ', (Virgin)' : '') + '" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
 };
 
 setup.getNpcByKey = function (key) {

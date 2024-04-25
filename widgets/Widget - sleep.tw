@@ -1,4 +1,4 @@
-:: Widget - sleep [widget] {"position":"20,634","size":"100,100"}
+:: Widget - sleep [widget]
 <<widget sleep>>
 	<<set _t0 = performance.now()>>
 	<<set $morningMessages = {
@@ -95,6 +95,11 @@
 <<for _scavengingItemKey, _scaveningItemChance range setup.items.scavenging_chance>>
 	<<if setup.percentageChance(_scaveningItemChance)>>
 		<<run _randomScavengingItems.push(_scavengingItemKey)>>
+	<</if>>
+<</for>>
+<<for _scavengingItemKey, _scavengingItem range _randomScavengingItems>>
+	<<if typeof setup.items.scavenging_max[_scavengingItem] !== 'undefined' && setup.items.scavenging_max[_scavengingItem] < setup.cabinInventory.count(_scavengingItem)>>
+		<<run _randomScavengingItems.splice(_scavengingItemKey, 1)>>
 	<</if>>
 <</for>>
 

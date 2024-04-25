@@ -106,7 +106,14 @@
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
-
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+        <</if>>
+        <<set _npcHorny = clone($tmpGirl.horny)>>
+        <<run console.log(_npcHorny)>>
+        <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
+        <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
+        <br />
         <<if $sexForced && !$tmpGirl.traits.includes('masochist') && $tmpGirl.sub !== 100>>
             <<set
                 $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
@@ -131,7 +138,6 @@
     <</if>>
 
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-        <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
 		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively. <strong>(Horny + 20)</strong>
 		<br />
 		
@@ -139,7 +145,7 @@
             <<include 'Mistress fuck squirt'>>
 			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
-			<<set $tmpGirl.horny = 0,
+			<<set
 				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
 				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
             <<if typeof $tmpGirl.orgasms !== 'undefined'>>
@@ -157,6 +163,13 @@
 
     <<include 'Mistress fuck traits'>>
 
+    <<if $tmpGirl.horny >= 100>>
+        <<script>>
+        setTimeout(function () {
+            variables().tmpGirl.horny = 0;
+        }, 400);
+        <</script>>
+    <</if>>
 <</if>>
 <br />
 <<include 'Mistress fuck buttons'>>

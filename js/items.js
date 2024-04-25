@@ -7,7 +7,11 @@ setup.items = {
      */
     scavenging : ['plastic', 'glass', 'rope', 'duck_tape', 'necklace_cheap', 'cloth', 'metal', 'fuel', 'book'],
     scavenging_chance: {
-        'gas_mask': 50
+        'gas_mask': 20,
+        'body_armor': 10
+    },
+    scavenging_max: {
+        'book': 50
     },
     /**
      * sold/bought in shops

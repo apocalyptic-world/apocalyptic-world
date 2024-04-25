@@ -1,4 +1,26 @@
+
+Save.onSave.add(function (save, details) {
+    if (details.type === 'disk') {
+        save.metadata = {};
+        save.metadata.settings = clone(settings);
+    }
+});
+
 Save.onLoad.add(function (save) {
+
+    if (save.metadata && save.metadata.settings) {
+        for (const name in save.metadata.settings) {
+            if (settings[name] !== save.metadata.settings[name]) {
+                settings[name] = save.metadata.settings[name]
+                const s = Setting.get(name);
+                if (s.hasOwnProperty('onChange')) {
+                    s.onChange.call();
+                }
+            }
+        }
+        Setting.save();
+    }
+
 
     let variables = save.state.history[save.state.index].variables; // shortcut to be used when we cleanup
 
