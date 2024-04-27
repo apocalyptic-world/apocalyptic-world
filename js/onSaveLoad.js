@@ -84,6 +84,10 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.characters.isabel !== 'undefined') {
         save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
         save.state.history[save.state.index].variables.characters.isabel.family ??= { husband: 'dom'};
+        if (typeof save.state.history[save.state.index].variables.characters.isabel.submission !== 'undefined') {
+            save.state.history[save.state.index].variables.characters.isabel.sub = 60;
+            delete save.state.history[save.state.index].variables.characters.isabel.submission;
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
@@ -189,6 +193,11 @@ Save.onLoad.add(function (save) {
 	if (typeof save.state.history[save.state.index].variables.tmpGirl.likes === 'undefined') {
             save.state.history[save.state.index].variables.tmpGirl.likes = setup.getRandomGifts(either(1, 2));
 			save.state.history[save.state.index].variables.tmpGirl.dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.tmpGirl.likes);
+        }
+
+        if (typeof save.state.history[save.state.index].variables.tmpGirl.submission !== 'undefined') {
+            save.state.history[save.state.index].variables.tmpGirl.sub = 60;
+            delete save.state.history[save.state.index].variables.tmpGirl.submission;
         }
     }
 
