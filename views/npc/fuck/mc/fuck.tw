@@ -162,6 +162,14 @@
 
     <<if _sexActions[$sexAction]?.stats>>
         <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+        <<if typeof $sexStats[$sexAction] === 'undefined'>>
+            <<set 
+                $tmpGirl.statsSex ??= {},
+                $tmpGirl.statsSex[$sexAction] ??= 0,
+                $tmpGirl.statsSex[$sexAction]++,
+                $sexStats[$sexAction] = true
+            >>
+        <</if>>
     <</if>>
     <<if $sexAction === 'pussy'>>
         <<set $tmpGirl.virgin = false>>

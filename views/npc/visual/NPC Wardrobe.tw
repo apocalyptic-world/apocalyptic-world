@@ -39,9 +39,7 @@
             <div class="npc-wardrobe-items">
                 <<if typeof $tmpGirl.clothes[_wardrobeCategory] !== 'undefined'>>
                     <div class="npc-wardrobe-item remove">
-                        [img[setup.ImagePath+'game/doll/none.png']]
-                        <br />
-                        <<link 'remove'>>
+                        <<link '<div>[img[setup.ImagePath+"game/doll/none.png"]]</div>'>>
                             <<run delete $tmpGirl.clothes[_wardrobeCategory]>>
                             <<script>>
                                     Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
@@ -55,9 +53,7 @@
                 <<for _wardrobeItem range _wardrobeCategoryItems.list>>
                     <<capture _wardrobeItem>>
                         <div class="npc-wardrobe-item">
-                            [img[setup.ImagePath+'game/doll/' + _wardrobeCategory + '/' + _wardrobeItem + '.png']]
-                            <br />
-                            <<link 'wear'>>
+                            <<link '<div>[img[setup.ImagePath+"game/doll/"+_wardrobeCategory+"/"+_wardrobeItem+".png"]]</div>'>>
                                 <<set $tmpGirl.clothes[_wardrobeCategory] = _wardrobeItem>>
                                 <<script>>
                                     Dialog.setup("NPC Wardrobe", "NPC Wardrobe");

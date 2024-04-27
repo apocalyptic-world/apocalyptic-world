@@ -37,6 +37,9 @@
 		<<if $tmpGirl.chastityBelt>>
 			<strong class="iitem" style="font-weight: normal;">With chastity belt.</strong>
 		<</if>>
+		<<if !_unknown>>
+			<<= setup.npcListInfo($tmpGirl)>>
+		<</if>>
 	</div>
 	<<if !_unknown>>
 		<div id="npc-inventory">
@@ -167,23 +170,64 @@
 					</div>
 				<</if>>
 			</div>
-			<<if ($tmpGirl.stats ?? false)>>
-				<div id="npc-work-stats">
-					<h4 style="display:block; margin-bottom: 0px;">Work stats</h4>
-					<table style="margin-top: 0px;">
-					<<for _npcWorkStatsLocation, _npcWorkStatsDays range $tmpGirl.stats>>
+			<div id="npc_stats">
+				<<if ($tmpGirl.stats ?? false)>>
+					<div id="npc-work-stats">
+						<h4 style="display:block; margin-bottom: 0px;">Work stats</h4>
+						<table style="margin-top: 0px;">
+						<<for _npcWorkStatsLocation, _npcWorkStatsDays range $tmpGirl.stats>>
+							<tr>
+								<td>
+									<<=_npcWorkStatsLocation>>:
+								</td>
+								<td>
+									<<=_npcWorkStatsDays>>
+								</td>
+							</tr>
+						<</for>>
+						</table>
+					</div>
+				<</if>>
+				<<if ($tmpGirl.statsSex ?? false)>>
+					<div id="npc-sex-stats">
+						<h4 style="display:block; margin-bottom: 0px;">Sex stats</h4>
+						<table style="margin-top: 0px;">
 						<tr>
 							<td>
-								<<=_npcWorkStatsLocation>>:
+								Gave blowjobs:
 							</td>
 							<td>
-								<<=_npcWorkStatsDays>>
+								<<=$tmpGirl.statsSex.bj ?? 0>>
 							</td>
 						</tr>
-					<</for>>
-					</table>
-				</div>
-			<</if>>
+						<tr>
+							<td>
+								Deepthroated:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.dp ?? 0>>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Fucked in pussy:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.pussy ?? 0>>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Fucked in ass:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.anal ?? 0>>
+							</td>
+						</tr>
+						</table>
+					</div>
+				<</if>>
+			</div>
 		</div>
 	
 	<</linkreplace>>
