@@ -1,0 +1,69 @@
+:: NPC view - character [sex no-redirect girlview]
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<if $tmpGirl.canTalk && !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'NPC talk'>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.canFuck && $player.energy > 30 && $tmpGirl.location !== 'garden'>>
+	<<set _linkName = 'Fuck ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - character'>>
+		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<fuck $tmpGirl>>
+		<<else>>
+			<<goto 'Mc fuck - no'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give pregnancy termination potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<if $tmpGirl.canMarry && !$tmpGirl.gender && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
+	<<set _linkName = 'Marry ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<goto 'NPC marry'>>
+	<</link>>
+<</if>>
+
+<<link 'Customize'>>
+	<<goto 'NPC customize'>>
+<</link>>
+	
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<unset $slaveId, $guestId, $charId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>

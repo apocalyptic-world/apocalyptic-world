@@ -19,7 +19,19 @@
  <strong>You managed to get <<=_getWood>> wood.</strong>
 <</if>>
 <br /><br />
-<<addmins 180>>
+<<for _companionKey, _companion range $player.companions ?? {}>>
+	<<if setup.percentageChance(30)>>
+		<<set _companion = setup.companionGet(_companionKey)>>
+		<<=setup.displayName(_companion)>> managed to collect 1 wood.
+		<br />
+		<<pickup $backpack 'wood' 1>>
+		<<set _companionWood = true>>
+	<</if>>
+<</for>>
+<<if _companionWood>>
+	<br />
+<</if>>
+<<addmins 120>>
 <<include 'Forest - new moon include'>>
 <<include 'Forest - full moon include'>>
 [[Back|Outside]]

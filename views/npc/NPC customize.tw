@@ -1,14 +1,16 @@
 :: NPC customize [girlview sex no-redirect] {"position":"3566,105","size":"100,100"}
-<<link 'Change name'>>
-	<<dialog 'Change name'>>	
-		What you will call your guest? <<textbox "_tmpGirlName" $tmpGirl.name>>
-		<<link 'OK'>>
-			<<set $tmpGirl.name = _tmpGirlName>>
-			<<dialogclose>>	
-			<<goto 'NPC customize'>>
-		<</link>>
-	<</dialog>>	
-<</link>>
+<<if !$charId>>
+	<<link 'Change name'>>
+		<<dialog 'Change name'>>	
+			What you will call your guest? <<textbox "_tmpGirlName" $tmpGirl.name>>
+			<<link 'OK'>>
+				<<set $tmpGirl.name = _tmpGirlName>>
+				<<dialogclose>>	
+				<<goto 'NPC customize'>>
+			<</link>>
+		<</dialog>>	
+	<</link>>
+<</if>>
 <<if !$tmpGirl.piercedBoobs && $backpack.has('piercing')>>
 	<<link 'Pierce nipples'>>
 		<<goto 'NPC customize - pierce boob'>>

@@ -33,9 +33,9 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 	<<goto 'Basement'>>
 <</link>>
 <<link `_linkRelease`>>
-	<<set _compKey = 'slave:' + $slaveId>>
-	<<companionRemoveItem _compKey>>
-	<<run $slaves.splice($slaveId, 1)>>
+	<<assignedTo $tmpGirl 'none'>>
+	<<slaveRemove $slaveId>>
+
 	<<statsAdd 'slaves_released'>>
 	<<goto 'Basement'>>
 <</link>>

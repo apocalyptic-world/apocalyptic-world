@@ -105,6 +105,7 @@
 
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<capture _i>>
+		<<set _npc = $slaves[_i]>>
 		<<set $slaves[_i].talked to false>>
 		<<set $slaves[_i].milked to false>>
 		<<set $slaves[_i].groped to false>>
@@ -146,6 +147,10 @@
 			<<if $slaves[_i].noPregnancyDays <= 0>>
 				<<run delete $slaves[_i].noPregnancyDays>>
 			<</if>>
+		<</if>>
+
+		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
+			<<set _npc.sub++>>
 		<</if>>
 		
 		// Assigned jobs
@@ -335,6 +340,7 @@
 
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 	<<capture _guestI>>
+		<<set _npc = $guests[_guestI]>>
 		<<set $guests[_guestI].talked to false>>
 		<<set $guests[_guestI].milked to false>>
 		<<set $guests[_guestI].groped to false>>
@@ -370,6 +376,10 @@
 			<<if $guests[_guestI].washDays <= 0>>
 				<<run delete $guests[_guestI].washDays>>
 			<</if>>
+		<</if>>
+
+		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
+			<<set _npc.sub++>>
 		<</if>>
 		
 		// Leave

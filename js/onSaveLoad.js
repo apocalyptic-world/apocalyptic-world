@@ -82,6 +82,12 @@ Save.onLoad.add(function (save) {
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.isabel !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.isabel.canFuck = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesGuys = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesGirls = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesTGuys = false;
+        save.state.history[save.state.index].variables.characters.isabel.likesTGirls = false;
+
         save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
         save.state.history[save.state.index].variables.characters.isabel.family ??= { husband: 'dom'};
         if (typeof save.state.history[save.state.index].variables.characters.isabel.submission !== 'undefined') {

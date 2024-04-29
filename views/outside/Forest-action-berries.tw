@@ -9,6 +9,19 @@
 You picked up <strong>_food</strong> food.
 <<pickup $backpack 'food' _food>>
 <br /><br />
+<<for _companionKey, _companion range $player.companions ?? {}>>
+	<<if setup.percentageChance(30)>>
+		<<set _companion = setup.companionGet(_companionKey)>>
+		<<=setup.displayName(_companion)>> managed to collect berries.
+		<br />
+		<<pickup $backpack 'food' 1>>
+		<<set _companionFood = true>>
+	<</if>>
+<</for>>
+<<if _companionFood>>
+	<br />
+<</if>>
+
 <<addmins 120>>
 <<include 'Forest - new moon include'>>
 <<include 'Forest - full moon include'>>
