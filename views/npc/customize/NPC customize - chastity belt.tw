@@ -1,10 +1,33 @@
 :: NPC customize - chastity belt [girlview no-redirect]
 <h1 class="ptitle">CHASTITY BELT</h1>
 <br />
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
 <<if $guestId !== null && $tmpGirl.sub < 50>>
 	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
 	<br /><br />
 	<strong>Submission too low</strong>
+	<br /><br />
+	<<set _linkName = 'Force ' + _himOrHer>>
+	<<linkreplace _linkName>>
+		<<set $tmpGirl.chastityBelt = true>>
+		<<drop $backpack 'chastity_belt' 1>>
+		<br /><br />
+		<<if [0,2].includes($tmpGirl.gender)>>
+			<center>
+				[img[setup.ImagePath+'game/misc/customize/chastity_belt_female.webp']]
+			</center>
+		<<else>>
+			<center>
+				[img[setup.ImagePath+'game/misc/customize/chastity_belt_male.webp']]
+			</center>
+		<</if>>
+		<<=setup.displayName($tmpGirl)>> resists a bit while you fasten a chastity belt on <<=_himOrHer>>.
+		<br /><br />
+		<<set $tmpGirl.relationship -= 40>>
+		<strong>Relationship decreased by 40</strong>
+		<br /><br />
+	<</linkreplace>>
 <<else>>
 	<<set $tmpGirl.chastityBelt = true>>
 	<<drop $backpack 'chastity_belt' 1>>
@@ -18,11 +41,10 @@
 			[img[setup.ImagePath+'game/misc/customize/chastity_belt_male.webp']]
 		</center>
 	<</if>>
-	<<=setup.displayName($tmpGirl)>> stands still while you fasten a chastity belt on <<=setup.pronounceWho($tmpGirl)>>.
+	<<=setup.displayName($tmpGirl)>> stands still while you fasten a chastity belt on <<=_himOrHer>>.
 	<br /><br />
 	<<addmins 30>>
 <</if>>
-<br /><br />
 <<link 'Back'>>
 	<<goto 'NPC customize'>>
 <</link>>

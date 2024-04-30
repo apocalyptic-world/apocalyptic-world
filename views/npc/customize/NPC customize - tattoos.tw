@@ -1,0 +1,61 @@
+:: NPC customize - tattoos
+
+<<set _tattoos = {
+    right_leg: {
+        list: [1],
+        name: 'Right leg'
+    }
+}>>
+
+<<link 'Remove all tattoos'>>
+    <<script>>
+        Dialog.setup("NPC customize - tattoos", "NPC customize - tattoos");
+        Dialog.wiki(Story.get("NPC customize - tattoos").processText());
+        Dialog.open();
+    <</script>>
+    <<for _category, _tattoo range $tmpGirl.tattoos ?? {}>>
+        <<run delete $tmpGirl.tattoos[_category]>>
+    <</for>>
+    <<goto `passage()`>>
+<</link>>
+
+<<for _tattooCategory, _tattooCategoryItems range _tattoos>>
+    <<capture _tattooCategory>>
+        <fieldset>
+            <legend>
+                <<=_tattooCategoryItems.name>>
+            </legend>
+            <div class="npc-wardrobe-items">
+                <<if $tmpGirl?.tattoos && typeof $tmpGirl.tattoos[_tattooCategory] !== 'undefined'>>
+                    <div class="npc-wardrobe-item remove">
+                        <<link '<div>[img[setup.ImagePath+"game/doll/none.png"]]</div>'>>
+                            <<run delete $tmpGirl.tattoos[_tattooCategory]>>
+                            <<script>>
+                                    Dialog.setup("NPC customize - tattoos", "NPC customize - tattoos");
+                                    Dialog.wiki(Story.get("NPC customize - tattoos").processText());
+                                    Dialog.open();
+                            <</script>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    </div>
+                <</if>>
+                <<for _tattooItem range _tattooCategoryItems.list>>
+                    <<capture _tattooItem>>
+                        <div class="npc-wardrobe-item">
+                            <<link '<div>[img[setup.ImagePath+"game/doll/tattoos/"+_tattooCategory+"_"+_tattooItem+".png"]]</div>'>>
+                                <<set $tmpGirl.tattoos ??= {}>>
+                                <<set $tmpGirl.tattoos[_tattooCategory] = _tattooItem>>
+                                <<script>>
+                                    Dialog.setup("NPC customize - tattoos", "NPC customize - tattoos");
+                                    Dialog.wiki(Story.get("NPC customize - tattoos").processText());
+                                    Dialog.open();
+                                <</script>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </div>
+        </fieldset>
+    <</capture>>
+<</for>>

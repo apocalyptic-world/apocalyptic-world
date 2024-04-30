@@ -211,7 +211,9 @@
 			<<else>>
 				<<setNpcStats 'slave' _i 'happy' -5>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set $slaves[_i].virgin = false>>
+					<<if !_npc.chastityBelt>>
+						<<set $slaves[_i].virgin = false>>
+					<</if>>
 					<<if $slaves[_i].gender == 0>>				
 						<<set _moneyEarned = randomInteger(4, 8)>>
 					<<elseif $slaves[_i].gender == 2>>				
@@ -232,11 +234,15 @@
 						<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
 					<</if>>
 					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
+					<<if _npc.chastityBelt>>
+						<<set _moneyEarned = Math.max(1, _moneyEarned / 3)>>
+					<</if>>
+
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($slaves[_i].name + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				
-					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom')>>
+					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom') && !_npc.chastityBelt>>
 						<<set $slaves[_i].pregnancy = 0>>
 						<<set $slaves[_i].pregnancy_father = 'unknown'>>
 						<<set $slaves[_i].pregnancy_event = 'streets'>>
@@ -457,6 +463,9 @@
 			<<else>>
 				<<setNpcStats 'guest' _guestI 'happy' -5>>
 				<<if randomInteger(0, 1) === 0>>
+					<<if !_npc.chastityBelt>>
+						<<set _npc.virgin = false>>
+					<</if>>
 					<<if $guests[_guestI].gender == 0>>
 						<<set _moneyEarned = randomInteger(4, 8)>>
 					<<elseif $guests[_guestI].gender == 2>>			
@@ -477,11 +486,15 @@
 						<<set _moneyEarned += Math.round($guests[_guestI].pussy / 25, 0)>>
 					<</if>>
 					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
+
+					<<if _npc.chastityBelt>>
+						<<set _moneyEarned = Math.max(1, _moneyEarned / 3)>>
+					<</if>>
+
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($guests[_guestI].name + ' had a client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
-					<<set $guests[_guestI].virgin = false>>
-					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom')>>
+					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom') && !_npc.chastityBelt>>
 						<<set $guests[_guestI].pregnancy = 0>>
 						<<set $guests[_guestI].pregnancy_father = 'unknown'>>
 						<<set $guests[_guestI].pregnancy_event = 'streets'>>
