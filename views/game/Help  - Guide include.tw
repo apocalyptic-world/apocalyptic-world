@@ -19,13 +19,13 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     rodger:  $characters.rodger.quests?.horse,
     eve:     false,
     octavia: $characters.octavia.quests?.kidnapped_found,
-    dom:     $characters.dom.quests?.quest6,
-    Isabel:  false,
+    dom:     $characters.dom.quests?.quest6, /* todo: more quests dom/isabel */
+    isabel:  $characters.isabel.quests?.temp_home || _closed.dom,
     negan:   $characters?.negan?.quests?.quest2 ?? false,
     laura:   $characters?.laura?.quests?.breeder_trait ?? false,
 }>>
-<<set _doneSome = _done.vincent || _done.blair || _done.rodger || /*_done.eve ||*/ _done.octavia ||  _done.dom || _closed.dom  || /*_done.isabel ||*/ _done.negan || _done.laura>>
-<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && /*_done.eve &&*/ _done.octavia && (_done.dom || _closed.dom) && /*_done.isabel &&*/ _done.negan && _done.laura>>
+<<set _doneSome = _done.vincent || _done.blair || _done.rodger || /*_done.eve ||*/ _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura>>
+<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && /*_done.eve &&*/ _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura>>
 
 <<set _helpguide = {
 /*  template
@@ -435,7 +435,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
             '<li>' + (!($characters.dom?.quests?.invite ?? false) ? 
                 'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
-                '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deals ends the Dom quest line.</span> <span style="color: green">Accepting the deal opens it.</span>'
+                '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deal ends the Dom & Isabel quest lines.</span> <span style="color: green">Accepting the deal continues them.</span>'
             : '<s>Have been invited to Dom\'s place.</s>')  + '</li>' +
             '</ul>',
     },
@@ -475,7 +475,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: $characters.dom.quests?.quest4_done_day|| _closed.dom,
         category: 'Story',
         title: 'Isabel\'s turn for fuel',
-        description: 'Ten days after the last attempt to get fuel to city meet up with Isabel in the nightclub. She know someone that runs an old oil and gas refinery. The only transport available is a bike with sidecar so you have to leave your companions behind at your home. Enjoy your solo adventure with Isolde.<br/>' +
+        description: 'Ten days after the last attempt to get fuel to city meet up with Isabel in the nightclub. She know someone that runs an old oil and gas refinery. The only transport available is a bike with sidecar so you have to leave your companions behind at your home. Enjoy your solo adventure with Isabel.<br/>' +
             '<<linkdesc>>(You have an option to use stealth in this quest. Stealth uses intelligence. For best result have a high stat!)><</linkdesc>>',
     },
     isabel_sanctuary: {
@@ -499,6 +499,23 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
             'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">4 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
             'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
+    },
+
+
+    isabel_desperation: {
+        show:  $characters.dom.quests?.quest6,
+        done:  $characters.isabel.quests?.temp_home || _closed.dom,
+        category: 'Story',
+        title: 'A desperate Isabel',
+        description: 'The Underground city is in turmoil. The meager deliveries of fuel to the city isn\'t enough. The threat of a fuel crisis and people rioting is immediate!' + 
+        (_closed.dom ? '<br/><span style="color: yellow">These quests is unavailable!</span>' : '<ul>' +
+            (($characters.dom.quests?.quest6_day + 5) >= $game.day ? '<li>Wait almost a week after giving the 15 fuel to Isabel</li>' : '')  +
+            (!$characters.dom.quests?.isabel_beg ? '<li>Visit the streets. A desperate Isabel begs for 10 fuel for the next time</li>' : '') +
+            (($characters.dom.quests?.isabel_beg_day + 5) > $game.day ? '<li>Wait another almost a week.</li>' : '') +
+            (!$characters.dom.quests?.isabel_beg_fuel ? '<li>Have 10 fuel in backpack. Visit the city. Help Isabel. Invite her as a guest.</li>' : '') +
+            (!$characters.isabel.quests?.temp_home ? '<li>Visit Isabel in your guest house and discuss her temporary new home.' : '') +
+            '<li>Have fun with Isabel, your new <s>toy</s> guest!</li>' +
+        '</ul>'),
     },
 
     laura_meet: {
@@ -542,15 +559,20 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: _doneAll,
         category: 'Story',
         title: 'End of questlines',
-        description: 'This is the end of some characters quests as of version v0.33. Just be patient and wait for game updates.<br/>' +
+        description: 'This is the end of ' + (_doneAll ? 'all' :  _doneSome ? 'some' : 'none') + ' of the characters quests as of version v0.36a. Just be patient and wait for game updates.<br/>' +
             'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-        /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
+        /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' */
             'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-            'Dom & Isabel: ' + (_done.dom ? '<span style="color: green">Done!</span>':
-                (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 'More quests to do!')) + '<br/>' +
-        /*  'Isabel: '  + (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' + */
+            'Dom: '     + 
+                (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 
+                    (_done.dom ? '<span style="color: green">Done!</span>': 'More quests to do!')
+                ) + '<br/>' +
+            'Isabel: '  + 
+                (_closed.dom ? '<span style="color: yellow">Questline unavailable!</span>' : 
+                    (_done.isabel  ? '<span style="color: green">Done!</span>' : 'More quests to do!')
+                ) + '<br/>' +
             'Negan:   ' + (_done.negan   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Laura: '   + (_done.laura   ? '<span style="color: green">Done!</span>' : 'More quests to do!'),
     },
