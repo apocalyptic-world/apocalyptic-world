@@ -1,0 +1,60 @@
+:: Shop - stealing shopkeeper [bg-shop]
+<h1 class="ptitle">
+	SHOP
+</h1>
+<br /><br />
+
+<<set _shopKeeperId = setup.getPersonsForLocation($guests, 'shop')>>
+<<set _shopKeeper = $guests[_shopKeeperId[0]]>>
+
+As you walk into the settlement store, you notice <<=setup.displayName(_shopKeeper)>>, a woman you've known for some time, acting suspiciously. 
+She quickly tries to hide something under her dress as she notices you entering.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/shop/shopkeeper_steal.jpg']]
+</center>
+<br /><br />
+<div id="option_ignore">
+    <<linkreplace 'Ignore her'>>
+        <<run $('#option_confront').hide()>>
+        You choose to keep quiet for now. <<=setup.displayName(_shopKeeper)>> looks at you with worried eyes but do not push and acts like nothing has happened.
+        <br /><br />
+        <<if setup.cabinInventory.has('food')>>
+            <<run setup.cabinInventory.drop('food')>>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="option_confront">
+    <<linkreplace 'Confront Her'>>
+        <<run $('#option_ignore').hide()>>
+        <<set _shopKeeper.relationship -= 10>>
+        <<=setup.displayName(_shopKeeper)>> eyes widen slightly, and she stammers for a moment before composing herself.
+        <br /><br />
+        <<sayNpc _shopKeeper>>
+            I never meant to cause trouble. Please forgive me.
+        <</sayNpc>>
+        <br />
+        Despite her confession, there's a sense of remorse and vulnerability in her demeanor. It's clear that she's torn between the need to survive and the guilt of her actions.
+        <br /><br />
+        <div id="option_forgive">
+            <<linkreplace 'Forgive her'>>
+                <<run $('#option_private')>>
+                <<if setup.cabinInventory.has('food')>>
+                    <<run setup.cabinInventory.drop('food')>>
+                <</if>>
+                <<set _shopKeeper.relationship += 10>>
+                Your forgiveness carries a weight of understanding and empathy, recognizing the hardships that led the shopkeeper to her desperate actions. 
+                As you hear her confession and see the remorse in her eyes, you soften your stance, realizing that survival in this post-apocalyptic world often means making difficult choices.
+                <br /><br />
+            <</linkreplace>>
+        </div>
+        <div id="option_private">
+            <<link 'Lead her to private room'>>
+                <<goto 'Shop - stealing shopkeeper fuck'>>
+            <</link>> 
+        </div> 
+    <</linkreplace>>
+</div>
+<<link 'Leave'>>
+    <<goto 'Shop'>>
+<</link>>

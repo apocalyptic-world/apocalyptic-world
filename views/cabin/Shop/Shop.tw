@@ -20,7 +20,9 @@
 	<</if>>
 <</for>>
 
-<<if setup.getPersonsForLocation($guests, 'shop').length>>
+<<set _shopKeeperIds = setup.getPersonsForLocation($guests, 'shop')>>
+<<if _shopKeeperIds.length>>
+	<<set _shopKeeper = $guests[_shopKeeperIds[0]]>>
 	<table id="manage-goods">
 		<tr>
 			<td></td>
@@ -69,6 +71,13 @@
 			* max - maximum amount of item you want to have in your storage.
 		</div>
 	</div>
+
+	<<if !($locationEvents.shop ?? false)>>
+		<<if _shopKeeper.sub <= 50 && setup.percentageChance(5)>>
+			<<set $locationEvents.shop = true>>
+			<<goto 'Shop - stealing shopkeeper'>>
+		<</if>>
+	<</if>>
 <<else>>
 	You need to assign someone with <strong>shopkeeper</strong> trait to this job.
 <</if>>
