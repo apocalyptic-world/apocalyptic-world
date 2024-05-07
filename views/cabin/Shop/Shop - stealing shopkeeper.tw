@@ -38,7 +38,7 @@ She quickly tries to hide something under her dress as she notices you entering.
         <br /><br />
         <div id="option_forgive">
             <<linkreplace 'Forgive her'>>
-                <<run $('#option_private')>>
+                <<run $('#option_private').hide()>>
                 <<if setup.cabinInventory.has('food')>>
                     <<run setup.cabinInventory.drop('food')>>
                 <</if>>
@@ -48,10 +48,20 @@ She quickly tries to hide something under her dress as she notices you entering.
                 <br /><br />
             <</linkreplace>>
         </div>
+
         <div id="option_private">
-            <<link 'Lead her to private room'>>
-                <<goto 'Shop - stealing shopkeeper fuck'>>
-            <</link>> 
+            <<if recall($suppCode)>>
+                <<link 'Lead her to private room'>>
+                    <<set $tmpEvent.id = _shopKeeperId[0]>>
+                    <<goto 'Shop - stealing shopkeeper fuck'>>
+                <</link>> 
+            <<else>>
+                <div class="link-internal disabled" style="background: #ccc">
+                    Lead her to private room
+                    <<notPatreonIcon>>
+                </div>
+            <</if>>
+            
         </div> 
     <</linkreplace>>
 </div>
