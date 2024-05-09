@@ -94,6 +94,14 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.characters.isabel.sub = 60;
             delete save.state.history[save.state.index].variables.characters.isabel.submission;
         }
+
+        if (
+            typeof save.state.history[save.state.index].variables.charId !== 'undefined' && 
+            save.state.history[save.state.index].variables.charId === 'isabel' && 
+            typeof save.state.history[save.state.index].variables.tmpGirlViewBack === 'undefined'
+        ) {
+            save.state.history[save.state.index].variables.tmpGirlViewBack = 'Isabel room';
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
