@@ -19,6 +19,14 @@
   <</link>>
 <</if>>
 
+<<if ($game.location.gloryhole ?? false)>>
+	<<link 'Go to bathroom'>>
+		<<addmins 5>>
+		<<energy -10>>
+		<<goto 'Nightclub - bathroom'>>
+	<</link>>
+<</if>>
+
 <<if isMetChar('dom') && $characters.dom.quests.quest3_done_day && ($characters.dom.quests.quest3_done_day + 10) < $game.day && !$characters.dom.quests.quest4>>
 	<<set $characters.dom.quests.quest4 = true>>
 	<<set $characters.dom.quests.quest4_done_day = $game.day>>
@@ -26,5 +34,9 @@
 <</if>>
 
 [[Leave|Underground city]]
+
+<<if $player.reputation > 150 && !($game.location.gloryhole ?? false)>>
+	<<goto 'Nightclub - bathroom introduction'>>
+<</if>>
 
 
