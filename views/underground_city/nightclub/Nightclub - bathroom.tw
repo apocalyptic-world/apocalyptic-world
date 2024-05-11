@@ -1,6 +1,38 @@
 :: Nightclub - bathroom [bg-underground]
-<h1 class="ptitle">NIGHTCLUB</h1>
+<h1 class="ptitle">NIGHTCLUB WC</h1>
 
+<<if $player.money >= 5>>
+    <<linkreplace 'Use gloryhole'>>
+        <<addmins 10>>
+        <br />
+        <center>
+            [img[setup.ImagePath+'places/nightclub/gloryhole.jpg']]
+        </center>
+        <br />
+        <<if setup.percentageChance(70)>>
+            <<newgirl>>
+            <<set $tmpGirl.race = 'white'>>
+            <<set $player.money -= 5>>
+            <<sayNpc $tmpGirl>>
+                Hey! Is someone there?
+            <</sayNpc>>
+            <br />
+            You hear noise behind the wall. After few seconds, hand reaches through the hole and takes 5 caps from you. Then she grabs your dick.
+            <br /><br />
+            <<link 'Enjoy'>>
+                <<set $tmpGirl.location = 'gloryhole'>>
+                <<set $tmpGirlViewBack = 'Nightclub - bathroom'>>
+                <<fuck $tmpGirl>>
+            <</link>>
+        <<else>>
+            You waited for few minutes but no one showed up...
+            <br /><br />
+        <</if>>
+    <</linkreplace>>
+    <<linkdesc 'gloryhole-desc'>>
+        5 caps
+    <</linkdesc>>
+<</if>>
 <<link 'Leave'>>
     <<addmins 5>>
     <<goto 'Nightclub - inside'>>
