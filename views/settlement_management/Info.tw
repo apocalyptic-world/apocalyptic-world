@@ -16,6 +16,7 @@
 
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 <<set _garden =   ($game.location.greenhouse ?? false) ? 'greenhouse' : 'garden' >>
+<<set _percentTax = !$characters.dom.quests.accepted_deal ? 80 : 40>>
 
 <<set _settlementStatsData = {
 	work: {},
@@ -70,15 +71,20 @@
 		<<set _chanceDeath *= !$characters.dom.quests.accepted_deal ? 1 : 0.5>>
 		<<set _chanceLife = 100 - _chanceDeath>>
 		<<set _chanceMoney = 0.5 * _chanceLife>>
-		<<set _percentTax = $characters.dom.quests.accepted_deal ? 80 : 40>>
-		<<set _money = _statsNpc.gender == 0 ? 6 : _statsNpc.gender == 2 ? 4 : 2>>
-		<<set _money = Math.round(_money*(100-_percentTax)/100) +
+		<<set _money =  (_statsNpc.gender == 0 ? 6 : _statsNpc.gender == 2 ? 4 : 2)>>
+		<<set _money *= (_statsNpc.traits ?? []).includes('nymphomaniac') ? 2 : 1>>
+		<<set _money +=
 	 		Math.round((_statsNpc.sub ?? 0)/25) +
 			Math.round((_statsNpc.pussy ?? 0)/25) +
 			Math.round((_statsNpc.anal ?? 0)/25)>>
+		<<if _statsNpc.chastityBelt>>
+			<<set _money = Math.max(1, _money / 3)>>
+		<</if>>
+		<<set _money = parseInt(_money)>>
+		<<set _money = Math.round(_money*(100-_percentTax)/100)>>
+
 		<<set _settlementStatsData.streets += _money * _chanceMoney/100>>
 		<<set _settlementStatsData.streets_die += _chanceDeath>>
-		/* chastity belt => money/3, at least 1 */
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
