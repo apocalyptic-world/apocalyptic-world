@@ -1,6 +1,51 @@
 :: Nightclub - bathroom [bg-underground]
 <h1 class="ptitle">NIGHTCLUB WC</h1>
 
+<table id="slaves">
+	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
+        <<set _hasWorkers = true>>
+		<<capture _streetGuestI, _streetGuest>>
+		<<set _isSick = (typeof $guests[_streetGuestI].sick !== 'undefined')>>
+		<<set _isRest = (typeof $guests[_streetGuestI].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
+		<<if _streetGuest.assignedTo != 'nightclub' || !timeBetween('20:00', '04:00') || _dayOff>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
+		<<set _assignedToStreets = true>>
+		<tr>
+			<td style="width: 300px">
+				<span @class="''+_genderClass+''">
+				  <<link _streetGuest.name>>
+					<<set $tmpGirl to _streetGuest>>
+					<<set $tmpGirl.location = 'gloryhole'>>
+					<<set $tmpGirlBack = 'Nightclub - bathroom'>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirlInvite to false>>
+					<<set $tmpGirl.rape to false>>
+					<<set $guestId = _streetGuestI>>
+					<<run delete $charId>>
+					<<run delete $slaveId>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<goto $tmpGirlViewBack>>
+				  <</link>>
+				</span>
+			</td>
+			<td>
+				<<if [0,2].includes(_streetGuest.gender) && setup.getAge(_streetGuest) >= 17>>
+					Beauty score: <<print _streetGuest.beauty>>
+				<</if>>
+			</td>
+			<td>
+				Age: <<=setup.getAge(_streetGuest)>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+</table>
+<<if _hasWorkers>>
+    <br /><br />
+<</if>>
 <<if $player.money >= 5>>
     <<linkreplace 'Use gloryhole'>>
         <<addmins 10>>

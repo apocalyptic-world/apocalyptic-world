@@ -1,0 +1,77 @@
+:: Nightclub - bathroom job [bg-nightclub]
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br />
+As you stand near the bar, taking in the sights and sounds of the underground city nightclub, a sudden presence at your side makes you turn. 
+The man in the golden suit is there, almost as if he materialized out of thin air. His approach is smooth and calculated, his steps deliberate as he closes the distance between you.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/nightclub/owner.jpg']]
+</center>
+<br />
+<<newguy>>
+With a charming smile, he extends a hand towards you, palm up as if offering a gift. 
+<br /><br />
+<<sayNpc $tmpGuy>>
+    My apologies for the abrupt introduction. I couldn't help but notice you. Word travels fast in these parts, especially when someone of your... reputation is involved.
+<</sayNpc>>
+<br />
+The man in the golden suit gestures for you to follow him through the bustling underground city nightclub. 
+The neon lights flicker and cast an otherworldly glow over the scene as you weave through the crowd. 
+The air is thick with the scent of sweat, alcohol, and a hint of something metallic.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/nightclub/girl_dancing.webp']]
+</center>
+<br /><br />
+As you enter a quieter section of the club, the man turns to you with a confident smile, his suit shimmering under the dim lights. 
+<br /><br />
+<<sayNpc $tmpGuy>>
+    I've heard about you. You have a way with the girls who work the streets, don't you?
+<</sayNpc>>
+<br />
+You nod cautiously, unsure of where this conversation is heading.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    Well, I have an offer for you. I have a luxurious bathroom in my establishment, one that would befit your girls. I could use some extra hands to attend to my guests.
+<</sayNpc>>
+<br />
+<<sayNpc $tmpGuy>>
+    Gloryholes.. I have few of them and my own girls are outdated so we could use fresh meat. So what are you saying?
+<</sayNpc>>
+<br />
+His offer hangs in the air, and you can sense the weight of the decision. On one hand, it's a chance for your girls to work in a more upscale environment, potentially earning more 
+and gaining a foothold in a different clientele. On the other hand, dealing with someone like this man could come with its own set of risks and complications.
+<br /><br />
+<div id="option_yes">
+    <<linkreplace "Agree">>
+        <<run $('#option_no').hide()>>
+        <<set _agree = true>>
+        <<set $player.quests.gloryholeJob = true>>
+        <<set $player.godwill -= 25>>
+        <<sayNpc $tmpGuy>>
+            Excellent! I will be waiting for your girls.
+        <</sayNpc>>
+        <br />
+        You leave the nightclub with a sense of optimism, knowing that your girls might have a chance at a more upscale and lucrative opportunity.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Nightclub - inside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_no">
+    <<linkreplace "Do not agree">>
+        <<run $('#option_yes').hide()>>
+        <<set $player.godwill += 10>>
+        <<sayNpc $tmpGuy>>
+            I respect your decision. Should you ever reconsider or need assistance of any kind, don't hesitate to reach out.
+        <</sayNpc>>
+        <br />
+        You thank him for his understanding and excuse yourself, choosing to focus on your current operations rather than diving into a potentially risky partnership.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Nightclub - inside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+

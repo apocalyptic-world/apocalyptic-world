@@ -106,10 +106,10 @@
 
             /* toolbox for job */
             <<elseif _ruleJob || (_ruleHunter &&  ['bow', 'axe'].includes(_item))>>
-                <<if setup.automatization.job_tools[_job].includes(_item) && _itemcount == 0>>
+                <<if (setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount == 0>>
                     <<set _want[_item] ??= []>>
                     <<set _want[_item].push(_npc)>>
-                <<elseif !setup.automatization.job_tools[_job].includes(_item) && _itemcount > 0>>
+                <<elseif !(setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount > 0>>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
                     <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
                 <</if>>

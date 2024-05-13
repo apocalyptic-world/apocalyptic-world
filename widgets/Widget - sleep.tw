@@ -643,6 +643,28 @@
 			<</if>>
 		<</if>>
 
+		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSick>>
+			<<setNpcStats 'guest' _guestI 'happy' -5>>
+			<<if $guests[_guestI].gender == 0>>
+				<<set _moneyEarned = randomInteger(5, 9)>>
+			<<elseif $guests[_guestI].gender == 2>>			
+				<<set _moneyEarned = randomInteger(3, 7)>>
+			<<else>>
+				<<set _moneyEarned = randomInteger(1, 5)>>
+			<</if>>
+			<<if (_npc.traits ?? []).includes('nymphomaniac')>>
+				<<set _moneyEarned = _moneyEarned * 2>>
+			<</if>>
+			<<set _moneyEarnedTax = 50>>
+			<<set _moneyEarned += Math.round(_npc.sub / 25, 0)>>
+			<<set _moneyEarned = parseInt(_moneyEarned)>>
+			<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
+			<<set $player.money += _moneyEarned>>
+			<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
+			<<set $morningMessages.main.push($guests[_guestI].name + ' had a client in the nightclub. She got you <strong>' + _moneyEarned + '</strong> caps')>>
+		<</if>>
+		
+
 		// Pregnancy
 		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
 			<<set $guests[_guestI].pregnancy++>>

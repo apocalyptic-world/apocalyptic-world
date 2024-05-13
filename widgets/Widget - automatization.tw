@@ -30,7 +30,7 @@
             <<if _count < 0>>
                 <<set _count = 0>>
             <</if>>
-            <<if setup.automatization.job_tools[_job].includes(_item)>>
+            <<if (setup.automatization.job_tools[_job] ?? []).includes(_item)>>
                 <<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
                 <<if _count == 0 && setup.cabinInventory.has(_item, _itemcount)>>
                     <<set setup.cabinInventory.to_npc(_npc, _item)>>
