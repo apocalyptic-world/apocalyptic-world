@@ -40,6 +40,9 @@
 		<<if !_unknown>>
 			<<= setup.npcListInfo($tmpGirl)>>
 		<</if>>
+		<<if ($tmpGirl.drunk ?? 0) > 0>>
+			 <strong><<=setup.pronounceWhat($tmpGirl, true)>> is <<=setup.drunkDescription($tmpGirl)>>.</strong>
+		<</if>>
 	</div>
 	<<if !_unknown>>
 		<div id="npc-inventory">

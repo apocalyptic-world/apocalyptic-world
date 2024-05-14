@@ -1,0 +1,36 @@
+:: NPC offer drink
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+ The <<=setup.displayName($tmpGirl)>>'s gaze flickers to the bottle as you approach, curiosity sparking in her eyes. 
+ Without a word, you offer her a glass, the bubbles dancing in the dim light of a flickering street lamp.
+ <br /><br />
+ Her initial surprise gives way to a cautious smile as she accepts the glass, the effervescence of the champagne a stark contrast to the harsh realities of their world. She raises bottle of champagne.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    A taste of luxury in the midst of chaos
+<</sayNpc>>
+<br />
+<center>
+	[img[setup.ImagePath+'places/cabin/drink_champagne_female.webp']]
+</center>
+<br /><br />
+Sitting together on the bench, surrounded by the sounds of the settlement's inhabitants going about their daily routines, you share stories of survival and moments of fleeting joy. 
+The champagne serves as a reminder that even in the darkest of times, there are still moments worth savoring, connections worth forging.
+<br /><br />
+As the time deepens and the stars twinkle faintly through the haze of pollution, the <<=setup.displayName($tmpGirl)>> continues to drink, indulging in the rare luxury. 
+Her speech becomes slurred, and laughter spills out uncontrollably. It's evident she's become quite drunk, her guard lowered as she shares tales of her past with increasing openness and sentimentality.
+<br /><br />
+Eventually, as the champagne runs dry, she leans heavily on your shoulder, her words now a jumble of gratitude and nostalgia for a world long lost.
+<br /><br />
+<<run setup.cabinInventory.drop('champagne', 1)>>
+<<sayNpc $tmpGirl>>
+    Wow! I am really drunk... Thank god the bottle is empty as I couldn't stop..
+<</sayNpc>>
+<br />
+<strong>You both are drunk!</strong>
+<<perkAdd 'drunk'>>
+<<set $tmpGirl.drunk = 89>>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'NPC view - guest'>>
+<</link>>
