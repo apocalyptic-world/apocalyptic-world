@@ -32,6 +32,8 @@
 	<<goto 'Dom - quest #6 isabel fuel'>>
 <<elseif isMetChar('dom') && $characters.dom.quests.isabel_beg && ($characters.dom.quests.isabel_beg_day + 5) <= $game.day && !$characters.dom.quests.isabel_beg_fuel && $backpack.count('fuel') >= 10>>
 	<<goto 'Dom - isabel riot'>>
+<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
+	<<goto 'Dom - Underground city chaos'>>
 <<else>>
 	<<if !$locationEvents.underground>>
 		<<set $randomNumber = randomInteger(0, 100)>>

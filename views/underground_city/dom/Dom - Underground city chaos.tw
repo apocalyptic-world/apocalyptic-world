@@ -1,0 +1,58 @@
+:: Dom - Underground city chaos [bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<<set $characters.isabel.quests.chaos = true>>
+As you descended into the dimly lit depths of the underground city, the familiar sounds of bustling life were replaced with an eerie silence. 
+Your footsteps echoed through empty corridors, devoid of the usual chatter and laughter. As you reached the main square, your heart sank at the scene before you.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/underground/chaoss.jpg']]
+</center>
+<br /><br />
+Chaos reigned supreme.
+<br /><br />
+Groups of people clashed in vicious brawls, their faces contorted with rage and fear. The air was thick with the metallic tang of blood and the acrid stench of burning materials.
+<br /><br />
+You scanned the area, searching for any familiar faces or signs of what had transpired. 
+The central podium, where Dom, your respected leader, would address the community, stood abandoned and vandalized. 
+<br /><br />
+Factions had emerged, each vying for control, their motives ranging from survival to domination. 
+Some wielded makeshift weapons, others relied on cunning and manipulation. The once tight-knit community had splintered into rival camps, each distrustful of the other.
+<br /><br />
+You hesitated, torn between intervening in the violence or retreating to safety. But as you watched a group of scavengers ransack a nearby storage area, their greed unchecked by conscience, you knew you couldn't stand idle.
+<br /><br />
+<div id="option_fight">
+    <<link 'Fight 4 guys with knives'>>
+        <<set $enemies = []>>
+        <<for _i = 0; _i < 4; _i++>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {
+                knife: 1
+            }>>
+            <<run $enemies.push($tmpGuy)>>
+        <</for>>
+        <<fight $enemies 'Underground city' 'Underground city'>>
+    <</link>>
+</div>
+<<linkreplace 'Try to leave'>>
+    <<run $('#option_fight').hide()>>
+    For a moment, the combatants paused, their attention drawn to your presence. 
+    They noticed that you're trying to get away and one of them started to run towards you and shouting.
+    <br /><br />
+    <<newguy>>
+    <<sayNpc $tmpGuy>>
+        Get him! He have caps on him!
+    <</sayNpc>>
+    <br />
+    <<link 'Fight'>>
+        <<set $enemies = []>>
+        <<for _i = 0; _i < 4; _i++>>
+            <<newguy>>
+            <<set $tmpGuy.inventory = {
+                knife: 1
+            }>>
+            <<run $enemies.push($tmpGuy)>>
+        <</for>>
+        <<fight $enemies 'Underground city' 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+
