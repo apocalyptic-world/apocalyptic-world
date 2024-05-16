@@ -1,0 +1,73 @@
+:: Car explore event - robber justice [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+As you navigate the rugged terrain in your trusty post-apocalyptic vehicle, the engine's rumble harmonizes with the wind's mournful howl. Dust swirls in your wake as you scan the horizon for signs of life or danger. 
+Suddenly, your sharp eyes catch movement ahead—a group of armed figures surrounding someone on the roadside.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/explore_car/robber_justice.jpg']]
+</center>
+<br /><br />
+You ease off the accelerator, the car's tires crunching on gravel as you approach cautiously. The scene unfolds before you: a young man, hands bound, surrounded by a gang of rough-looking individuals wearing makeshift armor and brandishing weapons. Their leader, a burly figure with a scarred face, barks orders as they accuse the captive of theft.
+<br /><br />
+Your grip tightens on the steering wheel as you assess the situation. The captors seem poised to mete out their brand of justice, uncaring of due process or innocence
+<br /><br />
+<<newguy>>
+<div id="option_int">
+    <<linkreplace 'Intervene'>>
+        <<set _int = true>>
+        As you pull up closer, the gang's leader, a grizzled man with a scarred face, approaches your vehicle. He eyes you warily, sizing you up before speaking in a gravelly voice.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            You got guts, stopping like this. This punk owes us big time. You wanna play hero? Fine. Here's the deal.
+        <</sayNpc>>
+        <br />
+        <<sayNpc $tmpGuy>>
+            You can buy his sorry hide and pay off his debt to us. Or you throw in something extra to sweeten the deal. Maybe some of them supplies you got in that fancy car of yours.
+        <</sayNpc>>
+        <br />
+        <<if $player.money > 100>>
+            <div id="option_pay">
+                <<linkreplace 'Pay his debt'>>
+                    <<run $('#option_pay_desc, #option_ignore').hide()>>
+                    <<run $('#option_leave').show()>>
+                    <<set $player.money -= 100>>
+                    <<set $player.goodwill += 5>>
+                    As soon as he's free, however, he doesn't utter a word of thanks. Instead, he takes off running, disappearing into the dusty landscape without a backward glance. The gang members chuckle at his hasty escape, clearly amused by the turn of events.
+                    <br /><br />
+                    You watch him go, a mix of emotions swirling within you. 
+                    Disappointment at his lack of gratitude mingles with a sense of relief that you were able to prevent a senseless execution. 
+                    The gang leader grunts again, accepting the payment you've offered, and signals for his group to disperse.
+                    <br /><br />
+                <</linkreplace>>
+            </div>
+            <<linkdesc 'option_pay_desc'>>
+                -100 caps
+            <</linkdesc>>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="option_ignore">
+    <<linkreplace 'Ignore'>>
+        <<if !_int>>
+            <<run $('#option_int').hide()>>
+        <</if>>
+        <<set $player.goodwill -= randomInteger(10,20)>>
+        <<run $('#option_leave').show()>>
+        The weight of your decision settles heavily as you shift gears and accelerate away from the grim scene in your rearview mirror. 
+        The echoes of the gang's cruel justice linger in your mind, a haunting reminder of the harsh realities of this post-apocalyptic world.
+        <br /><br />
+        <center>
+            [img[setup.ImagePath+'places/explore_car/robber_justice2.jpg']]
+        </center>
+        <br /><br />
+        In the mirror, you catch a glimpse of the gang's brutality as they shove the captive back and one of them, with a swift motion, cuts his throat.
+        The crimson spray mingles with the dust of the roadside, a stark testament to the unforgiving nature of survival in this ravaged world.
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_leave" style="display:none">
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>
