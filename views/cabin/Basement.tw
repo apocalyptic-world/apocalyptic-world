@@ -79,6 +79,22 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<</linkdesc>>
 		<</if>>
 	<</if>>
+	<<if (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 3>>
+		<<if timeBetween('18:00','20:30') && $player.energy >= 40>>
+			<<link 'Group workout with slaves'>>
+				<<energy -40>>
+				<<addmins 90>>
+				<<goto 'Group workout - slaves'>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				Group workout with slaves
+			</div>
+			<<linkdesc>>
+				Time between 19:00 - 20:30. Energy 40
+			<</linkdesc>>
+		<</if>>
+	<</if>>	
 
 	<table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
