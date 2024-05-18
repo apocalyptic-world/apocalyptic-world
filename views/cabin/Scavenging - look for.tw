@@ -6,15 +6,20 @@
 </center>
 <<addhours 3>>
 <br /><br />
-You took your stuff and decided to walk in the direction you thought <<=setup.pronounceWho($guests[$scavengingDidntReturn])>> would go. You walk for a few hours till you reached crossroads and you had to decide where to go next.
+<<set _npc = $guests[$scavengingDidntReturn]>>
+You took your stuff and decided to walk in the direction you thought <<=setup.pronounceWho(_npc)>> would go. You walk for a few hours till you reached crossroads and you had to decide where to go next.
 <br /><br />
 <<set _crossroadOptions = [
 	'Scavenging - look for - dead',
 	'Scavenging - look for - alive',
 	'Scavenging - look for - not found'
 ]>>
-<<if [0, 2].includes($guests[$scavengingDidntReturn].gender)>>
+
+<<if [0, 2].includes(_npc.gender)>>
 	<<run _crossroadOptions.push('Scavenging - look for girl fight')>>
+	<<if setup.npcInventoryHas(_npc, 'knife') && _npc.strength >= 50 && setup.npcInventoryHas(_npc, 'body_armor')>>
+		<<run _crossroadOptions.push('Scavenging - look for girl fight #2')>>	
+	<</if>>
 <</if>>
 <<set _crossroadOption = either(_crossroadOptions)>>
 <<addhours 3>>

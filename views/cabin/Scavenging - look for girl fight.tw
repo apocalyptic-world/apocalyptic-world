@@ -1,11 +1,20 @@
-:: Scavenging - look for girl fight {"position":"4955,996","size":"100,100"}
+:: Scavenging - look for girl fight
 <h1 class="ptitle">OUTSIDE</h1>
 <br /><br />
+<<if $tmpEvent?.watch>>
+	As you watched, one of the men, his face a mask of cruelty, heard Mia's desperate screams and threw her against the closest tree with a sickening thud. She crumpled to the ground, momentarily stunned. 
+	The man then knelt down and began to rip her clothes off, his intentions clear and terrifying.
+	<br /><br />
+<</if>>
 <center>
   [img[setup.ImagePath+'places/outside/scavenging_fuck.webp']]
 </center>
 <br /><br />
-You took the route through the forest and after some time you heard a scream in the distance. Someone screamed for help. You rushed toward the sound and noticed your girl, tied up to the tree as two guys fucked her and she couldn't do anything.
+<<if $tmpEvent?.watch>>
+	As soon as her panties where ripped of she hold her down as he shoved his dick inside her. She let out another scream for help as he started to fuck her.
+<<else>>
+	You took the route through the forest and after some time you heard a scream in the distance. Someone screamed for help. You rushed toward the sound and noticed your girl, tied up to the tree as two guys fucked her and she couldn't do anything.
+<</if>>
 <br /><br />
 <<linkreplace 'Keep watching'>>
 <center>
@@ -17,6 +26,7 @@ She begged them to stop while she still tried to scream for help. After few roug
 <</linkreplace>>
 
 <<link 'Fight them'>>
+	<<unset $tmpEvent>>
 	<<set $enemies = []>>
   	<<newguy>>
 	<<if randomInteger(0, 10) === 0>>
@@ -33,6 +43,7 @@ She begged them to stop while she still tried to scream for help. After few roug
 <</link>>
 
 <<link 'Leave her'>>
+	<<unset $tmpEvent>>
 	<<guestRemove $scavengingDidntReturn>>
 	<<goto 'Outside'>>
 <</link>>

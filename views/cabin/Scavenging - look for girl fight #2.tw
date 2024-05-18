@@ -1,0 +1,39 @@
+:: Scavenging - look for girl fight #2
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<set _npc = $guests[$scavengingDidntReturn]>>
+
+As you trekked deeper into the ruins, the sound of a struggle reached your ears—muffled screams and frantic scuffling. Your pulse quickened, and you broke into a run, your breath coming in sharp, desperate gasps. 
+The noise grew louder, more distinct, guiding you through the maze of debris and crumbling walls.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/cabin/scavenging_fight.jpg']]
+</center>
+<br /><br />
+You skidded to a halt as you rounded a corner, your heart leaping into your throat. There, in the middle of a narrow alleyway, <<=setup.displayName(_npc)>> was grappling with two men. Her face was twisted in a fierce snarl, and she fought like a cornered animal, but she was outmatched. 
+One of the men had her pinned, while the other was trying to wrestle her makeshift knife from her grasp. They managed to unarm her and started to tie her down against the tree.
+<br /><br />
+<<link 'Help her'>>
+    <<set $enemies = []>>
+  	<<newguy>>
+	<<if randomInteger(0, 10) === 0>>
+		<<set 
+			$tmpGuy.inventory = {
+				'knife': 1
+			}
+		>>
+	<</if>>
+  	<<run $enemies.push($tmpGuy)>>
+  	<<newguy>>
+  	<<run $enemies.push($tmpGuy)>>
+    <<set $tmpEvent = {
+        help: true
+    }>>
+  	<<fight $enemies 'Scavenging - look for girl fight won' 'Scavenging - look for girl fight lost'>>
+<</link>>
+<<link 'Continue to watch'>>
+    <<set $tmpEvent = {
+        watch: true
+    }>>
+    <<goto 'Scavenging - look for girl fight'>>
+<</link>>
