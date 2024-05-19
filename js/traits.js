@@ -32,6 +32,10 @@ setup.traits = {
     nymphomaniac: {
         title: 'Nymphomaniac',
         description: 'Never says no, and earns double on street.'
+    },
+    infertile: {
+        title: "Infertile",
+        description: "Can't have kids"
     }
 };
 

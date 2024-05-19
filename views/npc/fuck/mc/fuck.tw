@@ -1,6 +1,15 @@
 :: Mc fuck [sex]
 
 <<set _sexActions = {
+    kissing: {
+        title: 'Kissing',
+        minAction: 0,
+        horny: 1,
+        maxCorruption: 10,
+        show: !$tmpGirl.gender,
+        positive: $tmpGirl.relationship > 15,
+        hornyGive: 2
+    },
     handjob: {
         title: 'Handjob',
         minAction: 5,
@@ -122,7 +131,7 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _sexActions[$sexAction].hornyGive ?? 20, 100)>>
         <</if>>
         <<set _npcHorny = clone($tmpGirl.horny)>>
         <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
