@@ -51,10 +51,9 @@
     pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
-        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt,
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
         maxCorruption: 40,
         positive: !($tmpGirl.traits ?? []).includes('analslut'),
-        show: $tmpGirl.location != 'gloryhole'
     },
     pussy: {
         title: 'Fuck pussy',
@@ -131,7 +130,7 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _sexActions[$sexAction].hornyGive ?? 20, 100)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + (_sexActions[$sexAction].hornyGive ?? 20), 100)>>
         <</if>>
         <<set _npcHorny = clone($tmpGirl.horny)>>
         <<showmeter '$npcHornyBar' '_npcHorny / 100'>>

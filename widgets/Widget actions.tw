@@ -135,15 +135,22 @@
 					<</if>>
 				<<else>>
 					<<if _actionText[$args[1]] !== undefined>>
-						<<if (_actionText[$args[1]] ?? false) && (_actionText[$args[1]]['stats'] ?? false)>>
-							<<for _sortedTextsStat, _sortedTextsData range _actionText[$args[1]]['stats']>>
-								<<if typeof $tmpGirl[_npcStat] !== 'undefined' && $tmpGirl[_npcStat] >= _sortedTextsData.s>>
-									<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
-								<</if>>
-							<</for>>
-							<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
-						<<else>>
-							<<= _actionText[$args[1]].texts[Math.floor(Math.random()*_actionText[$args[1]].texts.length)].replace(/%name%/g, setup.displayName($args[0]))>>
+						<<set _locationLocalizedTexts = _actionText[$args[1]]?.location?.[$args[0].location]?.texts>>
+						<<if _locationLocalizedTexts>>
+							<<set _textFound = true>>
+							<<= _locationLocalizedTexts[Math.floor(Math.random()*_locationLocalizedTexts.length)].replace(/%name%/g, setup.displayName($args[0]))>>
+						<</if>>
+						<<if !_textFound>>
+							<<if (_actionText[$args[1]] ?? false) && (_actionText[$args[1]]['stats'] ?? false)>>
+								<<for _sortedTextsStat, _sortedTextsData range _actionText[$args[1]]['stats']>>
+									<<if typeof $tmpGirl[_npcStat] !== 'undefined' && $tmpGirl[_npcStat] >= _sortedTextsData.s>>
+										<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
+									<</if>>
+								<</for>>
+								<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
+							<<else>>
+								<<= _actionText[$args[1]].texts[Math.floor(Math.random()*_actionText[$args[1]].texts.length)].replace(/%name%/g, setup.displayName($args[0]))>>
+							<</if>>
 						<</if>>
 					<</if>>
 				<</if>>
