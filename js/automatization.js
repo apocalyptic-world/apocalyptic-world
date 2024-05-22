@@ -61,7 +61,7 @@ setup.automatization = {
         maid: [],
         mistress: [],
         none: [],
-        scavenging: ['knife'],
+        scavenging: ['knife', 'body_armor'],
         shop: [],
         streets: ['knife'],
         mc: ['knife', 'bow', 'gas_mask', 'axe', 'body_armor'],
