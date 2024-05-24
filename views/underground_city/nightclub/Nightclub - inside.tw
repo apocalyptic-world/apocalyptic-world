@@ -37,7 +37,7 @@
 
 <<if $player.reputation > 150 && !($game.location.gloryhole ?? false)>>
 	<<goto 'Nightclub - bathroom introduction'>>
-<<elseif $player.reputation > 170 && ($game.location.gloryhole ?? false) && setup.percentageChance(10)>>
+<<elseif $player.reputation > 170 && ($game.location.gloryhole ?? false) && !$player?.quests?.gloryholeJobAsked && setup.percentageChance(10)>>
 	<<goto 'Nightclub - bathroom job'>>
 <</if>>
 
