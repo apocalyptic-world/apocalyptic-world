@@ -306,6 +306,16 @@ setup.getNpcsForLocation = function (persons, location) {
     }
     return npcs;
 };
+setup.getNpcsForLocations = function (persons, locations) {
+    const npcs = [];
+    for (const npc of persons) {
+        if (locations.includes(npc.assignedTo)) {
+            npcs.push(npc);
+        }
+    }
+    return npcs;
+};
+
 setup.getBirthDate = function(yearsAgo) {
     var now = variables().gameDate;
     var earliestDate = new Date(now.getFullYear() - yearsAgo, 0, 1);

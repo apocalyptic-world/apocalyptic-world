@@ -13,22 +13,22 @@
 	  <<run $slaves.push($tmpGirl)>>
 	  <<goto 'Wood cabin'>>
   <</link>>
-  <<link 'Set all guest relationship to max'>>
+  <<if recall($suppCode)>>
+	<<link 'Set all guest relationship to max'>>
+			<<for _cheatGuestI, _cheatGuest range $guests>>
+				<<set $guests[_cheatGuestI].relationship = 100>>
+			<</for>>
+			<<if typeof $guestId !== 'undefined' && $tmpGirl>>
+				<<set $tmpGirl.relationship = 100>>
+			<</if>>
+			<<goto `passage()`>> 
+	<</link>>
+	<<link 'Set all guest submission to max'>>
   		<<for _cheatGuestI, _cheatGuest range $guests>>
-			<<set $guests[_cheatGuestI].relationship = 100>>
+			<<set $guests[_cheatGuestI].sub = 100>>
 		<</for>>
 		<<if typeof $guestId !== 'undefined' && $tmpGirl>>
-			<<set $tmpGirl.relationship = 100>>
-		<</if>>
-		<<goto `passage()`>> 
-  <</link>>
-  <<if recall($suppCode)>>
-	<<link 'Set all slave corruption to max'>>
-  		<<for _cheatslaveI, _cheatSlave range $slaves>>
-			<<set $slaves[_cheatslaveI].corruption = 100>>
-		<</for>>
-		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
-			<<set $tmpGirl.corruption = 100>>
+			<<set $tmpGirl.sub = 100>>
 		<</if>>
 		<<goto `passage()`>> 
   	<</link>>
@@ -56,6 +56,15 @@
 		<</for>>
 		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
 			<<set $tmpGirl.sub = 100>>
+		<</if>>
+		<<goto `passage()`>> 
+  	<</link>>
+	<<link 'Set all slave corruption to max'>>
+  		<<for _cheatslaveI, _cheatSlave range $slaves>>
+			<<set $slaves[_cheatslaveI].corruption = 100>>
+		<</for>>
+		<<if typeof $slaveId !== 'undefined' && $tmpGirl>>
+			<<set $tmpGirl.corruption = 100>>
 		<</if>>
 		<<goto `passage()`>> 
   	<</link>>
