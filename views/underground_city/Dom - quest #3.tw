@@ -45,20 +45,7 @@ You turn around the corner where your girls are standing and you see that Dom an
 			Tearing the curtains from the windows lets in light, illuminating the room ever so slightly. Suddenly, from behind, you hear a shout, and as you turn around, you see that many people have emerged from the previously dark corners of the room, now bathed in light. They all rush towards you all, and a fight ensues. Some of them have knives, while others wield metal pipes. A couple of them decide to attack you as well.
 			<br /><br />
 			<<link 'Fight'>>
-				<<set $enemies = []>>
-				<<newguy>>
-				<<if setup.percentageChance(10)>>
-					<<set 
-						$tmpGuy.inventory = {
-							'knife':1
-						}
-					>>
-				<</if>>
-				<<run $enemies.push($tmpGuy)>>
-				<<newguy>>
-				<<run $enemies.push($tmpGuy)>>
-				<<newguy>>
-				<<run $enemies.push($tmpGuy)>>
+				<<generateEnemies 3>>
 				<<set $game.death_reason = 'stab wounds.'>>
   				<<fight $enemies 'Dom - quest #3 2' 'Dead'>>
 				<<set 

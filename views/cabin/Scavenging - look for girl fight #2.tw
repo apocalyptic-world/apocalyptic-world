@@ -14,21 +14,10 @@ You skidded to a halt as you rounded a corner, your heart leaping into your thro
 One of the men had her pinned, while the other was trying to wrestle her makeshift knife from her grasp. They managed to unarm her and started to tie her down against the tree.
 <br /><br />
 <<link 'Help her'>>
-    <<set $enemies = []>>
-  	<<newguy>>
-	<<if randomInteger(0, 10) === 0>>
-		<<set 
-			$tmpGuy.inventory = {
-				'knife': 1
-			}
-		>>
-	<</if>>
-  	<<run $enemies.push($tmpGuy)>>
-  	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
     <<set $tmpEvent = {
         help: true
     }>>
+	<<generateEnemies 2>>
   	<<fight $enemies 'Scavenging - look for girl fight won' 'Scavenging - look for girl fight lost'>>
 <</link>>
 <<link 'Continue to watch'>>

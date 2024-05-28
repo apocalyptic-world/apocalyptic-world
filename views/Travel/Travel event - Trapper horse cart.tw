@@ -32,17 +32,7 @@ Your journey is interrupted by the sight of a lone merchant or traveler struggli
         <<run $('#option_leave').hide()>>
         <<link 'Fight'>>
             <<set $enemies = []>>
-            <<newguy>>
-            <<set $tmpGuy.inventory = {'knife':1}>>
-            <<run $enemies.push($tmpGuy)>>
-            <<newguy>>
-            <<set $tmpGuy.inventory = {'knife':1}>>
-            <<run $enemies.push($tmpGuy)>>
-            <<newguy>>
-            <<set $tmpGuy.inventory = {'knife':1}>>
-            <<run $enemies.push($tmpGuy)>>
-            <<newgirl>>
-            <<run $enemies.push($tmpGirl)>>
+            <<generateEnemies 4>>
             <<fight $enemies $travelPassage $travelPassage>>
         <</link>>
     <</if>>

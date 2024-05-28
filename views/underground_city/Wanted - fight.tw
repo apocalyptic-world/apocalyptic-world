@@ -14,22 +14,7 @@ Following closely behind and catching up to <<=_wantedPron2>>, to your surprise,
 <br /><br />
 
 <<link 'Fight them'>>
-	<<set $enemies = []>>
- 	<<newguy>>
-	<<if setup.percentageChance(10)>>
-		<<set 
-			$tmpGuy.inventory = {
-				'knife': 1
-			}
-		>>
-	<</if>>
-  	<<run $enemies.push($tmpGuy)>>
-  	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
-	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
-	<<newgirl>>
-	<<run $enemies.push($tmpGirl)>>
+	<<generateEnemies 4>>
   	<<fight $enemies 'Wanted - catched' 'Streets'>>
 <</link>>
 

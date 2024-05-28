@@ -27,18 +27,7 @@ She begged them to stop while she still tried to scream for help. After few roug
 
 <<link 'Fight them'>>
 	<<unset $tmpEvent>>
-	<<set $enemies = []>>
-  	<<newguy>>
-	<<if randomInteger(0, 10) === 0>>
-		<<set 
-			$tmpGuy.inventory = {
-				'knife': 1
-			}
-		>>
-	<</if>>
-  	<<run $enemies.push($tmpGuy)>>
-  	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
+	<<generateEnemies 2>>
   	<<fight $enemies 'Scavenging - look for girl fight won' 'Scavenging - look for girl fight lost'>>
 <</link>>
 

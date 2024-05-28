@@ -19,13 +19,7 @@ Looks like we've got ourselves a wanderer.
 <br /><br />
 <div id="option1">
 	<<link 'Fight them'>>
-		<<set $enemies = []>>
-		<<newguy>>
-		<<run $enemies.push($tmpGuy)>>
-		<<newguy>>
-		<<run $enemies.push($tmpGuy)>>
-		<<newguy>>
-		<<run $enemies.push($tmpGuy)>>
+		<<generateEnemies 3>>
 		<<fight $enemies 'Underground city' 'Underground city'>>
 	<</link>>
 </div>
@@ -38,13 +32,7 @@ Looks like we've got ourselves a wanderer.
 		<strong>You failed!</strong>
 		<br /><br />
 		<<link 'Fight them'>>
-			<<set $enemies = []>>
-			<<newguy>>
-			<<run $enemies.push($tmpGuy)>>
-			<<newguy>>
-			<<run $enemies.push($tmpGuy)>>
-			<<newguy>>
-			<<run $enemies.push($tmpGuy)>>
+			<<generateEnemies 3>>
 			<<fight $enemies 'Underground city' 'Underground city'>>
 		<</link>>
 	<</if>>

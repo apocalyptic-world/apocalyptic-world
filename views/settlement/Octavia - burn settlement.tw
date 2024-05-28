@@ -33,15 +33,9 @@ Your path is peaceful, paying no attention to anything along the roadside, you c
 		At that very moment, 3 grounders with loud shouts rush towards you. There is no retreat. You have to fight against them.
 		<br /><br />
 		<<link 'Fight them'>>
-			<<set $enemies = []>>
-  	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
-  	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
-	<<newguy>>
-  	<<run $enemies.push($tmpGuy)>>
-  	<<fight $enemies 'Octavia - burn settlement - won' 'Octavia - burn settlement - lost' true>>
-	<<set $fight.skipEnding = true>>
+			<<generateEnemies 3>>
+  			<<fight $enemies 'Octavia - burn settlement - won' 'Octavia - burn settlement - lost' true>>
+			<<set $fight.skipEnding = true>>
 		<</link>>
 	<</linkreplace>>
 <</linkreplace>>
