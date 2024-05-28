@@ -64,18 +64,20 @@
 		Dialog.open();
 	<</script>>
 <</if>>
-<<script>>
+<<<<script>>
 	Object.keys(variables().packs ?? {}).forEach(key => {
 		if (!variables().packs[key]) {
 			return;
 		}
 
-		importScripts(setup.Path + "packs/" + key + "/actions.js")
-            .then(function() {
-                memorize('actions', setup.actions);
-            }).catch(function(error) {  // eslint-disable-line
-                alert("Error: Could not load pack '" + key + ".js'.");
-            }
-        );
+		if (typeof setup.actions[key] == 'undefined') {
+			importScripts(setup.Path + "packs/" + key + "/actions.js")
+				.then(function() {
+					memorize('actions', setup.actions);
+				}).catch(function(error) {  // eslint-disable-line
+					alert("Error: Could not load pack '" + key + ".js'.");
+				}
+			);
+		}
 	});
-<</script>>
+<</script>>>>
