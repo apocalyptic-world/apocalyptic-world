@@ -1,0 +1,157 @@
+:: Settlement management - Base management
+<h1 class="ptitle">
+    BASE MANAGEMENT
+</h1>
+
+<<warning 'Work in progress.'>>
+
+<<set _electricityTotal = setup.baseManagement.electricity.total()>>
+<<set _electricityTotalOutput = _electricityTotal>>
+<<if _electricityTotal > 0>>
+    <<set _electicityClass = 'green'>>
+    <<set _electricityTotalOutput = '+' + _electricityTotal>>
+<<elseif _electricityTotal < 0>>
+    <<set _electicityClass = 'red'>>
+    <<set _electricityTotalOutput = '-' + _electricityTotal>>
+<</if>>
+<div id="base-management">
+    <div class="base-management-item">
+        <h3>Energy [<span @class="''+ _electicityClass  +''"><<=_electricityTotalOutput>></span>]</h3>
+        <table>
+            <tr>
+                <td>Produced:</td>
+                <td class="green"><<=setup.baseManagement.electricity.production()>></td>
+            </tr>
+            <tr>
+                <td>Consumed:</td>
+                <td class="red"><<=setup.baseManagement.electricity.consumption()>></td>
+            </tr>
+        </table>
+    </div>
+    <div class="base-management-item">
+        <h3>Defense</h3>
+        <table>
+            <tr>
+                <td><<=setup.baseManagement.defense.description()>></td>
+            </tr>
+        </table>
+    </div>
+    <div class="base-management-item">
+        <h3>Population</h3>
+        <table>
+            <tr>
+                <td><<=setup.baseManagement.population.description()>></td>
+            </tr>
+            <tr>
+                <td>Living houses:</td>
+                <td><strong><<=setup.baseManagement.population.livingHousesCount()>></strong></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<h2>Buildings</h2>
+<<for _baseBuildingName, _baseBuilding range setup.baseManagement.buildings>>
+    <<set _required to Object.keys(_baseBuilding.required)>>
+    <<set _workEnergy = _baseBuilding.energy>>
+    <<capture _baseBuildingName, _baseBuilding, _required, _workEnergy>>
+        <<set _itemHasResources = true>>
+	  <div class="base-management-building-item">
+		  <table>
+			  <tr>
+                <td class="base-building-img">
+					[img[setup.ImagePath+'base_management/'+_baseBuildingName+'.jpg']]
+				  </td>
+				  <td style="width: 57%">
+					  <h3><<=_baseBuilding.title>></h3>
+					  <<=_baseBuilding.description>>
+					  <br />
+                      <<if _baseBuilding.currentCount >>
+					    Current count: <<=$player?.baseManagement?.buildings[_baseBuildingName] ?? 0>>
+                      <</if>>
+				  </td>
+				  <td>
+					  <div class="base-management-building-required">
+						  Required:<br />
+						  <<for _r to 0; _r lt _required.length; _r++>>
+						  	  <<set _reqKey   = _required[_r]>>
+							  <<set _reqCount = _baseBuilding.required[_reqKey]>>
+                              <<set _hasCount = setup.cabinInventory.count(_reqKey)>>
+							  <<set _needtxt = ''>>
+							  <<if _hasCount < _reqCount>>
+								  <<set _itemHasResources = false>>
+                                  <<run console.log(_reqKey)>>
+								  <<set _needtxt = '(missing ' + (_reqCount - _hasCount) +  ')'>>
+							  <</if>>
+							  <span><<=_reqCount>> <<=Item.get(_reqKey).name>> _needtxt</span><br />
+						  <</for>>
+						  <span><<=_baseBuilding.energy>> energy</span>
+						  <<if $player.energy < _baseBuilding.energy>>
+					   	  	<<set _itemHasResources = false>>
+						  <</if>>
+					  </div>
+				  </td>
+				  <td>
+					  <<if _itemHasResources>>
+						<<link 'Build'>>
+
+							<<energy `-_workEnergy`>>
+							
+							<<for _r to 0; _r lt _required.length; _r++>>
+								<<capture _r>>
+                                    <<set _reqKey   = _required[_r]>>
+                                    <<set _reqCount = _baseBuilding.required[_reqKey]>>
+                                    <<run setup.cabinInventory.drop(_reqKey, _reqCount)>>
+								<</capture>>
+							<</for>>
+                            <<run console.log(_baseBuilding)>>
+							<<run _baseBuilding.after()>>
+							<<goto _baseBuilding.goto>>
+						<</link>>
+					  <<else>>
+                            <div class="workbench-not-enough">
+                                Not enough resources
+                            </div>
+					  <</if>>
+				  </td>
+			  </tr>
+		  </table>
+	  </div>
+	<</capture>>
+<</for>>
+
+<style>
+    #base-management {
+        display: flex;
+    }
+
+    #base-management > div {
+        background-color: #5b5b5b;
+        margin: 10px;
+        box-shadow: 5px 5px 5px #000;
+        padding: 10px;
+        max-width: 200px;
+    }
+
+    #base-management .green {
+        color: green;
+    }
+
+    #base-management .red {
+        color: red;
+    }
+
+    .base-building-img img {
+        width: 100px;
+    }
+
+    .base-management-building-item {
+        background: #5b5b5b;
+        box-shadow: 5px 5px 5px #000;
+        padding: 5px;
+        font-size: 11px;
+    }
+
+    .base-management-building-item td {
+        padding: 5px;
+    }
+</style>

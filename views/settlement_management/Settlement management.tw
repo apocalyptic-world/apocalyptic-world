@@ -25,7 +25,15 @@
         title: 'Family tree'
     }, 
 ];>>
-<<set _currentTab = $game.managementTab ?? 'info'>>
+<<set _defaultTab = 'info'>>
+<<if $player.quests.base_building || true>>
+    <<run _tabs.unshift({
+        name: 'Base management',
+        title: 'Base'
+    })>>
+    <<set _defaultTab = 'Base'>>
+<</if>>
+<<set _currentTab = $game.managementTab ?? _defaultTab>>
 <ul class="tab">
     <<for _tabKey, _tab range _tabs>>
         <<capture _tab>>
