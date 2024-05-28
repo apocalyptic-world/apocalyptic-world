@@ -25,8 +25,8 @@ setup.automatization = {
             description: 'Hunter with no bow works as a woodcutter; Might get an axe instead.'
         },
         streetworker: {
-            name: 'Street workers need rest',
-            description: 'Very unhappy, sad street workers takes a day off by themselves'
+            name: 'Sex workers need rest',
+            description: 'Very unhappy, sad street & nightclub workers takes a day off by themselves'
         },
 
         buttplug: {
@@ -60,8 +60,9 @@ setup.automatization = {
         kitchen: [],
         maid: [],
         mistress: [],
+        nightclub: [],
         none: [],
-        scavenging: ['knife'],
+        scavenging: ['knife', 'body_armor'],
         shop: [],
         streets: ['knife'],
         mc: ['knife', 'bow', 'gas_mask', 'axe', 'body_armor'],

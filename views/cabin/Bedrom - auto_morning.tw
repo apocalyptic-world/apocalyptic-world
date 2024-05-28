@@ -38,7 +38,7 @@
         <<set _outDupItems = []>>
         <<set _outMinusItems = []>>
 
-        <<if _ruleStreetworker && _job === 'streets' && setup.getNpcHappyLevel(_npc) === 'very_sad' && (typeof _npc.rest === 'undefined')>>
+        <<if _ruleStreetworker && ['streets', 'nightclub'].includes(_job) && setup.getNpcHappyLevel(_npc) === 'very_sad' && (typeof _npc.rest === 'undefined')>>
             <<set _npc.rest = {
 				days: 2,
 				desc: 'Day off resting',

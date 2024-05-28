@@ -16,7 +16,8 @@
 
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 <<set _garden =   ($game.location.greenhouse ?? false) ? 'greenhouse' : 'garden' >>
-<<set _percentTax = !$characters.dom.quests.accepted_deal ? 80 : 40>>
+<<set _percentTaxStreet = !$characters.dom.quests.accepted_deal ? 80 : 40>>
+<<set _percentTaxNightclub = 50>>
 
 <<set _settlementStatsData = {
 	work: {},
@@ -28,7 +29,7 @@
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
 	scav: 0,
-	streets: 0, streets_die: 0,
+	streets: 0, streets_die: 0, nightclub: 0,
 	wood: 0,
 	birthday: [],
 	pregnant: 0
@@ -81,10 +82,19 @@
 			<<set _money = Math.max(1, _money / 3)>>
 		<</if>>
 		<<set _money = parseInt(_money)>>
-		<<set _money = Math.round(_money*(100-_percentTax)/100)>>
+		<<set _money = Math.round(_money*(100-_percentTaxStreet)/100)>>
 
 		<<set _settlementStatsData.streets += _money * _chanceMoney/100>>
 		<<set _settlementStatsData.streets_die += _chanceDeath>>
+	<<elseif _job === 'nightclub'>>
+		<<set _money =  (_statsNpc.gender == 0 ? 7 : _statsNpc.gender == 2 ? 5 : 3)>>
+		<<set _money *= (_statsNpc.traits ?? []).includes('nymphomaniac') ? 2 : 1>>
+		<<set _chanceMoney = 100>>
+		<<set _money += Math.round((_statsNpc.sub ?? 0)/25)>>
+		<<set _money = parseInt(_money)>>
+		<<set _money = Math.round(_money*(100-_percentTaxNightclub)/100)>>
+
+		<<set _settlementStatsData.nightclub += _money>>
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
@@ -144,6 +154,8 @@
 <<set _streets_die = _settlementStatsData.streets_die>>
 <<set _streets_die_fraction = setup.ppFraction(_streets_die, 2)>>
 <<set _streetsText =  (_streets > 0 ? 'Average earnings/day: ' + _streets : '') + (_streets_die > 0 ? '; Average deaths/day: ' + _streets_die_fraction + ' %': '')>>
+<<set _nightclub = _settlementStatsData.nightclub.toFixed(1)>>
+<<set _nightclubText = (!$player?.quests?.gloryholeJob ? '(Make a deal with the glory hole manager first)' : '') + (_nightclub > 0 ? 'Average earnings/day: ' + _nightclub : '')>>
 
 <table class="mc-stats-table">
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
@@ -155,6 +167,7 @@
 	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
+	<tr><td>Working in nightclub:</td><td><<=_settlementStatsData.work.nightclub ?? 0>></td><td><<=_nightclubText>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td><<=_avgWolf>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>

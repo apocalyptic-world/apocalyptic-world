@@ -1,8 +1,7 @@
 :: Settlement management - street_workers [management include]
 
-<h1>Workers</h1>
+<h1>Sex workers</h1>
 
-Working the streets or a nightclub is unhappy work. One needs a day off now and then.
 <br/><br/>
 
 <<set _workersByHappyLvl = {
@@ -40,8 +39,8 @@ Working the streets or a nightclub is unhappy work. One needs a day off now and 
                 <<capture _npcs>>
                     <tr>
                         <td><<happyIcon _happyLevel>></td>
-                        <td>_happyLvlHuman[_happyLevel] _persons</td>
-                        <td/><td/>
+                        <td colspan="2">_happyLvlHuman[_happyLevel] _persons</td>
+                        <td></td>
                         <td align="right">
                             <table><tr><td>
                                 <<button 'Work!'>>
@@ -75,14 +74,14 @@ Working the streets or a nightclub is unhappy work. One needs a day off now and 
                                 <<set _statusId = 'status_' + $tmpGirl.id>>
                                 <div @id="_statusId">
                                     <<if def $tmpGirl.rest>>
-                                        ... has a day off
+                                        ... has a day off (<<=$tmpGirl.assignedTo>>)
                                     <<else>>
                                         ... is working (<<=$tmpGirl.assignedTo>>)
                                     <</if>>
                                 </div>
                             </td>
 
-                            <td>
+                            <td align="right">
                                 <<set _restId = 'rest_' + $tmpGirl.id>>
                                 <<set _workId = 'work_' + $tmpGirl.id>>
                                 <<if def $tmpGirl.rest>>
