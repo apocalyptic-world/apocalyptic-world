@@ -1,8 +1,8 @@
 :: Settlement management - street_workers [management include]
 
-<h1>Street workers</h1>
+<h1>Workers</h1>
 
-Working the streets is a unhappy work. Needs a day off now and then.
+Working the streets or a nightclub is unhappy work. One needs a day off now and then.
 <br/><br/>
 
 <<set _workersByHappyLvl = {
@@ -14,7 +14,7 @@ Working the streets is a unhappy work. Needs a day off now and then.
 }>>
 <<set _workers = {
     slaves: setup.getNpcsForLocation($slaves, 'streets'),
-    guests: setup.getNpcsForLocation($guests, 'streets'),
+    guests: setup.getNpcsForLocations($guests, ['streets', 'nightclub']),
 }>>
 
 
@@ -77,7 +77,7 @@ Working the streets is a unhappy work. Needs a day off now and then.
                                     <<if def $tmpGirl.rest>>
                                         ... has a day off
                                     <<else>>
-                                        ... is working
+                                        ... is working (<<=$tmpGirl.assignedTo>>)
                                     <</if>>
                                 </div>
                             </td>

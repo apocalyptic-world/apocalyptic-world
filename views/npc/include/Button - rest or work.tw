@@ -1,16 +1,12 @@
 :: Button - rest or work [include]
 
 /* using $tmpgirl */
-<<if $tmpGirl.assignedTo === 'streets'>>
+<<if ['streets', 'nightclub'].includes($tmpGirl.assignedTo)>>
 	<<set _isRest = (typeof $tmpGirl.rest !== 'undefined')>>
-	<<if $tmpGirl.assignedTo === 'streets'>>
-		<<if _isRest>>
-			<<set _restDisplay='block', _workDisplay='none'>>
-		<<else>>
-			<<set _restDisplay='none', _workDisplay='block'>>
-		<</if>>
+	<<if _isRest>>
+		<<set _restDisplay='block', _workDisplay='none'>>
 	<<else>>
-		<<set _restDisplay='none', _workstyle='none'>>
+		<<set _restDisplay='none', _workDisplay='block'>>
 	<</if>>
 	<div id="optrest" @style="'display:' + _restDisplay">
 		<<link 'Enough rest! - Back to work'>>

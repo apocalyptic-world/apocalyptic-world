@@ -1,24 +1,12 @@
 :: NPC customize - portrait [girlview no-redirect]
 
 <<set _portraits = {
-    asian: {
-		black: setup.range(1, 5)
-	},
-	white:{
-		black:		setup.range(1, 5),
-		blonde:		setup.range(1, 5),
-		brun:		setup.range(1, 5),
-		red:		setup.range(1, 5)
-	},
-	latina:{
-		black:		setup.range(1, 5),
-		blonde:		setup.range(1, 5),
-		brun:		setup.range(1, 5),
-		red:		setup.range(1, 5)
-	}
+    asian: setup.range(1, 5),
+    black: setup.range(1, 5),
+	white: setup.range(1, 20),
+    latina: setup.range(1, 5)
 }>>
-<<set _hair = ($tmpGirl.hair === 'brown' ? 'brun' : $tmpGirl.hair ?? '')>>
-<<set _availablePortraits = ((_portraits[$tmpGirl.race] ?? {})[_hair] ?? [])>>
+<<set _availablePortraits = (_portraits[$tmpGirl.race] ?? [])>>
 <div id="custom_portraits">
     <div class="custom_portrait_item">
             <div class="custom_portrait_item_img">
@@ -38,11 +26,30 @@
                 <</link>>
             </div>
 	</div>
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            Use your custom image.
+            <br />
+            Need to add full link to the image, with starting http protocol.
+            <br />
+            Ratio: [1:1]
+            <br /><br />
+            <<set _customValue = (($tmpGirl.portrait ?? '').includes('http') ? $tmpGirl.portrait : '')>>
+            <<textbox '_portraitUrl' _customValue>>
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<set $tmpGirl.portrait = _portraitUrl>>
+                <<dialogclose>>
+                <<goto `passage()`>>
+            <</link>>
+        </div>
+    </div>
     <<for _key = 1; _key <= _availablePortraits.length; _key++>>
         <<capture _key, _portraitUrl>>
             <div class="custom_portrait_item">
                 <div class="custom_portrait_item_img">
-                    <<set _portraitUrl = $tmpGirl.race + "/hair_" + _hair + "/" + _key + ".png">>
+                    <<set _portraitUrl = $tmpGirl.race + "/" + _key + ".png">>
                     [img[setup.ImagePath+'custom_portraits/female/' +_portraitUrl]]
                 </div>
                 <div class="custom_portrait_item_link">
@@ -80,5 +87,10 @@
 
     .custom_portrait_item_default {
         margin-left: 42px;
+    }
+
+    .custom_portrait_item_img input {
+        width: 100%;
+        min-width: auto;
     }
 </style>

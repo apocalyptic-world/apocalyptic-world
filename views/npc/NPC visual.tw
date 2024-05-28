@@ -2,7 +2,11 @@
 
 <<if _girlVisual.portrait && !_ignoreCustomPortrait>>
 	<div class="npc_custom_visual">
-		[img[setup.ImagePath+'custom_portraits/female/' + _girlVisual.portrait]]
+		<<if  _girlVisual.portrait.includes('http')>>
+			[img[_girlVisual.portrait]]
+		<<else>>
+			[img[setup.ImagePath+'custom_portraits/female/' + _girlVisual.portrait]]
+		<</if>>
 	</div>
 <<else>>
 	<<set _visualType = ''>>

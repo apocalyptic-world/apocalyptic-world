@@ -30,6 +30,10 @@
 	<br /><br />
 	<strong>Pregnancy terminated</strong>
 	<<run delete $tmpGirl.pregnancy>>
+	<<if setup.percentageChance(20) && ($tmpGirl.traits ?? []).includes('infertile')>>
+		<strong><<=setup.displayName($tmpGirl)>> received infertile trait!</strong>
+		<br /><br />
+	<</if>>
 <</if>>
 
 <br /><br />

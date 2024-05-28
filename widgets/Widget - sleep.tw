@@ -214,31 +214,7 @@
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
 					<</if>>
-					<<if $slaves[_i].gender == 0>>				
-						<<set _moneyEarned = randomInteger(4, 8)>>
-					<<elseif $slaves[_i].gender == 2>>				
-						<<set _moneyEarned = randomInteger(2, 6)>>
-					<<else>>	
-						<<set _moneyEarned = randomInteger(0, 4)>>
-					<</if>>
-					<<if ($slaves[_i].traits ?? []).includes('nymphomaniac')>>
-						<<set _moneyEarned = _moneyEarned * 2>>
-					<</if>>
-					<<set _moneyEarnedTax = 80>>
-					<<if $characters.dom.quests.accepted_deal>>
-						<<set _moneyEarnedTax = 40>>
-					<</if>>
-					<<set _moneyEarned += Math.round($slaves[_i].sub / 25, 0)>>
-					<<if typeof $slaves[_i].pussy !== 'undefined'>>
-						<<set _moneyEarned += Math.round($slaves[_i].pussy / 25, 0)>>
-					<</if>>
-					<<set _moneyEarned += Math.round($slaves[_i].anal / 25, 0)>>
-					<<if _npc.chastityBelt>>
-						<<set _moneyEarned = Math.max(1, _moneyEarned / 3)>>
-					<</if>>
-					<<set _moneyEarned = parseInt(_moneyEarned)>>
-					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
-
+					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($slaves[_i].name + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
@@ -467,31 +443,7 @@
 					<<if !_npc.chastityBelt>>
 						<<set _npc.virgin = false>>
 					<</if>>
-					<<if $guests[_guestI].gender == 0>>
-						<<set _moneyEarned = randomInteger(4, 8)>>
-					<<elseif $guests[_guestI].gender == 2>>			
-						<<set _moneyEarned = randomInteger(2, 6)>>
-					<<else>>
-						<<set _moneyEarned = randomInteger(0, 4)>>
-					<</if>>
-					<<if ($guests[_guestI].traits ?? []).includes('nymphomaniac')>>
-						<<set _moneyEarned = _moneyEarned * 2>>
-					<</if>>
-					<<set _moneyEarnedTax = 80>>
-					<<if $characters.dom.quests.accepted_deal>>
-						<<set _moneyEarnedTax = 40>>
-					<</if>>
-					<<set _moneyEarned += Math.round($guests[_guestI].sub / 25, 0)>>
-					<<if typeof $guests[_guestI].pussy !== 'undefined'>>
-						<<set _moneyEarned += Math.round($guests[_guestI].pussy / 25, 0)>>
-					<</if>>
-					<<set _moneyEarned += Math.round($guests[_guestI].anal / 25, 0)>>
-
-					<<if _npc.chastityBelt>>
-						<<set _moneyEarned = Math.max(1, _moneyEarned / 3)>>
-					<</if>>
-					<<set _moneyEarned = parseInt(_moneyEarned)>>
-					<<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
+					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 					<<set $morningMessages.main.push($guests[_guestI].name + ' had a client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps')>>
