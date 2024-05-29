@@ -6,7 +6,6 @@
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
 
 <<set _isMasochist = ($tmpGirl.traits ?? []).includes('masochist')>>
-
 <<set _relStats = 1>>
 <<set _subStats = 1>>
 <<set _punishView = 'punish'>>
@@ -21,6 +20,12 @@
 	>>
 <<elseif $punishType === 'beat'>>
 	<<set _punishView = _punishView + '_hit'>>
+<<elseif $punishType === 'piss'>>
+	<<set 
+		_relStats = 2,
+		_subStats = 2,
+		_punishView = _punishView + '_piss'
+	>>
 <</if>>
 
 <<set _relChanged = true, _subChanged = true>>
@@ -49,7 +54,11 @@
 	<<energy -10>>
 
 	<br /><br />
-	<<if $punishType == 'beat'>>
+	<<if $punishType == 'piss'>>
+		<strong>
+			You pull out your dick and start to piss all over <<=setup.displayName($tmpGirl)>> face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied up. She tries to turn away and close her eyes.
+		</strong>
+	<<elseif $punishType == 'beat'>>
 		<strong>
 			You've properly swung a few times and punched <<=setup.displayName($tmpGirl)>> right in the face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied to a chair, but after a few punches, it seems like <<=_heOrShe>>'s slowly starting to give in.
 		</strong>
@@ -94,6 +103,12 @@
 			<</link>>
 		<</if>>
   <</if>>
+  	<<if [0, 1].includes($tmpGirl.gender)>>
+		<<link 'Piss on her'>>
+			<<set $punishType = 'piss'>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
 <</if>>
 
 <<link 'Back'>>
