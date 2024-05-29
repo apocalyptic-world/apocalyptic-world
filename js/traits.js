@@ -35,7 +35,7 @@ setup.traits = {
     },
     infertile: {
         title: "Infertile",
-        description: "Can't have kids"
+        description: "Can't have children"
     }
 };
 

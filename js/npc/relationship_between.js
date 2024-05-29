@@ -72,6 +72,6 @@ setup.relationshipBetween = {
         }
 
         let end = Date.now() - start;
-        console.log("Relationships run: " + end + " milliseconds");
+        //console.log("Relationships run: " + end + " milliseconds");
     }
 };
