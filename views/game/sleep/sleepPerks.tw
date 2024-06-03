@@ -6,19 +6,19 @@
             <<set _item = 'bandage'>>
             <<set _totals[_item] ??= 0>>
             <<if _hasDoctor>>
-                <<set $morningMessages.main.push(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon.')>>
+                <<run setup.sleepMessages.addMain(either(setup.getDoctors()).name + ' stops your bleeding and saves your bacon.')>>
                 <<run delete $player.perks[_playerPerk]>>
                 <<continue>>
             <<elseif $storage.has(_item, 1)>>
                 <<set _totals[_item]-->>
                 <<drop $storage _item 1>>
-                <<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
+                <<run setup.sleepMessages.addMain('A bandage in the nick of time has stopped you for bleeding out.')>>
                 <<run delete $player.perks[_playerPerk]>>
                 <<continue>>
             <<elseif $backpack.has(_item, 1)>>
                 <<set _totals[_item]-->>
                 <<drop $backpack _item 1>>
-                <<set $morningMessages.main.push('A bandage in the nick of time has stopped you for bleeding out.')>>
+                <<run setup.sleepMessages.addMain('A bandage in the nick of time has stopped you for bleeding out.')>>
                 <<run delete $player.perks[_playerPerk]>>
                 <<continue>>
             <</if>>
@@ -31,7 +31,7 @@
             <<continue>>
         <</if>>
         <<if _playerPerk === 'bleeding'>>
-        <<set $morningMessages.main.unshift('<span class="starving">You are bleeding!</span>')>>
+        <<run setup.sleepMessages.addMain(<span class="starving">You are bleeding!</span>)>>
         <</if>>
         <<if _playerPerk === 'beaten'>>
             <<set $player.energy -= 50>>

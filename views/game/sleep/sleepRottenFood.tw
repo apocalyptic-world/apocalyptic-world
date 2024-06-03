@@ -8,7 +8,7 @@
             desc: 'Food poisoning',
             id: 'food_poisoning'
         }>>
-        <<set $morningMessages.main.push($guests[_rottenFoodId].name + ' got sick with food poisoning.')>>
+        <<run setup.sleepMessages.addMain($guests[_rottenFoodId].name + ' got sick with food poisoning.')>>
     <</for>>
     <<set _foodRottenSlaves = setup.getRandomPersonIds($slaves, randomInteger(1,3))>>
     <<for _rottenFoodKey, _rottenFoodId range _foodRottenSlaves>>
@@ -17,7 +17,7 @@
             desc: 'Food poisoning',
             id: 'food_poisoning'
         }>>
-        <<set $morningMessages.main.push($slaves[_rottenFoodId].name + ' got sick with food poisoning.')>>
+        <<run setup.sleepMessages.addMain($slaves[_rottenFoodId].name + ' got sick with food poisoning.')>>
     <</for>>
     <<run delete $game.foodRotten>>
 <</if>>

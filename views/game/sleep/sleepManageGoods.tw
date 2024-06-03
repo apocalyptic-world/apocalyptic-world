@@ -11,7 +11,7 @@
                     <<if $player.money >= _totalPrice>>
                         <<pickup $storage _manageGoodsName _amount>>
                         <<set $player.money -= _totalPrice>>
-                        <<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+                        <<run setup.sleepMessages.addShop(setup.displayName(_shopKeeper) + ' managed to buy ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
                     <</if>>
                 <</if>>
             <</if>>
@@ -20,7 +20,7 @@
                     <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
                     <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
                     <<set $player.money += _totalPrice>>
-                    <<set $morningMessages.shop.push(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
+                    <<run setup.sleepMessages.addShop(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
                 <</if>>
             <</if>>
         <</for>>

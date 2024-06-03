@@ -21,7 +21,8 @@ Then, it began.
  clothing strained against the sudden growth. You watched in awe as <<=setup.pronounceWhat($tmpGirl)>> transformed before your eyes. In a matter of moments, the room seemed to shrink around the figure now standing taller and stronger.
 <br /><br />
 
-<<set _randomGrowthYears = randomInteger(8, 10)>>
+<<set _randomGrowthYears = $yearsGrow ?? 8>>
+
 <<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - _randomGrowthYears)>>
 <<set _ageEnd = setup.getAge($tmpGirl)>>
 <<if _ageEnd <  18>>
@@ -33,7 +34,7 @@ Then, it began.
 	[img[setup.ImagePath+'places/cabin/growth_potion_' + _endImg + '.jpg']]
 </center>
 <br /><br />
-<strong><<=setup.displayName($tmpGirl)>> grew <<=_randomGrowthYears>> years.</strong>
+<strong><<=setup.displayName($tmpGirl)>> grew <<=_randomGrowthYears>> year<<=_randomGrowthYears > 1 ? 's' : ''>>.</strong>
 <br /><br />
 <<if _ageStart < 18 && _ageEnd >= 18>>
 	<<set _isAdult = true>>
@@ -41,6 +42,7 @@ Then, it began.
 	<br /><br />
 <</if>>
 <<link 'Leave'>>
+	<<unset $yearsGrow>>
 	<<if _isAdult>>
 		<<if typeof $childId !== 'undefined'>>
 			<<run $guests.push($tmpGirl)>>

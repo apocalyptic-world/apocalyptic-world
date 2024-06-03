@@ -18,27 +18,31 @@
 		You wake up fully rested and ready to conquer the world.
 	<</if>>
 	<br /><br />
-	<<if ($morningMessages?.main.length + $morningMessages?.shop.length) >= 8>>
+	<<set _messagesCount = setup.sleepMessages.count()>>
+	<<if _messagesCount >= 8>>
 		<<link 'Wake up'>>
 			<<wakeUp>>
 		<</link>>
 	<</if>>
-	<<if $morningMessages?.main.length > 0 || $morningMessages?.shop.length > 0>>
+	<<if _messagesCount>>
 		<h3>Some things have happened</h3>
 		<br />
 		<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
-			<<if _morningMessages.length>>
-			  <div @class="'morning-messages ' + _morningMessagesType + ''">
-			  	<fieldset>
-					<legend><<=_morningMessageType>> (<<=_morningMessages.length>>)</legend>
-				  <<for _i to 0; _i lt _morningMessages.length; _i++>>
-					  <div class="morning-message">
-						  <<print _morningMessages[_i]>>
-					  </div>
-				  <</for>>
-				</fieldset>
-			  </div>
-			<</if>>
+			<<for _morningMessageSubType, _morningMessagesSub range _morningMessages>>
+				<<run console.log(_morningMessagesSub)>>
+				<<if _morningMessagesSub.length>>
+				<div @class="'morning-messages ' + _morningMessagesType + ''">
+					<fieldset>
+						<legend><<=_morningMessageType>> <<=(_morningMessageSubType ? '(' + _morningMessageSubType + ')' : '')>> (<<=_morningMessagesSub.length>>)</legend>
+					<<for _i to 0; _i lt _morningMessagesSub.length; _i++>>
+						<div class="morning-message">
+							<<print _morningMessagesSub[_i]>>
+						</div>
+					<</for>>
+					</fieldset>
+				</div>
+				<</if>>
+			<</for>>
 		<</for>>
 	<</if>>
 	<<unset $morningMessages>>
