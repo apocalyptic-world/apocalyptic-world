@@ -211,7 +211,7 @@
 					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
-					<<run setup.sleepMessages.addJob(_npc + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps')>>
 				
 					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom') && !_npc.chastityBelt>>
 						<<set $slaves[_i].pregnancy = 0>>
