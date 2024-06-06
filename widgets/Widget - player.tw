@@ -98,6 +98,11 @@
 		<<set _compKey = _comp.split(':')>>
 		<<capture _comp, _compKey>>
 			<<set _girlVisual = setup.companionGet(_comp)>>
+			<<if !_girlVisual>>
+				<<run delete $player.companions[_comp]>>
+				<<run console.log('Companion not found. Removed')>>
+				<<continue>>
+			<</if>>
 			<<capture _girlVisual>>
 				<div class="companion tooltip" @data-id="_girlVisual.id" @title="'' + _girlVisual.name + ''">
 					<div class="girl_info_picture">
