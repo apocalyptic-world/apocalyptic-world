@@ -5,7 +5,6 @@ setup.neganQuest2HaveGirls = function()
         var _npc = setup.companionGet(_companionId);
         if (!_npc.gender && _npc.beauty >= 80 && _npc.hair === 'blonde') {
             girlIds.push(_companionId)
-            console.log(girlIds);
         }
     }
 

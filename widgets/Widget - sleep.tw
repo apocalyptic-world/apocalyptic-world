@@ -3,7 +3,9 @@
 	<<set _t0 = performance.now()>>
 	<<run setup.sleepMessages.init()>>
 	<<include 'Bedrom - auto_morning'>>
-	<<run setup.sleepMessages.messages.rules = _outputAutoList>>
+	<<if _outputAutoList>>
+		<<run setup.sleepMessages.messages.rules = [_outputAutoList]>>
+	<</if>>
 	<<set $game.sickPeople = []>>
 	<<run delete $tmpGirlViewBack>>
 	<<run delete $tmpGirlBack>>

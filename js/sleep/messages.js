@@ -40,7 +40,7 @@ setup.sleepMessages = {
     {
         let count = 0;
         for (let _messageType in setup.sleepMessages.messages) {
-            count += Object.keys(setup.sleepMessages.messages[_messageType]).length;
+            count += Object.keys(setup.sleepMessages.messages[_messageType] ?? {}).length;
         }
         
         return count;

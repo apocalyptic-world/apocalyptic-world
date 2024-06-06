@@ -28,8 +28,7 @@
 		<h3>Some things have happened</h3>
 		<br />
 		<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
-			<<for _morningMessageSubType, _morningMessagesSub range _morningMessages>>
-				<<run console.log(_morningMessagesSub)>>
+			<<for _morningMessageSubType, _morningMessagesSub range _morningMessages ?? {}>>
 				<<if _morningMessagesSub.length>>
 				<div @class="'morning-messages ' + _morningMessagesType + ''">
 					<fieldset>

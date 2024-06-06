@@ -79,7 +79,6 @@
 							  <<set _needtxt = ''>>
 							  <<if _hasCount < _reqCount>>
 								  <<set _itemHasResources = false>>
-                                  <<run console.log(_reqKey)>>
 								  <<set _needtxt = '(missing ' + (_reqCount - _hasCount) +  ')'>>
 							  <</if>>
 							  <span><<=_reqCount>> <<=Item.get(_reqKey).name>> _needtxt</span><br />
@@ -103,7 +102,6 @@
                                     <<run setup.cabinInventory.drop(_reqKey, _reqCount)>>
 								<</capture>>
 							<</for>>
-                            <<run console.log(_baseBuilding)>>
 							<<run _baseBuilding.after()>>
 							<<goto _baseBuilding.goto>>
 						<</link>>
