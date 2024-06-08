@@ -163,7 +163,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<goto 'Guesthouse [Event] - transfemale on transfemale'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
-		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && !setup.family.isBloodToMc($guests[_npcId])>>
+		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && !setup.family.isBloodToMC($guests[_npcId])>>
 			<<set $locationEvents.guesthouse = true>>
 			<<set $tmpEvent = {
 				id: setup.getRandomElement(_virginList[0])
