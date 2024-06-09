@@ -200,7 +200,7 @@
 			<</if>>
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
 				<<set _totals['streetworker'] = (_totals['streetworker'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addJob(_npc + ' <strong class="iitem">was found dead</strong> in the streets...', 'streets')>>
+				<<run setup.sleepMessages.addJob(_npc.name + ' <strong class="iitem">was found dead</strong> in the streets...', 'streets')>>
 				<<set $slaves.splice(_i, 1)>>
 				<<set _i-->>
 				<<continue>>
