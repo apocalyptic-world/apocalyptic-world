@@ -37,7 +37,7 @@ Another note! Since the game is a work-in-progress with new versions all the tim
 ]>>
 <<set _catTitle = {
     food:     'Food for eating',
-    crafting: 'Materials for building & crafting in workbench',
+    crafting: 'Materials for building & crafting in workbench and garage',
     fabric:   'Fabric',
     potion:   'Pharmacy; materials & finished products',
     tool:     'Tools, weapons & equipment',
@@ -96,13 +96,17 @@ Another note! Since the game is a work-in-progress with new versions all the tim
 <</button>>Important skills and traits</h2>
 <div id="skills" style="display:none;">
 <dl>
-    <dt>Cook      </dt><dd>Decreases chance of rotten food. <span style="color: green">Learnable</span>. Useable only in kitchen assignment</dd>
-    <dt>Doctor    </dt><dd>Decreases chance of miscarriage, treats knife wounds and reduces sickdays. <span style="color: red">Not learnable</span>. Any guest with doctor skill will step in as doctor when needed.</dd>
-    <dt>Gardener  </dt><dd>Gives bonus food while assigned to garden/greenhouse. <span style="color: green">Learnable</span></dd>
-    <dt>Sadistic  </dt><dd>Not a skill but a trait. A must for the mistress job. <span style="color: red">Not learnable</span>?</dd>
-    <dt>Scavenger </dt><dd>More likely to find stuff, and less likely to get into trouble. <span style="color: green">Learnable</span></dd>
-    <dt>Shopkeeper</dt><dd>Can work in shop and manage your goods. <span style="color: red">Not learnable</span></dd>
-    <dt>Woodcraft </dt><dd>Can gather more wood. <span style="color: green">Learnable</span>. Required for the hunters</dd>
+<<set _skills = setup.help.skills()>>
+<<for _skillID range Object.keys(_skills).sort()>>
+    <<set _skill = _skills[_skillID]>>
+    <<set _name = _skill.name, _desc = _skill.desc>>
+    <<set _learn = 
+            typeof _skill.learnable === 'undefined' ? '<span style="color: yellow">(Learnable ?)</span>.' : 
+            _skill.learnable ? '<span style="color: green">Learnable</span>.' : 
+            '<span style="color: red">Not learnable</span>.'>>
+    <<set _xtra = _skill.xtra ?? ''>>
+    <dt><<=_name>></dt><dd><<=_desc>> <<=_learn>> <<=_xtra>></dd>
+<</for>>
 </dl>
 <br /><hr /><br />
 </div>
@@ -222,7 +226,7 @@ Guests can work in any job.
             <li>Being female</li>
             <li>Deal with Dom for protection & lower taxes</li>
             <li>High strength or a deal with Dom for protection and a knife for survival</li>
-            <li>Being a nymphomaniac, having a high submission and being trained in using body orifices for pleasure pays more.</li> 
+            <li>Being a nymphomaniac, having a high submission, being beautiful and/or being trained in using body orifices for pleasure pays more.</li> 
             /*<li>Beauty, submission and other sexual traits pays more</li>*/
           </ul>
         </td>
