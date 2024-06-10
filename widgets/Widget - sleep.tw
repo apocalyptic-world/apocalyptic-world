@@ -276,6 +276,7 @@
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
+				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
 				<<run setup.sleepMessages.addMain(_npc + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage.</strong>')>>
 				<<set $slaves[_i].happy -= 20>>
 				<<set $slaves[_i].relationship -= 10>>
@@ -303,7 +304,7 @@
 		<</if>>
 		// Resting
 		<<if  _isRest>>
-			<<if $slaves[_i].assignedTo === 'streets'>>
+			<<if ['streets', 'nightclub'].includes($slaves[_i].assignedTo)>>
 				<<setNpcStats slave _i happy +5>>
 			<</if>>
 			<<set $slaves[_i].rest.days-->>
@@ -638,6 +639,7 @@
 			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
 			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
+				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
 				<<run setup.sleepMessages.addMain(_npc.name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage</strong>')>>
 				<<set $guests[_guestI].happy -= 20>>
 				<<set $guests[_guestI].relationship -= 10>>
@@ -691,7 +693,7 @@
 		<</if>>
 		// Resting
 		<<if _isRest>>
-			<<if $guests[_guestI].assignedTo === 'streets'>>
+			<<if ['streets', 'nightclub'].includes($guests[_guestI].assignedTo)>>
 				<<setNpcStats guest _guestI happy +5>>
 			<</if>>
 			<<set $guests[_guestI].rest.days-->>
