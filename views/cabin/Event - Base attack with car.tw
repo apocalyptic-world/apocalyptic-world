@@ -1,0 +1,62 @@
+:: Event - Base attack with car 
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_base_attack_car.jpg']]
+</center>
+<<set _guards = setup.getPersonsForLocation($guests, 'guard')>>
+<<set _allyCount = _guards.length + Object.keys($player.companions).length>>
+<<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
+<<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
+<br /><br />
+As you step outside, the cool evening breeze brushes against your face, carrying with it a faint, unfamiliar scent. 
+The tranquility is abruptly shattered by the sound of metal clanging against metal. 
+The source of the noise becomes apparent as you approach the gate: a rusty, battered car parked just outside, and a group of grim-looking men standing in front of it, 
+banging on the door with their fists and the butts of their knives.
+<br /><br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    Well, look what we have here. Nice place you got. Shame if something happened to it.
+<</sayNpc>>
+<br />
+He gestures to his companions, each one armed with an assortment of knives and makeshift weapons, their faces hidden behind makeshift masks. The tension is palpable as they spread out, ensuring you understand the seriousness of the situation.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    Here's the deal. You either pay us 500 caps as a toll for... protection, or we take whatever we like. And trust me, you don't want that.
+<</sayNpc>>
+<br />
+In front of you are standing <strong>10 guys, all holding knives</strong> in their hands.
+<br /><br />
+<<generateEnemies 8 0 8>>
+<<for _enemyI = 0; _enemyI < $enemies.length; _enemyI++ >>
+    <<set $enemies[_enemyI].strength += randomInteger(50, 130)>>
+    <<set $enemies[_enemyI].endurace += randomInteger(50, 130)>>
+<</for>>
+<<set $enemies[2].inventory.car_part = 1>>
+
+<div id="option_fight">
+    <<link 'Fight them'>>
+        <<set _guards = setup.getPersonsForLocation($guests, 'guard')>>
+		<<fight $enemies 'Wood cabin' 'Event - Base attack with car - lost' false _guards>>
+        <<set $fight.skipEndingLost = true>>
+	<</link>>
+</div>
+<<if $player.money >= 500>>
+    <div id="option_pay">
+        <<linkreplace 'Pay 500 caps'>>
+            <<run $('#option_fight').hide()>>
+            <<run $('#option_leave').show()>>
+            <<set $player.money -= 200>>
+            <<set $player.quests.baseAttackCarDay = $game.day>>
+            You hand over the demanded supplies, losing valuable resources but avoiding immediate conflict.
+            <br /><br />
+            This sets a precedent for future extortion attempts, and you'll need to decide how to handle those.
+            <br /><br />
+        <</linkreplace>>
+    </div>
+<</if>>
+<div id="option_leave" style="display:none">
+    <<link 'Leave'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>
