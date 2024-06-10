@@ -1,0 +1,40 @@
+:: Settlement management buildings  [include]
+<<set _managementBuildings = {
+   solar_panel: {
+		show: true,
+		title: "Solar panel",
+		description: "Connect solar panel to grid. Generates electricity",
+		required: {
+			solar_panel: 1
+		},
+		energy: 20,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.solar_panel ??= 0;
+            $player.baseManagement.buildings.solar_panel++;
+		},
+		goto: "Settlement management",
+        currentCount: true
+	},
+    hospital: {
+		show: !($game.location.hospital ?? false),
+		title: "Hospital",
+		description: "Helps to treat sick people, helps with child birth.",
+		required: {
+           blueprint_hospital: 1,
+           wood: 30,
+           glass: 30,
+           cloth: 20
+		},
+		energy: 50,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.hospital = 1;
+            $game.location.hospital = true;
+            $game.location.youth_district = true;
+		},
+		goto: "Settlement management",
+   }
+}>>

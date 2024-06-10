@@ -1,0 +1,74 @@
+:: Hospital [Place bg-hospital]
+<h1 class="ptitle">HOSPITAL</h1>
+<br />
+
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
+<<if _girlGuest.length > 0 && timeBetween('08:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+	<<set $tmpGirl = $guests[_girlGuest[0]]>>
+	<<set $tmpGirl.location = 'hospital'>>
+	<center>
+		<<actionImage $tmpGirl working>>
+	</center>
+	
+	<<=setup.displayName($tmpGirl)>> is cleaning up one of the bed.
+    <br /><br />
+	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
+	<<link `_girlGuestLink`>>
+        <<set $tmpGirl.location = 'hospital'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $tmpGirlBack = 'Hospital'>>
+		<<set $tmpGirlCapture to false>>
+		<<set $tmpGirlInvite to false>>
+		<<set $tmpGirl.rape to false>>
+		<<set $guestId = _girlGuest[0]>>
+		<<unset $slaveId, $charId, $childId>>
+		<<goto 'NPC view - guest'>>
+	<</link>>
+<</if>>
+
+<table id="slaves">
+	<<for _guestI, _guest range $guests>>
+		<<capture _guestI, _guest>>
+			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
+            <<if !_isSick>>
+                <<continue>>
+            <</if>>
+            <tr>
+				<td style="min-width: 25%">
+					<<if setup.getAge(_guest) < 18>>
+						<span @class="''+_genderClass+''">
+							<<link _guest.name>>
+								<<set $guestId = _guestI>>
+								<<unset $slaveId, $charId, $childId>>
+								<<set $tmpGirl = _guest>>
+								<<set $tmpGirlBack = 'Guest house'>>
+								<<goto 'Child view'>>
+							<</link>>
+						</span>
+					<<else>>
+						<span @class="''+_genderClass+''">
+                            <<=setup.displayName(_guest)>>
+						</span>
+
+						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
+					<</if>>
+				</td>
+				<td>
+					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
+						Beauty: <<=_guest.beauty>>
+					<</if>>
+				</td>
+				<td>
+					Age: <<=setup.getAge(_guest)>>
+				</td>
+				<td>
+					<<if _guest.assignedTo>>
+						(<<=_guest.assignedTo>>)
+				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
+						(companion)
+				 	 <</if>>
+				</td>
+			</tr>
+        <</capture>>
+    <</for>>
+</table>

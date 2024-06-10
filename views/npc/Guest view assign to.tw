@@ -30,6 +30,16 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Gives additional energy while taking a nap)
 	</div>
+<</if>>
+
+<<if !setup.getPersonsForLocation($guests, 'hospital').length && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
+	<div>
+	  <<link 'Assign as doctor'>>
+		  <<assignedTo $tmpGirl 'hospital'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Decreases people sickness days and automatically heals MC if bleeding)
+	</div>
 <</if>> 
 
 <<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>

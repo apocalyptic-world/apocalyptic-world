@@ -36,8 +36,14 @@ setup.getRandomSkills = function (count = 1) {
 };
 
 setup.hasDoctor = function() {
-    for (var i = 0; i < variables().guests.length; i++) {
-        if ((variables().guests[i].skills ?? []).includes('doctor')) {
+    if (!variables()?.game?.location?.hospital) {
+        return false;
+    }
+
+    let guests = variables().guests;
+
+    for (var i = 0; i < guests.length; i++) {
+        if (guests[i].assignedTo === 'hospital') {
             return true;
         }
     }
