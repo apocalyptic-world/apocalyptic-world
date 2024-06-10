@@ -10,6 +10,7 @@
 	<<set $player.hunger = 100>>
 	<<for _companionKey, _companion range $player.companions>>
 		<<set _npc = setup.companionGet(_companionKey)>>
+		<<set _npc.happy += _npc.food < 100 ? 1 : 0>>
 		<<set _npc.food to 100>>
     <</for>>
 	<br /><br />

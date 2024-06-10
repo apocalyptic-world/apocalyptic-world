@@ -220,6 +220,9 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' ) {
         save.state.history[save.state.index].variables.characters.eve.quests ??= {};
         save.state.history[save.state.index].variables.characters.eve.id ??= 'eve';
+        if (variables.characters.eve.id !== 'eve') {
+            variables.characters.eve.id   = 'eve';
+        }
         save.state.history[save.state.index].variables.characters.eve.family ??= { husband: 'rodger'};
         save.state.history[save.state.index].variables.characters.rodger.name ??= 'Rodger';
         save.state.history[save.state.index].variables.characters.rodger.id ??= 'rodger';

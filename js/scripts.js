@@ -503,9 +503,14 @@ setup.getNpcById = function(id) {
     for (var i in variables().characters) {
         if(variables().characters[i].id && variables().characters[i].id === id) {
             return variables().characters[i];
+        } else if (id === i) {
+            // old save sometimes blair.id != 'blair'
+            return variables().characters[id];
+        } else if (variables().characters[i].id === id) {
+            return variables().characters[i];
         }
     }
-
+    
     if (id === 'mc') {
         return variables().player;
     }
@@ -740,6 +745,9 @@ setup.mapKeys2list = function(map) {
     - _item.hasAllTag(tag) <=> setup.includesAll(_item.tags, tags)
 
     Of course these utility functions will work for any arrrays
+
+    My mistake? - manual says function exists...
+    No, old version of simple inventory code
 */
 
 setup.includesAny = function(have, want) {

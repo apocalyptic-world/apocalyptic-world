@@ -76,7 +76,7 @@
     <<run _helpItems.set(_itemID, _helpItem)>>
     <<set _tags = _item.tags>>
 
-    <<if !/no\suse/i.test(_helpItem.desc) && _tags.includes('no_use')>>
+    <<if !/no\suse/i.test(_helpItem.desc) && _item.hasTag('no_use')>>
         <<set _helpItem.desc += '<br />No use for now'>>
     <</if>>
     
@@ -108,8 +108,7 @@
     <<if setup.inventoryManageable[_itemID] ?? false>>
          <<run _helpItem.sources.push('Shopkeeper')>>
     <</if>>  
-    /* <<if _item.hasTag('start_item')>> */
-    <<if _tags.includes('start_item')>>
+    <<if _item.hasTag('start_item')>>
         <<run _helpItem.sources.push('Start item')>>
     <</if>>
     <<if ['breast_pump', 'wedding_ring', 'note3844'].includes(_itemID)>>
@@ -144,42 +143,36 @@
     que:      'Unsorted or new items',
  */
     
-     <<if _tags.includes('food')>>
+    <<if _item.hasTag('food')>>
        <<run _catHelpItems['food'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>
-    /* <<if /building|crafting/i.test(_helpItem.desc) ||
-      _item.hasAnyTag('building', 'crafting') || _crafting.includes(_itemID) >> */
     <<if /building|crafting/i.test(_helpItem.desc) ||
-      setup.includesAny(_tags, ['building', 'crafting', 'part']) || _crafting.includes(_itemID) >>   
+      _item.hasAnyTags('building', 'crafting', 'part') || _crafting.includes(_itemID) >>
         <<run _catHelpItems['crafting'].set(_itemID, _helpItem)>>
         <<set _catCount++>>
     <</if>>
-      <<if _tags.includes('fabric')>>
+    <<if _item.hasTag('fabric')>>
        <<run _catHelpItems['fabric'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>   
-    /* <<if /potion/i.test(_item.name + _helpItem.desc) || _item.hasTag('potion')>>*/
-    <<if /potion/i.test(_item.name + _helpItem.desc) || _tags.includes('potion')>>
+    <<if /potion/i.test(_item.name + _helpItem.desc) || _item.hasTag('potion')>>
        <<run _catHelpItems['potion'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>
-   /* <<if _item.hasAnyTag('tool', 'weapon')>> */
-   <<if setup.includesAny(_tags, ['tool', 'weapon'])>>
+   <<if _item.hasAnyTags('tool', 'weapon')>>
        <<run _catHelpItems['tool'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>
-   <<if (setup.gifts[_itemID] ?? false) || _tags.includes('gift')>>
+   <<if (setup.gifts[_itemID] ?? false) || _item.hasTag('gift')>>
        <<run _catHelpItems['gift'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>
-    /* <<if /quest/i.test(_helpItem.desc) || _item.hasTag('quest')>> */
-    <<if /quest/i.test(_helpItem.desc) || _tags.includes('quest')>>
+    <<if /quest/i.test(_helpItem.desc) || _item.hasTag('quest')>>
        <<run _catHelpItems['quest'].set(_itemID, _helpItem)>>
        <<set _catCount++>>
     <</if>>
-    /* <<if /no\suse/i.test(_helpItem.desc) || _item.hasTag('no_use')>> */
-    <<if /no\suse/i.test(_helpItem.desc) || _tags.includes('no_use')>>
+    <<if /no\suse/i.test(_helpItem.desc) || _item.hasTag('no_use')>>
         <<if !/no\suse/i.test(_helpItem.desc)>>
             <<set _helpItem.desc += '<br />No use for now'>>
         <</if>>
