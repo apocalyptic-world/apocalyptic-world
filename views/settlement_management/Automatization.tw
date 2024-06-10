@@ -5,6 +5,7 @@
 <br/>Things in storage only collects dust so it's better to distribute to settlers that need them. Like bows for hunters, axes to woodcutter & knives to nearly everyone.
 <br/><br/>
 <<set $automatization ??= {}>>
+<<set $auto_help ??= false>>
 <table class="mc-stats-table">
     <<for _dummy, _autoId range Object.keys(setup.automatization.rule)>>
         <<capture _autoId, _auto>>
@@ -14,9 +15,20 @@
                 <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
                 <td><<=_auto.description>></td>
             </tr>
+            <<if $auto_help>>
+                <tr>
+                    <td></td>
+                    <td>_auto.help</td>
+                </tr>
+            <</if>>
         <</capture>>
     <</for>>
 </table>
 
-
+<br/><br/>
+<<set _text = $auto_help ? 'Less info' : 'More info'>>
+<<link _text >>
+    <<set $auto_help = !$auto_help>>
+    <<goto 'Settlement management'>>
+<</link>>
              
