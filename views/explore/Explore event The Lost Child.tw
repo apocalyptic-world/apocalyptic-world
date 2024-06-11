@@ -19,23 +19,29 @@ As you venture through the desolate forest, you suddenly hear a sound—a cry em
 	<br /><br />
 	You notice the child's ragged clothes and unkempt appearance, his vulnerability tugging at your heartstrings
 	<br /><br />
-	<<if $backpack.has('food')>>
-		<<linkreplace 'Give him food'>>
-			<<run $('#option2_desc').hide()>>
-			<<drop $backpack 'food' 1>>
-		   <center>
-			  [img[setup.ImagePath+'places/explore/lost_child2.jpg']]
-		  </center>
-		  	<br /><br />
-			You take out a piece of food and hand it to him. You notice joy in his eyes, and he immediately lunges at the food as if he had never eaten before.
-			<br /><br />
-		<</linkreplace>>
-		<div id="option2_desc">
-			<<linkdesc>>-1 food<</linkdesc>>
-		</div>
-	<</if>>
+	<div id="option_food">
+		<<if $backpack.has('food')>>
+			<<linkreplace 'Give him food'>>
+				<<set _giveFood = true>>
+				<<run $('#option2_desc').hide()>>
+				<<drop $backpack 'food' 1>>
+			<center>
+				[img[setup.ImagePath+'places/explore/lost_child2.jpg']]
+			</center>
+				<br /><br />
+				You take out a piece of food and hand it to him. You notice joy in his eyes, and he immediately lunges at the food as if he had never eaten before.
+				<br /><br />
+			<</linkreplace>>
+			<div id="option2_desc">
+				<<linkdesc>>-1 food<</linkdesc>>
+			</div>
+		<</if>>
+	</div>
 	<div id="option_yes">
 		<<linkreplace 'Help him find his parents'>>
+			<<if !_giveFood>>
+				<<run $('#option_food').hide()>>
+			<</if>>
 			<<addhours 4>>
 			<<run $('#option_no').hide()>>
 				 <center>
@@ -44,6 +50,9 @@ As you venture through the desolate forest, you suddenly hear a sound—a cry em
 			<br /><br />
 			You spend a couple of hours walking together through the quiet forest, trying to coax any information from him about where his parents might be or at least the last place they were all together. After a while, you finally notice a couple in the distance, and he simply rushes towards them, calling out, <strong>"Mom, Dad..."</strong>
 			<br /><br />
+			<<link 'Approach them'>>
+				<<goto 'Explore event: The Lost Child approach parents'>>
+			<</link>>
 			<<link 'Leave'>>
 				<<set $player.goodwill++>>
 				<<goto 'Outside'>>
@@ -64,9 +73,9 @@ As you venture through the desolate forest, you suddenly hear a sound—a cry em
 
 <</linkreplace>>
 <div id="option1">
-  <<link 'Leave'>>
-	  <<goto 'Outside'>>
-  <</link>>
+	<<link 'Leave'>>
+		<<goto 'Outside'>>
+	<</link>>
 </div>
 
 
