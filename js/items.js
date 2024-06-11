@@ -87,6 +87,36 @@ setup.items = {
         }
         return setup.items.shopItems;
     },
+
+    /**
+     * The tag-functions semms to be missing in chapel simple inventory lib version v3.0.0-beta1, 2022-07-25. 
+     * But ok in version v3.0.0, 2024-02-20
+     */
+    simple_inventory_missing: {
+        // tags
+        hasTag: function(tag) {
+            // has the indicated tag, _tags not working
+            return this.tags.includes(tag);
+        },
+
+        hasAllTags: function() {
+            // has all the indicated tags
+            return this.tags.includesAll([].slice.call(arguments).flat(Infinity));
+        },
+
+        hasAnyTags: function() {
+            // has any of the indicated tags
+            return this.tags.includesAny([].slice.call(arguments).flat(Infinity));
+        },
+    },
+    simple_inv_fix: function() {
+        if(!Item.prototype.hasOwnProperty('hasTag')) {
+            /* Item.extendProtype doesn't seem to work either */
+            /*Item.extendProtype(setup.items.simple_inventory_missing); */
+            Item.prototype.hasTag = setup.items.simple_inventory_missing.hasTag;
+            Item.prototype.hasAllTags = setup.items.simple_inventory_missing.hasAllTags;
+            Item.prototype.hasAnyTags = setup.items.simple_inventory_missing.hasAnyTags;
+
+        }
+    },
 };
-
-
