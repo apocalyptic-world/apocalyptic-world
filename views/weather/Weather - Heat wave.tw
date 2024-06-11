@@ -1,0 +1,55 @@
+:: Weather - Heat wave
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+You awaken to an eerie red glow seeping through the cracks in the wooden walls of your cabin. 
+The usual gray of the morning sky has been replaced by a vivid, unsettling crimson. 
+A sense of foreboding fills you as you rise from your bed and move to the door. As soon as you open it, a blast of oppressive heat slams into your face, nearly knocking you back.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/cabin/heat_wave.jpg']]
+</center>
+<<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
+<<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
+<<set _npc = $guests[_randomGuestId[0]]>>
+
+Squinting against the harsh light, you step outside and see <<=setup.displayName(_npc)>>, one of your settlers, rushing toward you. 
+Sweat drips down their forehead, and their face is flushed with the intense heat.
+<br /><br />
+<<if !$player.quests.heatWave>>
+    <<set $player.quests.heatWave = true>>
+    <<sayNpc _npc>>
+        Heat wave... Again... I don't know if some of us will get through it this time...
+    <</sayNpc>>
+<<else>>
+    <<sayNpc _npc>>
+        It's a heat wave. I've never seen anything like it. The sky turned red just before dawn.
+    <</sayNpc>>
+    <br />
+    <<you>>
+        A heat wave? How long is it supposed to last?
+    <</you>>
+    <br />
+    <<sayNpc _npc>>
+        From what the old folks are saying, it could be a few days. Maybe more. This isn’t like the usual heat, though. It happens every few months.
+    <</sayNpc>>
+    <br />
+<</if>>
+<<sayNpc _npc>>
+    The crops in the garden are already starting to wilt.
+<</sayNpc>>
+<br />
+The next few days will be a grueling test of endurance and resourcefulness. The heat is relentless, and the air shimmers with an oppressive intensity.
+<br /><br />
+<strong class="iitem">
+    Your crops won't grow for the period of the heat wave and produce any food.
+</strong>
+<br /><br />
+<<for _guestI, _guest range $guests>>
+    <<set _guest.happy -= randomInteger(40, 60)>>
+<</for>>
+<<for _slaveI, _slave range $slaves>>
+    <<set _slave.happy -= randomInteger(40, 60)>>
+<</for>>
+<<link 'Leave'>>
+    <<goto 'Wood cabin'>>
+<</link>>
