@@ -85,7 +85,8 @@
 			<</if>>
 			<<set _allyHasKnife = setup.npcInventoryHas($fight.allies[_i], 'knife')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
-			<<set _allyStrength = Math.round($fight.allies[_i].strength ?? 5 / 3, 0)>>
+			<<set _allyStrength = Math.round(($fight.allies[_i].strength ?? 5) / 3, 0)>>
+
 			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
 				<<set $fight.enemies[_randomEnemyKey].attacks = []>>
 			<</if>>
@@ -95,7 +96,7 @@
 			<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
-			<</if >>
+			<</if>>
 			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
 			<<if _allyHasKnife>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
@@ -121,7 +122,7 @@
 
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
 		<<if _enemyHasKnife>>
-			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 2, 0) + 20>>
+			<<set $enemyStrength = Math.round(($fight.enemies[_i].strength / 2), 0) + 20>>
 			<<if _isPlayerTarget>>
 				<<if $player.endurance > 0>>
 					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
@@ -175,7 +176,7 @@
 			<<goto 'Fight - won'>>
 		<</if>>
 	<<elseif $fight.hp <= 0>>
-		<<if $fight.skipEnding>>
+		<<if $fight.skipEnding || $fight.skipEndingLost>>
 			<<goto $fight.passageLost>>
 		<<else>>
 			<<goto 'Fight - lost'>>
@@ -236,7 +237,7 @@
 <<widget generateEnemies>>
 	<<set $enemies = []>>
 
-	<<set _knivesLeft = 0>>
+	<<set _knivesLeft = $args[2] ?? 0>>
 	<<if setup.percentageChance(20)>>
 		<<set _knivesLeft++>>
 	<</if>>

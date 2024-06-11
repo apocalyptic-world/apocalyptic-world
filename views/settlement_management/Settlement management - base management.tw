@@ -50,10 +50,15 @@
     </div>
 </div>
 <h2>Buildings</h2>
-<<for _baseBuildingName, _baseBuilding range setup.baseManagement.buildings>>
+<<include 'Settlement management buildings'>>
+<<for _baseBuildingName, _baseBuilding range _managementBuildings>>
     <<set _required to Object.keys(_baseBuilding.required)>>
     <<set _workEnergy = _baseBuilding.energy>>
     <<capture _baseBuildingName, _baseBuilding, _required, _workEnergy>>
+        <<run console.log(_baseBuilding)>>
+        <<if !_baseBuilding.show>>
+            <<continue>>
+        <</if>>
         <<set _itemHasResources = true>>
 	  <div class="base-management-building-item">
 		  <table>

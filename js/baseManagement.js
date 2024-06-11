@@ -1,36 +1,35 @@
 setup.baseManagement = {
-    buildings: {
-        solar_panel: {
-			show: true,
-			title: "Solar panel",
-			description: "Connect solar panel to grid. Generates electricity",
-			required: {
-				solar_panel: 1
-			},
-			energy: 20,
-			after: function() {
-                variables().player.baseManagement ??= {};
-                variables().player.baseManagement.buildings ??= {};
-                variables().player.baseManagement.buildings.solar_panel ??= 0;
-                variables().player.baseManagement.buildings.solar_panel++;
-			},
-			goto: "Settlement management",
-            currentCount: true
-		},
-    },
     electricity: {
         consumption: function ()
         {
-            return 0;
+            let consumption = 0;
+            for (const _building in setup.baseManagement.electricity.list) {
+                if (setup.baseManagement.electricity.list[_building] > 0) {
+                    continue;
+                }
+                consumption += Math.abs(((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]));
+            }
+            return consumption;
         },
         production: function ()
         {
-            return variables().player?.baseManagement?.buildings?.solar_panel ?? 0;
+            let production = 0;
+            for (const _building in setup.baseManagement.electricity.list) {
+                if (setup.baseManagement.electricity.list[_building] < 0) {
+                    continue;
+                }
+                production += ((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
+            }
+            return production;
         },
         total: function ()
         {
             return setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption();
-        }
+        },
+        list: {
+            solar_panel: 1,
+            hospital: -5
+        },
     },
     defense: {
         description: function()
@@ -49,3 +48,4 @@ setup.baseManagement = {
         }
     }
 }
+

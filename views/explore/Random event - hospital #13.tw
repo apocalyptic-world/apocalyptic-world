@@ -15,6 +15,14 @@
  [img[setup.ImagePath+'places/explore/hospital_inside.jpg']]
  </center>
  <br /><br />
+	<<set _foundNothing = true>>
+	<<if !$player?.quests?.found_hospital_blueprint>>
+		<<set _foundNothing = false>>
+		<<set $player.quests.found_hospital_blueprint = true>>
+		<<pickup $backpack 'blueprint_hospital' 1>>
+		You found <strong class="iitem">small hospital blueprint</strong>!
+		<br /><br />
+	<</if>>
 	<<if setup.percentageChance(60)>>
 		<<pickup $backpack 'antibiotics' 2>>
 		You found <strong class="iitem">2</strong> bottles of <strong class="iitem">antibiotics</strong>
@@ -25,7 +33,9 @@
 		<<pickup $backpack 'gas_mask' 1>>
 		You found <strong class="iitem">1</strong> <strong class="iitem">gas mask</strong>
 	<<else>>
-		You found nothing and decided to leave
+		<<if _foundNothing>>
+			You found nothing and decided to leave
+		<</if>>
 	<</if>>
 	<br /><br />
  <</linkreplace>>

@@ -1,0 +1,109 @@
+:: Explore event: The Lost Child approach parents
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/explore/lost_child3.jpg']]
+</center>
+<br />
+Upon seeing the child, the woman bursts into tears of relief and runs to embrace the child. The man follows, his eyes moist with gratitude.
+<br /><br />
+<<newgirl>>
+<<newguy>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(20, 30))>>
+<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(20, 30))>>
+<<sayNpc $tmpGirl>>
+    Thank you so much!
+<</sayNpc>>
+<br />
+<<sayNpc $tmpGuy>>
+    We thought we had lost our child forever. Please, take this as a token of our gratitude.
+<</sayNpc>>
+<br />
+He hands you a small, intricately carved wedding ring.
+<br /><br />
+<div id="option_accept">
+    <<linkreplace 'Accept the ring'>>
+        <<run $('#option_demand, #option_house').hide()>>
+        As you put ring into your pocket the family departs, and you feel a sense of accomplishment.
+        <br /><br />
+        <strong>You got 1 <strong class="iitem">wedding ring</strong></strong>
+        <<pickup $backpack 'wedding_ring' 1>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_demand">
+    <<linkreplace 'Demand sexual favor'>>
+        <<run $('#option_accept, #option_house').hide()>>
+        <<you>>
+            I've done my part. Now, I expect something in return. From you.
+        <</you>>
+        <br />
+        You finish your sentence, looking directly at the mother.
+        <br />
+        The parents' expressions shift from gratitude to horror.
+        The mother looks at you with disgust and fear. The father steps in front of her protectively, his face hardening with resolve.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            You can take our things, but you won't take our dignity.
+        <</sayNpc>>
+        <br />
+            Children steps back few steps and is ready to run away.
+        <br /><br />
+        <<link 'Fight'>>
+            <<set $enemies = [
+                $tmpGuy,
+                $tmpGirl
+            ]>>
+            <<fight $enemies 'Outside' 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<if ($guests.length + 2) < $guesthouseLimit>>
+    <div id="option_house">
+        <<linkreplace 'Invite them to live with you'>>
+            <<run $('#option_accept, #option_demand').hide()>>
+            <<set $player.goodwill++>>
+            <<set _father = $tmpGuy>>
+            <<set _mother = $tmpGirl>>
+            <<newguy>>
+            <<set _children = $tmpGuy>>
+            <<set _children.birthDate = setup.getBirthDate(8)>>
+            <<set _children.family = {
+                mother: _mother.id,
+                father: _father.id
+            }>>
+            <<set _father.family = {
+                wives: [_mother.id],
+                kids: [
+                    _children.id
+                ]
+            }>>
+            <<set _mother.family = {
+                husband: _father.id,
+                kids: [
+                    _children.id
+                ]
+            }>>
+
+            <<run $guests.push(_mother)>>
+            <<run $guests.push(_father)>>
+            <<run $guests.push(_children)>>
+
+            The mother, still holding her child close, looks at you with tearful eyes.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                Thank you. We didn't know if we could trust anyone out here, but you've given us hope.
+            <</sayNpc>>
+            <br />
+            The father steps forward, extending his hand.
+            <br /><br />
+            <<sayNpc _father>>
+                You have no idea what this means to us. We'll do whatever we can to help. Thank you for giving us a chance.
+            <</sayNpc>>
+            <br />
+        <</linkreplace>>
+    </div>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>

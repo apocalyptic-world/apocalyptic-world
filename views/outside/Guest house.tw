@@ -60,6 +60,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick>>
 				<<continue>>
 			<</if>>
+			<<if ($game.location.hospital ?? false) && _isSick>>
+				<<continue>>
+			<</if>>
 			<tr>
 				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>

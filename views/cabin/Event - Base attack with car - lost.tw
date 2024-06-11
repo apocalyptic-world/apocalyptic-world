@@ -1,0 +1,57 @@
+:: Event - Base attack with car - lost
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<center>						
+	[img[setup.ImagePath+'places/cabin/event_base_attack_capture.jpg']]
+</center>
+<br /><br />
+You and your fellow survivors fought bravely, but the attackers were too many, too well-armed, and too ruthless. 
+As the last defenses crumbled, the leader of the gang steps forward, his sneer replaced with a look of triumph.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    I warned you. You had chance.
+<</sayNpc>>
+<br />
+The attackers begin to ransack the settlement, taking anything of value. 
+The leader gestures to his men, and they start rounding up the survivors corralling them into the central area of the settlement.
+<br /><br />
+<<set _tookFood = Math.min(100, setup.cabinInventory.count('food'))>>
+<<set _tookKnives = Math.min(5, setup.cabinInventory.count('knife'))>>
+<<set _tookMoney = Math.min(300, $player.money)>>
+<<if _tookFood>>
+    <strong>They stole <<=_tookFood>> food</strong>
+    <br />
+<</if>>
+<<if _tookKnives>>
+    <strong>They stole <<=_tookKnives>> knives</strong>
+    <br />
+<</if>>
+<<if _tookMoney>>
+    <strong>They stole <<=_tookMoney>> caps</strong>
+    <br />
+<</if>>
+<br />
+<<set _guestsCount = Math.min(1, $guests.length)>>
+<<set _slavesCount = Math.min(2, $guests.length)>>
+<<set _randomGuestIds = setup.getRandomPersonIds($guests, _guestsCount)>>
+<<set _randomSlaveIds = setup.getRandomPersonIds($slaves, _slavesCount)>>
+<<set _npcsTaken = []>>
+<<for _npcIndex, _npc range _randomGuestIds>>
+    <<set _npcsTaken.push(setup.displayName($guests[_randomGuestIds[_npcIndex]]))>>
+    <<guestRemove _randomGuestIds[_npcIndex]>>
+<</for>>
+<<for _npcIndex, _npc range _randomSlaveIds>>
+    <<set _npcsTaken.push(setup.displayName($slaves[_randomSlaveIds[_npcIndex]]))>>
+    <<slaveRemove _randomSlaveIds[_npcIndex]>>
+<</for>>
+
+The survivors are taken captive. The attackers impose harsh conditions, treating the inhabitants as forced labor. 
+The leader makes it clear that any resistance will be met with brutal punishment.
+<br /><br />
+You can't do anything but just look as they take with them <<=_npcsTaken.join(', ')>>.
+<br /><br />
+As you look outside your gates, in the distance you see as they car disappears behind the trees with some of your people.
+<br /><br />
+<<link 'Get up'>>
+	<<goto 'Wood cabin'>>
+<</link>>
