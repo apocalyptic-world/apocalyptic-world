@@ -23,6 +23,7 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 		<<if !$tmpGirl.gender && $orgasmsBefore === $tmpGirl.orgasms>>
 			She giggles while looking at you "<strong>Why would I</strong>"
 		<<elseif setup.percentageChance(50)>>
+			<<run $('#option_slave').hide()>>
 			You're a life savior. I recently started to look for a new place<br /> I'll go live with you! 
 			<br /><br />
 			<strong><<=$tmpGirl.name>> moved in as guest</strong>
@@ -33,9 +34,32 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 		<br /><br />
 	<</linkreplace>>
 <</if>>
+<<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
+	<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
+	<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+	<<set _captureLink = 'Capture ' + _pronounceWho>>
+	<<linkreplace _captureLink>>
+		<<set _captured = true>>
+		<<if [0,2].includes($tmpGirl.gender)>>
+			<center>
+				[img[setup.ImagePath+'places/nightclub/wc_enslave.webp']]
+			</center>
+			<br /><br />
+		<</if>>
+		You grab <<=setup.displayName($tmpGirl)>> from the back. <<=setup.pronounceWhat($tmpGirl, true)>> tries to resist but in the process you tear <<=setup.pronounceWhos($tmpGirl)>> clothes.
+		<br /><br />
+		As soon as you take <<=_pronounceWhat>> out you quietly go outside the nightclub back door.
+		<br />
+	<</linkreplace>>
+<</if>>
 <<link 'Leave'>>
 	<<unset $orgasmsBefore>>
-	<<goto 'Nightclub - inside'>>
+	<<if _captured>>'
+		<<addhours 1>>
+		<<goto 'Basement'>>
+	<<else>>
+		<<goto 'Nightclub - inside'>>
+	<</if>>	
 <</link>>
 
 
