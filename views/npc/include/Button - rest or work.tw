@@ -18,7 +18,7 @@
 	<div id="optwork" @style="'display:' + _workDisplay"> 
 		<<link 'Hard work? - Take a day off'>>
 			<<set $tmpGirl.rest = {
-				days: 1,
+				days: setup.getNpcHappyLevel($tmpGirl) === 'very_sad' ? 2 : 1,
 				desc: 'Day off resting',
 				id: 'resting'
 			}>>

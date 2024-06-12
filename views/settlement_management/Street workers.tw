@@ -15,12 +15,16 @@
     slaves: setup.getNpcsForLocation($slaves, 'streets'),
     guests: setup.getNpcsForLocations($guests, ['streets', 'nightclub']),
 }>>
-
+<<set _sick = []>>
+<<set _count = _workers.slaves.length + _workers.guests.length>>
 
 <<for _persons, _npcs range _workers>>
     <<for _npc range _npcs>>
         <<set _happyLevel = setup.getNpcHappyLevel(_npc)>>
         <<set _workersByHappyLvl[_happyLevel][_persons].push(_npc)>>
+        <<if _npc.sick>>
+            <<set _sick.push(_npc)>>
+        <</if>>
     <</for>>
 <</for>>
 
@@ -32,7 +36,47 @@
     very_happy: 'Very happy'
 }>>
 
-<table class="mc-stats-table">
+<<if _count>><table class="mc-stats-table">
+    <<if $weather?.heatWave>>
+        <tr>
+            <td></td>
+            <td colspan="3">Note: Heat wave in progress! Your workers can't work in this heat<br/>anyway so why not count this day as a day off?</td>
+            <td align="right">
+                <<button 'Rest for all!'>>
+                    <<for _persons, _npcs range _workers>>
+                        <<for _npc range _npcs>>
+                            <<set _npc.rest = {
+                                days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+                                desc: 'Day off resting',
+                                id: 'resting'
+                            }>>
+                        <</for>>
+                    <</for>>
+                    <<goto 'Settlement management'>>
+                <</button>>
+            </td>
+        </tr>
+    <</if>>
+
+    <<if _sick.length>>
+        <tr>
+            <td></td>
+            <td colspan="3">Note: Some sex workers are sick! As the sick don't work so why not count this day as a day off?</td>
+            <td align="right">
+                <<button 'Rest for sick!'>>
+                    <<for _npc range _sick>>
+                        <<set _npc.rest = {
+                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+                            desc: 'Day off resting',
+                            id: 'resting'
+                        }>>
+                    <</for>>
+                    <<goto 'Settlement management'>>
+                <</button>>
+            </td>
+        </tr>        
+    <</if>>
+
     <<for _happyLevel, _object range _workersByHappyLvl>>
         <<for _persons, _npcs range _object>>
             <<if _npcs.length>>
@@ -53,7 +97,7 @@
                                 <<button 'Rest!'>>
                                     <<for _npc range _npcs>>
                                         <<set _npc.rest = {
-                                            days: 1,
+                                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
                                             desc: 'Day off resting',
                                             id: 'resting'
                                         }>>
@@ -66,10 +110,11 @@
                 <</capture>>
                 <<for $tmpGirl range _npcs>>
                     <<capture $tmpGirl, _restId, _workId, _statusId>>
+                        <<set _showSick = $tmpGirl.sick ? ' [sick]' : ''>>
                         <tr>
                             <td/>
                             <td/>
-                            <td>$tmpGirl.name</td>
+                            <td>$tmpGirl.name<<=_showSick>></td>
                             <td>
                                 <<set _statusId = 'status_' + $tmpGirl.id>>
                                 <div @id="_statusId">
@@ -101,7 +146,7 @@
                                 <div @id="_workId" @style="'display:' + _w2r"> 
                                     <<link 'Hard work? - Take a day off'>>
                                         <<set $tmpGirl.rest = {
-                                            days: 1,
+                                            days: setup.getNpcHappyLevel($tmpGirl) === 'very_sad' ? 2 : 1,
                                             desc: 'Day off resting',
                                             id: 'resting'
                                         }>>
@@ -118,4 +163,6 @@
             <</if>>
         <</for>>
     <</for>>
-</table>
+</table><<else>>
+    You don't have any sex workers!
+<</if>>

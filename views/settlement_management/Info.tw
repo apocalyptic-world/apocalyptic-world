@@ -159,12 +159,14 @@
 <<set _nightclubText = (!$player?.quests?.gloryholeJob ? '(Make a deal with the glory hole manager first)' : '') + (_nightclub > 0 ? 'Average earnings/day: ' + _nightclub : '')>>
 
 <table class="mc-stats-table">
+	<tr><th colspan="3">Living</th></tr>
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
-	<tr><td>(people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
+	<tr><td>Total (people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
 	<tr><td>(kids < 3 years)</td><td><<=_settlementStatsData.food.none>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><th colspan="3">Working</th></tr>
 	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
@@ -182,9 +184,20 @@
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(No use yet)</td></tr>
 
+	<<set _text = !$backpack.has('blueprint_library') ? '(Explore to find blueprint → build)' : 
+			!$game.location.library ? '(Build the library)' : '(Max 0)' >>
+		<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
+
+	<<if $player.quests.base_building>>
+		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build)' : 
+			!$game.location.hospital ? '(Build the hospital)' : '(Max 1)' >>
+		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
+	<</if>>
+
 	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
 	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><th colspan="3">Interesting?</th></tr>
 	<tr><td># pregnant women</td><td><<=_settlementStatsData.pregnant ?? 0>></td>
 		<td>
 			<<if _settlementStatsData.pregnant>>
@@ -197,6 +210,7 @@
 					(Doctors and towels makes births safer; You don't have enough towels for all births:
 					 + Have <<=_towelsHave>> - need <<=_towelsNeed>> = deficit <span style="color: red; font-weight: bold"><<=_towelsNet>></span>)	
 				<</if>>
+				<span style="color: yellow">[writer todo - check how 'hospital' infects these texts!]</span>
 			<</if>>
 		</td>
 	</tr>
@@ -217,7 +231,24 @@
 		</tr>
 	<</if>>
 	<tr><td>&nbsp;</td><td> </td></tr>
+
+	/*
+		base management -> 
+		$player.quests.base_building
+
+		explore and find blueprint for hospital -> build -> assign a doctor
+		$player?.quests?.found_hospital_blueprint, blueprint_hospital -> 
+		    $player.baseManagement.buildings.hospital = 1;
+            $game.location.hospital = true;
+            $game.location.youth_district = true;
+
+		library
+			before -> blueprint -> build -> 0 assign
+
+	 */
+
 	<<if ($player.horse ?? false)>>
+		<tr><th colspan="3">Horsing</th></tr>
 		<tr><td colspan="2">Your horse <<=$player.horse>> </td><td>have enough hay for <<=setup.cabinInventory.count('hay')>> days</td></tr>
 	<</if>>
 </table>
