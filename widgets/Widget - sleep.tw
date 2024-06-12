@@ -58,6 +58,8 @@
   
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 
+<<set _isHeatWave = $weather.heatWave ?? false>>
+
 <<set _hasDoctor = setup.hasDoctor()>>
 // Horse
 <<if ($player.horse ?? false)>>
@@ -152,8 +154,11 @@
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
-		<<set _dayOff = _isSick || _isRest>>
-		<<if $slaves[_i].assignedTo === 'garden' && !_isSick>>
+		<<set _dayOff = _isSick || _isRest || _isHeatWave>>
+		<<if $slaves[_i].assignedTo === 'garden'>>
+			<<set $slaves[_i].gardenDay = 0>>
+		<</if>>
+		<<if $slaves[_i].assignedTo === 'garden' && !_isDayOff>>
 			<<if typeof $slaves[_i].stats['garden'] === 'undefined'>>
 				<<set $slaves[_i].stats['garden'] = 0>>
 			<</if>>
@@ -225,6 +230,9 @@
 		<</if>>
 		
 		// Starvation
+		<<if _isHeatWave>>
+			<<set $slaves[_i].food = -10>>
+		<</if>>
 		<<if $slaves[_i].food <= 10>>
 			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
@@ -379,9 +387,12 @@
 		
 		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
 		<<set _isRest = (typeof $guests[_guestI].rest !== 'undefined')>>
-		<<set _dayOff = _isSick || _isRest>>
+		<<set _dayOff = _isSick || _isRest || _isHeatWave>>
 		// Assigned jobs
-		<<if $guests[_guestI].assignedTo === 'garden' && !_isSick>>
+		<<if _npc.assignedTo === 'garden'>>
+			<<set _npc.gardenDay = 0>>
+		<</if>>
+		<<if $guests[_guestI].assignedTo === 'garden' && !_dayOff>>
 			<<if typeof $guests[_guestI].stats['garden'] === 'undefined'>>
 				<<set $guests[_guestI].stats['garden'] = 0>>
 			<</if>>
@@ -656,6 +667,9 @@
 		<</if>>
 		
 		// Starvation
+		<<if _isHeatWave>>
+			<<set $guests[_guestI].food = -10>>
+		<</if>>
 		<<if $guests[_guestI].food <= 10>>
   			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
