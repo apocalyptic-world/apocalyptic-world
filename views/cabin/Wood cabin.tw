@@ -30,7 +30,9 @@
     <<grid cabin shop 'Shop' 'Shop' false 1>>
   <</if>>
    <<grid cabin fireplace 'Fire place' 'Fire place'>>
-   <<grid cabin outside Outside Outside>>
+   <<set _isDisabled = (($weather.sandStorm ?? false) ? 30 : 0.5)>>
+   <<set _disabledDescription = 'Sand storm outside'>>
+   <<grid cabin outside Outside Outside 0 _isDisabled>>
    <<if ($game.location.garage ?? false) && hasTime(0, 30)>>
     <<grid cabin garage 'Garage' 'Garage' false 1>>
   <</if>>

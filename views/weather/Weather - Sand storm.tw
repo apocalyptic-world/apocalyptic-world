@@ -1,0 +1,34 @@
+:: Weather - Sand storm
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+You awaken to the sound of a loud, howling wind outside. The wooden walls of your cabin creak and groan under the pressure, and dust seeps through the cracks, filling the air with a fine, gritty powder. You sit up, rubbing your eyes, and move towards the door, the sense of foreboding growing with each step.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/cabin/sand_storm.jpg']]
+</center>
+<br />
+As you open the cabin doors, a gust of wind pushes back, making it difficult to keep your balance. Outside, a massive sandstorm engulfs the landscape, turning the sky into a swirling, opaque mass of sand and debris. The trees in the forest surrounding your settlement bend and sway, their dense canopy providing some protection, but the storm is relentless.
+<br /><br />
+<<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
+<<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
+<<set _npc = $guests[_randomGuestId[0]]>>
+
+Stepping back inside, you see <<=setup.displayName(_npc)>> running towards you, their face partially covered with a makeshift scarf to keep the sand at bay.
+<br /><br />
+<<sayNpc _npc>>
+    It's sand storm. It's a bad one. We won't be able to get outside the camp today.
+<</sayNpc>>
+<br />
+<strong class="iitem">
+    Today, no one who works outside the camp will be able to work.
+</strong>
+<br /><br />
+<<for _guestI, _guest range $guests>>
+    <<set _guest.happy -= randomInteger(20, 40)>>
+<</for>>
+<<for _slaveI, _slave range $slaves>>
+    <<set _slave.happy -= randomInteger(20, 40)>>
+<</for>>
+<<link 'Leave'>>
+    <<goto 'Wood cabin'>>
+<</link>>
