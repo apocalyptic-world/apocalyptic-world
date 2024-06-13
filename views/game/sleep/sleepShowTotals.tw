@@ -4,7 +4,7 @@
 <<for _itemID, _count range _totals>>
     <<if _count != 0>>
         <<set _name = Item.has(_itemID) ? Item.get(_itemID)?.name : _itemID>>
-        <<set _out = (_count > 0 ? '+' : '') + _count + ' ' + _name>>
+        <<set _out = (_count > 0 ? '<span style="color: green">+' : '<span style="color: red">') + _count + '</span> ' + _name>>
         <<set _output.push(_out)>>
     <</if>>
 <</for>>

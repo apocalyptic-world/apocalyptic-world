@@ -41,7 +41,8 @@ setup.player = {
         const genderclass = 
             (typeof person.gender !== 'undefined') ? setup.genderClass(person) :
             (['blair', 'eve', 'isabel'].includes(person.id)) ? 'girl' :
-            (['mc', 'dom', 'negan', 'rodger', 'vincent'].includes(person.id)) ? 'guy' : '';
+            (['mc', 'dom', 'negan', 'rodger', 'vincent'].includes(person.id)) ? 'guy' : 
+            (['horse'].includes(person.id)) ? 'horse' :'';
         return genderclass;
     },
     /**

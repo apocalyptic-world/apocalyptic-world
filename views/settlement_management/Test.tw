@@ -124,9 +124,22 @@
 	single:    []  
 }>>
 
+<<for _npcID, _npc range $characters>>
+	<<set _npc.id ??= _npcID>>
+<</for>>
 <<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {}))>>
-	<<set _npcs.set(_npc.id, _npc)>>
+	<<if typeof _npc.id === 'undefined'>>
+		/* DBG undefined id <<=_npc.name>>?<br/> */
+		<<continue>>
+	<<elseif typeof _npc.name === 'undefined'>>
+		/* rose ends here -- DBG undefined name <<=_npc.id>>?<br/> */
+		<<continue>>
+	<<elseif _npc.id  === 'negan' || _npc.name == 'Negan'>>
+		<<continue>>
+	<</if>>
 
+	<<set _npcs.set(_npc.id, _npc)>>
+	
 	<<if (typeof _npc.pregnancy !== 'undefined')>>
 		<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
 		<<if _fatherId === 'unkown' && typeof _npc.pregnancy_event !== 'undefined'>>
@@ -228,7 +241,7 @@
 				<<if _npcs.has(_childID)>>
 					<<set _outs[_reltype][_parentID] ??= []>>
 					<<set _outs[_reltype][_parentID].push(setup.player.npcRelationText2(_npcs.get(_childID), true, true))>>
-					<<set _shown[_npcID] = true>>
+					<<set _shown[_childID] = true>>
 				<</if>>
 			<</for>>
 		<</if>>
@@ -238,7 +251,7 @@
 <<for _reltype range ['orphan', 'single']>>
 	<<for _npcID, _dummy range _rels[_reltype]>>
 		<<if  _npcs.has(_npcID) && !_shown[_npcID]>>
-			<<set _outs[_reltype].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true))>>
+			<<set _outs[_reltype].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :''))>>
 			<<set _shown[_npcID] = true>>
 		<</if>>
 	<</for>>
