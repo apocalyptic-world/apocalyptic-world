@@ -4,10 +4,13 @@
     <<if _shopKeeperId.length>>
         <<set _shopKeeper = $guests[_shopKeeperId[0]]>>
         <<for _manageGoodsName, _manageGoods range ($player.manageGoods ?? {})>>
-            <<if _manageGoods.min && $storage.count(_manageGoodsName) < _manageGoods.min>>
-                <<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
-                    <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
-                    <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+            <<set _chance = setup.inventoryManageable[_manageGoodsName].chance>>
+            <<set _count  = $storage.count(_manageGoodsName)>>
+            <<set _price  = setup.inventoryManageable[_manageGoodsName].price>>
+            <<if _manageGoods.min && _count < _manageGoods.min>>
+                <<if setup.percentageChance(_chance)>>
+                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), Math.floor($player.money/_price))>>
+                    <<set _totalPrice = _price * _amount>>
                     <<if $player.money >= _totalPrice>>
                         <<pickup $storage _manageGoodsName _amount>>
                         <<set $player.money -= _totalPrice>>
@@ -15,10 +18,10 @@
                     <</if>>
                 <</if>>
             <</if>>
-            <<if _manageGoods.max && $storage.count(_manageGoodsName) > _manageGoods.max>>
-                <<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
-                    <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
-                    <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+            <<if _manageGoods.max && _count > _manageGoods.max>>
+                <<if setup.percentageChance(_chance)>>
+                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), _count)>>
+                    <<set _totalPrice = _price * _amount>>
                     <<drop $storage _manageGoodsName _amount>>
                     <<set $player.money += _totalPrice>>
                     <<run setup.sleepMessages.addShop(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
