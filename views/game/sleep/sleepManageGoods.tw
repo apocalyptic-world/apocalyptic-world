@@ -19,6 +19,7 @@
                 <<if setup.percentageChance(setup.inventoryManageable[_manageGoodsName].chance)>>
                     <<set _amount = randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1])>>
                     <<set _totalPrice = setup.inventoryManageable[_manageGoodsName].price * _amount>>
+                    <<drop $storage _manageGoodsName _amount>>
                     <<set $player.money += _totalPrice>>
                     <<run setup.sleepMessages.addShop(setup.displayName(_shopKeeper) + ' managed to sell ' + _amount + ' ' + Item.get(_manageGoodsName).name + ' for $' + _totalPrice)>>
                 <</if>>
