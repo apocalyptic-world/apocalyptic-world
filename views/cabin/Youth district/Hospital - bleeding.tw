@@ -1,0 +1,55 @@
+:: Hospital - bleeding [bg-hospital]
+<h1 class="ptitle">HOSPITAL</h1>
+<br />
+<<set _npc = $guests[$tmpEvent.id]>>
+<<set _pronWho = setup.pronounceWho(_npc)>>
+<<set _pronWhos = setup.pronounceWhos(_npc)>>
+<<set _pronWhat = setup.pronounceWhat(_npc)>>
+
+As you push through the flap of the makeshift hospital tent, the stark contrast between the chaos outside and the relative calm within strikes you immediately. 
+The dim lighting from a few strategically placed lanterns casts long shadows on the walls.
+<br /><br />
+<<=setup.displayName(_npc)>>, in white coat stained and worn, notices you as soon as you step inside. 
+<<=_pronWhos>> eyes narrow in concern as <<=_pronWhat>> spots the blood seeping through your clothes.
+<br /><br />
+<<sayNpc _npc>>
+    You're bleeding! We need to take care of that immediately. Please, lay down on this bed.
+<</sayNpc>>
+<br />
+As <<=_pronWhat>> works, <<=_pronWhos>> hands are gentle yet efficient. <<=setup.pronounceWhat(_npc, true)>> cleans the wound with a practiced ease, applying a disinfectant that stings sharply. 
+<br /><br />
+<<sayNpc _npc>>
+    You're lucky you came in when you did. Out here, infections can be just as deadly as the injuries themselves.
+<</sayNpc>>
+<br />
+<strong class="iitem">You are not bleeding anymore!</strong>
+<<run delete $player.perks.bleeding>>
+<br /><br />
+<<if [0, 1].includes(_npc.gender)>>
+    <<video 'hospital/bleeding1'>>
+    <br /><br />
+    As she cleans up the last of her supplies, you notice her eyes flicker to your crotch a few times, though she quickly averts her gaze each time. 
+    Despite her obvious professionalism, there's a momentary flicker of curiosity or perhaps concern in her expression.
+    <br /><br />
+    <<if _npc.horny >= 50>>
+        <<video 'hospital/bleeding2'>>
+        <br /><br />
+        Without warning, she slides her hand under the sheet, her fingers brushing lightly against your dick as she grabs it and strats to stroke it. 
+        Her touch is gentle, almost soothing, but there's an undeniable tension in the air.
+        <br /><br />
+        <<if recall($suppCode)>>
+            <<link 'Let her continue'>>
+                <<goto 'Hospital - bleeding fuck'>>
+            <</link>>
+        <<else>>
+            <div class="link-internal disabled" style="background: #ccc">
+                Let her continue
+                <<notPatreonIcon>>
+            </div>
+        <</if>>
+    <</if>>
+<</if>>
+<<link 'Leave'>>
+    <<unset $tmpEvent>>
+    <<goto 'Youth district'>>
+<</link>>
