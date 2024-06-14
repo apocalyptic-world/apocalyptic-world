@@ -115,7 +115,7 @@
 	<<elseif timeBetween('20:00', '24:00') && $game.lone_survivor && setup.percentageChance(50) && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - A lone survivor fuck'>>
-	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && setup.percentageChance(1)>>
+	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && $weather?.weather === 'storm' && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Forest - fallen tree'>>
 	<<else>>
