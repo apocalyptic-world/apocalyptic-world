@@ -1,0 +1,85 @@
+:: Forest - fallen tree [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+<<set _peopleWorking = setup.getPersonsForLocation($guests, 'forest')>>
+<<set _randomPeople = setup.shuffling(_peopleWorking)>>
+<<set _victim = $guests[_randomPeople[0]]>>
+<<set _npc = $guests[_randomPeople[1]]>>
+<<set _pronWhat = setup.pronounceWhat(_victim, true)>>
+<<set _pronWho = setup.pronounceWho(_victim)>>
+The dim light of dawn filters through the makeshift windows of your camp as you go over the daily plans with your small team. 
+The air carries a slight chill, a reminder of the ever-present uncertainty of this new world. Suddenly, the sound of hurried footsteps echoes through the camp. 
+You look up to see one of the forest workers, sweat dripping from his brow and eyes wide with panic, rushing toward you.
+<br /><br />
+<<sayNpc _npc>>
+    You gotta come quick! It's <<=setup.displayName(_victim)>>! <<=_pronWhat>>'s been crushed by a tree! _pronWhat's stuck and we can't get <<=_pronWho>> out!
+<</sayNpc>>
+<br />
+The <<=setup.displayName(_npc)>> leads you through the thick underbrush, past the remnants of a once-thriving forest now scarred by the apocalypse. 
+Your mind races with possible scenarios and solutions. You need to assess the situation quickly and act even faster.
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/forest/fallen_tree.jpg']]
+</center>
+<br /><br />
+You reach the site, and there lies <<=setup.displayName(_victim)>>, trapped beneath a massive fallen tree. <<=_pronWhat>>'s conscious but in visible pain, <<=setup.pronounceWhos(_victim)>> chest pinned awkwardly under the heavy trunk. 
+The other workers are gathered around, their faces etched with concern and helplessness.
+<br /><br />
+<<sayNpc _npc>>
+    If we have enough axes we can try to get <<=_pronWho>> out!
+<</sayNpc>>
+<br />
+<<if setup.cabinInventory.count('axe') > 5>>
+    <<set _linkName = 'Help ' + _pronWho>>
+    <<linkreplace _linkName>>
+        <<set _tryHelp = true>>
+        <<run setup.cabinInventory.drop('axe', 5)>>
+        <<run $('#option_look').hide()>>
+        Your team members scramble to grab their tools. 
+        The air is thick with urgency as you race back to the site where James lies pinned beneath the massive tree. 
+        <<=setup.pronounceWhos(_victim, true)>> face is pale, sweat beading on <<=setup.pronounceWhos(_victim)>> forehead, but <<=setup.pronounceWhat(_victim)>>'s still conscious.
+        <br /><br />
+        <<addmins 30>>
+        Finally, with a mighty crack, the tree splits. 
+        <br /><br />
+        <strong class="iitem">You broke 5 axes</strong>
+        <br /><br />
+        <<you>>
+            Everyone, lift!
+        <</you>>
+        <br />
+        Together, you and the team heave, using every bit of strength to shift the massive trunk just enough to free <<=setup.displayName(_victim)>>.
+        <br />
+        You rush <<=_pronWhat>> back to the camp with broken bones.
+        <<set $guests[_randomPeople[0]].sick = {
+            days: 30,
+            desc: 'Broken bones',
+            id: 'broken_bones'
+        }>>
+        <<run $('#option_leave').show()>>
+        <br /><br />
+    <</linkreplace>>
+<</if>>
+<<set _linkName = 'Look at ' + _pronWho + ' helplessly'>>
+<div id="option_look">
+    <<linkreplace _linkName>>
+        <<run $('#option_help').hide()>>
+        <<=setup.displayName(_victim)>>'s breathing becomes more labored, and you notice <<=setup.pronounceWhos(_victim)>> grip on your hand weakening. Panic starts to seep into your determination.
+        <br /><br />
+        <<you>>
+            <<=setup.displayName(_victim)>>, no! Hold on!
+        <</you>>
+        <br />
+        You shout, but it's too late. <<=setup.pronounceWhos(_victim, true)>> eyes close, <<=setup.pronounceWhos(_victim)>> chest rises and falls one last time, and then <<=_pronWhat>>'s gone.
+        <<guestRemove _randomPeople[0]>>
+        <br /><br />
+        A heavy silence falls over the group. The sound of axes stops as everyone realizes the horrifying truth. <<=setup.displayName(_victim)>> is dead.
+        <br /><br />
+        <<run $('#option_leave').show()>>
+    <</linkreplace>>
+</div>
+<div id="option_leave" style="display:none">
+    <<link 'Leave'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>
