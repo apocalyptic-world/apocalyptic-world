@@ -55,9 +55,10 @@ setup.relationshipBetween = {
     run: function() {
         let start = Date.now();
         this.guests = variables().guests;
-        this.guests18yo = setup.getAvailablePersons18yo(variables().guests);
-        for (let i = 0; i < variables().guests.length; i++) {
-            this.npc = variables().guests[i];
+        let guestsCount = this.guests.length;
+    
+        for (let i = 0; i < guestsCount; i++) {
+            this.npc = this.guests[i];
             this._init();
             if (this._ignore()) {
                 continue;
@@ -72,6 +73,33 @@ setup.relationshipBetween = {
         }
 
         let end = Date.now() - start;
+
+        this.getMatches();
         //console.log("Relationships run: " + end + " milliseconds");
+    },
+
+    getMatches: function() {
+        this.guests = variables().guests;
+        let guestsCount = this.guests.length;
+    
+        let _matches = {};
+        for (let i = 0; i < guestsCount; i++) {
+            this.npc = this.guests[i];
+            if (this.npc?.relationshipBetween?.likes) {
+                _matches[this.npc.id] = this.npc.relationshipBetween.likes;
+            }
+        }
+
+        let _matchesBetween = [];
+        for (let _npc1Id in _matches) {
+            let _npc2Id = _matches[_npc1Id];
+            if ((_matches[_npc2Id] ?? false) === _npc1Id) {
+                _matchesBetween.push([_npc1Id, _npc2Id]);
+                delete _matches[_npc2Id];
+            }
+        }
+
+        return _matchesBetween;
     }
+
 };
