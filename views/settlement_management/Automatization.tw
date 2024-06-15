@@ -9,11 +9,36 @@
 <table class="mc-stats-table">
     <<for _dummy, _autoId range Object.keys(setup.automatization.rule)>>
         <<capture _autoId, _auto>>
-            <<set $automatization[_autoId] ??= false>>
+            
             <<set _auto = setup.automatization.rule[_autoId] >>
             <tr>
-                <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
-                <td><<=_auto.description>></td>
+                <<if _autoId !== 'streetworker'>>
+                    <<set $automatization[_autoId] ??= false>>
+                    <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
+                    <td><<=_auto.description>></td>
+                <<else>>
+                    /* convert old false/true to a number */
+                    <<set $automatization.streetworker = $automatization.streetworker > 1 ? $automatization.streetworker : $automatization.streetworker ? 1 : 0>>
+                    <td valign="top">&nbsp;_auto.name</td>
+                    <td>
+                        <<=_auto.description>><br/>
+
+                        <<for _key, _text range setup.automatization.sexworkerDayOffText>>
+                                <<if _key === 'off'>>
+                                    <<set _level = 0>>
+                                <<else>>
+                                    <<set _level++>> 
+                                <</if>>
+                                <label>
+                                    <<radiobutton "$automatization.streetworker" _level autocheck>>
+                                    <<for _happy range setup.automatization.sexworker_levels[_key] >>
+                                            <<happyIcon _happy>>
+                                    <</for>>
+                                    <<=_text>>
+                                </label><br/>
+                        <</for>>
+                    </td>
+                <</if>>
             </tr>
             <<if $auto_help>>
                 <tr>

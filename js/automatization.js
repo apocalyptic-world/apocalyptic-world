@@ -32,7 +32,7 @@ setup.automatization = {
         },
         streetworker: {
             name: 'Sex workers need rest',
-            description: 'Very unhappy, sad street & nightclub workers takes a day off by themselves',
+            description: 'Sex workers on the street & nightclub below some happiness value takes a day off by themselves',
             help: ''
         },
 
@@ -62,7 +62,7 @@ setup.automatization = {
 
     /**
      * Toolboxes for different jobs/assignemnt. Can be set here or as a tag
-     * tool_<job> in "Inventory items.tw"
+     * tool_<job> in "Inventory items.tw" -- To be worked on later
      */
     job_tools: {
         companion: ['knife', 'gas_mask', 'body_armor'],
@@ -88,10 +88,41 @@ setup.automatization = {
         if(this._initDone) {
             return;
         }
-
         // WORK 
-
         this._initDone = true;
         return;
     },
+
+    /** 
+     * for happyIcons on automatization tab and happyness for taking a day off...
+     */
+    sexworker_levels: {
+        off:        [],
+        very_sad:   ['very_sad'],
+        sad:        ['very_sad','sad'],
+        normal:     ['very_sad','sad','normal'],
+        happy:      ['very_sad','sad','normal','happy'],
+        very_happy: ['very_sad','sad','normal','happy','very_happy'],
+    },
+
+    sexworkerDayOffText: {
+        off:        'Off - No sexworkers takes a day off by themselves', 
+        very_sad:   'Very sad, unhappy street & nightclub workers takes a day off by themselves', 
+        sad:        'Sad, unhappy street & nightclub workers takes a day off by themselves', 
+        normal:     'Sad and normal-happy street & nightclub workers takes a day off by themselves',  
+        happy:      'All but very happy street & nightclub workers takes a day off by themselves', 
+        very_happy: 'On - All sexworkers will take a day off themselves all the time',
+    },
+
+    /**
+     * 
+     * @param {*} npc 
+     * @returns boolean
+     */
+    sexworkerDayOffCheck: function (npc) {
+        const rulelevel = variables().automatization.streetworker;
+        const autolevel = ['off', 'very_sad','sad','normal','happy','very_happy'][rulelevel];
+        const happylevel = setup.automatization.sexworker_levels[autolevel];
+        return happylevel.includes(setup.getNpcHappyLevel(npc));
+    }
 };
