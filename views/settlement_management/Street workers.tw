@@ -37,10 +37,15 @@
 }>>
 
 <<if _count>><table class="mc-stats-table">
-    <<if $weather?.heatWave>>
+     <<set _badWeather = /*$weather?.heatWave || */ $weather?.sandStorm>>
+    <<if _badWeather>>
+        <<set _text = 
+            $weather?.heatWave  ? "Heat wave in progress! Your workers can't work in this heat'": 
+            $weather?.sandStorm ? "Sandstorm in progress! Your workers can't go outside" : 
+                "<span style=\"color: red\">Undefined bad weather in progress! -- This shoukdn't happen</span>">>
         <tr>
             <td></td>
-            <td colspan="3">Note: Heat wave in progress! Your workers can't work in this heat<br/>anyway so why not count this day as a day off?</td>
+            <td colspan="3">Note: _text<br/>anyway so why not count this day as a day off?</td>
             <td align="right">
                 <<button 'Rest for all!'>>
                     <<for _persons, _npcs range _workers>>
