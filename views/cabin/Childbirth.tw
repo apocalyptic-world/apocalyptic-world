@@ -5,9 +5,18 @@
 	[img[setup.ImagePath+'game/misc/childbirth1.webp']]
 </center>
 
-You hear screams and you rush toward the source. As you get to your destination you realize it's <<=setup.displayName($tmpGirl)>>.
+<<if $pregnancyHappening.type === 'slave'>>
+	<<set _mother = $slaves[$pregnancyHappening.id]>>
+<<elseif $pregnancyHappening.type === 'character'>>
+	<<set _mother = $characters[$pregnancyHappening.id]>>
+<<else>>
+	<<set _mother = $guests[$pregnancyHappening.id]>>
+<</if>>
+<<set $tmpGirl = _mother>>
 
-Her contractions grew stronger, <<=setup.displayName($tmpGirl)>> knew that she didn't have much time left. She asks you to create a makeshift birthing area.
+You hear screams and you rush toward the source. As you get to your destination you realize it's <<=setup.displayName(_mother)>>.
+
+Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she didn't have much time left. She asks you to create a makeshift birthing area.
 
 <<set _chanceSuccess = 50>>
 <<set _chanceMotherDies = 5>>
@@ -59,73 +68,12 @@ Her contractions grew stronger, <<=setup.displayName($tmpGirl)>> knew that she d
 		<<set _childGender = randomInteger(0,1)>>
 		Congratulation, it's a <<if !_childGender>><span style="color:pink">girl</span><<else>> <span style="color:blue">boy</span><</if>>
 		<br /><br />
-		<<if !_childGender>>
-			<<include 'Girl names'>>
-		<<else>>
-			<<include 'Guy names'>>
-		<</if>>
-		<<set _randomName = either(_names)>>
+		<<set _mother = $tmpGirl>>
+		<<newchild _childGender _mother>>
+		<<set _randomName = $newChild.name>>
 		What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" _randomName>>
 		<br /><br />
 		<<link 'Continue'>>
-			<<set _mother = $tmpGirl>>
-			
-			<<newgirl>>
-			<<newguy>>
-			<<set _child = (!_childGender ? $tmpGirl : $tmpGuy)>>
-			<<set 
-				_child.birthDate = $gameDate,
-				_child.anal = 0,
-				_child.bj = 0,
-				_child.food = 100,
-				_child.pussy = 0,
-				_child.relationship = 0,
-				_child.virgin = true,
-				_child.strength = 0,
-				_child.orgasms = 0,
-				_child.name = _childName,
-				_child.birthDate = $gameDate,
-				_child.beauty = _mother.beauty,
-				_child.race = _mother.race,
-				_child.breasts = _mother.breasts,
-				_child.hair = _mother.hair,
-				_child.strength = Math.round(_mother.strength / 2, 0),
-				_child.virgin = true,
-				_child.traits = [],
-				_child.skills = []
-			>>
-			<<set _child = setup.setSexuality(_child, 'straight')>>
-
-			<<if !_child.gender>>
-				<<set _child.traits = _mother.traits ?? []>>
-				<<set _additionalTrait = setup.getRandomTraits(1, _child.traits)>>
-				<<if _additionalTrait>>
-					<<set _child.traits = _child.traits.concat(_additionalTrait)>>
-				<</if>>
-			<</if>>
-			
-			<<set _child.family = {}>>
-			<<set _child.family.mother = _mother.id>>
-			<<if _mother.pregnancy_father>>
-				<<set _child.family.father = _mother.pregnancy_father>>
-				<<set _father = setup.getNpcById(_child.family.father)>>
-				<<if _father>>
-					<<set _father.family ??= {kids: []}>>
-					<<set _father.family.kids ??= []>>
-					<<run _father.family.kids.push(_child.id)>>
-				<</if>>
-			<</if>>
-			
-			<<if typeof _mother.family === 'undefined'>>
-				<<set _mother.family = {
-					kids: []
-				}>>
-			<</if>>
-			<<if typeof _mother.family.kids === 'undefined'>>
-				<<set _mother.family.kids = []>>
-			<</if>>
-			<<run _mother.family.kids.push(_child.id)>>
-			<<run delete _mother.pregnancy>>
 			<<set _mother.noPregnancyDays = randomInteger(180, 250)>>
 			<<if $pregnancyHappening.type === 'slave'>>
 				<<set $slaves[$pregnancyHappening.id] = _mother>>

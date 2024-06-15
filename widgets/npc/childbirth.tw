@@ -1,0 +1,76 @@
+:: Childbirth widget [widget]
+
+<<widget newchild>>
+    <<set _mother = $args[1]>>
+	<<set _childGender = $args[0]>>
+    <<if _childGender === 0>>
+        <<newgirl>>
+        <<set _child = $tmpGirl>>
+    <<else>>
+        <<newguy>>
+        <<set _child = $tmpGuy>>
+    <</if>>
+
+	<<if !_childGender>>
+		<<include 'Girl names'>>
+	<<else>>
+		<<include 'Guy names'>>
+	<</if>>
+	<<set _randomName = either(_names)>>
+
+    <<set 
+		_child.birthDate = $gameDate,
+		_child.anal = 0,
+		_child.bj = 0,
+		_child.food = 100,
+		_child.pussy = 0,
+		_child.relationship = 0,
+		_child.virgin = true,
+		_child.strength = 0,
+		_child.orgasms = 0,
+		_child.name = _randomName,
+		_child.beauty = _mother.beauty,
+		_child.race = _mother.race,
+		_child.breasts = _mother.breasts,
+		_child.hair = _mother.hair,
+		_child.strength = Math.round(_mother.strength / 2, 0),
+		_child.virgin = true,
+		_child.traits = [],
+		_child.skills = []
+	>>
+	<<set _child = setup.setSexuality(_child, 'straight')>>
+
+    <<if !_child.gender>>
+		<<set _child.traits = _mother.traits ?? []>>
+		<<set _additionalTrait = setup.getRandomTraits(1, _child.traits)>>
+		<<if _additionalTrait>>
+			<<set _child.traits = _child.traits.concat(_additionalTrait)>>
+		<</if>>
+	<</if>>
+
+    <<set _child.family = {}>>
+	<<set _child.family.mother = _mother.id>>
+	<<if _mother.pregnancy_father>>
+		<<set _child.family.father = _mother.pregnancy_father>>
+		<<set _father = setup.getNpcById(_child.family.father)>>
+		<<if _father>>
+			<<set _father.family ??= {kids: []}>>
+			<<set _father.family.kids ??= []>>
+			<<run _father.family.kids.push(_child.id)>>
+		<</if>>
+	<</if>>
+	
+	<<if typeof _mother.family === 'undefined'>>
+		<<set _mother.family = {
+			kids: []
+		}>>
+	<</if>>
+	<<if typeof _mother.family.kids === 'undefined'>>
+		<<set _mother.family.kids = []>>
+	<</if>>
+	<<run _mother.family.kids.push(_child.id)>>
+    <<run delete _mother.pregnancy>>
+
+    <<set $newChild = _child>>
+
+<</widget>>

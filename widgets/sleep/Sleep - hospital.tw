@@ -1,0 +1,35 @@
+:: Sleep - hospital [widget]
+
+<<widget sleepHospital>>
+    <<if $pregnancyHappening>>
+        <<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
+        <<set _doctor = $guests[_girlGuest[0]]>>
+
+        <<if $pregnancyHappening.type === 'slave'>>
+	        <<set _mother = $slaves[$pregnancyHappening.id]>>
+        <<elseif $pregnancyHappening.type === 'character'>>
+	        <<set _mother = $characters[$pregnancyHappening.id]>>
+        <<else>>
+	        <<set _mother = $guests[$pregnancyHappening.id]>>
+        <</if>>
+
+        <<if setup.percentageChance(10)>>
+            <<run delete _mother.pregnancy>>
+            <<set _mother.happy -= 80>>
+            <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. Unfortunately they were not successful and baby died.')>>
+        <<else>>
+            <<set _childGender = randomInteger(0,1)>>
+            <<newchild _childGender _mother>>
+            <<set _child = $newChild>>
+            <<if ($game.location.nursery ?? false)>>
+				<<run $nursery.push(_child)>>
+			<<elseif ($game.location.guesthouse ?? false)>>
+				<<run $guests.push(_child)>>
+			<<else>>
+				<<run $slaves.push(_child)>>
+			<</if>>
+            <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. She went to the hospital and gave birth to a ' + setup.displayName(_child) + '.', 'hospital')>>
+        <</if>>
+        <<unset $pregnancyHappening>>
+    <</if>>
+<</widget>>
