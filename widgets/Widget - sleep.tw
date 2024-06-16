@@ -156,7 +156,8 @@
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
-		<<if $slaves[_i].assignedTo === 'garden'>>
+
+		<<if _isHeatWave && $slaves[_i].assignedTo === 'garden'>>
 			<<set $slaves[_i].gardenDay = 0>>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'garden' && !_isDayOff && !_isHeatWave>>
@@ -389,7 +390,7 @@
 		<<set _isRest = (typeof $guests[_guestI].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
 		// Assigned jobs
-		<<if _npc.assignedTo === 'garden'>>
+		<<if __isHeatWave && npc.assignedTo === 'garden'>>
 			<<set _npc.gardenDay = 0>>
 		<</if>>
 		<<if $guests[_guestI].assignedTo === 'garden' && !_dayOff && !_isHeatWave>>
