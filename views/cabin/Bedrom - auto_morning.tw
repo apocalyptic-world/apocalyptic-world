@@ -210,8 +210,8 @@
     <<unset _npc, _want, _outNo>>
 
     /* MC */
+    <<set _outItem = []>>
     <<if _isStorageAvailable>>
-        <<set _outItem = []>>
         <<for _item range setup.automatization.job_tools.mc.sort()>>
             <<if !$backpack.has(_item) && $storage.has(_item)>>
                 <<transfer $storage $backpack _item 1>>
