@@ -1,4 +1,5 @@
-/* In cabin we have both $storage and $backpack */
+/**
+ *  In cabin we have both $storage and $backpack */
 setup.cabinInventory = {
     count: function (item) {
         const storeAvailable = variables().game.location.shop ?? false;
@@ -40,4 +41,38 @@ setup.cabinInventory = {
         setup.cabinInventory.pickup(item, count);
     },
 };
+/**
+ * As cabinInventory but also checks inventory of npcs
+ */
+setup.cabinNpcInv = {
+    count: function (item, npcs = []) {
+        const cabinCount =  setup.cabinInventory.count(item);
+        let npcCount = 0;
+        for (const npc of npcs) {
+            npcCount += setup.npcInventoryCount(npc, item);
+        }
+        return cabinCount + npcCount;
+    },
+
+    drop: function (item, count=1, npcs = []) {
+        const cabinCount = setup.cabinInventory.count(item);
+        if (cabinCount >= count, npcs = []) {
+            setup.cabinInventory.drop(item, count);
+            return;
+        }
+        setup.cabinInventory.drop(item, cabinCount);
+        count -= cabinCount;
+        for (const npc of npcs) {
+            let npcCount = setup.npcInventoryCount(npc, item);
+            if (npcCount >= count) {
+                setup.npcInventoryRemove(npc, item, count);
+                return;
+            } else if (count) {
+                setup.npcInventoryRemove(npc, item, npcCount);
+                count -= npcCount;
+            }
+        }
+        
+    },
+}
 

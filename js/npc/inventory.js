@@ -13,7 +13,7 @@ setup.npcInventoryRemove = function (npc, item, amount = 1) {
 
 setup.npcInventoryHas = function (npc, item) {
     const person = clone(npc);
-    return (person.inventory ??= {})[item] ??= 0;
+    return (person.inventory ?? {})[item] ??= 0;
 }
 
 setup.npcInventoryCount = function (npc, item) {
