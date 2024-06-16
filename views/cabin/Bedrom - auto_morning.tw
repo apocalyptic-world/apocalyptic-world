@@ -5,7 +5,7 @@
 <<set _ruleDup          = $automatization.dup ?? false>>
 <<set _ruleJob          = $automatization.job ?? false>>
 <<set _ruleHunter       = $automatization.hunter ?? false>>
-<<set _ruleStreetworker = $automatization.streetworker ?? false>>
+<<set _ruleStreetworker = $automatization.streetworker ?? 0>>
 <<set _ruleButtplug     = $automatization.buttplug ?? false>>
 <<set _ruleCondom       = $automatization.condom ?? false>>
 <<set _ruleDumbbell     = $automatization.dumbbell ?? false>>
@@ -38,7 +38,10 @@
         <<set _outDupItems = []>>
         <<set _outMinusItems = []>>
 
-        <<if _ruleStreetworker && ['streets', 'nightclub'].includes(_job) && (setup.getNpcHappyLevel(_npc) === 'very_sad' || $weather.heatWave || _npc.sick) && (typeof _npc.rest === 'undefined')>>
+        /* (setup.getNpcHappyLevel(_npc) === 'very_sad'  */
+
+        <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
+        <<if _ruleStreetworker && ['streets', 'nightclub'].includes(_job) && (setup.automatization.sexworkerDayOffCheck(_npc)|| _badWeather || _npc.sick) && (typeof _npc.rest === 'undefined')>>
             <<set _npc.rest = {
 				days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
 				desc: 'Day off resting',
@@ -207,8 +210,8 @@
     <<unset _npc, _want, _outNo>>
 
     /* MC */
+    <<set _outItem = []>>
     <<if _isStorageAvailable>>
-        <<set _outItem = []>>
         <<for _item range setup.automatization.job_tools.mc.sort()>>
             <<if !$backpack.has(_item) && $storage.has(_item)>>
                 <<transfer $storage $backpack _item 1>>
