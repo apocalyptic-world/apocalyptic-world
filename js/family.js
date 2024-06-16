@@ -14,8 +14,10 @@ setup.family = {
         if (npc.family.hasOwnProperty('father') && npc.family.father === 'mc') {
             return true;
         }
-        // grandchild of mc?
-        return npc.family.hasOwnProperty('mother') && setup.family.isBloodToMC(npc.family.mother);
+        // grandchild of mc? mc son's daughter or daughter's daughter
+        return 
+            (npc.family.hasOwnProperty('mother') && setup.family.isBloodToMC(npc.family.mother)) ||
+            (npc.family.hasOwnProperty('father') && setup.family.isBloodToMC(npc.family.father)) ;
     },
 
     getFamily: function(npc) {

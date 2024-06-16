@@ -5,6 +5,10 @@
 <<set _randomPeople = setup.shuffling(_peopleWorking)>>
 <<set _victim = $guests[_randomPeople[0]]>>
 <<set _npc = $guests[_randomPeople[1]]>>
+<<set _helpers = []>>
+<<for _i = 1; _i < _randomPeople.length; _i++>>
+     <<run _helpers.push($guests[_randomPeople[_i]])>>
+<</for>>
 <<set _pronWhat = setup.pronounceWhat(_victim, true)>>
 <<set _pronWho = setup.pronounceWho(_victim)>>
 The dim light of dawn filters through the makeshift windows of your camp as you go over the daily plans with your small team. 
@@ -29,7 +33,8 @@ The other workers are gathered around, their faces etched with concern and helpl
     If we have enough axes we can try to get <<=_pronWho>> out!
 <</sayNpc>>
 <br />
-<<if setup.cabinInventory.count('axe') > 5>>
+<<if setup.cabinNpcInv.count('axe', _helpers) >= 5>>
+/* < <if setup.cabinInventory.count('axe') > 5> > */
     <<set _linkName = 'Help ' + _pronWho>>
     <div id="option_help">
         <<linkreplace _linkName>>
@@ -37,13 +42,15 @@ The other workers are gathered around, their faces etched with concern and helpl
             <<run setup.cabinInventory.drop('axe', 5)>>
             <<run $('#option_look').hide()>>
             Your team members scramble to grab their tools. 
-            The air is thick with urgency as you race back to the site where James lies pinned beneath the massive tree. 
+            The air is thick with urgency as you race back to the site where <<=setup.displayName(_victim)>> lies pinned beneath the massive tree. 
             <<=setup.pronounceWhos(_victim, true)>> face is pale, sweat beading on <<=setup.pronounceWhos(_victim)>> forehead, but <<=setup.pronounceWhat(_victim)>>'s still conscious.
             <br /><br />
             <<addmins 30>>
             Finally, with a mighty crack, the tree splits. 
             <br /><br />
             <strong class="iitem">You broke 5 axes</strong>
+            /* <<run setup.cabinInventory.drop('axe', 5)>> **/
+            <<run setup.cabinNpcInv.drop('axe', 5, _helpers)>>
             <br /><br />
             <<you>>
                 Everyone, lift!
