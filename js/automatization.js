@@ -120,7 +120,8 @@ setup.automatization = {
      * @returns boolean
      */
     sexworkerDayOffCheck: function (npc) {
-        const rulelevel = variables().automatization.streetworker;
+        const _streetworkerSettings = variables().automatization.streetworker ?? 0;
+        const rulelevel = parseInt(_streetworkerSettings * 1);
         const autolevel = ['off', 'very_sad','sad','normal','happy','very_happy'][rulelevel];
         const happylevel = setup.automatization.sexworker_levels[autolevel];
         return happylevel.includes(setup.getNpcHappyLevel(npc));

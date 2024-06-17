@@ -118,8 +118,11 @@
 	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && $weather?.weather === 'storm' && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Forest - fallen tree'>>
+	<<elseif timeBetween('18:00', '21:00') && $characters?.blair?.quests?.missing_friend_found && gameDate.getDay() === 6>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Blair - Ashley threesome'>>
 	<<else>>
-		
+		Blair - Ashley threesome
 	<</if>>
 <</if>>
 

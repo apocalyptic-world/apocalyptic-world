@@ -32,6 +32,7 @@
     <<set _outDupNpcs = []>>
     <<set _outMinusNpcs = []>>
     <<set _bp_plus  = [], _bp_minus = []>>
+    <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
     <<for _npcI, _npc range _npcs>>
         <<set _job = _companions.has(_npc.id) ? 'companion' :
                  _companionSlaves.has(_npc.id) ? 'companion_slave': (_npc.assignedTo ?? 'none')>>
@@ -40,7 +41,6 @@
 
         /* (setup.getNpcHappyLevel(_npc) === 'very_sad'  */
 
-        <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
         <<if _ruleStreetworker && ['streets', 'nightclub'].includes(_job) && (setup.automatization.sexworkerDayOffCheck(_npc)|| _badWeather || _npc.sick) && (typeof _npc.rest === 'undefined')>>
             <<set _npc.rest = {
 				days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
