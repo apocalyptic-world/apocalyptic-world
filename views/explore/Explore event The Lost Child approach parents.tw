@@ -65,6 +65,7 @@ He hands you a small, intricately carved wedding ring.
             <<set $player.goodwill++>>
             <<set _father = $tmpGuy>>
             <<set _mother = $tmpGirl>>
+            <<set _mother.virgin = false>>
             <<newguy>>
             <<set _children = $tmpGuy>>
             <<set _children.birthDate = setup.getBirthDate(8)>>
@@ -87,7 +88,12 @@ He hands you a small, intricately carved wedding ring.
 
             <<run $guests.push(_mother)>>
             <<run $guests.push(_father)>>
-            <<run $guests.push(_children)>>
+
+            <<if ($game.location.nursery ?? false)>>
+				<<run $nursery.push(_children)>>
+            <<else>>
+                <<run $guests.push(_children)>>
+            <</if>>
 
             The mother, still holding her child close, looks at you with tearful eyes.
             <br /><br />
