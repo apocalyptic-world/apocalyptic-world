@@ -57,10 +57,10 @@
 <<widget wakeUp>>
 
 	<<set _weather = either('rain','storm','sun')>>
-	<<if $weather.daysLeft ?? null>>
+	<<if $weather?.daysLeft>>
 		<<set $weather.daysLeft-->>
 	<</if>>
-	<<if !$weather || !$weather.daysLeft>>
+	<<if !$weather || !$weather?.daysLeft>>
 		<<set $weather = {
 			weather: _weather
 		}>>
