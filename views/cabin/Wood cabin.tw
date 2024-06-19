@@ -45,6 +45,10 @@
 	<<set _percentageFoodForager = 1>>
 <</if>>
 
+<<if timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $gameDate.getDay() === 6>>
+	<<set $locationEvents.cabin = true>>
+	<<goto 'Blair - Ashley threesome'>>
+<</if>>
 <<if !($locationEvents.cabin ?? false)>>
 	<<if $game.lone_survivor>>
 		<<set $game.lone_survivor = false>>
@@ -118,10 +122,6 @@
 	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && $weather?.weather === 'storm' && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Forest - fallen tree'>>
-	<<elseif timeBetween('18:00', '21:00') && $characters?.blair?.quests?.missing_friend_found && $gameDate.getDay() === 6 && setup.percentageChance(30)>>
-		<<set $locationEvents.cabin = true>>
-		<<goto 'Blair - Ashley threesome'>>
-	<<else>>
 	<</if>>
 <</if>>
 
