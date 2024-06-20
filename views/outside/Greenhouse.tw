@@ -10,10 +10,11 @@
 <<set _assignedToGreenhouse = false>>
 <<set _girlsCompetition = []>>
 <<set _guestGirlsInGreenhouse = []>>
+<<set _isHeatWave = $weather?.heatWave ?? false>>
 <table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
-		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined'>>
+		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined' || _isHeatWave>>
 			<<continue>>
 		<</if>>
 		<<if !$slaves[_i].gender>>
@@ -52,7 +53,7 @@
 	<</for>> 
 	<<for _gardenGuestI, _gardenGuest range ($guests ?? [])>>
 		<<capture _gardenGuestI, _gardenGuest>>
-		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00')>>
+		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof _gardenGuest.sick !== 'undefined' || _isHeatWave>>
 			<<continue>>
 		<</if>>
 		<<set _assignedToGreenhouse = true>>
