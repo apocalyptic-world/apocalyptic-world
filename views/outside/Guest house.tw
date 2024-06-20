@@ -39,10 +39,10 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<set _isRest = (typeof _guest.rest !== 'undefined')>>
 			<<set _dayOff = _isSick || _isRest>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
-			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
+			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
 				<<continue>>
 			<</if>>	
-			<<if _guest.assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick>>
+			<<if _guest.assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>	
 			<<if _guest.assignedTo === 'kitchen' and timeBetween('08:00', '22:00') && !_isSick>>
@@ -51,13 +51,13 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'mistress' and timeBetween('12:00', '22:00') && !_isSick>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSick>>
+			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick>>
+			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick>>
+			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
