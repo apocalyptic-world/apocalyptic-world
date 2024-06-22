@@ -23,6 +23,9 @@
 <</if>>
 Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 
+<<set _isHeatWave = $weather?.heatWave ?? false>>
+<<set _isSandStorm = $weather?.sandStorm ?? false>>
+
 <<set _guests18yoWomen = []>>
 <<set _guests18yoMen = []>>
 <<set _guests18yoTransWomen = []>>
@@ -61,6 +64,12 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 				<<continue>>
 			<</if>>
 			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick && !_isSandStorm>>
+				<<continue>>
+			<</if>>
+			<<if _guest.assignedTo === 'hospital' and timeBetween('08:00', '22:00')>>
+				<<continue>>
+			<</if>>
+			<<if _guest.assignedTo === 'maid' and timeBetween('10:00', '19:00')>>
 				<<continue>>
 			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
