@@ -71,7 +71,7 @@
 			<<set $locationEvents.cabin = true>>
 			<<goto 'Event: Rotten Rations'>>
 		<</if>>
-	<<elseif setup.getAvailablePersons18yo($guests)[0] >= 2 && setup.percentageChance(1)>>
+	<<elseif  (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Common capital'>>
 	<<elseif $game.cabinName && setup.percentageChance(5)>>
