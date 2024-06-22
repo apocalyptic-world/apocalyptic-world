@@ -45,12 +45,11 @@
 	<<set _percentageFoodForager = 1>>
 <</if>>
 
-<<if timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $gameDate.getDay() === 6>>
-	<<set $locationEvents.cabin = true>>
-	<<goto 'Blair - Ashley threesome'>>
-<</if>>
 <<if !($locationEvents.cabin ?? false)>>
-	<<if $game.lone_survivor>>
+	<<if timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $gameDate.getDay() === 6>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Blair - Ashley threesome'>>
+	<<elseif $game.lone_survivor>>
 		<<set $game.lone_survivor = false>>
 		<<set $locationEvents.cabin = true>>
 		<<if setup.percentageChance(20)>>
@@ -71,7 +70,7 @@
 			<<set $locationEvents.cabin = true>>
 			<<goto 'Event: Rotten Rations'>>
 		<</if>>
-	<<elseif  (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(1)>>
+	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Common capital'>>
 	<<elseif $game.cabinName && setup.percentageChance(5)>>
