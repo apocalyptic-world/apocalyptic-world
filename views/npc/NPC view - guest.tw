@@ -130,7 +130,7 @@
 	<</if>>
 <</if>>
 
-<<if !$tmpGirl.gender && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
+<<if [0, 2].includes($tmpGirl.gender) && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<goto 'NPC marry'>>

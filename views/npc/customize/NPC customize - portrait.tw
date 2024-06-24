@@ -1,12 +1,28 @@
 :: NPC customize - portrait [girlview no-redirect]
 
 <<set _portraits = {
-    asian: setup.range(1, 5),
-    black: setup.range(1, 5),
-	white: setup.range(1, 20),
-    latina: setup.range(1, 5)
+    female: {
+        asian: setup.range(1, 5),
+        black: setup.range(1, 5),
+        white: setup.range(1, 20),
+        latina: setup.range(1, 5)
+    },
+    male: {
+        asian: setup.range(1, 4),
+        black: setup.range(1, 4),
+        white: setup.range(1, 8),
+        latina: setup.range(1, 4)
+    },
+    transfemale: {
+
+    }
 }>>
-<<set _availablePortraits = (_portraits[$tmpGirl.race] ?? [])>>
+<<set _mapping = [
+    'female',
+    'male',
+    'transfemale'
+]>>
+<<set _availablePortraits = (_portraits[_mapping[$tmpGirl.gender]][$tmpGirl.race] ?? [])>>
 <div id="custom_portraits">
     <div class="custom_portrait_item">
             <div class="custom_portrait_item_img">
@@ -49,8 +65,8 @@
         <<capture _key, _portraitUrl>>
             <div class="custom_portrait_item">
                 <div class="custom_portrait_item_img">
-                    <<set _portraitUrl = $tmpGirl.race + "/" + _key + ".png">>
-                    [img[setup.ImagePath+'custom_portraits/female/' +_portraitUrl]]
+                    <<set _portraitUrl = _mapping[$tmpGirl.gender] + '/' + $tmpGirl.race + "/" + _key + ".png">>
+                    [img[setup.ImagePath+'custom_portraits/' +_portraitUrl]]
                 </div>
                 <div class="custom_portrait_item_link">
                     <<link 'Choose'>>
