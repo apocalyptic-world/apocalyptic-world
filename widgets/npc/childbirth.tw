@@ -52,6 +52,9 @@
 	<<set _child.family.mother = _mother.id>>
 	<<if _mother.pregnancy_father>>
 		<<set _child.family.father = _mother.pregnancy_father>>
+		<<if _child.family.father === 'unnkown' && typeof _mother.pregnancy_event !== 'undefined'>>
+				<<set child.family.father = '(' + _mother..pregnancy_event + ')'>>
+		<</if>>
 		<<set _father = setup.getNpcById(_child.family.father)>>
 		<<if _father>>
 			<<set _father.family ??= {kids: []}>>

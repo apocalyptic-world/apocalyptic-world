@@ -35,7 +35,10 @@ setup.getRandomSkills = function (count = 1) {
     return shuffledSkills.slice(0, count);
 };
 
-setup.hasDoctor = function() {
+/** 
+ * @returns has working hospital with assigned doctor?
+ */
+setup.hasWorkingHospital = function() {
     if (!variables()?.game?.location?.hospital) {
         return false;
     }
@@ -51,6 +54,18 @@ setup.hasDoctor = function() {
     return false;
 };
 
+/**
+ * Has a hospital or guests with doctor skill
+ * @returns 
+ */
+setup.hasDoctor = function() {
+    return setup.hasWorkingHospital() || setup.getDoctors().length;
+};
+
+/**
+ * All guests with the doctor skill
+ * @returns [npc]
+ */
 setup.getDoctors = function() {
     var tmpDoctors = [];
     for (var i = 0; i < variables().guests.length; i++) {
