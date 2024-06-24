@@ -12,12 +12,57 @@
             
             <<set _auto = setup.automatization.rule[_autoId] >>
             <tr>
-                <<if _autoId !== 'streetworker'>>
+                <<if !['buttplug','streetworker'].includes(_autoId)>>
                     <<set $automatization[_autoId] ??= false>>
                     <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
                     <td><<=_auto.description>></td>
-                <<else>>
+
+                <<elseif ['buttplug'].includes(_autoId)>>
+                    <<set $automatization.buttplug = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>
+                    <<set _start = $automatization.buttplug>>
+                    <<set $automatization.buttplugGender ??= [_start, _start, _start, _start, _start]>>
+
+                    <td valign="top">&nbsp;_auto.name
+                    </td>
+                    <td><<=_auto.description>><br/>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <<button "All buttplug rotation OFF">>
+                                        <<set $automatization.buttplug = false>>
+                                        <<for _i, _val range $automatization.buttplugGender>>
+                                            <<set $automatization.buttplugGender[_i] = false>>
+                                        <</for>>
+                                        <<goto 'Settlement management'>>
+                                    <</button>>
+                                </td>
+                                <td>
+                                    <<button "All buttplug rotation ON">>
+                                        <<set $automatization.buttplug = true>>
+                                        <<for _i, _val range $automatization.buttplugGender>>
+                                            <<set $automatization.buttplugGender[_i] = true>>
+                                        <</for>>
+                                        <<goto 'Settlement management'>>
+                                    <</button>>
+                                </td>
+                                <td>Or buttplug rotation by gender:
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div id="bp_gender"  style="display: block">
+                            <<for _i = 0; _i < setup.automatization.buttplugGender.length; _i++>>
+                                <<capture _i>>
+                                    <label><<checkbox '$automatization.buttplugGender[_i]' false true autocheck>><<=setup.automatization.buttplugGender[_i]>></label><br/>
+                                <</capture>>
+                            <</for>>
+                        </div>
+                    </td>
+
+                <<elseif ['streetworker'].includes(_autoId)>>
                     /* convert old false/true to a number */
+                    <<set $automatization.streetworker ??= 0>>
                     <<set $automatization.streetworker = $automatization.streetworker > 1 ? $automatization.streetworker : $automatization.streetworker ? 1 : 0>>
                     <td valign="top">&nbsp;_auto.name</td>
                     <td>
