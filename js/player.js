@@ -38,11 +38,15 @@ setup.player = {
      * @returns     as  setup.genderClass(npc)
      */
     npcGenderClass: function(person) {
-        const genderclass = 
-            (typeof person.gender !== 'undefined') ? setup.genderClass(person) :
-            (['blair', 'eve', 'isabel'].includes(person.id)) ? 'girl' :
-            (['mc', 'dom', 'negan', 'rodger', 'vincent'].includes(person.id)) ? 'guy' : 
-            (['horse'].includes(person.id)) ? 'horse' :'';
+        /* const genderclass = (typeof person.gender !== 'undefined') ? setup.genderClass(person) : ''; */
+        let genderclass = setup.genderClass(person);
+        if (typeof genderclass !== 'undefined') {
+            return genderclass;
+        }
+        genderclass =
+            (['blair', 'eve', 'isabel'].includes(person.id)) ?                  'girl'  :
+            (['mc', 'dom', 'negan', 'rodger', 'vincent'].includes(person.id)) ? 'guy'   : 
+            (['horse'].includes(person.id)) ?                                   'horse' : '';
         return genderclass;
     },
     /**
@@ -101,8 +105,8 @@ setup.player = {
                         const rel = setup.getNpcById(id);
                         if(rel) {
                             out.push(setup.player.npcNameColor(rel));
-                        }
-                    }
+                        } 
+                    } 
                 }
                 if(out.length) {
                     npcText += relation + ': ' + out.sort().join(', ') + '; ';
