@@ -39,7 +39,7 @@ setup.automatization = {
         buttplug: {
             name: 'Butt plug rotation',
             description: 'Settlers trade butt plugs between them as needed, thoroughly cleaned of course ;-)',
-            help: ''
+            help: 'When on: Removes buttplug when anal score >= 20; Adds buttplug if submission >= 20 & anal < 20 '
         },
         condom: {
             name: 'Condom rotation',
@@ -125,5 +125,7 @@ setup.automatization = {
         const autolevel = ['off', 'very_sad','sad','normal','happy','very_happy'][rulelevel];
         const happylevel = setup.automatization.sexworker_levels[autolevel];
         return happylevel.includes(setup.getNpcHappyLevel(npc));
-    }
+    },
+
+    buttplugGender: ['Women', 'Men', 'Trans women', 'Trans men', 'Other'],
 };
