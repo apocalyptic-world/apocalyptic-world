@@ -257,6 +257,7 @@ Save.onLoad.add(function (save) {
     if (!(save.state.history[save.state.index].variables.player.stats ?? false)) {
         save.state.history[save.state.index].variables.player.stats = {};
     }
+    variables.player.id ??= 'mc';
 
     for(var varsSlaveI = 0; varsSlaveI < save.state.history[save.state.index].variables.slaves.length; varsSlaveI++) {
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {

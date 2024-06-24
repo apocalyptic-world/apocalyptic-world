@@ -1,12 +1,14 @@
 :: Settlement management - Test
 
-/* TODO -- perhaps coordinate this with family.js --  */
+/* TODO -- perhaps coordinate this with family.js
+ */
 
 <h1>Family and relations</h1>
 
 <h2><<=$player.name>>'s family tree</h2>
 <<run setup.player.updateFamily(true)>>
 <<set _shown = { mc: true}>>
+<<set _shownPreg = {}>>
 <table class="mc-stats-table">
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
@@ -72,6 +74,9 @@
 	<<for _npcId, _npc range $characters>>
 		<<if (typeof _npc.pregnancy !== 'undefined')>>
 			<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
+			<<if _fatherId === 'unnkown' && typeof _npc.pregnancy_event !== 'undefined'>>
+				<<set _fatherId = '(' + _npc.pregnancy_event + ')'>>
+			<</if>>
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
 				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
@@ -81,6 +86,9 @@
 	<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 		<<if (typeof _npc.pregnancy !== 'undefined')>>
 			<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
+			<<if _fatherId === 'unknown' && typeof _npc.pregnancy_event !== 'undefined'>>
+				<<set _fatherId = '(' + _npc.pregnancy_event + ')'>>
+			<</if>>
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
 				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
@@ -129,12 +137,13 @@
 <</for>>
 <<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {}))>>
 	<<if typeof _npc.id === 'undefined'>>
-		/* DBG undefined id <<=_npc.name>>?<br/> */
+		 DBG undefined id <<=_npc.name>>?<br/>
 		<<continue>>
 	<<elseif typeof _npc.name === 'undefined'>>
 		/* rose ends here -- DBG undefined name <<=_npc.id>>?<br/> */
 		<<continue>>
-	<<elseif _npc.id  === 'negan' || _npc.name == 'Negan'>>
+	<<elseif _npc.id  === 'negan' >>
+		/*DBG Negan?  <<=_npc.id>> <<=_npc.name>>?<br/> */
 		<<continue>>
 	<</if>>
 
@@ -142,9 +151,10 @@
 	
 	<<if (typeof _npc.pregnancy !== 'undefined')>>
 		<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
-		<<if _fatherId === 'unkown' && typeof _npc.pregnancy_event !== 'undefined'>>
+		<<if _fatherId === 'unknown' && (_npc?.pregnancy_event ?? '')>>
 			<<set _fatherId = '(' + _npc.pregnancy_event + ')'>>
 		<</if>>
+
 		/*
 		<<set _rels.pregnancy[_fatherId] ??= {}>>
 		<<set _rels.pregnancy[_fatherId][_npc.id] = true>>
@@ -152,12 +162,13 @@
 		<<if _fatherId !== 'mc'>>
 			<<set _outs.pregnancy[_fatherId] ??= []>>
 			<<set _outs.pregnancy[_fatherId].push(setup.player.npcRelationText2(_npc, true, true))>>
-			<<set _shown[_npc.id] = true>>
+			<<set _shownPreg[_npc.id] = true>>
 		<</if>>
 	<</if>>
 
 	<<if !_npc.hasOwnProperty('family')>>
 		<<if !_npc.hasOwnProperty('birthDate')>>
+			DBG missing birthday for <<=_npc.name>><br/>
 			<<set _rels.single[_npc.id] = true>>
 		<<elseif setup.getAge(_npc) < 18>>
 			<<set _rels.orphan[_npc.id] = true>>
@@ -176,29 +187,85 @@
 			<<set _rels.marriage[_husbandID] ??= {}>>
 			<<set _rels.marriage[_husbandID][_npc.id] = true>>
 			<<set _shown[_npc.id] = true>>
+
+			<<set _wifeID = _npc.id>>
+			<<set _husband = setup.getNpcById(_husbandID)>>
+			<<if _husband>>
+				<<set _husband.family ??= {}>>
+				<<set _husband.family.wives ??= []>>
+				<<if (!_husband.family.wives.includes(_wifeID))>>
+					<<run _husband.family.wives.push(_wifeID)>>
+				<</if>>
+			<</if>>
 		<<elseif _reltype === 'wives'>>
 			<<set _wives = _data>>
 			<<set _rels.marriage[_npc.id] ??= {}>>
 			<<for _wifeID range _wives>>
 				<<set _rels.marriage[_npc.id][_wifeID] = true>>
 				<<set _shown[_wifeID] = true>>
+
+				<<set _husbandID = _npc.id>>
+				<<set _wife =  setup.getNpcById(_wifeID)>>
+				<<if _wife>>
+					<<set _wife.family ??= {}>>
+					<<set _wife.family.husband ??= _husbandID>>
+				<</if>>
 			<</for>>
 		<<elseif _reltype === 'father'>>
-			<<set _fatherID = _data>>
-			<<set _rels.father[_fatherID] ??= {}>>
-			<<set _rels.father[_fatherID][_npc.id] = true>>
-			<<set _shown[_npc.id] = true>>
+			<<set _fatherID = _data ?? 'unknown'>>
+			<<if _fatherID !== 'unknown'>>
+				<<set _rels.father[_fatherID] ??= {}>>
+				<<set _rels.father[_fatherID][_npc.id] = true>>
+				<<set _shown[_npc.id] = true>>
+
+				<<set _kidID =  _npc.id>>
+				<<set _father = setup.getNpcById(_fatherID)>>
+				<<if _father>>
+					<<set _father.family ??= {}>>
+					<<set _father.family.kids ??= []>>
+					<<if (!_father.family.kids.includes(_kidID))>>
+						<<run _father.family.kids.push(_kidID)>>
+					<</if>>
+				<</if>>
+			<<else>>
+				<<set _fatherID = null>>
+			<</if>>
 		<<elseif _reltype === 'mother'>>
 			<<set _motherID = _data>>
-			<<set _rels.mother[_motherID] ??= {}>>
-			<<set _rels.mother[_motherID][_npc.id] = true>>
-			<<set _shown[_npc.id] = true>>
+			<<if _motherID ?? 'unknown' !== 'unknown'>>
+				<<set _rels.mother[_motherID] ??= {}>>
+				<<set _rels.mother[_motherID][_npc.id] = true>>
+				<<set _shown[_npc.id] = true>>
+
+				<<set _kidID =  _npc.id>>
+				<<set _mother = setup.getNpcById(_motherID)>>
+				<<if _mother>>
+					<<set _mother.family ??= {}>>
+					<<set _mother.family.kids ??= []>>
+					<<if (!_mother.family.kids.includes(_kidID))>>
+						<<run _mother.family.kids.push(_kidID)>>
+					<</if>>
+				<</if>>
+			<<else>>
+				<<set _motherID = null>>
+			<</if>>
 		<<elseif _reltype === 'kids'>>
 			<<set _kids = _data>>
 			<<set _rels.child[_npc.id] ??= {}>>
 			<<for _kidID range _kids>>
 				<<set _rels.child[_npc.id][_kidID] = true>>
 				<<set _shown[_kidID] = true>>
+
+				<<set _parentID = _npc.id>>
+				<<set _kid = setup.getNpcById(_kidID)>>
+				<<if _kid>>
+					<<set _kid.family ??= {}>>
+					<<if _npc.gender>>
+						<<set _kid.family.father ??= _parentID>>
+					<<else>>
+						<<set _kid.family.mother ??= _parentID>>
+					<</if>>
+				<</if>>
 			<</for>>
 		<<else>>
 			DBG Strange relation: <<=_reltype>><br/><br/>
@@ -233,7 +300,7 @@
 
 <<for _reltype range ['mother', 'parent']>>
 	<<for _parentID, _children range _rels[_reltype]>>
-		<<if !_shown[_parentID]>>
+		<<if _npcs.has(_parentID) && !_shown[_parentID]>>
 			<<set _outs.females.push(setup.player.npcRelationText2(_npcs.get(_parentID), true, true))>>
 			<<set _shown[_parentID] = true>>
 
@@ -250,7 +317,7 @@
 
 <<for _reltype range ['orphan', 'single']>>
 	<<for _npcID, _dummy range _rels[_reltype]>>
-		<<if  _npcs.has(_npcID) && !_shown[_npcID]>>
+		<<if  _npcs.has(_npcID) && !_shown[_npcID] && !_shownPreg[_npcID]>>
 			<<set _outs[_reltype].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :''))>>
 			<<set _shown[_npcID] = true>>
 		<</if>>
