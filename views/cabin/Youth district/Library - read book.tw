@@ -25,7 +25,7 @@ Your intelligence increased by <<=_giveInt>>.
 <<energy -20>>
 
 <<set _guests = setup.getAvailablePersons18yo($guests)>>
-<<if _guests[0].length>>
+<<if (_guests[0] ?? []).length>>
     <<set _randomGuestId = setup.getRandomElement(_guests[0])>>
     <<set _randomGuest = $guests[_randomGuestId]>>
     <<if _randomGuest.horny > 50>>
