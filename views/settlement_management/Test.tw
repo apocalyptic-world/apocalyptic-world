@@ -168,7 +168,9 @@
 
 	<<if !_npc.hasOwnProperty('family')>>
 		<<if !_npc.hasOwnProperty('birthDate')>>
-			DBG missing birthday for <<=_npc.name>><br/>
+			<<if _npc.id !== 'horse'>>
+				DBG missing birthday for <<=_npc.name>><br/>
+			<</if>>
 			<<set _rels.single[_npc.id] = true>>
 		<<elseif setup.getAge(_npc) < 18>>
 			<<set _rels.orphan[_npc.id] = true>>
