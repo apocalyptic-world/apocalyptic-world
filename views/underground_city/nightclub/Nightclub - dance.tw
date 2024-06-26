@@ -9,6 +9,8 @@
 		<<set _orientation = 'bisexual'>>
 	<</if>>	
 	<<set $tmpGirl = setup.setSexuality($tmpGirl, _orientation)>>
+<<elseif settings.transEnabled && setup.percentageChance(30)>>
+	<<newtransgirl>>
 <<elseif settings.gaysEnabled>>
 	<<newguy>>
 	<<if (setup.percentageChance(80))>>
@@ -18,7 +20,7 @@
 	<</if>>
 	<<set $tmpGirl = setup.setSexuality($tmpGuy, _orientation)>>
 <</if>>
-
+<<newtransgirl>>
 <<if $tmpGirl>>
 	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + 20, 100)>>
 	<<set _age = setup.getAge($tmpGirl)>>
@@ -27,11 +29,15 @@
 	<<actionImage $tmpGirl dance>>
 	<br />
 	After an hour on the dancefloor, a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong> in <<=setup.pronounceWhos($tmpGirl)>> <strong class="iitem"><<=setup.agePeriod(_age)>></strong> starts dancing close to you,<br /><<=setup.pronounceWhat($tmpGirl)>> is <strong class="iitem"><<=setup.beautyDescription($tmpGirl.beauty)>></strong>, <strong class="iitem"><<=$tmpGirl.race>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair
-	<<if !$tmpGirl.gender>>
+	<<if [0, 2].includes($tmpGirl.gender)>>
 	and <strong class="iitem"><<=$tmpGirl.breasts>></strong> breasts
 	<</if>>
 	<<if ($tmpGirl.drunk ?? 0) > 0>>
 	- <<=setup.pronounceWhat($tmpGirl)>> is <<=setup.drunkDescription($tmpGirl)>>.
+	<</if>>
+	<<if $tmpGirl.gender === 2>>
+		<br />
+		<strong>She is clearly packing something under that dress.</strong>
 	<</if>>
 <<else>>
 	<br /><br />
