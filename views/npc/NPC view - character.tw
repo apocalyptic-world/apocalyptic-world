@@ -36,6 +36,7 @@
 	<</if>>
 	<<if $backpack.has('pregnancy_speed_potion')>>
 		<<link 'Give pregnancy speed potion'>>
+			<<set $pregnancyPotionBackLink = 'NPC view - character'>>
 			<<goto 'Girl - pregnancy speed potion'>>
 		<</link>>
 	<</if>>
@@ -53,13 +54,7 @@
 <</link>>
 	
  <<link 'Go back'>>
-	<<if typeof $slaveId !== 'undefined'>>
-		<<set $slaves[$slaveId] = $tmpGirl>>
-	<<elseif typeof $guestId !== 'undefined'>>
-		<<set $guests[$guestId] = $tmpGirl>>
-	<<elseif typeof $charId !== 'undefined'>>
-		<<set $characters[$charId] = $tmpGirl>>
-	<</if>>
+	<<set $characters[$charId] = $tmpGirl>>
 	<<unset $slaveId, $guestId, $charId>>
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>

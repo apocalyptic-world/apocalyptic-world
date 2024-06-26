@@ -22,7 +22,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 <br /><br />
 
 <<for _guestI, _guest range $guests>>
-	<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
+	<<if setup.getAge(_guest) < 18>>
 		<<continue>>
 	<</if>>
 	<<setNpcStats 'guest' _guestI 'relationship' +10>>
@@ -41,7 +41,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<h4>Guests attending the party</h4>
 	<table id="slaves">
 		<<for _guestI, _guest range $guests>>
-			<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
+			<<if setup.getAge(_guest) < 18>>
 				<<continue>>
 			<</if>>
 			<<capture _guestI, _guest>>
@@ -61,7 +61,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  <td>
 						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if _guest.gender == 0 && setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished>>
+							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -210,7 +210,8 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  <td>
   						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if _guest.gender == 0 && setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished>>
+							<<run console.log(_guest)>>
+							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -223,7 +224,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 								<<set $tmpGirlInvite to false>>
 								<<set $tmpGirl.rape to false>>
 								<<set $guestId = _guestI>>
-								<<run delete $slaveId>>
+								<<unset $slaveId, $charId>>
 								<<fuck $tmpGirl>>
 							<</if>>
 						<</link>>
