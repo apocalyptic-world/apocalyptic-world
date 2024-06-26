@@ -158,6 +158,20 @@ setup.displayOrientation = function(person) {
 	return 'straight';
 };
 
+setup.displayOrientationIcon = function(person) {
+	const mapping = {
+		asexual: '&#x26B2;',
+		pansexual: '&#x26A7;',
+		bisexual: 'bi',
+		straight: '&#x26A4;',
+		gay: '&#x26A3;',
+		lesbian: '&#x26A2;'
+	};
+	const _ori = setup.displayOrientation(person);
+
+	return mapping[_ori] ?? _ori;
+}
+
 setup.setSexuality = function(person, orientation) {
 	var _orientation = orientation;
 

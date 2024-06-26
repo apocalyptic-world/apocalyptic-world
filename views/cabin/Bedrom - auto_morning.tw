@@ -6,9 +6,10 @@
 <<set _ruleJob          = $automatization.job ?? false>>
 <<set _ruleHunter       = $automatization.hunter ?? false>>
 <<set _ruleStreetworker = $automatization.streetworker ?? 0>>
-<<set _ruleButtplug     = $automatization.buttplug ?? false>>
+<<set _ruleButtplug     = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>
 <<set _ruleCondom       = $automatization.condom ?? false>>
 <<set _ruleDumbbell     = $automatization.dumbbell ?? false>>
+<<set _ruleBPgender     = $automatization.buttplugGender ?? [_ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug]>>
 
 <<if _ruleDup || _ruleJob || _ruleHunter || _ruleStreetworker || _ruleButtplug ||  _ruleCondom || _ruleDumbbell>>
     <<set _outputAutoList ??= []>>
@@ -49,8 +50,10 @@
 			}>>
         <</if>>
 
-        <<if _ruleButtplug>>
-            <<if _npc.sub >= 20 && _npc.anal < 20 && !(_npc.buttplug ?? false)>>
+        <<if _ruleButtplug>> /* add to specific gender only; remove from all when done */
+            <<set _gender = typeof _npc.gender !== 'undefined' ? _npc.gender : 4 >>
+            <<set _genderOK = _ruleBPgender[_gender]>>
+            <<if _npc.sub >= 20 && _npc.anal < 20 && !(_npc.buttplug ?? false) && _genderOK>>
                 <<set _bp_plus.push(_npc)>>
             <<elseif _npc.anal >= 20 && (_npc.buttplug ?? false)>>
                 <<set _npc.buttplug = false>>

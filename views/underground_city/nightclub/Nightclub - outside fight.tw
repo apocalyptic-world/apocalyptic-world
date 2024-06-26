@@ -28,7 +28,8 @@ As soon as you step outside the nightclub and turn around the corner, <strong>2<
 	<<if setup.percentageChance(_nightclubPercentageTheyRecognize)>>
 		<<goto 'Nightclub - outside fight recognize'>>
 	<<else>>
-		<<generateEnemies 2 1>>
+		<<generateEnemies 2>>
+		<<run $enemies.run($tmpGirl)>>
 		<<fight $enemies 'Underground city' 'Underground city' true>>
 	<</if>>
 <</link>>

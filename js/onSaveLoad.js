@@ -102,6 +102,10 @@ Save.onLoad.add(function (save) {
         ) {
             save.state.history[save.state.index].variables.tmpGirlViewBack = 'Isabel room';
         }
+        if (typeof variables.characters.isabel.pregnancy !== 'undefined') {
+            variables.characters.isabel.pregnancy_father ??= 'mc';
+        }
+
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
@@ -112,6 +116,9 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.likesGirls = false;
         save.state.history[save.state.index].variables.characters.blair.likesTGuys = false;
         save.state.history[save.state.index].variables.characters.blair.likesTGirls = false;
+        if (typeof variables.characters.blair.pregnancy !== 'undefined') {
+            variables.characters.blair.pregnancy_father ??= 'mc';
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
@@ -250,6 +257,7 @@ Save.onLoad.add(function (save) {
     if (!(save.state.history[save.state.index].variables.player.stats ?? false)) {
         save.state.history[save.state.index].variables.player.stats = {};
     }
+    variables.player.id ??= 'mc';
 
     for(var varsSlaveI = 0; varsSlaveI < save.state.history[save.state.index].variables.slaves.length; varsSlaveI++) {
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {
