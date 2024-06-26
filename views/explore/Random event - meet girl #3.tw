@@ -1,28 +1,156 @@
 :: Random event - meet girl #3 {"position":"5742,16","size":"100,100"}
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
-<center>
- [img[setup.ImagePath+'places/explore/found_girl.jpg']]
- </center>
- <br /><br />
-You notice a girl walking through the forest and decide to check out what she's doing.
- <br /><br />
+<<set $tmpGirl = null, $slaveId = null, $tempGuy = null>>
+
+<<if (settings.orientationMC is 'hetero')>>
+			<<set _probGirl to 100>>
+			<<if (settings.gaysEnabled)>>	
+					<<set _probGirl to 90>>
+			<</if>>
+			<<if (settings.transEnabled)>>
+					<<set _probGirl = 94>><<set _probTGirl = 97>>
+			<</if>>
+			<<if (settings.transEnabled &amp;&amp; settings.gaysEnabled)>>
+					<<set _probGirl = 84>><<set _probBoy = 94>><<set _probTGirl = 97>>
+			<</if>>
+<</if>>
+<<if (settings.orientationMC is 'bi')>>
+			<<set _probGirl = 90>>
+			<<if (settings.gaysEnabled)>>	
+					<<set _probGirl = 50>>
+			<</if>>
+			<<if (settings.transEnabled)>>
+					<<set _probGirl = 94>><<set _probTGirl = 97>>
+			<</if>>
+			<<if (settings.transEnabled &amp;&amp; settings.gaysEnabled)>>
+					<<set _probGirl = 47>><<set _probBoy = 94>><<set _probTGirl = 97>>
+			<</if>>
+<<elseif  (settings.orientationMC is 'gay')>>
+		<<set _probGirl = 50>>;
+		<<if (settings.gaysEnabled)>>	
+				<<set _probGirl = 10>>
+		<</if>>
+		<<if (settings.transEnabled)>>
+				<<set _probGirl = 86>><<set _probTGirl = 93>>
+		<</if>>
+		<<if (settings.transEnabled &amp;&amp; settings.gaysEnabled)>>
+					<<set _probGirl = 10>><<set _probBoy = 94>><<set _probTGirl = 97>>
+			<</if>>
+<</if>>
+<!--<<print _probGirl>> <<print _probBoy>> <<print _probTGirl>> <<print _probTBoy>> -->
+<!-- girl -->
+<<if (setup.percentageChance(_probGirl))>>
+	<<newgirl>>
+		<center>
+			[img[setup.ImagePath+'places/explore/found_girl.jpg']]
+		</center>
+		<br /><br />
+			You notice a girl walking through the forest and decide to check out what she's doing.
+		 <br /><br />
+		<<link 'Go closer'>>
+			<<set $tmpGirl.location = 'forest'>>
+			<<set $tmpGirl.rape to true>>
+			<<set $tmpGirlCapture to true>>
+			<<set $tmpGirlInvite to true>>
+			<<unset $tmpGirlViewBack>>
+			<<if setup.getAge($tmpGirl) < 40 &amp;&amp; randomInteger(1,4) === 1>>
+				<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
+				<<set $tmpGirl.virgin = false>>
+			<</if>>
+			<<unset $slaveId, $guestId, $charId, $childId>>
+			<<set $tmpGirlBack = 'Outside'>>
+			<<goto [[NPC view]]>>
+		<</link>>
+<!-- boy -->
+<<elseif (setup.percentageChance(_probBoy))>>
+	<center>
+		<<if randomInteger(1,3) === 1>>
+			[img[setup.ImagePath+'places/explore/found_boy1.jpg']]
+		<<elseif randomInteger(1,3) === 2>>
+			[img[setup.ImagePath+'places/explore/found_boy2.jpg']]
+		<<else>>
+			[img[setup.ImagePath+'places/explore/found_boy3.jpg']]
+		<</if>>
+	</center>
+	<br /><br />
+	You notice a guy walking through the forest and decide to check out what he's doing.
+<br /><br />	
 
 <<link 'Go closer'>>
-	<<newgirl>>
-	<<set $tmpGirl.location = 'forest'>>
-	<<set $tmpGirl.rape to true>>
-	<<set $tmpGirlCapture to true>>
-	<<set $tmpGirlInvite to true>>
-	<<unset $tmpGirlViewBack>>
-	<<if setup.getAge($tmpGirl) < 40 && randomInteger(1,4) === 1>>
-		<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
-		<<set $tmpGirl.virgin = false>>
+	<<newguy>>
+	<<set $tmpGuy.location = 'forest'>>
+	<<if (settings.gaysEnabled or settings.orientationMC isnot 'hetero')>>
+		<<set $tmpGuy.rape to true>>
+		<<elseif set $tmpGuy.rape to false>>
 	<</if>>
+	<<set $tmpGuyCapture to true>>
+	<<set $tmpGuyInvite to true>>
+	<<unset $tmpGuyViewBack>>
 	<<unset $slaveId, $guestId, $charId, $childId>>
-	<<set $tmpGirlBack = 'Outside'>>
+	<<set $tmpGuyBack = 'Outside'>>
+	<<set $tmpGirl = setup.setSexuality($tmpGuy, _orientation)>>
 	<<goto [[NPC view]]>>
 <</link>>
+<!-- Tgirl -->
+<<elseif (setup.percentageChance(_probTGirl))>>
+	<center>
+		<<if randomInteger(1,2) === 1>>
+			[img[setup.ImagePath+'places/explore/found_tgirl1.jpg']]
+		<<else>>
+			[img[setup.ImagePath+'places/explore/found_tgirl2.jpg']]
+		<</if>>
+	</center>
+	<br /><br />
+	You notice a slightly masculine girl walking through the forest and decide to check out what she's doing.
+<br /><br />	
+
+<<link 'Go closer'>>
+	<<newtransgirl>>
+	<<set $tmpGuy.location = 'forest'>>
+	<<if settings.gaysEnabled>>
+		<<set $tmpGuy.rape to true>>
+	<</if>>
+	<<set $tmpGuyCapture to true>>
+	<<set $tmpGuyInvite to true>>
+	<<unset $tmpGuyViewBack>>
+	<<unset $slaveId, $guestId, $charId, $childId>>
+	<<set $tmpGuyBack = 'Outside'>>
+	<<set $tmpGirl = setup.setSexuality($tmpGuy, _orientation)>>
+	<<goto [[NPC view]]>>
+<</link>>
+<!-- TBoy -->
+<<else>>
+	<center>
+		<<if randomInteger(1,3) === 1>>
+			[img[setup.ImagePath+'places/explore/found_tboy1.jpg']]
+		<<elseif randomInteger(1,3) === 2>>
+			[img[setup.ImagePath+'places/explore/found_tboy2.jpg']]
+		<<else>>
+			[img[setup.ImagePath+'places/explore/found_tboy3.jpg']]
+		<</if>>
+	</center>
+	<br /><br />
+	You notice a slightly femenine guy walking through the forest and decide to check out what he's doing.
+<br /><br />	
+
+		<<link 'Go closer'>>
+		<<newtransguy>>
+			<<set $tmpGirl.location = 'forest'>>
+			<<set $tmpGirl.rape to true>>
+			<<set $tmpGirlCapture to true>>
+			<<set $tmpGirlInvite to true>>
+			<<unset $tmpGirlViewBack>>
+			<<if setup.getAge($tmpGirl) < 40 &amp;&amp; randomInteger(1,8) === 1>>
+				<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
+				<<set $tmpGirl.virgin = false>>
+			<</if>>
+			<<unset $slaveId, $guestId, $charId, $childId>>
+			<<set $tmpGirlBack = 'Outside'>>
+			<<goto [[NPC view]]>>
+		<</link>>	
+	
+<</if>>
 
 [[Leave|Outside]]
 
