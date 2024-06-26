@@ -15,7 +15,7 @@ setup.help = {
        },
        doctor: {
         /* name from setup.skills */
-        desc: 'A must skill to worki in the hospital. Decreases chance of miscarriage, treats knife wounds and reduces sickdays',
+        desc: 'A must skill to work in the hospital. Decreases chance of miscarriage, treats knife wounds and reduces sickdays',
         learnable: false,
         xtra: 'Without hospital, any guest with doctor skill will step in as doctor when needed.',
        },
