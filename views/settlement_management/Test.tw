@@ -6,6 +6,7 @@
 <h1>Family and relations</h1>
 
 <h2><<=$player.name>>'s family tree</h2>
+<<set _replace = setup.player.charactersCheck()>>
 <<run setup.player.updateFamily(true)>>
 <<set _shown = { mc: true}>>
 <<set _shownPreg = {}>>
@@ -142,7 +143,7 @@
 	<<elseif typeof _npc.name === 'undefined'>>
 		/* rose ends here -- DBG undefined name <<=_npc.id>>?<br/> */
 		<<continue>>
-	<<elseif _npc.id  === 'negan' >>
+	<<elseif _npc.id  === 'negan' || (_replace.has(_npc.id) && _replace.get(_npc.id)  === 'negan' )>>
 		/*DBG Negan?  <<=_npc.id>> <<=_npc.name>>?<br/> */
 		<<continue>>
 	<</if>>
@@ -262,10 +263,10 @@
 				<<set _kid = setup.getNpcById(_kidID)>>
 				<<if _kid>>
 					<<set _kid.family ??= {}>>
-					<<if _npc.gender>>
-						<<set _kid.family.father ??= _parentID>>
-					<<else>>
+					<<if ['girl'].includes(setup.player.npcGenderClass(_npc))>>
 						<<set _kid.family.mother ??= _parentID>>
+					<<else>>
+						<<set _kid.family.father ??= _parentID>>
 					<</if>>
 				<</if>>
 			<</for>>
@@ -300,7 +301,8 @@
 	<</for>>
 <</for>>
 
-<<for _reltype range ['mother', 'parent']>>
+/*<<for _reltype range ['mother', 'parent']>> */
+<<for _reltype range ['mother']>>
 	<<for _parentID, _children range _rels[_reltype]>>
 		<<if _npcs.has(_parentID) && !_shown[_parentID]>>
 			<<set _outs.females.push(setup.player.npcRelationText2(_npcs.get(_parentID), true, true))>>

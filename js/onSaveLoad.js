@@ -112,6 +112,7 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.id ??= 'blair';
         save.state.history[save.state.index].variables.characters.blair.family ??= {};
         save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
+        delete variables.characters.blair.family.mother;
         save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
         save.state.history[save.state.index].variables.characters.blair.likesGirls = false;
         save.state.history[save.state.index].variables.characters.blair.likesTGuys = false;
