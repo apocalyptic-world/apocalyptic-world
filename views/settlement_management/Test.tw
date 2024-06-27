@@ -217,11 +217,14 @@
 		<<elseif _reltype === 'father'>>
 			<<set _fatherID = _data ?? 'unknown'>>
 			<<if _fatherID !== 'unknown'>>
+				<<set _kidID =  _npc.id>>
+				<<if _replace.has(_kidID)>>
+					<<set _kidID = _replace.get(_kidID)>>
+				<</if>>
+
 				<<set _rels.father[_fatherID] ??= {}>>
 				<<set _rels.father[_fatherID][_npc.id] = true>>
 				<<set _shown[_npc.id] = true>>
-
-				<<set _kidID =  _npc.id>>
 				<<set _father = setup.getNpcById(_fatherID)>>
 				<<if _father>>
 					<<set _father.family ??= {}>>
@@ -236,11 +239,14 @@
 		<<elseif _reltype === 'mother'>>
 			<<set _motherID = _data>>
 			<<if _motherID ?? 'unknown' !== 'unknown'>>
+				<<set _kidID =  _npc.id>>
+				<<if _replace.has(_kidID)>>
+					<<set _kidID = _replace.get(_kidID)>>
+				<</if>>
+
 				<<set _rels.mother[_motherID] ??= {}>>
 				<<set _rels.mother[_motherID][_npc.id] = true>>
 				<<set _shown[_npc.id] = true>>
-
-				<<set _kidID =  _npc.id>>
 				<<set _mother = setup.getNpcById(_motherID)>>
 				<<if _mother>>
 					<<set _mother.family ??= {}>>
@@ -255,7 +261,16 @@
 		<<elseif _reltype === 'kids'>>
 			<<set _kids = _data>>
 			<<set _rels.child[_npc.id] ??= {}>>
-			<<for _kidID range _kids>>
+			<<for _i, _kidID range _kids>>
+				<<if _replace.has(_kidID)>>
+					<<set _new = _replace.get(_kidID)>>
+					<<if _kids.includes(_new)>>
+						<<run _kids.splice(_i, 1)>>
+						<<set _i-->>
+					<</if>>
+					<<set _kidID = _new>>
+				<</if>>
+
 				<<set _rels.child[_npc.id][_kidID] = true>>
 				<<set _shown[_kidID] = true>>
 
@@ -291,6 +306,10 @@
 			<</if>>
 
 			<<for _npcID, _dummy range _others>>
+				<<if _replace.has(_npcID)>>
+					<<set _npcID = _replace.get(_npcID)>>
+				<</if>>
+
 				<<if _npcs.has(_npcID)>>
 					<<set _outs[_reltype][_maleID] ??= []>>
 					<<set _outs[_reltype][_maleID].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true))>>
