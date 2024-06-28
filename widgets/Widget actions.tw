@@ -21,7 +21,7 @@
 	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
 	<<if _isPack>>
-		<<set _subActionsPath = '/actions'>>
+		<<set _subActionsPath = 'actions/'>>
 	<</if>>
 
 	<div class="action-image">
@@ -78,24 +78,31 @@
 		_genderDesc
 		]>>
 
+		<<set _actions = clone(setup.actions)>>
+		<<set _location = $args[0].location>>
 		<<if $args[0].pack>>
 			<<run _morphs.unshift($args[0].pack + _pregnancyDesc, $args[0].pack)>>
+			<<if typeof _actions[$args[0].pack] !== 'undefined' && typeof _actions[$args[0].pack][$args[0].location] === 'undefined'>>
+				<<set _actions[$args[0].pack][$args[0].location] = _actions[$args[0].pack]['default']>>
+				<<set _location = 'default'>>
+			<</if>>
 		<</if>>
 		
 		<<for _i to 0; _i < _morphs.length; _i++>>
 			<<if
-			typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-			typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
-			typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
+			typeof _actions[_morphs[_i]] !== 'undefined' && 
+			typeof _actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
+			typeof _actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
 				<<if _isPack && ![$args[0].pack, $args[0].name].includes(_morphs[_i])>>
 					<<set _actionsPath = _defaultActionsPath>>
 					<<set _subActionsPath = ''>>
 				<</if>>
-				<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
+				<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + either(_actions[_morphs[_i]][_location][$args[1]])`>>
 				<<set _imageFound = true>>
 				<<break>>
 			<</if>>
 		<</for>>
+		
 
 		<<if !_imageFound>>
 			<<for _i to 0; _i < _morphs.length; _i++>>
