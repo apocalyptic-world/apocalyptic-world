@@ -2,6 +2,7 @@
 <<set _traits = {}>>
 <<set _traitsLocked = {}>>
 <<set _skills = {}>>
+<<set _likes = {}>>
 <<set $editTraits = $editTraitsLocked = $editSkills>>
 <<set $tmpGirl.strength = $tmpGirl.strength ?? 0>>
 <<set $tmpGirl.anal = $tmpGirl.anal ?? 0>>
@@ -63,6 +64,19 @@
             <<numberbox "_anal" $tmpGirl.anal>>
         </td>
     </tr>
+    <<if [0,2].includes($tmpGirl.gender)>>
+        <tr>
+            <td>
+                Breasts:
+            </td>
+            <td>
+                <<set _breasts = $tmpGirl.breasts>>
+                <label><<radiobutton "_breasts" "small" autocheck>> Small</label>
+                <label><<radiobutton "_breasts" "medium" autocheck>> Medium</label>
+                <label><<radiobutton "_breasts" "big" autocheck>> Big</label>
+            </td>
+        </tr>
+    <</if>>
     <tr>
         <td>
             Traits:
@@ -103,6 +117,21 @@
                     <div>
                         <<set _checked = $tmpGirl.skills.includes(_skillKey) ? 'checked' : null>>
                         <<checkbox "_skills[_skillKey]" false true _checked>> <<=setup.skills[_skillKey].title>>
+                    </div>
+                <</capture>>
+            <</for>>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Sexualities:
+        </td>
+        <td>
+            <<for _sexuallityKey, _sexuallity range ['likesGirls', 'likesGuys', 'likesTGirls', 'likesTGuys']>>
+                <<capture _sexuallity, _sexuallityKey>>
+                    <div>
+                        <<set _checked = $tmpGirl[_sexuallity] ? 'checked' : null>>
+                        <<checkbox "_likes[_sexuallity]" false true _checked>> <<=_sexuallity>>
                     </div>
                 <</capture>>
             <</for>>
@@ -150,6 +179,14 @@
 	        <<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
         <</if>>
     <</if>>
+    <<if [0,2].includes($tmpGirl.gender)>>
+        <<set $tmpGirl.breasts = _breasts>>
+    <</if>>
+    <<run console.log(_likes)>>
+    <<set $tmpGirl.likesGirls = _likes.likesGirls>>
+    <<set $tmpGirl.likesGuys = _likes.likesGuys>>
+    <<set $tmpGirl.likesTGirls = _likes.likesTGirls>>
+    <<set $tmpGirl.likesTGuys = _likes.likesTGuys>>
     <<goto `passage()`>>
     <<dialogclose>>
 <</link>>
