@@ -61,6 +61,7 @@
 <<set _isHeatWave = $weather?.heatWave ?? false>>
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
 
+<<set _hasWorkingHospital = setup.hasWorkingHospital()>>
 <<set _hasDoctor = setup.hasDoctor()>>
 // Horse
 <<if ($player.horse ?? false)>>
@@ -282,7 +283,7 @@
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
-			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<set _miscarrieageChance = _hasWorkingHospital ? 3 : _hasDoctor ? 6 : 12>>
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
 				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
@@ -303,7 +304,7 @@
 		// Sick
 		<<if _isSick>>
 			<<set $slaves[_i].sick.days-->>
-			<<if _hasDoctor>>
+			<<if _hasWorkingHospital || (_hasDoctor && setup.percentageChance(42))>>
 				<<set $slaves[_i].sick.days-->>
 			<</if>>
 			<<if $slaves[_i].sick.days <= 0>>
@@ -647,7 +648,7 @@
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
-			<<set _miscarrieageChance = _hasDoctor ? 5 : 10>>
+			<<set _miscarrieageChance = _hasWorkingHospital ? 3 : _hasDoctor ? 6 : 12>>
 			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
 				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
@@ -697,7 +698,7 @@
 		// Sick
 		<<if _isSick>>
 			<<set $guests[_guestI].sick.days-->>
-			<<if _hasDoctor>>
+			<<if _hasWorkingHospital || (_hasDoctor && setup.percentageChance(42))>>
 				<<set $guests[_guestI].sick.days-->>
 			<</if>>
 			<<if $guests[_guestI].sick.days <= 0>>
@@ -826,7 +827,7 @@
 
 
 <<shopMerchantUpdate>>
-<<if _hasDoctor>>
+<<if _hasWorkingHospital>>
 	<<sleepHospital>>
 <</if>>
 <<run setup.relationshipBetween.run()>>

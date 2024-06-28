@@ -189,8 +189,8 @@
 		<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
 
 	<<if $player.quests.base_building>>
-		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build)' : 
-			!$game.location.hospital ? '(Build the hospital)' : '(Max 1)' >>
+		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign a doctor)' : 
+			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max 1)' >>
 		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
 	<</if>>
 
@@ -204,13 +204,15 @@
 				<<set _towelsHave = setup.cabinInventory.count('towel')>>
 				<<set _towelsNeed = 5*_settlementStatsData.pregnant>>
 				<<set _towelsNet  = _towelsHave - _towelsNeed>>
-				<<if _towelsNet >= 0>>
-					(Doctors and towels makes births safer; You have enough towels for all births!)
+				<<if setup.hasWorkingHospital()>>
+					(You have hospital with doctor! The best chances for a successful birth.)
+				<<elseif _towelsNet >= 0>>
+					(Without a hospital doctors and towels makes births safer; You have enough towels for all births!)
 				<<else>>
-					(Doctors and towels makes births safer; You don't have enough towels for all births:
+					(Without a hospital doctors and towels makes births safer; You don't have enough towels for all births:
 					 + Have <<=_towelsHave>> - need <<=_towelsNeed>> = deficit <span style="color: red; font-weight: bold"><<=_towelsNet>></span>)	
 				<</if>>
-				<span style="color: yellow">[writer todo - check how 'hospital' infects these texts!]</span>
+				/* <span style="color: yellow">[writer todo - check how 'hospital' infects these texts!]</span> */
 			<</if>>
 		</td>
 	</tr>
@@ -235,16 +237,6 @@
 	/*
 		base management -> 
 		$player.quests.base_building
-
-		explore and find blueprint for hospital -> build -> assign a doctor
-		$player?.quests?.found_hospital_blueprint, blueprint_hospital -> 
-		    $player.baseManagement.buildings.hospital = 1;
-            $game.location.hospital = true;
-            $game.location.youth_district = true;
-
-		library
-			before -> blueprint -> build -> 0 assign
-
 	 */
 
 	<<if ($player.horse ?? false)>>

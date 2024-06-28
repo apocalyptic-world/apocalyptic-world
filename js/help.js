@@ -15,9 +15,9 @@ setup.help = {
        },
        doctor: {
         /* name from setup.skills */
-        desc: 'Decreases chance of miscarriage, treats knife wounds and reduces sickdays',
+        desc: 'A must skill to work in the hospital. Decreases chance of miscarriage, treats knife wounds and reduces sickdays',
         learnable: false,
-        xtra: ' Any guest with doctor skill will step in as doctor when needed. <span style="color: yellow">[writer todo - check how hospital infects these texts!]</span>',
+        xtra: 'Without hospital, any guest with doctor skill will step in as doctor when needed.',
        },
        gardener: {
         /* name from setup.skills */

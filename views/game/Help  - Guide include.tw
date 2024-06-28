@@ -169,10 +169,10 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
     },
     blueprints: {
-        show: $game.location?.workbench,
+        show: $game.location?.workbench || $player.quests.base_building,
         done:  $backpack.hasAll('blueprint_hot_shower','blueprint_hot_tub', 'blueprint_library') && ($game.hotShower ?? false) && ($game.location.hottub ?? false) && ($game.location.library ?? false) && ($game.location.hospital ?? false),
         category: 'Gameplay',
-        title: 'Blueprints for home improvement',
+        title: 'Blueprints for home & base improvement',
         description:
             '<dl>' +
                 (!$backpack.has('blueprint_hot_shower') 
@@ -184,6 +184,10 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                 (!$backpack.has('blueprint_library') 
                     ? '<dt>Library</dt><dd>Go exploring for a chance to find the blueprint. </dd>'
                     : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint, build away. </dd>' : '<dt><s>Library</s></dt>')) +
+
+                (!$backpack.has('blueprint_hospital') && !($game.location.hospital ?? false)
+                    ? '<dt>Hospital</dt><dd>Go exploring for a chance to find the blueprint. </dd>'
+                    : (!($game.location.hospital ?? false) ? '<dt>Hospital</dt><dd>Have blueprint, build it. </dd>' : '<dt><s>Hospital</s></dt>')) +
             '</dl>',
     },
     first_pregnancy: {

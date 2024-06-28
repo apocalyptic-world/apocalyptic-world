@@ -33,7 +33,23 @@ setup.player = {
         }
     },
     /**
-     * As setup.genderClass(npc) but notes that som characters don't have npc.attributes like gende
+     * check that special characters have correct I.D
+     * should be .character.x.id = x
+     * @returns 
+     */
+    charactersCheck: function() {
+        const chars =  variables().characters;
+        const changesID = new Map;
+        for(const charID in chars) {
+            chars[charID].id ??= charID;
+            if (chars[charID].id !== charID) {
+                changesID.set(chars[charID].id, charID);
+            }
+        }
+        return changesID;
+    },
+    /**
+     * As setup.genderClass(npc) but notes that som characters don't have npc.attributes like gender
      * @param {*} person
      * @returns     as  setup.genderClass(npc)
      */
