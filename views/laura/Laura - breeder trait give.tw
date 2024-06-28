@@ -36,7 +36,7 @@
     <</for>>
     <<for _labSlaveI, _labSlave range $slaves>>
         <<capture _labSlaveI, _labSlave>>
-            <<if _labSlave.gender || (_labSlave.traits ?? []).includes('breeder') || setup.getAge(_labSlave) < 18>>
+            <<if _labSlave.gender || (_labSlave.traits ?? []).includes('breeder') || setup.getAge(_labSlave) < 18 || (_labSlave.traitsLocked ?? []).includes('breeder')>>
                 <<continue>>
             <</if>>
             <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>

@@ -39,6 +39,8 @@ setup.traits = {
     }
 };
 
+
+
 setup.getRandomTraits = function (count = 1, exclude) {
     const _traits = clone(setup.traits);
     if (exclude) {

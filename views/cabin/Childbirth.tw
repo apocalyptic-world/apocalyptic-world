@@ -18,7 +18,7 @@ You hear screams and you rush toward the source. As you get to your destination 
 
 Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she didn't have much time left. She asks you to create a makeshift birthing area.
 
-<<set _chanceSuccess = 50>>
+<<set _chanceSuccess = 60>>
 <<set _chanceMotherDies = 5>>
 /*
 <<if setup.hasDoctor()>>
@@ -41,7 +41,7 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 	  <br /><br />
 	  You lay down towels on the ground and hope that will do. 
 	  <br /><br />
-	  <<set _chanceSuccess += 20>>
+	  <<set _chanceSuccess += 5>>
 	  <<set _chanceMotherDies -= 1>>
 	<</linkreplace>>
 <<else>>
@@ -50,8 +50,12 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 <</if>>
 <<if setup.hasDoctor()>>
 	<<set _chanceSuccess += 20>>
-	<<set _chanceMotherDies -= 3>>
+	<<set _chanceMotherDies -= 2>>
 <</if>>	
+<<if ($tmpGirl.traits ?? []).includes('breeder')>>
+	<<set _chanceSuccess += 10>>
+	<<set _chanceMotherDies -= 1>>
+<</if>>
 <<linkreplace 'Continue'>>
 	<center>
 		[img[setup.ImagePath+'game/misc/childbirth3.webp']]
