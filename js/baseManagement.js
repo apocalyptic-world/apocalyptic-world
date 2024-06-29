@@ -28,7 +28,8 @@ setup.baseManagement = {
         },
         list: {
             solar_panel: 1,
-            hospital: -5
+            hospital: -5,
+            house: -0.5
         },
     },
     defense: {
@@ -44,7 +45,7 @@ setup.baseManagement = {
         },
         livingHousesCount: function ()
         {
-            return 0;
+            return (variables().player?.baseManagement?.buildings['house'] ?? 0); 
         }
     }
 }

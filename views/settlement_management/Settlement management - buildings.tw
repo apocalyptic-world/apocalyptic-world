@@ -17,6 +17,26 @@
 		goto: "Settlement management",
         currentCount: true
 	},
+	house: {
+		show: true,
+		title: "Small house",
+		description: "Small living house for few poeple (no use yet)",
+		required: {
+			wood: 20,
+			metal: 3,
+			glass: 5,
+			rope: 5
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.house ??= 0;
+            $player.baseManagement.buildings.house++;
+		},
+		goto: "Settlement management",
+        currentCount: true,
+	},
     hospital: {
 		show: !($game.location.hospital ?? false),
 		title: "Hospital",
@@ -27,7 +47,7 @@
            glass: 30,
            cloth: 20
 		},
-		energy: 50,
+		energy: 90,
 		after: function() {
             $player.baseManagement ??= {};
             $player.baseManagement.buildings ??= {};

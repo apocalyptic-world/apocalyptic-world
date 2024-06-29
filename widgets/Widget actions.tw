@@ -82,7 +82,7 @@
 		<<set _location = $args[0].location>>
 		<<if $args[0].pack>>
 			<<run _morphs.unshift($args[0].pack + _pregnancyDesc, $args[0].pack)>>
-			<<if typeof _actions[$args[0].pack] !== 'undefined' && typeof _actions[$args[0].pack][$args[0].location] === 'undefined'>>
+			<<if typeof _actions[$args[0].pack] !== 'undefined' && typeof _actions[$args[0].pack][$args[0].location] === 'undefined' && typeof _actions[$args[0].pack]['default'][$args[1]] !== 'undefined'>>
 				<<set _actions[$args[0].pack][$args[0].location] = _actions[$args[0].pack]['default']>>
 				<<set _location = 'default'>>
 			<</if>>

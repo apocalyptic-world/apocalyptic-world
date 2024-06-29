@@ -12,7 +12,7 @@
     <<set _electricityTotalOutput = '+' + _electricityTotal>>
 <<elseif _electricityTotal < 0>>
     <<set _electicityClass = 'red'>>
-    <<set _electricityTotalOutput = '-' + _electricityTotal>>
+    <<set _electricityTotalOutput = _electricityTotal>>
 <</if>>
 <div id="base-management">
     <div class="base-management-item">
@@ -74,7 +74,7 @@
 					    Current count: <<=$player?.baseManagement?.buildings[_baseBuildingName] ?? 0>>
                       <</if>>
 				  </td>
-				  <td>
+				  <td style="width: 20%">
 					  <div class="base-management-building-required">
 						  Required:<br />
 						  <<for _r to 0; _r lt _required.length; _r++>>
@@ -94,7 +94,7 @@
 						  <</if>>
 					  </div>
 				  </td>
-				  <td>
+				  <td style="width: 10%">
 					  <<if _itemHasResources>>
 						<<link 'Build'>>
 
