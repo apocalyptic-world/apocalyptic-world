@@ -1,0 +1,32 @@
+:: npc list view [widget]
+
+<<widget npcListView>>
+    <<set _npc = _args[0]>>
+    <<set _npcId = _args[1]>>
+    <<set _npcType = _args[2]>>
+    <div class="item-beauty">
+        &#x1F484; <<=_npc.beauty>>
+    </div>
+    <div class="item-age">
+        <<=setup.getAge(_npc)>>yo
+    </div>
+    <div class="item-happy">
+        <<happyIcon _npc>>
+    </div>
+    <div class="item-orientation">
+        <<=setup.displayOrientationIcon(_npc)>>
+    </div>
+    <div class="item-strength">
+        &#x1F4AA; <<=_npc.strength>>
+    </div>
+    <div class="item-relationship">
+        &#x1F46C; <<=_npc.relationship>>
+    </div>
+    <div class="item-assignedTo">
+        <<if _npc.assignedTo>>
+			(<<=_npc.assignedTo>>)
+		<<elseif typeof $player.companions[_npcType + ':' + _npcId] !== 'undefined'>>
+			(companion)
+		<</if>>
+    </div>
+<</widget>>

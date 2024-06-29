@@ -35,7 +35,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<br /><br />
 	</div>
 <<else>>
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
@@ -73,7 +73,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if ($game.location.hospital ?? false) && _isSick>>
 				<<continue>>
 			<</if>>
-			<tr>
+			<tr class="item">
 				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>
 						<span @class="''+_genderClass+''">
@@ -112,19 +112,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<</if>>
 				</td>
 				<td>
-					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
-						Beauty: <<=_guest.beauty>>
-					<</if>>
-				</td>
-				<td>
-					Age: <<=setup.getAge(_guest)>>
-				</td>
-				<td>
-					<<if _guest.assignedTo>>
-						(<<=_guest.assignedTo>>)
-				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
-						(companion)
-				 	 <</if>>
+					 <<npcListView _guest _guestI 'guest'>>
 				</td>
 			</tr>
 		<</capture>>
