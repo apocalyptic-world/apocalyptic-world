@@ -15,9 +15,10 @@
   */
 
  <<if ($game.location.guesthouse ?? false) && ($tmpGirlInvite ?? false) && $guests.length < $guesthouseLimit>>
-	<<linkreplace 'Invite her as guest'>>
+    <<set _linkName = 'Invite '  + setup.pronounceWho($tmpGirl) + ' as guest'>>
+	<<linkreplace _linkName>>
         <<set $tmpGirlInvite = false>>
-        <<set _strongGirl = $player.strength <= $tmpGirl.strength>>
+        <<set _strongNpc = $player.strength <= $tmpGirl.strength>>
         <<set _relation   = $tmpGirl.relationship ?? 0>>
         <<set _countComp  = $player.companions.length ?? 0>>
         <<set _reputation = $player.reputation ?? 0>>
@@ -25,11 +26,13 @@
         <<set _no = !_yes || ($wasRaped ?? false) || (_relation <= 0)>>
         <<unset $wasRaped>>
         <<if _no>>
-            <<if _strongGirl>>
-                <<set $escapeReason = 'She considers your invite for a few moments, says no and leaves.'>>
-			    <<goto 'Girl escape'>>
+            <<if _strongNpc>>
+                <<set $escapeReason = setup.pronounceWhat($tmpGirl, true) + ' considers your invite for a few moments, says no and leaves.'>>
+			    <<goto 'NPC found escape'>>
             <<else>>
-                No, I don't want to come to live with you. Please let me go!
+                <<sayNpc $tmpGirl>>
+                    No, I don't want to come to live with you. Please let me go!
+                <</sayNpc>>
             <</if>>
         <<else>>
             <<set $tmpGirl.capture = false>>

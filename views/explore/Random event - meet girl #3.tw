@@ -1,29 +1,55 @@
-:: Random event - meet girl #3 {"position":"5742,16","size":"100,100"}
+:: Random event - meet girl #3
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
+
+<<set _npcGenderOptions = [0, 1]>>
+<<if settings.transEnabled>>
+	<<set _npcGenderOptions.push(2)>>
+<</if>>
+
+<<set _npcGender = setup.getRandomElement(_npcGenderOptions)>>
+<<if _npcGender === 0>>
+	<<newgirl>>
+<<elseif _npcGender === 1>>
+	<<newguy>>
+	<<set $tmpGirl = $tmpGuy>>
+<<elseif _npcGender === 2>>
+	<<newtransgirl>>
+<</if>>
+
+<<set _npcDataMapped = [
+	{
+		text: "You notice a girl walking through the forest and decide to check out what she's doing",
+		img: 'found_female',
+	},
+	{
+		text: "You notice a guy walking through the forest and decide to check out what he's doing.",
+		img: "found_male",
+	},
+	{
+		text: "You notice a slightly masculine girl walking through the forest and decide to check out what she's doing.",
+		img: "found_transfemale",
+	}
+]>>
+
+<<set _npcData = _npcDataMapped[$tmpGirl.gender]>>
+
 <center>
- [img[setup.ImagePath+'places/explore/found_girl.jpg']]
- </center>
- <br /><br />
-You notice a girl walking through the forest and decide to check out what she's doing.
- <br /><br />
+ 	[img[setup.ImagePath+'places/explore/' + _npcData.img + '.jpg']]
+</center>
+<br /><br />
+<<=_npcData.text>>
+<br /><br />
 
 <<link 'Go closer'>>
-	<<newgirl>>
 	<<set $tmpGirl.location = 'forest'>>
 	<<set $tmpGirl.rape to true>>
-	<<set $tmpGirlCapture to true>>
-	<<set $tmpGirlInvite to true>>
+	<<set $tmpGirlCapture = true>>
+	<<set $tmpGirlInvite = true>>
 	<<unset $tmpGirlViewBack>>
-	<<if setup.getAge($tmpGirl) < 40 && randomInteger(1,4) === 1>>
-		<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
-		<<set $tmpGirl.virgin = false>>
-	<</if>>
 	<<unset $slaveId, $guestId, $charId, $childId>>
 	<<set $tmpGirlBack = 'Outside'>>
 	<<goto [[NPC view]]>>
 <</link>>
 
 [[Leave|Outside]]
-
-
