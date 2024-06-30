@@ -370,6 +370,10 @@
 		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
 			<<set _npc.sub++>>
 		<</if>>
+
+		<<if (_npc?.quests?.lastInteractionDay + 5) < $game.day>>
+			<<set _npc.sub = Math.max(0, (_npc.sub - 1))>>
+		<</if>>
 		
 		// Leave
 		<<if $guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70>>
