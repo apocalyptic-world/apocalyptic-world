@@ -101,6 +101,12 @@
 			<<if _allyHasKnife>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' stabbed ' + $fight.enemies[_randomEnemyKey].name + ' in the chest (-' + _allyStrength + ')')>>
+				
+				<<if setup.percentageChance(10)>>
+					<<set _knifeBroke = true>>
+					<<run setup.npcInventoryRemove($fight.allies[_i], 'knife')>>
+					<<run $fight.messages.push($fight.allies[_i].name + ' knife broke')>>
+				<</if>>
 			<<else>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('hit')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' punched ' + $fight.enemies[_randomEnemyKey].name + ' in the face (-' + _allyStrength + ')')>>
@@ -139,6 +145,10 @@
 				<<set $fight.allies[_randomEnemyTarget].attacks.push('knife')>>
 			<</if>>
 			<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + $enemyStrength + ')')>>
+			<<if setup.percentageChance(10)>>
+				<<run setup.npcInventoryRemove($fight.enemies[_i], 'knife')>>
+				<<run $fight.messages.push($fight.enemies[_i].name + ' knife broke')>>
+			<</if>>
 		<<else>>
 			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 3, 0) + randomInteger(0, 10)>>
 			<<if _isPlayerTarget>>
