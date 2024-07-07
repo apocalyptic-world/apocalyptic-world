@@ -81,11 +81,21 @@
 
 <<if !($locationEvents.bedroom ?? false)>>
 	<<if timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
+		<<run console.log('wghy')>>
 		<<set _hornyGuests = setup.getHornyPersons($guests)>>
-		<<if (_hornyGuests[0] ?? false)>>
+		<<if (_hornyGuests[0] ?? []).length>>
 			<<set $guestId = _hornyGuests[0][Math.floor(Math.random()*_hornyGuests[0].length)]>>
 			<<set $locationEvents.bedroom = true>>
 			<<goto 'Bedroom: horny guest'>>
+		<</if>>
+	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5)>>
+		<<set _girls = setup.getAvailablePersons18yo($guests)>>
+		<<if (_girls[0] ?? []).length>>
+			<<set $tmpEvent = {
+				id: _girls[0][Math.floor(Math.random()*_girls[0].length)]
+			}>>
+			<<set $locationEvents.bedroom = true>>
+			<<goto 'Bedroom - sleepover'>>
 		<</if>>
 	<</if>>
 <</if>>

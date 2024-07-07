@@ -176,15 +176,19 @@
 			</legend>
 			<<link 'Explore: Toxic cave'>>
 				<<goto 'Explore event - toxic cave'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 			<<link 'Explore: Waterfall'>>
 				<<goto 'Explore event: Waterfall'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 			<<link 'Explore: mysterious scream'>>
 				<<goto 'Explore event - mysterious scream'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 			<<if (_availableGuests[0] ?? []).length >= 2 && ($game.location.bathhouse ?? false)>>
 				<<link 'Bathhouse: Threesome'>>
+					<<run console.log(_availableGuests)>>
 					<<set $tmpEvent = {
 						bathhouseThreesome: [
 							'guest:' + _availableGuests[0][0],
@@ -192,10 +196,22 @@
 						]
 					}>>
 					<<goto 'Bathhouse - threesome'>>
+					<<script>>Dialog.close();<</script>>
+				<</link>>
+			<</if>>
+			<<if (_availableGuests[0] ?? []).length >= 0>>
+				<<run console.log(_availableGuests)>>
+				<<link 'Bedroom: Sleepover'>>
+					<<set $tmpEvent = {
+						id: _availableGuests[0][0]
+					}>>
+					<<goto 'Bedroom - sleepover'>>
+					<<script>>Dialog.close();<</script>>
 				<</link>>
 			<</if>>
 			<<link 'Event: Base attack - fight'>>
 				<<goto 'Event: Base attack - fight'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 
 			<<link 'Event: Heat wave'>>
@@ -205,6 +221,7 @@
 					daysLeft: randomInteger(4,6)
 				}>>
 				<<goto 'Weather - Heat wave'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 
 			<<link 'Event: Sand storm'>>
@@ -214,9 +231,11 @@
 					daysLeft: 1
 				}>>
 				<<goto 'Weather - Sand storm'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 			<<link 'Event: Blair and Ashley visit'>>
 				<<goto 'Blair - Ashley threesome'>>
+				<<script>>Dialog.close();<</script>>
 			<</link>>
 		</fieldset>
 	<</if>>
