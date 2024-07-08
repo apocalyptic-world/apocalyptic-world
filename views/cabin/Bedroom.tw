@@ -88,7 +88,7 @@
 			<<set $locationEvents.bedroom = true>>
 			<<goto 'Bedroom: horny guest'>>
 		<</if>>
-	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5)>>
+	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5) && recall($suppCode)>>
 		<<set _girls = setup.getAvailablePersons18yo($guests)>>
 		<<if (_girls[0] ?? []).length>>
 			<<set $tmpEvent = {
