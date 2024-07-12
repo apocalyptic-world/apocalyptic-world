@@ -46,7 +46,17 @@
 <</if>>
 
 <<if !($locationEvents.cabin ?? false)>>
-	<<if timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $gameDate.getDay() === 6>>
+	<<if $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
+	(!$characters.octavia.quests.kidnapped_found_day || ($characters.octavia.quests.kidnapped_found_day + 5) < $game.day) && 
+	timeBetween('08:00', '16:00')
+	>>
+		<<goto 'Octavia - The Troubled Messenger'>>
+	<<elseif $characters?.octavia?.quests?.betrayal && !$characters.octavia.quests.betrayal2 && 
+		(($characters.octavia.quests.betrayal_day + 3) < $game.day) && 
+		timeBetween('08:00', '16:00')
+	>>
+		<<goto 'Octavia - Blackthorn camp'>>
+	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $gameDate.getDay() === 6>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Blair - Ashley threesome'>>
 	<<elseif $game.lone_survivor>>

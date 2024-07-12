@@ -1,0 +1,183 @@
+:: Octavia - The Investigation Begins
+<h1 class="ptitle">OCTAVIA'S CAMP</h1>
+<br />
+You and Octavia approach the central area of the camp where the water supply is located. A group of women are gathered, their faces lined with worry.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/captured1.jpg']]
+</center>
+<br /><br />
+<<octavia>>
+    We need to ask you some questions about the recent events.
+<</octavia>>
+<br />
+A tall, athletic woman steps forward, her expression wary.
+<br /><br />
+<<newgirl>>
+<<sayNpc $tmpGirl>>
+    We haven't done anything wrong. We're just trying to figure this out like everyone else.
+<</sayNpc>>
+<br />
+<<you>>
+    But someone poisoned your water supply. If you know anything, anything at all, it could help us find the culprit and prevent more people from getting hurt.
+<</you>>
+<br />
+The woman exchanges glances with the others before speaking.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    There's been a lot of tension recently. 
+    Some disagreements about how we handle resources, but nothing that would lead to this. But there's one woman... 
+    Zia. She's been acting strange lately. Keeps to herself, doesn't talk much. She was in charge of the water supply rotation this week.
+<</sayNpc>>
+<br />
+<<octavia>>
+    Where is she now?
+<</octavia>>
+<br />
+<<sayNpc $tmpGirl>>
+    She's in her tent, over there. But be careful. There's something off about her.
+<</sayNpc>>
+<br />
+You and Octavia make your way to Zia's tent. As you approach, you see a woman with wild eyes and a nervous demeanor. She looks up sharply as you arrive.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/tent_woman.jpg']]
+</center>
+<br />
+<<you>>
+    Zia? We need to talk
+<</you>>
+<br />
+She backs away, her hands trembling.
+<br /><br />
+<<newgirl>>
+<<set $tmpGirl.name = 'Zia'>>
+<<set $tmpGirl.strength = 95>>
+<<set _zia = $tmpGirl>>
+<<sayNpc _zia>>
+    I didn't mean for it to go this far...
+<</sayNpc>>
+<br />
+<<octavia>>
+    What do you mean?
+<</octavia>>
+<br />
+Octavia demands, stepping closer.
+<br /><br />
+<<sayNpc _zia>>
+    I was approached by someone from outside the tribe.
+<</sayNpc>>
+<br />
+Zia confesses, her voice breaking.
+<br /><br />
+<<sayNpc _zia>>
+    They promised me supplies, medicine for my sick sister... if I did what they asked. I poisoned the water. I'm so sorry.
+<</sayNpc>>
+<br />
+<<you>>
+    Who approached you?
+<</you>>
+<br />
+<<sayNpc _zia>>
+    A man from the Blackthorn faction. He said if I didn't do it, they'd attack us and take everything by force.
+<</sayNpc>>
+<br />
+Octavia looks at you, her expression grim as she pulls out her big knife and points it at Zia.
+<br /><br />
+<<octavia>>
+    The Blackthorn... They were wiped out years ago.
+<</octavia>>
+<br />
+<<sayNpc _zia>>
+    Apparently not, I am not lying. They are camped in some old factory not so far away.
+<</sayNpc>>
+<br />
+<center>
+    [img[setup.ImagePath+'places/settlement/octavia_tent_begging.jpg']]
+</center>
+<br />
+Octavia's face hardens with a mix of fury and betrayal. Without a word, she steps forward, drawing her knife back to strike. 
+You barely have time to react before she slashes Zia.
+<br /><br />
+<div id="option_stop">
+    <<linkreplace 'Stop her'>>
+        <<set _stop = true>>
+        <<run $('#option_nothing').hide()>>
+        <<you>>
+            Octavia, no!
+        <</you>>
+        <br />
+        Before she can strike, you grab her arm, stopping her.
+        <br /><br />
+        <<octavia>>
+            She betrayed us. She poisoned my people. She has to pay.
+        <</octavia>>
+        <br />
+        You take a deep breath, trying to process...
+        <br /><br />
+        Octavia trembles with rage, her eyes locked on Zia, who cowers in fear. Her voice quivering with barely controlled anger.
+        <br /><br />
+        <div id="option_letgo">
+            <<linkreplace 'Let her hand go'>>
+                <<run $('#option_enslave').hide()>>
+                <<run $('#ending_killed').show()>>
+            <</linkreplace>>
+        </div>
+        <<if $slaves.length < $basementLimit>>
+            <div id="option_enslave">
+                <<linkreplace 'Tell that you will enslave Zia'>>
+                    <<run $('#option_letgo').hide()>>
+                    <<you>>
+                        I'm taking Zia with me. I will punish her on my own terms.
+                    <</you>>
+                    <<set $characters.octavia.relationship -= 30>>
+                    <br />
+                    Octavia's eyes narrow, and for a moment, it looks like she might turn her fury on you. But then she takes a deep breath, her grip on the knife loosening.
+                    <br /><br />
+                    <<octavia>>
+                        Fine. Take her. But if she tries anything, anything at all, I'll kill her myself
+                    <</octavia>>
+                    <br />
+                    <<link 'Leave'>>
+                        <<run $slaves.push(_zia)>>
+                        <<addhours 4>>
+                        <<goto 'Basement'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="option_nothing">
+    <<linkreplace 'Do nothing'>>
+        <<run $('#option_stop').hide()>>
+        <<run $('#ending_killed').show()>>
+    <</linkreplace>>
+</div>
+
+<div id="ending_killed" style="display:none">
+    With a primal scream, Octavia lunges at Zia. 
+    The knife flashes in the dim light as she slashes wildly. Blood sprays across the tent, and Zia's screams fill the air.
+    <br /><br />
+    Octavia's rage is a brutal, unstoppable force. She continues to stab long after Zia has stopped moving, reducing her to a bloody mess on the floor
+    <br /><br />
+    <center>
+        [img[setup.ImagePath+'places/settlement/octavia_woman_killed_tent.jpg']]
+    </center>
+    <br />
+    Finally, Octavia steps back, breathing heavily, her hands and face spattered with blood. She turns to you, her eyes still filled with fury but also a deep, aching sorrow.
+    <br /><br />
+    <<octavia>>
+        It's done. She can't hurt us anymore.
+    <</octavia>>
+    <br />
+    You nod, feeling a mix of emotions—relief, regret, and a cold determination to end the threat of the Blackthorn once and for all. As you leave the tent, the grim reality of your world settles heavily on your shoulders. In the wasteland, justice is often brutal, and survival demands hard choices.
+    <br /><br />
+    <<link 'Leave'>>
+        <<addhours 4>>
+        <<goto 'Outside'>>
+    <</link>>
+</div>
+
+<<set $characters.octavia.quests.betrayal_day = $game.day>>
+<<set $characters.octavia.quests.betrayal = true>>
