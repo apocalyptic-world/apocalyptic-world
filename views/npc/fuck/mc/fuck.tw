@@ -1,5 +1,6 @@
 :: Mc fuck [sex]
 
+<<set _canFuck = !setup.perkHas('temp_impotence')>>
 <<set _sexActions = {
     kissing: {
         title: 'Kissing',
@@ -21,12 +22,12 @@
         minAction: 20,
         horny: 20,
         maxCorruption: 30,
-        show: $tmpGirl.location != 'gloryhole'
+        show: $tmpGirl.location != 'gloryhole' && _canFuck
     },
     titjob: {
         title: 'Titjob',
         minAction: 25,
-        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && $tmpGirl.location != 'gloryhole',
+        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && $tmpGirl.location != 'gloryhole' && _canFuck,
         horny: 20,
         maxCorruption: 40,
     },
@@ -43,6 +44,7 @@
         minAction: 40,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         horny: 20,
+        show: _canFuck,
         maxCorruption: 60,
         positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
         stats: 'dp'
@@ -57,7 +59,7 @@
     pussy: {
         title: 'Fuck pussy',
         minAction: 40,
-        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && _canFuck,
         horny: 20,
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
@@ -80,7 +82,7 @@
         maxCorruption: 100,
         positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20),
         stats: 'anal',
-        show: $tmpGirl.location != 'gloryhole'
+        show: $tmpGirl.location != 'gloryhole' && _canFuck,
     },
     anal_fisting: {
         title: 'Fist asshole',
@@ -124,6 +126,9 @@
         <<include 'Mc fuck anal'>>
     <</if>>
 
+    <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
+        <<include 'MC fuck flaccid'>>
+    <</if>>
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />

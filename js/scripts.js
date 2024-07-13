@@ -138,6 +138,11 @@ setup.perkList = {
         title: "Your sperm is overpowered",
         desc: "Doubles chance to impregnate",
         days: 0
+    },
+    temp_impotence: {
+        title: "Flaccid dick",
+        desc: "You can't get your dick hard",
+        days: 5
     }
 };
 
