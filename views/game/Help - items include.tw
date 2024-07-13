@@ -130,8 +130,11 @@
     <<if  ['revolver'].includes(_itemID)>>
         <<run _helpItem.sources.push('Special')>>
     <</if>>    
-    <<if _helpItem.sources.length == 0 && ['raw_human_meat', 'blueprint_hot_shower', 'blueprint_library', 'fuel', 'tribe_medallion', 'gas_mask', 'car_part', 'metal'].includes(_itemID)>>
+    <<if _helpItem.sources.length == 0 && (['raw_human_meat', 'blueprint_hot_shower', 'blueprint_library', 'fuel', 'tribe_medallion', 'gas_mask', 'car_part', 'metal'].includes(_itemID) || _item.hasTag('explore'))>>
         <<run _helpItem.sources.push('Explore!')>>
+    <</if>>
+    <<if  _helpItem.sources.length == 0>>
+        <<run _helpItem.sources.push('<span style="color: yellow">Unavailable in this version!</span>')>>
     <</if>>
 
     /* categories */

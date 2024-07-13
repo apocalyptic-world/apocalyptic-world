@@ -37,14 +37,14 @@ Another note! Since the game is a work-in-progress with new versions all the tim
 ]>>
 <<set _catTitle = {
     food:     'Food for eating',
-    crafting: 'Materials for building & crafting in workbench and garage',
+    crafting: 'Materials for building & crafting in workbench, garage & base building tab',
     fabric:   'Fabric',
     potion:   'Pharmacy; materials & finished products',
     tool:     'Tools, weapons & equipment',
     gift:     'Gifts or stuff for slaves & guests',
     quest:    'Quest items',
     no_use:   'No use for now', 
-    que:      'Unsorted or new items',
+    que:      'Unsorted or new items (If you find stuff here the writer forgot to update the help....)',
 }>>
 
 /* dynamic help for all items */
@@ -62,6 +62,9 @@ Another note! Since the game is a work-in-progress with new versions all the tim
     </tr>
 
 <<for _cat range _catOrder>>
+    <<if !_catHelpItems[_cat].size>>
+        <<continue>>
+    <</if>>
     <tr><td colspan="3"><h3>_catTitle[_cat]</h3></td></tr>
     <<for _itemID range setup.mapKeys2list(_catHelpItems[_cat]) >>
         <<set _helpItem = _catHelpItems[_cat].get(_itemID)>>
@@ -135,6 +138,7 @@ Guests can work in any job.
     <dt>Hunter</dt><dd>Provides you with food or wolf pelts</dd>
     <dt>Kitchen</dt><dd>Any guest can work in the kitchen but with no effect. Only if the guest has the cook skill it will ha an effect.</dd>
     <dt>Maid</dt><dd>Any guest can work as a maid. Will give extra energy for the hero taking a nap.</dd>
+    <dt>Milk maid</dt><dd>Any guest can work as a milk maid. Helps the livestock to get milked. No use for now. Not in game</dd>
     <dt>Mistress</dt><dd>Any guest with the sadistic trait might work as mistress. Will whip the slaves into shape.</dd>
     <dt>Nightclub</dt><dd>After a deal with the glory-hole manager you can put your sex workers to work here</dd>
     <dt>Scavenging</dt><dd>A guest assigned to scavenging is sent out to find and collect nice-to-have things. There is a chance of a scavenger not coming home. When that happens the mc have a chance to go out and try to find her.</dd>
@@ -169,13 +173,13 @@ Guests can work in any job.
    </tr>
     <tr>
         <td>Garden/Greenhouse</td>
-        <td>None</td>
+        <td>(Relationship >= 30)</td>
         <td>Upgrade the garden with a greenhouse to produce more food
         <br/>Skill gardener</td>
    </tr>
     <tr>
         <td>Guard</td>
-        <td>A good strength</td>
+        <td>A good strength (Strength >= 30)</td>
         <td>A good strength & knife, for the rare base attack</td>
    </tr>
     <tr>
@@ -194,18 +198,23 @@ Guests can work in any job.
         <td>None</td>
    </tr>
     <tr>
+        <td>Milk maid</td>
+        <td>Breast pump</td>
+        <td>None</td>
+   </tr>
+    <tr>
         <td>Mistress</td>
         <td>Female|Male with sadistic trait</td>
         <td>A paddle?</td>
    </tr>
         <td>Nightclub</td>
-        <td>Having a deal with the management</td>
+        <td>Having a deal with the management<br/>(Relationship >= 70)</td>
         <td>
           <ul>
             <li>Being female</li>
             <li>Being a nymphomaniac and having a high submission</li>
           </ul>
-</td>
+        </td>
    <tr>
    </tr>
     <tr>
@@ -221,7 +230,7 @@ Guests can work in any job.
    </tr>
     <tr>
         <td>Streets</td>
-        <td></td>
+        <td>(Relationship >= 50)</td>
         <td>
           <ul>
             <li>Being female</li>
@@ -253,7 +262,7 @@ The hero takes possession of a farm with little luxury. There is water but only 
     <dt>Basement</dt>
         <dd>You start with only a few slave cells in the basement but with room for more. Obedient slaves, that is high relationship, can be released and upgraded to guests in the guesthouse.</dd>
     <dt>Bathhouse</dt>
-        <dd>A little luxury for the persons living in the farm. Improves beauty, at least temporary.</dd>
+        <dd>A little luxury for the persons living in the farm. Improves beauty, at least temporary. </dd>
     <dt>Bedroom</dt>
         <dd>A place to rest and sleep and more. Taking a nap will restore energy. Having a house-maid will restore more energy when napping.</dd>
     <dt>Cold shower</dt>

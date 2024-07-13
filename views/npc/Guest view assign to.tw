@@ -1,7 +1,7 @@
 :: Guest view assign to {"position":"2149,98","size":"100,100"}
 Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <br /><br />
-<<if $tmpGirl.relationship > 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
+<<if $tmpGirl.relationship >= 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>
 		  <<assignedTo $tmpGirl 'garden'>>
@@ -61,6 +61,17 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	  <</link>> (Keeps slaves in order. Increases submission for them)
 	</div>
 <</if>>
+
+<<if false && setup.cabinInventory.has('breast_pump') && !setup.getPersonsForLocation($guests, 'milk_maid').length && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign as milk maid'>>
+		  <<assignedTo $tmpGirl 'milk_maid'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Help the girls with the breast pump to produce milk for the infants and toddlers - No use yet)
+	</div>
+<</if>>
+
 
 <div>
   <<link 'Assign to forest'>>
