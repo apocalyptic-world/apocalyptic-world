@@ -1,0 +1,68 @@
+:: Explore event - Snake pit
+<h1 class="ptitle">FOREST</h1>
+<<set _randomCompanion = setup.getRandomElement(Object.keys($player.companions))>>
+<<set _npc = setup.companionGet(_randomCompanion)>>
+<br />
+You and your companions tread carefully through the dense, overgrown forest. 
+The air is thick with the scent of damp earth and the sounds of distant, unseen creatures. 
+Sunlight filters through the canopy, casting dappled shadows on the forest floor. 
+Your group moves cautiously, every step measured to avoid making too much noise.
+<br /><br />
+Suddenly, the ground beneath <<=setup.displayName(_npc)>> gives way with a sickening crunch. 
+<<=setup.pronounceWhat(_npc, true)>> cries out in surprise as <<=setup.pronounceWhat(_npc)>> disappears into the earth.
+<br /><br />
+<center>    
+    [img[setup.ImagePath+'places/explore/snake_pit_' + (_npc.gender === 1 ? 'male' : 'female')  +'.jpg']]
+</center>
+<br />
+You rush forward, heart pounding, and peer over the edge of a freshly dug pit.
+It's deep enough that the fall alone must have hurt, but worse still, the pit is filled with snakes, their scales glinting ominously in the half-light.
+<br /><br />
+<strong>Snakes look poisonous</strong>
+<br /><br />
+<<set _linkHelp = 'Help ' + setup.pronounceWho(_npc)>>
+<<set _linkLeave = 'Leave ' + setup.pronounceWho(_npc)>>
+<div id="option_help">
+    <<linkreplace _linkHelp>>
+        <<run $('#option_leave, #option_help_desc').hide();>>
+        You decide to help your companion, knowing the risks but unwilling to leave <<=setup.pronounceWho(_npc)>>. 
+        Quickly, you grab a sturdy branch from the forest floor and lower it into the pit, instructing your companion to hold on tight.
+        <br /><br />
+        <<if setup.percentageChance(50)>>
+            <<perkAdd 'bleeding'>>
+            <<perkAdd 'temp_impotence'>>
+            <strong>
+                As you lean over the edge, focusing on your companion’s grip, you feel a sharp pain in your arm. One of the snakes has bitten you, its fangs sinking deep into your flesh. 
+                You grit your teeth, fighting through the pain, and concentrate on pulling your companion out of the pit        
+            </strong>
+            <br /><br />
+        <</if>>
+        In the end you manage to pull your companion out and you decide to go back to your camp.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<linkdesc 'option_help_desc'>>
+    Chance to get bitten and get infection
+<</linkdesc>>
+<div id="option_leave">
+    <<linkreplace _linkLeave>>
+        <<run $('#option_help, #option_help_desc').hide()>>
+        You stand at the edge of the pit, watching your companion struggle amidst the writhing snakes. The desperation in his eyes tugs at your heart, but the cold logic of survival prevails. 
+        The wasteland is harsh and unforgiving, and you cannot risk your own life and the lives of your remaining companions for a single person, no matter how much it pains you.
+        <br /><br />
+        As you leave, the sound of your fallen comrade’s cries fades into the distance.
+        <br /><br />
+        <<set _companionType = _randomCompanion.split(':')>>
+        <<if _companionType[0] === 'slave'>>
+            <<slaveRemove _companionType[1]>>
+        <<else>>
+            <<guestRemove _companionType[1]>>
+        <</if>>
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
