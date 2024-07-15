@@ -22,8 +22,10 @@
 	$game.avatars = {},
 	$game.avatars.blair = 'people/blair/avatar.png',
 	$game.avatars.rodger = 'people/rodger/avatar.png',
-	$game.avatars.laura = 'people/laura/avatar.jpg'
-	$game.avatars.isabel = 'people/isabel.png'
+	$game.avatars.laura = 'people/laura/avatar.jpg',
+	$game.avatars.isabel = 'people/isabel.png',
+	$game.avatars.octavia = 'people/octavia/avatar.png'
+
 >>
 
 <<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
@@ -52,6 +54,9 @@
 
 <<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved>>
 	<<run $charactersInLocation['guesthouse'].push('isabel')>>
+<</if>>
+<<if isMetChar('octavia') && $characters.octavia.quests.next_move>>
+	<<run $charactersInLocation['guesthouse'].push('octavia')>>
 <</if>>
 
 <<if isMetChar('blair') && !$game.debugBlair>>

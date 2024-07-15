@@ -226,6 +226,21 @@
 				variables().game.location.bathhouse = true;
 			}
 		},
+		bathhouse: {
+			show: ($game.location.bathhouse ?? false) && $backpack.has('blueprint_massage_table')
+			title: 'Massage table',
+			description: "Your guests will have a place in bathhouse where to receive a massage.",
+			required: {
+				wood: 20,
+				cloth: 10,
+				rope: 5,
+			},
+			goto: "Workbench",
+			energy: 30,
+			after: function() {
+				variables().game.location.massage_table = true;
+			}
+		},
 		lab: {
 			show: (isMetChar('laura') && $characters.laura.quests.lab_workbench && !$game.location.lab),
 			title: 'Lab',

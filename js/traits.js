@@ -42,6 +42,9 @@ setup.traits = {
 
 
 setup.getRandomTraits = function (count = 1, exclude) {
+    const _traitsNotPair = {
+        breeder: 'infertile'
+    };
     const _traits = clone(setup.traits);
     if (exclude) {
         for (let excludeTrait in exclude) {
@@ -52,6 +55,14 @@ setup.getRandomTraits = function (count = 1, exclude) {
     if (!shuffledTraits.length) {
         return [];
     }
+
+    const _givenTraits = shuffledTraits.slice(0, count);
+    for (const _traitsNotPairKey in _traitsNotPair) {
+        if (_givenTraits.includes(_traitsNotPairKey) && _givenTraits.includes(_traitsNotPair[_traitsNotPairKey])) {
+            const _traitKey = _givenTraits.indexOf(_traitsNotPair[_traitsNotPairKey]);
+            _givenTraits.splice(_traitKey, 1);
+        }
+    }
     
-    return shuffledTraits.slice(0, count);
+    return _givenTraits;
 };
