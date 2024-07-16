@@ -1,0 +1,75 @@
+:: Massage [bg-bathhouse]
+<h1 class="ptitle">BATHHOUSE</h1>
+<br />
+<<addmins 30>>
+<<set $tmpGirl.location = 'massage'>>
+<<sayNpc $tmpGirl>>
+    Wow, really? I would love that
+<</sayNpc>>
+<br />
+<<=setup.displayName($tmpGirl)>> lies down on the massage table, her back facing you. She’s using a towel to cover her lower half, 
+preserving a sense of modesty despite the intimacy of the situation. You pour a small amount of warm oil into your hands, rubbing them together to warm it up. 
+The room is quiet except for the gentle sound of water dripping and the soft rustling of the towel as she adjusts herself.
+<br /><br />
+<<actionImage $tmpGirl 'massage_back'>>
+<br />
+You start with slow, gentle strokes along her shoulders and back, feeling the tension and stress in her muscles. 
+As you work, you can feel her begin to relax under your touch. 
+You focus on her shoulders and upper back, kneading out knots and tightness, using firm but careful pressure. 
+The warmth of the oil and the rhythm of your movements create a calming effect.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    This feels so good.
+<</sayNpc>>
+<br />
+<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + 10)>>
+<<set $tmpGirl.happy += randomInteger(5, 10)>>
+<<set $tmpGirl.horny += randomInteger(5, 10)>>
+<<linkreplace 'Pull down her towel'>>
+    <<actionImage $tmpGirl 'remove_towel'>>
+    <br />
+    You slowly pull down her towel revealing her ass.
+    <br />
+    She breathes deeply, sinking further into the relaxation that the massage is providing. 
+    You take your time, ensuring that she feels safe and comfortable throughout the entire process.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Oh my.. This feels like a heaven. Thank  you.
+    <</sayNpc>>
+    <br />
+    <<actionImage $tmpGirl 'massage_ass'>>
+    <br />
+    As you massage her ass, you remain attentive to her responses, ensuring that she feels comfortable and relaxed throughout.
+    <br /><br />
+    <<if $tmpGirl.relationship < 50>>
+        <<sayNpc $tmpGirl>>
+            I think it will be enough. Thanks.
+        <</sayNpc>>
+        <br /><br />
+    <<else>>
+        <<linkreplace 'Massage her pussy'>>
+            <<actionImage $tmpGirl 'massage_pussy'>>
+            <br />
+            Then you slide your hand between her legs and start to massage her pussy. She moans for a moment before relaxing fully on the table.
+            <br />
+            She lets you work on her pussy for some time. After that she pulls you closer to her head and slides down your pants.
+            <br /><br />
+            <<link 'Let her suck you'>>
+                <<fuck $tmpGirl>>
+                <<set $sexAction = 'bj'>>
+            <</link>>
+        <</linkreplace>>
+    <</if>>
+<</linkreplace>>
+<<linkreplace 'Finish'>>
+    After completing the massage on her lower back, you cover her again with the towel, ensuring she feels secure. 
+    The massage has created a peaceful respite from the harshness of the post-apocalyptic world outside, a moment of care and comfort that is rare and precious.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Thank you so much! This really was something.
+    <</sayNpc>>
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Bathhouse'>>
+    <</link>>
+<</linkreplace>>

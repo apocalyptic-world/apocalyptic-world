@@ -1,0 +1,115 @@
+:: Octavia - Annihilation
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<<set $characters.octavia.quests.next_move = true>>
+<<set $characters.octavia.quests.next_move_day = $game.day>>
+
+<<set $player.companions = {}>>
+As you step out of your wood cabin one morning, you see Octavia approaching with a determined look on her face.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/forest_emerge.jpg']]
+</center>
+<br />
+She takes a deep breath, clearly troubled by something.
+<br /><br />
+<<octavia>>
+    I've found out that the Blackthorn have another camp nearby. It's close to my tribe's territory, and there are rumors they're planning something big. We need to check it out.
+<</octavia>>
+<br />
+<<you>>
+    Alright. We'll go in stealth mode. Just the two of us.
+<</you>>
+<br />
+Octavia nods in agreement.
+<br /><br />
+<<octavia>>
+    It's the best way to avoid detection. We need to be quick and quiet.
+<</octavia>>
+<br />
+<center>
+    [img[setup.ImagePath+'people/octavia/anhilation1.jpg']]
+</center>
+<br />
+You and Octavia gear up and set out towards the rumored Blackthorn camp. The journey is tense, the threat of discovery always present. 
+As you approach the camp, you take cover and observe the area, noting the patrols and the layout.
+<br /><br />
+<<octavia>>
+    We need to find a way in without being seen.
+<</octavia>>
+<br />
+You spot a gap in their patrols and motion for Octavia to follow. 
+Moving silently, you slip into the camp, sticking to the shadows. The camp is bustling with activity, Blackthorn soldiers moving about, unaware of your presence.
+<br /><br />
+You and Octavia move quickly and quietly, avoiding detection as you navigate through the camp. You find a large tent that seems to be the command center and slip inside, finding a table covered with maps and drawings.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/anhilation2.jpg']]
+</center>
+<br />
+Octavia quickly sifts through the papers.
+<br /><br />
+<<octavia>>
+    These drawings... they look like plans for defense, not attack. Why would they be so focused on defending?
+<</octavia>>
+<br />
+<<you>>
+    We need to get this information back to Emberclaw and warn your tribe.
+<</you>>
+<br />
+As you continue to examine the table, something unusual catches your eye. 
+Beneath the defensive plans, there's a strange drawing. It looks oddly familiar yet completely out of place. You pull it out and hold it up to the light.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/octavia/anhilation3.jpg']]
+</center>
+<br />
+<<octavia>>
+    What is it?
+<</octavia>>
+<br />
+<div id="option_idk">
+    <<linkreplace "I don't know">>
+        <<run $('#option_stormtrooper').hide()>>
+        <<run $('#continue').show()>>
+        <<you>>
+            I have no idea.
+        <</you>>
+        <br />
+    <</linkreplace>>
+</div>
+<div id="option_stormtrooper">
+    <<linkreplace "It looks like a stormtrooper">>
+        <<run $('#option_idk').hide()>>
+        <<run $('#continue').show()>>
+        <<you>>
+            It looks like a stormtrooper from the Star Wars movies. But how would anyone here know what that looks like?
+        <</you>>
+        <br />
+        Octavia looks puzzled.
+        <br /><br />
+        <<octavia>>
+            Star Wars? That was from before everything fell apart, right? Why would they have a drawing of something like that?
+        <</octavia>>
+        <br />
+    <</linkreplace>>
+</div>
+<div id="continue" style="display:none">
+    Suddenly, you hear footsteps approaching. There's no time to hide, and a group of Blackthorn soldiers bursts into the tent, weapons drawn.
+    <<newguy>>
+    <br /><br />
+    <<sayNpc $tmpGuy>>
+        Intruders!
+    <</sayNpc>>
+    <br />
+    You and Octavia draw your weapons, the fight breaking out immediately. The confined space of the tent adds to the intensity of the battle, with little room to maneuver. You dodge a swing from a Blackthorn soldier.
+    <br /><br />
+    <<link 'Fight'>>
+        <<addhours 6>>
+        <<generateEnemies 2>>
+        <<run $enemies.push($tmpGuy)>>
+        <<set $game.deadReason = 'stabbed wounds'>>
+        <<fight $enemies 'Octavia - Annihilation #2' 'Dead'>>
+        <<set $fight.skipEnding = true>>
+    <</link>>
+</div>

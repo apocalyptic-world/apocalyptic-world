@@ -56,6 +56,11 @@
 		timeBetween('08:00', '16:00')
 	>>
 		<<goto 'Octavia - Blackthorn camp'>>
+	<<elseif $characters?.octavia?.quests?.betrayal2 && !$characters.octavia.quests.next_move && 
+		(($characters.octavia.quests.betrayal2_day + 3) < $game.day) && 
+		timeBetween('08:00', '16:00')
+	>> 
+		<<goto 'Octavia - Annihilation'>>
 	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $gameDate.getDay() === 6>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Blair - Ashley threesome'>>
