@@ -13,7 +13,8 @@
 	        <<set _mother = $guests[$pregnancyHappening.id]>>
         <</if>>
 
-        <<if setup.percentageChance(10)>>
+        /* without hospital max chance of success = 95% so hospital should also reach that, see childbirth.tw */
+        <<if setup.percentageChance(10) - ((_mother.traits ?? []).includes('breeder') ? 5 : 0)>>
             <<run delete _mother.pregnancy>>
             <<set _mother.happy -= 80>>
             <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. Unfortunately they were not successful and baby died.')>>
