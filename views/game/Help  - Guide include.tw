@@ -18,7 +18,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     blair:   $characters.blair.quests?.basement,
     rodger:  $characters.rodger.quests?.horse,
     eve:     false,
-    octavia: $characters.octavia.quests?.kidnapped_found,
+    octavia: $characters.octavia.quests.betrayal2,
     dom:     $characters.dom.quests?.quest6, /* todo: more quests dom/isabel */
     isabel:  $characters.isabel.quests?.temp_home || _closed.dom,
     negan:   $characters?.negan?.quests?.quest2 ?? false,
@@ -144,7 +144,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done: $player.reputation_bounty_hunter >= 20,
         category: 'Hint',
         title: 'Bounty hunter reputation',
-        description: 'Your reputation within the bounty hunter community. Gained by turn-ins and lost if you don\' follow the the BH code. Your bounty reward increases with this rep.',
+        description: 'Your reputation within the bounty hunter community. Gained by turn-ins and lost if you don\'t follow the the BH code. Your bounty reward increases with this rep.',
     },
 
     find_workbench: {
@@ -152,21 +152,40 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         done:  $game.location?.workbench,
         category: 'Gameplay',
         title: 'Home improvement',
-        description: 'From day 5 you have a chance to find a workbench when exploring. This important item will allow you to improve your base and build items',
+        description:  ($game.location?.workbench ?? false) ?  'You have the <span style="color: green">workbench</span>!' :
+            'From day 5 you have a chance to find a workbench when exploring. This important item will allow you to improve your base and build items',
+    },
+    buildings_workbench: {
+        show: $game.location.workbench,
+        done: $game.location.greenhouse && $game.location.basement &&  $basementLimit >= 30 && $game.location.guesthouse && $guesthouseLimit >= 25 && $game.location.lab && $game.location.nursery && $game.location.shop && $game.location.bathhouse,
+        category: 'Gameplay',
+        title: 'Home buildings',
+        description: 'Buildings buildable in workbench: '  +
+            (!$game.location.greenhouse ? 'Greenhouse' : '<span style="color: green">Greenhouse</span> done') + ', ' +
+            (!$game.location.basement ? 'Basement' : $basementLimit < 30 ?  '+' + (30-$basementLimit) + ' <span style="color: yellow">Slave cells</span>' : '<span style="color: green">Basement fully built</span>') + ', ' +
+            (!$game.location.guesthouse ? 'Guesthouse' : $guesthouseLimit < 25 ? '+' + (25-$guesthouseLimit) + ' <span style="color: yellow">Guest beds</span>' : !$game.location.lab ? 'Laboratory in guesthouse' : '<span style="color: green">Guesthouse & lab fully built</span>') + ', ' +
+            (!$game.location.nursery ? 'Nursery' : '<span style="color: green">Nursery</span> done' ) + ', ' +
+            ($game.location.shop ? 'Shop' : '<span style="color: green">Shop</span> done') + ', ' +
+            ($game.location.bathhouse ? 'Bathhouse' : '<span style="color: green">Bathhouse</span> done') + 
+              /* gate */
+             '',
     },
     girl_in_cage: {
-        show: !$characters.vincent?.talked_about_girl && $game.location?.farm,
+        show:  $game.location?.farm,
         done:  $characters.vincent?.talked_about_girl,
         category: 'Gameplay',
         title: 'Girl in cage',
-        description: 'From day 5 you can ask Vincent about the strange girl in the cage. You get a little background history of the world and permission to have fun with her.',
+        description: 'From day 5 you can ask Vincent about the strange girl in the cage. You get a little background history of the world and permission to have fun with her (for a small fee). Her name is Rose by the way!',
     },
     find_hot_shower: {
-        show: !$backpack.has('blueprint_hot_shower') && $game.location?.farm,
-        done:  $backpack.has('blueprint_hot_shower'),
+        show:  $game.location?.farm,
+        done:  $game.hotShower,
         category: 'Gameplay',
         title: 'Home improvement',
-        description: 'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
+        description:  ($game.hotShower ?? false) ? 'You have the <span style="color: green">hot shower</span>!' :
+            $backpack.has('blueprint_hot_shower') ? 'You have the blueprint for <span style="color: yellow">hot shower</span>! Build it with workbench.' +
+                (($game.location?.workbench ?? false) ? '' : ' (After you found workbench.)') :
+            'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
     },
     blueprints: {
         show: $game.location?.workbench || $player.quests.base_building,
@@ -177,17 +196,17 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '<dl>' +
                 (!$backpack.has('blueprint_hot_shower') 
                     ? '<dt>Hot shower</dt><dd>From day 10 you have a chance to find the blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers.</dd>'
-                    : (!($game.hotShower ?? false) ? '<dt>Hot shower</dt><dd>Have blueprint so build at your leisure.</dd>' : '<dt><s>Hot shower</s></dt>' )) +
+                    : (!($game.hotShower ?? false) ? '<dt>Hot shower</dt><dd>Have blueprint so build at your leisure.</dd>' : '<dt>Built <s>Hot shower</s></dt>' )) +
                 (!$backpack.has('blueprint_hot_tub')
                     ? '<dt>Hot tub</dt><dd>Visit bathhouse and the guests may suggest a hot tub. </dd>'
                     : (!($game.location.hottub ?? false) ? 'Have blueprint, build in workbench</dd>' : '<dt><s>Hot tub</s></dt>')) +
                 (!$backpack.has('blueprint_library') 
                     ? '<dt>Library</dt><dd>Go exploring for a chance to find the blueprint. </dd>'
-                    : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint, build away. </dd>' : '<dt><s>Library</s></dt>')) +
+                    : (!($game.location.library ?? false) ? '<dt>Library</dt><dd>Have blueprint, build away. </dd>' : '<dt>Built <s>Library</s></dt>')) +
 
                 (!$backpack.has('blueprint_hospital') && !($game.location.hospital ?? false)
                     ? '<dt>Hospital</dt><dd>Go exploring for a chance to find the blueprint. </dd>'
-                    : (!($game.location.hospital ?? false) ? '<dt>Hospital</dt><dd>Have blueprint, build it. </dd>' : '<dt><s>Hospital</s></dt>')) +
+                    : (!($game.location.hospital ?? false) ? '<dt>Hospital</dt><dd>Have blueprint, build it. </dd>' : '<dt>Built <s>Hospital</s></dt>')) +
             '</dl>',
     },
     first_pregnancy: {
@@ -313,8 +332,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'Making a community',
         description: 'After the first house party we quickly move on to the next adventure 8-|.<ul>' + 
-                '<li>It all starts with you having a chat with Blair in the morning. Being a good(?) daughter she wants you to fulfill one of her father\' old dreaams. A dream he since then abandoned.</li>' +
-                '<li>Use your workbench to build a <strong>Settlement gate</strong>.' + ($game.location?.workbench ? 'But first you have to go exploring until you find a workbench!' : '') + '</li>' +
+                '<li>It all starts with you having a chat with Blair in the morning. Being a good(?) daughter she wants you to fulfill one of her father\'s old dreaams. A dream he since then abandoned.</li>' +
+                '<li>Use your workbench to build a <strong>Settlement gate</strong>.' + (!$game.location?.workbench ? 'But first you have to go exploring until you find a workbench!' : '') + '</li>' +
                 '<li>Visit Vincent at his farm. He has very strong opinions about this project.</li>' +
             '</ul>',
     },
@@ -376,7 +395,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Horse',
         description: 
             (!$characters.rodger.quests?.horse ? 'Rodger tells you that a person called Harper might have a horse to sell. Go find him.<br/>' : '<s>Harper visited!</s><br/>') +
-            (!$player?.horse ? 'Barnaby, the horse traveling merchant comes by your place now and then if you don\' get the horse from Harper, give it to Rodger or loose it somehow.' : '<s>My horse, ' + $player?.horse + '!</s>'),
+            (!$player?.horse ? 'Barnaby, the horse traveling merchant comes by your place now and then if you don\'t get the horse from Harper, give it to Rodger or loose it somehow.' : '<s>My horse, ' + $player?.horse + '!</s>'),
     },
 
     burn_settlement: {
@@ -417,6 +436,15 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         title: 'Testing of the Faith',
         description: 
             'Vist the settlement. Some bandits have blocked the water supply. Fix!',
+    },
+    more_octavia: {
+        show: $characters.octavia.quests.kidnapped_found,
+        done: $characters.octavia.quests.betrayal2,
+        category: 'Story',
+        title: 'More of Octavia',
+        description: 
+            'More quests with Octavia. You have to do without guide for now!',
+
     },
 
     dom_taxes: {
