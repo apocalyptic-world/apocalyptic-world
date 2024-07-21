@@ -4,6 +4,8 @@
 
 <<if !$characters.isabel.quests.temp_home>>
     <<goto 'Isabel - new home'>>
+<<elseif (($characters.isabel.quests.temp_home_day ?? 0) + 14) < $game.day && !$characters.isabel.quests.check_city>>
+    <<goto 'Isabel - Check underground city'>>
 <</if>>
 
 <<isabel>>
