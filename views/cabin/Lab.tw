@@ -11,6 +11,10 @@ Samples: <strong><<=$characters.laura.quests.productionSamples>></strong>
 	<<link 'Talk to Laura'>>
 		<<goto 'Laura - lab talk'>>
 	<</link>>
+
+	<<if !$characters.laura.quests.explore1 && $characters.laura.quests.breeder_trait && timeBetween('08:00', '12:00')>>
+		<<goto 'Laura - Explore #1'>>
+	<</if>>
 <<else>>
     Laura isn't here...
 	<br /><br />

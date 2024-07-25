@@ -1,0 +1,151 @@
+:: Laura - Explore #1
+<h1 class="ptitle">LAB</h1>
+<br />
+<<set $characters.laura.quests.explore1 = true>>
+You step into Laura's room and find her packing her bag hastily, her face set with determination.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'people/laura/explore1.jpg']]
+</center>
+<br />
+<<you>>
+    Laura, what are you doing?
+<</you>>
+<br />
+Laura doesn't look up as she stuffs a worn notebook into her bag.
+<br /><br />
+<<laura>>
+    Oh, hey. I'm just packing a few things. I need to head out and explore a bit.
+<</laura>>
+<br />
+<<you>>
+    Explore? Now? It's dangerous out there.
+<</you>>
+<br />
+<<laura>>
+    I know, but I have to. I've been thinking about a few experiments that could really help our settlement. We can't keep surviving like this—we need to start thriving.
+<</laura>>
+<br />
+Laura stops packing and looks at you earnestly.
+<br /><br />
+<<laura>>
+    I've been studying the plants around here. If I can find a way to cultivate larger, more nutritious vegetables, it could make a huge difference. Better food means stronger people, fewer illnesses. It's worth the risk.
+<</laura>>
+<br />
+<<you>>
+    Those are great ideas, Laura, but it's risky out there. You can't do this alone
+<</you>>
+<br />
+<<linkreplace 'Go with Laura'>>
+    You both leave the settlement, armed and ready for the journey ahead. 
+    The city outside is a desolate wasteland, remnants of a world long gone. As you navigate through the ruins, the air is thick with tension.
+    <br /><br />
+    <<addhours 4>>
+    <center>
+        [img[setup.ImagePath+'people/laura/explore2.jpg']]
+    </center>
+    <br />
+    Hours pass as you trek through the desolate landscape. Laura stops occasionally to collect samples of soil and plants, meticulously noting her observations. 
+    <br /><br />
+    As you walk through a narrow alley, the quiet is shattered by the sudden appearance of a ragged man with a knife.
+    <br /><br />
+    <center>
+        [img[setup.ImagePath+'people/laura/explore3.jpg']]
+    </center>
+    <br />
+    <<newguy>>
+    <<sayNpc $tmpGuy>>
+        Give me everything you've got, or I'll kill you both!
+    <</sayNpc>>
+    <br />
+    Laura stumbles but manages to pull out her own knife in the chaos. 
+    The man lunges at you, and in the scuffle, Laura swings her knife defensively. 
+    The blade catches the man's neck, and he cries out in pain, dropping his knife.
+    <br /><br />
+    <center>
+        [img[setup.ImagePath+'people/laura/explore4.jpg']]
+    </center>
+    <br />
+    <<laura>>
+        Stop! Please, stop!
+    <</laura>>
+    <br />
+    Laura shouts, rushing to the man's side as he clutches his bleeding neck.
+    <br /><br />
+    <<you>>
+        Laura, what are you doing? He's dangerous!
+    <</you>>
+    <br />
+    <<laura>>
+        He's hurt. We can't just leave him like this 
+    <</laura>>
+    <br />
+    She insists, tearing a strip from her shirt to bandage his wound.
+    <br /><br />
+    <<you>>
+        Why are you helping him?
+    <</you>>
+    <br />
+    She replies firmly, trying to staunch the flow of blood with her hands.
+    <br /><br />
+    <center>
+        [img[setup.ImagePath+'places/explore/bleeding_neck.webp']]
+    </center>
+    <br /><br />
+    <<laura>>
+        He's hurt. We can't just leave him like this. We all have to survive out here, but we don't have to become monsters
+    <</laura>>
+    <br />
+    You hear noise in the distance—footsteps and yelling, the unmistakable sounds of approaching danger.
+    <br /><br />
+    <<you>>
+        Laura, we need to go! I hear more coming. Probably his associates!
+    <</you>>
+    <br />
+    Realizing there's no time to argue, you need to make a split-second decision.
+    <br /><br />
+    <div id="option_wait">
+        <<linkreplace 'Wait Laura'>>
+            <<run $('#option_kill').hide()>>
+            Suddenly, a group of five to ten men appear at the end of the alley. They see their wounded comrade and shout, rushing toward you.
+            <br /><br />
+            <<newguy>>
+            <<sayNpc $tmpGuy>>
+                There they are! Get them!
+            <</sayNpc>>
+            <br /><br />
+            <<link 'Fight them'>>
+                <<generateEnemies 4>>
+                <<set $game.death_reason = 'bleeding out'>>
+                <<fight $enemies 'Laura - Explore #2', 'Dead'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+    <div id="option_kill">
+        <<linkreplace 'Kill man on the ground'>>
+            <<set $player.goodwill -= 5>>
+            <<set $characters.laura.relationship -= 30>>
+            <<run $('#option_wait').hide()>>
+            <center>
+                [img[setup.ImagePath+'people/laura/explore5.jpg']]
+            </center>
+            <br />
+            You grab the man's weapon from the ground and finish him off. Laura gasps in shock and pulls back, her hands covered in blood.
+            <br /><br />
+            <<laura>>
+                You didn't have to do that!!!
+            <</laura>>
+            <br />
+            <<you>>
+                We had no choice. Come on, we need to move. Now.
+            <</you>>
+            <br />
+            You both run, the sounds of the approaching men growing louder behind you. 
+            Your hearts pound in your chests as you navigate through the ruins, finally finding a way to get out of their sight.
+            <br /><br />
+            <<link 'Run home'>>
+                <<goto 'Laura - Explore #2'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</linkreplace>>
