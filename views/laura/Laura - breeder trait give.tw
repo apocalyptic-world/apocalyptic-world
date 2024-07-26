@@ -9,7 +9,7 @@
     <table id="slaves">
     <<for _labGuestI, _labGuest range $guests>>
         <<capture _labGuestI, _labGuest>>
-            <<if _labGuest.gender || (_labGuest.traits ?? []).includes('breeder') || setup.getAge(_labGuest) < 18>>
+            <<if _labGuest.gender || (_labGuest.traits ?? []).includes('breeder') || setup.getAge(_labGuest) < 18 || (_labGuest.traitsLocked ?? []).includes('infertile')>>
                 <<continue>>
             <</if>>
             <<set _genderClass = 'gender-' + setup.genderClass(_labGuest)>>

@@ -27,6 +27,9 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<</if>>
 	<<setNpcStats 'guest' _guestI 'relationship' +10>>
 	<<=$guests[_guestI].name>> relationship increased by 10<br />
+	<<if typeof $guests[_guestI].quests === 'undefined'>>
+		<<set $guests[_guestI].quests = {}>>
+	<</if>>
 	<<set $guests[_guestI].quests.lastInteractionDay = $game.day>>
 <</for>>
 <br /><br />

@@ -1,4 +1,12 @@
 
+function checkAndFixTraits(npc)
+{
+    if ((npc.traits ?? []).includes('breeder') && (npc.traits ?? []).includes('infertile')) {
+        let indexOf = npc.traits.indexOf('infertile');
+        npc.traits.splice(indexOf, 1);
+    }
+}
+
 Save.onSave.add(function (save, details) {
     if (details.type === 'disk') {
         save.metadata = {};
@@ -120,6 +128,11 @@ Save.onLoad.add(function (save) {
         if (typeof variables.characters.blair.pregnancy !== 'undefined') {
             variables.characters.blair.pregnancy_father ??= 'mc';
         }
+        checkAndFixTraits(save.state.history[save.state.index].variables.characters.blair);
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.octavia !== 'undefined') {
+        checkAndFixTraits(save.state.history[save.state.index].variables.characters.octavia);
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
@@ -261,6 +274,7 @@ Save.onLoad.add(function (save) {
     variables.player.id ??= 'mc';
 
     for(var varsSlaveI = 0; varsSlaveI < save.state.history[save.state.index].variables.slaves.length; varsSlaveI++) {
+        checkAndFixTraits(save.state.history[save.state.index].variables.slaves[varsSlaveI]);
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms = 0;
             save.state.history[save.state.index].variables.slaves[varsSlaveI].guys = 1;
@@ -338,6 +352,7 @@ Save.onLoad.add(function (save) {
     }
 
     for(var saveGuestI = 0; saveGuestI < save.state.history[save.state.index].variables.guests.length; saveGuestI++) {
+        checkAndFixTraits(save.state.history[save.state.index].variables.guests[saveGuestI]);
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].strength === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].strength = 0;
         }
