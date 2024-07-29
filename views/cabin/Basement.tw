@@ -4,7 +4,7 @@
 <<set _showSlavesCount = 0>>
 
 <h1 class="ptitle">
-	<<backButton 'Wood cabin'>>		
+	<<backButton 'Wood cabin'>>
 	BASEMENT
 </h1>
 <h3>Slaves</h3>
@@ -52,7 +52,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<center>
 			<<actionImage $tmpGirl basement>>
 		</center>
-		
+
 		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
 		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 		<<link `_girlGuestLink`>>
@@ -100,7 +100,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				Time between 19:00 - 20:30. Energy 40
 			<</linkdesc>>
 		<</if>>
-	<</if>>	
+	<</if>>
 
 	<table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
@@ -109,6 +109,10 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
+		<<set _customColorStyle = ''>>
+		<<if typeof $slaves[_i].color !== 'undefined' >>
+			<<set _customColorStyle = 'color: ' + $slaves[_i].color >>
+		<</if>>
 		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
 			<<set _workingInGarden++>>
 			<<continue>>
@@ -131,7 +135,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<tr>
 			<td style="width: 300px">
 				<<if setup.getAge($slaves[_i]) < 18>>
-					<span @class="''+_genderClass+''">
+					<span @class="_genderClass" @style="_customColorStyle">
 						<<link $slaves[_i].name>>
 							<<set $slaveId = _i>>
 							<<unset $guestId, $charId, $childId>>
@@ -141,7 +145,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<</link>>
 					</span>
 				<<else>>
-					<span @class="''+_genderClass+''">
+					<span @class="_genderClass" @style="_customColorStyle">
 					  <<link $slaves[_i].name>>
 						<<set $tmpGirl to $slaves[_i]>>
 						<<set $tmpGirl.location = 'basement'>>
@@ -151,7 +155,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<<set $tmpGirlInvite to false>>
 						<<set $tmpGirlViewBack = 'NPC view'>>
 						<<set $slaveId = _i>>
-						
+
 						<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>
 							<<if typeof $slaves[_i].quests === 'undefined'>>
 								<<set $slaves[_i].quests = {}>>
@@ -194,7 +198,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 							<<set $player.goodwill-->>
 							<<statsAdd 'slaves_killed'>>
 							<<statsAdd 'people_killed'>>
-						<</link>>	
+						<</link>>
 					<</dialog>>
 				<</link>>
 			</td>
