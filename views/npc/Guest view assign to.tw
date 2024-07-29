@@ -62,6 +62,17 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
+<<if false && setup.cabinInventory.has('breast_pump') && !setup.getPersonsForLocation($guests, 'milk_maid').length && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign as milk maid'>>
+		  <<assignedTo $tmpGirl 'milk_maid'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Help the girls with the breast pump to produce milk for the infants and toddlers - No use yet)
+	</div>
+<</if>>
+
+
 <div>
   <<link 'Assign to forest'>>
 	  <<assignedTo $tmpGirl 'forest'>>

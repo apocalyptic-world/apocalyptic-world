@@ -73,6 +73,7 @@ setup.automatization = {
         hunter: ['bow'],
         kitchen: [],
         maid: [],
+        milk_maid: [],
         mistress: [],
         nightclub: [],
         none: [],
