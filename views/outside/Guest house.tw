@@ -48,8 +48,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<set _dayOff = _isSick || _isRest>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 			<<set _customColorStyle = ''>>
-			<<if typeof $slaves[_i].color !== 'undefined' >>
-				<<set _customColorStyle = 'color: ' + $slaves[_i].color >>
+			<<if typeof _guest.color !== 'undefined' >>
+				<<set _customColorStyle = 'color: ' + _guest.color >>
 			<</if>>
 
 			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
