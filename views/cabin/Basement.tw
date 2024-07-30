@@ -102,7 +102,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<</if>>
 	<</if>>
 
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
@@ -132,8 +132,8 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<<run _lowSubmissionSlaves.push(_i)>>
 		<</if>>
 		<<run _slavesInBasement.push(_i)>>
-		<tr>
-			<td style="width: 300px">
+		<tr class="item">
+			<td style="min-width: 25%">
 				<<if setup.getAge($slaves[_i]) < 18>>
 					<span @class="_genderClass" @style="_customColorStyle">
 						<<link $slaves[_i].name>>
@@ -171,19 +171,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
 			</td>
 			<td>
-				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-						Beauty: <<=$slaves[_i].beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge($slaves[_i])>>
-			</td>
-			<td>
-				<<if $slaves[_i].assignedTo>>
-					(<<=$slaves[_i].assignedTo>>)
-				<<elseif typeof $player.companions['slave:' + _i] !== 'undefined'>>
-					(slave companion)
-				<</if>>
+				<<npcListView $slaves[_i] _i 'slave'>>
 			</td>
 			<td>
 				<<link 'Kill'>>
