@@ -36,6 +36,11 @@ Setting.addToggle("fastTravelEnabled", {
 	default: true
 });
 
+Setting.addToggle("safeMode", {
+	label : "Safe mode enabled",
+	default: false
+});
+
 Config.navigation.override = pas => {
   if (!Story.has(pas)) return 'Wood cabin';
 };
@@ -73,7 +78,7 @@ Config.navigation.override = pas => {
 // visible end
 
 $(document).on(':passageend', function (e) {
-  	State.variables.mcCache = 'gbmmgvdl';  	
+  	State.variables.mcCache = 'gbmmgvdl';
 });
 
 // notify.min.js, for SugarCube 2, by Chapel

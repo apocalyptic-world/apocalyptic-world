@@ -41,41 +41,41 @@
 		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
 			<<set $args[1] = 'deflower'>>
 		<</if>>
-		
+
 		<<set _genderDesc = setup.genderPath($args[0])>>
 		<<set _race = '.' + $args[0].race>>
 		<<set _hair = '.' + $args[0].hair + 'hair'>>
 		<<if ($args[0].pregnancy ?? 0) > 100 >>
 			<<set _pregnancyDesc = '.pregnant'>>
 		<<else>>
-			<<set _pregnancyDesc = '.notpregnant'>>				
+			<<set _pregnancyDesc = '.notpregnant'>>
 		<</if>>
-		
+
 		<<if setup.getAge($args[0]) <= 24 >>
 			<<set _ageDesc = '.young'>>
 		<<elseif setup.getAge($args[0]) <= 39 >>
-			<<set _ageDesc = ''>>		
+			<<set _ageDesc = ''>>
 		<<elseif setup.getAge($args[0]) <= 59 >>
 			<<set _ageDesc = '.mature'>>
 		<<else>>
-			<<set _ageDesc = '.old'>>				
+			<<set _ageDesc = '.old'>>
 		<</if>>
-		
+
 		<<set _morphs = [
 		$args[0].name + _pregnancyDesc,
 		$args[0].name,
-		_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,		
-		_genderDesc + _race + _ageDesc + _pregnancyDesc,		
-		_genderDesc + _race + _hair + _pregnancyDesc,		
-		_genderDesc + _race + _pregnancyDesc,		
+		_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,
+		_genderDesc + _race + _ageDesc + _pregnancyDesc,
+		_genderDesc + _race + _hair + _pregnancyDesc,
+		_genderDesc + _race + _pregnancyDesc,
 		_genderDesc + _race + _hair + _ageDesc,
 		_genderDesc + _race + _ageDesc,
 		_genderDesc + _race + _hair,
 		_genderDesc + _race,
-		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
-		_genderDesc + _ageDesc + _pregnancyDesc,		
-		_genderDesc + _hair + _pregnancyDesc,		
-		_genderDesc + _pregnancyDesc,		
+		_genderDesc + _hair + _ageDesc + _pregnancyDesc,
+		_genderDesc + _ageDesc + _pregnancyDesc,
+		_genderDesc + _hair + _pregnancyDesc,
+		_genderDesc + _pregnancyDesc,
 		_genderDesc + _hair + _ageDesc,
 		_genderDesc + _ageDesc,
 		_genderDesc + _hair,
@@ -91,11 +91,11 @@
 				<<set _location = 'default'>>
 			<</if>>
 		<</if>>
-		
+
 		<<for _i to 0; _i < _morphs.length; _i++>>
 			<<if
-			typeof _actions[_morphs[_i]] !== 'undefined' && 
-			typeof _actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
+			typeof _actions[_morphs[_i]] !== 'undefined' &&
+			typeof _actions[_morphs[_i]][$args[0].location] !== 'undefined' &&
 			typeof _actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
 				<<if _isPack && ![$args[0].pack, $args[0].name].includes(_morphs[_i])>>
 					<<set _actionsPath = _defaultActionsPath>>
@@ -106,13 +106,13 @@
 				<<break>>
 			<</if>>
 		<</for>>
-		
+
 
 		<<if !_imageFound>>
 			<<for _i to 0; _i < _morphs.length; _i++>>
 				<<if
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
+				typeof setup.actions[_morphs[_i]] !== 'undefined' &&
+				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' &&
 				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
 					<<if _isPack && ![$args[0].pack, $args[0].name].includes(_morphs[_i])>>
 						<<set _actionsPath = _defaultActionsPath>>
@@ -120,7 +120,7 @@
 					<</if>>
 						<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
 					<<break>>
-				<</if>>	
+				<</if>>
 			<</for>>
 		<</if>>
 	</div>
@@ -185,16 +185,16 @@
 <</widget>>
 
 <<widget actionImageOutput>>
-	<<set _extension = $args[0].split('.').pop()>>
-	<<if ['mp4', 'webm'].includes(_extension)>>
-		<<set _videoType = 'video/' + _extension>>
-		<<set _url to $args[0]>>
-		<video controls autoplay loop>
-  			<source @src="_url" @type="_videoType">
-		</video>
-	<<else>>
-		[img[$args[0]]]
+	<<if not settings.safeMode>>
+		<<set _extension = $args[0].split('.').pop()>>
+		<<if ['mp4', 'webm'].includes(_extension)>>
+			<<set _videoType = 'video/' + _extension>>
+			<<set _url to $args[0]>>
+			<video controls autoplay loop>
+					<source @src="_url" @type="_videoType">
+			</video>
+		<<else>>
+			[img[$args[0]]]
+		<</if>>
 	<</if>>
 <</widget>>
-
-
