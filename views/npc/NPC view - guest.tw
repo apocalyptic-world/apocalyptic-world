@@ -9,11 +9,29 @@
 		<<if $tmpGirl.relationship > 100>>
   			<<set $tmpGirl.relationship = 100>>
  		<</if>>
-		<<set $tmpGirl.talked = true>>
+		<<set $tmpGirl.talked = null>>
 		<<addmins 15>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<goto 'NPC talk'>>
 	<</link>>
+<</if>>
+
+<<set _guestBirthDate to new Date($tmpGirl.birthDate)>>
+<<set _gameDate to new Date(variables().gameDate)>>
+<<set _guestBirthMonth to _guestBirthDate.getMonth()>>
+<<set _guestBirthDay to _guestBirthDate.getDate()>>
+<<set _gameMonth to _gameDate.getMonth()>>
+<<set _gameDay to _gameDate.getDate()>>
+<<set _isBirthday to (_guestBirthMonth === _gameMonth && _guestBirthDay === _gameDay)>>
+<<if !_isBirthday>>
+    <<if !$tmpGirl.birthday>>
+		<<link 'Celebrate Birthday'>>
+			<<set $tmpGirl.birthday = true>>
+			<<set $tmpGirl.quests.lastInteractionDay = $game.gameDate>>
+			<<energy -10>>
+			<<goto 'NPC - celebrate birthday'>>
+		<</link>>
+	<</if>>
 <</if>>
 
 <<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20>>

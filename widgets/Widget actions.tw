@@ -56,6 +56,10 @@
 		<<else>>
 			<<set _ageDesc = '.old'>>				
 		<</if>>
+		<<if typeof $args[3] !== 'undefined'>>
+			<<set _maleRace = '.male' + $args[3].race>>
+		<</if>>
+			
 		
 		<<set _morphs = [
 		$args[0].name + _pregnancyDesc,
@@ -67,6 +71,7 @@
 		_genderDesc + _race + _hair + _ageDesc,
 		_genderDesc + _race + _ageDesc,
 		_genderDesc + _race + _hair,
+		_genderDesc + _race + _maleRace,
 		_genderDesc + _race,
 		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
 		_genderDesc + _ageDesc + _pregnancyDesc,		

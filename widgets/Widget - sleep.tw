@@ -832,11 +832,20 @@
 
 <<shopMerchantUpdate>>
 <<if _hasWorkingHospital>>
-	<<sleepHospital>>
+    <<sleepHospital>>
 <</if>>
 <<run setup.relationshipBetween.run()>>
+<<run setup.relationshipBetween.checkBirthdays()>>
 <<set _matchesBetween = setup.relationshipBetween.getMatches()>>
 <<run console.log(_matchesBetween)>>
+
+<!-- Daily routine call -->
+<<for _i to 0; _i < variables().guests.length; _i++>>
+    <<set $npc = variables().guests[_i]>>
+    <<run setup.relationshipBetween.checkAdmirer($npc)>>
+    <<run setup.relationshipBetween.initiateDivorce($npc)>>
+<</for>>
+
 <<if $args[0]>>
 	<<set $morningMessages = []>>
 <<else>>

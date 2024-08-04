@@ -18,6 +18,40 @@
 	<</if>>
 	<<set _randomName = either(_names)>>
 
+	<<set _childName = _randomName>>
+	<<set _father = $tmpGuy>>
+	<<if _mother.pregnancy_father>>
+		<<set _father_id = _mother.pregnancy_father>>
+		<<set _father = setup.getNpcById(_father_id)>>
+	<</if>>
+	<<set _childRace_check to _mother.race>>
+
+	<!-- custom child race -->
+	<<if _father.race == "black">>
+		<<set _randomValue = Math.floor(random(0, 9))>>
+		<<if _randomValue >= 3>>
+			<<set _childRace_check to _father.race>>
+		<</if>>
+	<<elseif _father.race != "black" and _mother.race != _father.race>>
+		<<set _randomValue = Math.floor(random(0, 9))>>
+		<<if _randomValue % 2 == 1>>
+			<<set _childRace_check to _father.race>>
+		<</if>>
+	<</if>>
+	<!-- end custom child race -->
+	<!-- middle name-->
+	<<set _midName to "">>
+	<<if _father_id === 'mc' and _mother.id === 'isabel'>>
+		<<set _midName to " Dom">>
+	<<elseif _father_id === 'mc'>>
+		<<set _midName to "">>
+	<<elseif _father_id !== 'mc' and _father_id !== 'unknown'>>
+		<<set _midName to " G">>
+	<<else>>
+		<<set _midName to " B">>
+	<</if>>
+	<!-- end middle name-->
+
     <<set 
 		_child.birthDate = $gameDate,
 		_child.anal = 0,
@@ -28,9 +62,9 @@
 		_child.virgin = true,
 		_child.strength = 0,
 		_child.orgasms = 0,
-		_child.name = _randomName,
-		_child.beauty = _mother.beauty,
-		_child.race = _mother.race,
+		_child.name = _childName + _midName + ( (_father.name != "") ? (" " + _father.name) : "" ),
+		_child.beauty = Math.max(10, Math.min(Math.round(_mother.beauty + (Math.random() * 10 - 5)), 100)),
+		_child.race = _childRace_check,
 		_child.breasts = _mother.breasts,
 		_child.hair = _mother.hair,
 		_child.strength = Math.round(_mother.strength / 2, 0),
@@ -38,6 +72,7 @@
 		_child.traits = [],
 		_child.skills = []
 	>>
+	
 	<<set _child = setup.setSexuality(_child, 'straight')>>
 
     <<if !_child.gender>>
