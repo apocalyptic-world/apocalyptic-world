@@ -7,19 +7,19 @@
     mistress_handjob: {
         title: 'Handjob',
         minAction: 10,
-        show: $guests[_girlGuest[0]].gender == 1,
+        show: [1,2].includes($guests[_girlGuest[0]].gender),
         maxCorruption: 20
     },
     mistress_footjob: {
         title: 'Footjob',
         minAction: 20,
-        show: $guests[_girlGuest[0]].gender == 1,
+        show: [1,2].includes($guests[_girlGuest[0]].gender),
         maxCorruption: 30
     },
     mistress_titjob: {
         title: 'Titjob',
         minAction: 30,
-        show: $guests[_girlGuest[0]].gender == 1 && ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
         maxCorruption: 40
     },
     mistress_face_strapon: {
@@ -27,6 +27,13 @@
         minAction: 30,
         show: $guests[_girlGuest[0]].gender == 0 && $tmpGirl.gender == 1,
         maxCorruption: 40
+    },
+    mistress_pussy_lick: {
+        title: 'Lick pussy',
+        minAction: 30,
+        show: typeof $tmpGirl.pussy !== 'undefined',
+        maxCorruption: 40,
+        positive: true
     },
     mistress_licked: {
         title: 'Sit on face',
@@ -41,6 +48,11 @@
         maxCorruption: 50,
         stats: 'bj'
     },
+    mistress_rimjob: {
+        title: 'Rimjob',
+        minAction: 40,
+        maxCorruption: 50
+    },
     mistress_dp: {
         title: 'Deepthroat',
         minAction: 50,
@@ -48,13 +60,6 @@
         maxCorruption: 60,
         positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
         stats: 'dp'
-    },
-    mistress_pussy_lick: {
-        title: 'Lick pussy',
-        minAction: 30,
-        show: typeof $tmpGirl.pussy !== 'undefined',
-        maxCorruption: 40,
-        positive: true
     },
     mistress_pussy: {
         title: 'Fuck pussy',

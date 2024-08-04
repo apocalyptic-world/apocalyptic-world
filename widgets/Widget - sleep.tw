@@ -212,7 +212,9 @@
 				<<set _i-->>
 				<<continue>>
 			<<else>>
-				<<setNpcStats 'slave' _i 'happy' -5>>
+				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
+					<<setNpcStats 'slave' _i 'happy' -5>>
+				<</if>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
@@ -451,7 +453,9 @@
 				<<set _guestI-->> 
 				<<continue>>
 			<<else>>
-				<<setNpcStats 'guest' _guestI 'happy' -5>>
+				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
+					<<setNpcStats 'guest' _guestI 'happy' -5>>
+				<</if>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set _npc.virgin = false>>
