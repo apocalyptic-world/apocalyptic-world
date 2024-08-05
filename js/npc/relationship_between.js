@@ -11,7 +11,9 @@ setup.relationshipBetween = {
                   admirer: [],
                   tempAdmirer: [],
                   sharedEvents: {},
-                  celebratedBirthday: null
+                  ncpCream: {},
+                  celebratedBirthday: null,
+                  bff: null
               };
               console.log("Initialized relationship for:", this.npc.id);
           }
@@ -227,9 +229,21 @@ setup.relationshipBetween = {
         this.handleDislikes(); // Ensure dislikes are updated
     },
     setBFF: function(npcA, npcB) {
+        // Check if both NPCs have a relationship stat of 100 or higher with each other
         if (npcA.relationshipBetween.stats[npcB.id] >= 100 && npcB.relationshipBetween.stats[npcA.id] >= 100) {
-            npcA.relationshipBetween.bff = npcB.id;
-            npcB.relationshipBetween.bff = npcA.id;
+            // Check if both NPCs have shared at least 5 events with each other
+            if (npcA.relationshipBetween.sharedEvents[npcB.id] >= 5) {
+                // Ensure neither NPC already has a BFF
+                if (!npcA.relationshipBetween.bff && !npcB.relationshipBetween.bff) {
+                    npcA.relationshipBetween.bff = npcB.id;
+                    npcB.relationshipBetween.bff = npcA.id;
+                    console.log(`${npcA.id} and ${npcB.id} are now best friends.`);
+                } else {
+                    console.log("One of the NPCs already has a BFF.");
+                }
+            } else {
+                console.log("The NPCs haven't shared enough events to become BFFs.");
+            }
         }
     },
     handleGroupActivity: function(npcGroup) {
@@ -460,5 +474,28 @@ setup.relationshipBetween = {
                console.log(`Shared events between ${npcA.id} and ${npcB.id}: ${npcA.relationshipBetween.sharedEvents[npcB.id]}`);
            }
        }
-   }
+   },
+   trackNpcCream: function(npcA, npcB) {
+        // Ensure ncpCream property exists
+        if (!npcA.relationshipBetween.ncpCream) {
+            npcA.relationshipBetween.ncpCream = {};
+        }
+        if (!npcB.relationshipBetween.ncpCream) {
+            npcB.relationshipBetween.ncpCream = {};
+        }
+
+        // Initialize the shared event count if it doesn't exist
+        if (!npcA.relationshipBetween.ncpCream[npcB.id]) {
+            npcA.relationshipBetween.ncpCream[npcB.id] = 0;
+        }
+        if (!npcB.relationshipBetween.ncpCream[npcA.id]) {
+            npcB.relationshipBetween.ncpCream[npcA.id] = 0;
+        }
+
+        // Increment the shared event count
+        npcA.relationshipBetween.ncpCream[npcB.id]++;
+        npcB.relationshipBetween.ncpCream[npcA.id]++;
+
+        console.log(`${npcB.id} fills ${npcA.id} with cream: ${npcA.relationshipBetween.ncpCream[npcB.id]}`);
+    }
 };

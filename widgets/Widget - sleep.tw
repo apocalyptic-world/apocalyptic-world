@@ -642,7 +642,19 @@
 			<</if>>
 			<<if $guests[_guestI].pregnancy == 8>>
 				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
-				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
+				// Checks if husband is not the father
+				<<if $guests[_guestI].family.husband and $guests[_guestI].family.husband !== 'mc'>>
+					<<set _hubby = setup.getNpcById($guests[_guestI].family.husband)>>
+					<<if $guests[_guestI].pregnancy_father !== $guests[_guestI].family.husband>>
+						<<set _pregnantMsg = $guests[_guestI].name + 'told you, and her husband ' + _hubby.name +', that <strong>she is pregnant</strong>. <strong>NEITHER of you is the father!</strong>'>>
+						<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
+							<<set $pregnancyStreetsHappening = {
+								type: 'guest',
+								id: _guestI
+							}>>
+						<</if>>
+					<</if>>
+				<<elseif $guests[_guestI].pregnancy_father !== 'mc'>>
 					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
 					<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
 						<<set $pregnancyStreetsHappening = {
