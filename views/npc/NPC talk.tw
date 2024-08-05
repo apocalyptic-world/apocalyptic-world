@@ -27,7 +27,7 @@
 	<<set _chanceShowSkill += 20>>
 <</if>>
 
-<<if setup.percentageChance(50)>>
+<<if setup.percentageChance(_chanceShowSkill) && !$slaveId && !$guestId && !$charId>>
 	<<if ($tmpGirl.skills ?? []).length>>
 		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> has <<=setup.skills[setup.getRandomElement($tmpGirl.skills)].title>> skill!</strong>
 	<<else>>

@@ -13,30 +13,35 @@
 <<if !settings.gaysEnabled && $tmpGirl.gender == 1 >>
 	<<set _punishView = _punishView + '_hit'>>
 <</if>>
-<<if $punishType === 'paddle'>>
-	<<set 
-		_relStats = 2,
-		_subStats = 2,
-		_punishView = _punishView + '_paddle'
-	>>
-<<elseif $punishType === 'beat'>>
-	<<set _punishView = _punishView + '_hit'>>
-<<elseif $punishType === 'piss'>>
-	<<set 
-		_relStats = 2,
-		_subStats = 2,
-		_punishView = _punishView + '_piss'
-	>>
-<</if>>
+<<set _punishSettings = {
+    paddle: { show: true, relStats: 2, subStats: 2, viewSuffix: '_paddle' },
+    beat: { show: true, relStats: 1, subStats: 1, viewSuffix: '_hit' },
+    piss: { show:true, relStats: 2, subStats: 2, viewSuffix: '_piss' },
+	choke: { show: !$tmpGirl.gender, relStats: 0, subStats: 3, viewSuffix: '_choke'}
+}>>
 
-<<set _relChanged = true, _subChanged = true>>
+<<set _punishTypeSettings = _punishSettings[$punishType] ?? { relStats: 1, subStats: 1, viewSuffix: '' }>>
+
+<<set _relStats = _punishTypeSettings.relStats>>
+<<set _subStats = _punishTypeSettings.subStats>>
+<<set _punishView += _punishTypeSettings.viewSuffix>>
+
+<<set _relChanged = true>>
+<<set _subChanged = true>>
+
 <<if _isMasochist && $punishType !== 'beat'>>
-	<<set 
-		_relStats = 0, 
-		_relChanged = false
-	>>
+    <<set _relStats = 0>>
+    <<set _relChanged = false>>
 <</if>>
-
+<<if $punishType !== $prevPunish>>
+	<<set $punishCount = 0>>
+<</if>>
+<<set $punishCount++>>
+<<set _dead = false>>
+<<if $punishType === 'choke' && $punishCount >= 3>>
+	<<set _dead = true>>
+	<<set _punishView = 'punish_dead'>>
+<</if>>
 <<if $punishType>>
 	<<actionImage $tmpGirl _punishView>>
 
@@ -53,9 +58,9 @@
 
 	<<addmins 15>>
 	<<energy -10>>
-
-	<br /><br />
-	<<if $punishType == 'piss'>>
+	<<if _dead>>
+			You take a step back and look at her. You overdid and she's laying on the ground dead.
+	<<elseif $punishType == 'piss'>>
 		<strong>
 			You start to piss all over <<=setup.displayName($tmpGirl)>> face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied up. <<=_heOrSheU>> tries to turn away and close <<=_hisOrHer>> eyes.
 		</strong>
@@ -63,13 +68,22 @@
 		<strong>
 			You've properly swung a few times and punched <<=setup.displayName($tmpGirl)>> right in the face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied to a chair, but after a few punches, it seems like <<=_heOrShe>>'s slowly starting to give in.
 		</strong>
+	
+	<<elseif $punishType === 'choke'>>
+		<<if $punishCount < 1>>
+			You put your hands around <<=setup.displayName($tmpGirl)>> neck and choke her.
+		<<elseif $punishCount < 3>>
+			<<=setup.displayName($tmpGirl)>> eyes gets sleepy as she looks straight at you and tries to tell something.
+		<</if>>
 	<<elseif _isMasochist>>
 		<strong><<=setup.displayName($tmpGirl)>></strong> moans in enjoyment while looking over <<=_hisOrHer>> shoulder straight in your eyes.
 		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 100)>>
 	<<else>>
 		<strong><<print $tmpGirl.name>></strong> yells in pain as you punish <<=_himOrHer>>. 
 	<</if>>
-	<br /><br />
+	<<if _relChanged || _subChanged>>
+		<br /><br />
+	<</if>>
 	<<if _relChanged>>
 		<strong><<print $tmpGirl.name>></strong> relationship decreased by <<=_relStats>><br />
 	<</if>>
@@ -84,7 +98,8 @@
 	You enter <<=_hisOrHer>> basement cell, and <<=_heOrShe>> is already waiting for you. Fear is visible in <<=_hisOrHer>> eyes, while <<=_hisOrHer>> hands are tied behind <<=_hisOrHer>> back.
 <</if>>
 <br /><br />
-
+<<set $prevPunish = $punishType>>
+<<if !_dead>>
 <<if $player.energy >= 10 && hasTime(1)>>
 	<<if $tmpGirl.gender == 1>>
 		<<link 'Hit him'>>
@@ -109,11 +124,25 @@
 		<<set $punishType = 'piss'>>
 		<<goto `passage()`>>
 	<</link>>
+	<<if [0, 2].includes($tmpGirl.gender)>>
+		<<set _linkName = 'Choke ' + _himOrHer>>
+		<<link _linkName>>
+			<<set $punishType = 'choke'>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
+<</if>>
+<<else>>
+	<<slaveRemove $slaveId>>
 <</if>>
 
 <<link 'Back'>>
-	<<unset $punishType>>
-	<<goto 'NPC view'>>
+	<<unset $punishType, $prevPunish, $punishCount>>
+	<<if _dead>>
+		<<goto 'Basement'>>
+	<<else>>
+		<<goto 'NPC view'>>
+	<</if>>
 <</link>>
 
 

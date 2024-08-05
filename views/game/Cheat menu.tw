@@ -160,7 +160,7 @@
 		<<sleep>>
 		<<goto `passage()`>>
 	<</link>>
-	<<if typeof $tmpGirl !== 'undefined' && (typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined')>>
+	<<if typeof $tmpGirl !== 'undefined' && (typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined')>>
 		<<link 'Edit NPC'>>
 			<<script>>
 				Dialog.setup("Cheatmenu - edit NPC", "Cheatmenu - edit NPC");
@@ -192,7 +192,6 @@
 			<</link>>
 			<<if (_availableGuests[0] ?? []).length >= 2 && ($game.location.bathhouse ?? false)>>
 				<<link 'Bathhouse: Threesome'>>
-					<<run console.log(_availableGuests)>>
 					<<set $tmpEvent = {
 						bathhouseThreesome: [
 							'guest:' + _availableGuests[0][0],
@@ -204,7 +203,6 @@
 				<</link>>
 			<</if>>
 			<<if (_availableGuests[0] ?? []).length >= 0>>
-				<<run console.log(_availableGuests)>>
 				<<link 'Bedroom: Sleepover'>>
 					<<set $tmpEvent = {
 						id: _availableGuests[0][0]
