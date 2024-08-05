@@ -17,10 +17,6 @@
 	<<if !_isPack>>
 		<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
 	<</if>>
-	<<run console.log(_isPack)>>
-	<<run console.log($args[0].name)>>
-	<<run console.log((($packs ?? {})[$args[0].name] ?? false))>>
-	<<run console.log(typeof setup.actions[$args[0].name] !== 'undefined')>>
 	<<set _defaultActionsPath = 'images/actions'>>
 	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
