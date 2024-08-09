@@ -1,0 +1,98 @@
+:: Fight cage - introduction [bg-underground]
+<h1 class="ptitle">FIGHT CAGE</h1>
+<br />
+You make your way to the side of the cage, dropping your bag to the cracked concrete floor. 
+The weight of the world on your shoulders feels a little lighter as you begin your workout routine. 
+The repetition of lifting weights and practicing strikes brings a sense of comfort, a ritual that allows you to block out the chaos around you, at least for a little while. 
+But you can feel eyes on you, a familiar sensation in a world where survival often depends on sizing up every stranger.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/cage_fight/introduction1.jpg']]
+</center>
+<br />
+It doesn’t take long for you to spot them. A girl and a guy, both lean and hardened by the harsh realities of this world, stand a few feet away, watching you with intense, scrutinizing eyes. The girl’s gaze is cold, calculating, like she’s already figuring out how to use you to her advantage. 
+The guy, though, has a different look—curiosity mixed with something more dangerous.
+<br /><br />
+The guy takes a step closer, a smirk tugging at the corner of his mouth.
+<br /><br />
+<<boris>>
+    Haven’t seen you around here before. You new?
+<</boris>>
+<<newguy>>
+<<set 
+    $tmpGuy.id = 'boris',
+    $tmpGirl.name = 'Boris',
+    $tmpGirl.birthDate = setup.getBirthDate(27),
+    $tmpGirl.hair = 'black',
+    $tmpGirl.eyes = 'brown',
+    $tmpGirl.race = 'white',
+    $tmpGirl.beauty = 94,
+    $tmpGirl.anal = 0,
+    $tmpGirl.traits = [];
+    $tmpGirl.quests = {},
+    $tmpGirl.virgin = false
+>>
+<br />
+You set down the weights, wiping the sweat from your brow as you turn to face him fully.
+<br /><br />
+<div id="option_calm">
+<<linkreplace 'Yeah, just got in. Trying to get a feel for the place'>>
+    <<run $('#option_agressive').hide()>>
+    <<run $('#continue').show()>>
+    <<you>>
+        Yeah, just got in. Trying to get a feel for the place.
+    <</you>>
+    <br />
+    He nods, glancing at the fight cage where two brawlers go at it with a ferocity that speaks of desperation.
+    <br /><br />
+    <<boris>>
+        You came to the right spot. This is where the real action happens. We got the fights going all night. You can make some good caps if you know how to handle yourself.
+    <</boris>>
+    <br />
+<</linkreplace>>
+</div>
+<div id="option_agressive">
+    <<linkreplace 'Looking for trouble?'>>
+        <<run $('#option_calm').hide()>>
+        <<run $('#continue').show()>>
+        <<you>>
+            Looking for trouble?
+        <</you>>
+        <br />
+        The guy’s grin widens, a glint of something predatory in his eyes.
+        <br /><br />
+        <<boris>>
+            Is that so? Well, we could always use more fighters. If you’re half as good as you look, you might make a name for yourself down here
+        <</boris>>
+        <br />
+    <</linkreplace>>
+</div>
+<div id="continue" style="display:none">
+    <center>
+        [img[setup.ImagePath+'places/cage_fight/introduction2.jpg']]
+    </center>
+    <br />
+    The girl, who has remained silent until now, steps forward, her eyes scanning you with a mixture of interest and suspicion. 
+    She says nothing, but her presence is palpable, a reminder that nothing in this place is as simple as it seems.
+    <br /><br />
+    <<boris>>
+        Whenever you're ready, just step inside fight cage.
+    <</boris>>
+    <br />
+    The guy leans in slightly, lowering his voice as if sharing a secret.
+    <br /><br />
+    <<boris>>
+        Tell you what… You keep winning, climb the ranks, and maybe—just maybe—I’ll let you fight with some of my best men. Or even I will let you fight my slaves. Maybe yours against mine? 
+    <</boris>>
+    <br />
+    You feel the gravity of his offer, the darkness it carries. The choice is yours—step into the cage and fight for caps, climb the ranks, and eventually, perhaps, command your own slaves in the arena. Or you could walk away, refuse to be a part of the twisted game that turns human lives into currency and entertainment.
+    <br /><br />
+    <strong>
+        Now you can fight in cage for caps!
+    </strong>
+    <br /><br />
+    <<link 'Leave'>>
+        <<set $characters.boris = $tmpGuy>>
+        <<goto 'Fight cage'>>
+    <</link>>
+</div>
