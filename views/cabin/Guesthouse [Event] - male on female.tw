@@ -119,7 +119,6 @@
       <<set _npcShared = true>>
    <</if>>
    <!-- END NPC Shared events -->
-
    <!-- failed orgasm -->
    <<if _index == 3>>
    <<set _failOrgasm = Math.random()>>
@@ -253,107 +252,100 @@
 				<<set $npcA = setup.getNpcById($targetNpcs[_i])>>
 				<<run setup.relationshipBetween.checkAndSelectAdmirer($npcA)>>
 			<</for>>
-			<!-- END custom admirers -->      
+			<!-- END custom admirers -->     
       <<else>>
          <<set $randEvent[2] = _index + 1>>
-         <<set _orgasm = true>>
       <</if>>
       <!-- end custom creampie -->
-	<<else>>
-      <<if _index + 1 == _sexActions.length>>
-         <<set _orgasm = true>>
-         <<else>>
-   		<<set $randEvent[2] = _index + 1>>
-         <<if $player.horny < 100>>
-            [[Masturbate|passage()][$player.horny += 20]]
-         <</if>>     
-         [[Just watch|passage()]]
-      <</if>>
 	<</if>>
-   <!-- custom creampie -->
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[2] = _index + 1>>
+		<<if not _checkCreampie>>
+			<<if $player.horny < 100>>
+				[[Masturbate|passage()][$player.horny += 20]]
+			<</if>>     
+			[[Just watch|passage()]]
+		<</if>>  
+	<</if>>
+   <!-- Check if custom creampie to hide button-->
    <<if not _checkCreampie>>
-   <!-- end custom creampie -->
-	<<link 'Interrupt them'>>
-		<<set _interrupted = true>>
-      <!-- custom decrease for mc -->
-      <<set $targetNpcs = []>> <!-- Initialize an empty array for selected NPCs -->
+		<<link 'Interrupt them'>>
+			<<set _interrupted = true>>
+			<<replace "#choice">>
+				<<for _i = 0; _i < _guestIds.length; _i++>>
+					<<set 
+						$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+						$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+					>>
+				<</for>>
+				<!-- custom decrease for mc -->
+				<<set $targetNpcs = []>> <!-- Initialize an empty array for selected NPCs -->
 
-<<for _i to 0; _i < _guestIds.length; _i++>> <!-- Loop through all guest IDs -->
-    <<set $randomNpcId = $guests[_guestIds[_i]].id>> <!-- Get the ID of each guest -->
-    <<if !$targetNpcs.includes($randomNpcId)>>
-        <<set $targetNpcs.push($randomNpcId)>>
-        <<print "Added: " + $randomNpcId>>
-    <</if>>
-<</for>>
+				<<for _i to 0; _i < _guestIds.length; _i++>> <!-- Loop through all guest IDs -->
+					<<set $randomNpcId = $guests[_guestIds[_i]].id>> <!-- Get the ID of each guest -->
+					<<if !$targetNpcs.includes($randomNpcId)>>
+						<<set $targetNpcs.push($randomNpcId)>>
+					<</if>>
+				<</for>>
 
-<<print "Target NPCs: " + $targetNpcs>>
+				<!-- Ensure at least one NPC is in the group -->
+				<<if $targetNpcs.length >= 1>>
+					<!-- Decrease relationship between each NPC in the list and MC -->
+					<<for _i to 0; _i < $targetNpcs.length; _i++>>
+						<<set $npc = setup.getNpcById($targetNpcs[_i])>>
+						<<run setup.relationshipBetween.decrease($npc, ["mc"], 5)>>
+					<</for>>
+				<</if>>
+				<!-- end custom decrease for mc -->
 
-<!-- Ensure at least one NPC is in the group -->
-<<if $targetNpcs.length >= 1>>
-    <!-- Decrease relationship between each NPC in the list and MC -->
-    <<for _i to 0; _i < $targetNpcs.length; _i++>>
-        <<set $npc = setup.getNpcById($targetNpcs[_i])>>
-        <<run setup.relationshipBetween.decrease($npc, ["mc"], 1)>>
-        <<print "Decreased relationship for: " + $targetNpcs[_i]>>
-    <</for>>
-    Relationship between MC and the following NPCs has been decreased:
-    <<for _i to 0; _i < $targetNpcs.length; _i++>> <<=$targetNpcs[_i]>> <<if _i < $targetNpcs.length - 1>>, <</if>> <</for>>
-<</if>>
-      <!-- end custom decrease for mc -->
-		<<replace "#choice">>
-			<<for _i = 0; _i < _guestIds.length; _i++>>
-				<<set 
-					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
-					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
-				>>
-			<</for>>
-				<center>
-					<<actionImageOutput `setup.ImagePath+'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
-				</center>
-				<br /><br />
-				You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
-				<br />
-			<<linkreplace 'Ask for a creampie'>>
-				<<if setup.percentageChance(setup.sexChance($guests[_guestIds[0]]))>>
-					<<if $guests[_guestIds[0]].virgin>>
+					<center>
+						<<actionImageOutput `setup.ImagePath+'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
+					</center>
+					<br /><br />
+					You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
+					<br />
+				<<linkreplace 'Ask for a creampie'>>
+					<<if setup.percentageChance(setup.sexChance($guests[_guestIds[0]]))>>
+						<<if $guests[_guestIds[0]].virgin>>
+							<center>
+								<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text' $guests[_guestIds[1]]>>
+							</center>
+							<br />
+							<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+							<br /><br />
+							<<set $guests[_guestIds[0]].virgin = false>>
+						<</if>>
 						<center>
 							<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text' $guests[_guestIds[1]]>>
 						</center>
 						<br />
-						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+						<<print _actionText['male_on_female']['pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
 						<br /><br />
-						<<set $guests[_guestIds[0]].virgin = false>>
-					<</if>>
-					<center>
-						<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text' $guests[_guestIds[1]]>>
-					</center>
-					<br />
-					<<print _actionText['male_on_female']['pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
-					<br /><br />
 
-					<<linkreplace 'Continue'>>
-						<<set _orgasm = true>>
-						<center>
-							<<actionImage $guests[_guestIds[0]] 'cum_in_pussy' 'no-text' $guests[_guestIds[1]]>>
-						</center>
-						<br />
-						<<print _actionText['male_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
-						<br /><br />
-						<<if setup.percentageChance(setup.pregnancyChance($guests[_guestIds[0]]))>>
-							<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
-							<<set $guests[_guestIds[0]].pregnancy = 0>>
-						<</if>>
-					<</linkreplace>>
-				<<else>>
-					<<=setup.displayName($guests[_guestIds[0]])>> says no and leaves the room half naked.
-					<br /><br />					
-				<</if>>
-			<</linkreplace>>
-		<</replace>>
-	<</link>>
-   <!-- custom creampie -->
+						<<linkreplace 'Continue'>>
+							<<set _orgasm = true>>
+							<center>
+								<<actionImage $guests[_guestIds[0]] 'cum_in_pussy' 'no-text' $guests[_guestIds[1]]>>
+							</center>
+							<br />
+							<<print _actionText['male_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
+							<br /><br />
+							<<if setup.percentageChance(setup.pregnancyChance($guests[_guestIds[0]]))>>
+								<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+								<<set $guests[_guestIds[0]].pregnancy = 0>>
+							<</if>>
+						<</linkreplace>>
+					<<else>>
+						<<=setup.displayName($guests[_guestIds[0]])>> says no and leaves the room half naked.
+						<br /><br />					
+					<</if>>
+				<</linkreplace>>
+			<</replace>>
+		<</link>>
+   <!-- close the if to check if custom creampie -->
    <</if>>  
-   <!-- end custom creampie -->
 </div>
 
 <<link 'Leave'>>

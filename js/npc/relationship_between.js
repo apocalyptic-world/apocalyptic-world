@@ -362,35 +362,35 @@ setup.relationshipBetween = {
            console.log(npcA.id + " has added " + npcB.id + " as an admirer.");
        }
    },
-   transitionToNewPartner: function(npcA, npcB) {
-        if (npcA.relationshipBetween.likes) {
-            this.initiateDivorce(npcA, setup.getNpcById(npcA.relationshipBetween.likes));
-        }
-
-
-
-        npcA.relationshipBetween.likes = npcB.id;
-        npcB.relationshipBetween.likes = npcA.id;
-        npcA.relationshipBetween.admirer = []; // Reset admirers after transition
-    },
-    initiateDivorce: function(npcA, npcB) {
-        if (npcA && npcB) {
-            npcA.relationshipBetween.likes = null;
-            npcB.relationshipBetween.likes = null;
-
-            if (npcA.relationshipBetween.bff === npcB.id) {
-                npcA.relationshipBetween.bff = null;
-            }
-            if (npcB.relationshipBetween.bff === npcA.id) {
-                npcB.relationshipBetween.bff = null;
+    transitionToNewPartner: function(npcA, npcB) {
+            if (npcA.relationshipBetween.likes) {
+                this.initiateDivorce(npcA, setup.getNpcById(npcA.relationshipBetween.likes));
             }
 
-            npcA.relationshipBetween.stats[npcB.id] = -100;
-            npcB.relationshipBetween.stats[npcA.id] = -100;
 
-            console.log(`${npcA.id} and ${npcB.id} have divorced.`);
-        }
-    },
+
+            npcA.relationshipBetween.likes = npcB.id;
+            npcB.relationshipBetween.likes = npcA.id;
+            npcA.relationshipBetween.admirer = []; // Reset admirers after transition
+        },
+        initiateDivorce: function(npcA, npcB) {
+            if (npcA && npcB) {
+                npcA.relationshipBetween.likes = null;
+                npcB.relationshipBetween.likes = null;
+
+                if (npcA.relationshipBetween.bff === npcB.id) {
+                    npcA.relationshipBetween.bff = null;
+                }
+                if (npcB.relationshipBetween.bff === npcA.id) {
+                    npcB.relationshipBetween.bff = null;
+                }
+
+                npcA.relationshipBetween.stats[npcB.id] = -100;
+                npcB.relationshipBetween.stats[npcA.id] = -100;
+
+                console.log(`${npcA.id} and ${npcB.id} have divorced.`);
+            }
+        },
     // Used to manage birthday relationships
     adjustForBirthday: function() {
        if (this.npc.relationshipBetween.celebratedBirthday === true) {
