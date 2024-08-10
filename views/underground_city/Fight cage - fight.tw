@@ -32,6 +32,11 @@
 Your current fight rank is: #<strong><<print $player.fighter_rank>></strong>
 <br /><br />
 <<addmins 60>>
-[[Back|Fight cage]]
-
+<<link 'Back'>>
+	<<if $player.fighter_rank <= 95 && !$characters.boris.quests.shop>>
+		<<goto 'Fight cage - milk orders'>>
+	<<else>>
+		<<goto 'Fight cage'>>
+	<</if>>
+<</link>>
 
