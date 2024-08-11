@@ -27,6 +27,7 @@ She approached you, her expression a mix of weariness and anxiety.
 </div>
 <div id="option_join">
     <<linkreplace 'Sure. Follow me'>>
+        <<set _join = true>>
         <<run $('#option_alone').hide()>>
         <<run $('#option_leave').show()>>
         Together, we made our way inside, leaving behind the harsh realities of the outside world, if only for a moment. As Eve stepped into the warmth of my shelter, I couldn't help but wonder what trials awaited us beyond the safety of these walls. 
@@ -116,7 +117,11 @@ She approached you, her expression a mix of weariness and anxiety.
 </div>
 <div id="option_leave" style="display:none">
     <<link 'Leave'>>
-        <<goto 'Outside'>>
+        <<if _join>>
+            <<goto 'Wood cabin'>>
+        <<else>>
+            <<goto 'Outside'>>
+        <</if>>
     <</link>>
 </div>
 

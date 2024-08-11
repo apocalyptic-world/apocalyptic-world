@@ -151,4 +151,9 @@ setup.player = {
         npcText += ')';
         return npcText;
     },
+
+    hasFlaccidDick: function()
+    {
+        return setup.perkHas('temp_impotence');
+    }
 };

@@ -18,6 +18,23 @@
 ]>>
 
 <<set _talkDialog = _talkDialogs[Math.floor(Math.random()*_talkDialogs.length)]>>
+
+<<set _chanceShowSkill = 20>>
+<<if $player.int > 30>>
+	<<set _chanceShowSkill += 20>>
+<</if>>
+<<if $player.int > 60>>
+	<<set _chanceShowSkill += 20>>
+<</if>>
+
+<<if setup.percentageChance(_chanceShowSkill) && !$slaveId && !$guestId && !$charId>>
+	<<if ($tmpGirl.skills ?? []).length>>
+		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> has <<=setup.skills[setup.getRandomElement($tmpGirl.skills)].title>> skill!</strong>
+	<<else>>
+		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> don't have any skills!</strong>
+	<</if>>
+	<br /><br />
+<</if>>
 <br />
 <<sayNpc $tmpGirl>>
 	<<=_talkDialog>>
