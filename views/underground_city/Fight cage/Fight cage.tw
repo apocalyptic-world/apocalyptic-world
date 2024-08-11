@@ -1,0 +1,30 @@
+:: Fight cage [Place bg-fight-cage] {"position":"1938,1349","size":"100,100"}
+<h1 class="ptitle">FIGHT CAGE</h1>
+<<if isMetChar('boris')>>
+	<div id="characters-in-location">
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/boris/avatar.png"]]</div>'>>
+			<<goto 'Boris room'>>
+		<</link>>
+	</div>
+	<br />
+<</if>>
+<<if $player.energy >= 40 && $player.money >= 5 && timeBetween('08:00', '23:00') && isMetChar('boris')>>
+	<<link 'Fight'>>
+		<<goto 'Fight cage - fight'>>
+	<</link>>
+	<<linkdesc 'fight'>>
+		5 caps.
+	<</linkdesc>>
+<</if>>
+<<if $player.energy >= 20>>
+	<<link 'Exercise'>>
+		<<if $player.strength > 30 && !isMetChar('boris')>>
+			<<goto 'Fight cage - introduction'>>
+		<<else>>
+			<<goto 'Fight cage - exercise'>>
+		<</if>>
+	<</link>>
+<</if>>
+[[Leave|Underground city]]
+
+
