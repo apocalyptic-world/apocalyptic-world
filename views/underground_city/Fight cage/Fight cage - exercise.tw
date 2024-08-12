@@ -25,6 +25,8 @@ Afterwards you shake hands before getting out of the cage.
 <<link 'Back'>>
 	<<if $player.maxEnergy <= 130 && setup.percentageChance(30)>>
 		<<goto 'Fight cage - drug dealer'>>
+	<<elseif setup.percentageChance(5) && !$locationEvents.fight_cage>>
+		<<goto 'Fight cage - ambush'>>
 	<<else>>
 		<<goto 'Fight cage'>>
 	<</if>>

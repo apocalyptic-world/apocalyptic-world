@@ -25,6 +25,16 @@
 		<</if>>
 	<</link>>
 <</if>>
+
+<<if isMetChar('boris') && !($locationEvents.fight_cage ?? false)>>
+	<<if $player.fighter_rank <= 90 && !$characters.boris.quests.fight1>>
+		<<set $locationEvents.fight_cage = true>>
+		<<goto 'Fight cage - fight #1'>>
+	<<elseif $player.fighter_rank <= 80 && !$characters.boris.quests.fight2>>
+		<<set $locationEvents.fight_cage = true>>
+		<<goto 'Fight cage - fight #2'>>>>
+	<</if>>
+<</if>>
 [[Leave|Underground city]]
 
 

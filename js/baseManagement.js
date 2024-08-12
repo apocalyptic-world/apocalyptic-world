@@ -29,7 +29,8 @@ setup.baseManagement = {
         list: {
             solar_panel: 1,
             hospital: -5,
-            house: -0.5
+            house: -0.5,
+            milk_barn: 5
         },
     },
     defense: {
