@@ -56,5 +56,25 @@
             $game.location.youth_district = true;
 		},
 		goto: "Settlement management",
+   },
+    milk_barn: {
+		show: !($game.location.milk_barn ?? false) && $player?.quests?.milk_farm,
+		title: "Milk barn",
+		description: "Automatically milks assigned pregnant women.",
+		required: {
+           wood: 50,
+           glass: 10,
+           cloth: 20,
+		   rope: 30,
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.milk_barn = 1;
+            $game.location.milk_barn = true;
+			$game.location.youth_district = true;
+		},
+		goto: "Settlement management",
    }
 }>>
