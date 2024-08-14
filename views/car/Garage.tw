@@ -45,13 +45,18 @@
     <<if !$player.car.explore && !$characters.vincent.quests.car_fixed && $player.car.fuel === 100 && $player.car.health === 100>>
         <<goto 'Vincent quest - Car finished. First explore'>>
     <</if>>
-    <<if $player.car.explore>>
-        <div class="menu-grid">
+    <div class="menu-grid">
+        <<if $player.car.explore>>
             <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<set $useCarFuel = 20>>
             <<grid garage explore 'Car - Explore' Explore 30 _isDisabled>>
-        </div>
-    <</if>>
-
+        <</if>>
+        <<if ($game.location.car_stadium ?? false)>>
+            <<set _isDisabled = (!timeBetween('08:00', '16:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<set $useCarFuel = 20>>
+            <<grid garage race_stadium 'Car - Race stadium' 'Race stadium' 30 _isDisabled>>
+        <</if>>
+    </div>
 <br /><br />
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
