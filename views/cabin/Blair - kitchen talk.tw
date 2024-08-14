@@ -1,4 +1,4 @@
-:: Blair - kitchen talk {"position":"336,2061","size":"100,100"}
+:: Blair - kitchen talk [girlview]
 <<if $characters.blair.relationship >= 20 && !$characters.blair.quests.missing_friend>>
 	<<set $characters.blair.quests.missing_friend = true>>
 	<<goto 'Blair - quest missing friend'>>
@@ -47,6 +47,15 @@ You talked about <<=_talkedAbout>>.
 	<</if>>
 	<<link 'Kiss her'>>
 		<<goto 'Blair - kitchen kiss'>>
+	<</link>>
+	<<link 'Approach her'>>
+		<<set $charId = 'blair'>>
+		<<unset $slaveId, $guestId, $childId>>
+		<<set $tmpGirl = $characters.blair>>
+		<<set $tmpGirl.location = 'kitchen'>>
+		<<set $tmpGirlBack = 'Kitchen-room'>>
+		<<set $tmpGirlViewBack = 'NPC view - character'>>
+		<<goto 'NPC view - character'>>
 	<</link>>
 	
 	<<if $game.canMarry && !$characters.blair.quests.married && $backpack.has('wedding_ring')>>

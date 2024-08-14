@@ -12,19 +12,15 @@
 	<</if>>
 
 	<<if $args[0].pack>>
-		<<set _isPack = (($packs ?? {})[$args[0].pack] ?? false) && typeof setup.actions[$args[0].pack] !== 'undefined'>>
+		<<set _imageIsPack = (($packs ?? {})[_args[0].pack] ?? false) && typeof setup.actions[_args[0].pack] !== 'undefined'>>
 	<</if>>
-	<<if !_isPack>>
-		<<set _isPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<<if !_imageIsPack>>
+		<<set _imageIsPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
 	<</if>>
-	<<run console.log(_isPack)>>
-	<<run console.log($args[0].name)>>
-	<<run console.log((($packs ?? {})[$args[0].name] ?? false))>>
-	<<run console.log(typeof setup.actions[$args[0].name] !== 'undefined')>>
 	<<set _defaultActionsPath = 'images/actions'>>
-	<<set _actionsPath = _isPack ? 'packs'  : _defaultActionsPath>>
+	<<set _actionsPath = _imageIsPack ? 'packs'  : _defaultActionsPath>>
 	<<set _subActionsPath = ''>>
-	<<if _isPack>>
+	<<if _imageIsPack>>
 		<<set _subActionsPath = '/actions/'>>
 	<</if>>
 
@@ -92,33 +88,33 @@
 			<</if>>
 		<</if>>
 		
-		<<for _i to 0; _i < _morphs.length; _i++>>
+		<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
 			<<if
-			typeof _actions[_morphs[_i]] !== 'undefined' && 
-			typeof _actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
-			typeof _actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-				<<if _isPack && ![$args[0].pack, $args[0].name].includes(_morphs[_i])>>
+			typeof _actions[_morphs[_imageI]] !== 'undefined' && 
+			typeof _actions[_morphs[_imageI]][$args[0].location] !== 'undefined' && 
+			typeof _actions[_morphs[_imageI]][$args[0].location][$args[1]] !== 'undefined'>>
+				<<if _imageIsPack && ![$args[0].pack, $args[0].name].includes(_morphs[_imageI])>>
 					<<set _actionsPath = _defaultActionsPath>>
 					<<set _subActionsPath = ''>>
 				<</if>>
-				<<actionImageOutput ` _actionsPath + '/' + _morphs[_i] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + either(_actions[_morphs[_i]][_location][$args[1]])`>>
-				<<set _imageFound = true>>
+				<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + either(_actions[_morphs[_imageI]][_location][$args[1]])`>>
+				<<set _imageImageFound = true>>
 				<<break>>
 			<</if>>
 		<</for>>
 		
 
-		<<if !_imageFound>>
-			<<for _i to 0; _i < _morphs.length; _i++>>
+		<<if !_imageImageFound>>
+			<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
 				<<if
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-					<<if _isPack && ![$args[0].pack, $args[0].name].includes(_morphs[_i])>>
+				typeof setup.actions[_morphs[_imageI]] !== 'undefined' && 
+				typeof setup.actions[_morphs[_imageI]]['default'] !== 'undefined' && 
+				typeof setup.actions[_morphs[_imageI]]['default'][$args[1]] !== 'undefined'>>
+					<<if _imageIsPack && ![$args[0].pack, $args[0].name].includes(_morphs[_imageI])>>
 						<<set _actionsPath = _defaultActionsPath>>
 						<<set _subActionsPath = ''>>
 					<</if>>
-						<<actionImageOutput `_actionsPath + '/' + _morphs[_i] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
+						<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_imageI]]['default'][$args[1]])`>>
 					<<break>>
 				<</if>>	
 			<</for>>
