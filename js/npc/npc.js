@@ -451,10 +451,13 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 	if (npc.married) {
 		output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 	}
-	if (isSick) {
+	if (isSick && !npc.sleeping) {
 		output += '<span class="sick-info">(sick)</span>';
-	} else if (isRest) {
+	} else if (isRest && !npc.sleeping) {
 		output += '<span class="sick-info">(resting)</span>';
+	}
+	if (npc.sleeping) {
+		output += '<span class="sleeping-info" data-balloon-length="medium" aria-label="Sleeping" data-balloon-pos="up-right"></span>';
 	}
 
 	return output;
