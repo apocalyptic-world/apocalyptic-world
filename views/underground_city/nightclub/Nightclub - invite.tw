@@ -1,13 +1,13 @@
 :: Nightclub - invite {"position":"3003,1464","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
 <br /><br />
-<<if !$tmpGirl.gender>>	
+<<if !$tmpGirl.gender>>
 	<center>
-	[img[setup.ImagePath+'places/nightclub/dress_up.webp']]
+	<<picture 'places/nightclub/dress_up.webp'>>
 	</center>
 <<else>>
 	<center>
-	[img[setup.ImagePath+'places/nightclub/dress_up_guy.webp']]
+	<<picture 'places/nightclub/dress_up_guy.webp'>>
 	</center>
 <</if>>
 
@@ -30,7 +30,7 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 				<</sayNpc>>
 			<<elseif setup.percentageChance(50)>>
 				<<run $('#option_slave').hide()>>
-				You're a life savior. I recently started to look for a new place<br /> I'll go live with you! 
+				You're a life savior. I recently started to look for a new place<br /> I'll go live with you!
 				<br /><br />
 				<strong><<=$tmpGirl.name>> moved in as guest</strong>
 				<<run $guests.push($tmpGirl)>>
@@ -52,7 +52,7 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 		<</if>>
 		<<if [0,2].includes($tmpGirl.gender)>>
 			<center>
-				[img[setup.ImagePath+'places/nightclub/wc_enslave.webp']]
+				<<picture 'places/nightclub/wc_enslave.webp'>>
 			</center>
 			<br /><br />
 		<</if>>
@@ -70,7 +70,7 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 		<<goto 'Basement'>>
 	<<else>>
 		<<goto 'Nightclub - inside'>>
-	<</if>>	
+	<</if>>
 <</link>>
 
 

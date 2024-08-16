@@ -59,7 +59,7 @@
 
 <<else>>
 	<<addmins 5>>
-	<<set 
+	<<set
 		_guestIds = $randEvent[0],
 		_sexActions = $randEvent[1],
 		_index = $randEvent[2]
@@ -84,7 +84,7 @@
 		<<linkreplace 'Cum'>>
 			<<horny_reset>>
 			<center>
-				[img[setup.ImagePath+'game/misc/cum.webp']]
+				<<picture 'game/misc/cum.webp'>>
 			</center>
 		<</linkreplace>>
 	<</if>>
@@ -94,14 +94,14 @@
 		<<set $randEvent[2] = _index + 1>>
 		<<if $player.horny < 100>>
 			[[Masturbate|passage()][$player.horny += 20]]
-		<</if>>		
+		<</if>>
 		[[Just watch|passage()]]
 	<</if>>
 	<<link 'Interrupt them'>>
 		<<set _interrupted = true>>
 		<<replace "#choice">>
 			<<for _i = 0; _i < _guestIds.length; _i++>>
-				<<set 
+				<<set
 					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
 					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
 				>>
@@ -145,7 +145,7 @@
 						<</linkreplace>>
 					<<else>>
 						<<=setup.displayName($guests[_guestIds[0]])>> says no and leaves the room half naked.
-						<br /><br />					
+						<br /><br />
 					<</if>>
 				<</linkreplace>>
 			<</replace>>
@@ -155,7 +155,7 @@
 <<link 'Leave'>>
 	<<if _orgasm || !_interrupted>>
 		<<for _i = 0; _i < _guestIds.length; _i++>>
-			<<set 
+			<<set
 				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
 				$guests[_guestIds[_i]].horny = 0
 			>>

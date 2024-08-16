@@ -16,7 +16,7 @@
 
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<if _i + 1 == _guestIds.length>>
-			<<set _separator =' and '>>	
+			<<set _separator =' and '>>
 		<<elseif _i > 0>>
 			<<set _separator =', '>>
 		<</if>>
@@ -45,7 +45,7 @@
 		['sn_pussy','sn_pussy','strapon_anal','dd_anal','fisting_anal'][_r],
 		'squirting'
 	]>>
-	
+
 	<<set _maxVirgins = _guestIds.length>>
 	<<if _r == 3>>
 		<<set _maxVirgins = _guestIds.length - 1>>
@@ -64,24 +64,24 @@
 	<<if _nbSquirters == 0>>
 		<<set _sexActions[5] = 'orgasm'>>
 	<</if>>
-	
+
 	<<set $randEvent = [
 		_guestIds,
 		_girlNames,
 		_sexActions,
 		_index
 	]>>
-	
+
 	As you approach the dormitory, you hear muffled sounds.<br />
-	You take a peek and see 
+	You take a peek and see
 		<<if _guestIds.length == 3>>
-			<<=setup.displayName($guests[_guestIds[2]])>>, 
+			<<=setup.displayName($guests[_guestIds[2]])>>,
 		<</if>>
 	<<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> pleasuring each other.<br />
 
 <<else>>
 	<<addmins 5>>
-	<<set 
+	<<set
 		_guestIds = $randEvent[0],
 		_girlNames = $randEvent[1],
 		_sexActions = $randEvent[2],
@@ -107,7 +107,7 @@
 		<<linkreplace 'Cum'>>
 			<<horny_reset>>
 			<center>
-				[img[setup.ImagePath+'game/misc/cum.webp']]
+				<<picture 'game/misc/cum.webp'>>
 			</center>
 		<</linkreplace>>
 	<</if>>
@@ -115,16 +115,16 @@
 		<<set _orgasm = true>>
 	<<else>>
 		<<set $randEvent[3] = _index + 1>>
-		<<if $player.horny < 100>>		
+		<<if $player.horny < 100>>
 			[[Masturbate|passage()][$player.horny += 20]]
-		<</if>>		
+		<</if>>
 		[[Just watch|passage()]]
 	<</if>>
 	<<link 'Interrupt them'>>
 		<<replace "#choice">>
 			<<set _interrupted = true>>
 			<<for _i = 0; _i < _guestIds.length; _i++>>
-				<<set 
+				<<set
 					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
 					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
 				>>
@@ -142,7 +142,7 @@
 <<link 'Leave'>>
 	<<if _orgasm || !_interrupted>>
 		<<for _i = 0; _i < _guestIds.length; _i++>>
-			<<set 
+			<<set
 				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
 				$guests[_guestIds[_i]].horny = 0
 			>>
