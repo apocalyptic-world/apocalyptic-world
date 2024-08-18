@@ -881,3 +881,28 @@ setup.ppFraction = function(n, divisor = 3) {
 setup.getKeyByValue = function(object, value) {
     return Object.keys(object).find(key => object[key] === value);
   }
+
+
+setup.extendPack = function(obj1, obj2) {
+    let merged = {};
+
+    for (let key in obj1) {
+        if (obj1.hasOwnProperty(key)) {
+            if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+                merged[key] = Array.from(new Set([...obj1[key], ...obj2[key]]));
+            } else if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+                merged[key] = setup.extendPack(obj1[key], obj2[key]);
+            } else {
+                merged[key] = obj2.hasOwnProperty(key) ? obj2[key] : obj1[key];
+            }
+        }
+    }
+
+    for (let key in obj2) {
+        if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+            merged[key] = obj2[key];
+        }
+    }
+
+    return merged;
+}
