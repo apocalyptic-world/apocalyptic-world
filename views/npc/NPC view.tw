@@ -92,6 +92,19 @@
 	<</link>>
 <</if>>
 
+<<if [0].includes($tmpGirl.gender) && $slaveId !== undefined && !$tmpGirl.assignedTo && $game?.location?.milk_barn && $tmpGirl.pregnancy >= 7>>
+	<<link 'Assign to milk barn'>>
+		<<assignedTo $tmpGirl 'milk_barn'>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'NPC view'>>
+		<</if>>
+	<</link>>
+<</if>>
+
 <<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
 <<if $slaveId !== undefined  && $tmpGirl.gender == 1 && (_availableGirlSlaves[0] ?? []).length && !$tmpGirl.offerSlave>>
 	<<link 'Offer him one of your slave girls'>>
@@ -147,9 +160,6 @@
 	<<if $player.energy >= 10 && hasTime(1)>>
 		<<set _linkName = 'Punish ' + _himOrHer>>
 		<<link `_linkName`>>
-			<<if $backpack.has('paddle')>>
-				<<set $punishType = 'paddle'>>
-			<</if>>
 			<<goto 'NPC punish'>>
 		<</link>>
 	<</if>>

@@ -69,20 +69,24 @@
 		Dialog.open();
 	<</script>>
 <</if>>
-<<<<script>>
+<<script>>
 	Object.keys(variables().packs ?? {}).forEach(key => {
 		if (!variables().packs[key]) {
 			return;
 		}
 
 		if (typeof setup.actions[key] == 'undefined') {
-			importScripts(setup.Path + "packs/" + key + "/actions.js")
+			importScripts(setup.Path + "packs/" + setup.packs[key].name + "/actions.js")
 				.then(function() {
+					if (setup.packs[key].extended) {
+						setup.extendPack(setup.actions, setup.actions[setup.packs[key].name]);
+					}
 					memorize('actions', setup.actions);
 				}).catch(function(error) {  // eslint-disable-line
-					alert("Error: Could not load pack '" + key + ".js'.");
+
+					alert("Error: Could not load pack '" + setup.packs[key].name + ".js'.");
 				}
 			);
 		}
 	});
-<</script>>>>
+<</script>>

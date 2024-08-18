@@ -62,6 +62,12 @@ setup.items = {
             {name:'gas_mask', price: 50, buy:false},
             {name:'fuel', price: 40, sell:false}
         ],
+        cage_fight: [
+            {name:'milk', price:2, sell:true, buy:false}
+        ],
+        race_stadium: [
+            {name:'car_part', price:50, sell:false, buy:true}
+        ]
     },
     /**
      * Items shops sells and hero might buy.

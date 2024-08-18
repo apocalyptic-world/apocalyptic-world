@@ -34,6 +34,18 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<set _guests18yoWomen = []>>
 <<set _guests18yoMen = []>>
 <<set _guests18yoTransWomen = []>>
+
+<<set _sleepingChance = 0>>
+<<if timeBetween('22:00', '23:00')>>
+	<<set _sleepingChance = 10>>
+<<elseif timeBetween('23:00', '23:59')>>
+	<<set _sleepingChance = 20>>
+<<elseif timeBetween('23:59', '01:00')>>
+	<<set _sleepingChance = 40>>
+	<<elseif timeBetween('01:00', '02:00')>>
+	<<set _sleepingChance = 60>>
+<</if>>
+
 <<if ($guests ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		You have no guests...
@@ -76,11 +88,14 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'hospital' and timeBetween('08:00', '22:00')>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'maid' and timeBetween('10:00', '19:00')>>
+			<<if _guest.assignedTo === 'maid' and timeBetween('10:00', '15:00')>>
 				<<continue>>
 			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
 				<<continue>>
+			<</if>>
+			<<if setup.percentageChance(_sleepingChance)>>
+				<<set _guest.sleeping = true>>
 			<</if>>
 			<tr class="item">
 				<td style="min-width: 25%">
@@ -104,16 +119,20 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<</if>>
 						<span @class="_genderClass" @style="_customColorStyle">
 							<<link _guest.name>>
-							  <<set $tmpGirl to _guest>>
-							  <<set $tmpGirl.location = 'bedroom'>>
-							  <<set $tmpGirlBack = 'Guest house'>>
-							  <<set $tmpGirl.rape to false>>
-							  <<set $tmpGirlCapture to false>>
-							  <<set $tmpGirlInvite to false>>
-							  <<set $guestId = _guestI>>
-							  <<unset $slaveId>>
-							  <<set $tmpGirlViewBack = 'NPC view - guest'>>
-							  <<goto `$tmpGirlViewBack`>>
+								<<set $tmpGirl to _guest>>
+								<<set $tmpGirl.location = 'bedroom'>>
+								<<set $tmpGirlBack = 'Guest house'>>
+								<<set $tmpGirl.rape to false>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
+								<<set $guestId = _guestI>>
+								<<unset $slaveId>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<if _guest.sleeping && !_guest.gender>>
+									<<goto 'Guesthouse - guest sleeping'>>
+								<<else>>
+							  		<<goto `$tmpGirlViewBack`>>
+								<</if>>
 							<</link>>
 						</span>
 
