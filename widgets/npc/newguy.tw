@@ -4,8 +4,16 @@
 	<<set _gender = 1>>	
 	<<include 'newnpc'>>
 
+	<<set _randomNum = Math.random()>>
+	<<if _randomNum <= 0.01>>
+		<<set $size = 'Micro'>>
+	<<elseif _randomNum <= 0.06>>
+		<<set $size = 'Massive'>>
+	<<else>>
+		<<set $size = either('Small', 'Medium', 'big')>>
+	<</if>>
 	<<set
-		_npc.dick = either('small', 'medium', 'big'),
+		_npc.dick = $size,
 		_npc.strength = random(20, 40),
    		_npc.sub = random(5, 13)
 	>>

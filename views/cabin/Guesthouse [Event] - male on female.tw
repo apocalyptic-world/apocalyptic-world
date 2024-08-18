@@ -1,6 +1,6 @@
 :: Guesthouse \[Event\] - male on female {"position":"336,1079","size":"100,100"}
 <h1 class="ptitle">GUEST HOUSE</h1>
-
+<<run console.log($tmpEvent)>>
 <<if typeof $randEvent === 'undefined'>>
 	<<set
 		_guestIds = [setup.getRandomPersons($tmpEvent[0], 1), setup.getRandomPersons($tmpEvent[1], 1)],
@@ -112,6 +112,8 @@
 
           <!-- Track shared events for the group -->
           <<run setup.relationshipBetween.trackSharedEventForGroup($npcGroup)>>
+		  <!-- Form relationships ouside from Assignment -->
+		  <<run setup.relationshipBetween.formFriendshipOutsideAssignment($npcGroup)>>
           <!-- Group meeting event has been tracked for the following NPCs:
           <<for _i to 0; _i < $npcIds.length; _i++>> <<=$npcIds[_i]>> <<if _i < $npcIds.length - 1>>, <</if>> <</for>>-->
       <</if>>
@@ -154,27 +156,46 @@
    <!-- End failed orgasm -->
 
 	<!-- custom creampie -->
-   <<set _randomCream = Math.floor(Math.random() * 10)>>
+   <<set _randomCream = Math.random()>>
    <<set _checkCreampie = false>>
    <<set _relGuest0 = $guests[_guestIds[0]].relationshipBetween.stats[$guests[_guestIds[1]].id]>>
    <<set _relGuest1 = $guests[_guestIds[1]].relationshipBetween.stats[$guests[_guestIds[0]].id]>>
    <<set _likeGuest0 = $guests[_guestIds[0]].relationshipBetween.likes>>
    <<set _likeGuest1 = $guests[_guestIds[1]].relationshipBetween.likes>>
+   <<if $guests[_guestIds[1]].dick.toLowerCase() == "massive">>
+	<!-- Increase relationship stats among all targetNpcs -->
+		<<set $targetNpcs = []>> <!-- Initialize an empty array for selected NPCs -->
+		<<for _i to 0; _i < _guestIds.length; _i++>> <!-- Loop through all guest IDs -->
+			<<set $randomNpcId = $guests[_guestIds[_i]].id>> <!-- Get the ID of each guest -->
+			<<if !$targetNpcs.includes($randomNpcId)>>
+				<<set $targetNpcs.push($randomNpcId)>>
+			<</if>>
+		<</for>>
+		<<for _i to 0; _i < $targetNpcs.length; _i++>>
+			<<set $npcA = setup.getNpcById($targetNpcs[_i])>>
+			<<set $otherNpcs = $targetNpcs.filter(id => id !== $npcA.id)>>
+			<<run setup.relationshipBetween.increase($npcA, $otherNpcs, 1)>>
+		<</for>>
+	<</if>>
    <<if _index == 4>>
       <<if _relGuest0 == 100 or _relGuest1 == 100 or _likeGuest0 == $guests[_guestIds[1]].id or _likeGuest1 == $guests[_guestIds[0]].id>>
          <<set _relGuest = true>>
-		 <<set _chance = 4 >>
-		 <<if _likeGuest0 == $guests[_guestIds[1]].id or _likeGuest1 == $guests[_guestIds[0]].id>>
-			<<set _chance = 2 >>
+		 <<set _chance = 0.25 >>
+		 <<if _likeGuest0 == $guests[_guestIds[1]].id and _likeGuest1 == $guests[_guestIds[0]].id>>
+			<<set _chance = 0.5 >>
+	  	 <</if>>
+		 <<if _likeGuest0 == $guests[_guestIds[1]].id and $guests[_guestIds[1]].dick == "massive">>
+			<<set _chance = 0.7 >>
 	  	 <</if>>
       <<else>>
          <<set _relGuest = false>>
-         <<set _randomCreamExtra = Math.floor(Math.random() * 10)>>
+         <<set _randomCreamExtra = Math.floor(Math.random() * 10) + 1>>
          <<if _randomCreamExtra % 2 == 1>>
             <<set _relGuest = true>>
+			<<set _chance = 0.1 >>
          <</if>>
       <</if>>
-      <<if _randomCream % _chance == 1 && _sexActions[_index] == "pussy" && _relGuest>><!-- Checks if _randomEvent -->
+      <<if _randomCream < _chance && _sexActions[_index] == "pussy" && _relGuest>><!-- Checks if _randomEvent -->
          <<set _orgasm = true>>  
          <<set _checkCreampie = true>>
 			<center>
@@ -188,7 +209,7 @@
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
 			<</if>>
 			<!-- custom ncpCream increase -->
-			<<run setup.relationshipBetween.trackNpcCream($guests[_guestIds[0]], $guests[_guestIds[1]]) >>
+			<<run setup.relationshipBetween.trackNpcSCream($guests[_guestIds[0]], $guests[_guestIds[1]]) >>
 			<!-- custom relationship increase -->
 			<!-- Assuming _guestIds is defined earlier and contains the IDs of participating NPCs -->
 			<<set $targetNpcs = []>> <!-- Initialize an empty array for selected NPCs -->

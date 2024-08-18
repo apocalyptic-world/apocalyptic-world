@@ -135,7 +135,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 <<set _guestsLikesGuys = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guestsNoChastityBelt, _hornyGuests])>>
 <<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
-
+<!-- This formula will give you a minimum _chanceEvent of 10 with a smooth, natural increase as the number of guests grows, without exceeding a chance of 30. -->
+<<set _chanceEvent = Math.min(30, 10 + Math.floor((20 / (1 + Math.exp(-0.1 * (_hornyGuests.length - 30))))))>>
 <<if !($locationEvents.guesthouse ?? false)>>
 	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {
@@ -151,27 +152,27 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - female on female'>>
-	<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+	<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(_chanceEvent)>>
 		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoMen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - male on female'>>
-	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen]).length > 0 && setup.percentageChance(_chanceEvent)>>
 		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]), setup.commonValues([_guestsLikesTGirls, _guests18yoMen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - male on transfemale'>>
-	<<elseif settings.gaysEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoMen]).length > 1 && setup.percentageChance(20)>>
+	<<elseif settings.gaysEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoMen]).length > 1 && setup.percentageChance(_chanceEvent)>>
 		<<set $tmpEvent = setup.commonValues([_guestsLikesGuys, _guests18yoMen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - male on male'>>
-	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen]).length > 0 && setup.percentageChance(10)>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen]).length > 0 && setup.percentageChance(_chanceEvent)>>
 		<<set $tmpEvent = [setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - transfemale on female'>>
-	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen]).length > 1 && setup.percentageChance(10)>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen]).length > 1 && setup.percentageChance(_chanceEvent)>>
 		<<set $tmpEvent = setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen])>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>

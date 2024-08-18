@@ -271,6 +271,11 @@
 		<</if>>
 		<br />
 	<</if>>
+	<<if $args[1]>>
+		<<set _fianceNpc = setup.getNpcById($args[1])>>
+		Fiancé: <<=(_fianceNpc ? _fianceNpc.name : '????')>>
+		<br />
+	<</if>>
 	<<if $args[0].wives>>
 		Wives: <br />
 		<<for _familyTreeWifeI, _familyTreeWife range $args[0].wives>>
@@ -293,6 +298,22 @@
 			</div>
 		<</for>>
 	<</if>>
+	<<if $args[0].exHusbands>>
+		Ex-Husbands: <br />
+		<<for _familyTreeExHusbandI, _familyTreeExHusband range $args[0].exHusbands>>
+			<div>
+			<<set _familyMember = setup.getNpcById(_familyTreeExHusband.id)>>
+				<<if _familyMember>>
+					<<= _familyMember.name>>
+					<<if $args[0].exHusbands.length >= 0>> 
+						[ex: #<<= _familyTreeExHusband.order>>]
+					<</if>>
+				<</if>>
+			</div>
+		<</for>>
+	<</if>>
+
+	<<set _fiance = $args.length > 1 ? $args[1] : null>>
 <</widget>>
 
 <<widget statsAdd>>
