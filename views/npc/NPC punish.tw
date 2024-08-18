@@ -42,7 +42,15 @@
 	<<set _dead = true>>
 	<<set _punishView = 'punish_dead'>>
 <</if>>
-<<if $punishType>>
+<<if typeof $punishType === 'undefined'>>
+	<<if $tmpGirl.gender == 1>>
+		<center>
+		[img[setup.ImagePath+'places/basement/guy_punish.webp']]
+		</center>
+		<br /><br />
+	<</if>>
+	You enter <<=_hisOrHer>> basement cell, and <<=_heOrShe>> is already waiting for you. Fear is visible in <<=_hisOrHer>> eyes, while <<=_hisOrHer>> hands are tied behind <<=_hisOrHer>> back.
+<<else>>
 	<<actionImage $tmpGirl _punishView>>
 
 	<<set $tmpGirl.relationship -= _relStats>>
@@ -90,12 +98,6 @@
 	<<if _subChanged>>
 		<strong><<print $tmpGirl.name>></strong> submission increased by <<=_subStats>><br />
 	<</if>>
-<<else>>
-	<center>
-	  [img[setup.ImagePath+'places/basement/guy_punish.webp']]
-	</center>
-	<br /><br />
-	You enter <<=_hisOrHer>> basement cell, and <<=_heOrShe>> is already waiting for you. Fear is visible in <<=_hisOrHer>> eyes, while <<=_hisOrHer>> hands are tied behind <<=_hisOrHer>> back.
 <</if>>
 <br /><br />
 <<set $prevPunish = $punishType>>

@@ -1,7 +1,6 @@
 :: Car - Explore [Place bg-garage]
 <<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<energy -30>>
-<<carFuel 20>>
 
 <<if _randomNumber <= 20>>
 	<<goto 'Car explore event - girl gas station'>>
@@ -13,6 +12,8 @@
 	<<goto 'Car explore event - robber justice'>>
 <<elseif _randomNumber <= 64>>
 	<<goto 'Car explore event - fuel dilemma'>>
+<<elseif setup.percentageChance(100) && !($game.location.race_stadium ?? false)>>
+	<<goto 'Car - race stadium introduction'>>
 <<else>>
     <<include 'Car explore - nothing found'>>
 <</if>>

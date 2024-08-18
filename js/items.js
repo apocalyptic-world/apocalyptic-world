@@ -64,6 +64,9 @@ setup.items = {
         ],
         cage_fight: [
             {name:'milk', price:2, sell:true, buy:false}
+        ],
+        race_stadium: [
+            {name:'car_part', price:50, sell:false, buy:true}
         ]
     },
     /**

@@ -16,33 +16,55 @@
 <<elseif _npcGender === 2>>
 	<<newtransgirl>>
 <</if>>
+<<set $tmpGirl.location = 'forest'>>
 
 <<set _npcDataMapped = [
 	{
-		text: "You notice a girl walking through the forest and decide to check out what she's doing",
-		img: 'found_female',
+		default: {
+			text: "You notice a girl walking through the forest and decide to check out what she's doing",
+			img: 'found_female',
+		},
+		masturbate: {
+			text: "As you peer through the foliage, you spot a figure—a woman sitting on a fallen tree in a small clearing. Her legs are spread wide as she pleasures herself.",
+			textTop: "As you move quietly, you suddenly hear a faint rustling noise not far ahead. Instinctively, you freeze, crouching low, your senses heightened. You inch closer, careful to avoid stepping on any dry twigs that might give away your position"
+		}
 	},
 	{
-		text: "You notice a guy walking through the forest and decide to check out what he's doing.",
-		img: "found_male",
+		default: {
+			text: "You notice a guy walking through the forest and decide to check out what he's doing.",
+			img: "found_male",
+		}
 	},
 	{
-		text: "You notice a slightly masculine girl walking through the forest and decide to check out what she's doing.",
-		img: "found_transfemale",
+		default: {
+			text: "You notice a slightly masculine girl walking through the forest and decide to check out what she's doing.",
+			img: "found_transfemale",
+		}
 	}
 ]>>
 
-<<set _npcData = _npcDataMapped[$tmpGirl.gender]>>
+<<set _type = (!_npcGender && setup.percentageChance(30) ? 'masturbate' : 'default')>>
+<<if _type === 'masturbate'>>
+	<<set $tmpGirl.horny = 100>>
+<</if>>
 
+<<set _npcData = _npcDataMapped[$tmpGirl.gender][_type]>>
+<<if _npcData.textTop>>
+	<<=_npcData.textTop>>
+	<br /><br />
+<</if>>
 <center>
- 	[img[setup.ImagePath+'places/explore/' + _npcData.img + '.jpg']]
+	<<if _type === 'masturbate'>>
+		<<actionImage $tmpGirl 'masturbate'>>
+	<<else>>
+ 		[img[setup.ImagePath+'places/explore/' + _npcData.img + '.jpg']]
+	<</if>>
 </center>
 <br /><br />
 <<=_npcData.text>>
 <br /><br />
 
 <<link 'Go closer'>>
-	<<set $tmpGirl.location = 'forest'>>
 	<<set $tmpGirl.rape to true>>
 	<<set $tmpGirlCapture = true>>
 	<<set $tmpGirlInvite = true>>
