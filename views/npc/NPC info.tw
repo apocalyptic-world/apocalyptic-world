@@ -52,9 +52,12 @@
 				<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
 				<<if ($tmpGirl.inventory ?? {})>>
 					<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
+						<<set _icon = _npcInventoryItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+							_npcInventoryItem.indexOf("note")     !== -1 ? 'note' :  
+							_npcInventoryItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _npcInventoryItem>>
 						<div class='npc-inventory-item'>
 							<div class='npc-inventory-img'>
-								[img[setup.ImagePath+'game/inventory/' + _npcInventoryItem + '.png']]
+								[img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
 							</div>
 						</div>
 					<</for>>

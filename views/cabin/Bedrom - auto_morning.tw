@@ -11,6 +11,12 @@
 <<set _ruleDumbbell     = $automatization.dumbbell ?? false>>
 <<set _ruleBPgender     = $automatization.buttplugGender ?? [_ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug]>>
 
+<<set _bellstrength = {
+    dumbbell:    {min:  0, max: 30}, 
+    dumberbell:  {min: 30, max: 50}, 
+    dumbestbell: {min: 50, max: 60}, 
+}>>
+
 <<if _ruleDup || _ruleJob || _ruleHunter || _ruleStreetworker || _ruleButtplug ||  _ruleCondom || _ruleDumbbell>>
     <<set _outputAutoList ??= []>>
     <<set _isStorageAvailable = ($game.location.shop ?? false)>>
@@ -68,9 +74,9 @@
             <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
 
             /* duplicates go to backpack or storage */
-            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && _item === 'dumbbell') || 
+            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)) || 
                     (_ruleHunter &&  ['bow', 'axe'].includes(_item)) || 
-                    (_ruleJob &&  !['condom', 'dumbbell'].includes(_item)) >>
+                    (_ruleJob &&  !['condom', 'dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)) >>
                 <<if _itemcount > 1>>
                     <<run _itemcount-->>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
@@ -96,16 +102,16 @@
                     <<set _want[_item].push(_npc)>>
                 <</if>>
 
-            /* special for dumbbell, baseed on strength not toolbox */
-            <<elseif _item == 'dumbbell'>>
+            /* special for dumbbell, baseed on strength not toolbox */ 
+            <<elseif ['dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)>>
                 <<if !_ruleDumbbell>>
                     <<continue>>
                 <</if>>
                 
-                <<if _npc.strength < 30 && _itemcount == 0>>
+                <<if _bellstrength[_item].min <= _npc.strength && _npc.strength < _bellstrength[_item].max && _itemcount == 0>>
                     <<set _want[_item] ??= []>>
                     <<set _want[_item].push(_npc)>>
-                <<elseif _npc.strength >= 30 && _itemcount > 0>>
+                <<elseif (_npc.strength < _bellstrength[_item].min || _npc.strength >= _bellstrength[_item].max) && _itemcount > 0>>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
                     <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
                 <</if>>
@@ -189,6 +195,30 @@
         <<set _outputAutoList.push('Add failed - no buttplug in storage for: ' + _outNo.sort().join(', ') + ';')>>
     <</if>>
 
+    /* dumb-, dumber-, dumbest-bells, npc gets the next higher type */
+    <<if _ruleDumbbell>>
+        <<set _outItem = []>>
+        <<set _want.dumbbell ??= []>>
+        <<set _want.dumberbell ??= []>>
+        <<set _want.dumbestbell ??= []>>
+        <<for _item range ['dumberbell', 'dumbestbell']>>
+            <<for (_want.dumbbell.length > 0 || _want.dumberbell.length > 0) && setup.cabinInventory.has(_item, 1)>>
+                <<if _want.dumberbell.length > 0>>
+                    <<set _npc = _want.dumberbell.pop()>>
+                    <<run setup.cabinInventory.to_npc(_npc, _item)>>
+                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of dumberbell')>>
+                <<elseif _want.dumbbell.length > 0>>
+                    <<set _npc = _want.dumbbell.pop()>>
+                    <<run setup.cabinInventory.to_npc(_npc, _item)>>
+                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of dumbbell')>>
+                <</if>>
+            <</for>>
+            <<if _outItem.length > 0>>
+                <<set _outputAutoList.push(_item + ': ' + _outItem.sort().join(', ') + ';')>>
+            <</if>>
+            <<set _outItem = []>>
+        <</for>>
+    <</if>>
 
     <<if _ruleHunter>>
         <<set _item = 'axe'>>

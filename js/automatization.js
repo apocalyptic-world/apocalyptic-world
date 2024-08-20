@@ -51,8 +51,8 @@ setup.automatization = {
     },
     dumbbell: {
       name: 'Dumbbell rotation',
-      description: 'Gives dumbbells to low strength settlers (below 30) and removes from other.',
-      help: '',
+      description: 'Gives dumbbells/dumberbells/dumbestbells to settlers that benefit and removes from other.',
+      help: 'Dumbbell works for strength below 30, dumberbells 50 and dumbestbells 60',
     },
 
     /*

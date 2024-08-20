@@ -9,9 +9,12 @@
                     <<if !$backpack.has(_inventoryNpcMcItem)>>
                         <<continue>>
                     <</if>>
+                    <<set _icon = _inventoryNpcMcItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+                                   _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :  
+                                   _inventoryNpcMcItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _inventoryNpcMcItem>>
                     <div class="npc-inventory-transfer-container">
                         <div class="npc-inventory-transfer-icon">
-                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                            [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
                         </div>
                         <div class="npc-inventory-transfer-name">
                          (<<=$backpack.count(_inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
@@ -58,11 +61,15 @@
                                 <<goto `passage()`>>
                             <</link>>
                         </div>
+                        <<set _icon = _inventoryNpcMcItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+                                    _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :  
+                                    _inventoryNpcMcItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _inventoryNpcMcItem>>
+
                         <div class="npc-inventory-transfer-name">
                             (<<=setup.npcInventoryCount($tmpGirl, _inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-icon">
-                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                            [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
                         </div>
                     </div>
                 <</capture>>
