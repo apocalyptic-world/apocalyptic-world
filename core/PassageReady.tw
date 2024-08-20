@@ -1,5 +1,5 @@
 :: PassageReady
-<<set $suppCode = 'Patreon0.43'>>
+<<set $suppCode = 'Patreon0.44'>>
 <<if $player.energy > $player.maxEnergy>>
 	<<set $player.energy = $player.maxEnergy>>
 <</if>>
@@ -75,16 +75,17 @@
 			return;
 		}
 
-		if (typeof setup.actions[key] == 'undefined') {
+		if (typeof setup.actions[key] == 'undefined' && typeof setup.packs[key] !== 'undefined') {
 			importScripts(setup.Path + "packs/" + setup.packs[key].name + "/actions.js")
 				.then(function() {
-					if (setup.packs[key].extended) {
-						setup.extendPack(setup.actions, setup.actions[setup.packs[key].name]);
+					if (setup.packs[key].extended ?? false) {
+						setup.mergeObjects(setup.actions, setup.actions[setup.packs[key].name], setup.packs[key].name + '/actions');
+						setup.actions[key] = true;
 					}
 					memorize('actions', setup.actions);
 				}).catch(function(error) {  // eslint-disable-line
-
-					alert("Error: Could not load pack '" + setup.packs[key].name + ".js'.");
+					console.log(error);
+					alert("Error: Could not load pack 'packs/" + setup.packs[key].name + "/actions.js'.");
 				}
 			);
 		}
