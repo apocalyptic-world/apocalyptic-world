@@ -1,0 +1,10 @@
+:: Fight cage - shop [bg-fight-cage]
+<h1 class="ptitle">FIGHT CAGE</h1>
+<br /><br />
+<<set _shopItems = clone(setup.items.shop.cage_fight)>>
+<<shop 'cage_fight' _shopItems 'Fight cage - shop' '<<if $characters.boris.relationship < 30>><<set $characters.boris.relationship += Math.min(5, _shopItems[_i].qty)>><</if>>'>>
+<br /><br />
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Fight cage'>>
+<</link>>

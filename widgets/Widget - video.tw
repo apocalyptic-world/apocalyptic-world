@@ -1,6 +1,6 @@
 :: Widget - video [widget] {"position":"134,757","size":"100,100"}
 <<widget video>>
-	<<if not settings.safeMode>>
+	<<if !settings.SFWmode>>
 		<<set _extension = ($args[1] ?? 'mp4')>>
 		<<set _videoType = 'video/' + _extension>>
 		<<set _url to setup.videoPath+'/'+$args[0]+'.' + _extension>>
@@ -8,6 +8,6 @@
 				<source @src="_url">
 		</video>
 	<<else>>
-		<span class="safe-placeholder">SAFE MODE ON</span>
+		<span class="safe-placeholder">SFW MODE ON</span>
 	<</if>>
 <</widget>>

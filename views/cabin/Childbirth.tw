@@ -1,10 +1,6 @@
 :: Childbirth
 <h1 class="ptitle">BEDROOM</h1>
 
-<center>
-	[img[setup.ImagePath+'game/misc/childbirth1.webp']]
-</center>
-
 <<if $pregnancyHappening.type === 'slave'>>
 	<<set _mother = $slaves[$pregnancyHappening.id]>>
 <<elseif $pregnancyHappening.type === 'character'>>
@@ -13,7 +9,12 @@
 	<<set _mother = $guests[$pregnancyHappening.id]>>
 <</if>>
 <<set $tmpGirl = _mother>>
+<<set $tmpGirl.location = 'childbirth'>>
 
+<center>
+	<<actionImage $tmpGirl 'scream'>>
+</center>
+<br />
 You hear screams and you rush toward the source. As you get to your destination you realize it's <<=setup.displayName(_mother)>>.
 
 Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she didn't have much time left. She asks you to create a makeshift birthing area.
@@ -35,9 +36,9 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 		    <<transfer $storage $backpack _reqKey 5>>
 		<</if>>
 		<<drop $backpack 'towel' 5>>
-	  <center>
-		  [img[setup.ImagePath+'game/misc/childbirth2.jpg']]
-	  </center>
+		<center>
+			[img[setup.ImagePath+'game/misc/childbirth2.jpg']]
+		</center>
 	  <br /><br />
 	  You lay down towels on the ground and hope that will do. 
 	  <br /><br />
@@ -58,7 +59,9 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 <</if>>
 <<linkreplace 'Continue'>>
 	<center>
-		[img[setup.ImagePath+'game/misc/childbirth3.webp']]
+		<center>
+			<<actionImage $tmpGirl 'push'>>
+		</center>
 	</center>
 	<br /><br />
 	<<addhours 7>>
@@ -68,7 +71,7 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 		<<=setup.displayName($tmpGirl)>> held her newborn child close, tears streaming down her face. She knew that they were still in a dangerous situation, but for the moment, all that mattered was the new life in her arms.
 		<br /><br />
 		<center>
-			[img[setup.ImagePath+'game/misc/childbirth4.jpg']]
+			<<actionImage $tmpGirl 'kid'>>
 		</center>
 		<br /><br />
 		<<set _childGender = randomInteger(0,1)>>
@@ -106,7 +109,7 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 
 	<<else>>
 		<center>
-			[img[setup.ImagePath+'places/cabin/childbirth_failed.jpg']]
+			<<actionImage $tmpGirl 'died'>>
 		</center>
 		<br /><br />
 		Despite the best efforts of the community, tragedy strikes. The child is born, but due to the harsh conditions and lack of medical resources, it becomes clear that survival is impossible. The child passes away in Mother <<=setup.displayName($tmpGirl)>>'s arms.

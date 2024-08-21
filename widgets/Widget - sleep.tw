@@ -191,6 +191,22 @@
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden', 'garden')>>
 			<</if>>
 		<</if>>
+		<<if _npc.assignedTo == 'milk_barn' && !_dayOff>>
+			<<if typeof _npc.milkingDay === 'undefined'>>
+				<<set _npc.milkingDay = 0>>
+			<</if>>
+			<<if _npc.pregnancy < 7>>
+				<<run delete _npc.assignedTo>>
+				<<continue>>
+			<</if>>
+			<<set _npc.milkingDay++>>
+			<<setNpcStats 'slave' _i 'happy' -5>>
+			<<if _npc.milkingDay >= 3>>
+				<<run setup.cabinInventory.pickup('milk', 1)>>
+				<<run setup.sleepMessages.addJob($slaves[_i].name + ' filled pack of milk', 'milk_garden')>>
+				<<set _npc.milkingDay = 0>>
+			<</if>>
+		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($slaves[_i].strength ?? 0) > 20>>
@@ -212,7 +228,9 @@
 				<<set _i-->>
 				<<continue>>
 			<<else>>
-				<<setNpcStats 'slave' _i 'happy' -5>>
+				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
+					<<setNpcStats 'slave' _i 'happy' -5>>
+				<</if>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
@@ -337,6 +355,7 @@
 		<<set $guests[_guestI].washed = false>>
 		<<set $guests[_guestI].gift = false>>
 		<<set $guests[_guestI].cosmetics = false>>
+		<<set _npc.sleeping = false>>
 		<<set $guests[_guestI].washedBathhouse = false>>
 		<<set $guests[_guestI].drunk = 0>>
 		<<if $guests[_guestI].horny <= 90>>
@@ -451,7 +470,9 @@
 				<<set _guestI-->> 
 				<<continue>>
 			<<else>>
-				<<setNpcStats 'guest' _guestI 'happy' -5>>
+				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
+					<<setNpcStats 'guest' _guestI 'happy' -5>>
+				<</if>>
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set _npc.virgin = false>>
@@ -836,7 +857,6 @@
 <</if>>
 <<run setup.relationshipBetween.run()>>
 <<set _matchesBetween = setup.relationshipBetween.getMatches()>>
-<<run console.log(_matchesBetween)>>
 <<if $args[0]>>
 	<<set $morningMessages = []>>
 <<else>>
