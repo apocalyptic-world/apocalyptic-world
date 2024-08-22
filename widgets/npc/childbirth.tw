@@ -27,12 +27,12 @@
 	<<set _childRace_check to _mother.race>>
 
 	<!-- custom child race -->
-	<<if _father.race == "black">>
+	<<if _father.race == "black" and _father_id != 'mc'>>
 		<<set _randomValue = Math.floor(random(0, 9))>>
 		<<if _randomValue >= 3>>
 			<<set _childRace_check to _father.race>>
 		<</if>>
-	<<elseif _father.race != "black" and _mother.race != _father.race>>
+	<<elseif _father.race != "black" and _mother.race != _father.race and _father_id != 'mc'>>
 		<<set _randomValue = Math.floor(random(0, 9))>>
 		<<if _randomValue % 2 == 1>>
 			<<set _childRace_check to _father.race>>

@@ -514,9 +514,9 @@ setup.relationshipBetween = {
     },
 
     finalizeDivorceAndTransition: function(npcA) {
-        let currentHusbandId = npcA.family.husband;
+        let currentHusbandId = npcA.family?.husband;
         let divorceDate = variables().gameDate;
-    
+        
         if (currentHusbandId) {
             let currentHusband = setup.getNpcById(currentHusbandId);
             
@@ -530,19 +530,19 @@ setup.relationshipBetween = {
                 divorceDate: divorceDate
             });
             
-            // Remove as husband
-            npcA.family.husband = null;
-    
+            // Remove husband property
+            delete npcA.family.husband;
+        
             // Update husband's family
-            if (currentHusband.family.wives) {
+            if (currentHusband?.family?.wives) {
                 currentHusband.family.wives = currentHusband.family.wives.filter(wifeId => wifeId !== npcA.id);
             }
-    
+        
             console.log(`${npcA.id} is now divorced from ${currentHusbandId}.`);
         }
-    
+        
         // Promote Admirer to Fiance
-        let newPartnerId = npcA.relationshipBetween.admirer;
+        let newPartnerId = npcA.relationshipBetween?.admirer;
         if (newPartnerId) {
             npcA.relationshipBetween.fiance = newPartnerId;
             npcA.relationshipBetween.admirer = null; // Clear admirer after engagement
