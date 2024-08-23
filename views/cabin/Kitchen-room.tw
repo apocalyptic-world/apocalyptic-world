@@ -55,7 +55,7 @@
 		<<set $locationEvents.kitchen = true>>
 		<<set $guestId = _girlGuest[0]>>
 		<<goto 'Event: Kitchen stuck'>>
-	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather.weather == 'rain' && recall($suppCode)>>
+	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
