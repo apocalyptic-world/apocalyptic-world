@@ -156,7 +156,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 
 <<if !($locationEvents.guesthouse ?? false)>>
-	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather.weather == 'sun' && recall($suppCode)>>
+	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
 		}>>
