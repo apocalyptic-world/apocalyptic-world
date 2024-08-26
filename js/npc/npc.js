@@ -378,14 +378,14 @@ setup.getNpcHappyLevel = function(nns) {
 	} else if (typeof nns === 'string' || nns instanceof String) {
 		return nns;
 	} else { /* npc */
-		happy = nns.happy ??= 0;
+		happy = nns.happy ?? 0;
 	}
 	
 	const emotions = {
-        very_sad: nns.happy < -50,
-        sad: nns.happy < 0,
-        normal: nns.happy < 20,
-        happy: nns.happy < 50
+        very_sad: happy < -50,
+        sad: happy < 0,
+        normal: happy < 20,
+        happy: happy < 50
     };
 
     for (const emotion in emotions) {
