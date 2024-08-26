@@ -205,6 +205,8 @@
 				<<run setup.cabinInventory.pickup('milk', 1)>>
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' filled pack of milk', 'milk_garden')>>
 				<<set _npc.milkingDay = 0>>
+				<<set _totals.milk ??= 0>>
+				<<set _totals.milk++>>
 			<</if>>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm>>

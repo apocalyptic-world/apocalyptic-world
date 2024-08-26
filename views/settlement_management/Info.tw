@@ -28,6 +28,7 @@
 	},
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
+	milk: 0,
 	scav: 0,
 	streets: 0, streets_die: 0, nightclub: 0,
 	wood: 0,
@@ -57,6 +58,8 @@
 	<<elseif _job === 'forest'>>
 		<<set _settlementStatsData.wood +=  (_statsNpc.strength > 30 ? 2 : 1) + 
 			((_statsNpc.skills ?? []).includes('woodcraft') ? 1 : 0) + setup.npcInventoryHas(_statsNpc, 'axe')>>
+	<<elseif _job === 'milk_barn'>>
+			<<set _settlementStatsData.milk += _statsNpc.pregnancy >= 7 ? 1/3 : 0>>
 	<<elseif _job === 'hunter'>>
 		<<set _percentage = 10 + (_statsNpc.strength > 50 ? 25 : _statsNpc.strength > 10 ? 10 : 0)>>
 		<<set  _settlementStatsData.hunt.wolf += _percentage * 0.2 * 1.5/100,
@@ -192,6 +195,9 @@
 		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign a doctor)' : 
 			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max 1)' >>
 		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
+
+		<<set _text = !$player.quests?.milk_farm ? '(Vincent have an idea → build milk barn → assign dairy cattle)' : !$game.location?.milk_barn ? '(Build milk barn → assign dairy cattle)' : !_settlementStatsData.work?.milk_barn ? '(Assign dairy cattle)' : '(Average milk/day: ' + setup.ppFraction(_settlementStatsData.milk) + ')'>>
+		<tr><td>Dairy cattle in milk barn:</td><td><<=_settlementStatsData.work.milk_barn ?? 0>></td><td><<=_text>></td></tr>
 	<</if>>
 
 	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
