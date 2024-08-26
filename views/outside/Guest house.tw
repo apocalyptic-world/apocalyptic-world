@@ -61,7 +61,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 			<<set _customColorStyle = ''>>
 			<<if typeof _guest.color !== 'undefined' >>
-				<<set _customColorStyle = 'color: ' + _guest.color >>
+				<<set _customColorStyle = ' npc-color color-' + _guest.color >>
 			<</if>>
 
 			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
@@ -100,7 +100,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<tr class="item">
 				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>
-						<span @class="_genderClass" @style="_customColorStyle">
+						<span @class="_genderClass + _customColorStyle">
 							<<link _guest.name>>
 								<<set $guestId = _guestI>>
 								<<unset $slaveId, $charId, $childId>>
@@ -117,7 +117,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<<elseif _guest.gender == 2>>
 							<<run _guests18yoTransWomen.push(_guestI)>>
 						<</if>>
-						<span @class="_genderClass" @style="_customColorStyle">
+						<span @class="_genderClass + _customColorStyle">
 							<<link _guest.name>>
 								<<set $tmpGirl to _guest>>
 								<<set $tmpGirl.location = 'bedroom'>>

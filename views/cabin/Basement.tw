@@ -111,7 +111,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<<set _customColorStyle = ''>>
 		<<if typeof $slaves[_i].color !== 'undefined' >>
-			<<set _customColorStyle = 'color: ' + $slaves[_i].color >>
+			<<set _customColorStyle = ' npc-color color-' + $slaves[_i].color >>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
 			<<set _workingInGarden++>>
@@ -149,7 +149,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<</link>>
 					</span>
 				<<else>>
-					<span @class="_genderClass" @style="_customColorStyle">
+					<span @class="_genderClass + _customColorStyle">
 					  <<link $slaves[_i].name>>
 						<<set $tmpGirl to $slaves[_i]>>
 						<<set $tmpGirl.location = 'basement'>>
