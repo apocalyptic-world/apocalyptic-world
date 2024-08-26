@@ -92,7 +92,7 @@
 	<</link>>
 <</if>>
 
-<<if [0].includes($tmpGirl.gender) && $slaveId !== undefined && !$tmpGirl.assignedTo && $game?.location?.milk_barn && $tmpGirl.pregnancy >= 7>>
+<<if [0].includes($tmpGirl.gender) && $slaveId !== undefined && !$tmpGirl.assignedTo && $game?.location?.milk_barn && ($tmpGirl.pregnancy >= 7 || ($tmpGirl.traits ?? []).includes('milker'))>>
 	<<link 'Assign to milk barn'>>
 		<<assignedTo $tmpGirl 'milk_barn'>>
 		<<if $tmpGirlBack>>
@@ -151,7 +151,7 @@
 
 <<if $tmpGirl.location === 'basement'>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
-	<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('breast_pump') && $tmpGirl.pregnancy >= 60>>
+	<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('breast_pump') && ($tmpGirl.pregnancy >= 60 || ($tmpGirl.traits ?? []).includes('milker'))>>
 	  <<link 'Milk her'>>
 			<<set $tmpGirlViewBack = 'NPC view'>>
 		 	<<goto 'Girl milk'>> 

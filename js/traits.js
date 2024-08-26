@@ -36,6 +36,11 @@ setup.traits = {
     infertile: {
         title: "Infertile",
         description: "Can't have children"
+    },
+    milker: {
+        title: "milker",
+        description: "Can produce breast milk without being pregnant",
+        gender: [0]
     }
 };
 
