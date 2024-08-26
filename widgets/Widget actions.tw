@@ -185,7 +185,7 @@
 	<<if typeof setup.actions !== 'undefined'>>
 		<<set _dreamImg = setup.ImagePath+'actions/female/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions.female[_sleepAction.place][_sleepAction.type])>>
 	<<else>>
-		<<set _dreamImg = setup.ImagePath+'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
 	<</if>>
 
 	<<actionImageOutput _dreamImg>>
@@ -196,11 +196,9 @@
 	<<if ['mp4', 'webm'].includes(_extension)>>
 		<<set _videoType = 'video/' + _extension>>
 		<<set _url to $args[0]>>
-		<video controls autoplay loop>
-  			<source @src="_url" @type="_videoType">
-		</video>
+		<<video _url>>
 	<<else>>
-		[img[$args[0]]]
+		<<image $args[0]>>
 	<</if>>
 <</widget>>
 
