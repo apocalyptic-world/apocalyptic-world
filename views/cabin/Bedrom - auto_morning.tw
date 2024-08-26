@@ -48,9 +48,9 @@
 
         /* (setup.getNpcHappyLevel(_npc) === 'very_sad'  */
 
-        <<if _ruleStreetworker && ['streets', 'nightclub'].includes(_job) && (setup.automatization.sexworkerDayOffCheck(_npc)|| _badWeather || _npc.sick) && (typeof _npc.rest === 'undefined')>>
+        <<if _ruleStreetworker && ['streets', 'nightclub', 'milk_barn'].includes(_job) && (setup.automatization.sexworkerDayOffCheck(_npc)|| _badWeather || _npc.sick) && (typeof _npc.rest === 'undefined')>>
             <<set _npc.rest = {
-				days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+				days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
 				desc: 'Day off resting',
 				id: 'resting'
 			}>>

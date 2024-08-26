@@ -33,9 +33,9 @@ setup.automatization = {
       help: 'When off: Hunter with no bow does nothing',
     },
     streetworker: {
-      name: 'Sex workers need rest',
-      description: 'Sex workers on the street & nightclub below some happiness value takes a day off by themselves',
-      help: '',
+      name: 'People in unhappy jobs need rest',
+      description: 'People with jobs that make them unhappy needs rest. If the happyness falls below some happiness value then they takes a day off by themselves',
+      help: 'This includes dairy cattle, sex workers on the street & nightclub',
     },
 
     buttplug: {
@@ -109,12 +109,12 @@ setup.automatization = {
   },
 
   sexworkerDayOffText: {
-    off: 'Off - No sexworkers takes a day off by themselves',
-    very_sad: 'Very sad, unhappy street & nightclub workers takes a day off by themselves',
-    sad: 'Sad, unhappy street & nightclub workers takes a day off by themselves',
-    normal: 'Sad and normal-happy street & nightclub workers takes a day off by themselves',
-    happy: 'All but very happy street & nightclub workers takes a day off by themselves',
-    very_happy: 'On - All sexworkers will take a day off themselves all the time',
+    off: 'Off - No sexworkers or dairy cattle takes a day off by themselves',
+    very_sad: 'Very sad, dairy cattle, unhappy street & nightclub workers takes a day off by themselves',
+    sad: 'Sad dairy cattle, unhappy street & nightclub workers takes a day off by themselves',
+    normal: 'Sad and normal-happy dairy cattle, street & nightclub workers takes a day off by themselves',
+    happy: 'All but very happy dairy cattle, street & nightclub workers takes a day off by themselves',
+    very_happy: 'On - All dairy cattle & sexworkers will take a day off themselves all the time',
   },
 
   /**

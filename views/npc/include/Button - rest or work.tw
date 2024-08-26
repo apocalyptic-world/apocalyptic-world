@@ -1,7 +1,7 @@
 :: Button - rest or work [include]
 
 /* using $tmpgirl */
-<<if ['streets', 'nightclub'].includes($tmpGirl.assignedTo)>>
+<<if ['streets', 'nightclub', 'milk_barn'].includes($tmpGirl.assignedTo)>>
 	<<set _isRest = (typeof $tmpGirl.rest !== 'undefined')>>
 	<<if _isRest>>
 		<<set _restDisplay='block', _workDisplay='none'>>
@@ -18,7 +18,7 @@
 	<div id="optwork" @style="'display:' + _workDisplay"> 
 		<<link 'Hard work? - Take a day off'>>
 			<<set $tmpGirl.rest = {
-				days: setup.getNpcHappyLevel($tmpGirl) === 'very_sad' ? 2 : 1,
+				days: setup.getNpcHappyLevel($tmpGirl) === 'very_sad' ? 3 : 2,
 				desc: 'Day off resting',
 				id: 'resting'
 			}>>

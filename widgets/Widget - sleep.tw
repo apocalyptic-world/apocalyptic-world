@@ -198,8 +198,9 @@
 			<<if typeof _npc.milkingDay === 'undefined'>>
 				<<set _npc.milkingDay = 0>>
 			<</if>>
-			<<if _npc.pregnancy < 7>>
+			<<if _npc.pregnancy < 7 && !(_npc.traits ?? []).includes('milker')>>
 				<<run delete _npc.assignedTo>>
+				<<run setup.sleepMessages.addJob($slaves[_i].name + ' has dried out and produces no xtra milk (for now). Unassigned from barn!', 'milk_garden')>>
 				<<continue>>
 			<</if>>
 			<<set _npc.milkingDay++>>
@@ -336,7 +337,7 @@
 		<</if>>
 		// Resting
 		<<if  _isRest>>
-			<<if ['streets', 'nightclub'].includes($slaves[_i].assignedTo)>>
+			<<if ['streets', 'nightclub', 'milk_barn'].includes($slaves[_i].assignedTo)>>
 				<<setNpcStats slave _i happy +5>>
 			<</if>>
 			<<set $slaves[_i].rest.days-->>
@@ -740,7 +741,7 @@
 		<</if>>
 		// Resting
 		<<if _isRest>>
-			<<if ['streets', 'nightclub'].includes($guests[_guestI].assignedTo)>>
+			<<if ['streets', 'nightclub', 'milk_barn'].includes($guests[_guestI].assignedTo)>>
 				<<setNpcStats guest _guestI happy +5>>
 			<</if>>
 			<<set $guests[_guestI].rest.days-->>
