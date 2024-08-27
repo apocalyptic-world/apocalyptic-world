@@ -15,7 +15,10 @@
 	<<elseif typeof $charId !== 'undefined'>>
 		<<set $characters[$charId] = $tmpGirl>>
 	<</if>>
-
+	<<if $oldTmpGirlLocation>>
+        <<set $tmpGirl.location = $oldTmpGirlLocation>>
+    	<<unset $oldTmpGirlLocation>>
+    <</if>>
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>
 	<<else>>
