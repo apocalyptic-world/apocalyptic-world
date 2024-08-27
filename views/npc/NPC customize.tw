@@ -11,83 +11,85 @@
 		<</dialog>>	
 	<</link>>
 <</if>>
-<<if !$tmpGirl.piercedBoobs && $backpack.has('piercing')>>
-	<<link 'Pierce nipples'>>
-		<<goto 'NPC customize - pierce boob'>>
-	<</link>>
-<</if>>
-<<if $tmpGirl.piercedBoobs>>
-	<<link 'Remove piercings from nipples'>>
-		<<goto 'NPC customize - pierce boob remove'>>
-	<</link>>
-<</if>>
-<<if !$tmpGirl.buttplug && $backpack.has('buttplug')>>
-	<<link 'Insert buttplug'>>
-		<<goto 'NPC customize - buttplug insert'>>
-	<</link>>
-<</if>>
-<<if $tmpGirl.buttplug>>
-	<<link 'Remove buttplug'>>
-		<<goto 'NPC customize - buttplug remove'>>
-	<</link>>
-<</if>>
-<<if !$tmpGirl.chastityBelt && $backpack.has('chastity_belt')>>
-	<<link 'Put on chastity belt'>>
-		<<goto 'NPC customize - chastity belt'>>
-	<</link>>
-<</if>>
-<<if $tmpGirl.chastityBelt>>
-	<<link 'Remove chastity belt'>>
-		<<goto 'NPC customize - chastity belt remove'>>
-	<</link>>
-<</if>>
-<<if $backpack.has('cosmetics') && !$tmpGirl.cosmetics>>
-	<<link 'Apply cosmetics'>>
-		<<goto 'NPC customize - cosmetics'>>
-	<</link>>	
-<</if>>
-<<if $backpack.has('hair_dye_kit') && $tmpGirl.hair !== 'bald'>>
-	<<link 'Use hair dye kit'>>
-		<<goto 'NPC customize - hair dye'>>
-	<</link>>	
-<</if>>
-<<link 'Portrait'>>
-	<<script>>
-		Dialog.setup("NPC customize - portrait", "NPC customize - portrait");
-		Dialog.wiki(Story.get("NPC customize - portrait").processText());
-		Dialog.open();
-	<</script>>
-<</link>>
-<<if [0,2].includes($tmpGirl.gender)>>
-	<<link 'Clothes'>>
+<<if setup.getAge($tmpGirl) >= 18>>
+	<<if !$tmpGirl.piercedBoobs && $backpack.has('piercing')>>
+		<<link 'Pierce nipples'>>
+			<<goto 'NPC customize - pierce boob'>>
+		<</link>>
+	<</if>>
+	<<if $tmpGirl.piercedBoobs>>
+		<<link 'Remove piercings from nipples'>>
+			<<goto 'NPC customize - pierce boob remove'>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.buttplug && $backpack.has('buttplug')>>
+		<<link 'Insert buttplug'>>
+			<<goto 'NPC customize - buttplug insert'>>
+		<</link>>
+	<</if>>
+	<<if $tmpGirl.buttplug>>
+		<<link 'Remove buttplug'>>
+			<<goto 'NPC customize - buttplug remove'>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.chastityBelt && $backpack.has('chastity_belt')>>
+		<<link 'Put on chastity belt'>>
+			<<goto 'NPC customize - chastity belt'>>
+		<</link>>
+	<</if>>
+	<<if $tmpGirl.chastityBelt>>
+		<<link 'Remove chastity belt'>>
+			<<goto 'NPC customize - chastity belt remove'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('cosmetics') && !$tmpGirl.cosmetics>>
+		<<link 'Apply cosmetics'>>
+			<<goto 'NPC customize - cosmetics'>>
+		<</link>>	
+	<</if>>
+	<<if $backpack.has('hair_dye_kit') && $tmpGirl.hair !== 'bald'>>
+		<<link 'Use hair dye kit'>>
+			<<goto 'NPC customize - hair dye'>>
+		<</link>>	
+	<</if>>
+	<<link 'Portrait'>>
 		<<script>>
-			Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
-			Dialog.wiki(Story.get("NPC Wardrobe").processText());
+			Dialog.setup("NPC customize - portrait", "NPC customize - portrait");
+			Dialog.wiki(Story.get("NPC customize - portrait").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+	<<if [0,2].includes($tmpGirl.gender)>>
+		<<link 'Clothes'>>
+			<<script>>
+				Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+				Dialog.wiki(Story.get("NPC Wardrobe").processText());
+				Dialog.open();
+			<</script>>
+		<</link>>
+	<</if>>
+	<<link 'Tattoos'>>
+		<<script>>
+			Dialog.setup("NPC customize - tattoos", "NPC customize - tattoos");
+			Dialog.wiki(Story.get("NPC customize - tattoos").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+	<<link 'Change name color'>>
+		<<script>>
+			Dialog.setup("NPC customize - name color", "NPC customize - name color");
+			Dialog.wiki(Story.get("NPC customize - name color").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+	<<link 'Custom pack'>>
+		<<script>>
+			Dialog.setup("NPC customize - custom pack", "NPC customize - custom pack");
+			Dialog.wiki(Story.get("NPC customize - custom pack").processText());
 			Dialog.open();
 		<</script>>
 	<</link>>
 <</if>>
-<<link 'Tattoos'>>
-	<<script>>
-		Dialog.setup("NPC customize - tattoos", "NPC customize - tattoos");
-		Dialog.wiki(Story.get("NPC customize - tattoos").processText());
-		Dialog.open();
-	<</script>>
-<</link>>
-<<link 'Change name color'>>
-	<<script>>
-		Dialog.setup("NPC customize - name color", "NPC customize - name color");
-		Dialog.wiki(Story.get("NPC customize - name color").processText());
-		Dialog.open();
-	<</script>>
-<</link>>
-<<link 'Custom pack'>>
-	<<script>>
-		Dialog.setup("NPC customize - custom pack", "NPC customize - custom pack");
-		Dialog.wiki(Story.get("NPC customize - custom pack").processText());
-		Dialog.open();
-	<</script>>
-<</link>>
 <<link 'Back'>>
 	<<goto $tmpGirlViewBack>>
 <</link>>
