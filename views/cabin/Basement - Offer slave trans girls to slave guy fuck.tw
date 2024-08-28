@@ -43,8 +43,8 @@
 	<<if !$slaves[$slaveOfferId].likesGuys>>
 		<<set _slaveRelationshipDecrease += 10>>
 	<</if>>
-	<<set $slaves[$slaveOfferId].relationship -= _slaveRelationshipDecrease>>
-	<<set $slaves[$slaveOfferId].happy -= _slaveRelationshipDecrease>>
+	<<setNpcStats 'slave' $slaveOfferId 'relationship' `-_slaveRelationshipDecrease`>>
+	<<setNpcStats 'slave' $slaveOfferId 'happy' `-_slaveRelationshipDecrease`>>
 	<br /><br />
 	<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
 <</if>>

@@ -61,40 +61,39 @@ setup.dyeRoll = function(hair) {
 };
 
 setup.eyesRoll = function(_race, _hair) {
-	var _eyesRoll = window.randomInteger(1, 100);
-	var _metisRoll = window.randomInteger(1, 100);
-	var _lightRoll = window.randomInteger(1, 100);
-	var _eyes = 'brown';
-	
-	if (_race = 'white' || _metisRoll <= 30){
-		if (['blonde', 'ginger'].includes(_hair)){
-			if (_eyesRoll <= 10) {
-				_eyes = 'gray';
-			} else if (_eyesRoll <= 25) {
-				_eyes = 'green';
-			} else if (_eyesRoll <= 50) {
-				_eyes = 'hazel';
-			} else if (_eyesRoll <= 90) {
-				_eyes = 'blue';
-			}
-		} else {
-			if (_eyesRoll <= 10) {
-				_eyes = 'gray';
-			} else if (_eyesRoll <= 20) {
-				_eyes = 'green';
-			} else if (_eyesRoll <= 40) {
-				_eyes = 'hazel';
-			} else if (_eyesRoll <= 60) {
-				_eyes = 'blue';
-			}
-		}
-	}
-	if (_lightRoll <= 33) {
-		_eyes = 'dark '+_eyes;
-	} else if (_lightRoll <= 66) {
-		_eyes = 'light '+_eyes;
-	}
-	return _eyes;
+    var _eyesRoll = window.randomInteger(1, 100);
+    var _metisRoll = window.randomInteger(1, 100);
+    var _eyes = 'brown';
+    
+    var eyeColorChances = {
+        blonde_ginger: [
+            { color: 'gray', chance: 10 },
+            { color: 'green', chance: 15 },
+            { color: 'hazel', chance: 25 },
+            { color: 'blue', chance: 40 },
+            { color: 'brown', chance: 100 } // default to brown if no other matches
+        ],
+        other_hair: [
+            { color: 'gray', chance: 10 },
+            { color: 'green', chance: 10 },
+            { color: 'hazel', chance: 20 },
+            { color: 'blue', chance: 20 },
+            { color: 'brown', chance: 100 } // default to brown if no other matches
+        ]
+    };
+
+    var selectedMapping = (['blonde', 'ginger'].includes(_hair)) ? eyeColorChances.blonde_ginger : eyeColorChances.other_hair;
+
+    if (_race === 'white' || _metisRoll <= 30) {
+        for (var i = 0; i < selectedMapping.length; i++) {
+            if (_eyesRoll <= selectedMapping[i].chance) {
+                _eyes = selectedMapping[i].color;
+                break;
+            }
+        }
+    }
+    
+    return _eyes;
 };
 
 setup.orientationRoll = function(gender) {

@@ -14,7 +14,9 @@ setup.audioPath = setup.Path + "audio/";
 
 setup.lockID = LoadScreen.lock();  // Lock loading screen
 
-importScripts(setup.Path + "js/actions.js?v=1")
+let _timestamp = Math.floor(Date.now() / 1000);
+
+importScripts(setup.Path + "js/actions.js?v=" + _timestamp)
 	.then(function() {
         memorize('actions', setup.actions);
         // Reload current passage since imported scripts can function now.
@@ -24,7 +26,7 @@ importScripts(setup.Path + "js/actions.js?v=1")
 		alert("Error: Could not find file 'actions.js'.");
 	}
 );
-importScripts(setup.Path + "packs/packs.js?v=2")
+importScripts(setup.Path + "packs/packs.js?v=" + _timestamp)
 	.then(function() {
         memorize('packs', setup.packs);
 	}).catch(function(error) {  // eslint-disable-line
