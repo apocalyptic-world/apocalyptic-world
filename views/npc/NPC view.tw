@@ -182,9 +182,34 @@
 	<</if>>
 <</if>>
 
-<<include 'NPC view - massage table invite'>>
-
 <<if typeof $slaveId !== 'undefined'>>
+	<<if $tmpGirl.assignedTo>>
+		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+			<<assignedTo $tmpGirl 'none'>>
+			<<goto 'NPC view'>>
+		<</link>>
+	<</if>>
+
+	<<include 'Button - rest or work'>>
+	
+	<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
+		<<set _linkName = 'Wash ' + _himOrHer>>
+		<<link `_linkName`>>
+			<<energy -10>>
+			<<goto 'Slave - wash'>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.workout && $player.energy >= 10>>
+		<<link 'Workout together'>>
+			<<set $tmpGirl.workout = true>>
+			<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+			<<energy -10>>
+			<<goto 'NPC - workout together'>>
+		<</link>>
+	<</if>>
+
+	<<include 'NPC view - massage table invite'>>
+
 	<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
 		<<if $backpack.has('pregnancy_potion')>>
 			<<link 'Give pregnancy termination potion'>>
@@ -198,31 +223,6 @@
 		<</if>>
 	<</if>>
 
-	<<if $tmpGirl.assignedTo>>
-		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
-			<<assignedTo $tmpGirl 'none'>>
-			<<goto 'NPC view'>>
-		<</link>>
-	<</if>>
-
-	
-	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
-		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
-		<<link `_linkName`>>
-			<<moveSlaveToGuest $tmpGirl $slaveId>>
-			<<goto 'Guest house'>>
-		<</link>>
-	<</if>>
-
-	<<include 'Button - rest or work'>>
-	
-	<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
-		<<set _linkName = 'Wash ' + _himOrHer>>
-		<<link `_linkName`>>
-			<<energy -10>>
-			<<goto 'Slave - wash'>>
-		<</link>>
-	<</if>>
 	<<if !$tmpGirl.gift>>
 		<<link 'Give gift'>>
 			<<script>>
@@ -232,17 +232,17 @@
 	  		<</script>>
 		<</link>>
 	<</if>>
-	<<if !$tmpGirl.workout && $player.energy >= 10>>
-		<<link 'Workout together'>>
-			<<set $tmpGirl.workout = true>>
-			<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
-			<<energy -10>>
-			<<goto 'NPC - workout together'>>
-		<</link>>
-	<</if>>
 	<<link 'Customize'>>
 		<<goto 'NPC customize'>>
 	<</link>>
+	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
+		<<link `_linkName`>>
+			<<moveSlaveToGuest $tmpGirl $slaveId>>
+			<<goto 'Guest house'>>
+		<</link>>
+	<</if>>
+
 	<<link 'Release'>>
 		<<goto 'Basement - release slave'>>
 	<</link>>

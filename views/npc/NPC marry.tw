@@ -8,7 +8,7 @@
 <<set $player.family.wives.push($tmpGirl.id)>>
 
 <center>
-	[img[setup.ImagePath+'places/kitchen/blair_propose_yes.gif']]
+	[img[setup.ImagePath+'places/kitchen/blair_propose.jpg']]
 </center>
 <br /><br />
 You dropped to one knee, holding out the makeshift ring.
@@ -30,8 +30,6 @@ You embraced tightly, the weight of your journey and this newfound commitment wa
 <</sayNpc>>
 <br />
 
-<<set _target = !$tmpGirl.gender ? 'pussy' : 'ass'>>
-<<set _fuck = !$tmpGirl.gender ? 'pussy' : 'anal'>>
 <div id="option_two">
     <<linkreplace 'Just the two of us'>>
         <<set $tmpGirl.location = 'wedding'>>
@@ -53,7 +51,7 @@ You embraced tightly, the weight of your journey and this newfound commitment wa
         After a while, she comes to your bedroom with a borrowed wedding dress that the village girls share among themselves.
         <br /><br />
         <center>
-            <<actionImage $tmpGirl 'undress'>>
+            <<actionImage $tmpGirl 'undress' 'no-text'>>
         </center>
         <br /><br />
         In front of you she takes of her clothes and asks you to help her put on wedding dress.
@@ -61,46 +59,92 @@ You embraced tightly, the weight of your journey and this newfound commitment wa
         As she's done, she pushes you onto your bed.
         <br /><br />
         <<sayNpc $tmpGirl>>
-            I've always wanted to do in wedding dress
+            I've always wanted to do it in a wedding dress
         <</sayNpc>>
         <br />
         <center>
-            <<actionImage $tmpGirl 'bj'>>
+            <<actionImage $tmpGirl 'bj' 'no-text'>>
         </center>
         <br /><br />
         She unbuttons your pants and slides her hand in to grab your dick. She strokes it few times while looking right into your eyes before pulling it out and sliding it into her mouth.
         <br />
-        She deepthroats your dick with determination to get it all inside her tight mouth and still - without taking eyes off you. She really enjoys this moment. 
-        She gives a big spit on it before she climbs on you, push the dress aside and slides your dick into her <<=_target>>.
+        She catches her breath for a moment and you decide to take the lead.
         <br /><br />
-        <center>
-            <<actionImage $tmpGirl _fuck>>
-        </center>
-        <br /><br />
-            With her legs spread she sits up and down while you lay down on your bed. She moans she glances at her ring every now and then.
-        <br /><br />
-        <<if $tmpGirl.virgin>>
-            <strong>She lost her virginity!</strong>
-            <<set $tmpGirl.virgin = false>>
+        <<linkreplace 'Deepthroat her'>>
+            <center>
+                <<actionImage $tmpGirl 'dp' 'no-text'>>
+            </center>
             <br /><br />
-        <</if>>
-        <center>
-			<<actionImage $tmpGirl 'cum'>>
-		</center>
-        <br /><br />
+            She deepthroats your dick with determination to get it all inside her tight mouth and still - without taking eyes off you. She really enjoys this moment.
+        <</linkreplace>>
+
         <<if !$tmpGirl.gender>>
-            You throw her on her back and cum all over her pussy.
-        <<else>>
-            You pull out your dick and you both lay on your back. You stroke your dick as she massages your balls. You both cum together.
+            <<linkreplace 'Eat her pussy'>>
+                <center>
+                    <<actionImage $tmpGirl 'pussy_lick' 'no-text'>>
+                </center>
+                <br /><br />
+                You decide to reward your lovely wife by eating her pussy.
+            <</linkreplace>>
+            
+            <<if $tmpGirl.virgin>>
+                <<set _linkName = 'Fuck her virgin pussy'>>
+            <<else>>
+                <<set _linkName = 'Fuck her pussy'>>
+            <</if>>
+            <<linkreplace `_linkName`>>
+                <<if $tmpGirl.virgin>>
+                    <<set $tmpGirl.virgin = false>>
+                    <<set _virginityLost = true>>
+                <</if>>
+                <center>
+                    <<actionImage $tmpGirl 'pussy' 'no-text'>>
+                </center>
+                <br /><br />
+                You enter her warm pussy and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
+                <<if _virginityLost>>
+                    <strong>She lost her virginity!</strong>
+                <</if>>
+            <</linkreplace>>
         <</if>>
-        <br /><br />
-        <<link 'Fuck some more'>>
-            <<fuck $tmpGirl>>
-        <</link>>
-        <<link 'Leave'>>
-            <<horny_reset>>
-            <<goto $tmpGirlViewBack>>
-        <</link>>
+
+        <<if $tmpGirl.anal < 20>>
+            <<set _linkName = 'Fuck her tight ass'>>
+        <<else>>
+            <<set _linkName = 'Fuck her ass'>>
+        <</if>>
+        <<linkreplace `_linkName`>>
+            <center>
+                <<actionImage $tmpGirl 'anal' 'no-text'>>
+            </center>
+            <br /><br />
+            <<if $tmpGirl.anal < 20>>
+                You enter her tight ass and start ramming her while she tries to control her pain, glancing at her ring for comfort.
+            <<else>>
+                You enter her warm ass and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
+            <</if>>
+        <</linkreplace>>
+
+        <<linkreplace 'Continue'>>
+            <<set _cum = !$tmpGirl.gender ? 'cum_on_pussy' : 'cum'>>
+            <center>
+                <<actionImage $tmpGirl _cum 'no-text'>>
+            </center>
+            <br /><br />
+            <<if !$tmpGirl.gender>>
+                You throw her on her back and cum all over her pussy.
+            <<else>>
+                You pull out your dick and you both lay on your back. You stroke your dick as she massages your balls. You both cum together.
+            <</if>>
+            <br /><br />
+            <<link 'Fuck some more'>>
+                <<fuck $tmpGirl>>
+            <</link>>
+            <<link 'Leave'>>
+                <<horny_reset>>
+                <<goto $tmpGirlViewBack>>
+            <</link>>
+        <</linkreplace>>
     <</linkreplace>>
 </div>
 <div id="option_others">
