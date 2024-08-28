@@ -1,6 +1,6 @@
 :: Settlement management - street_workers [management include]
 
-<h1>Sex workers</h1>
+<h1>Sex workers & dairy cattle with unhappy jobs</h1>
 
 <br/><br/>
 
@@ -12,8 +12,8 @@
     very_happy: {slaves: [], guests: []}
 }>>
 <<set _workers = {
-    slaves: setup.getNpcsForLocation($slaves, 'streets'),
-    guests: setup.getNpcsForLocations($guests, ['streets', 'nightclub']),
+    slaves: setup.getNpcsForLocations($slaves, ['streets', 'nightclub', 'milk_barn']),
+    guests: setup.getNpcsForLocations($guests, ['streets', 'nightclub', 'Milk_barn']),
 }>>
 <<set _sick = []>>
 <<set _count = _workers.slaves.length + _workers.guests.length>>
@@ -37,12 +37,13 @@
 }>>
 
 <<if _count>><table class="mc-stats-table">
+    /* should sand storm affect milk barn? -- don't care for now -- sand storm is rare */
      <<set _badWeather = /*$weather?.heatWave || */ $weather?.sandStorm>>
     <<if _badWeather>>
         <<set _text = 
             $weather?.heatWave  ? "Heat wave in progress! Your workers can't work in this heat'": 
             $weather?.sandStorm ? "Sandstorm in progress! Your workers can't go outside" : 
-                "<span style=\"color: red\">Undefined bad weather in progress! -- This shoukdn't happen</span>">>
+                "<span style=\"color: red\">Undefined bad weather in progress! -- This shouldn't happen</span>">>
         <tr>
             <td></td>
             <td colspan="3">Note: _text<br/>anyway so why not count this day as a day off?</td>
@@ -51,7 +52,7 @@
                     <<for _persons, _npcs range _workers>>
                         <<for _npc range _npcs>>
                             <<set _npc.rest = {
-                                days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+                                days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
                                 desc: 'Day off resting',
                                 id: 'resting'
                             }>>
@@ -66,12 +67,12 @@
     <<if _sick.length>>
         <tr>
             <td></td>
-            <td colspan="3">Note: Some sex workers are sick! As the sick don't work so why not count this day as a day off?</td>
+            <td colspan="3">Note: Some sex workers and/or dairy cattles are sick! As the sick don't work so why not count this day as a day off?</td>
             <td align="right">
                 <<button 'Rest for sick!'>>
                     <<for _npc range _sick>>
                         <<set _npc.rest = {
-                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
                             desc: 'Day off resting',
                             id: 'resting'
                         }>>
@@ -102,7 +103,7 @@
                                 <<button 'Rest!'>>
                                     <<for _npc range _npcs>>
                                         <<set _npc.rest = {
-                                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 2 : 1,
+                                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
                                             desc: 'Day off resting',
                                             id: 'resting'
                                         }>>

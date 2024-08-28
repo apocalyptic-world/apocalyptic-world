@@ -48,7 +48,8 @@ setup.traits = {
 
 setup.getRandomTraits = function (count = 1, exclude) {
     const _traitsNotPair = {
-        breeder: 'infertile'
+        breeder: 'infertile',
+        infertile: 'breeder'
     };
     const _traits = clone(setup.traits);
     if (exclude) {
