@@ -26,6 +26,10 @@ setup.baseManagement = {
         {
             return setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption();
         },
+        hasElectricity: function()
+        {
+            return setup.baseManagement.electricity.total() > 0;
+        },
         list: {
             solar_panel: 1,
             hospital: -5,

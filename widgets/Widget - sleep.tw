@@ -63,6 +63,8 @@
 
 <<set _hasWorkingHospital = setup.hasWorkingHospital()>>
 <<set _hasDoctor = setup.hasDoctor()>>
+
+<<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
 <<if ($player.horse ?? false)>>
 	<<if typeof $characters.horse === 'undefined'>>
@@ -194,23 +196,33 @@
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden', 'garden')>>
 			<</if>>
 		<</if>>
+		<<if _npc.assignedTo == 'milk_barn'>>
+			<<run console.log('sick', _isSick)>>
+			<<run console.log('rest', _isRest)>>
+			<<run console.log(_npc)>>
+		<</if>>
 		<<if _npc.assignedTo == 'milk_barn' && !_dayOff>>
 			<<if typeof _npc.milkingDay === 'undefined'>>
 				<<set _npc.milkingDay = 0>>
 			<</if>>
 			<<if _npc.pregnancy < 7 && !(_npc.traits ?? []).includes('milker')>>
 				<<run delete _npc.assignedTo>>
-				<<run setup.sleepMessages.addJob($slaves[_i].name + ' has dried out and produces no xtra milk (for now). Unassigned from barn!', 'milk_garden')>>
-				<<continue>>
-			<</if>>
-			<<set _npc.milkingDay++>>
-			<<setNpcStats 'slave' _i 'happy' -5>>
-			<<if _npc.milkingDay >= 3>>
-				<<run setup.cabinInventory.pickup('milk', 1)>>
-				<<run setup.sleepMessages.addJob($slaves[_i].name + ' filled pack of milk', 'milk_garden')>>
-				<<set _npc.milkingDay = 0>>
-				<<set _totals.milk ??= 0>>
-				<<set _totals.milk++>>
+				<<run setup.sleepMessages.addJob($slaves[_i].name + ' has dried out and produces no extra milk (for now). Unassigned from barn!', 'milk_barn')>>
+			<<else>>
+				<<run console.log('####')>>
+				<<if _hasElectricity>>
+					<<set _npc.milkingDay++>>
+					<<setNpcStats 'slave' _i 'happy' -5>>
+					<<if _npc.milkingDay >= 3>>
+						<<run setup.cabinInventory.pickup('milk', 1)>>
+						<<run setup.sleepMessages.addJob($slaves[_i].name + ' filled pack of milk', 'milk_barn')>>
+						<<set _npc.milkingDay = 0>>
+						<<set _totals.milk ??= 0>>
+						<<set _totals.milk++>>
+					<</if>>
+				<<else>>
+					<<run setup.sleepMessages.addJob($slaves[_i].name + ' could not work as there was no electricity in the barn', 'milk_barn')>>
+				<</if>>
 			<</if>>
 		<</if>>
 		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm>>
