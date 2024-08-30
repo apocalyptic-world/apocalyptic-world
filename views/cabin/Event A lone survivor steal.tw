@@ -8,9 +8,9 @@
 The lone survivor that you let stay overnight and feed at your camp yesterday is nowhere to be found. The gate is left half-open and it appears that food has been taken from the storage.
 <br /><br />
 
-<<set _food = Math.min(20, $backpack.count('food'))>>
+<<set _food = Math.min(20, setup.cabinInventory.count('food'))>>
 
-<<drop $backpack 'food' _food>>
+<<run setup.cabinInventory.drop('food', _food)>>
 
 <strong>You lost <strong class="iitem"><<=_food>> food</strong></strong> 
 <br /><br />

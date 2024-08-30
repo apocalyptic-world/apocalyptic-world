@@ -859,13 +859,17 @@
 <</if>>
 <<if !_sleepDead>>
 <<set $player.showered to false>>
-	<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
-	<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
-	<<if $args[0]>>
-		<<goto $args[0]>>
-	<<else>>
-		<<goto "Bedroom-sleep">>
-	<</if>>
+
+<<if $player.horny > 70>>
+	<<set $player.energy -= 30>>
+<</if>>
+<<updatemeter '$energyBar' `$player.energy / $player.maxEnergy`>>
+<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
+<<if $args[0]>>
+	<<goto $args[0]>>
+<<else>>
+	<<goto "Bedroom-sleep">>
+<</if>>
 <<else>>
 	<<set $game.death_reason = _sleepDead>>
 	<<goto "Dead">>
