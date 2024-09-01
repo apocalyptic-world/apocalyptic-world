@@ -76,5 +76,26 @@
 			$game.location.youth_district = true;
 		},
 		goto: "Settlement management",
+   },
+   wood_wall: {
+		show: ($player?.baseManagement?.buildings?.wood_wall ?? 0) < 100,
+		title: "Wood wall",
+		description: "Wood wall will protect settlement from intruders and thieves",
+		required: {
+			wood: 20,
+			rope: 1
+		},
+		energy: 10,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.wood_wall ??= 0;
+            $player.baseManagement.buildings.wood_wall++;
+		},
+		goto: "Settlement management",
+        currentCount: true,	
+		percentage: true,
+		currentTitle: 'Around settlement',
+		minutes: 60
    }
 }>>

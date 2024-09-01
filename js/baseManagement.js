@@ -40,6 +40,17 @@ setup.baseManagement = {
     defense: {
         description: function()
         {
+            const _woodWalls = (variables().player?.baseManagement?.buildings['wood_wall'] ?? 0);
+            if (_woodWalls >= 100) {
+                return 'Around your settlement is wood wall. It will protect from small intruders and thieves.'
+            }
+            if (_woodWalls >= 50) {
+                return 'More than half of your settlement is protected from intruders. They are still holes someone could get in.'
+            }
+            if (_woodWalls > 10) {
+                return 'Small part of your settlement is behind walls. They are still big threats of intruders or thieves.'
+            }
+            
             return 'Almost no defense. No walls, only some gates in the middle of the road.'
         }
     },

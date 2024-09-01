@@ -10,3 +10,13 @@ setup.neganQuest2HaveGirls = function()
 
     return girlIds;
 }
+
+setup.baseIntruderChance = function ()
+{
+    const _woodWalls = (variables().player?.baseManagement?.buildings['wood_wall'] ?? 0);
+    const _chance = 100;
+
+    _chance -= _woodWalls;
+
+    return setup.percentageChance(_chance)
+}

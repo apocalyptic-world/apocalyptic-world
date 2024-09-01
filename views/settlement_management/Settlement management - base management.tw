@@ -3,8 +3,6 @@
     BASE MANAGEMENT
 </h1>
 
-<<warning 'Work in progress.'>>
-
 <<set _electricityTotal = setup.baseManagement.electricity.total()>>
 <<set _electricityTotalOutput = _electricityTotal>>
 <<if _electricityTotal > 0>>
@@ -70,7 +68,12 @@
 					  <<=_baseBuilding.description>>
 					  <br />
                       <<if _baseBuilding.currentCount >>
-					    Current count: <<=$player?.baseManagement?.buildings[_baseBuildingName] ?? 0>>
+                        <<if _baseBuilding.currentTitle>>
+                            <<=_baseBuilding.currentTitle>>: 
+                        <<else>>
+                            Current count:
+                        <</if>>
+					    <<=$player?.baseManagement?.buildings[_baseBuildingName] ?? 0>><<if _baseBuilding.percentage>>%<</if>>
                       <</if>>
 				  </td>
 				  <td style="width: 20%">
@@ -94,7 +97,7 @@
 					  </div>
 				  </td>
 				  <td style="width: 10%">
-					  <<if _itemHasResources>>
+					  <<if _itemHasResources && timeBetween('08:00', '23:59')>>
 						<<link 'Build'>>
 
 							<<energy `-_workEnergy`>>
@@ -106,6 +109,9 @@
                                     <<run setup.cabinInventory.drop(_reqKey, _reqCount)>>
 								<</capture>>
 							<</for>>
+                            <<if _baseBuilding.minutes>>
+                                <<addmins _baseBuilding.minutes>>
+                            <</if>>
 							<<run _baseBuilding.after()>>
 							<<goto _baseBuilding.goto>>
 						<</link>>

@@ -106,13 +106,13 @@
 	<<elseif $game.cabinName && isMetChar('rodger') && ($characters.rodger.quests.horse ?? false) && !$player.horse && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Horse merchant'>>
-	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager)>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
-	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30 && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: The uninvited couple'>>
-	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(3) && timeBetween('08:00', '11:00')>>
+	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(3) && timeBetween('08:00', '11:00') && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: guard caught intruder'>>
 	<<elseif isMetChar('laura') && !$characters.laura.quests.successful_test && $characters.laura.quests.metOnDay < ($game.day - 3)>>
