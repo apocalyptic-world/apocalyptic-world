@@ -1,16 +1,16 @@
 :: Sleep - hospital [widget]
 
 <<widget sleepHospital>>
-    <<if $pregnancyHappening>>
-        <<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
-        <<set _doctor = $guests[_girlGuest[0]]>>
+    <<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
+    <<set _doctor = $guests[_girlGuest[0]]>>
 
-        <<if $pregnancyHappening.type === 'slave'>>
-	        <<set _mother = $slaves[$pregnancyHappening.id]>>
-        <<elseif $pregnancyHappening.type === 'character'>>
-	        <<set _mother = $characters[$pregnancyHappening.id]>>
+    <<for _pregnancyHappening range $pregnancysHappeningHospital>>
+        <<if _pregnancyHappening.type === 'slave'>>
+	        <<set _mother = $slaves[_pregnancyHappening.id]>>
+        <<elseif _pregnancyHappening.type === 'character'>>
+	        <<set _mother = $characters[_pregnancyHappening.id]>>
         <<else>>
-	        <<set _mother = $guests[$pregnancyHappening.id]>>
+	        <<set _mother = $guests[_pregnancyHappening.id]>>
         <</if>>
 
         /* without hospital max chance of success = 95% so hospital should also reach that, see childbirth.tw */
@@ -48,6 +48,6 @@
         
             <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. She went to the hospital and gave birth to ' + _textDesc + _childNames.join(', ') + '.', 'hospital')>>
         <</if>>
-        <<unset $pregnancyHappening>>
-    <</if>>
+        <<unset $pregnancyHappening,  $pregnancysHappeningHospital>>
+    <</for>>
 <</widget>>
