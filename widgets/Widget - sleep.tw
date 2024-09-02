@@ -10,6 +10,7 @@
 	<<run delete $tmpGirlViewBack>>
 	<<run delete $tmpGirlBack>>
 	<<unset $pregnancyHappening, $pregnancyStreetsHappening, $scavengingDidntReturn>>
+	<<set $pregnancysHappeningHospital = []>>
 	<<set _energyPenalty = 0>>
 	<<if $gameDate.getHours() < 8>>
 		<<set _addDay = 0>>
@@ -330,10 +331,19 @@
 			<</if>>
 			
 			<<if !$pregnancyHappening && $slaves[_i].pregnancy > 260 && ($slaves[_i].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<set $pregnancyHappening = {
-					type: 'slave',
-					id: _i
-				}>>
+				<<if _hasWorkingHospital>>
+					<<run $pregnancysHappeningHospital.push(
+						{
+							type: 'slave',
+							id: _i
+						}
+					)>>
+				<<else>>
+					<<set $pregnancyHappening = {
+						type: 'slave',
+						id: _i
+					}>>
+				<</if>>
 			<</if>>
 		<</if>>
 		
@@ -705,10 +715,19 @@
 			<</if>>
 			
 			<<if !$pregnancyHappening && $guests[_guestI].pregnancy > 260 && ($guests[_guestI].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<set $pregnancyHappening = {
-					type: 'guest',
-					id: _guestI
-				}>>
+				<<if _hasWorkingHospital>>
+					<<run $pregnancysHappeningHospital.push(
+						{
+							type: 'guest',
+							id: _guestI
+						}
+					)>>
+				<<else>>
+					<<set $pregnancyHappening = {
+						type: 'guest',
+						id: _guestI
+					}>>
+				<</if>>
 			<</if>>
 		<</if>>
 		
@@ -814,10 +833,19 @@
 			<</if>>
 			
 			<<if !$pregnancyHappening && $characters[_charI].pregnancy > 260 && ($characters[_charI].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<set $pregnancyHappening = {
-					type: 'character',
-					id: _charI
-				}>>
+				<<if _hasWorkingHospital>>
+					<<run $pregnancysHappeningHospital.push(
+						{
+							type: 'character',
+							id: _charI
+						}
+					)>>
+				<<else>>
+					<<set $pregnancyHappening = {
+						type: 'character',
+						id: _charI
+					}>>
+				<</if>>
 			<</if>>
 		<</if>>
 	<</if>>

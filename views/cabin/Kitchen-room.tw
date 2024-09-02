@@ -49,18 +49,28 @@
 
 [[Back|Wood cabin]]
 
+<<set _guestsWomen = setup.getAvailablePersons18yo($guests)[0] ?? []>>
 
 <<if !($locationEvents.kitchen ?? false)>>
 	<<if _isKitchenGirlAssigned && !$tmpGirl.gender && setup.percentageChance(5)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $guestId = _girlGuest[0]>>
 		<<goto 'Event: Kitchen stuck'>>
-	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
+	<<elseif _guestsWomen.length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
 		}>>
 		<<goto 'Kitchen - wet shirt'>>
+	<<elseif _guestsWomen.length >= 1 && timeBetween('10:00', '12:00') && recall($suppCode) && setup.percentageChance(10)>>
+		<<set _id = setup.getRandomElement(_guestsWomen)>>
+		<<if $guests[_id].horny > 50 || true>>
+			<<set $locationEvents.kitchen = true>>
+			<<set $tmpEvent = {
+				id: _id
+			}>>
+			<<goto 'Kitchen - breakfast'>>
+		<</if>>
 	<</if>>
 <</if>>
 
