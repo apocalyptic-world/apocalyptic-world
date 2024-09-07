@@ -98,11 +98,10 @@
 					<<set _subActionsPath = ''>>
 				<</if>>
 				<<set _image = either(_actions[_morphs[_imageI]][_location][$args[1]])>>
-
 				<<if _image.includes('/')>>
 					<<actionImageOutput `'packs/' + _image` true>>
 				<<else>>
-					<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + _image`>>
+					<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + _image` _imageIsPack>>
 				<</if>>
 				<<set _imageImageFound = true>>
 				<<break>>
@@ -124,7 +123,7 @@
 						<<if _image.includes('/')>>
 							<<actionImageOutput `'packs/' + _image` true>>
 						<<else>>
-							<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + _image`>>
+							<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + _image` _imageIsPack>>
 						<</if>>
 					<<break>>
 				<</if>>	
@@ -203,7 +202,8 @@
   			<source @src="_url" @type="_videoType">
 		</video>
 	<<else>>
-		<<image $args[0]>>
+		<<run console.log(_args[1])>>
+		<<image _args[0] 'nsfw' _args[1]>>
 	<</if>>
 <</widget>>
 

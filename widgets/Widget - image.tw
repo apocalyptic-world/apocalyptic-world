@@ -4,8 +4,12 @@
     <<if settings.SFWmode && (!_args[1] || _args[1] !== 'sfw')>>
         <div class="safe-placeholder">SAFE MODE ON</div>
 	<<else>>
+		<<set _url = _args[0]>>
+		<<if !_args[2]>>
+			<<set _url = setup.ImagePath + _url>>
+		<</if>>
 		<center>
-			[img[setup.ImagePath + _args[0]]]
+			[img[_url]]
 		</center>
 	<</if>>
 <</widget>>
