@@ -91,7 +91,11 @@
 	<</link>>
 <</if>>
 <<link 'Back'>>
-	<<goto $tmpGirlViewBack>>
+	<<if !$tmpGirlViewBack && setup.getAge($tmpGirl) < 18>>
+		<<goto 'Child view'>>
+	<<else>>
+		<<goto $tmpGirlViewBack>>
+	<</if>>
 <</link>>
 
 
