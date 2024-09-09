@@ -144,6 +144,10 @@
 <<set _pre = '', _post = ''>>
 <<if _avgFoodNet < 0>>
 	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
+<<elseif  _avgFoodNet > 0>>
+	<<set _pre = '<span style="color: green; font-weight: bold">+', _post = '</span>'>>	
+<<else>>
+	<<set _pre = '<span style="color: yellow; font-weight: bold">±', _post = '</span>'>>	
 <</if>>
 <<set _avgFoodText = '(Average food/day: + ' +  _garden + ' makes ' + setup.ppFraction(_avgFoodProduce) +  _forestText + _huntText +
 	' - people eats '                                     + setup.ppFraction(_avgFoodConsume) +  

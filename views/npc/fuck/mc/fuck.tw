@@ -61,8 +61,11 @@
         title: 'Finger pussy',
         minAction: 5,
         horny: 5,
+        maxMcHorny: 60,
         maxCorruption: 25,
         show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole',
+        positive: true,
+        hornyGive: 10
     },
     pussy: {
         title: 'Fuck pussy',
@@ -81,7 +84,8 @@
         positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 10),
         stats: 'anal',
         show: $tmpGirl.location != 'gloryhole',
-        horny: 2
+        horny: 2,
+        maxMcHorny: 60,
     },
     anal: {
         title: 'Fuck ass',
@@ -108,7 +112,8 @@
         positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90),
         stats: 'anal',
         show: $tmpGirl.location != 'gloryhole',
-        horny: 2
+        horny: 2,
+        maxMcHorny: 60,
     },
     cum_on_face: {
         show: false,
@@ -136,7 +141,10 @@
     <</if>>
 
     <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
-    <<horny _hornyGained>>
+    <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? 0)>>
+    <<if (!_maxMcHorny || $player.horny < _maxMcHorny)>>
+        <<horny _hornyGained>>
+    <</if>>
 	<<set _showSex = true>>
 
     <<if $sexAction === 'anal'>>

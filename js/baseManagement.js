@@ -28,7 +28,7 @@ setup.baseManagement = {
         },
         hasElectricity: function()
         {
-            return setup.baseManagement.electricity.total() > 0;
+            return setup.baseManagement.electricity.production() && setup.baseManagement.electricity.total() >= 0;
         },
         list: {
             solar_panel: 1,

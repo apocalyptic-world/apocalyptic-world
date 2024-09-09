@@ -21,12 +21,34 @@ You feel dizzy and blood is all over your face and clothes. You were knocked out
 <</if>>
 
 <<include 'Fight - after companions'>>
+<<set _raped = false>>
 <<if $fight.defeatedAllies.length > 0>>
-	<<if _someoneDied>>
-		<br /><br />
-	<</if>>
 	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
-		<<if setup.percentageChance(10)>>
+		<<if setup.percentageChance(90) && !_fightAlly.gender && !_raped && !_fightAlly.died>>
+			<<set _npcKey = _fightAlly.key.split(':')>>
+			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'happy' -15>>
+			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'sub' -5>>
+			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'relationship' -10>>
+			<<set _raped = true>>
+			<<video 'misc/fight_lost1'>>
+			<br /><br />
+			Your heart dropped when you saw her — <<=setup.displayName(_fightAlly)>> pinned to the ground by one of them, a man snarling as he tried to force himself on her. He has already pulled down her panties as she screams.
+			Moment later he manages to pull down her panties while you still can't get up from lost fight.
+			<br />
+			You notice him getting his dick out as you try to get up but without success. 
+			<br /><br />
+			<<video 'misc/fight_lost2'>>
+			<br /><br />
+			His butt tensed up before she with big thrust shoved his dick in <<=setup.displayName(_fightAlly)>>. She let out load scream and begged him to stop but with no use. 
+			As her head was pinned down to the ground the only thing she did was cry. Nothing else she could do at that moment anymore.
+			<br />
+			Few more minutes and he released her as he stood up while she still was on the ground crying her eyes out.
+			<br />
+		<</if>>
+	<</for>>
+
+	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
+		<<if setup.percentageChance(10) && !_fightAlly.died>>
 			<strong><<=setup.displayName(_fightAlly)>> was taken by enemies</strong>
 			<<companionRemove _fightAlly.key>>
 			<br />

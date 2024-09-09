@@ -441,7 +441,7 @@ setup.getRandomNpcClothes = function(npc)
 
 setup.npcListInfo = function(npc, isSick, isRest) {
 	let output = '';
-	if (npc.virgin) {
+	if (npc.virgin && !npc.gender) {
 		output += '<span class="virgin-info" data-balloon-length="medium" aria-label="Virgin" data-balloon-pos="up-right"></span>';
 	}
 	if (npc.pregnancy) {

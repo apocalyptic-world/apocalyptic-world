@@ -874,7 +874,7 @@ setup.ppFraction = function(n, divisor = 3) {
     const quotient = Math.abs(n - intPart);
     const dividend = Math.round(quotient*divisor);
     const fractext = dividend ? '&nbsp;<span class="frac"><sup>' + dividend  + '</sup><span>&frasl;</span><sub>' + divisor + '</sub></span>': '';
-    const inttext =  intPart  ? intPart : '';
+    const inttext =  intPart  ? intPart : dividend ? '' : 0;
     return inttext + fractext;
 }
 
