@@ -514,6 +514,10 @@ Save.onLoad.add(function (save) {
         /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
         variables.backpack.pickup('blueprint_hot_tub', 1);
     }
+    if ((variables.player.fighter_rank ?? 100) > 150) {
+        /* fight cage system changed from very old saves */
+        variables.player.fighter_rank = Math.floor(variables.player.fighter_rank/10);
+    }
 
     /* obselete variables */
     delete 
