@@ -177,14 +177,21 @@
 <</widget>>
 
 <<widget actionDream>>
+	<<set _actions = ['anal', 'bj', 'dp']>>
+	<<if settings.gaysEnabled>>>
+		<<set _gender = 'male'>>
+	<<else>>
+		<<set _gender = 'female'>>
+		<<run _actions.push('pussy')>>
+	<</if>>
 	<<set _sleepAction = {
 		place: either(['basement', 'bathhouse', 'default', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
-		type: either('pussy', 'anal', 'bj', 'dp')
+		type: either(_actions)
 	}>>
 	<<if typeof setup.actions !== 'undefined'>>
-		<<set _dreamImg = 'actions/female/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions.female[_sleepAction.place][_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
 	<<else>>
-		<<set _dreamImg = 'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + either(setup.actions[_gender].default[_sleepAction.type])>>
 	<</if>>
 
 	<<actionImageOutput _dreamImg>>
