@@ -785,6 +785,8 @@
 
 <<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
 	<<capture _nurseryI>>
+		<<set _npc = $nursery[_nurseryI]>>
+		<<set _npc.sleeping = false>>
 		// Starvation
 		<<if $nursery[_nurseryI].food <= 10>>
   			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>

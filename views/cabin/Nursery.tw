@@ -4,16 +4,30 @@
 	NURSERY
 </h1>
 
+<<set _sleepingChance = 0>>
+<<if timeBetween('20:00', '23:00')>>
+	<<set _sleepingChance = 40>>
+<<elseif timeBetween('23:00', '23:59')>>
+	<<set _sleepingChance = 70>>
+<<elseif timeBetween('23:59', '01:00')>>
+	<<set _sleepingChance = 100>>
+<<elseif timeBetween('01:00', '02:00')>>
+	<<set _sleepingChance = 100>>
+<</if>>
+
 <<if ($nursery ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		Noone is living here...
 	</div>
 <<else>>
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _nurseryI, _nursery range $nursery>>
 		<<capture _nurseryI, _nursery>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_nursery)>>
-			<tr>
+			<<if setup.percentageChance(_sleepingChance)>>
+				<<set _nursery.sleeping = true>>
+			<</if>>
+			<tr class="item">
 				<td style="width: 300px">
 					<span @class="''+_genderClass+''">
 						<<link _nursery.name>>
@@ -25,6 +39,7 @@
 							<<goto 'Child view'>>
 						<</link>>
 					</span>
+					<<=setup.npcListInfo(_nursery)>>
 				</td>
 				<td>
 					Age: <<=setup.getAge(_nursery)>>

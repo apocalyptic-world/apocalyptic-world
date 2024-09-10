@@ -441,19 +441,21 @@ setup.getRandomNpcClothes = function(npc)
 
 setup.npcListInfo = function(npc, isSick, isRest) {
 	let output = '';
-	if (npc.virgin && !npc.gender) {
-		output += '<span class="virgin-info" data-balloon-length="medium" aria-label="Virgin" data-balloon-pos="up-right"></span>';
-	}
-	if (npc.pregnancy) {
-		output += '<span class="pregnancy-info" data-balloon-length="medium" aria-label="Pregnant" data-balloon-pos="up-right">' + npc.pregnancy + '</span>';
-	}
-	if (npc.married) {
-		output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
-	}
-	if (isSick && !npc.sleeping) {
-		output += '<span class="sick-info">(sick)</span>';
-	} else if (isRest && !npc.sleeping) {
-		output += '<span class="sick-info">(resting)</span>';
+	if (setup.getAge(npc) >= 18) {
+		if (npc.virgin && !npc.gender) {
+			output += '<span class="virgin-info" data-balloon-length="medium" aria-label="Virgin" data-balloon-pos="up-right"></span>';
+		}
+		if (npc.pregnancy) {
+			output += '<span class="pregnancy-info" data-balloon-length="medium" aria-label="Pregnant" data-balloon-pos="up-right">' + npc.pregnancy + '</span>';
+		}
+		if (npc.married) {
+			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
+		}
+		if (isSick && !npc.sleeping) {
+			output += '<span class="sick-info">(sick)</span>';
+		} else if (isRest && !npc.sleeping) {
+			output += '<span class="sick-info">(resting)</span>';
+		}
 	}
 	if (npc.sleeping) {
 		output += '<span class="sleeping-info" data-balloon-length="medium" aria-label="Sleeping" data-balloon-pos="up-right"></span>';
