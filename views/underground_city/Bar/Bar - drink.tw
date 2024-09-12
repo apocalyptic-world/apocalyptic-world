@@ -13,7 +13,10 @@
 You order a beer at the bar and start drinking it.
 <br /><br />
 
-<<if randomInteger(1,5) === 1>>
+<<if $game.day > 150 && $player.reputation > 150 && !($locationEvents.bar ?? false) && setup.percentageChance(5)>>
+	<<goto 'Bar - A strange offer'>>
+	<<set $locationEvents.bar = true>>
+<<elseif randomInteger(1,5) === 1>>
 	<<goto 'Bar - random event #1'>>
 <</if>>
 

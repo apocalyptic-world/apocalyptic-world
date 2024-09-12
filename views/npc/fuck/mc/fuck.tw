@@ -134,6 +134,9 @@
     <</if>>
 
     <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
+    <<if _canFuck>>
+        <<set _hornyGained = 0>>
+    <</if>>
     <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? 0)>>
     <<if (!_maxMcHorny || $player.horny < _maxMcHorny)>>
         <<horny _hornyGained>>
