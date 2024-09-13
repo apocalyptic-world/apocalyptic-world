@@ -1,0 +1,57 @@
+:: Underground city - girl ambush [bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br /><br />
+As you descend into the heart of the underground city, the dim, flickering lights barely cut through the shadows of the decaying tunnels. 
+The air smells of rust and dampness, and the sound of dripping water echoes down the alleyways.
+<br /><br />
+<center>
+    <<image 'places/underground/ambush.jpg'>>
+</center>
+<br />
+Suddenly, you notice a commotion in a narrow side street. Three men, rough-looking scavengers with jagged knives in their hands, are cornering a lone woman. Her stance is defensive, and while she appears capable, it's clear she’s outnumbered. They circle her like predators, grinning, muttering threats about stealing her supplies and dragging her to their hideout.
+<br /><br />
+You remain unnoticed, hidden in the darkness just outside the scene
+<br /><br />
+<div id="option_help">
+    <<linkreplace 'Help the Woman'>>
+        <<generateEnemies 3 0 1>>
+        <<set _help = true>>
+        <<set $player.goodwill++>>
+        <<newguy>>
+        The moment you move into view, the laughter stops. The three men turn to face you, their faces twisted in surprise and annoyance.
+        One of them, the largest of the group, snarls at you.
+        <br /><br />
+        <<sayNpc $enemies[0]>>
+            This ain’t your business. Walk away, or we’ll gut you like a dog.
+        <</sayNpc>>
+        <br />
+        <div id="option_fight">
+            <<link 'Fight'>>
+                <<fight $enemies 'Underground city - girl ambush won', 'Underground city'>>
+            <</link>>
+        </div>
+    <</linkreplace>>
+</div>
+<div id="option_ignore">
+    <<linkreplace 'Ignore'>>
+        <<set $player.goodwill -= 3>>
+        <<if !_help>>
+            <<run $('#option_help').hide()>>
+        <</if>>
+        <<run $('#option_fight').hide()>>
+        Just a few steps further, and you hear it—the sharp sound of a body hitting the ground. 
+        Her resistance is broken. You pause for a moment, feeling a pang of guilt, but shake it off. 
+        You decide to take a look.
+        <br /><br />
+        <center>
+            <<set $tmpGirl.location = 'streets'>>
+            <<actionImage $tmpGirl 'rip_clothes'>>
+        </center>
+        <br /><br />
+        Her fabric tearing and one of the men laughing darkly. You can almost see them in your mind's eye what happens next: her pinned to the dirty ground, her clothes ripped away, as they begin to use her for their own sick pleasure.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Underground city'>>
+        <</link>>
+    <</linkreplace>>
+</div>
