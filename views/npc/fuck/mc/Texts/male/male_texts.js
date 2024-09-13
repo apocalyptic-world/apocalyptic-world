@@ -18,6 +18,12 @@ setup.actionText.male = {
     anal: [
         "%name% grunts with a little bit of pain while clenching his teeth as you fuck his tight asshole.."
     ],
+    anal_reverse: [
+        "%name% fucks you in the ass!"
+    ],
+    anal_reverse_cum: [
+        "You start to cum while %name%'s still in your ass!"
+    ],
     handjob_cum: [
         "You start to jerk off with %name%'s hands tightly gripped around your cock."
     ],
