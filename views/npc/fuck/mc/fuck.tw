@@ -63,7 +63,7 @@
         horny: 5,
         maxMcHorny: 60,
         maxCorruption: 25,
-        show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole',
+        show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole' && !$tmpGirl.chastityBelt,
         positive: true,
         hornyGive: 10
     },
@@ -161,7 +161,8 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + (_sexActions[$sexAction].hornyGive ?? 20), 100)>>
+            <<set _npcHornyGained = (_sexActions[$sexAction].hornyGive ?? 20)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _npcHornyGained, 100)>>
         <</if>>
         <<set _npcHorny = clone($tmpGirl.horny)>>
         <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
@@ -191,7 +192,7 @@
     <</if>>
 
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + 20)</strong>
+		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
 		<br />
 		
 		<<if $tmpGirl.horny >= 100>>

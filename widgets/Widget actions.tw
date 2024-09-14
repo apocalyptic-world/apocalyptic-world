@@ -178,16 +178,19 @@
 
 <<widget actionDream>>
 	<<set _actions = ['anal', 'bj', 'dp']>>
+	<<set _places = ['basement', 'default', 'forest', 'nightclub', 'shower', 'streets']>>
 	<<if settings.gaysEnabled>>>
 		<<set _gender = 'male'>>
 	<<else>>
 		<<set _gender = 'female'>>
 		<<run _actions.push('pussy')>>
+		<<set _places.push('kitchen', 'maid', 'bathhouse')>>
 	<</if>>
 	<<set _sleepAction = {
-		place: either(['basement', 'bathhouse', 'default', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
+		place: either(_places),
 		type: either(_actions)
 	}>>
+	<<run console.log(_sleepAction)>>
 	<<if typeof setup.actions !== 'undefined'>>
 		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
 	<<else>>
@@ -209,7 +212,6 @@
   			<source @src="_url" @type="_videoType">
 		</video>
 	<<else>>
-		<<run console.log(_args[1])>>
 		<<image _args[0] 'nsfw' _args[1]>>
 	<</if>>
 <</widget>>

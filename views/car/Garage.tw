@@ -47,10 +47,12 @@
     <</if>>
     <div class="menu-grid">
         <<set _props = {
-            fuel: 20
+            fuel: 20,
+            disabled: $player.car.fuel < 20
         }>>
         <<if $player.car.explore>>
             <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<run console.log(_isDisabled)>>
             <<grid garage explore 'Car - Explore' Explore 30 _isDisabled null _props>>
         <</if>>
         <<if ($game.location.car_stadium ?? false)>>
