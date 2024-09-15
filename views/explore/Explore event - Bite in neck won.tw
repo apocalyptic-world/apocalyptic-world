@@ -1,0 +1,62 @@
+:: Explore event: Bite in neck won [bg-forest] 
+<h1 class="ptitle">FOREST</h1> 
+<br />
+Breathing hard, you glanced at the woman, still on the ground, eyes wide with shock. You extended a hand to her.
+<br /><br />
+<<newgirl>>
+<center>
+    <<image 'places/explore/neck_bite_won.jpg'>>
+</center>
+<br />
+<<you>>
+    Are you alright?
+<</you>>
+<br />
+She nodded, hugging herself as if trying to hold together the pieces of her composure.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I don’t know what to say... I didn’t think anyone would come.
+<</sayNpc>>
+<br />
+<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+    <div id="option_invite">
+        <<linkreplace 'Offer your place to live in'>>
+            <<set _invited = true>>
+            <<if !$tmpGirl.gender>>
+                Scared she looks at the men laying on the ground...
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    Thanks, but I will pass.
+                <</sayNpc>>
+            <<elseif setup.percentageChance(50)>>
+                <<run $('#option_slave').hide()>>
+                You're a life savior. I recently started to look for a new place<br /> I'll go live with you! 
+                <br /><br />
+                <strong><<=$tmpGirl.name>> moved in as guest</strong>
+                <<run $guests.push($tmpGirl)>>
+            <<else>>
+                Sorry but no. You look like a nice guy but I've got my family and I won't leave them.
+            <</if>>
+            <br /><br />
+        <</linkreplace>>
+    </div>
+<</if>>
+<div id="option_slave">
+    <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
+        <<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
+        <<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+        <<set _captureLink = 'Capture ' + _pronounceWho>>
+        <<linkreplace _captureLink>>
+            <<set _captured = true>>
+            <<if !_invited>>
+                <<run $('#option_invite').hide()>>
+            <</if>>
+            You grab <<=setup.displayName($tmpGirl)>> from the back. <<=setup.pronounceWhat($tmpGirl, true)>> tries to resist but she's very weak.
+            <br /><br />
+            <<run $slaves.push($tmpGirl)>>
+        <</linkreplace>>
+    <</if>>
+</div>
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>

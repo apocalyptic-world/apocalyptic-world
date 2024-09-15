@@ -1,0 +1,44 @@
+:: Guesthouse - guest masturbating [bg-guesthouse]
+<h1 class="ptitle">GUESTHOUSE</h1>
+<br />
+<<horny 20>>
+As you approach <<=setup.displayName($tmpGirl)>> bed, you notice the rhythmic motion beneath the threadbare blanket, her breath coming in short, uneven gasps. 
+You freeze, realization sinking in as you glimpse her hand moving beneath the fabric, lost in a private moment of pleasure she thought no one would disturb.
+<br /><br />
+<center>
+    <<actionImage $tmpGirl 'masturbate'>>
+</center>
+<br /><br />
+The air between you grows thick with the sudden, unspoken tension, the fragile intimacy of the moment at odds with the chaos outside.
+<br /><br />
+<<set _linkName = 'Interrupt ' + setup.pronounceWho($tmpGirl)>>
+<<linkreplace _linkName>>
+    <<you>>
+        What are you doing?
+    <</you>>
+    <br />
+    <<if $tmpGirl.corruption < 60>>
+        <<setNpcStats 'guest' $guestId 'corruption' 5>>
+        <strong><<=setup.displayName($tmpGirl)>> corruption increased by 5</strong>
+        <br /><br />
+    <</if>>
+    <center>
+        <<actionImage $tmpGirl 'masturbate_hide'>>
+    </center>
+    <br />
+    She stammers, unable to meet your gaze, her breath shaky.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        I didn’t... I didn’t think anyone would-
+    <</sayNpc>>
+    <br />
+    She bites her lip, looking away, her shoulders hunching as if trying to disappear beneath the blanket. 
+    Shame radiates from her, but there’s something else in her eyes—a vulnerability she struggles to hide.
+    <br /><br />
+    <<link 'Approach her'>>
+        <<goto 'NPC view - guest'>>
+    <</link>>
+<</linkreplace>>
+<<link 'Leave'>>
+    <<goto 'Guest house'>>
+<</link>>

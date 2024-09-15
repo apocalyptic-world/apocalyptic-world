@@ -131,6 +131,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 								<<set $tmpGirlViewBack = 'NPC view - guest'>>
 								<<if _guest.sleeping && !_guest.gender>>
 									<<goto 'Guesthouse - guest sleeping'>>
+								<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
+									<<goto 'Guesthouse - guest masturbating'>>
 								<<else>>
 							  		<<goto `$tmpGirlViewBack`>>
 								<</if>>
