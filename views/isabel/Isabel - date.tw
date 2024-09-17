@@ -26,6 +26,27 @@
 		<<notPatreonIcon>>
 	</div>
 <</if>>
+<<if recall($suppCode)>>
+    <<if timeBetween('08:00', '16:00')>>
+    <<link 'Lake visit'>>
+	    <<set $player.companionsHome = $player.companions>>
+		<<set $player.companions = {}>>
+		<<goto 'Isabel - date [lake]'>>
+	<</link>>
+    <<else>>
+        <div class="link-internal" style="background: #ccc">
+			Lake visit
+		</div>
+    <</if>>
+    <<linkdesc>>
+		Time between 08:00-16:00
+	<</linkdesc>>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Lake visit
+		<<notPatreonIcon>>
+	</div>
+<</if>>
 
 <<link 'Leave'>>
 	<<goto 'Isabel room'>>
