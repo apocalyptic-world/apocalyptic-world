@@ -13,7 +13,7 @@
 
 <<set _bellstrength = {
     dumbbell:    {min:  0, max: 30}, 
-    dumberbell:  {min: 30, max: 50}, 
+    kettlebell:  {min: 30, max: 50}, 
     dumbestbell: {min: 50, max: 60}, 
 }>>
 
@@ -74,9 +74,9 @@
             <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
 
             /* duplicates go to backpack or storage */
-            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)) || 
+            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) || 
                     (_ruleHunter &&  ['bow', 'axe'].includes(_item)) || 
-                    (_ruleJob &&  !['condom', 'dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)) >>
+                    (_ruleJob &&  !['condom', 'kettlebell', 'kettlebell', 'dumbestbell'].includes(_item)) >>
                 <<if _itemcount > 1>>
                     <<run _itemcount-->>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
@@ -103,7 +103,7 @@
                 <</if>>
 
             /* special for dumbbell, baseed on strength not toolbox */ 
-            <<elseif ['dumbbell', 'dumberbell', 'dumbestbell'].includes(_item)>>
+            <<elseif ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)>>
                 <<if !_ruleDumbbell>>
                     <<continue>>
                 <</if>>
@@ -199,14 +199,14 @@
     <<if _ruleDumbbell>>
         <<set _outItem = []>>
         <<set _want.dumbbell ??= []>>
-        <<set _want.dumberbell ??= []>>
+        <<set _want.kettlebell ??= []>>
         <<set _want.dumbestbell ??= []>>
-        <<for _item range ['dumberbell', 'dumbestbell']>>
-            <<for (_want.dumbbell.length > 0 || _want.dumberbell.length > 0) && setup.cabinInventory.has(_item, 1)>>
-                <<if _want.dumberbell.length > 0>>
-                    <<set _npc = _want.dumberbell.pop()>>
+        <<for _item range ['kettlebell', 'dumbestbell']>>
+            <<for (_want.dumbbell.length > 0 || _want.kettlebell.length > 0) && setup.cabinInventory.has(_item, 1)>>
+                <<if _want.kettlebell.length > 0>>
+                    <<set _npc = _want.kettlebell.pop()>>
                     <<run setup.cabinInventory.to_npc(_npc, _item)>>
-                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of dumberbell')>>
+                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of kettlebell')>>
                 <<elseif _want.dumbbell.length > 0>>
                     <<set _npc = _want.dumbbell.pop()>>
                     <<run setup.cabinInventory.to_npc(_npc, _item)>>

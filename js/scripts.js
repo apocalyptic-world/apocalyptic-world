@@ -202,7 +202,8 @@ setup.inventoryNpc = [
     'bow',
     'gas_mask',
     'axe',
-    'dumbbell', 'dumberbell', 'dumbestbell',
+    'dumbbell', 
+    'kettlebell', 'dumbestbell',
     'condom',
     'body_armor'
 ];
