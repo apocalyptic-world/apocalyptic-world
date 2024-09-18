@@ -142,9 +142,9 @@
 <<set _avgFoodNet = _avgFoodProduce + _forestFood + _huntFood - _avgFoodConsume>>
 
 <<set _pre = '', _post = ''>>
-<<if _avgFoodNet < 0>>
+<<if _avgFoodNet < -1/6>>
 	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
-<<elseif  _avgFoodNet > 0>>
+<<elseif  _avgFoodNet > 1/6>>
 	<<set _pre = '<span style="color: green; font-weight: bold">+', _post = '</span>'>>	
 <<else>>
 	<<set _pre = '<span style="color: yellow; font-weight: bold">±', _post = '</span>'>>	
@@ -189,12 +189,15 @@
 	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
-	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(No use yet)</td></tr>
+	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span></td></tr>
 
 	<<set _text = !$backpack.has('blueprint_library') ? '(Explore to find blueprint → build)' : 
-			!$game.location.library ? '(Build the library)' : '(Max 0)' >>
+			!$game.location.library ? '(Build the library)' : '(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span>' >>
 		<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
 
+	<<if !$player.quests?.base_building>>
+		<tr><td>Base management</td><td></td><td><span style="color: blue">[Will appear later in your game!]</span> (Place reserved for hospital & milk barn & more...)</td></tr>
+	<</if>>
 	<<if $player.quests.base_building>>
 		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign a doctor)' : 
 			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max 1)' >>
