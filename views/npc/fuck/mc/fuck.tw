@@ -56,6 +56,7 @@
         horny: 3,
         maxCorruption: 40,
         positive: !($tmpGirl.traits ?? []).includes('analslut'),
+        maxMcHorny: 60
     },
     pussy_fingering: {
         title: 'Finger pussy',
@@ -73,8 +74,9 @@
         show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && _canFuck,
         horny: 20,
         maxCorruption: 60,
-        positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
-        stats: 'pussy'
+        positive: !$tmpGirl.virgin,
+        stats: 'pussy',
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5)
     },
     anal_fingering: {
         title: 'Finger ass',
