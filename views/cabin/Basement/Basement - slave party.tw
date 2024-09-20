@@ -22,9 +22,12 @@ With each sip, the tension of survival ebbed away, replaced by a sense of camara
 Slaves who had once been strangers found themselves sharing stories and laughter, momentarily forgetting the harsh realities that awaited them after the party.
 <br /><br />
 
+<<set _slavesAvailable = setup.getAvailablePersons18yo($slaves)>>
+<<run console.log(_slavesAvailable)>>
 <<for _slaveI, _slave range $slaves>>
     <<set $slaves[_slaveI].happy += 20>>
     <<set $slaves[_slaveI].relationship += 10>>
+    <<set $slaves[_slaveI].quests ??= {}>>
     <<set $slaves[_slaveI].quests.lastInteractionDay = $game.day>>
 <</for>>
 <<if setup.cabinInventory.count('champagne')>>
@@ -42,6 +45,9 @@ Slaves who had once been strangers found themselves sharing stories and laughter
                 <<set $slaves[_slaveI].happy += 10>>
                 <<set $slaves[_slaveI].relationship += 5>>
             <</for>>
+            <<if (_slavesAvailable[0].length ?? 0) >= 4 && (_slavesAvailable[1].length ?? 0) >= 3>>
+                <<include 'Basement - slave party orgy'>>
+            <</if>>
         <</linkreplace>>
     </div>
 <</if>>
