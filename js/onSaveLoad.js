@@ -5,6 +5,11 @@ function checkAndFixTraits(npc)
         let indexOf = npc.traits.indexOf('infertile');
         npc.traits.splice(indexOf, 1);
     }
+    /* name & -change 0.45 dumberbell -> 0.46 kettlebell */
+    if ( typeof npc.inventory !== 'undefined' && typeof npc.inventory['dumberbell'] !== 'undefined') {
+        npc.inventory['kettlebell'] = npc.inventory['dumberbell'];
+        delete npc.inventory['dumberbell'];
+    }
 }
 
 Save.onSave.add(function (save, details) {
@@ -514,6 +519,18 @@ Save.onLoad.add(function (save) {
         /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
         variables.backpack.pickup('blueprint_hot_tub', 1);
     }
+    /* name & -change 0.45 dumberbell -> 0.46 kettlebell */
+    if (variables.backpack.has('dumberbell')) {
+        const count = variables.backpack.count('dumberbell');
+        variables.backpack.pickup('kettlebell', count);
+        variables.backpack.drop('dumberbell', count);
+    }
+    if (variables.storage.has('dumberbell')) {
+        const count = variables.storage.count('dumberbell');
+        variables.storage.pickup('kettlebell', count);
+        variables.storage.drop('dumberbell', count);
+    }
+
     if ((variables.player.fighter_rank ?? 100) > 150) {
         /* fight cage system changed from very old saves */
         variables.player.fighter_rank = Math.floor(variables.player.fighter_rank/10);
