@@ -1,0 +1,64 @@
+:: Bedroom - invite to sleep in bedroom [bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br />
+You approach <<=setup.displayName($tmpGirl)>>, the air heavy with the weight of the crumbling world around you. 
+The village is quiet, save for the distant sound of crackling fires.
+<br /><br />
+<<you>>
+    It’s going to be a cold night. Would you like to share my bed tonight?
+<</you>>
+<br />
+She looks at you, her expression a mixture of exhaustion and something else.
+<br /><br />
+<<if $tmpGirl.relationship > 50 && $tmpGirl.likesGuys>>
+    <<sayNpc $tmpGirl>>
+        Really? I'd like that.
+    <</sayNpc>>
+    <br />
+    In the bedroom you light a small lantern, its dim glow casting long shadows on the walls.
+    <br />
+    <<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
+        Blair has already gone somewhere else to sleep.
+        <br />
+    <</if>>
+    She smiles, a small, tired thing, and slips off her jacket, laying it over a chair.
+    <br /><br />
+    <center>
+        <<image 'places/bedroom/sleepover2.webp'>>
+    </center>
+    <br />
+    You both settle into the bed, the silence thick but companionable. You feel the warmth of her body next to yours, a strange comfort in a world that’s anything but comfortable.
+    <br /><br />
+    You hesitate, then reach out to gently take her hand. She doesn’t pull away, and for the first time in what feels like foreve.
+    <br /><br />
+    <center>
+        <<image 'places/bedroom/sleepover.webp'>>
+    </center>
+    <br />
+    <<set $sleepOver = {
+            type: 'guest',
+            id: $guestId
+    }>>
+    <<setNpcStats 'guest' $guestId 'happy' 6>>
+    <<setNpcStats 'guest' $guestId 'relationship' 5>>
+
+    <<link 'Sleep'>>
+        <<goto 'Sleep eval'>>
+    <</link>>
+    <<link 'Fuck'>>
+        <<set $tmpGirlViewBack = 'Sleep eval'>>
+	    <<set $tmpGirlBack = 'Sleep eval'>>
+        <<fuck $tmpGirl>>
+    <</link>>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        Thank you, but I am okay. I’ve gotten used to sleeping on my own.
+    <</sayNpc>>
+    <br />
+    You nod again, watching as she walks away, a shadow among many in the dim light. 
+    The rejection stings a little, but you tell yourself it’s just another part of surviving in this broken world.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'NPC view - guest'>>
+    <</link>>
+<</if>>

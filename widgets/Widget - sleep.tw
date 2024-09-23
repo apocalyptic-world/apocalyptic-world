@@ -197,11 +197,6 @@
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden', 'garden')>>
 			<</if>>
 		<</if>>
-		<<if _npc.assignedTo == 'milk_barn'>>
-			<<run console.log('sick', _isSick)>>
-			<<run console.log('rest', _isRest)>>
-			<<run console.log(_npc)>>
-		<</if>>
 		<<if _npc.assignedTo == 'milk_barn' && !_dayOff>>
 			<<if typeof _npc.milkingDay === 'undefined'>>
 				<<set _npc.milkingDay = 0>>
@@ -210,7 +205,6 @@
 				<<run delete _npc.assignedTo>>
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' has dried out and produces no extra milk (for now). Unassigned from barn!', 'milk_barn')>>
 			<<else>>
-				<<run console.log('####')>>
 				<<if _hasElectricity>>
 					<<set _npc.milkingDay++>>
 					<<setNpcStats 'slave' _i 'happy' -5>>
@@ -898,7 +892,13 @@
 <<if $args[0]>>
 	<<goto $args[0]>>
 <<else>>
-	<<goto "Bedroom-sleep">>
+
+	<<if $sleepOver && setup.percentageChance(100)>>
+		<<goto 'Bedroom - invite to sleep in bedroom morning'>>
+	<<else>>
+		<<goto "Bedroom-sleep">>
+	<</if>>
+	<<unset $sleepOver>>
 <</if>>
 <<else>>
 	<<set $game.death_reason = _sleepDead>>
