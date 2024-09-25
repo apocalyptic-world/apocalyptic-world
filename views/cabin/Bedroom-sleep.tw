@@ -3,53 +3,54 @@
 <<if $game.day > 5 && !($game.location.basement ?? false)>>
 	<<goto 'Basement find'>>
 <<else>>
-	<center>
 	<<if $player.horny >= 40>>
 		<<actionDream>>
-	  	<br /><br />
-	  	You went to bed horny and dreamt about fucking another girl.
+		<br /><br />
+		You went to bed horny and dreamt about fucking someone.
+		<br /><br />
 	<<else>>
-	  [img[setup.ImagePath+'places/cabin/wake_up.webp']]
-	  <br /><br />
+		<<image 'places/cabin/wake_up.webp'>>
+		<br /><br />
 	<</if>>
 	<<if $player.energy < 80>>
 		You wake up still tired, but ready to explore the world some more.
 	<<else>>
 		You wake up fully rested and ready to conquer the world.
 	<</if>>
-	<br /><br />
-	<<set _messagesCount = setup.sleepMessages.count()>>
-	<<if _messagesCount >= 8>>
+	<center>
+		<<set _messagesCount = setup.sleepMessages.count()>>
+		<<if _messagesCount >= 8>>
+			<br /><br />
+			<<link 'Wake up'>>
+				<<wakeUp>>
+			<</link>>
+		<</if>>
+		<<if _messagesCount>>
+			<h3>Some things have happened</h3>
+			<br />
+			<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
+				<<for _morningMessageSubType, _morningMessagesSub range _morningMessages ?? {}>>
+					<<if _morningMessagesSub.length>>
+					<div @class="'morning-messages ' + _morningMessagesType + ''">
+						<fieldset>
+							<legend><<=_morningMessageType>> <<=(_morningMessageSubType ? '(' + _morningMessageSubType + ')' : '')>> (<<=_morningMessagesSub.length>>)</legend>
+						<<for _i to 0; _i lt _morningMessagesSub.length; _i++>>
+							<div class="morning-message">
+								<<print _morningMessagesSub[_i]>>
+							</div>
+						<</for>>
+						</fieldset>
+					</div>
+					<</if>>
+				<</for>>
+			<</for>>
+		<</if>>
+		<<unset $morningMessages>>
+		
+		<br /><br />
 		<<link 'Wake up'>>
 			<<wakeUp>>
 		<</link>>
-	<</if>>
-	<<if _messagesCount>>
-		<h3>Some things have happened</h3>
-		<br />
-		<<for _morningMessageType, _morningMessages range ($morningMessages ?? {})>>
-			<<for _morningMessageSubType, _morningMessagesSub range _morningMessages ?? {}>>
-				<<if _morningMessagesSub.length>>
-				<div @class="'morning-messages ' + _morningMessagesType + ''">
-					<fieldset>
-						<legend><<=_morningMessageType>> <<=(_morningMessageSubType ? '(' + _morningMessageSubType + ')' : '')>> (<<=_morningMessagesSub.length>>)</legend>
-					<<for _i to 0; _i lt _morningMessagesSub.length; _i++>>
-						<div class="morning-message">
-							<<print _morningMessagesSub[_i]>>
-						</div>
-					<</for>>
-					</fieldset>
-				</div>
-				<</if>>
-			<</for>>
-		<</for>>
-	<</if>>
-	<<unset $morningMessages>>
-	
-	<br /><br />
-	<<link 'Wake up'>>
-		<<wakeUp>>
-	<</link>>
 	</center>
 <</if>>
 
