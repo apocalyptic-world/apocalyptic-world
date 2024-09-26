@@ -120,6 +120,7 @@
 					<<if _imageIsPack && ![$args[0].pack, $args[0].name].includes(_morphs[_imageI])>>
 						<<set _actionsPath = _defaultActionsPath>>
 						<<set _subActionsPath = ''>>
+						<<set _imageIsPack = false>>
 					<</if>>
 						<<set _image = either(setup.actions[_morphs[_imageI]]['default'][$args[1]])>>
 
@@ -182,10 +183,16 @@
 <<widget actionDream>>
 	<<set _actions = ['anal', 'bj']>>
 	<<set _places = ['basement', 'default', 'forest', 'nightclub', 'shower']>>
+	<<set _genders = ['female']>>
 	<<if settings.gaysEnabled>>
-		<<set _gender = 'male'>>
-	<<else>>
-		<<set _gender = 'female'>>
+		<<set _genders.push('male')>>
+	<</if>>
+	<<if settings.transEnabled>>
+		<<set _genders.push('transfemale')>>
+	<</if>>
+	
+	<<set _gender = either(_genders)>>
+	<<if _gender === 'female'>>
 		<<run _actions.push('pussy')>>
 		<<set _places.push('kitchen', 'maid', 'bathhouse')>>
 	<</if>>
