@@ -1,0 +1,73 @@
+:: NPC fight cage - choose fighers [bg-fight-cage]
+<h1 class="ptitle">FIGHT CAGE</h1>
+<br />
+<<set $fightCage = {
+    fightersNeeded: ($fightCage?.fightersNeeded ?? randomInteger(1, 3))
+}>>
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    Choose <strong><<=$fightCage.fightersNeeded>></strong> of your fighters!
+<</sayNpc>>
+<br />
+<center>
+    <<image 'places/cage_fight/npc_fight_3.jpg'>>
+</center>
+<br /><br />
+
+<<set _props = {
+    assignedTo: false,
+    beauty: false,
+    orientation: false
+}>>
+<<set _fighters = {}>>
+<table id="slaves" class="npc-list">
+    <<for _companionKey, _companion range $player.companions ?? {}>>
+        <<set _companionKeySplit = _companionKey.split(':')>>
+        <<set _companionNpc = setup.companionGet(_companionKey)>>
+        <<capture _companionNpc, _companionKeySplit>>
+            <tr class="item">
+                <td style="width: 5%">
+                    <<checkbox "_fighters[_companionKeySplit]" false true>>
+                </td>
+			    <td style="min-width: 25%">
+				    <<=setup.displayName(_companionNpc)>> 
+                    <<=setup.npcListInfo(_companionNpc)>>
+			    </td>
+                <td>
+                    <<npcListView _companionNpc _companionKeySplit[1] _companionKeySplit[0] _props>>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+
+<div id="error"></div>
+
+<<link 'Fight'>>
+    <<set _readyFighters = []>>
+    <<for _fighter, _enabled range _fighters>>
+        <<if _enabled>>
+            <<set _npc = setup.companionGet(_fighter.split(',').join(':'))>>
+            <<set _npc.key = _fighter>>
+            <<run _readyFighters.push(_npc)>>
+        <</if>>
+    <</for>>
+
+    <<if _readyFighters.length !== $fightCage.fightersNeeded>>
+        <<replace "#error">>
+            <<sayNpc $tmpGuy>>
+                Not correct amount of fighters choosen. You need to choose <strong><<=$fightCage.fightersNeeded>></strong>
+            <</sayNpc>>
+        <</replace>>
+    <<else>>
+        <<set $fightCage.fighters = _readyFighters>>
+        <<set _enemiesMales = Math.floor(Math.random() * ($fightCage.fightersNeeded + 1))>>
+        <<set _enemiesFemales = $fightCage.fightersNeeded - _enemiesMales>>
+        <<generateEnemies _enemiesMales _enemiesFemales>>
+        <<goto 'NPC fight cage - fight'>>
+    <</if>>
+<</link>>
+
+<<link 'Leave'>>
+    <<goto 'Fight cage'>>
+<</link>>

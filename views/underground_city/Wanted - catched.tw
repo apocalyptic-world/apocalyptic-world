@@ -21,6 +21,17 @@ You beat his ass and cuff him as he lies on the ground.
 	<<goto 'Wanted - collect reward'>>
 <</link>>
 
+<<if $slaves.length < $basementLimit>>
+	<<set _linkName = 'Capture ' + setup.pronounceWho($wanted[$wantedId])>>
+	<<link _linkName>>
+		<<set $wanted[$wantedId].capture = false>>
+		<<set $slaves.push($wanted[$wantedId])>>
+		<<set $wanted.splice($wantedId, 1)>>
+		<<addhours 2>>
+		<<goto 'Basement'>>
+	<</link>>
+<</if>>
+
 <<if !$wanted[$wantedId].gender>>
 	<<if timeBetween('08:00', '02:00')>>
 		<<link 'Use her'>>
@@ -28,15 +39,6 @@ You beat his ass and cuff him as he lies on the ground.
 			<<set _wantedPsg = 'Wanted - fuck ' + random(1,2)>>
 			<<set $wasRaped = true>>
 			<<goto `_wantedPsg`>>
-		<</link>>
-	<</if>>
-	<<if $slaves.length < $basementLimit>>
-		<<link 'Capture her and bring her home as slave'>>
-			<<set $wanted[$wantedId].capture = false>>
-			<<set $slaves.push($wanted[$wantedId])>>
-			<<set $wanted.splice($wantedId, 1)>>
-			<<addhours 2>>
-			<<goto 'Basement'>>
 		<</link>>
 	<</if>>
 	<<slaveValue $wanted[$wantedId]>>

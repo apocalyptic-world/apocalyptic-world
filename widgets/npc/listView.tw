@@ -4,32 +4,41 @@
     <<set _npc = _args[0]>>
     <<set _npcId = _args[1]>>
     <<set _npcType = _args[2]>>
-    <div class="item-beauty">
-        &#x1F484; <<=_npc.beauty>>
-    </div>
+    <<set _props = _args[3] ?? {}>>
+    <<if (_props.beauty ?? true)>>
+        <div class="item-beauty">
+            &#x1F484; <<=_npc.beauty>>
+        </div>
+    <</if>>
     <div class="item-age">
         &#128197; <<=setup.getAge(_npc)>>
     </div>
     <div class="item-happy">
         <<happyIcon _npc>>
     </div>
-    <div class="item-orientation">
-        <<=setup.displayOrientationIcon(_npc)>>
-    </div>
+    <<if (_props.orientation ?? true)>>
+        <div class="item-orientation">
+            <<=setup.displayOrientationIcon(_npc)>>
+        </div>
+    <</if>>
     <div class="item-strength">
         &#x1F4AA; <<=_npc.strength>>
     </div>
-    <div class="item-relationship">
-        &#x1F46C; <<=_npc.relationship>>
-    </div>
+    <<if (_props.relationship ?? true)>>
+        <div class="item-relationship">
+            &#x1F46C; <<=_npc.relationship>>
+        </div>
+    <</if>>
     <div class="item-submission">
         <span>&#x072D;</span> <span><<= _npc.sub>></span>
     </div>
-    <div class="item-assignedTo">
-        <<if _npc.assignedTo>>
-			(<<=_npc.assignedTo>>)
-		<<elseif typeof $player.companions[_npcType + ':' + _npcId] !== 'undefined'>>
-			(companion)
-		<</if>>
-    </div>
+    <<if (_props.assignedTo ?? true)>>
+        <div class="item-assignedTo">
+            <<if _npc.assignedTo>>
+                (<<=_npc.assignedTo>>)
+            <<elseif typeof $player.companions[_npcType + ':' + _npcId] !== 'undefined'>>
+                (companion)
+            <</if>>
+        </div>
+    <</if>>
 <</widget>>

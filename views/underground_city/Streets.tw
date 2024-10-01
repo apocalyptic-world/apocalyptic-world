@@ -7,7 +7,7 @@ You see some hookers standing against the wall..
 
 <h3>Your hookers</h3>
 <<set _assignedToStreets = false>>
-<table id="slaves">
+<table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
@@ -18,7 +18,7 @@ You see some hookers standing against the wall..
 		<</if>>
 		<<set _assignedToStreets = true>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
-		<tr>
+		<tr class="item">
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">
 				  <<link $slaves[_i].name>>
@@ -35,14 +35,10 @@ You see some hookers standing against the wall..
 					<<goto $tmpGirlViewBack>>
 				  <</link>>
 				</span>
+				<<=setup.npcListInfo($slaves[_i])>>
 			</td>
 			<td>
-				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-					Beauty score: <<print $slaves[_i].beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge($slaves[_i])>>
+				<<npcListView $slaves[_i] _i 'save'>>
 			</td>
 		</tr>
 		<</capture>>
@@ -57,7 +53,7 @@ You see some hookers standing against the wall..
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set _assignedToStreets = true>>
-		<tr>
+		<tr class="item">
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">
 				  <<link _streetGuest.name>>
@@ -74,14 +70,10 @@ You see some hookers standing against the wall..
 					<<goto $tmpGirlViewBack>>
 				  <</link>>
 				</span>
+				<<=setup.npcListInfo(_streetGuest)>>
 			</td>
 			<td>
-				<<if [0,2].includes(_streetGuest.gender) && setup.getAge(_streetGuest) >= 17>>
-					Beauty score: <<print _streetGuest.beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge(_streetGuest)>>
+				<<npcListView _streetGuest _streetGuestI 'guest'>>
 			</td>
 		</tr>
 		<</capture>>
