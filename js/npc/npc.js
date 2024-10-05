@@ -440,7 +440,6 @@ setup.getRandomNpcClothes = function(npc)
 };
 
 setup.npcListInfo = function(npc, isSick, isRest) {
-	console.log('npc', npc);
 	let output = '';
 	if (setup.getAge(npc) >= 18) {
 		if (npc.virgin && !npc.gender) {
