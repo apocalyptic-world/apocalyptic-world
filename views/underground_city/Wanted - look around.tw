@@ -1,5 +1,8 @@
-:: Wanted - look around [bg-underground] {"position":"2771,1792","size":"100,100"}
-<<set $wanted[$wantedId].wanted.progress += randomInteger(25, 40)>>
+:: Wanted - look around [bg-underground]
+
+<<set _progress = randomInteger(25, 30)>>
+<<set _additionalProgress = Math.min(Math.floor($player.reputation_bounty_hunter / 10) * 10, 30)>>
+<<set $wanted[$wantedId].wanted.progress += (_progress + _additionalProgress)>>
 <<if $wanted[$wantedId].wanted.progress >= 100>>
 	<<set _wantedPsg = 'Wanted - found'>>
 <<else>>
