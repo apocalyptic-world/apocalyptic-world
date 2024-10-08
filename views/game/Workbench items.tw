@@ -112,6 +112,35 @@
 			},
 			goto: "Workbench"
 		},
+		crossbow: {
+			show: $backpack.has('blueprint_crossbow'),
+			title: "Crossbow",
+			description: "Can be used as weapon",
+			required: {
+				wood: 10,
+				metal: 10,
+				rope: 10
+			},
+			energy: 60,
+			after: function() {
+				variables().backpack.pickup('crossbow', 1);
+			},
+			goto: "Workbench"
+		},
+		arrow: {
+			show: true,
+			title: "Arrow",
+			description: "Can be used with crossbow",
+			required: {
+				wood: 1,
+				metal: 1
+			},
+			energy: 10,
+			after: function() {
+				variables().backpack.pickup('arrow', 1);
+			},
+			goto: "Workbench"
+		},
 		guesthouse_cell: {
 			show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 25,
 			title: 'Guest house bed',

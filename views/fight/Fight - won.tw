@@ -41,7 +41,8 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 	
 	<<set $fight.gotCaps = randomInteger(5, 10)>>
 	<<set $player.money += $fight.gotCaps>>
-	You got <strong><<=$fight.gotCaps>></strong> caps.<br /><br />
+	You got <strong><<=$fight.gotCaps>></strong> caps.
+	<br /><br />
 	<<set $fight.reward = true>>
 	
 	<<for _i, _enemy range $fight.defeatedEnemies>>
@@ -54,15 +55,20 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 					</div>
 				<</for>>
 				<<run delete _enemy.inventory>>
+				<br />,br />
 			<</if>>
 		<</capture>>
 	<</for>>
 	
 	<<if $fight.public>>
-	  <br /><br />
-	  <<set $player.reputation++>>
-	  <strong>Someone saw your fight. Your reputation increased by 1</strong>
-	  <br /><br />
+	  	<<set $player.reputation++>>
+	  	<strong>Someone saw your fight. Your reputation increased by 1</strong>
+		<br /><br />
+	<</if>>
+
+	<<if $fight.arrowsOnGround>>
+		<strong>You picked up <<=$fight.arrowsOnGround>> arrow<<=($fight.arrowsOnGround > 1 ? 's' : '')>> from the ground</strong>
+		<br /><br />
 	<</if>>
 <</if>>
 <<if !$fight.enemiesAlive>>
