@@ -159,6 +159,18 @@
     <<run $guests.splice(_guestI, 1)>>
 <</widget>>
 
+<<widget guestLeft>>
+	<<for _npcId, _npcLike range $guests[_args[0]].relationshipBetween?.stats ?? {}>>
+		<<set _npc = setup.getNpcById(_npcId)>>
+		<<if _npcLike > 50>>
+			<<set _npc.happy -= 80>>
+		<<else>>
+			<<set _npc.happy -= 50>>
+		<</if>>
+	<</for>>
+	<<guestRemove _args[0]>>
+<</widget>>
+
 <<widget slaveRemove>>
     /* does slaves.splice and companion rearrange, must use at every slave.splice
        args[0] = index in slaves list */

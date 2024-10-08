@@ -422,7 +422,7 @@
 		// Leave
 		<<if $guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70>>
 			<<run setup.sleepMessages.addMain(_npc.name + ' was missing in the morning, ' + setup.pronounceWhat(_npc) + ' probably decided to leave this place.')>>
-			<<guestRemove _guestI >>
+			<<guestLeft _guestI >>
 			<<set _guestI-->>
 			<<continue>>
 		<</if>>
@@ -491,7 +491,7 @@
 			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
 				<<set _totals['streetworker'] = (_totals['streetworker'] ?? 0) - 1>>
 				<<run setup.sleepMessages.addJob(_npc.name + ' <strong class="iitem">was found dead</strong> in the streets!', 'streets')>>
-				<<guestRemove _guestI >>
+				<<guestLeft _guestI >>
 				<<set _guestI-->> 
 				<<continue>>
 			<<else>>
@@ -743,10 +743,11 @@
 
 			<<if $guests[_guestI].food <= -20>>
 				<<run setup.sleepMessages.addMain('<span class="left">' + _npc.name + ' left because you don\'t not enough food!</span>')>>
-				<<guestRemove _guestI>>
+				<<guestLeft _guestI>>
 				<<set _guestI-->>
 				<<continue>>
 			<<elseif $guests[_guestI].food <= 10>>
+				<<set $guests[_guestI].happy -= 50>>
 				<<run setup.sleepMessages.addMain('<span class="starving">' + _npc.name + ' is starving!</span>')>>
 			<</if>>
 		<</if>>
