@@ -71,7 +71,7 @@
 <</if>>
 <<script>>
 	Object.keys(variables().packs ?? {}).forEach(key => {
-		if (!variables().packs[key]) {
+		if (!variables().packs[key] || typeof setup.actions === 'undefined' || typeof setup.packs === 'undefined') {
 			return;
 		}
 
