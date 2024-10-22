@@ -40,12 +40,23 @@
         maxMcHorny: 30
     },
     bj: {
-        title: 'Blowjob 2',
+        title: 'Blowjob',
         minAction: 30,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
         horny: 20,
         maxCorruption: 50,
         stats: 'bj'
+    },
+    bj_reverse: {
+        title: 'Give a blowjob',
+        minAction: 10,
+        show: !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
+        horny: 3,
+        maxMcHorny: 60,
+        maxCorruption: 20,
+        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
+        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
     },
     dp: {
         title: 'Deepthroat',
@@ -112,7 +123,9 @@
         minAction: 30,
         horny: 20,
         maxCorruption: 100,
-        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled)
+        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
+        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
     },
     anal_fisting: {
         title: 'Fist asshole',
