@@ -1,4 +1,4 @@
-:: Wood cabin [Place] {"position":"953,626","size":"200,100"}
+:: Wood cabin [Place]
 <h1 class="ptitle"><<cabinName>></h1>
 <div class="menu-grid">   
   <<grid cabin bedroom Bedroom 'Your room'>>
@@ -61,6 +61,8 @@
 		timeBetween('08:00', '16:00')
 	>> 
 		<<goto 'Octavia - Annihilation'>>
+	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return>>
+		<<goto 'Dom - return'>>
 	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $gameDate.getDay() === 6>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Blair - Ashley threesome'>>

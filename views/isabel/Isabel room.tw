@@ -6,6 +6,8 @@
     <<goto 'Isabel - new home'>>
 <<elseif (($characters.isabel.quests.temp_home_day ?? 0) + 14) < $game.day && !$characters.isabel.quests.check_city>>
     <<goto 'Isabel - Check underground city'>>
+<<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && $characters.isabel.pregnancy >= 10>>
+    <<goto 'Isabel - pregnant'>>
 <</if>>
 
 <<isabel>>
