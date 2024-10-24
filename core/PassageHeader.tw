@@ -28,7 +28,7 @@
 <</if>>
 
 /* restore companion after hero being alone with Blair or Isabel */
-<<if passage().search(/^(Blair|Fight|Isabel)/) == -1 && typeof $player.companionsHome !== 'undefined'>>
+<<if typeof $player.companionsHome !== 'undefined' && passage().search(/^(Blair|Fight|Isabel)/) == -1>>
       	<<set $player.companions = $player.companionsHome>>
         <<run delete $player.companionsHome>>
 <</if>>
