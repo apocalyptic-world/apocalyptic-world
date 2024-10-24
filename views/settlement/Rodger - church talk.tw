@@ -16,6 +16,8 @@
 	<<goto 'Rodger - shop'>>
 <<elseif ($game.location.settlement_shop ?? false) && !$characters.rodger.quests.horse>>
 	<<goto 'Rodger - horse #1'>>
+<<elseif $characters.eve.quests.sex && $characters.eve.corruption >= 40 && !$characters.rodger.quests.cheat && $game.day >= 120>>
+	<<goto 'Rodger - cheat'>>
 <<else>>
 	<<set _rodgerText = either([
 		'One time we stayed with the group, sharing our faith and helping them to find hope in the midst of their despair. As they listened to my words, they began to believe that there was a better future waiting for them.',
