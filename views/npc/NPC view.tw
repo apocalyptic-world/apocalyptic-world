@@ -157,6 +157,12 @@
 		 	<<goto 'Girl milk'>> 
 	  <</link>>
 	<</if>>	
+	<<if settings.gaysEnabled && $tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('dick_pump')>>
+	  <<link 'Milk him'>>
+			<<set $tmpGirlViewBack = 'NPC view'>>
+		 	<<goto 'Guy milk'>> 
+	  <</link>>
+	<</if>>	
 	<<if $player.energy >= 10 && hasTime(1)>>
 		<<set _linkName = 'Punish ' + _himOrHer>>
 		<<link `_linkName`>>
