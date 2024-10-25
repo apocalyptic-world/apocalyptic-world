@@ -1,0 +1,201 @@
+:: Guesthouse \[Event\] - threesome mff {"position":"336,1079","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+
+<<if typeof $randEvent === 'undefined'>>
+
+	<<set
+		_femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 2),
+		_maleGuestIds = setup.getRandomPersons($tmpEvent[1], 1),
+		_guestIds = _femaleGuestIds.concat(_maleGuestIds),
+		_guestNames ='',
+		_girlNames ='',
+		_guyNames ='',
+		_separator ='',
+		_index = 0,
+		_minCorruption = 100,
+		_nbVirgins = 0,
+		_nbAnalVirgins = 0,
+		_nbSquirters = 0,
+		_nbFemaleSadists = 0,
+		_nbMaleMasochists = 0
+	>>
+
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _guestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _guestNames += _separator + $guests[_guestIds[_i]].name>>
+		<<set _minCorruption = Math.min(_minCorruption, $guests[_guestIds[_i]].corruption)>>
+	<</for>>
+	<<set _separator =''>>
+
+	<<for _i = 0; _i < _femaleGuestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _femaleGuestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _girlNames += _separator + $guests[_femaleGuestIds[_i]].name>>
+		<<if $guests[_femaleGuestIds[_i]].virgin>>
+			<<set _nbVirgins += 1>>
+		<</if>>
+		<<if $guests[_femaleGuestIds[_i]].anal < 20>>
+			<<set _nbAnalVirgins += 1>>
+		<</if>>
+		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('squirter')>>
+			<<set _nbSquirters += 1>>
+		<</if>>
+		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('sadistic')>>
+			<<set _nbFemaleSadists += 1>>
+		<</if>>
+	<</for>>
+	<<set _separator =''>>
+
+	<<for _i = 0; _i < _maleGuestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _maleGuestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _guyNames += _separator + $guests[_maleGuestIds[_i]].name>>
+		<<if ($guests[_maleGuestIds[_i]].traits ?? []).includes('masochist')>>
+			<<set _nbMaleMasochists += 1>>
+		<</if>>
+	<</for>>
+	<<set _separator =''>>
+
+	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
+	<<if _r < 0>>
+		<<set _r = 0>>
+	<</if>>
+	<<set _sexActions = [
+		['kissing','feet','spanking','feet','spanking'][random(0, _r)],
+		['sn_tits','masturbating','rimjob','masturbating','rimjob'][random(0, _r)],
+		['facesitting','facesitting','strapon_bj','dd_deepthroat','facesitting'][_r],
+		['scissoring','scissoring','strapon_pussy','dd_pussy','fisting_pussy'][_r],
+		['sn_pussy','sn_pussy','strapon_anal','dd_anal','fisting_anal'][_r],
+		'squirting'
+	]>>
+	
+	<<set _maxVirgins = _femaleGuestIds.length>>
+	<<if _r == 3>>
+		<<set _maxVirgins = _femaleGuestIds.length - 1>>
+	<</if>>
+	<<if Math.min(_nbVirgins, _nbAnalVirgins) >= _maxVirgins>>
+		<<set _sexActions[2] = 'facesitting'>>
+	<</if>>
+	<<if _nbVirgins >= _maxVirgins>>
+		<<set _sexActions[3] = 'scissoring'>>
+	<</if>>
+	<<if _nbAnalVirgins >= _maxVirgins>>
+		<<set _sexActions[4] = 'sn_pussy'>>
+	<<elseif _femaleGuestIds.length == 3 && _r == 2 && !$guests[_femaleGuestIds[0]].virgin && $guests[_femaleGuestIds[0]].anal >= 20>>
+		<<set _sexActions[4] = 'strapon_double'>>
+	<</if>>
+	<<if _nbSquirters == 0>>
+		<<set _sexActions[5] = 'orgasm'>>
+	<</if>>
+	
+	<<set $randEvent = [
+		_guestIds,
+		_femaleGuestIds,
+		_maleGuestIds,
+		_guestNames,
+		_girlNames,
+		_guyNames,
+		_sexActions,
+		_index
+	]>>
+	
+	As you approach the dormitory, you hear muffled sounds.<br />
+	You take a peek and see
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<if _i > 0 && _i + 1 == _guestIds.length>>
+				<<set _separator =' and '>>	
+			<<elseif _i > 0>>
+				<<set _separator =', '>>
+			<</if>>
+			<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
+		<</for>>
+	 pleasuring each other.<br />
+
+<<else>>
+	<<addmins 5>>
+	<<set 
+		_guestIds = $randEvent[0],
+		_femaleGuestIds = $randEvent[1],
+		_maleGuestIds = $randEvent[2],
+		_guestNames = $randEvent[3],
+		_girlNames = $randEvent[4],
+		_guyNames = $randEvent[5],
+		_sexActions = $randEvent[6],
+		_index = $randEvent[7]
+	>>
+<</if>>
+
+<br /><br />
+
+<<set _actionText = setup.actionText>>
+<div id="choice">
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
+	<</for>>
+	<center>
+		<<set _url = 'actions/female_on_female-'+_femaleGuestIds.length+'/default/'+_sexActions[_index]+'/'+ either(setup.actions['female_on_female-'+_femaleGuestIds.length]['default'][_sexActions[_index]])>>
+		<<actionImageOutput _url>><br />
+	</center>
+	<br />
+	<<print _actionText['female_on_female'][_sexActions[_index]][0].replace('%names%', _girlNames).replace('%name1%', $guests[_femaleGuestIds[0]].name).replace('%name2%', $guests[_femaleGuestIds[1]].name)>>
+	<br /><br />
+	<<if $player.horny >= 100>>
+		<<linkreplace 'Cum'>>
+			<<horny_reset>>
+			<center>
+				[img[setup.ImagePath+'game/misc/cum.webp']]
+			</center>
+		<</linkreplace>>
+	<</if>>
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[7] = _index + 1>>
+		<<if $player.horny < 100>>		
+			[[Masturbate|passage()][$player.horny += 20]]
+		<</if>>		
+		[[Just watch|passage()]]
+	<</if>>
+	<<link 'Interrupt them'>>
+		<<replace "#choice">>
+			<<set _interrupted = true>>
+			<<for _i = 0; _i < _guestIds.length; _i++>>
+				<<set 
+					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+				>>
+			<</for>>
+			<center>
+				<<actionImageOutput `'actions/female_on_female-2/default/caught/'+ either(setup.actions['female_on_female-2']['default']['caught'])`>>
+			</center>
+			<br /><br />
+			<<print _actionText['female_on_female']['caught'][0].replace('%names%', _guestNames)>>
+			<br /><br />
+		<</replace>>
+	<</link>>
+</div>
+
+<<link 'Leave'>>
+	<<if _orgasm || !_interrupted>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<set 
+				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
+				$guests[_guestIds[_i]].horny = 0
+			>>
+		<</for>>
+	<</if>>
+	<<unset $randEvent, $tmpEvent>>
+	<<goto 'Guest house'>>
+<</link>>
+
+
