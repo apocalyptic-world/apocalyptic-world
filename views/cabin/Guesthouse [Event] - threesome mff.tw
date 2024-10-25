@@ -15,6 +15,7 @@
 		_minCorruption = 100,
 		_nbVirgins = 0,
 		_nbAnalVirgins = 0,
+		_nbSmallTits = 0,
 		_nbSquirters = 0,
 		_nbFemaleSadists = 0,
 		_nbMaleMasochists = 0
@@ -29,8 +30,8 @@
 		<<set _guestNames += _separator + $guests[_guestIds[_i]].name>>
 		<<set _minCorruption = Math.min(_minCorruption, $guests[_guestIds[_i]].corruption)>>
 	<</for>>
-	<<set _separator =''>>
 
+	<<set _separator =''>>
 	<<for _i = 0; _i < _femaleGuestIds.length; _i++>>
 		<<if _i > 0 && _i + 1 == _femaleGuestIds.length>>
 			<<set _separator =' and '>>	
@@ -44,6 +45,9 @@
 		<<if $guests[_femaleGuestIds[_i]].anal < 20>>
 			<<set _nbAnalVirgins += 1>>
 		<</if>>
+		<<if $guests[_femaleGuestIds[_i]].breasts == 'small'>>
+			<<set _nbSmallTits += 1>>
+		<</if>>
 		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('squirter')>>
 			<<set _nbSquirters += 1>>
 		<</if>>
@@ -51,8 +55,8 @@
 			<<set _nbFemaleSadists += 1>>
 		<</if>>
 	<</for>>
-	<<set _separator =''>>
 
+	<<set _separator =''>>
 	<<for _i = 0; _i < _maleGuestIds.length; _i++>>
 		<<if _i > 0 && _i + 1 == _maleGuestIds.length>>
 			<<set _separator =' and '>>	
@@ -64,38 +68,46 @@
 			<<set _nbMaleMasochists += 1>>
 		<</if>>
 	<</for>>
-	<<set _separator =''>>
 
 	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
 	<<if _r < 0>>
 		<<set _r = 0>>
 	<</if>>
 	<<set _sexActions = [
-		['kissing','feet','spanking','feet','spanking'][random(0, _r)],
-		['sn_tits','masturbating','rimjob','masturbating','rimjob'][random(0, _r)],
-		['facesitting','facesitting','strapon_bj','dd_deepthroat','facesitting'][_r],
-		['scissoring','scissoring','strapon_pussy','dd_pussy','fisting_pussy'][_r],
-		['sn_pussy','sn_pussy','strapon_anal','dd_anal','fisting_anal'][_r],
-		'squirting'
+		['kissing','handjob','handjob','footjob','footjob'][random(0, _r)],
+		['bj','bj','titjob','titjob','dp'][random(0, _r)],
+		['nipple_lick','nipple_lick','nipple_lick','pussy_lick','pussy_lick'][random(0, _r)],
+		['pussy_lick','pussy_fingering','pussy_fingering','anal_fingering','anal_fingering'][random(0, _r)],
+		['pussy','pussy','pussy','anal','anal'][random(0, _r)],
+		['cum_on_back','cum_on_stomach','cum_on_tits','cum_on_face','cum_in_mouth'][random(0, _r)]
 	]>>
 	
-	<<set _maxVirgins = _femaleGuestIds.length>>
-	<<if _r == 3>>
-		<<set _maxVirgins = _femaleGuestIds.length - 1>>
+	<<if _sexActions[1] == 'titjob' && _nbSmallTits == _femaleGuestIds.length>>
+		<<set _sexActions[1] = 'dp'>>
 	<</if>>
-	<<if Math.min(_nbVirgins, _nbAnalVirgins) >= _maxVirgins>>
-		<<set _sexActions[2] = 'facesitting'>>
+	<<if _sexActions[2] == 'pussy_lick' && _nbSquirter > 0>>
+		<<set _sexActions[3] = 'squirt_lick'>>
 	<</if>>
-	<<if _nbVirgins >= _maxVirgins>>
-		<<set _sexActions[3] = 'scissoring'>>
+	<<if _sexActions[3] == 'pussy_fingering' && _nbVirgin == _femaleGuestIds.length>>
+		<<set _sexActions[3] = 'anal_fingering'>>
 	<</if>>
-	<<if _nbAnalVirgins >= _maxVirgins>>
-		<<set _sexActions[4] = 'sn_pussy'>>
-	<<elseif _femaleGuestIds.length == 3 && _r == 2 && !$guests[_femaleGuestIds[0]].virgin && $guests[_femaleGuestIds[0]].anal >= 20>>
-		<<set _sexActions[4] = 'strapon_double'>>
+	<<if _sexActions[4] == 'pussy' && _nbVirgin == _femaleGuestIds.length>>
+		<<set
+			_sexActions[4] = 'anal',
+			_sexActions[5] = 'cum_in_ass'
+		>>
 	<</if>>
-	<<if _nbSquirters == 0>>
-		<<set _sexActions[5] = 'orgasm'>>
+	<<if _sexActions[4] == 'anal' && _nbAnalVirgin == _femaleGuestIds.length>>
+		<<set
+			_sexActions[4] = 'dp',
+			_sexActions[5] = 'cum_throat'
+		>>
+	<</if>>
+	<<if _r > 2 && _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
+		<<set
+			_sexActions[4] = 'anal_reverse',
+			_sexActions[5] = 'anal_reverse_cum'
+		>>
 	<</if>>
 	
 	<<set $randEvent = [
@@ -109,8 +121,13 @@
 		_index
 	]>>
 	
+	<br />
+	<<=_sexActions.toString()>>
+	<br />
+
 	As you approach the dormitory, you hear muffled sounds.<br />
 	You take a peek and see
+		<<set _separator =''>>
 		<<for _i = 0; _i < _guestIds.length; _i++>>
 			<<if _i > 0 && _i + 1 == _guestIds.length>>
 				<<set _separator =' and '>>	
@@ -142,12 +159,10 @@
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
-	<center>
-		<<set _url = 'actions/female_on_female-'+_femaleGuestIds.length+'/default/'+_sexActions[_index]+'/'+ either(setup.actions['female_on_female-'+_femaleGuestIds.length]['default'][_sexActions[_index]])>>
-		<<actionImageOutput _url>><br />
-	</center>
+
+	<<actionImage $guests[_guestIds[0]] _sexActions[_index] 'no-text'>>
 	<br />
-	<<print _actionText['female_on_female'][_sexActions[_index]][0].replace('%names%', _girlNames).replace('%name1%', $guests[_femaleGuestIds[0]].name).replace('%name2%', $guests[_femaleGuestIds[1]].name)>>
+	<<print _actionText['threesome_mff'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
 	<br /><br />
 	<<if $player.horny >= 100>>
 		<<linkreplace 'Cum'>>
@@ -161,26 +176,72 @@
 		<<set _orgasm = true>>
 	<<else>>
 		<<set $randEvent[7] = _index + 1>>
-		<<if $player.horny < 100>>		
+		<<if $player.horny < 100>>
 			[[Masturbate|passage()][$player.horny += 20]]
 		<</if>>		
 		[[Just watch|passage()]]
 	<</if>>
 	<<link 'Interrupt them'>>
+		<<set _interrupted = true>>
 		<<replace "#choice">>
-			<<set _interrupted = true>>
 			<<for _i = 0; _i < _guestIds.length; _i++>>
 				<<set 
 					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
 					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
 				>>
 			<</for>>
-			<center>
-				<<actionImageOutput `'actions/female_on_female-2/default/caught/'+ either(setup.actions['female_on_female-2']['default']['caught'])`>>
-			</center>
-			<br /><br />
-			<<print _actionText['female_on_female']['caught'][0].replace('%names%', _guestNames)>>
-			<br /><br />
+				<center>
+					<<actionImageOutput `'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
+				</center>
+				<br /><br />
+				You walk in on
+					<<set _separator =''>>
+					<<for _i = 0; _i < _guestIds.length; _i++>>
+						<<if _i > 0 && _i + 1 == _guestIds.length>>
+							<<set _separator =' and '>>	
+						<<elseif _i > 0>>
+							<<set _separator =', '>>
+						<</if>>
+						<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
+					<</for>>
+				 having sex, they stop and seem unhappy.<br />
+				<br />
+			<<linkreplace 'Ask for a creampie'>>
+				<<if setup.percentageChance(setup.sexChance($guests[_femaleGuestIds[0]]))>>
+					<<if $guests[_femaleGuestIds[0]].virgin>>
+						<center>
+							<<actionImage $guests[_femaleGuestIds[0]] 'pussy' 'no-text'>>
+						</center>
+						<br />
+						<<=setup.displayName($guests[_femaleGuestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+						<br /><br />
+						<<set $guests[_femaleGuestIds[0]].virgin = false>>
+					<</if>>
+					<center>
+						<<actionImage $guests[_femaleGuestIds[0]] 'pussy' 'no-text'>>
+					</center>
+					<br />
+					<<print _actionText['male_on_female']['pussy'][0].replace('%female%', $guests[_femaleGuestIds[0]].name).replace('%male%', $guests[_maleGuestIds[0]].name)>>
+					<br /><br />
+
+					<<linkreplace 'Continue'>>
+						<<set _orgasm = true>>
+						<center>
+							<<actionImage $guests[_femaleGuestIds[0]] 'cum_in_pussy' 'no-text'>>
+						</center>
+						<br />
+						<<print _actionText['male_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_femaleGuestIds[0]].name).replace('%male%', $guests[_maleGuestIds[0]].name)>>
+						<br /><br />
+						<<if setup.percentageChance(setup.pregnancyChance($guests[_femaleGuestIds[0]]))>>
+							<<set $guests[_femaleGuestIds[0]].pregnancy_father = $guests[_maleGuestIds[0]].id>>
+							<<set $guests[_femaleGuestIds[0]].pregnancy = 0>>
+						<</if>>
+					<</linkreplace>>
+				<<else>>
+					<<=setup.displayName($guests[_femaleGuestIds[0]])>> says no and leaves the room half naked.
+					<br /><br />
+				<</if>>
+			<</linkreplace>>
 		<</replace>>
 	<</link>>
 </div>
