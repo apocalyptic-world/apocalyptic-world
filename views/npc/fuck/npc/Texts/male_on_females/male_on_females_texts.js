@@ -1,5 +1,5 @@
 setup.actionText ??= {};
-setup.actionText.threesome_mff = {
+setup.actionText.male_on_females = {
     kissing: [
         "%females% are kissing %male% and each other sweetly."
     ],

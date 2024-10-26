@@ -1,4 +1,4 @@
-:: Guesthouse \[Event\] - threesome mff {"position":"336,1079","size":"100,100"}
+:: Guesthouse \[Event\] - male on females {"position":"336,1079","size":"100,100"}
 <h1 class="ptitle">GUEST HOUSE</h1>
 
 <<if typeof $randEvent === 'undefined'>>
@@ -120,10 +120,6 @@
 		_sexActions,
 		_index
 	]>>
-	
-	<br />
-	<<=_sexActions.toString()>>
-	<br />
 
 	As you approach the dormitory, you hear muffled sounds.<br />
 	You take a peek and see
@@ -162,7 +158,7 @@
 
 	<<actionImage $guests[_guestIds[0]] _sexActions[_index] 'no-text'>>
 	<br />
-	<<print _actionText['threesome_mff'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
+	<<print _actionText['male_on_females'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
 	<br /><br />
 	<<if $player.horny >= 100>>
 		<<linkreplace 'Cum'>>
@@ -206,42 +202,6 @@
 					<</for>>
 				 having sex, they stop and seem unhappy.<br />
 				<br />
-			<<linkreplace 'Ask for a creampie'>>
-				<<if setup.percentageChance(setup.sexChance($guests[_femaleGuestIds[0]]))>>
-					<<if $guests[_femaleGuestIds[0]].virgin>>
-						<center>
-							<<actionImage $guests[_femaleGuestIds[0]] 'pussy' 'no-text'>>
-						</center>
-						<br />
-						<<=setup.displayName($guests[_femaleGuestIds[0]])>> seems a bit in pain at first as she looses her virginity.
-						<br /><br />
-						<<set $guests[_femaleGuestIds[0]].virgin = false>>
-					<</if>>
-					<center>
-						<<actionImage $guests[_femaleGuestIds[0]] 'pussy' 'no-text'>>
-					</center>
-					<br />
-					<<print _actionText['male_on_female']['pussy'][0].replace('%female%', $guests[_femaleGuestIds[0]].name).replace('%male%', $guests[_maleGuestIds[0]].name)>>
-					<br /><br />
-
-					<<linkreplace 'Continue'>>
-						<<set _orgasm = true>>
-						<center>
-							<<actionImage $guests[_femaleGuestIds[0]] 'cum_in_pussy' 'no-text'>>
-						</center>
-						<br />
-						<<print _actionText['male_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_femaleGuestIds[0]].name).replace('%male%', $guests[_maleGuestIds[0]].name)>>
-						<br /><br />
-						<<if setup.percentageChance(setup.pregnancyChance($guests[_femaleGuestIds[0]]))>>
-							<<set $guests[_femaleGuestIds[0]].pregnancy_father = $guests[_maleGuestIds[0]].id>>
-							<<set $guests[_femaleGuestIds[0]].pregnancy = 0>>
-						<</if>>
-					<</linkreplace>>
-				<<else>>
-					<<=setup.displayName($guests[_femaleGuestIds[0]])>> says no and leaves the room half naked.
-					<br /><br />
-				<</if>>
-			<</linkreplace>>
 		<</replace>>
 	<</link>>
 </div>
