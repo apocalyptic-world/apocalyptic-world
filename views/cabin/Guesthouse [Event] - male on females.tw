@@ -79,7 +79,7 @@
 		['nipple_lick','nipple_lick','nipple_lick','pussy_lick','pussy_lick'][random(0, _r)],
 		['pussy_lick','pussy_fingering','pussy_fingering','anal_fingering','anal_fingering'][random(0, _r)],
 		['pussy','pussy','pussy','anal','anal'][random(0, _r)],
-		['cum_on_back','cum_on_stomach','cum_on_tits','cum_on_face','cum_in_mouth'][random(0, _r)]
+		['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
 	]>>
 	
 	<<if _sexActions[1] == 'titjob' && _nbSmallTits == _femaleGuestIds.length>>
@@ -100,11 +100,12 @@
 	<<if _sexActions[4] == 'anal' && _nbAnalVirgin == _femaleGuestIds.length>>
 		<<set
 			_sexActions[4] = 'dp',
-			_sexActions[5] = 'cum_throat'
+			_sexActions[5] = 'cum_in_mouth'
 		>>
 	<</if>>
 	<<if _r > 2 && _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
 		<<set
+			_sexActions[3] = 'bj_reverse',
 			_sexActions[4] = 'anal_reverse',
 			_sexActions[5] = 'anal_reverse_cum'
 		>>
@@ -155,8 +156,10 @@
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
-
-	<<actionImage $guests[_guestIds[0]] _sexActions[_index] 'no-text'>>
+	<center>
+		<<set _url = 'actions/threesome_ff/default/'+_sexActions[_index]+'/'+ either(setup.actions['threesome_ff']['default'][_sexActions[_index]])>>
+		<<actionImageOutput _url>><br />
+	</center>
 	<br />
 	<<print _actionText['male_on_females'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
 	<br /><br />

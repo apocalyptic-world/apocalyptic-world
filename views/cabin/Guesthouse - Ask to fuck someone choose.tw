@@ -6,7 +6,9 @@
 	_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
 	_prospects = 0,
 	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id),
-	_lesbians = [];
+	_lesbians = [],
+	_biGirls = [],
+	_guys = [];
 >>
 <<run _interestedGuests.delete(_k)>>
 
@@ -28,8 +30,16 @@
 				<<continue>>
 			<</if>>
 
-			<<if _guestYes && _mainYes && !$tmpGirl.gender && !_guest.gender>>
+			<<if _guestYes && _mainYes && !_guest.gender>>
 				<<set _lesbians.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && !_guest.gender && _guest.likesGirls>>
+				<<set _biGirls.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && _guest.gender == 1>>
+				<<set _guys.push(_j)>>
 			<</if>>
 
 			<div>
@@ -75,7 +85,7 @@
 		<</capture>>
 	<</for>>
 
-	<<if _lesbians.length > 1>>
+	<<if !$tmpGirl.gender && _lesbians.length > 1>>
 		<<set
 			_lesbians=setup.shuffling(_lesbians),
 			_girl0 = $guests[_lesbians[0]],
@@ -91,6 +101,62 @@
 
 					<<set $tmpEvent = [_lesbians[0], _lesbians[1], _k]>>
 					<<goto 'Guesthouse [Event] - female on female'>>
+				<</link>>
+			</span>
+		</div>
+	<</if>>
+
+	<<if !$tmpGirl.gender && _lesbians.length > 0 && _guys > 0 >>
+		<<set
+			_lesbians=setup.shuffling(_lesbians),
+			_girl0 = $guests[_lesbians[0]],
+			_guys=setup.shuffling(_guys),
+			_guy0 = $guests[_guys[0]],
+			_linkName = _girl0.name,
+			_linkName2 = _guy0.name
+		>>
+
+		<div>
+			<span @class="'gender-girl'">
+				<<link _linkName>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_k,_lesbians[0]], [_guys[0]]]>>
+					<<goto 'Guesthouse [Event] - male on females'>>
+				<</link>>
+			</span>
+			<span>
+				 & 
+			</span>
+			<span @class="'gender-guy'">
+				<<link _linkName2>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_k,_lesbians[0]], [_guys[0]]]>>
+					<<goto 'Guesthouse [Event] - male on females'>>
+				<</link>>
+			</span>
+		</div>
+	<</if>>
+
+	<<if $tmpGirl.gender == 1 && _biGirls.length > 1>>
+		<<set
+			_biGirls=setup.shuffling(_biGirls),
+			_girl0 = $guests[_biGirls[0]],
+			_girl1 = $guests[_biGirls[1]],
+			_linkName = _girl0.name + ' & ' + _girl1.name
+		>>
+
+		<div>
+			<span @class="'gender-girl'">
+				<<link _linkName>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_biGirls[0], _biGirls[1]], [_k]]>>
+					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
 		</div>

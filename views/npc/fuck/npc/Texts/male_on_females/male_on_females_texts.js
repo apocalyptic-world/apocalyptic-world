@@ -15,6 +15,9 @@ setup.actionText.male_on_females = {
     bj: [
         "%females% suck %male%'s hard dick with their warm mounths and agile tongues!"
     ], 
+    bj_reverse: [
+        "%male% sucks %female0%'s strapon."
+    ], 
     dp: [
         "%male% grabbed %females%'s heads with his hands and is driving his hard dick deep into their throats."
     ],
@@ -60,6 +63,9 @@ setup.actionText.male_on_females = {
     cum_in_ass: [
         "With a groan, %male% cums in %female0% ass."
     ],
+    cum_on_ass: [
+        "With a groan, %male% cums on %female0% ass."
+    ],
     cum_on_back: [
         "With a groan, %male% cums on %females%'s back sides."
     ],
@@ -68,11 +74,5 @@ setup.actionText.male_on_females = {
     ],
     cum_in_mouth: [
         "%male% fills %females%'s mouths with his cum."
-    ],
-    cum_throat: [
-        "%male% grabs %female0% head and hold her as he shoves his dick deep into her throat and starts cumming."
-    ],
-    squirt_lick: [
-        "%female0% screams of pleasure and starts squirting while %male% continues licking her pussy."
     ]
 };
