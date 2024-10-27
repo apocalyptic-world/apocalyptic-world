@@ -1,3 +1,27 @@
 :: NPC fight cage - fight[bg-fight-cage]
 <h1 class="ptitle">FIGHT CAGE</h1>
 <br />
+
+<<run console.log($fightCage.fighters)>>
+<<for _fighterI, _fighter  range $fightCage.fighters>>
+    <<if typeof $fightCage.enemies[_fighterI] === 'undefined'>>
+        <<continue>>
+    <</if>>
+    <<set _enemy = $fightCage.enemies[_fighterI]>>
+
+    <<set _fightResult = setup.fight.simulateFight(_fighter, _enemy)>>
+    <div class="npc-fight-result">
+        <center>
+            ###
+        </center>
+        <br />
+        <<=_fightResult.text>>
+    </div>
+<</for>>
+
+<style>
+.npc-fight-result {
+    margin-bottom: 20px;
+}
+</style>
+

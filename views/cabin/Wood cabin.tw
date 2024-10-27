@@ -45,6 +45,10 @@
 	<<set _percentageFoodForager = 1>>
 <</if>>
 
+<<if $tmpEventWedding && timeBetween('18:00', '22:00')>>
+	<<goto 'NPC between marry'>>
+<</if>>
+
 <<if !($locationEvents.cabin ?? false)>>
 	<<if $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
 	(!$characters.octavia.quests.kidnapped_found_day || ($characters.octavia.quests.kidnapped_found_day + 5) < $game.day) && 

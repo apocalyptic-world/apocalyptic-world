@@ -24,6 +24,11 @@ setup.relationshipBetween = {
         let colleagues = setup.getPersonsForLocation(variables().guests, this.npc.assignedTo);
         for (let i in colleagues) {
             let colleagueIndex = colleagues[i];
+            if (this.npc.id === this.guests[colleagueIndex].id) {
+                delete this.npc.relationshipBetween.stats[this.guests[colleagueIndex].id];
+                continue;
+            }
+
             this.npc.relationshipBetween.stats[this.guests[colleagueIndex].id]??=0;
             this.npc.relationshipBetween.stats[this.guests[colleagueIndex].id] = Math.min(
                 (this.npc.relationshipBetween.stats[this.guests[colleagueIndex].id] + 1),
@@ -67,6 +72,9 @@ setup.relationshipBetween = {
                 this.increaseByAssignedTo();
             }
 
+            if (this.npc.relationshipBetween.likes !== null && this.npc.relationshipBetween.likes === this.npc.id) {
+                delete this.npc.relationshipBetween.likes;
+            }
             if (setup.percentageChance(5) && this.npc.relationshipBetween.likes === null) {
                 this.setLike()
             }
@@ -78,7 +86,7 @@ setup.relationshipBetween = {
         //console.log("Relationships run: " + end + " milliseconds");
     },
 
-    getMatches: function() {
+    getMatches: function(notMarried) {
         this.guests = variables().guests;
         let guestsCount = this.guests.length;
     
@@ -94,8 +102,21 @@ setup.relationshipBetween = {
         for (let _npc1Id in _matches) {
             let _npc2Id = _matches[_npc1Id];
             if ((_matches[_npc2Id] ?? false) === _npc1Id) {
-                _matchesBetween.push([_npc1Id, _npc2Id]);
+                const npc1 = setup.getNpcById(_npc1Id);
+                const npc2 = setup.getNpcById(_npc2Id);
+
                 delete _matches[_npc2Id];
+
+                if (notMarried && (npc1.married || npc2.married)) {
+                    continue;
+                }
+
+                // Only male and female for now
+                if (npc1.gender !== 1 || npc2.gender !== 0) {
+                    continue;
+                }
+
+                _matchesBetween.push([_npc1Id, _npc2Id]);
             }
         }
 
