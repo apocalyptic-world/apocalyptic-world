@@ -14,6 +14,14 @@
 	<<goto 'Farm - slave market'>>
 <</if>>
 
+<<if $game.day > 5 && !$characters.vincent.talked_about_girl>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk about girl' 'Farm - talk about girl'>>
+		<<set $characters.vincent.talked_about_girl = true>>
+		<<set $characters.vincent.can_use_girl = true>>
+	<</link>>
+<</if>>
+
 <<if !$characters.vincent.first_time>>
 <<vincent>>So, let me make something perfectly clear, son. The name's Vincent, and I don't take kindly to someone else trying to touch what's mine. If I catch you trying to put your hands on my girl back there again, I'll shoot you. Now, with that nice and clear...if you want something honestly, I run a little shop from my farm. I'm open to buying, as well as selling. Keep yourself in my good graces, and this could be a mutually beneficial relationship. Now what will it be, son?<</vincent>>
 	<<set $characters.vincent.first_time to true>>
@@ -40,12 +48,6 @@
 	<</link>>
 <<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
 	<<link 'Talk' 'Settlement - intro'>><</link>>
-<<elseif $game.day > 5 && !$characters.vincent.talked_about_girl>>
-	<<set $characters.vincent.relationship++>>
-	<<link 'Talk about girl' 'Farm - talk about girl'>>
-		<<set $characters.vincent.talked_about_girl = true>>
-		<<set $characters.vincent.can_use_girl = true>>
-	<</link>>
 <<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
 	<<link 'Talk about wanted poster' 'Farm - wanted poster'>>
 		<<set $characters.vincent.wanted_poster = true>>

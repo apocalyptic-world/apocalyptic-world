@@ -1,5 +1,8 @@
 setup.actionText ??= {};
 setup.actionText.male_on_female = {
+    kissing: [
+        "%male% and %female% are kissing each other with passion."
+    ],
     handjob: [
         "%female% is giving %male% a nice handjob, a good start!"
     ],
@@ -15,6 +18,12 @@ setup.actionText.male_on_female = {
     dp: [
         "%male% grabbed %female%'s head with his hands and is driving his hard dick deep into her throat.<br />She starts to coughs when her gag reflex kicks in."
     ],
+    nipple_lick: [
+        "%male% is licking %female%'s nipples, while squeezing her tits!"
+    ],
+    pussy_fingering: [
+        "%male% is fingering %female%'s pussy."
+    ],
     pussy_lick: [
         "%male% is licking %female%'s clit, she seems to like it a lot!"
     ],
@@ -26,6 +35,12 @@ setup.actionText.male_on_female = {
     ],
     anal: [
         "%female% moans softly as %male% fucks her ass, looks like she is enjoying it."
+    ],
+    anal_reverse: [
+        "%male% moans softly as %female% fucks his ass with a strapon."
+    ],
+    anal_reverse_cum: [
+        "%male% starts to cum while %female%'s strapon is still in his ass!"
     ],
     handjob_cum: [
         "%male% jerks off with %female%'s hands tightly gripped around his cock."
