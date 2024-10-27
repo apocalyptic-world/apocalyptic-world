@@ -34,6 +34,7 @@
   <<set $player.energy = $player.maxEnergy>>
   <<run delete $player?.quests.hottub>>
   <<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
+  <<unset $tmpEventWedding>>
   <<if $storage.has('food')>>
   		<<drop $storage 'food' 1>>
 		<<set $player.hunger = 100>>
@@ -866,6 +867,8 @@
 <<include 'sleepRottenFood'>>
 <<include 'sleepShowTotals'>>
 <<include 'sleepManageGoods'>>
+<<include 'sleepRelationship'>>
+
 <<unset $tmpGirlCapture>>
 
 // moon
@@ -911,8 +914,6 @@
 <<if _hasWorkingHospital>>
 	<<sleepHospital>>
 <</if>>
-<<run setup.relationshipBetween.run()>>
-<<set _matchesBetween = setup.relationshipBetween.getMatches()>>
 <<if $args[0]>>
 	<<set $morningMessages = []>>
 <<else>>
