@@ -1,0 +1,225 @@
+:: Guesthouse \[Event\] - male on females {"position":"336,1079","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+
+<<if typeof $randEvent === 'undefined'>>
+
+	<<set
+		_femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 2),
+		_maleGuestIds = setup.getRandomPersons($tmpEvent[1], 1),
+		_guestIds = _femaleGuestIds.concat(_maleGuestIds),
+		_guestNames ='',
+		_girlNames ='',
+		_guyNames ='',
+		_separator ='',
+		_index = 0,
+		_minCorruption = 100,
+		_nbVirgins = 0,
+		_nbAnalVirgins = 0,
+		_nbSmallTits = 0,
+		_nbSquirters = 0,
+		_nbFemaleSadists = 0,
+		_nbMaleMasochists = 0
+	>>
+
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _guestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _guestNames += _separator + $guests[_guestIds[_i]].name>>
+		<<set _minCorruption = Math.min(_minCorruption, $guests[_guestIds[_i]].corruption)>>
+	<</for>>
+
+	<<set _separator =''>>
+	<<for _i = 0; _i < _femaleGuestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _femaleGuestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _girlNames += _separator + $guests[_femaleGuestIds[_i]].name>>
+		<<if $guests[_femaleGuestIds[_i]].virgin>>
+			<<set _nbVirgins += 1>>
+		<</if>>
+		<<if $guests[_femaleGuestIds[_i]].anal < 20>>
+			<<set _nbAnalVirgins += 1>>
+		<</if>>
+		<<if $guests[_femaleGuestIds[_i]].breasts == 'small'>>
+			<<set _nbSmallTits += 1>>
+		<</if>>
+		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('squirter')>>
+			<<set _nbSquirters += 1>>
+		<</if>>
+		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('sadistic')>>
+			<<set _nbFemaleSadists += 1>>
+		<</if>>
+	<</for>>
+
+	<<set _separator =''>>
+	<<for _i = 0; _i < _maleGuestIds.length; _i++>>
+		<<if _i > 0 && _i + 1 == _maleGuestIds.length>>
+			<<set _separator =' and '>>	
+		<<elseif _i > 0>>
+			<<set _separator =', '>>
+		<</if>>
+		<<set _guyNames += _separator + $guests[_maleGuestIds[_i]].name>>
+		<<if ($guests[_maleGuestIds[_i]].traits ?? []).includes('masochist')>>
+			<<set _nbMaleMasochists += 1>>
+		<</if>>
+	<</for>>
+
+	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
+	<<if _r < 0>>
+		<<set _r = 0>>
+	<</if>>
+	<<set _sexActions = [
+		['kissing','handjob','handjob','footjob','footjob'][random(0, _r)],
+		['bj','bj','titjob','titjob','dp'][random(0, _r)],
+		['nipple_lick','nipple_lick','nipple_lick','pussy_lick','pussy_lick'][random(0, _r)],
+		['pussy_lick','pussy_fingering','pussy_fingering','anal_fingering','anal_fingering'][random(0, _r)],
+		['pussy','pussy','pussy','anal','anal'][random(0, _r)],
+		['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
+	]>>
+	
+	<<if _sexActions[1] == 'titjob' && _nbSmallTits == _femaleGuestIds.length>>
+		<<set _sexActions[1] = 'dp'>>
+	<</if>>
+	<<if _sexActions[2] == 'pussy_lick' && _nbSquirter > 0>>
+		<<set _sexActions[3] = 'squirt_lick'>>
+	<</if>>
+	<<if _sexActions[3] == 'pussy_fingering' && _nbVirgin == _femaleGuestIds.length>>
+		<<set _sexActions[3] = 'anal_fingering'>>
+	<</if>>
+	<<if _sexActions[4] == 'pussy' && _nbVirgin == _femaleGuestIds.length>>
+		<<set
+			_sexActions[4] = 'anal',
+			_sexActions[5] = 'cum_in_ass'
+		>>
+	<</if>>
+	<<if _sexActions[4] == 'anal' && _nbAnalVirgin == _femaleGuestIds.length>>
+		<<set
+			_sexActions[4] = 'dp',
+			_sexActions[5] = 'cum_in_mouth'
+		>>
+	<</if>>
+	<<if _r > 2 && _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
+		<<set
+			_sexActions[3] = 'bj_reverse',
+			_sexActions[4] = 'anal_reverse',
+			_sexActions[5] = 'anal_reverse_cum'
+		>>
+	<</if>>
+	
+	<<set $randEvent = [
+		_guestIds,
+		_femaleGuestIds,
+		_maleGuestIds,
+		_guestNames,
+		_girlNames,
+		_guyNames,
+		_sexActions,
+		_index
+	]>>
+
+	As you approach the dormitory, you hear muffled sounds.<br />
+	You take a peek and see
+		<<set _separator =''>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<if _i > 0 && _i + 1 == _guestIds.length>>
+				<<set _separator =' and '>>	
+			<<elseif _i > 0>>
+				<<set _separator =', '>>
+			<</if>>
+			<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
+		<</for>>
+	 pleasuring each other.<br />
+
+<<else>>
+	<<addmins 5>>
+	<<set 
+		_guestIds = $randEvent[0],
+		_femaleGuestIds = $randEvent[1],
+		_maleGuestIds = $randEvent[2],
+		_guestNames = $randEvent[3],
+		_girlNames = $randEvent[4],
+		_guyNames = $randEvent[5],
+		_sexActions = $randEvent[6],
+		_index = $randEvent[7]
+	>>
+<</if>>
+
+<br /><br />
+
+<<set _actionText = setup.actionText>>
+<div id="choice">
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
+	<</for>>
+	<center>
+		<<set _url = 'actions/threesome_ff/default/'+_sexActions[_index]+'/'+ either(setup.actions['threesome_ff']['default'][_sexActions[_index]])>>
+		<<actionImageOutput _url>><br />
+	</center>
+	<br />
+	<<print _actionText['male_on_females'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
+	<br /><br />
+	<<if $player.horny >= 100>>
+		<<linkreplace 'Cum'>>
+			<<horny_reset>>
+			<center>
+				[img[setup.ImagePath+'game/misc/cum.webp']]
+			</center>
+		<</linkreplace>>
+	<</if>>
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[7] = _index + 1>>
+		<<if $player.horny < 100>>
+			[[Masturbate|passage()][$player.horny += 20]]
+		<</if>>		
+		[[Just watch|passage()]]
+	<</if>>
+	<<link 'Interrupt them'>>
+		<<set _interrupted = true>>
+		<<replace "#choice">>
+			<<for _i = 0; _i < _guestIds.length; _i++>>
+				<<set 
+					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+				>>
+			<</for>>
+				<center>
+					<<actionImageOutput `'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
+				</center>
+				<br /><br />
+				You walk in on
+					<<set _separator =''>>
+					<<for _i = 0; _i < _guestIds.length; _i++>>
+						<<if _i > 0 && _i + 1 == _guestIds.length>>
+							<<set _separator =' and '>>	
+						<<elseif _i > 0>>
+							<<set _separator =', '>>
+						<</if>>
+						<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
+					<</for>>
+				 having sex, they stop and seem unhappy.<br />
+				<br />
+		<</replace>>
+	<</link>>
+</div>
+
+<<link 'Leave'>>
+	<<if _orgasm || !_interrupted>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<set 
+				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
+				$guests[_guestIds[_i]].horny = 0
+			>>
+		<</for>>
+	<</if>>
+	<<unset $randEvent, $tmpEvent>>
+	<<goto 'Guest house'>>
+<</link>>
+
+
