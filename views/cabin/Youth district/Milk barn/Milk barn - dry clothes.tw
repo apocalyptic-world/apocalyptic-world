@@ -1,0 +1,111 @@
+:: Milk barn - dry clothes [bg-milk-barn]
+<br />
+<h1 class="ptitle">
+	<<backButton 'Youth district'>>
+    MILK BARN
+</h1>
+<br />
+<<set _guestsWomen = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+<<set _id = setup.getRandomElement(_guestsWomen)>>
+<<set _npc = $guests[_id]>>
+As you stepped into the dimly lit milk barn, the scent of damp hay and old wood mingled with the faint aroma of clean laundry. 
+You noticed <<=setup.displayName(_npc)>> by the far wall, carefully draping freshly washed clothes over a rope stretched across the room, each item dripping slowly onto the dusty floor. 
+Outside, rain pattered steadily against the corrugated roof, creating a calming rhythm in the barn.
+<br /><br />
+<center>
+    <<image 'places/milk_barn/dry.jpg'>>
+</center>
+<br />
+<<linkreplace 'Approach her'>>
+    <<run $('#option_ignore').hide()>>
+    <<=setup.displayName(_npc)>> glanced back, a hint of surprise in her eyes quickly fading into a small smile.
+    <br /><br />
+    <<sayNpc _npc>>
+        Hey! Hope you don't mind. Had to find a place to dry out clothes.
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Lift her dress'>>
+        Your hand lingered at her waist, and she leaned into your embrace, the warmth between you almost tangible in the chilly, rain-dampened barn. 
+        Then you slowly lifted up her dress, revealing her bare ass. No panties...
+        <br /><br />
+        <<video 'milk_barn/dry1'>>
+        <br /><br />
+        <<if setup.sexChance(_npc)>>
+            <<sayNpc _npc>>
+                Oh what you have in mind?
+            <</sayNpc>>
+        <<else>>
+            <<set _npc.happy -= 20>>
+            <<sayNpc _npc>>
+                What are you doing? Not here. Not now
+            <</sayNpc>>
+        <</if>>    
+        <br />
+        <<linkreplace 'Push her on stack of hay'>>
+            <<video 'milk_barn/dry2'>>
+            <br /><br />
+            <<sayNpc _npc>>
+                Not now! Let me finish the clothes.
+            <</sayNpc>>
+            <<set _npc.happy -= 10>>
+            <br />
+            <center>
+                <<image 'places/milk_barn/dry2.jpg'>>
+            </center>
+            <br />
+            <<linkreplace 'Finger her ass'>>
+                <<video 'milk_barn/dry3'>>
+                <br /><br />
+                <<=setup.displayName(_npc)>> stands still as you spit on her ass and slowly slide finger inside it. 
+                She strains her asshole but slowly relaxes as as you slide your finger deper and deeper inside her.
+                <br /><br />
+                <<video 'milk_barn/dry4'>>
+                <br /><br />
+                <<sayNpc _npc>>
+                    Uh I kind of like that.
+                <</sayNpc>>
+                <br />
+                <<if ['analslut'].includes(_npc.traitsLocked) && setup.percentageChance(30)>>
+                    <<set _analSlutTraitLocked = setup.getKeyByValue(_npc.traitsLocked, 'analslut')>>
+                    <<run _npc.traitsLocked.splice(_analSlutTraitLocked, 1)>>
+                    <strong>Anal slut locked trait removed!</strong>
+                    <br /><br />
+                <</if>>
+                <br /><br />
+                As she moans inside the barn, she puts her hands behind her and spreads her ass cheeks wide open.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Not inside, please!
+                <</sayNpc>>
+                <br />
+                <<video 'milk_barn/dry6'>>
+                <br /><br />
+                You can feel her asshole getting more relaxed with each thrust. In few random moments although you feel that thrust has been too hard as she strains her asshole for a second, forcing you to slow down.
+                <br /><br />
+                <<linkreplace 'Cum on her ass'>>
+                    <<addmins 20>>
+                    <<horny_reset>>
+                    <<set _npc.horny = 0>>
+                    <<video 'milk_barn/dry7'>>
+                    <br /><br />
+                    With the last of your thrust, you pull your dick out of her ass as you cum all over it and her clean dress too. 
+                    She is leaning completely against the pile of hay with her stomach and waiting for you to finish..
+                    <br /><br />
+                    <<sayNpc _npc>>
+                        Are you finished? Can I finish putting out clothes now?
+                    <</sayNpc>>
+                    <br /><br />
+                <</linkreplace>>
+            <</linkreplace>>
+        <</linkreplace>>
+    <</linkreplace>>
+    <<link 'Leave'>>
+        <<goto 'Milk barn'>>
+    <</link>>
+<</linkreplace>>
+<div id="option_ignore">
+    <<link 'Ignore her'>>
+        <<addmins 5>>
+        <<goto 'Milk barn'>>
+    <</link>>
+</div>
