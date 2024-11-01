@@ -127,18 +127,24 @@
 <</widget>>
 
 <<widget companionRearange>>
+	<<set _newCompanions = {}>>
 	<<set _splitOldNpcKey = $args[0].split(':')>>
 	<<for _compR, _compIR range $player.companions>>
 		<<set _compKeyR = _compR.split(':')>>
 		<<if _compKeyR[0] !== _splitOldNpcKey[0]>>
+			<<set _newCompanions[_compR] = true>>
 			<<continue>>
 		<</if>>
+
 		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
-			<<run delete $player.companions[_compR]>>
 			<<set _compKeyR[1]-->>
-			<<set $player.companions[_compKeyR.join(':')] = true>>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<<else>>
+			<<set _newCompanions[_compKeyR] = true>>
 		<</if>>
 	<</for>>
+
+	<<set $player.companions = _newCompanions>>
 <</widget>>
 
 <<widget guestRemove>>

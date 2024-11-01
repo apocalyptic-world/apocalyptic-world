@@ -39,22 +39,36 @@ Her face is a mix of desperation and urgency, and you can sense that something i
         <br />
         Her words resonate with you, reminding you of the precariousness of survival in this unforgiving world
         <br /><br />
-        <<if $player.car.fuel < 20>>
+        <<if $player.car.fuel < 20 && $backpack.count('fuel') < 2>>
             <strong>You don't have enough fuel to help</strong>
             <br /><br />
         <<else>>
-            <strong>You will give her 20% of your fuel tank</strong>
+            <<if $backpack.count('fuel') >= 2>>
+                <<set _gaveCans = true>>
+                <strong>You will give 2 fuel cans</strong>
+            <<else>>
+                <strong>You will give her 20% of your fuel tank</strong>
+            <</if>>
             <br /><br />
             <div id="option_give">
                 <<linkreplace 'Give her fuel'>>
-                    <<set $player.car.fuel -= 20>>
+                    <<if $backpack.count('fuel') >= 2>>
+                        <<drop $backpack 'fuel' 2>>
+                    <<else>>
+                        <<set $player.car.fuel -= 20>>
+                    <</if>>
+                    
                     <<set $player.goodwill += randomInteger(3, 5)>>
                     <<run $('#option_bj, #option_fuck').hide()>>
                     <<sayNpc $tmpGirl>>
                         Really? Thank you so much
                     <</sayNpc>>
                     <br />
-                    The woman watches anxiously as you carefully draw fuel from your tank into the container. Once you've filled it with a reasonable amount, you hand it to her. 
+                    <<if _gaveCans>>
+                        The woman watches anxiously as you carefully take two cans of fuel out of your car and give them to her.
+                    <<else>>
+                        The woman watches anxiously as you carefully draw fuel from your tank into the container. Once you've filled it with a reasonable amount, you hand it to her. 
+                    <</if>>
                     <br /><br />
                     <<you>>
                         This should give you a bit of breathing room. I need to ensure I have enough for my own journey, but I hope this helps.
@@ -101,6 +115,11 @@ Her face is a mix of desperation and urgency, and you can sense that something i
                         Deal is a deal. Now leave. Thank you.
                     <</sayNpc>>
                     <br /><br />
+                    <<if $backpack.count('fuel') >= 2>>
+                        <<drop $backpack 'fuel' 2>>
+                    <<else>>
+                        <<set $player.car.fuel -= 20>>
+                    <</if>>
                 <</linkreplace>>
             </div>
             <div id="option_fuck">

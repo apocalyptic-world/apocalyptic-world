@@ -1,0 +1,96 @@
+:: First settlers
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+The faint yet rhythmic sound of banging resonates through the stillness, cutting through the eerie quiet and sending a shiver up your spine. 
+Gripping your weapon instinctively, you make your way to the gate. 
+There, beyond the sturdy wooden barricade and barbed wire, stands a young couple, their weary faces framed by the grime of the road, desperation, 
+and hope etched deeply into their expressions. In the woman’s arms, bundled in layers of cloth, is a kid, perhaps only a few years old, its face barely visible but serene, 
+oblivious to the harsh world it’s been born into.
+<br /><br />
+<center>
+    <<image 'places/cabin/new_settlers1.jpg'>>
+</center>
+<br />
+You carefully approach, your presence stiffening the couple. The man, his voice trembling with both exhaustion and resolve, speaks first
+<br /><br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    We heard about your settlement. We've been on the road for months, trying to survive with... with her.
+<</sayNpc>>
+<br />
+He nods toward the baby.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    We don't ask for charity. We'll gather our own wood, hunt or scavenge for food. We only ask for protection—at least, a place where she can grow up safe from raiders and beasts.
+<</sayNpc>>
+<br />
+The woman, her face shadowed with fatigue, joins in, her eyes pleading
+<br /><br />
+<<newgirl>>
+<<sayNpc $tmpGirl>>
+    We can pay. Whatever tax you set, we'll manage it. Just… please. We need a chance, somewhere we don't have to sleep with one eye open.
+<</sayNpc>>
+<br />
+The wind carries the scent of dirt, sweat, and the faintest tang of fear. You assess them closely. 
+They appear able-bodied and resourceful, though weary. With the harsh times approaching, the risk of taking on new people is daunting, yet a kid among them adds a layer of gravity. 
+A reminder of a time long past, when family and community meant something, even in the darkest times.
+<br /><br />
+Looking back at them, you take a deep breath, weighing the cost of rejecting them against the possible strain they might bring. Finally, you speak.
+<br /><br />
+<div id="option_stay">
+    <<linkreplace 'Let them stay as settlers'>>
+        <<set $player.quests.first_settlers = true>>
+        <<set $player.baseManagement ??= {}>>
+        <<set $player.baseManagement.settlers = 3>>
+        <<run $('#option_away').hide()>>
+        <<you>>
+            All right. But here, every settler has responsibilities. 
+            You'll gather your own supplies, as you've promised. 
+            In return, you'll contribute to the settlement in both labor and resources, whatever tax we set.
+        <</you>>
+        <br />
+        Their faces soften with a mixture of relief and gratitude. The man nods quickly, reaching for your hand with a grip that speaks of survival, of a man ready to build a life from the ground up, no matter how hard it may be. 
+        The woman’s tired smile as she holds her child a little closer is a spark of hope, fragile yet burning in the dark.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Thank you so much!
+        <</sayNpc>>
+        <br />
+        <div style="font-size: 17pt; color: white; font-weight: bold">
+            You got your first settlers!
+        </div>
+        <br /><br />
+        You lead them down the worn path through the heart of the settlement, the dirt packed hard from footsteps. 
+        The air feels a little warmer here, sheltered from the cold and open wilds beyond the walls, and the young couple relaxes just a fraction as they realize they've made it. 
+        The kid stirs in its mother’s arms, letting out a soft coo that brings a faint, tired smile to her lips.
+        <br /><br />
+        <center>
+            <<image 'places/cabin/new_settlers2.jpg'>>
+        </center>
+        <br /><br />
+        Finally, you arrive at one of the empty houses. The roof, though patched in places, holds strong, and the door swings open with a soft creak. 
+        Dust hangs in the air, disturbed as they step inside, and though the place is bare, it's shelter—a gift of unimaginable value in these times.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_away">
+    <<linkreplace 'Tell them to go away'>>
+        <<run $('#option_stay').hide()>>
+        <<you>>
+            I'm sorry. I can't take on any more settlers. This world… it's not kind to the weak, and I can't risk the safety of everyone here by adding another family.
+        <</you>>
+        <br />
+        The woman's grip on the baby tightens, her face a mixture of exhaustion and silent resignation. 
+        She nods once, biting back whatever words were forming on her lips. 
+        Slowly, they turn to leave, their figures already shrouded in the mist as they trudge away, the faint sound of their footsteps swallowed by the quiet landscape. 
+        You watch them disappear, knowing you may never see them again.
+        <br /><br />
+        <<link 'Go back'>>
+            <<set $player.quests.first_settlers_day = $game.day>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <</linkreplace>>
+</div>

@@ -57,11 +57,20 @@ setup.baseManagement = {
     population: {
         description: function()
         {
-            return 'No visitors outside your people are living in your settlement.';
+            const settlerCount = setup.baseManagement.population.settlersCount();
+            if (settlerCount > 0) {
+                return 'You have <strong>' + settlerCount + '</strong> settlers living in your settlement';
+            }
+
+            return 'No visitors outside your people are living in your settlement';
         },
         livingHousesCount: function ()
         {
             return (variables().player?.baseManagement?.buildings['house'] ?? 0); 
+        },
+        settlersCount: function ()
+        {
+            return (variables().player?.baseManagement?.settlers ?? 0);
         }
     }
 }
