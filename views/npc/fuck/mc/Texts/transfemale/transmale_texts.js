@@ -15,6 +15,9 @@ setup.actionText.transfemale = {
     bj_reverse: [
         "You happily suck %name%'s hard dick",
     ],
+    sn: [
+        "%name% sucks your hard dick while you suck hers!",
+    ],
     dp: [
         "You grab the girl's head with your hands and drive your hard dick deep into her throat.<br />%name% coughs when her gag reflex kicks in."
     ],
