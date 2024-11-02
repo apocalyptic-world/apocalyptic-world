@@ -4,9 +4,10 @@
 <div id="fight-enemies">
 	<<for _i to 0; _i lt $fight.enemies.length; _i++>>
 		<<capture _i>>
+			<<set _enemyAvatar = [0, 2].includes($fight.enemies[_i].gender) ? 0 : 1>>
 			<div class="enemy-div">
 				<div class="enemy-img">
-					[img[setup.ImagePath+'places/fight/enemy_' + $fight.enemies[_i].gender + '.png']]
+					[img[setup.ImagePath+'places/fight/enemy_' + _enemyAvatar + '.png']]
 				</div>
 				<<=$fight.enemies[_i].name>>
 				<div class="enemy-hp">
