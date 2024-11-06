@@ -9,7 +9,8 @@
         maxCorruption: 10,
         show: $tmpGirl.location != 'gloryhole',
         positive: $tmpGirl.relationship > 15,
-        hornyGive: 2
+        hornyGive: 2,
+        maxMcHorny: 20
     },
     handjob: {
         title: 'Handjob',
@@ -27,116 +28,132 @@
     titjob: {
         title: 'Titjob',
         minAction: 25,
-        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && $tmpGirl.location != 'gloryhole' && _canFuck,
         horny: 20,
         maxCorruption: 40,
+        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && $tmpGirl.location != 'gloryhole' && _canFuck
     },
     nipple_lick: {
-        minAction: 5,
         title: 'Lick nipples',
-        show: [0, 2].includes($tmpGirl.gender),
-        hornyGive: 2,
+        minAction: 5,
         horny: 1,
+        maxCorruption: 20,
+        show: [0, 2].includes($tmpGirl.gender),
+        positive: true,
+        hornyGive: 5,
         maxMcHorny: 30
     },
     bj: {
         title: 'Blowjob',
         minAction: 30,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
         horny: 20,
         maxCorruption: 50,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
         stats: 'bj'
-    },
-    bj_reverse: {
-        title: 'Give a blowjob',
-        minAction: 10,
-        show: !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
-        horny: 3,
-        maxMcHorny: 60,
-        maxCorruption: 20,
-        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
-        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
-        hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
     },
     dp: {
         title: 'Deepthroat',
         minAction: 40,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         horny: 20,
-        show: _canFuck,
         maxCorruption: 60,
+        show: _canFuck,
         positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         stats: 'dp'
     },
     pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
-        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
         horny: 3,
         maxCorruption: 40,
-        positive: !($tmpGirl.traits ?? []).includes('analslut'),
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
+        positive: true,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
         maxMcHorny: 60
     },
+    sn: {
+        title: 'Sixty-nine',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 50,
+        show: !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && _canFuck,
+        positive: true,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
+        stats: 'bj'
+    },    
     pussy_fingering: {
         title: 'Finger pussy',
         minAction: 5,
         horny: 5,
-        maxMcHorny: 60,
         maxCorruption: 25,
         show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole' && !$tmpGirl.chastityBelt,
         positive: true,
-        hornyGive: 10
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 10 : 2),
+        maxMcHorny: 60
     },
     pussy: {
         title: 'Fuck pussy',
         minAction: 40,
-        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && _canFuck,
         horny: 20,
         maxCorruption: 60,
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && _canFuck,
         positive: !$tmpGirl.virgin,
-        stats: 'pussy',
-        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5)
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'pussy'
     },
     anal_fingering: {
         title: 'Finger ass',
         minAction: 60,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
-        maxCorruption: 70,
-        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 10),
-        stats: 'anal',
-        show: $tmpGirl.location != 'gloryhole',
         horny: 2,
+        maxCorruption: 70,
+        show: $tmpGirl.location != 'gloryhole',
+        positive: $tmpGirl.anal >= 10,
+        hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 10 : 2),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
         maxMcHorny: 60,
+        stats: 'anal'
+
     },
     anal: {
         title: 'Fuck ass',
         minAction: 70,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
         horny: 20,
         maxCorruption: 100,
-        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20),
-        stats: 'anal',
         show: $tmpGirl.location != 'gloryhole' && _canFuck,
+        positive: $tmpGirl.anal >= 20,
+        hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        stats: 'anal'
+    },
+    anal_fisting: {
+        title: 'Fist asshole',
+        minAction: 90,
+        horny: 2,
+        maxCorruption: 100,
+        show: $tmpGirl.location != 'gloryhole',
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90,
+        maxMcHorny: 60,
+        stats: 'anal'
+    },
+    bj_reverse: {
+        title: 'Give a blowjob',
+        minAction: 10,
+        horny: 3,
+        maxCorruption: 20,
+        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
+        hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 2),
+        maxMcHorny: 60
     },
     anal_reverse: {
         title: 'Get fucked in the ass',
         minAction: 30,
         horny: 20,
         maxCorruption: 100,
-        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
         show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
         hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
-    },
-    anal_fisting: {
-        title: 'Fist asshole',
-        minAction: 90,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90,
-        maxCorruption: 100,
-        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90),
-        stats: 'anal',
-        show: $tmpGirl.location != 'gloryhole',
-        horny: 2,
-        maxMcHorny: 60,
     },
     cum_on_face: {
         show: false,

@@ -12,6 +12,9 @@ setup.actionText.male = {
     bj_reverse: [
         "You happily suck %name%'s hard dick",
     ],
+    sn: [
+        "%name% sucks your hard dick while you suck his!",
+    ],
     dp: [
         "You grab the guy's head with your hands and drive your hard dick deep into his throat.<br />%name% coughs when his reflex kicks in."
     ],
