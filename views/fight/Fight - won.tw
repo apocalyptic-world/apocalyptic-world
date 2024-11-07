@@ -9,6 +9,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 
 <<set $fight.enemiesAlive = false>>
 <<set $fight.enemiesCaptured = 0>>
+<<set _enemiesWithAction = 0>>
 <<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
 	<<capture _i>>
 		<<if !setup.fightIsKilled($fight.defeatedEnemies[_i])>>
@@ -19,8 +20,17 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 		<<if $fight.defeatedEnemies[_i].captured>>
 			<<set $fight.enemiesCaptured++>>
 		<</if>>
+
+		<<if $fight.killAll && !$fight.defeatedEnemies[_i].captured>>
+			<<set $fight.defeatedEnemies[_i].killed = true>>
+		<</if>>
+
+		<<if !$fight.defeatedEnemies[_i].killed && !$fight.defeatedEnemies[_i].captured>>
+			<<set _enemiesWithAction++>>
+		<</if>>
 	<</capture>>
 <</for>>
+<<run delete $fight.killAll>>
 
 <<if !$fight.reward>>
 	<<if $player.strength < 100>>
@@ -47,7 +57,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 	
 	<<for _i, _enemy range $fight.defeatedEnemies>>
 		<<capture _i>>
-			<<if _enemy.inventory>>
+			<<if Object.keys(_enemy.inventory ?? {}).length>>
 				<<for _enemyInventory, _enemyInventoryCount range _enemy.inventory>>
 					<<pickup $backpack _enemyInventory _enemyInventoryCount>>
 					<div>
@@ -76,6 +86,16 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 <<else>>
 	<strong>You look down at <<=($fight.defeatedEnemies.length > 1 ? 'their' : ($fight.defeatedEnemies[0].gender ? 'his' : 'her'))>> <<=($fight.defeatedEnemies.length > 1 ? 'bodies' : 'body')>>, 
 	lying on the floor and you're deciding...</strong>
+	<<if _enemiesWithAction > 1>>
+		<br />
+		<span class="no-style">
+			<<link 'Kill them all'>>
+				<<set $fight.killAll = true>>
+				<<set $player.goodwill -= _enemiesWithAction>>
+				<<goto 'Fight - won'>>
+			<</link>>
+		</span>
+	<</if>>
 	<table id="fight-table">
 	  <<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
 		  <<capture _i>>

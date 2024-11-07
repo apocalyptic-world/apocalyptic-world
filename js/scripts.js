@@ -205,7 +205,8 @@ setup.inventoryNpc = [
     'dumbbell', 
     'kettlebell', 'dumbestbell',
     'condom',
-    'body_armor'
+    'body_armor',
+    'pickaxe'
 ];
 
 setup.inventoryManageable = {

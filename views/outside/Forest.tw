@@ -1,13 +1,13 @@
 :: Forest [Place] {"position":"1811,749","size":"100,100"}
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<if _guest.assignedTo !== 'forest' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
 				<<continue>>
 			<</if>>		
-			<tr>
+			<tr class="item">
 				<td style="width: 300px">
 					<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
 					<<if setup.getAge(_guest) < 17>>
@@ -31,12 +31,7 @@
 					<<=setup.npcListInfo(_guest)>>
 				</td>
 				<td>
-					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
-						Beauty: <<=_guest.beauty>>
-					<</if>>
-				</td>
-				<td>
-					Age: <<=setup.getAge(_guest)>>
+					 <<npcListView _guest _guestI 'guest'>>
 				</td>
 			</tr>
 		<</capture>>
