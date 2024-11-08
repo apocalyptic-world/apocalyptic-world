@@ -6,8 +6,9 @@
 		<<capture _i>>
 			<<set _enemyAvatar = [0, 2].includes($fight.enemies[_i].gender) ? 0 : 1>>
 			<div class="enemy-div">
-				<div class="enemy-img">
-					[img[setup.ImagePath+'places/fight/enemy_' + _enemyAvatar + '.png']]
+				<div class="girl_info_picture">
+					<<set _girlVisual = $fight.enemies[_i]>>
+					<<include 'NPC visual'>>
 				</div>
 				<<=$fight.enemies[_i].name>>
 				<div class="enemy-hp">

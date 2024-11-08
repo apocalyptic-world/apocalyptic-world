@@ -11,7 +11,12 @@
   "LightCyan",
   "Lavender",
   "Turquoise",
-  'Red'
+  'Red',
+  'Chartreuse',
+  'Gold',
+  'Salmon',
+  'Thistle',
+  'MediumOrchid',
 ];>>
 <<set _customColor = $tmpGirl.color ?? 'none'>>
 
@@ -31,7 +36,8 @@
                     <<radiobutton "_customColor" _colorName autocheck>>
                 </td>
                 <td>
-                    <<= _colorName>> 
+                    <<set _class = 'npc-color color-' + _colorName>>
+                    <span @class="''+_class+''"><a><<= _colorName>></a></span> 
                 </td>
             </tr>
         <</capture>>
