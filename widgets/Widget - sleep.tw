@@ -64,7 +64,9 @@
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
 
 <<set _hasWorkingHospital = setup.hasWorkingHospital()>>
-<<set _hasDoctor = setup.hasDoctor()>>
+<<set _doctorCount = setup.getDoctors()>>
+<<set _miscarrieageChanceBase = 12>>
+<<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
 
 <<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
@@ -314,8 +316,7 @@
 				<<run setup.sleepMessages.addMain(_pregnantMsg)>>
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
-			
-			<<set _miscarrieageChance = _hasWorkingHospital ? 3 : _hasDoctor ? 6 : 12>>
+
 			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
 			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
 				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
@@ -699,7 +700,6 @@
 				<<set $characters.vincent.quests.pregnancy = true>>
 			<</if>>
 			
-			<<set _miscarrieageChance = _hasWorkingHospital ? 3 : _hasDoctor ? 6 : 12>>
 			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
 			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
 				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>

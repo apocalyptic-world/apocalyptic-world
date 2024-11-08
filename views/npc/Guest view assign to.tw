@@ -32,9 +32,9 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if !setup.getPersonsForLocation($guests, 'hospital').length && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
+<<if setup.getPersonsForLocation($guests, 'hospital').length < 3 && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
 	<div>
-	  <<link 'Assign as doctor'>>
+	  <<link 'Assign to hospital'>>
 		  <<assignedTo $tmpGirl 'hospital'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
