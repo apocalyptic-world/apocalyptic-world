@@ -12,21 +12,16 @@ You don't have any slaves.
 <</if>>
 
 <br />
-<table id="slaves">
+<table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<slaveValue $slaves[_i]>>
-		<tr>
+		<tr class="item">
 			<td style="width: 300px">
-				<<=setup.displayName($slaves[_i])>>
+				<<=setup.displayName($slaves[_i])>> <<=setup.npcListInfo($slaves[_i])>>
 			</td>
 			<td>
-				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-					Beauty score: <<print $slaves[_i].beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge($slaves[_i])>>
+				 <<npcListView $slaves[_i] _i 'slave'>>
 			</td>
 			<td>
 				Value: <strong><<=$slaves[_i].value>></strong>
