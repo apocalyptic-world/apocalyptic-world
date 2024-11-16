@@ -1,22 +1,46 @@
-:: NPC fight cage - fight[bg-fight-cage]
+:: NPC fight cage - fight [bg-fight-cage]
 <h1 class="ptitle">FIGHT CAGE</h1>
 <br />
 
+<<set _remainingFighters = []>>
+<<set _remainingEnemies = []>>
 <<for _fighterI, _fighter  range $fightCage.fighters>>
     <<if typeof $fightCage.enemies[_fighterI] === 'undefined'>>
         <<continue>>
     <</if>>
-    <<set _enemy = $fightCage.enemies[_fighterI]>>
-
-    <<set _fightResult = setup.fight.simulateFight(_fighter, _enemy)>>
+    <<set _fightResult = setup.fight.simulateFight(_fighter, $fightCage.enemies[_fighterI])>>
+    <<set _img = 'places/cage_fight/npc_' + _fightResult.type + '.jpg'>>
     <div class="npc-fight-result">
         <center>
-            ###
+            <<image _img>>
         </center>
         <br />
         <<=_fightResult.text>>
     </div>
+   
+    <<if _fightResult.win>>
+        <<set $fightCage.enemiesLost ??= []>>
+        <<set _fighter.fightCage ??= {}>>
+        <<set _fighter.fightCage.fightsWon++>>
+        <<set _remainingFighters.push(_fighter)>>
+    <<else>>
+        <<set $fightCage.fightersLost ??= []>>
+        <<set $fightCage.fighters[_fighterI].fightCage ??= {}>>
+        <<set $fightCage.fighters[_fighterI].fightCage.fightsLost++>>
+        <<run $fightCage.fightersLost.push(_fighter)>>
+        <<set _remainingEnemies.push($fightCage.enemies[_fighterI])>>
+    <</if>>
 <</for>>
+<br /><br />
+<<link 'Continue'>>
+    <<set $fightCage.enemies = _remainingEnemies>>
+    <<set $fightCage.fighters = _remainingFighters>>
+    <<if _remainingFighters.length && _remainingEnemies.length>>
+        <<goto `passage()`>>
+    <<else>>
+        <<goto 'NPC fight cage - fight finished'>>
+    <</if>>
+<</link>>
 
 <style>
 .npc-fight-result {

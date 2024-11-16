@@ -25,7 +25,19 @@ setup.fight = {
                 "[Female B] catches [Female A] off guard with a powerful kick to the torso, dropping her to the floor and ending the fight."
               ]
             },
-            emaleVsMale: {
+            MaleVsFemale: {
+              win: [
+                "[Female A] evades [Male B]'s heavy attacks and counters with an elbow strike to his face, bringing him to his knees for the win.",
+                "[Female A] uses her agility to outmaneuver [Male B], locking him into an armbar until he taps out.",
+                "With surprising strength, [Female A] catches [Male B] in a guillotine choke, forcing him to submit to the shock of the audience."
+              ],
+              lose: [
+                "[Male B] uses his size to overpower [Female A], slamming her into the cage wall before delivering the final blow.",
+                "[Male B] takes advantage of his reach, landing a solid punch that knocks [Female A] out cold.",
+                "After a long exchange, [Male B] catches [Female A] with a knee strike, leaving her unable to stand and ending the fight."
+              ]
+            },
+            FemaleVsMale: {
               win: [
                 "[Female A] evades [Male B]'s heavy attacks and counters with an elbow strike to his face, bringing him to his knees for the win.",
                 "[Female A] uses her agility to outmaneuver [Male B], locking him into an armbar until he taps out.",
@@ -39,8 +51,9 @@ setup.fight = {
             }
           }
 
-
-        const fightType = (fighter.gender === 0 ? 'Female' : 'Male') + 'Vs' + (enemy.gender === 0 ? 'Female' : 'Male');
+        const fightType1 = (fighter.gender === 0 ? 'Female' : 'Male');
+        const fightType2 = (enemy.gender === 0 ? 'Female' : 'Male');
+        const fightType = fightType1 + 'Vs' + fightType2;
         
         const fighterWins = fighter.strength > enemy.strength;
         
@@ -52,8 +65,9 @@ setup.fight = {
                      .replace(/\[Female A\]/g, setup.displayName(fighter)).replace(/\[Female B\]/g, setup.displayName(enemy));
 
         return {
-            'win2': fighterWins,
-            'text': text
+            'win': fighterWins,
+            'text': text,
+            'type': fightType1.toLowerCase() + '_vs_' + fightType2.toLowerCase()
         };
       }
 };
