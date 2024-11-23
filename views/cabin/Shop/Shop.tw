@@ -73,7 +73,7 @@
 	</div>
 
 	<<if !($locationEvents.shop ?? false)>>
-		<<if _shopKeeper.sub <= 50 && setup.percentageChance(5)>>
+		<<if !_shopKeeper.gender && _shopKeeper.sub <= 50 && setup.percentageChance(5)>>
 			<<set $locationEvents.shop = true>>
 			<<goto 'Shop - stealing shopkeeper'>>
 		<</if>>
