@@ -1,227 +1,162 @@
 :: Negan - The Poisoned Gift
 <h1 class="ptitle">NEGAN'S OFFICE</h1>
 <br />
-<<set $characters.negan.quests.quest3 = true>>
-The heavy wooden door creaks as you push it open, revealing Negan sitting casually on the edge of a battered desk. 
-His bat, wrapped in barbed wire, rests across his lap, and his smirk widens as you enter.
+<<set $characters.negan.quests.quest4 = true>>
+<<set $characters.negan.quests.quest4_day = $game.day>>
+You push open the heavy wooden door to Negan’s office, the faint creak of the hinges slicing through the quiet hall. 
+Inside, the dim light casts long shadows across the room, where Negan sits at his desk. 
+He’s relaxed, leaning back in his chair, feet propped up on the desk. His bat, Lucille, rests casually across his lap, glinting faintly in the light.
 <br /><br />
 <center>
     <<image 'places/sanctuary/puppet_master0.jpg'>>
 </center>
 <br /><br />
-Your eyes are immediately drawn to the man tied to a chair in the center of the room. 
-His face is unrecognizable—swollen, bloody, and smeared with streaks of red that have dripped down onto his shirt. 
-One of his eyes is swollen shut, and his breathing is labored, each inhale a shallow wheeze.
+In the center of the room stands a small table with a box on it. 
+It’s unassuming at first glance, wrapped in burlap and tied with coarse string. Beside it, a single vial of liquid sits, shimmering faintly in the dim light.
+<br /><br />
+<<negan>>
+    Well, well. If it isn’t my favorite lackey. C’mon in. Got something real special for ya today.
+<</negan>>
+<br />
+You step cautiously into the room, your gaze flickering to the box.
 <br /><br />
 <center>
-    <<image 'places/sanctuary/puppet_master1.jpg'>>
+    <<image 'places/sanctuary/poison_gift1.jpg'>>
 </center>
+<br />
+Negan leans forward, planting his boots back on the floor.
 <br /><br />
 <<negan>>
-    Ah, there you are. Right on time. Meet my good buddy here.
+    That, my friend, is the solution to a little… pest problem we’ve got. There’s this village—a nasty little hive of scumbags. They’ve been hoarding supplies, skimming off the top of what they owe me.
 <</negan>>
 <br />
-Negan drawls, his voice dripping with mock warmth. He gestures to the captive, whose head lolls forward, barely conscious.
+He picks up the vial, holding it up to the light.
 <br /><br />
 <<negan>>
-    This fine gentleman has been keeping secrets. Real juicy ones, I’m sure. Problem is, he’s playing hard to get. And I hate when people play hard to get.
+    This? This is gonna fix all that. You deliver this box—tell ‘em it’s a gift, a token of my generosity. They’ll drink it, eat it, or whatever the hell they do, and boom—problem solved.
 <</negan>>
 <br />
-Negan stands and slowly circles the chair, dragging the tip of his bat along the floor with an agonizing scrape.
-<br /><br />
-<<negan>>
-    Here’s the deal: I need to know who he’s been chatting with outside my little kingdom. You? You’re gonna get him to talk.
-<</negan>>
-<br />
-He leans in close, inches from the captive’s battered face.
-<br /><br />
-<<negan>>
-    But if you don’t... well, let’s just say you’ll be the one I’ll have tied up next.
-<</negan>>
-<br />
-You glance at Negan, trying to read his mood. His smile is wide but razor-sharp, a warning hidden behind the charm. He raises an eyebrow as if daring you to object.
-<br /><br />
-<<negan>>
-    Give him your best shot. I’m dying to see how you work.
-<</negan>>
-<br />
-<div id="option_beat">
-    <<linkreplace 'Beat him'>>
-        <<set _beat = true>>
-        <<run $('#option_fake').hide()>>
-        <<set $player.goodwill -= 10>>
-        <<set $characters.negan.trust ??= 0>>
-        <<set $characters.negan.trust++>>
-        You step forward, fists clenched. The captive tries to speak again, but you cut him off, driving home the fact that you’re not the one to test. 
-        You interrogate him with force, pushing past your discomfort to prove to Negan you’re someone he can trust.
-        <br /><br />
-        <center>
-            <<image 'places/sanctuary/puppet_master_hit.gif'>>
-        </center>
-        <br />
-        Your knuckles connect with the captive’s jaw, sending his head snapping to the side. Blood splatters onto the floor, vivid against the dull concrete. The man groans, spitting out a tooth.
-        <br /><br />
-        <<negan>>
-            Stop messing around! You think this is a joke? Dig deeper!
-        <</negan>>
-        <br />
-        You grit your teeth, fury rising in your chest. Grabbing him by the collar, you slam him back into the chair. The wood creaks, teetering under the force. 
-        Blood spatters across your arm and drips onto the floor.
-        <br /><br />
-        You deliver a brutal blow to his jaw, and his head snaps to the side with a sickening crack. He coughs violently, a spray of crimson staining the floor.
-        <br /><br />
-        <<newguy>>
-        <<sayNpc $tmpGuy>>
-            Please... I don’t… I don’t know what you want...
-        <</sayNpc>>
-        <br />
-        You cut him off with another strike, this time to his midsection. 
-        He doubles over as much as the bindings allow, gagging. Tears and blood stream down his face, mixing into a grotesque mess.
-        <br /><br />
-        Behind you, Negan laughs—a deep, satisfied sound that fills the room.
-        <br /><br />
-        <<negan>>
-            Now that’s more like it!
-        <</negan>>
-        <br />
-        When the captive doesn’t respond fast enough, you drive your fist into his ribs. There’s a crunch beneath your knuckles, and the man lets out a choked scream.
-        <br /><br />
-        <<sayNpc $tmpGuy>>
-            The train depot! South of the river! They’ve got weapons, supplies—please… I told you everything!
-        <</sayNpc>>
-        <br />
-        Negan lets out a low whistle, standing up and patting you on the shoulder.
-        <br /><br />
-        <<negan>>
-            Now that, my friend, is how you get results. You’ve got talent, kid. I like that.
-        <</negan>>
-        <br />
-        <<linkreplace 'Look at guy in the chair'>>
-            <<run $('#end').show()>>
-        <</linkreplace>>
-    <</linkreplace>>
-</div>
-<div id="option_fake">
-    <<linkreplace 'Fake it'>>
-        <<set $player.goodwill++>>
-        <<run $('#option_beat').hide()>>
-        As you stand before the captive, his bloodied and broken face trembling with exhaustion and fear, an idea forms. 
-        You glance at Negan, who leans casually against the desk, spinning his bat in slow circles like a predator waiting for the right moment to pounce.
-        <br /><br />
-        You lean in close to the captive, grabbing his shirt to sell the act.
-        <br /><br />
-        <<you>>
-            You’re gonna talk now. Or things are about to get a lot worse for you.
-        <</you>>
-        <br />
-        The captive shakes his head weakly, his voice barely audible.
-        <br /><br />
-        <<sayNpc $tmpGuy>>
-            I… I can’t…
-        <</sayNpc>>
-        <br />
-        You tighten your grip, pulling him up slightly. But instead of hitting him again, you shift your posture just enough to shield his face from Negan’s line of sight. 
-        Speaking in a low whisper, you say.
-        <br /><br />
-        <<you>>
-            Stay quiet. Let me handle this.
-        <</you>>
-        <br />
-        The man’s eyes widen slightly, confusion flickering across his swollen features, but he nods ever so faintly.
-        <br /><br />
-        Straightening up, you turn to Negan, trying to hide the slight tremor in your voice.
-        <br /><br />
-        <<you>>
-            He talked. He gave me a name—Frank. Some guy helping the rebels. Says he’s holed up near the old water tower.
-        <</you>>
-        <br />
-        Negan stops spinning the bat. His head tilts slightly, and for a moment, you feel the weight of his gaze pressing down on you.
-        <br /><br />
-        <center>
-            <<image 'places/sanctuary/puppet_master0.jpg'>>
-        </center>
-        <br />
-        <<negan>>
-            Frank, huh?
-        <</negan>>
-        <br />
-        He says slowly, tapping the bat against the ground. The sharp clink of metal against concrete echoes in the room.
-        <br /><br />
-        <<negan>>
-            Well, isn’t that just peachy? Frank. At the water tower.
-        <</negan>>
-        <br />
-        Negan walks toward you, his boots thudding ominously on the floor.
-        <br /><br />
-        <<negan>>
-            You sure about this? Because if you’re lying to me…
-        <</negan>>
-        <br />
-        Negan’s grin widens slightly, though it doesn’t reach his eyes. He glances at the captive, who hangs limp in the chair, too exhausted to even raise his head.
-        <br /><br />
-        <<negan>>
-            Well, I’ll be damned. Maybe you’ve got a knack for this after all.
-        <</negan>>
-        <br /><br />
-        He claps you on the shoulder, the force nearly knocking you off balance.
-        <br /><br />
-        <<linkreplace 'Look at guy in the chair'>>
-            <<run $('#end').show()>>
-        <</linkreplace>>
-    <</linkreplace>>
-</div>
-
-<div id="end" style="display:none">
-    The captive slumps in the chair, barely conscious, his face a grotesque mix of bruises and blood. 
-    The room is silent except for his ragged breathing and the faint drip of blood pooling onto the floor. 
-    You step back, wiping your hands on your pants, feeling the weight of what you’ve just done.
+<<linkreplace 'Leave to the village'>>
+    The sun beats down as you and a small group of Negan’s men approach the village. It’s nestled beside a serene lake, the water reflecting the bright blue sky. The air smells fresh, untouched by the grim decay of the world beyond.
     <br /><br />
     <center>
-        <<image 'places/sanctuary/puppet_master1.jpg'>>
+        <<image 'places/sanctuary/poison_gift2.jpg'>>
     </center>
-    <br />
-    Negan stands from his desk, his bat still resting casually on his shoulder. 
-    He doesn’t say a word as he strides toward the captive. There’s an almost playful bounce in his step, but his face is unreadable.
     <br /><br />
-    <<negan>>
-        I appreciate a good show. You did good—real good. I gotta admit, I’m impressed.
-    <</negan>>
+    As you draw closer, the sound of laughter carries on the breeze. You pause, your eyes narrowing. By the lake’s edge, a group of children plays, their laughter light and carefree. A woman nearby washes clothes, chatting with a man who’s mending a fishing net.
     <br /><br />
-    He stops in front of the captive, crouching slightly to look him in the eye.
+    These aren’t hardened criminals or ruthless survivors. They’re families.
     <br /><br />
-    <<negan>>
-        But the thing about guys like you.. is you can’t ever really trust ‘em, can you? Even when they spill their guts, you’re left wondering... did they leave something out? Did they tell me everything?
-    <</negan>>
+    You clutch the box tightly, the weight of the vial inside feeling heavier by the second. 
+    The villagers notice your group now, their smiles faltering. 
+    The children pause in their play, curiosity—and faint fear—replacing their laughter.
     <br /><br />
-    The captive’s head lolls weakly, and he manages to stammer.
+    <<newguy>>
+    <<set _oldGuy = $tmpGuy>>
+    A village elder approaches, wiping his hands on a rag. He’s thin, weathered by age and hardship, but there’s a kindness in his eyes.
     <br /><br />
-    <<sayNpc $tmpGuy>>
-        I… I told you… everything…
+    <<sayNpc _oldGuy>>
+        What brings you to our little corner of the world?
     <</sayNpc>>
     <br />
-    Negan sighs, standing up straight.
-    <br /><br />
-    <<negan>>
-        Yeah, you probably did. But let’s be honest here—this isn’t about you anymore.
-    <</negan>>
-    <br />
-    <center>
-        <<image 'places/sanctuary/puppet_master_bat.gif'>>
-    </center>
-    <br /><br />
-    Without warning, Negan swings his bat in a brutal arc. The barbed wire tears into the man’s face with a sickening crunch, the force of the blow knocking the chair backward. 
-    Blood sprays across the floor and walls as the captive collapses onto the ground, lifeless.
-    <br /><br />
-    As he walks toward the door, he pauses and looks back, his grin widening.
-    <br /><br />
-    <<negan>>
-        Oh, and next time? Maybe try leaving a little more for me to do. I hate being bored.
-    <</negan>>
-    <br />
-    With that, he steps out of the room, humming a jaunty tune, leaving you alone with the gruesome aftermath.
-    <br /><br />
-    <<link 'Leave'>>
-        <<goto 'Sanctuary'>>
-    <</link>>
-</div>
-
+    <div id="option_order">
+        <<linkreplace 'Give poision as gift'>>
+            <<set $player.goodwill -=5>>
+            <<run $('#option_defy').hide()>>
+            <<set $characters.negan.trust++>>
+            <<set $characters.negan.quests.quest4_option = 'poison'>>
+            You square your shoulders, forcing a smile.
+            <br /><br />
+            <<you>>
+                We bring a gift from Negan. A peace offering, to show there’s no hard feelings.
+            <</you>>
+            <br />
+            You say, setting the box down in the elder’s hands. he elder hesitates, clearly surprised. 
+            <br /><br />
+            <center>
+                <<image 'places/sanctuary/poison_gift4.jpg'>>
+            </center>
+            <br /><br />
+            <<sayNpc _oldGuy>>
+                That’s... unexpected. Thank you.
+            <</sayNpc>>
+            <br />
+            He motions for others to gather, curiosity spreading through the small crowd.
+            <br /><br />
+            As the villagers begin to open the box, you turn away, unable to watch. You lead your men back to the road, the laughter of children still echoing faintly behind you.
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+    <div id="option_defy">
+        <<linkreplace "Warn them">>
+            You set the box down in the elder’s hands. he elder hesitates, clearly surprised.
+            <br /><br />
+            <center>
+                <<image 'places/sanctuary/poison_gift4.jpg'>>
+            </center>
+            <br /><br />
+            <<run $('#option_order').hide()>>
+            <<set $player.goodwill++>>
+            You step forward, meeting the elder’s gaze.
+            <br /><br />
+            <<you>>
+                I need to be honest. This isn’t a gift—it’s poison. Negan wants you dead.
+            <</you>>
+            <br />
+            You say, lowering your voice.
+            <br /><br />
+            The elder’s face pales, his hands trembling as he sets the box down. The villagers behind him exchange frightened whispers.
+            <br /><br />
+            You glance over your shoulder, expecting Negan’s men to be watching you like hawks. Instead, you notice their attention has drifted. 
+            A blonde woman from the village, perhaps in her early 20s, has caught their eyes. She stands near the lake, her hair catching the sunlight.
+            <br /><br />
+            <center>
+                <<image 'places/sanctuary/poison_gift3.jpg'>>
+            </center>
+            <br /><br />
+            One of Negan’s men makes a crude comment, and the others chuckle, their focus entirely on her.
+            <br /><br />
+            <<sayNpc _oldGuy>>
+                Poisoned?
+            <</sayNpc>>
+            <br />
+            <<you>>
+                Get everyone out of here! Leave the box unopened, and burn it somewhere far from here. Do it quietly, and don’t let them see.
+            <</you>>
+            <br />
+            The elder stares at you, his expression a mixture of disbelief and fear.
+            <br /><br />
+            <<sayNpc _oldGuy>>
+                Why are you telling us this?
+            <</sayNpc>>
+            <br />
+            <<you>>
+                Because you don’t deserve to die for something you didn’t do. Now go. Quickly.
+            <</you>>
+            <br />
+            The elder nods, his movements deliberate and steady as he takes the box. He bows slightly to you, masking his fear with a forced expression of gratitude. 
+            He murmurs quietly enough that only you can hear.
+            <br /><br />
+            <<sayNpc _oldGuy>>
+                Thank you.
+            <</sayNpc>>
+            <br />
+            Turning to his people, he raises his voice just enough to be heard.
+            <br /><br />
+            <<sayNpc _oldGuy>>
+                We are honored by this gift. I’ll make sure it’s prepared for a proper celebration.
+            <</sayNpc>>
+            <br />
+            The villagers exchange puzzled glances, but no one questions him. He motions for a few others to follow him, carrying the box toward a small storage hut on the far side of the village.
+            <br /><br />
+            You exhale softly, your heart pounding in your chest.
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</linkreplace>>
