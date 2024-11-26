@@ -26,6 +26,10 @@
   	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
     <<grid outside sanctuary 'Sanctuary' 'Sanctuary' 0 _isDisabled>>
   <</if>>
+  <<if ($game.location.quarry ?? false)>>
+  	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
+    <<grid outside quarry 'Quarry' 'Quarry' 0 _isDisabled>>
+  <</if>>
 </div>
 
 <<if $game.day > 100 && $game.cabinName && !$player?.quests?.base_building>>
