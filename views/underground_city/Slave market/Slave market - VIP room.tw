@@ -18,6 +18,20 @@
 <br /><br />
 As you enter the room you notice Elena sitting in her usual place. She notices you and greets you with smile through her gag.
 <br /><br />
+<<if !$player.quests.slave_market_vip_room_girl && $player.stats.slaves_sold >= 40>>
+    <<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
+        As our main slave provider you can use Elena anyway you like.
+    <</say>>
+    <<set $player.quests.slave_market_vip_room_girl = true>>
+    <br />
+<</if>>
+<<if $player.quests.slave_market_vip_room_girl>>
+    <<link 'Fuck Elene'>>
+        <<goto 'Slave market - VIP room fuck Elena'>>
+    <</link>>
+    <br /><br />
+<</if>>
+
 <<if typeof $player.quests.slaveMarketVipRequest === 'undefined'>>
     <<say 'Slave merchant' setup.ImagePath+'/people/slave_merchant.jpg'>>
         My clients do not have new requests. Come back later.

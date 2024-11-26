@@ -168,6 +168,9 @@
 <<widget guestLeft>>
 	<<for _npcId, _npcLike range $guests[_args[0]].relationshipBetween?.stats ?? {}>>
 		<<set _npc = setup.getNpcById(_npcId)>>
+		<<if !_npc>>
+			<<continue>>
+		<</if>>
 		<<if _npcLike > 50>>
 			<<set _npc.happy -= 80>>
 		<<else>>
