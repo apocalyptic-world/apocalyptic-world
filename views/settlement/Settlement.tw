@@ -26,6 +26,8 @@
 <<elseif isMetChar('octavia') && ($game.location.settlement_church ?? false) && $characters.octavia.quests.eve_kidnapped && $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
 	<<set $characters.rodger.quests.faith = true>>
 	<<goto 'Settlement - [Event] The Testing of Faith'>>
+<<elseif isMetChar('rodger') && $characters.rodger.quests.cheat && !$characters.rodger.quests.eve_pregnant && (!$characters.rodger.quests.cheat_day || ($characters.rodger.quests.cheat_day + 14) < $game.day)>>
+	<<goto 'Eve - pregnant talk'>>
 <<else>>
 	<<if !$locationEvents.settlement>>
 	  <<if randomInteger(0, 100) <= 5>>
