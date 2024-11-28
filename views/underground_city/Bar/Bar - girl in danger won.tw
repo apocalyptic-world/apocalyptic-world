@@ -1,0 +1,66 @@
+:: Bar - girl in danger won [bg-underground]
+<h1 class="ptitle">BAR</h1>
+<br />
+You turn your attention to the girl. She’s still pressed against the wall, her breathing uneven as she tries to steady herself. 
+Her wide eyes meet yours, and for a moment, there’s only silence between you, the rest of the bar fading into the background.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    Thank you.
+<</sayNpc>>
+<br />
+She says softly, her voice shaking but sincere. She straightens up, brushing off her clothes and looking at you with a mixture of gratitude and apprehension.
+<br /><br />
+<center>
+    <<image 'places/bar/girl_in_danger3.jpg'>>
+</center>
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I don’t know what would’ve happened if you hadn’t stepped in.
+<</sayNpc>>
+<br />
+You nod, the tension from the confrontation still lingering in your chest. 
+This is the kind of world where nothing comes for free, and now that she’s safe, you realize you have a choice.
+<br /><br />
+<<linkreplace 'Ask for reward'>>
+    <<you>>
+        You wouldn’t want to leave without showing your appreciation, would you?
+    <</you>>
+    <br />
+    She looks up at you, uncertainty flickering in her eyes. 
+    For a long moment, she doesn’t speak, her gaze shifting to the door of the restroom nearby. 
+    She seems to weigh her options, clearly uncomfortable but caught between what’s expected and what she feels is right.
+    <br /><br />
+    <<if setup.percentageChance(50)>>
+        <<set $tmpGirl.sub = 60>>
+        She looks down for a moment, clearly hesitating, but then nods. 
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Alright. Just... quick, okay? Follow me to the wc.
+        <</sayNpc>>
+        <br />
+        <<link 'Follow her'>>
+            <<set $tmpGirl.rape to false>>
+            <<set $tmpGirl.corruption = randomInteger(50, 70)>>
+            <<set $tmpGirl.sub = 60>>
+            <<set $tmpGirlCapture to false>>
+            <<set $tmpGirlInvite to false>>
+            <<unset $slaveId, $charId, $guestId>>
+            <<set $tmpGirl.location = 'nightclub'>>
+            <<set $tmpGirlBack = 'Bar'>>
+            <<set $tmpGirlViewBack = 'Bar'>>
+            <<fuck $tmpGirl>>
+        <</link>>
+    <<else>>
+        Her face hardens, and she pulls back.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            No! I’m not that kind of girl.
+        <</sayNpc>>
+        <br />
+        In a sudden rush, she turns and bolts, disappearing into the crowd of the bar, leaving you with nothing but the sound of her footsteps fading into the distance.
+        <br /><br />
+    <</if>>
+<</linkreplace>>
+<<link 'Leave'>>
+    <<goto 'Bar'>>
+<</link>>

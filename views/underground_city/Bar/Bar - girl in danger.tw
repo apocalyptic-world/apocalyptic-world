@@ -1,0 +1,112 @@
+:: Bar - girl in danger [bg-underground]
+<h1 class="ptitle">BAR</h1>
+<br />
+<center>
+    <<image 'places/bar/drinking_event.gif'>>
+</center>
+<br /><br />
+You're nursing a drink at the corner of the bar, the chipped glass cool against your fingers, when your attention is drawn to a commotion in the shadows.
+<br /><br />
+A man, broad-shouldered and rough-looking, has a young woman pinned against the wall near a broken-down arcade machine.
+She twists her arm in a futile attempt to break free, her voice low but strained as she pleads.
+<br /><br />
+<<newgirl>>
+<<sayNpc $tmpGirl>>
+    Stop it, let go.
+<</sayNpc>>
+<br />
+The man leans in closer, his grip tightening. His voice is a growl, laced with menace.
+<br /><br />
+<center>
+    <<image 'places/bar/girl_in_danger.jpg'>>
+</center>
+<br /><br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    Don’t make a scene.
+<</sayNpc>>
+<br />
+Her eyes dart around the room, wide with panic, silently begging for help.
+<br /><br />
+You glance around. The other patrons, drifters, scavengers, and misfits, either don’t notice or deliberately avert their eyes. A group at a nearby table laughs too loudly, their voices forcing normalcy into the uneasy atmosphere. 
+Even the bartender, a wiry man who looks like he's seen too much, pretends to be engrossed in his work.
+<br /><br />
+<div id="option_help">
+    <<linkreplace 'Help her'>>
+        You take a deep breath and set your drink down, the chipped glass clinking softly on the table. The weight of the moment presses down on you, but something inside refuses to let you stay seated. 
+        Your chair scrapes against the floor as you stand, the sound cutting through the low hum of the bar like a knife.
+        <br /><br />
+        The man's head snaps toward you, his grip on the woman faltering just slightly. His bloodshot eyes narrow as he sizes you up, his lips curling into a sneer.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            What do you want?
+        <</sayNpc>>
+        <br />
+        The girl glances at you, hope flickering in her eyes but quickly replaced by fear—fear for what might happen next.
+        <br /><br />
+        <center>
+            <<image 'places/bar/girl_in_danger2.jpg'>>
+        </center>
+        <br /><br />
+        <<linkreplace 'Tell him to leave her alone'>>
+            <<run $('#option_ignore').hide()>>
+            <<you>>
+                Let her go. Now.
+            <</you>>
+            <br />
+            <<if !setup.player.isRecognized()>>
+                He chuckles, low and mean, releasing the girl just enough to push her behind him like a shield.
+                <br /><br />
+                <<sayNpc $tmpGuy>>
+                    And who the hell are you to tell me what to do?
+                <</sayNpc>>
+                <br />
+                His hand drifts to his belt, where a knife or worse might be waiting. After few seconds he pulls out knife and rushes towards you.
+                <br /><br />
+                <<link 'Fight'>>
+                    <<set $player.goodwill++>>
+                    <<set $tmpGuy.inventory = {
+                        knife: 1
+                    }>>
+                    <<set $enemies = [$tmpGuy]>>
+                    <<fight $enemies 'Bar - girl in danger won' 'Underground city'>>
+                <</link>>
+            <<else>>
+                <<set $player.goodwill++>>
+                He sneers, his bravado kicking in. He spits, his hand drifting toward his belt. The unmistakable glint of a blade flashes there.
+                <br /><br />
+                <<sayNpc $tmpGuy>>
+                    You don’t tell me what to do.
+                <</sayNpc>>
+                <br />
+                But then he freezes. His eyes narrow as recognition dawns, and his sneer falters. 
+                He looks you over again, taking in the details—the scars, the worn weapon at your side, the subtle but unmistakable weight of your presence and your reputation around here.
+                You're not just some drunk looking for trouble.
+                <br /><br />
+                <<sayNpc $tmpGuy>>
+                    You’re… that guy...
+                <</sayNpc>>
+                <br />
+                His hand inches away from his belt, and he raises it slightly, palms out.
+                <br /><br />
+                <<sayNpc $tmpGuy>>
+                    I don’t want any trouble, alright?
+                <</sayNpc>>
+                <br />
+                The girl stumbles away from him, her breath coming in shallow gasps as she clings to the wall. The tension in the room shifts as the man takes a step back, still keeping his eyes on you like a cornered animal.
+                <br /><br />
+                <<link 'Approach girl'>>
+                    <<goto 'Bar - girl in danger won'>>
+                <</link>>
+                <<link 'Leave'>>
+                    <<goto 'Bar - drink'>>
+                <</link>>
+            <</if>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>
+<div id="option_ignore">
+    <<link 'Ignore'>>
+        <<goto 'Bar - drink'>>
+    <</link>>
+</div>

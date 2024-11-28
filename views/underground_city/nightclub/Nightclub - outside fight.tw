@@ -16,16 +16,7 @@ As soon as you step outside the nightclub and turn around the corner, <strong>2<
 <</if>>
 
 <<link 'Fight them'>>
-	<<if $player.fighter_rank <= 40>> <<set _nightclubPercentageTheyRecognize = 60>>
-	<<elseif $player.fighter_rank <= 50>> <<set _nightclubPercentageTheyRecognize = 50>>
-	<<elseif $player.fighter_rank <= 60>> <<set _nightclubPercentageTheyRecognize = 40>>
-	<<elseif $player.fighter_rank <= 70>> <<set _nightclubPercentageTheyRecognize = 30>>
-	<<elseif $player.fighter_rank <= 80>> <<set _nightclubPercentageTheyRecognize = 20>>
-	<<elseif $player.fighter_rank <= 90>> <<set _nightclubPercentageTheyRecognize = 10>>
-	<<else>> <<set _nightclubPercentageTheyRecognize = 0>>
-	<</if>>
-
-	<<if setup.percentageChance(_nightclubPercentageTheyRecognize)>>
+	<<if setup.player.isRecognized()>>
 		<<goto 'Nightclub - outside fight recognize'>>
 	<<else>>
 		<<generateEnemies 2>>
