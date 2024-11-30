@@ -223,45 +223,51 @@
         <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> welcome the attention.<strong> (Happy / Relationship + 1)</strong>
          <br />
 
-        <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
+        <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption && $tmpGirl2.corruption < _sexActions[$sexAction].maxCorruption>>
+            <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
+            <<set $tmpGirl2.corruption = Math.min($tmpGirl2.corruption + 1, 100)>>
+            <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> are getting more corrupted.<strong> (Corruption + 1)</strong>
+            <br />
+        <<elseif (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
             <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
             <<=setup.displayName($tmpGirl, true)>> is getting more corrupted.<strong> (Corruption + 1)</strong>
             <br />
-        <</if>>
-
-        <<if (_sexActions[$sexAction] ?? false) && $tmpGirl2.corruption < _sexActions[$sexAction].maxCorruption>>
+        <<elseif (_sexActions[$sexAction] ?? false) && $tmpGirl2.corruption < _sexActions[$sexAction].maxCorruption>>
             <<set $tmpGirl2.corruption = Math.min($tmpGirl2.corruption + 1, 100)>>
             <<=setup.displayName($tmpGirl2, true)>> is getting more corrupted.<strong> (Corruption + 1)</strong>
             <br />
         <</if>>
 
-        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<=setup.displayName($tmpGirl, true)>>'s body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive && _sexActions[$sexAction].positive2 && $tmpGirl.horny < 100 && $tmpGirl2.horny < 100>>
+            <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> are getting hornier and hornier. <strong>(Horny +<<=_npcHornyGained>> / +<<=_npcHornyGained2>>)</strong>
             <br />
-            
-            <<if $tmpGirl.horny >= 100>>
-                <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
-                <<include 'Mc fuck squirt'>>
-                <<set $sexAction = 'threesome_f_' + $sexAction>>
-                
-                <<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+        <<else>>
+            <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+                <<if $tmpGirl.horny >= 100>>
+                    <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
+                    <<include 'Mc fuck squirt'>>
+                    <<set $sexAction = 'threesome_f_' + $sexAction>>
+                    <<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+                    <br />
+                    <<set
+                        $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+                        $tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+                    <<set $tmpGirl.orgasms ??= 0>>
+                    <<set $tmpGirl.orgasms++>>
+                <<else>>
+                    <<=setup.displayName($tmpGirl, true)>>'s body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
+                    <br />
+                <</if>>	
+            <</if>>
+            <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
+                <<if $tmpGirl2.horny >= 100>>
+                    <<set $tmpGirl2.horny -= 20>>
+                    <<=setup.displayName($tmpGirl2, true)>> needs some attention. <strong>(Horny - 20)</strong>
+                <<else>>
+                    <<=setup.displayName($tmpGirl2, true)>> is getting hornier and hornier. <strong>(Horny + <<=_npcHornyGained2>>)</strong>
+                <</if>>
                 <br />
-                <<set
-                    $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
-                    $tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
-                <<set $tmpGirl.orgasms ??= 0>>
-                <<set $tmpGirl.orgasms++>>
-            <</if>>	
-        <</if>>
-
-        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
-            <<if $tmpGirl2.horny >= 100>>
-                <<set $tmpGirl2.horny -= 20>>
-                <<=setup.displayName($tmpGirl2, true)>> needs some attention. <strong>(Horny - 20)</strong>
-            <<else>>
-                <<=setup.displayName($tmpGirl2, true)>> is getting more and horny. <strong>(Horny + <<=_npcHornyGained>>)</strong>
-            <</if>>	
-            <br />
+            <</if>>
         <</if>>
 
         <<if _sexActions[$sexAction]?.stats>>
