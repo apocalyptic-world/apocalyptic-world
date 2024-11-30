@@ -1,0 +1,67 @@
+:: Guesthouse - Ask for threesome choose {"position":"2307,223","size":"100,100"}
+
+<<set
+	_hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 20, '>='),
+	_nymphoGuests = setup.propertyMatchIndexes($guests, 'traits', 'nymphomaniac', 'includes'),
+	_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
+	_prospects = 0,
+	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id)
+>>
+<<run _interestedGuests.delete(_k)>>
+
+<<if !setup.percentageChance(setup.sexChance($tmpGirl))>>
+	<<if $tmpGirl.married && $tmpGirl.family.husband !== 'mc'>>
+		You know that I am married to someone else. I don't want to do it.
+	<<elseif !$tmpGirl.likesGuys>>
+		Sorry, you are not my type, I hope you understand.
+	<<else>>
+		I'm not in the mood right now, maybe some other time.
+	<</if>>
+<<elseif _interestedGuests.length == 0>>
+	Didn't find anyone interested, maybe some other time.
+<<else>>
+	<<for _i to 0; _i lt _interestedGuests.length; _i++>>
+		<<capture _i, _j>>
+			<<set
+				_guest = $guests[_interestedGuests[_i]],
+				_genderClass = 'gender-' + setup.genderClass(_guest),
+				_j = _interestedGuests[_i],
+				_guestYes = (setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty))),
+				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty))),
+				_mcYes = setup.percentageChance(setup.sexChance($tmpGirl))
+			>>
+			<<if setup.getAge(_guest) < 18 || _guest.gender>>
+				<<continue>>
+			<</if>>
+
+			<div>
+				<span @class="''+_genderClass+''">
+					<<if (_guestYes && _mainYes && _mcYes)>>
+						<<set _prospects++>>
+						<<link _guest.name>>
+							<<set $locationEvents.guesthouse = true>>
+							<<dialogclose>>
+
+							<<if ($guests[_j].gender == 0 && $guests[_k].gender == 0)>>
+								<<set $guestId2 = _j>>
+								<<set $tmpGirl2 = $guests[_j]>>
+								<<threesome $tmpGirl $tmpGirl2>>
+							<</if>>
+						<</link>>
+					<</if>>
+				</span>
+			</div>
+		<</capture>>
+	<</for>>
+	
+	<<if _prospects == 0>>
+		I didn't match with anyone, maybe some othertime.
+	<</if>>
+<</if>>
+
+<br /><br />
+<<link 'Back'>>
+	<<dialogclose>>
+<</link>>
+
+

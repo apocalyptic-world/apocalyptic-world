@@ -69,6 +69,18 @@
 	<</link>>
 <</if>>
 
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden' && $tmpGirl.location !== 'gloryhole' && !$tmpGirl.gender>>
+	<<set _linkName = 'Fuck ' + _himOrHer + ' in a threesome'>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<script>>
+			Dialog.setup("Guesthouse - Ask for threesome", "Guesthouse - Ask for threesome");
+			Dialog.wiki(Story.get("Guesthouse - Ask for threesome choose").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
+
 <<if $tmpGirl.location !== 'garden' >>
 	<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
 	<<link `_linkName`>>

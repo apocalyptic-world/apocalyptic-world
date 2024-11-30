@@ -61,10 +61,10 @@ setup.actionText.male_on_females = {
         "%male% pulls out and finishes on %females%'s stomachs."
     ],
     cum_in_ass: [
-        "With a groan, %male% cums in %female0% ass."
+        "With a groan, %male% cums in %female0%'s ass."
     ],
     cum_on_ass: [
-        "With a groan, %male% cums on %female0% ass."
+        "With a groan, %male% cums on %female0%'s ass."
     ],
     cum_on_back: [
         "With a groan, %male% cums on %females%'s back sides."
