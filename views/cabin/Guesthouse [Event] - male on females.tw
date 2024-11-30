@@ -157,7 +157,7 @@
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
 	<center>
-		<<set _url = 'actions/threesome_ff/default/'+_sexActions[_index]+'/'+ either(setup.actions['threesome_ff']['default'][_sexActions[_index]])>>
+		<<set _url = 'actions/female/default/threesome_f_'+_sexActions[_index]+'/'+ either(setup.actions['female']['default']['threesome_f_' + _sexActions[_index]])>>
 		<<actionImageOutput _url>><br />
 	</center>
 	<br />
@@ -189,22 +189,59 @@
 					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
 				>>
 			<</for>>
-				<center>
-					<<actionImageOutput `'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
-				</center>
-				<br /><br />
-				You walk in on
-					<<set _separator =''>>
-					<<for _i = 0; _i < _guestIds.length; _i++>>
-						<<if _i > 0 && _i + 1 == _guestIds.length>>
-							<<set _separator =' and '>>	
-						<<elseif _i > 0>>
-							<<set _separator =', '>>
-						<</if>>
-						<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
-					<</for>>
-				 having sex, they stop and seem unhappy.<br />
-				<br />
+			<center>
+				<<actionImageOutput `'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
+			</center>
+			<br /><br />
+			You walk in on
+				<<set _separator =''>>
+				<<for _i = 0; _i < _guestIds.length; _i++>>
+					<<if _i > 0 && _i + 1 == _guestIds.length>>
+						<<set _separator =' and '>>	
+					<<elseif _i > 0>>
+						<<set _separator =', '>>
+					<</if>>
+					<<=_separator + setup.displayName($guests[_guestIds[_i]])>>
+				<</for>>
+				having sex, they stop and seem unhappy.<br />
+			<br />
+
+			<<set _linkName = 'Ask to replace ' + _guyNames>>
+			<<linkreplace `_linkName`>>
+				<<set _yesGuestIds = []>>
+				<<for _i = 0; _i < _femaleGuestIds.length; _i++>>
+					<<if setup.percentageChance(setup.sexChance($guests[_femaleGuestIds[_i]]))>>
+						<<set _yesGuestIds.push(_femaleGuestIds[_i])>>
+					<</if>>
+				<</for>>
+
+				<<if _yesGuestIds.length == 0>>
+					They refuse and leave the room at once!
+				<<else>>
+					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
+						<<set $guests[$guestId] = $tmpGirl>>
+					<</if>>
+					<<if _yesGuestIds.length == 1>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<fuck $tmpGirl>>
+						<</linkreplace>>
+					<<else>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> and <<=setup.displayName($guests[_yesGuestIds[1]], true)>> agree to have a threesome with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]],
+							$guestId2 = _yesGuestIds[1],
+							$tmpGirl2 = $guests[_yesGuestIds[1]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<threesome $tmpGirl $tmpGirl2>>
+						<</linkreplace>>					
+					<</if>>
+				<</if>>
+			<</linkreplace>>
 		<</replace>>
 	<</link>>
 </div>

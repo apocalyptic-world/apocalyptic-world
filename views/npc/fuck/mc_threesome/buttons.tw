@@ -1,0 +1,185 @@
+:: Mc threesome buttons
+
+<<set $sexForced == false >>
+
+<<if ($tmpGirl.traits ?? []).includes('nymphomaniac') >>
+    <<set _actionMax = 100>>
+<<else>>
+	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
+	<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
+	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub, $tmpGirl.drunk ?? 0)>>
+<</if>>
+
+<<if ($tmpGirl2.traits ?? []).includes('nymphomaniac') >>
+    <<set _actionMax2 = 100>>
+<<else>>
+	<<set _actionMax2 = Math.max($tmpGirl2.relationship, $tmpGirl2.horny)>>
+	<<set _actionMax2 = Math.min(_actionMax2, $tmpGirl2.corruption)>>
+	<<set _actionMax2 = Math.max(_actionMax2, $tmpGirl2.sub, $tmpGirl2.drunk ?? 0)>>
+<</if>>
+
+<<set _actionMax = Math.min(_actionMax, _actionMax2)>>
+
+<<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
+	<<energy +5>>
+	<<set $player.sexp++>>
+
+    <<if !$tmpGirl.gender>>
+        <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
+        <<include 'asks to cum inside'>>
+        <<set $sexAction = 'threesome_f_' + $sexAction>>
+    <</if>>
+
+	<<if $sexAction == 'threesome_f_handjob'>>
+        <<link 'Handjob cum'>>
+            <<set $sexAction = 'threesome_f_handjob_cum'>>
+            <<horny_reset>>
+            <<goto `passage()`>>
+        <</link>>
+	<<elseif $sexAction == 'threesome_f_footjob'>>
+        <<link 'Footjob cum'>>
+            <<set $sexAction = 'threesome_f_footjob_cum'>>
+            <<horny_reset>>
+            <<goto `passage()`>>
+        <</link>>
+	<<elseif $sexAction == 'threesome_f_titjob'>>
+        <<link 'Cum on tits'>>
+            <<set $sexAction = 'threesome_f_cum_on_tits'>>
+            <<horny_reset>>
+            <<goto `passage()`>>
+        <</link>>
+	<<elseif $sexAction == 'threesome_f_pussy'>>
+        <<link 'Cum in pussy'>>
+            <<horny_reset>>
+            <<if _askedToCumInside>>
+                <<set _relIncrease = randomInteger(5, 10)>>
+                <<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + _relIncrease, 100)>>
+                <<set $tmpGirl.happy += randomInteger(5, 10)>>
+            <</if>>
+            <<set $sexAction = 'threesome_f_cum_in_pussy'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<link 'Cum on pussy'>>
+            <<horny_reset>>
+            <<set $sexAction = 'threesome_f_cum_on_pussy'>>
+            <<goto `passage()`>>
+        <</link>>	
+        <<link 'Cum on stomach'>>
+            <<horny_reset>>
+            <<set $sexAction = 'threesome_f_cum_on_stomach'>>
+            <<goto `passage()`>>
+        <</link>>
+    <<elseif $sexAction == 'threesome_f_anal'>>
+        <<link 'Cum in ass'>>
+            <<horny_reset>>
+            <<set $sexAction = 'threesome_f_cum_in_ass'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<link 'Cum on back'>>
+            <<horny_reset>>
+            <<set $sexAction = 'threesome_f_cum_on_back'>>
+            <<goto `passage()`>>
+        <</link>>
+    <<elseif $sexAction === 'threesome_f_dp'>>
+        <<link 'Cum in throat'>>
+            <<horny_reset>>
+	        <<set $sexAction = 'threesome_f_cum_throat'>>
+	        <<goto `passage()`>>
+	    <</link>>
+    <<elseif $sexAction === 'threesome_f_anal_reverse'>>
+        <<link 'Cum while being fucked'>>
+            <<horny_reset>>
+	        <<set $sexAction = 'threesome_f_anal_reverse_cum'>>
+	        <<goto `passage()`>>
+	    <</link>>
+	<</if>>
+    <<link 'Cum on face'>>
+        <<horny_reset>>
+	    <<set $sexAction = 'threesome_f_cum_on_face'>>
+	    <<goto `passage()`>>
+	<</link>>
+    <<link 'Cum in mouth'>>
+        <<horny_reset>>
+	    <<set $sexAction = 'threesome_f_cum_in_mouth'>>
+	    <<goto `passage()`>>
+	<</link>>
+		
+<<else>>
+        <<if $player.energy >= 5>>
+            <div id="action-buttons">
+                <<set _sexOptionHidden = false>>
+                <<for _sexActionKey, _sexAction range _sexActions>>
+                    <<capture _sexActionKey, _sexAction>>
+                        <<set _sexActionShortKey = _sexActionKey.replace('threesome_f_', '')>>
+                        <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionShortKey+".png"]]</span>'>>
+                            <<link _linkName>>
+                                <<set $sexAction = _sexActionKey>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        <<elseif (_sexAction.show ?? true)>>
+                            <<set _sexOptionHidden = true>>
+                        <</if>>
+                    <</capture>>
+                <</for>>
+            </div>
+        <br />
+     <</if>>
+
+	<<set _linkName = 'Focus on ' + $tmpGirl2.name>>
+	<<link `_linkName`>>
+        <<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
+            <<set $guests[$guestId] = $tmpGirl>>
+        <</if>>
+        <<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
+            <<set $guests[$guestId2] = $tmpGirl2>>
+        <</if>>
+
+        <<set _guestId0 = $guestId,
+        $guestId = $guestId2,
+        $guestId2 = _guestId0,
+        _tmpGirl0 = $tmpGirl,
+        $tmpGirl = $tmpGirl2,
+        $tmpGirl2 = _tmpGirl0
+        >>
+
+        <<unset $sexAction>>
+        <<goto `passage()`>>
+    <</link>>
+
+
+     <<link 'End'>>
+	    <<unset $sexAction>>
+        <<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
+            <<set $guests[$guestId2] = $tmpGirl2>>
+        <</if>>
+        <<unset $guestId2, $tmpGirl2>>
+        <<if $oldTmpGirlLocation>>
+            <<set $tmpGirl.location = $oldTmpGirlLocation>>
+            <<unset $oldTmpGirlLocation>>
+        <</if>>
+        <<if $tmpGirlViewBack && !tags($tmpGirlViewBack).includes('girlview')>>
+            <<if typeof $slaveId !== 'undefined'>>
+                <<set $slaves[$slaveId] = $tmpGirl>>
+                <<unset $slaveId>>
+            <<elseif typeof $guestId !== 'undefined'>>
+                <<set $guests[$guestId] = $tmpGirl>>
+                <<unset $guestId>>
+            <<elseif typeof $charId !== 'undefined'>>
+                <<set $characters[$charId] = $tmpGirl>>
+                <<unset $charId>>
+            <</if>>
+            <<if $tmpGirlViewBack>>
+                <<goto $tmpGirlViewBack>>
+            <<else>>
+                <<goto 'NPC view'>>
+            <</if>>
+        <<else>>
+            <<if $tmpGirlViewBack>>
+                <<goto $tmpGirlViewBack>>
+            <<else>>
+                <<goto 'NPC view'>>
+            <</if>>
+        <</if>>
+    <</link>>
+<</if>>

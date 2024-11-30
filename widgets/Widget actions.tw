@@ -34,7 +34,7 @@
 
 		<<if $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
 			<<set $args[1] = 'deflower_strapon'>>
-		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
+		<<elseif $args[0].virgin && ('pussy', 'threesome_f_pussy').includes($args[1])>>
 			<<set $args[1] = 'deflower'>>
 		<</if>>
 		
@@ -144,16 +144,24 @@
 					<<set $args[1] = 'mistress_' + $args[1] >>
 			<</if>>
 			<<set _StatsMapping = {
-				mistress_anal: 'anal'
+				mistress_anal: 'anal',
+				threesome_f_anal: 'anal',
+				threesome_f_bj: 'bj',
+				threesome_f_dp: 'dp',
+				threesome_f_pussy: 'pussy'
 			}>>
 			<<set _npcStat = _StatsMapping[$args[1]] ?? $args[1]>>
 			<<set _actionText = setup.actionText>>
 			<<if $args[0].virgin && typeof _actionText[$args[1]] !== 'undefined' && typeof _actionText[$args[1]]['v'] !== 'undefined'>>
 				<<print _actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
 			<<else>>
-				<<if $args[0].gender>>
+				<<if $args[0].gender || $args[1].includes('threesome')>>
 					<<if _actionText[setup.genderPath($args[0])][$args[1]] !== undefined>>
-						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/%name%/g, $args[0].name)>>
+						<<set _name2 = ''>>
+						<<if typeof $tmpGirl2 !== 'undefined'>>
+							<<set _name2 = $tmpGirl2.name>>
+						<</if>>
+						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/%name%/g, $args[0].name).replace('%name2%', _name2)>>
 					<</if>>
 				<<else>>
 					<<if _actionText[$args[1]] !== undefined>>
