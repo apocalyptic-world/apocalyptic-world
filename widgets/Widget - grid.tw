@@ -25,7 +25,12 @@
         percentage: 5
     },
 	_eventHorseCart
-    ]
+    ],
+	'Wood cabin': [{
+		enabled: recall($suppCode) && timeBetween('08:00', '16:00'), 
+		passage: 'Cabin - Trespassing',
+		percentage: 3
+	}]
 }>>
 
 <<set _props = _args[7] ?? {}>>
@@ -65,7 +70,9 @@
 		<</if>>
 		<<if typeof _randomEvents[$args[2]] !== 'undefined'>>
 			<<for _randomEventI, _randomEvent range _randomEvents[$args[2]]>>
-				<<if _randomEvent.enabled && setup.percentageChance(_randomEvent.percentage)>>
+				<<set _travelEventName = 'travel' + _randomEventI>>
+				<<if _randomEvent.enabled && setup.percentageChance(_randomEvent.percentage) && !($locationEvents[_travelEventName] ?? false)>>
+					<<set $locationEvents[_travelEventName] = true>>
 					<<set $travelPassage = $args[2]>>
 					<<set _randomTravelEvent = _randomEvent.passage>>
 					<<break>>
