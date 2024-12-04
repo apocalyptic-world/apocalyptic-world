@@ -52,6 +52,9 @@
 				<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
 				<<if ($tmpGirl.inventory ?? {})>>
 					<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
+						<<if typeof setup.gifts[_npcInventoryItem] !== 'undefined'>>
+							<<continue>>
+						<</if>>
 						<<set _icon = _npcInventoryItem.indexOf("blueprint") !== -1 ? 'blueprint' :
 							_npcInventoryItem.indexOf("note")     !== -1 ? 'note' :  
 							_npcInventoryItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _npcInventoryItem>>

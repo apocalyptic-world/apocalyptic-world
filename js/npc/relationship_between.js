@@ -83,7 +83,6 @@ setup.relationshipBetween = {
         let end = Date.now() - start;
 
         this.getMatches();
-        //console.log("Relationships run: " + end + " milliseconds");
     },
 
     getMatches: function(notMarried) {
