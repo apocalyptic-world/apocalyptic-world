@@ -48,7 +48,7 @@
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
-	<<elseif $sexAction == 'threesome_f_pussy'>>
+	<<elseif ('threesome_f_pussy','threesome_f_pussy_pussy_lick','threesome_f_pussy_anal_reverse').includes($sexAction)>>
         <<link 'Cum in pussy'>>
             <<horny_reset>>
             <<if _askedToCumInside>>
@@ -86,7 +86,7 @@
 	        <<set $sexAction = 'threesome_f_cum_throat'>>
 	        <<goto `passage()`>>
 	    <</link>>
-    <<elseif $sexAction === 'threesome_f_anal_reverse'>>
+    <<elseif $sexAction.includes('anal_reverse') >>
         <<link 'Cum while being fucked'>>
             <<horny_reset>>
 	        <<set $sexAction = 'threesome_f_anal_reverse_cum'>>

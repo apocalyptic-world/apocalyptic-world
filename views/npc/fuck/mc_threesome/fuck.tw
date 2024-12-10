@@ -106,6 +106,18 @@
         hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
         stats: 'pussy'
     },
+    threesome_f_pussy_pussy_lick: {
+        title: 'Fuck pussy & lick pussy',
+        minAction: 40,
+        horny: 20,
+        maxCorruption: 60,
+        show: _canFuck && !$tmpGirl.gender && !$tmpGirl2.gender,
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: true,
+        hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'pussy'
+    },
     threesome_f_anal_fingering: {
         title: 'Finger ass',
         minAction: 60,
@@ -138,6 +150,74 @@
         maxMcHorny: 60,
         stats: 'anal'
     },
+    threesome_f_handjob_anal_reverse: {
+        title: 'Handjob & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5)
+    },
+    threesome_f_bj_anal_reverse: {
+        title: 'Blowjob & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5),
+        stats: 'bj'
+    },
+    threesome_f_sn_anal_reverse: {
+        title: 'Blowjob, lick pussy & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: !$tmpGirl.gender && ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive: true,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5),
+        stats: 'bj'
+
+    },
+    threesome_f_pussy_anal_reverse: {
+        title: 'Fuck pussy & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: !$tmpGirl.gender && ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5),
+        stats: 'pussy'
+    },
+    threesome_f_nipple_lick_anal_reverse: {
+        title: 'Lick tits & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: [0, 2].includes($tmpGirl.gender) && ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive: true,
+        hornyGive: 5,
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5)
+
+    },
+    threesome_f_pussy_lick_anal_reverse: {
+        title: 'Lick pussy & get ass fucked',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: !$tmpGirl.gender && ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) && (settings.gaysEnabled || settings.transEnabled),
+        positive: true,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5)
+
+    },
     threesome_f_bj_reverse: {
         title: 'Give a blowjob',
         minAction: 10,
@@ -149,13 +229,125 @@
         maxMcHorny: 60
     },
     threesome_f_anal_reverse: {
-        title: 'Get fucked in the ass',
+        title: 'Get ass fucked',
         minAction: 30,
         horny: 20,
         maxCorruption: 100,
         show: ((($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender))) && (settings.gaysEnabled || settings.transEnabled),
         positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
         hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
+    },
+    threesome_f_bj_reverse_anal_reverse: {
+        title: 'Give a blowjob while getting fucked in the ass',
+        minAction: 30,
+        horny: 20,
+        maxCorruption: 100,
+        show: ((($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender))) && ((($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender))) &&(settings.gaysEnabled || settings.transEnabled),
+        positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
+        hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 2),
+        positive2: (($tmpGirl2.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl2.gender)),
+        hornyGive2: ([1,2].includes($tmpGirl2.gender) ? 20 : 5)
+    },
+    threesome_f_anal_a_pussy_lick: {
+        title: 'Fuck ass + girl licks pussy',
+        minAction: 70,
+        horny: 20,
+        maxCorruption: 100,
+        show: _canFuck && !$tmpGirl2.gender,
+        positive: $tmpGirl.anal >= 20,
+        hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        positive2: true,
+        hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'anal'
+    },
+    threesome_f_anal_b_bj: {
+        title: 'Fuck ass + girl blows strapon',
+        minAction: 70,
+        horny: 20,
+        maxCorruption: 100,
+        show: _canFuck,
+        positive: $tmpGirl.anal >= 20,
+        hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        stats: 'anal'
+    },
+    threesome_f_anal_b_pussy: {
+        title: 'Fuck ass + girl pussy fucked',
+        minAction: 70,
+        horny: 20,
+        maxCorruption: 100,
+        show: _canFuck && !$tmpGirl.gender,
+        positive: !$tmpGirl.virgin && $tmpGirl.anal >= 20,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        stats: 'anal'
+    },
+    threesome_f_bj_b_anal: {
+        title: 'Blowjob + girl ass fucked',
+        minAction: 70,
+        horny: 20,
+        maxCorruption: 100,
+        positive: $tmpGirl.anal >= 20,
+        hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && ($tmpGirl.traits ?? []).includes('cumslut'),
+        stats: 'bj'
+    },
+    threesome_f_bj_b_pussy: {
+        title: 'Blowjob + girl pussy fucked',
+        minAction: 40,
+        horny: 20,
+        maxCorruption: 60,
+        show: !$tmpGirl.gender,
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
+        stats: 'bj'
+    },
+    threesome_f_pussy_a_pussy: {
+        title: 'Fuck pussy + girl fucks pussy',
+        minAction: 40,
+        horny: 20,
+        maxCorruption: 60,
+        show: !$tmpGirl.gender && !$tmpGirl2.gender,
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: !$tmpGirl2.virgin,
+        hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'pussy'
+    },
+    threesome_f_pussy_a_pussy_lick: {
+        title: 'Fuck pussy + girl licks pussy',
+        minAction: 40,
+        horny: 20,
+        maxCorruption: 60,
+        show: !$tmpGirl.gender && !$tmpGirl2.gender,
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: true,
+        hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'pussy'
+    },
+    threesome_f_pussy_a_sn: {
+        title: 'Fuck pussy + girls sixty-nine',
+        minAction: 40,
+        horny: 20,
+        maxCorruption: 60,
+        show: !$tmpGirl.gender && !$tmpGirl2.gender,
+        positive: !$tmpGirl.virgin,
+        hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+        positive2: true,
+        hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+        stats: 'pussy'
+    },
+    threesome_f_pussy_b_anal: {
+        title: 'Fuck pussy + girl ass fucked',
+        minAction: 70,
+        horny: 20,
+        maxCorruption: 100,
+        show: _canFuck && !$tmpGirl.gender,
+        positive: !$tmpGirl.virgin && $tmpGirl.anal >= 20,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        stats: 'pussy'
     },
     threesome_f_cum_on_face: {
         show: false,
@@ -294,8 +486,13 @@
             <</if>>
         <</if>>
 
-        <<if $sexAction === 'threesome_f_pussy'>>
+        <<if $tmpGirl.virgin && ('threesome_f_pussy', 'threesome_f_pussy_pussy_lick', 'threesome_f_pussy_anal_reverse').includes($sexAction)>>
             <<set $tmpGirl.virgin = false>>
+        <</if>>
+
+        <<if $tmpGirl2.virgin && ('threesome_f_anal_reverse_pussy').includes($sexAction)>>
+            <<set $tmpGirl2.virgin = false>>
+            <<=setup.displayName($tmpGirl2, true)>> groans while clenching her teeth from pain.<br />There's some <strong>blood</strong> on your penis because you just <strong>deflowered</strong> the girl.
         <</if>>
 
         <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
