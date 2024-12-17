@@ -22,6 +22,9 @@
 				<<if typeof _guest.color !== 'undefined' >>
 					<<set _customColorStyle = ' npc-color color-' + _guest.color >>
 				<</if>>
+				<<if !_guest.gender && !_femaleDoctor>>
+					<<set _femaleDoctor = _doctor>>
+				<</if>>
 				<tr>
 					<td style="min-width: 25%">
 						<center>
@@ -95,9 +98,9 @@
 <br />
 [[Back|Youth district]]
 
-<<if setup.perkHas('bleeding') && $tmpGirl>>
+<<if setup.perkHas('bleeding') && _femaleDoctor>>
 	<<set $tmpEvent = {
-		id: _girlGuest[0]
+		id: _femaleDoctor
 	}>>
 	<<goto 'Hospital - bleeding'>>
 <</if>>

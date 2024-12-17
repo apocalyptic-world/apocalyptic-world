@@ -25,6 +25,10 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 			<<set $fight.defeatedEnemies[_i].killed = true>>
 		<</if>>
 
+		<<if $fight.captureAll && !$fight.defeatedEnemies[_i].killed>>
+			<<set $fight.defeatedEnemies[_i].captured = true>>
+		<</if>>
+
 		<<if !$fight.defeatedEnemies[_i].killed && !$fight.defeatedEnemies[_i].captured>>
 			<<set _enemiesWithAction++>>
 		<</if>>
@@ -91,17 +95,20 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 		<span class="no-style">
 			<<link 'Kill them all'>>
 				<<set $fight.killAll = true>>
-				<<set $player.goodwill -= _enemiesWithAction>>
-				<<goto 'Fight - won'>>
-			<</link>>
-		</span> | 
-		<span class="no-style">
-			<<link 'Kill them all'>>
-				<<set $fight.killAll = true>>
-				<<set $player.goodwill -= _enemiesWithAction>>
+				<<set $player.goodwill -= (_enemiesWithAction * 2)>>
 				<<goto 'Fight - won'>>
 			<</link>>
 		</span>
+		<<if (($game.location.basement ?? false) && ($slaves.length + _enemiesWithAction) <= $basementLimit)>>
+		 | 
+			<span class="no-style">
+				<<link 'Capture them all'>>
+					<<set $fight.captureAll = true>>
+					<<set $player.goodwill -= _enemiesWithAction>>
+					<<goto 'Fight - won'>>
+				<</link>>
+			</span>
+		<</if>>
 	<</if>>
 	<table id="fight-table">
 	  <<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
