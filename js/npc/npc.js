@@ -463,3 +463,12 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 
 	return output;
 }
+
+setup.NpcInHome = function(_npc) {
+	if (['garden', 'quarry'].includes(_npc.location)) {
+		return false;
+	}
+
+
+	return true;
+}

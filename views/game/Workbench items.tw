@@ -1,5 +1,33 @@
 :: Workbench items  [include] {"position":"146,521","size":"100,100"}
 	<<set _workbenchItems = {
+		axe: {
+			show: true,
+			title: "Axe",
+			description: "Helps to gather more wood",
+			required: {
+				wood: 2,
+				metal: 5
+			},
+			energy: 30,
+			after: function() {
+				variables().backpack.pickup('axe', 1);
+			},
+			goto: "Workbench"
+		},
+		pickaxe: {
+			show: true,
+			title: "Pickaxe",
+			description: "Required to work in quarry/mines",
+			required: {
+				wood: 2,
+				metal: 10,
+			},
+			energy: 40,
+			after: function() {
+				variables().backpack.pickup('pickaxe', 1);
+			},
+			goto: "Workbench"
+		},
 		greenhouse: {
 			show: !($game.location.greenhouse ?? false),
 			title: 'Greenhouse',

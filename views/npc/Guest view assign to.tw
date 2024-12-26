@@ -87,6 +87,19 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <</if>>
 
 <div>
+	<<if ($game.location.quarry ?? false)>>
+		<<if setup.npcInventoryHas($tmpGirl, 'pickaxe')>>
+			<<link 'Assign to quarry'>>
+				<<assignedTo $tmpGirl 'quarry'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Provides you with coal and stone)
+		<<else>>
+			Assign to quarry [Need pickaxe] (Provides you with coal and stone)
+		<</if>>
+	<</if>>
+</div>
+<div>
   <<link 'Assign to scavenging'>>
 	  <<assignedTo $tmpGirl 'scavenging'>>
 	  <<dialogclose>>
