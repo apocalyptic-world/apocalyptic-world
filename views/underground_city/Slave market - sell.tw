@@ -1,7 +1,7 @@
 :: Slave market - sell [bg-underground] {"position":"2063,1690","size":"100,100"}
 <h1 class="ptitle">SLAVE MARKET</h1>
 <div id="place-head">
-[img[setup.ImagePath+'places/underground/slave_market_head.jpg']]
+	<<image 'places/underground/slave_market_head.jpg'>>
 </div>
 <br /><br />
 
@@ -11,6 +11,7 @@ Choose a slave you want to sell.
 You don't have any slaves.
 <</if>>
 
+<<set _sellSlaves = {}>>
 <br />
 <table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
@@ -18,7 +19,9 @@ You don't have any slaves.
 		<<slaveValue $slaves[_i]>>
 		<tr class="item">
 			<td style="width: 3%">
-                <<checkbox "_slaves[i]" false true>>
+				<span class="sell-npc-checkbox">
+                	<<checkbox "_sellSlaves[_i]" false true>>
+				</span>
             </td>
 			<td style="width: 300px">
 				<<=setup.displayName($slaves[_i])>> <<=setup.npcListInfo($slaves[_i])>>
@@ -35,15 +38,7 @@ You don't have any slaves.
 						Are you sure you want to sell <<=setup.pronounceWho($slaves[_i])>>?
 						<br />
 						<<link 'Yes' 'Slave market - sell'>>
-							<<for _inventory, _inventoryCount range ($slaves[_i].inventory ?? {})>>
-								<<run setup.npcInventoryRemove($slaves[_i], _inventory, _inventoryCount)>>
-								<<pickup $backpack _inventory _inventoryCount>>
-							<</for>>
-							<<set $player.reputation++>>
-							<<set $player.goodwill-=5>>
-							<<set $player.money += $slaves[_i].value>>
-							<<run $slaves.splice(_i, 1)>>
-							<<statsAdd 'slaves_sold'>>
+							<<slaveSell _i>>
 							<<addmins 30>>
 							<<dialogclose>>
 						<</link>>	
@@ -54,7 +49,33 @@ You don't have any slaves.
 		<</capture>>
 	<</for>>
 </table>
+<div id="sell-all-link" style="display:none">
+	<span class="no-style">
+		<<link 'Sell all'>>
+			<<for _sellSlaveI, _sellSlave range _sellSlaves>>
+				<<if _sellSlave>>
+					<<slaveSell _sellSlaveI>>
+				<</if>>
+			<</for>>
+			<<goto `passage()`>>
+		<</link>>
+	</span>
+</div>
 <br /><br />
 [[Leave|Slave market]]
+
+
+<<script>>
+	$(document).ready(function() {
+		$('.sell-npc-checkbox input[type="checkbox"]').on('click', function() {
+			if($('.sell-npc-checkbox input[type="checkbox"]:checked').length > 0) {
+				$('#sell-all-link').show();
+				return;
+			}
+
+			$('#sell-all-link').hide();
+		});
+	});
+<</script>>
 
 

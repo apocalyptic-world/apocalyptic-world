@@ -198,6 +198,18 @@
     <<run $slaves.splice(_slaveI, 1)>>
 <</widget>>
 
+<<widget slaveSell>>
+	<<for _inventory, _inventoryCount range ($slaves[_args[0]].inventory ?? {})>>
+		<<run setup.npcInventoryRemove($slaves[_args[0]], _inventory, _inventoryCount)>>
+		<<pickup $backpack _inventory _inventoryCount>>
+	<</for>>
+	<<set $player.reputation++>>
+	<<set $player.goodwill-=5>>
+	<<set $player.money += $slaves[_args[0]].value>>
+	<<statsAdd 'slaves_sold'>>
+	<<slaveRemove _args[0]>>
+<</widget>>
+
 <<widget companionRemove>>
 	<<set _splitKey = $args[0].split(':')>>
 	<<if _splitKey[0] === 'guest'>>
