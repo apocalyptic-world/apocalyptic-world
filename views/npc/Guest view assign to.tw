@@ -99,6 +99,19 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 		<</if>>
 	<</if>>
 </div>
+<<if ($game.location.garage ?? false) && setup.assignedToCount('garage') < 1>>
+	<div>
+		<<if ($tmpGirl.skills ?? []).includes('mechanic')>>
+			<<link 'Assign to garage'>>
+				<<assignedTo $tmpGirl 'garage'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Helps to maintain and fix car)
+		<<else>>
+			Assign to garage (Helps to maintain and fix car)
+		<</if>>
+	</div>
+<</if>>
 <div>
   <<link 'Assign to scavenging'>>
 	  <<assignedTo $tmpGirl 'scavenging'>>

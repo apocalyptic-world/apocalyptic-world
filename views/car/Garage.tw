@@ -5,6 +5,13 @@
     health: 0,
     fuel: 0
 }>>
+
+<<set _mechanicList = setup.getPersonsForLocation($guests, 'garage')>>
+<<unset $tmpGirl>>
+<<if _mechanicList.length && timeBetween('10:00', '18:00')>>
+    <<set $tmpGirl = $guests[_mechanicList[0]]>>
+	<<set $tmpGirl.location = 'car'>>
+<</if>>
 <br />
     <fieldset>
         <legend>
@@ -60,6 +67,24 @@
         <</if>>
     </div>
 <br /><br />
+<<if $tmpGirl && !$tmpGirl.gender>>
+    <center>
+        <<actionImage $tmpGirl 'fix'>>
+    </center>
+    <<=setup.displayName($tmpGirl)>> is working on your car.
+    <br /><br />
+    <<set _linkName = 'Approach ' + $tmpGirl.name>>
+    <<link _linkName>>
+        <<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $tmpGirlBack = 'Garage'>>
+		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirlInvite to false>>
+		<<set $guestId = _mechanicList[0]>>
+		<<run delete $slaveId, $charId, $childId>>
+		<<goto 'NPC view - guest'>>
+    <</link>>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
 <</link>>

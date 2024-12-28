@@ -26,6 +26,10 @@ setup.skills = {
     teacher: {
         title: "Teacher",
         description: "Can teach childrens in school"
+    },
+    mechanic: {
+        title: "Mechanic",
+        description: "Good with mechanics. Sometimes able to fix cars without needing parts"
     }
 };
 
