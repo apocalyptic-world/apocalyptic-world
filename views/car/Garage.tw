@@ -82,7 +82,11 @@
 		<<set $tmpGirlInvite to false>>
 		<<set $guestId = _mechanicList[0]>>
 		<<run delete $slaveId, $charId, $childId>>
-		<<goto 'NPC view - guest'>>
+        <<if recall($suppCode) && !($locationEvents.garage ?? false)>>
+            <<goto 'Garage - help mechanic'>>
+        <<else>>
+		    <<goto 'NPC view - guest'>>
+        <</if>>
     <</link>>
 <</if>>
 <<link 'Leave'>>
