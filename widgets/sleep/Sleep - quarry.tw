@@ -1,5 +1,7 @@
 :: sleepQuarry [include]
 
+/* check for pickaxe */
+
 <<if typeof _npc.stats['quarry'] === 'undefined'>>
     <<set _npc.stats['quarry'] = 0>>
 <</if>>
@@ -11,6 +13,7 @@
     <<set _itemCount++>>
 <</if>>
 
+<<set _totals[_randomItem] ??= 0>>
 <<set _totals[_randomItem] += _itemCount>>
 <<if _isStorageAvailable>>
 	<<pickup $storage _randomItem _itemCount>>

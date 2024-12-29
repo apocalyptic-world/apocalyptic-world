@@ -29,6 +29,7 @@
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
 	milk: 0,
+	mining: 0,
 	scav: 0,
 	streets: 0, streets_die: 0, nightclub: 0,
 	wood: 0,
@@ -99,6 +100,8 @@
 		<<set _money = Math.round(_money*(100-_percentTaxNightclub)/100)>>
 
 		<<set _settlementStatsData.nightclub += _money>>
+	<<elseif _job === 'quarry'>>
+		<<set _settlementStatsData.mining += 1 + (_statsNpc.strength >= 50 ? 0.25 : 0)>>
 	<</if>>
 	<<if  setup.getAge(_statsNpc) > 3>>
 		<<set _settlementStatsData.food.consume++>>
@@ -178,7 +181,7 @@
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
 	<tr><td>Working in nightclub:</td><td><<=_settlementStatsData.work.nightclub ?? 0>></td><td><<=_nightclubText>></td></tr>
-	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
+	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td>(Max <<=($workersLimitHunter ?? 8)>>) <<=_avgWood>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td><<=_avgWolf>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
 	<tr><td>Working as companion (guests+slaves):</td>
@@ -189,18 +192,22 @@
 	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
-	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span></td></tr>
+	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(Max 0)(No use yet) <span style="color: yellow">[Not in game yet!]</span></td></tr>
+	<tr><td>Mechanic in garage:</td><td><<=_settlementStatsData.work.garage ?? 0>></td><td>(Max 1)(No use yet)</td></tr>
 
 	<<set _text = !$backpack.has('blueprint_library') ? '(Explore to find blueprint → build)' : 
 			!$game.location.library ? '(Build the library)' : '(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span>' >>
-		<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
+	<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
+
+	<<set   _text = !$game.location.quarry ?  '(Explore to find quarry)' : 'Average mining/day <<=_settlementStatsData.mining>> coal/stone'>>
+	<tr><td>Working in quarry:</td><td><<=_settlementStatsData.work.quarry ?? 0>></td><td><<=_text>></td></tr>
 
 	<<if !$player.quests?.base_building>>
 		<tr><td>Base management</td><td></td><td><span style="color: blue">[Will appear later in your game!]</span> (Place reserved for hospital & milk barn & more...)</td></tr>
 	<</if>>
 	<<if $player.quests.base_building>>
-		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign a doctor)' : 
-			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max 1)' >>
+		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign doctors)' : 
+			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max ' + ($workersLimitHospital ?? 3) + ')' >>
 		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
 
 		<<set _text = !$player.quests?.milk_farm ? '(Vincent have an idea → build milk barn → assign dairy cattle)' : !$game.location?.milk_barn ? '(Build milk barn → assign dairy cattle)' : !_settlementStatsData.work?.milk_barn ? '(Assign dairy cattle)' : '(Average milk/day: ' + setup.ppFraction(_settlementStatsData.milk) + ')'>>

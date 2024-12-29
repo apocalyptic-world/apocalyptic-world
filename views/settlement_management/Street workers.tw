@@ -1,6 +1,6 @@
 :: Settlement management - street_workers [management include]
 
-<h1>Sex workers & dairy cattle with unhappy jobs</h1>
+<h1>People with unhappy jobs</h1>
 
 <br/><br/>
 
@@ -11,9 +11,10 @@
     happy:      {slaves: [], guests: []},
     very_happy: {slaves: [], guests: []}
 }>>
+<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
 <<set _workers = {
-    slaves: setup.getNpcsForLocations($slaves, ['streets', 'nightclub', 'milk_barn']),
-    guests: setup.getNpcsForLocations($guests, ['streets', 'nightclub', 'Milk_barn']),
+    slaves: setup.getNpcsForLocations($slaves, _unhappy_jobs),
+    guests: setup.getNpcsForLocations($guests, _unhappy_jobs),
 }>>
 <<set _sick = []>>
 <<set _count = _workers.slaves.length + _workers.guests.length>>
@@ -67,7 +68,7 @@
     <<if _sick.length>>
         <tr>
             <td></td>
-            <td colspan="3">Note: Some sex workers and/or dairy cattles are sick! As the sick don't work so why not count this day as a day off?</td>
+            <td colspan="3">Note: Some unhappy workers are sick! As the sick don't work so why not count this day as a day off?</td>
             <td align="right">
                 <<button 'Rest for sick!'>>
                     <<for _npc range _sick>>
@@ -170,5 +171,5 @@
         <</for>>
     <</for>>
 </table><<else>>
-    You don't have any sex workers!
+    You don't have workers with unhappy jobs!
 <</if>>

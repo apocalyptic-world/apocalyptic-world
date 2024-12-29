@@ -355,8 +355,11 @@
 		<</if>>
 		// Resting
 		<<if  _isRest>>
-			<<if ['streets', 'nightclub', 'milk_barn'].includes($slaves[_i].assignedTo)>>
+			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
+			<<if _unhappy_jobs.includes($slaves[_i].assignedTo)>>
 				<<setNpcStats slave _i happy +5>>
+			<<else>>
+				<<setNpcStats slave _i happy +2>>
 			<</if>>
 			<<set $slaves[_i].rest.days-->>
 			<<if $slaves[_i].rest.days <= 0>>
@@ -775,8 +778,11 @@
 		<</if>>
 		// Resting
 		<<if _isRest>>
-			<<if ['streets', 'nightclub', 'milk_barn'].includes($guests[_guestI].assignedTo)>>
+			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
+			<<if _unhappy_jobs.includes($guests[_guestI].assignedTo)>>
 				<<setNpcStats guest _guestI happy +5>>
+			<<else>>
+				<<setNpcStats guest _guestI happy +2>>
 			<</if>>
 			<<set $guests[_guestI].rest.days-->>
 			<<if $guests[_guestI].rest.days <= 0>>
