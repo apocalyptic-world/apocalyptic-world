@@ -8,7 +8,7 @@
     /* no workout when sick or too hot */
 <<elseif setup.npcInventoryHas(_npc, 'dumbbell') && _npc.strength < 30>>
     <<set _training = true>>
-    <<set _percentInjury = 0>>
+    <<set _percentInjury = 0>> /* -7*_npc.strength/10 + 21 */
     <<set _sickdays = 2>>
     <<set _item = 'dumbbell'>>
 <<elseif setup.npcInventoryHas(_npc, 'kettlebell') && _npc.strength < 50>>
@@ -24,23 +24,25 @@
 <</if>>
 
 <<if _training>>
-    <<set _npc.strength++>>
     <<if setup.percentageChance(_percentInjury)>>
-        <<set _reasons = [
-            'got training soreness',
-            'accidentally drops weight on toes',
-            'trips and has a bad fall landing on ' + either('left', 'right') + ' arm',
-            ((_npc.pregnancy ?? 0) > 180 ? 'falls backwards surprised when her unborn baby kicks' : 'got back-pain'),
-        ]>>
+        <<if setup.percentageChance(42)>>
+            <<set _reasons = [
+                'got training soreness',
+                'accidentally drops weight on toes',
+                'trips and has a bad fall landing on ' + either('left', 'right') + ' arm',
+                ((_npc.pregnancy ?? 0) > 180 ? 'falls backwards surprised when her unborn baby kicks' : 'got back-pain'),
+            ]>>
 
-        <<set _message = 'While working out with ' +  _item +', ' + _npc.name + ' ' + either(_reasons) + '. Takes a sickday'>>
-        <<run setup.sleepMessages.add(_message, 'main', '')>>
-    
-        <<set _npc.sick = {
-            days: _sickdays,
-            desc: 'injured when working out',
-            id: 'workout'
-        }>>
-
+            <<set _message = 'While working out with ' +  _item +', ' + _npc.name + ' ' + either(_reasons) + '. Takes a sickday'>>
+            <<run setup.sleepMessages.add(_message, 'main', '')>>
+        
+            <<set _npc.sick = {
+                days: _sickdays,
+                desc: 'injured when working out',
+                id: 'workout'
+            }>>
+        <</if>>
+    <<else>>
+        <<set _npc.strength++>>
     <</if>>
 <</if>>
