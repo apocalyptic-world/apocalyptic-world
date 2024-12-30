@@ -1,0 +1,29 @@
+:: Guy milk [sex] {"position":"2512,335","size":"100,100"}
+<<energy -10>>
+<<addmins 15>>
+<<set $tmpGirl.milked = true>>
+<center>
+	<<actionImage $tmpGirl 'milking'>>
+</center>
+<br /><br />
+<<if $tmpGirl.location == 'basement'>>
+	<<=setup.displayName($tmpGirl)>> moans as you milk him.
+<<else>>
+	You attach a dick pump to <<=setup.displayName($tmpGirl)>>'s dick and start to milk him. 
+<</if>> 
+<br /><br />
+<<if $tmpGirl.relationship < 100>>
+	<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+	<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
+	<br /><br />
+<</if>>
+<<if randomInteger(0, 3) === 0>>
+	<<pickup $backpack 'sperm_vial' 1>>
+	<strong>You managed to get one vial of sperm.</strong>
+	<br /><br />
+<</if>>
+<<link 'Back'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>
+
+

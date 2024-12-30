@@ -124,7 +124,13 @@
 			<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		  	<<goto 'Girl milk'>> 
 	  <</link>>
-	<</if>>	
+<</if>>	
+<<if settings.gaysEnabled && $tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('dick_pump')>>
+	  <<link 'Milk him'>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		  	<<goto 'Guy milk'>> 
+	  <</link>>
+<</if>>	
 
 <<if ($game.hotShower ?? false) && $player.energy >= 10 && setup.NpcInHome($tmpGirl)>>
 	<<link 'Invite to your shower'>>
