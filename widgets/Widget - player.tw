@@ -147,6 +147,25 @@
 	<<set $player.companions = _newCompanions>>
 <</widget>>
 
+<<widget sellSlavesRearange>>
+	<<set _newSellSlaves = {}>>
+	<<for _slaveSell, _slaveSellI range $sellSlaves>>
+		<<if _args[0] !== _splitOldNpcKey[0]>>
+			<<set _newCompanions[_compR] = true>>
+			<<continue>>
+		<</if>>
+
+		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
+			<<set _compKeyR[1]-->>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<<else>>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<</if>>
+	<</for>>
+
+	<<set $player.companions = _newCompanions>>
+<</widget>>
+
 <<widget guestRemove>>
     /* does guests.splice and companion rearrange, must use at every guest.splice
        args[0] = index in guests list */

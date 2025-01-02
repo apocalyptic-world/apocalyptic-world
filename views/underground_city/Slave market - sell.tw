@@ -52,12 +52,20 @@ You don't have any slaves.
 <div id="sell-all-link" style="display:none">
 	<span class="no-style">
 		<<link 'Sell all'>>
+			<<set _sellIds = []>>
 			<<for _sellSlaveI, _sellSlave range _sellSlaves>>
 				<<if _sellSlave>>
-					<<slaveSell _sellSlaveI>>
+					<<run _sellIds.push(_sellSlaveI)>>
 				<</if>>
 			<</for>>
-			<<goto `passage()`>>
+
+			<<for _sellKey, _sellId range _sellIds.reverse()>>
+				<<capture _sellKey, _sellId>>
+					<<run console.log('sell', _sellId)>>
+					<<slaveSell _sellId>>
+					<<goto `passage()`>>
+				<</capture>>
+			<</for>>
 		<</link>>
 	</span>
 </div>
