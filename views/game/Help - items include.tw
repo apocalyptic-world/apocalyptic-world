@@ -107,7 +107,11 @@
     <</if>>    
     <<if setup.items.scavenging.includes(_itemID) || typeof setup.items.scavenging_chance[_itemID] !== 'undefined'>>
         <<run _helpItem.sources.push('Scavenging')>>
+    <</if>> 
+    <<if  ['coal', 'stone'].includes(_itemID)>>
+        <<run _helpItem.sources.push('Quarry')>>
     <</if>>    
+
     <<if setup.inventoryManageable[_itemID] ?? false>>
          <<run _helpItem.sources.push('Shopkeeper')>>
     <</if>>  
@@ -122,7 +126,6 @@
     <</if>>    
    <<if ['fuel'].includes(_itemID)>>
         <<run _helpItem.sources.push('Dom quests/tasks')>>
-        
     <</if>>
     <<if  ['growth_potion'].includes(_itemID)>>
         <<run _helpItem.sources.push('Laura in lab')>>
