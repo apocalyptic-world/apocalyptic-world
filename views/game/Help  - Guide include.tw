@@ -18,7 +18,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     blair:   $characters.blair.quests?.basement,
     rodger:  $characters.rodger.quests?.eve_pregnant,
     eve:     $characters.rodger.quests?.eve_pregnant,
-    octavia: $characters.octavia.quests.betrayal2,
+    octavia: $characters.octavia.quests.new_plan2,
     dom:     $characters.isabel.quests?.dom_return || _closed.dom,
     isabel:  $characters.isabel.quests?.dom_return || _closed.dom,
     negan:   $characters?.negan?.quests?.quest5 ?? false,
@@ -439,14 +439,31 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Vist the settlement. Some bandits have blocked the water supply. Fix!',
     },
     more_octavia: {
-        show: $characters.octavia.quests.kidnapped_found,
-        done: $characters.octavia.quests.betrayal2,
+        show: $characters.octavia.quests?.kidnapped_found,
+        done: $characters.octavia.quests.new_plan2,
         category: 'Story',
         title: 'More of Octavia',
         description: 
-            'More quests with Octavia. You have to do without guide for now!',
-
+            ($characters.octavia.quests.kidnapped_found && !$characters.octavia.quests.betrayal  ? 
+                ($characters.octavia.quests.kidnapped_found_day + 5 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.kidnapped_found_day + 5-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin with bad news. Help her investigate the posioning of the water source') : '') + 
+            ($characters.octavia.quests.betrayal        && !$characters.octavia.quests.betrayal2 ? 
+                ($characters.octavia.quests.betrayal_day + 3 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.betrayal_day + 3-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin. Help her investigate Blackthorn camp') : '') + 
+            ($characters.octavia.quests.betrayal2       && !$characters.octavia.quests.next_move ? 
+                ($characters.octavia.quests.betrayal2_day + 3 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.betrayal2_day + 3-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin. Help her') : '') + 
+            ($characters.octavia.quests.next_move       && !$characters.octavia.quests.new_plan  ? 
+                ($characters.octavia.quests.next_move_day +5 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.next_move_day +5-$game.day+1) + ' more days' : 
+                    'After all bad things that have happened Octavia moves in to your guesthouse. Visit her in her room') : '') + 
+            ($characters.octavia.quests.new_plan        && !$characters.octavia.quests.new_plan2 ? 
+                'Prepare for battle. Have maximium allowed fighting companions (6). Equip them as good as pssible. Visit Octavia in her room and join her.' : ''),
     },
+
     happy_eve: {
         show: $characters.rodger.quests?.champagne,
         done: $characters.rodger.quests?.eve_pregnant,
@@ -681,7 +698,6 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         category: 'Story',
         title: 'End of questlines',
         description: 'This is the end of ' + (_doneAll ? 'all' :  _doneSome ? 'some' : 'none') + ' of the characters quests as of version v0.51c. Just be patient and wait for game updates.<br/>' +
-                     'To do for version v0.51c: Dom, Isabel, Negan.<br/>' +
             'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
