@@ -7,6 +7,14 @@
 <</octavia>>
 
 <br /><br />
+
+<<if $characters.octavia.quests.next_move && !$characters.octavia.quests.new_plan && ($characters.octavia.quests.next_move_day +5) < $game.day>>
+    <<goto 'Octavia - new plan'>>
+<<elseif $characters.octavia.quests.new_plan && !$characters.octavia.quests.new_plan2>>
+    <<link 'About next plan'>>
+        <<goto 'Octavia - new plan #2'>>
+    <</link>>
+<</if>>
 <<link 'Approach her'>>
     <<set $charId = 'octavia'>>
 	<<unset $slaveId, $guestId, $childId>>
