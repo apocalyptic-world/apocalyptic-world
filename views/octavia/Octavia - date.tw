@@ -1,0 +1,19 @@
+:: Octavia - date
+<h1 class="ptitle">OCTAVIA</h1>
+<br /><br />
+<<octavia>>
+    Where do you wanna go?
+<</octavia>>
+<br />
+<<if recall($suppCode)>>
+    <<link 'Nightclub'>>
+	    <<set $player.companionsHome = $player.companions>>
+		<<set $player.companions = {}>>
+		<<goto 'Octavia - date [nightclub]'>>
+	<</link>>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Nightclub
+		<<notPatreonIcon>>
+	</div>
+<</if>>
