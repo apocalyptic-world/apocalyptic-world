@@ -112,7 +112,6 @@
         orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
         maxMcHorny: 60,
         stats: 'anal'
-
     },
     anal: {
         title: 'Fuck ass',
@@ -197,6 +196,9 @@
     <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
         <<include 'MC fuck flaccid'>>
     <</if>>
+    <<if $sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')>>
+        <<set $tmpGirl.horny += 30>>
+    <</if>>
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
@@ -236,7 +238,7 @@
 		<br />
 		
 		<<if $tmpGirl.horny >= 100>>
-			<<include 'Mc fuck squirt'>>
+			<<include 'Mc fuck orgasm'>>
 			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
 			<br />
 			<<set
@@ -248,7 +250,9 @@
     <</if>>
 
     <<if _sexActions[$sexAction]?.stats>>
-        <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+        <<if setup.percentageChance(70)>>
+            <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+        <</if>>
         <<if typeof $sexStats[$sexAction] === 'undefined'>>
             <<set 
                 $tmpGirl.statsSex ??= {},
@@ -267,6 +271,8 @@
 	<<if $sexAction == 'cum_in_pussy'>>
         <<include 'Mc fuck cum in pussy'>>
 	<</if>>
+
+    <<include 'Mc fuck - use lube'>>
 
     <<if $tmpGirl.horny >= 100>>
         <<script>>

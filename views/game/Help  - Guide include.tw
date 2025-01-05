@@ -16,16 +16,17 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 <<set _done = {
     vincent: $player.car?.explore,
     blair:   $characters.blair.quests?.basement,
-    rodger:  $characters.rodger.quests?.horse,
-    eve:     false,
-    octavia: $characters.octavia.quests.betrayal2,
-    dom:     $characters.dom.quests?.quest6, /* todo: more quests dom/isabel */
-    isabel:  $characters.isabel.quests?.temp_home || _closed.dom,
-    negan:   $characters?.negan?.quests?.quest2 ?? false,
+    rodger:  $characters.rodger.quests?.eve_pregnant,
+    eve:     $characters.rodger.quests?.eve_pregnant,
+    octavia: $characters.octavia.quests.new_plan2,
+    dom:     $characters.isabel.quests?.dom_return || _closed.dom,
+    isabel:  $characters.isabel.quests?.dom_return || _closed.dom,
+    negan:   $characters?.negan?.quests?.quest5 ?? false,
     laura:   $characters?.laura?.quests?.breeder_trait ?? false,
+    boris:   $characters.boris.quests?.fight2,
 }>>
-<<set _doneSome = _done.vincent || _done.blair || _done.rodger || /*_done.eve ||*/ _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura>>
-<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && /*_done.eve &&*/ _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura>>
+<<set _doneSome = _done.vincent || _done.blair || _done.rodger || _done.eve || _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura || _done.boris>>
+<<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura && _done.boris>>
 
 <<set _helpguide = {
 /*  template
@@ -438,13 +439,57 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Vist the settlement. Some bandits have blocked the water supply. Fix!',
     },
     more_octavia: {
-        show: $characters.octavia.quests.kidnapped_found,
-        done: $characters.octavia.quests.betrayal2,
+        show: $characters.octavia.quests?.kidnapped_found,
+        done: $characters.octavia.quests.new_plan2,
         category: 'Story',
         title: 'More of Octavia',
         description: 
-            'More quests with Octavia. You have to do without guide for now!',
+            ($characters.octavia.quests.kidnapped_found && !$characters.octavia.quests.betrayal  ? 
+                ($characters.octavia.quests.kidnapped_found_day + 5 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.kidnapped_found_day + 5-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin with bad news. Help her investigate the posioning of the water source') : '') + 
+            ($characters.octavia.quests.betrayal        && !$characters.octavia.quests.betrayal2 ? 
+                ($characters.octavia.quests.betrayal_day + 3 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.betrayal_day + 3-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin. Help her investigate Blackthorn camp') : '') + 
+            ($characters.octavia.quests.betrayal2       && !$characters.octavia.quests.next_move ? 
+                ($characters.octavia.quests.betrayal2_day + 3 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.betrayal2_day + 3-$game.day+1) + ' more days' : 
+                    'Octavia visits your cabin. Help her') : '') + 
+            ($characters.octavia.quests.next_move       && !$characters.octavia.quests.new_plan  ? 
+                ($characters.octavia.quests.next_move_day +5 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.next_move_day +5-$game.day+1) + ' more days' : 
+                    'After all bad things that have happened Octavia moves in to your guesthouse. Visit her in her room') : '') + 
+            ($characters.octavia.quests.new_plan        && !$characters.octavia.quests.new_plan2 ? 
+                'Prepare for battle. Have maximium allowed fighting companions (6). Equip them as good as pssible. Visit Octavia in her room and join her.' : ''),
+    },
 
+    happy_eve: {
+        show: $characters.rodger.quests?.champagne,
+        done: $characters.rodger.quests?.eve_pregnant,
+        category: 'Story',
+        title: 'Eve and <s>Snake in paradise</s> ' + $player.name,
+        description: 
+            (!$characters.rodger.quests?.champagne ? 'Visit Rodger in his church and go on a champagne-run.<br/>' : 
+                '<span style="color: green"><s>Normal champagne-run done!</s></span><br/>') +
+            (!$game?.cabinName ? 'Follow Blair\'s quests and build a gate and choose a flag.<br>'                 : 
+                '<span style="color: green"><s>Have gate!</s></span><br/>') +
+            (!$characters.eve.quests?.sex ? 'Visit Rodger for another (but a little special) champagne-run.<br/>' : 
+                '<span style="color: green"><s>Special champagne-run done!</s></span><br/>') +
+            ( $characters.eve.corruption < 30 ? 'Corrupt Eve more {' + (30-($characters.eve.corruption ?? 0)) + ' steps} (Misbehave=Masturbate in church {have horny 50+}, champagne-runs or rather sex-runs with Eve)<br/>' : 
+                '<span style="color: green"><s>Innocent Eve corrupted enough!</s></span><br/>') +
+            ( $game.day < 120 ? 'Do other stuff until after game day 120.<br/>' : 
+                '<span style="color: green"><s>Waiting, no more!</s></span><br/>') + 
+            ( $characters.eve.quests?.sex && $characters.eve.corruption >= 30 && $game.day >= 120 ?
+                 (!$characters.rodger.quests?.cheat ? 'Rodger sends you and Eve to a ruined library in search of a book with answers about the apocalypse!' : 
+                    '<span style="color: green"><s>Found something!</s></span><br/>') : 
+                 '<span style="color: yellow">Do all the things above before the ruined library</span><br/>') +
+            ( $characters.rodger.quests?.cheat ? 
+                (!$characters.rodger.quests.eve_pregnant ?
+                    ($characters.rodger.quests.cheat_day + 14 >= $game.day ? 
+                        'Wait for ' + ($characters.rodger.quests.cheat_day+14-$game.day+1) + ' more days' : 'Visit settlement. Eve have news!' ) : 
+                    '<span style="color: green"><s>Mission completed!</s></span>') : 
+                '<span style="color: yellow">...</span><br/>'),
     },
 
     dom_taxes: {
@@ -523,17 +568,6 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'Go back to the Underground city where Isabel eagerly awaits the fuel.',
     },
 
-    negan: {
-        show: $game.location?.slave_market || $characters.dom.quests?.quest4_done_day,
-        done: $characters?.negan?.quests?.quest2 ?? false,
-        category: 'Story',
-        title: 'Negan and the blondes',
-        description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
-            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">4 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
-            'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
-    },
-
-
     isabel_desperation: {
         show:  $characters.dom.quests?.quest6,
         done:  $characters.isabel.quests?.temp_home || _closed.dom,
@@ -548,6 +582,23 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             (!$characters.isabel.quests?.temp_home ? '<li>Visit Isabel in your guest house and discuss her temporary new home.' : '') +
             '<li>Have fun with Isabel, your new <s>toy</s> guest!</li>' +
         '</ul>'),
+    },
+
+    dom_return: {
+        show: $characters.isabel.quests?.temp_home  && !_closed.dom,
+        done: $characters.isabel.quests?.dom_return ||  _closed.dom,
+        category: 'Story',
+        title: 'Isabel back to Dom',
+        description: 
+            ( _closed.dom ? '<br/><span style="color: yellow">Unavailable!</span>' : '') +
+            (!_closed.dom ? 
+                ($characters.isabel.quests?.temp_home_day ?? 0) + 14 >= $game.day ? 'Wait two weeks for Isabel to settle in her new home.' : 
+                !$characters.isabel.quests?.check_city ? 'Visit Isabel who wants you to check the situation in Underground city' : 
+                !$characters.isabel.quests?.pregnant ?              
+                    (!$characters.isabel?.pregnancy ? 'Go on dates with Isabel and shag her until pregnancy' : 
+                     $characters.isabel?.pregnancy < 10 ? 'Wait for it!' : 'Visit Isabel and talk about her pregnancy' ) :
+                ($characters.isabel.quests?.pregnant_day + 5) >= $game.day ? 'Wait a couple of days' :
+                !$characters.isabel.quests?.dom_return ? 'Dom shows up outside your place and takes back Isabel to the Underground' : 'To be continued...' : '')
     },
 
     laura_meet: {
@@ -586,16 +637,71 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '</ul>',
     },
 
+    negan: {
+        show: $game.location?.slave_market || $characters.dom.quests?.quest4_done_day,
+        done: $characters?.negan?.quests?.quest2 ?? false,
+        category: 'Story',
+        title: 'Negan and the blondes',
+        description: 'Find the Sanctuary. You can do this by following the Dom questline or by selling 20 slaves at the Underground slave market. Visit Negan in the Sanctuary<br/>' +
+            'Negan wants to trade blonde girls, very beautiful (80+) for fuel, either <strong class="iitem">4 blonde</strong> for <strong class="iitem">15 fuel</strong> (Dom questline) or <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong> (selling slaves).<br/>' +
+            'Thereafter you can repeat trade <strong class="iitem">2 blonde</strong> for <strong class="iitem">5 fuel</strong>.',
+    },
+
+    negan_bad: {
+        show: ($player.stats?.slaves_sold ?? 0) || $characters?.dom?.quests?.quest5,
+        done: $characters.negan.quests?.quest5 || (_closed.dom && $characters?.negan?.quests?.fuel_slaves),
+        category: 'Story',
+        title: 'Negan - the bad guy that likes blondes',
+        description: '<ul>' +
+
+            ($characters?.dom?.quests?.quest5   && !$characters?.negan?.quests?.quest1      ? '<li>Visit Sanctuary!</li>' : '') + 
+            ($characters?.negan?.quests?.quest1 && !$characters.negan.quests?.quest2        ? '<li>Trade Negan 4 blondes in  his office!</li>' : '') +
+            ($characters?.negan?.quests?.quest2 && !$characters?.negan?.quests?.fuel_slaves ? '<li>Visit Sanctuary!</li>' : '') + 
+
+            (!$characters?.negan?.quests?.fuel_slaves && !isMetChar('negan') ? '<li>' +
+                    (($player.stats.slaves_sold ?? 0) <= 20 ? 'Slave sell path: Sell ' + 21-(($player.stats.slaves_sold ?? 0)) + 'slaves in the Underground slave market' : 'Visit sanctuary!' ) + '</li>' : '') +
+            ( $characters?.negan?.quests?.fuel_slaves ? '<li><span style="color: yellow">Repetable trade</span>: Fuel deal for slaves - In his office trade a pair of blonde women with high beauty (80+) for 5x fuel</li>' : '') + '<li>' +
+
+            ($characters?.negan?.quests?.quest2 && !$characters.negan.quests?.quest3 ? 
+                (($characters.negan.quests?.fuel_slaves_count ?? 0) < 2) ? 
+                    'Trade ' + (2-($characters.negan.quests?.fuel_slaves_count ?? 0))  + ' pair of blonde women in his office' : 'Visit office.' : '' ) +
+            ($characters?.negan?.quests?.quest3 && !$characters.negan.quests?.quest4 ? 
+                ($game.day <= ($characters.negan.quests.quest3_day + 4) ? 
+                    'Wait ' + ($characters.negan.quests.quest3_day + 4-$game.day+1) + ' days' : 'Visit Negan\'s office for a gift') : '' ) +
+            ($characters?.negan?.quests?.quest4 && !$characters.negan.quests?.quest5 ? 
+                ($game.day <= ($characters.negan.quests.quest4_day + 7) ? 
+                    'Wait ' + ($characters.negan.quests.quest4_day + 7-$game.day+1) + ' days' : 'Visit Negan\'s office for a lower deck experience') : '' ) + '</li></ul>'
+
+    },
+
+    boris: {
+        show: $game.location?.underground,
+        done: $characters.boris.quests?.fight2,
+        category: 'Story',
+        title: 'Boris fight cage',
+        description: 
+            (!$game.location?.underground ? 'Follow Vincents questline to find the location of the underground city and Boris fight cage.<br/>' :
+             ($player.strength <= 30 ? 'Train your strength to more than 30 before Boris talks to you.<br/>' : 
+              (!isMetChar('boris') ? 'Visit Fight cage and meet Boris' : 
+               ( $player.fighter_rank > 80 ? 
+                'Fight in the cage and reach rank' + ( $player.fighter_rank > 95 ? 's 95, 90 & 80' : $player.fighter_rank > 90 ? 's 90 & 80' : ' 80') : 
+                'Feel free to continue to fight and train in the fight cage and gain ranks.'
+               )
+              )
+             )
+            )
+    },
+
     all_future: {
         show: _doneSome,
         done: _doneAll,
         category: 'Story',
         title: 'End of questlines',
-        description: 'This is the end of ' + (_doneAll ? 'all' :  _doneSome ? 'some' : 'none') + ' of the characters quests as of version v0.36a. Just be patient and wait for game updates.<br/>' +
+        description: 'This is the end of ' + (_doneAll ? 'all' :  _doneSome ? 'some' : 'none') + ' of the characters quests as of version v0.51c. Just be patient and wait for game updates.<br/>' +
             'Vincent: ' + (_done.vincent ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Blair: '   + (_done.blair   ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Rodger & Eve: ' + (_done.rodger ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
-        /*  'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' */
+            'Eve: '     + (_done.eve     ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Octavia: ' + (_done.octavia ? '<span style="color: green">Done!</span>' : 'More quests to do!') + '<br/>' +
             'Dom: '     + 
                 (_closed.dom ? '<span style="color: yellow">Questline aborted!</span>' : 
@@ -613,8 +719,10 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         show: false,
         done: false,
         category: 'Internal',
-        title: 'Notes for guide writer',
-        description: 'This is a reminder for the writer of this game guide of things to do.<br/>Player<br/>Characters<br/>More hints, gameplay etc. Improving the format<br/>Check f95-forum for suggestions.',
+        title: 'Notes for guide writer + help pages + info and more',
+        description: '<ul><li>It has been too loong since update of help+info + etc.</li>' + 
+            '<li>A little fix for NPC training with bells</li><li>New limits for number of workers and new asssignments, info pages and help pages</li>' +
+            '<li>This is a reminder for the writer of this game guide of things to do.<br/>Player<br/>Characters<br/>More hints, gameplay etc. Improving the format<br/>Check f95-forum for suggestions.</li></ul>',
     },
 
 }>>

@@ -5,7 +5,42 @@ The mine and quarry could become a cornerstone for your settlement’s growth, p
 <br />
 Before you can use them you will need to reinforce the walls.
 <br /><br />
-<<warning 'Work in progress. Will be added mechanics in next update'>>
+<table id="slaves" class="npc-list">
+<<for _guestI, _guest range $guests>>
+	<<capture _guestI, _guest>>
+		<<if _guest.assignedTo !== 'quarry' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
+			<<continue>>
+		<</if>>		
+		<tr class="item">
+			<td style="width: 300px">
+				<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
+				<<if setup.getAge(_guest) < 17>>
+					<span class="name-no-click"><<=_guest.name>></span>
+				<<else>>
+					<span @class="''+_genderClass+''">
+					<<link _guest.name>>
+					  <<set $tmpGirl to _guest>>
+					  <<set $tmpGirl.location = 'quarry'>>
+					  <<set $tmpGirlBack = 'Quarry'>>
+					  <<set $tmpGirl.rape to false>>
+					  <<set $tmpGirlCapture to false>>
+					  <<set $tmpGirlInvite to false>>
+					  <<set $guestId = _guestI>>
+					  <<run delete $slaveId, $charId, $childId>>						  
+					  <<set $tmpGirlViewBack = 'NPC view - guest' >>
+					  <<goto 'NPC view - guest'>>
+				  	<</link>>
+					</span>
+				<</if>>
+				<<=setup.npcListInfo(_guest)>>
+			</td>
+			<td>
+				 <<npcListView _guest _guestI 'guest'>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
 <br />
 <<link 'Leave'>>
     <<goto 'Outside'>>

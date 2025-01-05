@@ -32,10 +32,10 @@ setup.automatization = {
       description: 'Hunter with no bow works as a woodcutter; Might get an axe instead.',
       help: 'When off: Hunter with no bow does nothing',
     },
-    streetworker: {
+    streetworker: { /* should be renamed */
       name: 'People in unhappy jobs need rest',
-      description: 'People with jobs that make them unhappy needs rest. If the happyness falls below some happiness value then they takes a day off by themselves',
-      help: 'This includes dairy cattle, sex workers on the street & nightclub',
+      description: 'People with jobs that make them unhappy needs rest. If the happyness falls below some happiness value then they takes a day off by themselves if activated.',
+      help: 'Unhappy jobs:<ul><li>milker in the milk barn</li><li>sexworker in nightclub or streets</li><li>miner in quarry</li></ul>',
     },
 
     buttplug: {
@@ -46,8 +46,8 @@ setup.automatization = {
     condom: {
       name: 'Condom rotation',
       description:
-        'Gives condoms to girls who need it and removes from other. Only street workers gets condoms for now.',
-      help: '',
+        'Gives condoms to girls who need it and removes from other. Only street workers (that can be pregnant) gets condoms for now.',
+      help: 'Only women younger than 60 years, not infertile and not already pregnant have a chance to become pregnant',
     },
     dumbbell: {
       name: 'Dumbbell rotation',
@@ -79,6 +79,7 @@ setup.automatization = {
     mistress: [],
     nightclub: [],
     none: [],
+    quarry: ['pickaxe'],
     scavenging: ['knife', 'body_armor'],
     shop: [],
     teacher: [],
@@ -109,12 +110,12 @@ setup.automatization = {
   },
 
   sexworkerDayOffText: {
-    off: 'Off - No sexworkers or dairy cattle takes a day off by themselves',
-    very_sad: 'Very sad, dairy cattle, unhappy street & nightclub workers takes a day off by themselves',
-    sad: 'Sad dairy cattle, unhappy street & nightclub workers takes a day off by themselves',
-    normal: 'Sad and normal-happy dairy cattle, street & nightclub workers takes a day off by themselves',
-    happy: 'All but very happy dairy cattle, street & nightclub workers takes a day off by themselves',
-    very_happy: 'On - All dairy cattle & sexworkers will take a day off themselves all the time',
+    off: 'Off - No workers in unhappy jobs takes a day off by themselves',
+    very_sad: 'Very sad workers takes a day off by themselves',
+    sad: 'Very sad & sad workers takes a day off by themselves',
+    normal: 'Very sad, sad & normal-happy workers takes a day off by themselves',
+    happy: 'All but very happy workers takes a day off by themselves',
+    very_happy: 'On - All workers in unhappy jobs take a day off themselves all the time',
   },
 
   /**

@@ -2,32 +2,54 @@
 <h1 class="ptitle">HOSPITAL</h1>
 <br />
 
-<<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
+<<set _randomDoctorJobs = [
+	'is cleaning up one of the bed.',
+	'is putting some medicine back in shelves',
+	'is cleaning floor'
+]>>
+
+<<set _doctors = setup.getPersonsForLocation($guests, 'hospital')>>
 <<unset($tmpGirl)>>
-<<if _girlGuest.length > 0 && timeBetween('08:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
-	<<set $tmpGirl = $guests[_girlGuest[0]]>>
-	<<set $tmpGirl.location = 'hospital'>>
-	<center>
-		<<actionImage $tmpGirl working>>
-	</center>
-	
-	<<=setup.displayName($tmpGirl)>> is cleaning up one of the bed.
-    <br /><br />
-	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
-	<<link `_girlGuestLink`>>
-        <<set $tmpGirl.location = 'hospital'>>
-		<<set $tmpGirlViewBack = 'NPC view - guest'>>
-		<<set $tmpGirlBack = 'Hospital'>>
-		<<set $tmpGirlCapture to false>>
-		<<set $tmpGirlInvite to false>>
-		<<set $tmpGirl.rape to false>>
-		<<set $guestId = _girlGuest[0]>>
-		<<unset $slaveId, $charId, $childId>>
-		<<goto 'NPC view - guest'>>
-	<</link>>
-<</if>>
 
 <table id="slaves">
+	<<if _doctors.length > 0 && timeBetween('08:00', '22:00')>>
+		<<for _doctorI, _doctor range _doctors>>
+			<<set _guest = $guests[_doctor]>>
+			<<capture _doctor, _guest>>
+				<<set _guest.location = 'hospital'>>
+				<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
+				<<set _customColorStyle = ''>>
+				<<if typeof _guest.color !== 'undefined' >>
+					<<set _customColorStyle = ' npc-color color-' + _guest.color >>
+				<</if>>
+				<<if !_guest.gender && !_femaleDoctor>>
+					<<set _femaleDoctor = _doctor>>
+				<</if>>
+				<tr>
+					<td style="min-width: 25%">
+						<center>
+							<<actionImage _guest working>>
+						</center>
+						<span @class="_genderClass + _customColorStyle">
+							<<link _guest.name>>
+								<<set $tmpGirl to _guest>>
+								<<set $tmpGirl.location = 'hospital'>>
+								<<set $tmpGirl.rape to false>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
+								<<set $guestId = _doctor>>
+								<<unset $slaveId, $childId, $charId>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<set $tmpGirlBack = 'Hospital'>>
+								<<goto `$tmpGirlViewBack`>>
+							<</link>>
+						</span> <<=setup.getRandomElement(_randomDoctorJobs)>> 
+						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
+					</td>
+				</tr>
+			<</capture>>
+		<</for>>
+	<</if>>
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
@@ -76,9 +98,9 @@
 <br />
 [[Back|Youth district]]
 
-<<if setup.perkHas('bleeding') && $tmpGirl>>
+<<if setup.perkHas('bleeding') && _femaleDoctor>>
 	<<set $tmpEvent = {
-		id: _girlGuest[0]
+		id: _femaleDoctor
 	}>>
 	<<goto 'Hospital - bleeding'>>
 <</if>>

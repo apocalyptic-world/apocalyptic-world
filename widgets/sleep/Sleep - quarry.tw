@@ -1,0 +1,25 @@
+:: sleepQuarry [include]
+
+/* check for pickaxe */
+
+<<if typeof _npc.stats['quarry'] === 'undefined'>>
+    <<set _npc.stats['quarry'] = 0>>
+<</if>>
+<<set _npc.stats['quarry']++>>
+
+<<set _randomItem = either('coal', 'stone')>>
+<<set _itemCount = 1>>
+<<if _npc.strength >= 50 && setup.percentageChance(50)>>
+    <<set _itemCount++>>
+<</if>>
+
+<<set _totals[_randomItem] ??= 0>>
+<<set _totals[_randomItem] += _itemCount>>
+<<if _isStorageAvailable>>
+	<<pickup $storage _randomItem _itemCount>>
+<<else>>
+	<<pickup $backpack _randomItem _itemCount>>
+<</if>>
+
+<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _itemCount + '</strong> ' + _randomItem + ' in the quarry', 'quarry')>>
+<<setNpcStats 'guest' _guestI 'happy' -10>>

@@ -3,11 +3,11 @@
 <br /><br />
 <<if !$tmpGirl.gender>>	
 	<center>
-	[img[setup.ImagePath+'places/nightclub/dress_up.webp']]
+		<<image 'places/nightclub/dress_up.webp'>>
 	</center>
 <<else>>
 	<center>
-	[img[setup.ImagePath+'places/nightclub/dress_up_guy.webp']]
+		<<image 'places/nightclub/dress_up_guy.webp'>>
 	</center>
 <</if>>
 
@@ -34,6 +34,7 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 				<br /><br />
 				<strong><<=$tmpGirl.name>> moved in as guest</strong>
 				<<run $guests.push($tmpGirl)>>
+				<<run $('#option_capture').hide()>>
 			<<else>>
 				Sorry but no. You look like a nice guy but I've got my family and I won't leave them for you.
 			<</if>>
@@ -42,26 +43,28 @@ After having fun in the restrooms <<=setup.pronounceWhat($tmpGirl)>> picks up <<
 	</div>
 <</if>>
 <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
-	<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
-	<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
-	<<set _captureLink = 'Capture ' + _pronounceWho>>
-	<<linkreplace _captureLink>>
-		<<set _captured = true>>
-		<<if !_invited>>
-			<<run $('#option_invite').hide()>>
-		<</if>>
-		<<if [0,2].includes($tmpGirl.gender)>>
-			<center>
-				[img[setup.ImagePath+'places/nightclub/wc_enslave.webp']]
-			</center>
+	<div id="option_capture">
+		<<set _pronounceWho = setup.pronounceWho($tmpGirl)>>
+		<<set _pronounceWhat = setup.pronounceWhat($tmpGirl)>>
+		<<set _captureLink = 'Capture ' + _pronounceWho>>
+		<<linkreplace _captureLink>>
+			<<set _captured = true>>
+			<<if !_invited>>
+				<<run $('#option_invite').hide()>>
+			<</if>>
+			<<if [0,2].includes($tmpGirl.gender)>>
+				<center>
+					<<image 'places/nightclub/wc_enslave.webp'>>
+				</center>
+				<br /><br />
+			<</if>>
+			You grab <<=setup.displayName($tmpGirl)>> from the back. <<=setup.pronounceWhat($tmpGirl, true)>> tries to resist but in the process you tear <<=setup.pronounceWhos($tmpGirl)>> clothes.
 			<br /><br />
-		<</if>>
-		You grab <<=setup.displayName($tmpGirl)>> from the back. <<=setup.pronounceWhat($tmpGirl, true)>> tries to resist but in the process you tear <<=setup.pronounceWhos($tmpGirl)>> clothes.
-		<br /><br />
-		As soon as you take <<=_pronounceWhat>> out you quietly go outside the nightclub back door.
-		<br /><br />
-		<<run $slaves.push($tmpGirl)>>
-	<</linkreplace>>
+			As soon as you take <<=_pronounceWhat>> out you quietly go outside the nightclub back door.
+			<br /><br />
+			<<run $slaves.push($tmpGirl)>>
+		<</linkreplace>>
+	</div>
 <</if>>
 <<link 'Leave'>>
 	<<unset $orgasmsBefore>>

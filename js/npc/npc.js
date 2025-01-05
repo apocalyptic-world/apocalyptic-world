@@ -448,7 +448,7 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.pregnancy) {
 			output += '<span class="pregnancy-info" data-balloon-length="medium" aria-label="Pregnant" data-balloon-pos="up-right">' + npc.pregnancy + '</span>';
 		}
-		if (npc.married && npc.family.husband === 'mc') {
+		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
 		if (isSick && !npc.sleeping) {
@@ -462,4 +462,13 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 	}
 
 	return output;
+}
+
+setup.NpcInHome = function(_npc) {
+	if (['garden', 'quarry'].includes(_npc.location)) {
+		return false;
+	}
+
+
+	return true;
 }

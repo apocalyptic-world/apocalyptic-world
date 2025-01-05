@@ -32,7 +32,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if setup.getPersonsForLocation($guests, 'hospital').length < 3 && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
+<<if setup.getPersonsForLocation($guests, 'hospital').length < ($workersLimitHospital ?? 3)  && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
 	<div>
 	  <<link 'Assign to hospital'>>
 		  <<assignedTo $tmpGirl 'hospital'>>
@@ -73,7 +73,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<set $automatization ??= {}>>
 <<set _itemcount = setup.automatization.job_tools.mc.includes('bow') ? 2 : 1>> /* save one for the MC */
 <<set _autoHunterOk = ($automatization.hunter ?? false) && setup.cabinInventory.has('bow', _itemcount)>>
-<<if ($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk)>>
+<<if ($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk) && setup.assignedToCount('hunter') < ($workersLimitHunter ?? 8)>>
 	<<link 'Assign as hunter'>>
 		<<if !setup.npcInventoryHas($tmpGirl, 'bow')>>
 			<<run setup.cabinInventory.to_npc($tmpGirl, 'bow', 1)>>
@@ -86,6 +86,36 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	Assign as hunter [Need woodcraft skill and bow] (Provides you with food or wolf pelts)
 <</if>>
 
+<div>
+	<<if ($game.location.quarry ?? false)>>
+		<<set $automatization ??= {}>>
+		<<set _item = 'pickaxe'>>
+		<<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
+		<<set _autoMiningOk = ($automatization.job ?? fals) && setup.cabinInventory.has(_item, _itemcount)>>
+		<<if setup.npcInventoryHas($tmpGirl, _item) || _autoMiningOk>>
+			<<link 'Assign to quarry'>>
+				<<assignedTo $tmpGirl 'quarry'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Provides you with coal and stone)
+		<<else>>
+			Assign to quarry [Need pickaxe] (Provides you with coal and stone)
+		<</if>>
+	<</if>>
+</div>
+<<if ($game.location.garage ?? false) && setup.assignedToCount('garage') < 1>>
+	<div>
+		<<if ($tmpGirl.skills ?? []).includes('mechanic')>>
+			<<link 'Assign to garage'>>
+				<<assignedTo $tmpGirl 'garage'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Helps to maintain and fix car)
+		<<else>>
+			Assign to garage (Helps to maintain and fix car)
+		<</if>>
+	</div>
+<</if>>
 <div>
   <<link 'Assign to scavenging'>>
 	  <<assignedTo $tmpGirl 'scavenging'>>

@@ -14,14 +14,6 @@
 	<<goto 'Farm - slave market'>>
 <</if>>
 
-<<if $game.day > 5 && !$characters.vincent.talked_about_girl>>
-	<<set $characters.vincent.relationship++>>
-	<<link 'Talk about girl' 'Farm - talk about girl'>>
-		<<set $characters.vincent.talked_about_girl = true>>
-		<<set $characters.vincent.can_use_girl = true>>
-	<</link>>
-<</if>>
-
 <<if !$characters.vincent.first_time>>
 <<vincent>>So, let me make something perfectly clear, son. The name's Vincent, and I don't take kindly to someone else trying to touch what's mine. If I catch you trying to put your hands on my girl back there again, I'll shoot you. Now, with that nice and clear...if you want something honestly, I run a little shop from my farm. I'm open to buying, as well as selling. Keep yourself in my good graces, and this could be a mutually beneficial relationship. Now what will it be, son?<</vincent>>
 	<<set $characters.vincent.first_time to true>>
@@ -30,6 +22,13 @@
 <</if>>
 
 <br /><br />
+<<if $game.day > 5 && !$characters.vincent.talked_about_girl>>
+	<<set $characters.vincent.relationship++>>
+	<<link 'Talk about girl' 'Farm - talk about girl'>>
+		<<set $characters.vincent.talked_about_girl = true>>
+		<<set $characters.vincent.can_use_girl = true>>
+	<</link>>
+<</if>>
 <<if $player.money >= 30 && $characters.vincent.delivery_done && !$backpack.has('breast_pump')>>
 	<<link 'Buy breast pump'>>
 		<<set $characters.vincent.relationship+=5>>

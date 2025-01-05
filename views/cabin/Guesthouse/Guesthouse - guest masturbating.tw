@@ -5,8 +5,12 @@
 As you approach <<=setup.displayName($tmpGirl)>> bed, you notice the rhythmic motion beneath the threadbare blanket, her breath coming in short, uneven gasps. 
 You freeze, realization sinking in as you glimpse her hand moving beneath the fabric, lost in a private moment of pleasure she thought no one would disturb.
 <br /><br />
+<<set _action = 'masturbate'>>
+<<if !$tmpGirl.gender && setup.npcInventoryHas($tmpGirl, 'sextoy') && setup.percentageChance(90)>>
+    <<set _action = 'masturbate_dildo'>>
+<</if>>
 <center>
-    <<actionImage $tmpGirl 'masturbate'>>
+    <<actionImage $tmpGirl _action>>
 </center>
 <br /><br />
 The air between you grows thick with the sudden, unspoken tension, the fragile intimacy of the moment at odds with the chaos outside.
