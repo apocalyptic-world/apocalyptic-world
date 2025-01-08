@@ -24,13 +24,7 @@
 	<<energy +5>>
 	<<set $player.sexp++>>
 
-    <<if !$tmpGirl.gender>>
-        <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
-        <<include 'asks to cum inside'>>
-        <<set $sexAction = 'threesome_f_' + $sexAction>>
-    <</if>>
-
-	<<if $sexAction == 'threesome_f_handjob'>>
+	<<if $sexAction == ['threesome_f_handjob','threesome_f_handjob_anal_reverse'].includes($sexAction)>>
         <<link 'Handjob cum'>>
             <<set $sexAction = 'threesome_f_handjob_cum'>>
             <<horny_reset>>
@@ -48,7 +42,13 @@
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
-	<<elseif ('threesome_f_pussy','threesome_f_pussy_pussy_lick','threesome_f_pussy_anal_reverse').includes($sexAction)>>
+    <<elseif $sexAction === 'threesome_f_dp'>>
+        <<link 'Cum in throat'>>
+            <<horny_reset>>
+	        <<set $sexAction = 'threesome_f_cum_throat'>>
+	        <<goto `passage()`>>
+	    <</link>>
+	<<elseif ['threesome_f_pussy','threesome_f_pussy_pussy_lick','threesome_f_pussy_a_pussy_lick','threesome_f_pussy_a_sn','threesome_f_pussy_a_pussy','threesome_f_pussy_b_anal','threesome_f_pussy_anal_reverse'].includes($sexAction)>>
         <<link 'Cum in pussy'>>
             <<horny_reset>>
             <<if _askedToCumInside>>
@@ -69,10 +69,15 @@
             <<set $sexAction = 'threesome_f_cum_on_stomach'>>
             <<goto `passage()`>>
         <</link>>
-    <<elseif $sexAction == 'threesome_f_anal'>>
+    <<elseif ['threesome_f_anal','threesome_f_anal_b_pussy','threesome_f_anal_a_pussy_lick','threesome_f_anal_b_bj'].includes($sexAction)>>
         <<link 'Cum in ass'>>
             <<horny_reset>>
             <<set $sexAction = 'threesome_f_cum_in_ass'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<link 'Cum on ass'>>
+            <<horny_reset>>
+            <<set $sexAction = 'threesome_f_cum_on_ass'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on back'>>
@@ -80,13 +85,8 @@
             <<set $sexAction = 'threesome_f_cum_on_back'>>
             <<goto `passage()`>>
         <</link>>
-    <<elseif $sexAction === 'threesome_f_dp'>>
-        <<link 'Cum in throat'>>
-            <<horny_reset>>
-	        <<set $sexAction = 'threesome_f_cum_throat'>>
-	        <<goto `passage()`>>
-	    <</link>>
-    <<elseif $sexAction.includes('anal_reverse') >>
+    <</if>>
+    <<if $sexAction.includes('anal_reverse') >>
         <<link 'Cum while being fucked'>>
             <<horny_reset>>
 	        <<set $sexAction = 'threesome_f_anal_reverse_cum'>>
