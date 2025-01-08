@@ -768,7 +768,7 @@ setup.sexChance = function (person, gender = 1, beauty) {
     var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
     var appeal = (beauty ?? person.relationship);
 
-    if (person.married && person.family.husband !== 'mc' && setup.percentageChance(50)) {
+    if (person.married && (!person.family || person.family.husband !== 'mc') && setup.percentageChance(50)) {
         Math.floor(Math.max(person.sub, person.drunk ?? 0)/2)
     } else if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
