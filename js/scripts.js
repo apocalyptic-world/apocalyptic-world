@@ -943,3 +943,23 @@ setup.mergeObjects = function(obj1, obj2, parentPath = '', packName = '') {
 
     return merged;
 }
+
+
+window.blackoutScreen = function(duration) {
+    let blackoutDiv = document.getElementById('blackout');
+
+    // Create the blackout div if it doesn't exist
+    if (!blackoutDiv) {
+        blackoutDiv = document.createElement('div');
+        blackoutDiv.id = 'blackout';
+        document.body.appendChild(blackoutDiv);
+    }
+
+    // Show the blackout screen
+    blackoutDiv.classList.add('active');
+
+    // Remove the active class after the duration (includes the fade-out time)
+    setTimeout(() => {
+        blackoutDiv.classList.remove('active');
+    }, duration);
+};

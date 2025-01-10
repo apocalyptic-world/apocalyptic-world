@@ -36,7 +36,7 @@ She shook her head, grabbing a small pack and slinging it over her shoulder.
 With that, the two of you set out, following winding trails that eventually led to the river. The journey was quiet except for the occasional exchange of observations or memories of past encounters. When you finally arrived at the spot Octavia remembered, the sight surprised you both.
 <br /><br />
 <center>
-    ##
+    <<image 'people/octavia/investigate1.jpg'>>
 </center>
 <br />
 There was nothing. No remnants of tents, no fire pits, not even a trace of tracks in the dirt. It was as though the camp had never existed.
@@ -56,13 +56,13 @@ The eerie stillness of the place set you both on edge. After searching for a whi
 The lake’s cool waters were a welcome relief from the heat and tension. After splashing your face and washing the grime off your hands, you sat on a rock near the shore, watching Octavia as she tied her hair back.
 <br /><br />
 <center>
-    ####
+    <<image 'people/octavia/investigate2.jpg'>>
 </center>
 <br /><br />
 As you both stood to leave, you noticed movement out of the corner of your eye. Turning, you saw them—two figures standing at the edge of the clearing
 <br /><br />
 <center>
-    ###
+    <<image 'people/octavia/investigate3.jpg'>>
 </center>
 <br /><br />
 They were dressed in white, their suits gleaming unnaturally in the sunlight. Their weapons, sleek and futuristic, glinted ominously.
@@ -78,12 +78,44 @@ She followed your gaze, and her eyes widened slightly.
 <</octavia>>
 <br />
 <<linkreplace 'Attack them'>>
+    <<script>>
+        blackoutScreen(3000);
+        window.scrollBy({
+        top: 200,
+        left: 0,
+        behavior: 'smooth'
+    });
+    <</script>>
     Before either of you could act, one of the figures raised their weapon. A sharp, blinding light engulfed you, and everything went black...
     <br /><br /><br /><br />
-    When you awoke, your wrists and ankles were bound tightly to a metal chair. 
-    The cold bite of the restraints sent a jolt of reality through you as your vision adjusted to the harsh fluorescent lighting. 
-    Octavia was beside you, similarly restrained, her expression oscillating between confusion and anger.
+    The haze of unconsciousness faded as you stirred awake, the uncomfortable bite of rough rope digging into your wrists. 
+    Opening your eyes, you realized you were tied to a tree, your arms pinned behind your back. 
+    Octavia, similarly restrained, was tied to a nearby trunk, her face dark with barely contained fury. 
+    The scene around you was eerily quiet, the forest alive with the faint rustle of leaves but devoid of any other sound.
     <br /><br />
+    <<if Object.keys($player.companions).length>>
+        <<set $missingNpcs ??= []>>
+        <<for _companionI, _companion range $player.companions>>
+            <<set _npc = setup.companionGet(_companionI)>>
+            <<run $missingNpcs.push({
+                event: 'octavia_investigation',
+                day: $game.day,
+                npc: _npc
+            })>>
+            <<set $player.companions = {}>>
+            <<replace "#companions-list">><</replace>>
+        <</for>>
+        <strong>All of your companions where missing. Only you and Octavia were there.</strong>
+        <br /><br />
+        <<newguy>>
+        <<set $tmpGuy.visual = 'trooper'>>
+
+        <<sayNpc $tmpGuy>>
+            Who are you? What are you doing here?
+        <</sayNpc>>
+        <br />
+    <</if>>
+    ....
 <</linkreplace>>
 
 
