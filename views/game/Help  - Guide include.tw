@@ -18,7 +18,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     blair:   $characters.blair.quests?.basement,
     rodger:  $characters.rodger.quests?.eve_pregnant,
     eve:     $characters.rodger.quests?.eve_pregnant,
-    octavia: $characters.octavia.quests.new_plan2,
+    octavia: $characters.octavia.quests.new_plan3,
     dom:     $characters.isabel.quests?.dom_return || _closed.dom,
     isabel:  $characters.isabel.quests?.dom_return || _closed.dom,
     negan:   $characters?.negan?.quests?.quest5 ?? false,
@@ -440,7 +440,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     },
     more_octavia: {
         show: $characters.octavia.quests?.kidnapped_found,
-        done: $characters.octavia.quests.new_plan2,
+        done: $characters.octavia.quests.new_plan3,
         category: 'Story',
         title: 'More of Octavia',
         description: 
@@ -457,11 +457,15 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                     'Wait ' + ($characters.octavia.quests.betrayal2_day + 3-$game.day+1) + ' more days' : 
                     'Octavia visits your cabin. Help her') : '') + 
             ($characters.octavia.quests.next_move       && !$characters.octavia.quests.new_plan  ? 
-                ($characters.octavia.quests.next_move_day +5 >= $game.day? 
-                    'Wait ' + ($characters.octavia.quests.next_move_day +5-$game.day+1) + ' more days' : 
+                ($characters.octavia.quests.next_move_day + 5 >= $game.day? 
+                    'Wait ' + ($characters.octavia.quests.next_move_day +5 -$game.day+1) + ' more days' : 
                     'After all bad things that have happened Octavia moves in to your guesthouse. Visit her in her room') : '') + 
             ($characters.octavia.quests.new_plan        && !$characters.octavia.quests.new_plan2 ? 
-                'Prepare for battle. Have maximium allowed fighting companions (6). Equip them as good as pssible. Visit Octavia in her room and join her.' : ''),
+                'Prepare for battle. Have maximium allowed fighting companions (6). Equip them as good as pssible. Visit Octavia in her room and join her.' : '') +
+            ($characters.octavia.quests.new_plan2       && !$characters.octavia.quests.new_plan3  ? 
+                ($characters.octavia.quests.new_plan2_day + 0 >= $game.day? 
+                    'Visit Octavia tomorrow' : 
+                    'Visit Octavia in her room and go with her to investigate the last lead. <strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>') : '') + '',
     },
 
     happy_eve: {
