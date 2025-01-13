@@ -768,7 +768,7 @@ setup.sexChance = function (person, gender = 1, beauty) {
     var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
     var appeal = (beauty ?? person.relationship);
 
-    if (person.married && person.family.husband !== 'mc' && setup.percentageChance(50)) {
+    if (person.married && (!person.family || person.family.husband !== 'mc') && setup.percentageChance(50)) {
         Math.floor(Math.max(person.sub, person.drunk ?? 0)/2)
     } else if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
@@ -943,3 +943,23 @@ setup.mergeObjects = function(obj1, obj2, parentPath = '', packName = '') {
 
     return merged;
 }
+
+
+window.blackoutScreen = function(duration) {
+    let blackoutDiv = document.getElementById('blackout');
+
+    // Create the blackout div if it doesn't exist
+    if (!blackoutDiv) {
+        blackoutDiv = document.createElement('div');
+        blackoutDiv.id = 'blackout';
+        document.body.appendChild(blackoutDiv);
+    }
+
+    // Show the blackout screen
+    blackoutDiv.classList.add('active');
+
+    // Remove the active class after the duration (includes the fade-out time)
+    setTimeout(() => {
+        blackoutDiv.classList.remove('active');
+    }, duration);
+};

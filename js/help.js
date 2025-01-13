@@ -46,6 +46,11 @@ setup.help = {
         /* learnable: ?, */
         xtra: '(No use yet)',
        },
+       mechanic: {
+        /* name and desc from setup.skills */
+        /* learnable: ?, */
+        xtra: '(No use yet)',
+       },
        woodcraft: {
         /* name and desc from setup.skills */
         learnable: true,

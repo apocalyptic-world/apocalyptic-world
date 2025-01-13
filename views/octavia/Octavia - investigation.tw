@@ -1,0 +1,191 @@
+:: Octavia - investigation [bg-guesthouse]
+<h1 class="ptitle">OCTAVIA</h1>
+<br />
+<<set $characters.octavia.quests.new_plan3 = true>>
+<<set $characters.octavia.quests.new_plan3_day = $game.day>>
+Inside, Octavia was standing near a small wooden dresser, slipping into a pair of her signature tight leather pants. Her bare back was to you, her toned muscles flexing slightly as she adjusted the waistband. Her dark hair tumbled over her shoulders, and she glanced over her shoulder with a smirk when she noticed you.
+<br /><br />
+<center>
+    <<image 'people/octavia/room.jpg'>>
+</center>
+<br /><br />
+<<octavia>>
+    You always just walk into people’s rooms?
+<</octavia>>
+<br />
+She chuckled, pulling a plain tank top over her head and turning to face you, her expression shifting to something more serious.
+<br /><br />
+<<octavia>>
+    That guy mentioned a spot near the river. It’s not far from here, and I think I know the place. There used to be a biker camp there—real scumbags.
+<</octavia>>
+<br />
+<<octavia>>
+     They liked to kill and sell people, but I haven’t been out that way in years.
+<</octavia>>
+<br />
+<<you>>
+    Do you think they’re still there?
+<</you>>
+<br />
+She shook her head, grabbing a small pack and slinging it over her shoulder.
+<br /><br />
+<<octavia>>
+    No idea. But it’s worth checking out. If they’re connected to this... whatever it is, we need to know.
+<</octavia>>
+<br />
+With that, the two of you set out, following winding trails that eventually led to the river. The journey was quiet except for the occasional exchange of observations or memories of past encounters. When you finally arrived at the spot Octavia remembered, the sight surprised you both.
+<br /><br />
+<center>
+    <<image 'people/octavia/investigate1.jpg'>>
+</center>
+<br />
+There was nothing. No remnants of tents, no fire pits, not even a trace of tracks in the dirt. It was as though the camp had never existed.
+<br /><br />
+<<octavia>>
+    This doesn’t feel right.
+<</octavia>>
+<br />
+Octavia said, scanning the area. She crouched to examine the ground, her fingers brushing over the undisturbed earth
+<br /><br />
+<<octavia>>
+    It’s like they vanished without a trace.
+<</octavia>>
+<br />
+The eerie stillness of the place set you both on edge. After searching for a while and finding nothing, you suggested taking a break at a small lake nearby to regroup.
+<br /><br />
+The lake’s cool waters were a welcome relief from the heat and tension. After splashing your face and washing the grime off your hands, you sat on a rock near the shore, watching Octavia as she tied her hair back.
+<br /><br />
+<center>
+    <<image 'people/octavia/investigate2.jpg'>>
+</center>
+<br /><br />
+As you both stood to leave, you noticed movement out of the corner of your eye. Turning, you saw them—two figures standing at the edge of the clearing
+<br /><br />
+<center>
+    <<image 'people/octavia/investigate3.jpg'>>
+</center>
+<br /><br />
+They were dressed in white, their suits gleaming unnaturally in the sunlight. Their weapons, sleek and futuristic, glinted ominously.
+<br /><br />
+<<you>>
+    Octavia!
+<</you>>
+<br />
+She followed your gaze, and her eyes widened slightly.
+<br /><br />
+<<octavia>>
+    No way... It’s like the drawing.
+<</octavia>>
+<br />
+<<linkreplace 'Attack them'>>
+    <<script>>
+        blackoutScreen(2000);
+        window.scrollBy({
+        top: 200,
+        left: 0,
+        behavior: 'smooth'
+    });
+    <</script>>
+    Before either of you could act, one of the figures raised their weapon. A sharp, blinding light engulfed you, and everything went black...
+    <br /><br /><br /><br />
+    The haze of unconsciousness faded as you stirred awake, the uncomfortable bite of rough rope digging into your wrists. 
+    Opening your eyes, you realized you were tied to a tree, your arms pinned behind your back. 
+    Octavia, similarly restrained, was tied to a nearby trunk, her face dark with barely contained fury. 
+    The scene around you was eerily quiet, the forest alive with the faint rustle of leaves but devoid of any other sound.
+    <br /><br />
+    <<if Object.keys($player.companions).length>>
+        <<set $missingNpcs ??= []>>
+        <<for _companionI, _companion range $player.companions>>
+            <<set _npc = setup.companionGet(_companionI)>>
+            <<run $missingNpcs.push({
+                event: 'octavia_investigation',
+                day: $game.day,
+                npc: _npc
+            })>>
+            <<set $player.companions = {}>>
+            <<replace "#companions-list">><</replace>>
+        <</for>>
+        <strong>All of your companions where missing. Only you and Octavia were there.</strong>
+        <br /><br />
+    <</if>>
+    <center>
+        <<image 'people/octavia/investigate4.jpg'>>
+    </center>
+    <br /><br />
+
+        <<newguy>>
+        <<set $tmpGuy.visual = 'trooper'>>
+        <<set _npc1 = $tmpGuy>>
+        <<newguy>>
+        <<set $tmpGuy.visual = 'trooper'>>
+        <<set _npc2 = $tmpGuy>>
+        <<sayNpc _npc1>>
+            Who are you? What are you doing here?
+        <</sayNpc>>
+        <br />
+        Octavia glared at them, defiance blazing in her eyes.
+        <br /><br />
+        <<octavia>>
+            You think tying us up is going to get answers? Go to hell.
+        <</octavia>>
+        <br />
+        The shorter figure tilted their head slightly, as if studying her.
+        <br /><br />
+        <<sayNpc _npc1>>
+            The bikers are gone. They broke the law. That’s what happens when you step out of line. And if you don’t want to meet the same end, you’ll leave us alone.
+        <</sayNpc>>
+        <br />
+        You frowned, your mind racing.
+        <br /><br />
+        <<you>>
+            What law? Who are you?
+        <</you>>
+        <br />
+        <<sayNpc _npc1>>
+            You’re wandering into things you don’t understand. There’s a cleansing on the way, and the world will be better for it. 
+            But interference from people like you will only complicate things—and bring about consequences.
+        <</sayNpc>>
+        <br />
+        The taller figure continued, their modulated voice unwavering.
+        <br /><br />
+        <<sayNpc _npc2>>
+            Settlements like the one near here, hidden away from the world, are risks we cannot afford. Chaos breeds there. Chaos leads to collapse.
+        <</sayNpc>>
+        <br />
+        <<sayNpc _npc2>>
+            If places like that step out of line, we will erase them—every person, every building, every trace that they ever existed.
+        <</sayNpc>>
+        <br />
+        Your stomach churned at their words. They didn’t know it was your settlement they were talking about, but the threat was clear. Octavia’s jaw tightened, her knuckles white as she gripped the ropes binding her.
+        <br /><br />
+        <<you>>
+            You think you can just decide who lives and who dies?
+        <</you>>
+        <br />
+        The shorter figure’s tone turned almost casual, chilling in its detachment.
+        <br /><br />
+        <<sayNpc _npc1>>
+            Call it what you want. But we’re the only thing standing between humanity and its extinction.
+        <</sayNpc>>
+        <br />
+        Octavia leaned forward as much as her restraints allowed, her voice a venomous growl.
+        <br /><br />
+        <<octavia>>
+            You think you’re saving the world? You’re just another group of killers pretending to be gods.
+        <</octavia>>
+        <br />
+        The two figures exchanged a glance, silent for a moment. Then they slowly walked towards you and injected something in your neck and everything went black again...
+        <br /><br />
+        <center>
+            <<image 'people/octavia/investigate5.jpg'>>
+        </center>
+        <br /><br />
+        When you awoke, the ropes were gone, and the two figures were nowhere to be seen. The forest was quiet, save for the distant sound of the river. Octavia sat up, rubbing her wrists where the bindings had left red marks.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+<</linkreplace>>
+
+
+

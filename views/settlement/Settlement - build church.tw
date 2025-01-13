@@ -17,6 +17,7 @@ Church done: (<<=$locationData.settlement.church_level * 20>>%)
 	You need <strong class="iitem">50 wood</strong> to help with the building<br /><br />
 	<<if $backpack.count('wood') >= 50 && $player.energy >= 80>>
 		<<link 'Help build church'>>
+			<<set $characters.rodger.relationship += 5>>
 			<<drop $backpack 'wood' 50>>
 			<<set $locationData.settlement.church_level++>>
 			<<addhours 8>>
@@ -32,6 +33,7 @@ Church done: (<<=$locationData.settlement.church_level * 20>>%)
 			<<addhours 8>>
 			<<energy -80>>
 			<<set $locationData.settlement.church_level++>>
+			<<set $characters.rodger.relationship += 5>>
 			<<goto 'Settlement - build church #2'>>
 		<</link>>
 	<</if>>
@@ -40,6 +42,7 @@ Church done: (<<=$locationData.settlement.church_level * 20>>%)
 	  <<link 'Help build church'>>
 		  <<addhours 8>>
 		  <<energy -80>>
+		  <<set $characters.rodger.relationship += 5>>
 		  <<set $locationData.settlement.church_level++>>
 		  <<goto 'Settlement - build church #2'>>
 	  <</link>>
@@ -52,6 +55,7 @@ Church done: (<<=$locationData.settlement.church_level * 20>>%)
 			<<addhours 8>>
 			<<energy -80>>
 			<<set $game.location.settlement_church = true>>
+			<<set $characters.rodger.relationship += 5>>
 			<<goto 'Settlement - church finished'>>
 		<</link>>
 	<</if>>

@@ -1241,3 +1241,21 @@ span.sick-info {
   font-size: 30px;
   line-height: 95px;
 }
+
+#blackout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 10000; /* Ensure it stays on top of everything */
+  opacity: 0; /* Start invisible */
+  pointer-events: none; /* Prevent interactions when invisible */
+  transition: opacity 1s ease; /* Fade effect */
+}
+
+#blackout.active {
+  opacity: 1; /* Fully visible */
+  pointer-events: all; /* Allow interactions when visible */
+}

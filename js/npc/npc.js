@@ -472,3 +472,28 @@ setup.NpcInHome = function(_npc) {
 
 	return true;
 }
+
+setup.npc = {
+	/**
+	 * For people with the same name, get a number som we can differiate them
+	 * @returns list of these
+	 */
+	checkDuplicateName: function() {
+		const name2id = {}; // {name}[ids...]
+		const number  = new Map; // number{id} = number for that name
+
+        const persons = [variables().player].concat((Object.values(variables().characters ?? {})), (variables().slaves ?? [], variables().guests ?? []), (variables().nursery ?? []));
+		for (const person of persons) {
+			name2id[person.name] ??= [];
+			name2id[person.name].push(person.id);
+		}
+		for (const name in name2id) {
+			if (name2id[name].length > 1) {
+				for (const i in name2id[name]) {
+					number.set(name2id[name][i], parseInt(i)+1);
+				}
+			}
+		}
+		return number;
+	},
+}

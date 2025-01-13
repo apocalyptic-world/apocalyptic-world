@@ -5,16 +5,17 @@
 
 <h1>Family and relations</h1>
 
-<h2><<=$player.name>>'s family tree</h2>
+<h2><<=setup.player.npcNameColor($player)>>'s family tree</h2> /* $player.name */
 <<set _replace = setup.player.charactersCheck()>>
 <<run setup.player.updateFamily(true)>>
+<<set _number = setup.npc.checkDuplicateName()>>
 <<set _shown = { mc: true}>>
 <<set _shownPreg = {}>>
 <table class="mc-stats-table">
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
 		<<set _shown[_wifeId] = true>>
-		<<set _wifeText = setup.player.npcRelationText(_wifeId)>>
+		<<set _wifeText = setup.player.npcRelationText(_wifeId) + (_number.get(_wifeid) ?? '')>>
 		<<if _wifeText>>
 			<<set _wivesTexts.push(_wifeText)>>
 		<</if>>
@@ -23,7 +24,7 @@
 		<tr><td colspan ="2">Wives you married</td></tr>
 		<tr>
 			<td></td>
-			<td><<=_wivesTexts.sort().join('<br/>')>></td>
+			<td colspan ="2"><<=_wivesTexts.sort().join('<br/>')>></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
@@ -31,7 +32,7 @@
 	<<set _childmothersTexts = []>>
 	<<for _childmotherId range $player.family?.childmothers ?? []>>
 		<<set _shown[_childmotherId] = true>>
-		<<set _childmotherText = setup.player.npcRelationText(_childmotherId)>>
+		<<set _childmotherText = setup.player.npcRelationText(_childmotherId) + (_number.get(_childmotherid) ?? '')>>
 		<<if _childmotherText>>
 			<<set _childmothersTexts.push(_childmotherText)>>
 		<</if>>
@@ -40,7 +41,7 @@
 		<tr><td colspan ="2">Mothers to your children</td></tr>
 		<tr>
 			<td></td>
-			<td><<=_childmothersTexts.sort().join('<br/>')>></td>
+			<td colspan ="2"><<=_childmothersTexts.sort().join('<br/>')>></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
@@ -48,7 +49,7 @@
 	<<set _kidsTexts = []>>
 	<<for _kidId range $player.family?.kids ?? []>>
 		<<set _shown[_kidId] = true>>
-		<<set _kidText = setup.player.npcRelationText(_kidId)>>
+		<<set _kidText = setup.player.npcRelationText(_kidId) + (_number.get(_kidid) ?? '')>>
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
 		<</if>>
@@ -57,19 +58,18 @@
 		<tr><td colspan ="2">Children you fathered</td></tr>
 		<tr>
 			<td></td>
-			<td><<=_kidsTexts.sort().join('<br/>')>></td>
+			<td colspan ="2"><<=_kidsTexts.sort().join('<br/>')>></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
-	/*
-	<tr>
+/* 	<tr>
 	  <td>From your view</td>
-	  <td><<=setup.player.npcRelationText('mc', false, true)>></td>
+	  <td colspan ="2"><<=setup.player.npcRelationText('mc', false, true) + (_number.get('mc') ?? '')>></td>
 	</tr>
 	<tr><td>&nbsp;</td></tr>
-	*/
-		
+ */		
+
 	<<set _pregTexts = []>>
 	<<set _characters = []>>
 	<<for _npcId, _npc range $characters>>
@@ -80,7 +80,7 @@
 			<</if>>
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
-				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
+				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false)) + (_number.get(_npc.id) ?? '')>>
 			<</if>>
 		<</if>>
 	<</for>>
@@ -92,7 +92,7 @@
 			<</if>>
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
-				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false))>>
+				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false)) + (_number.get(_npc.id) ?? '')>>
 			<</if>>
 		<</if>>
 	<</for>>
@@ -162,7 +162,7 @@
 		 */
 		<<if _fatherId !== 'mc'>>
 			<<set _outs.pregnancy[_fatherId] ??= []>>
-			<<set _outs.pregnancy[_fatherId].push(setup.player.npcRelationText2(_npc, true, true))>>
+			<<set _outs.pregnancy[_fatherId].push(setup.player.npcRelationText2(_npc, true, true)) + (_number.get(_npc.id) ?? '')>>
 			<<set _shownPreg[_npc.id] = true>>
 		<</if>>
 	<</if>>
@@ -301,7 +301,7 @@
 	<<for _maleID, _others range _rels[_reltype]>>
 		<<if _maleID !== 'mc'>>
 			<<if _npcs.has(_maleID) && !_shown[_maleID] >>
-				<<set _outs.males.push(setup.player.npcRelationText2(_npcs.get(_maleID), true, true))>>
+				<<set _outs.males.push(setup.player.npcRelationText2(_npcs.get(_maleID), true, true)) + (_number.get(_maleid) ?? '')>>
 				<<set _shown[_maleID] = true>>
 			<</if>>
 
@@ -312,7 +312,7 @@
 
 				<<if _npcs.has(_npcID)>>
 					<<set _outs[_reltype][_maleID] ??= []>>
-					<<set _outs[_reltype][_maleID].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true))>>
+					<<set _outs[_reltype][_maleID].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true)) + (_number.get(_npcID) ?? '')>>
 					<<set _shown[_npcID] = true>>
 				<</if>>
 			<</for>>
@@ -324,13 +324,13 @@
 <<for _reltype range ['mother']>>
 	<<for _parentID, _children range _rels[_reltype]>>
 		<<if _npcs.has(_parentID) && !_shown[_parentID]>>
-			<<set _outs.females.push(setup.player.npcRelationText2(_npcs.get(_parentID), true, true))>>
+			<<set _outs.females.push(setup.player.npcRelationText2(_npcs.get(_parentID), true, true)) + (_number.get(_parentid) ?? '')>>
 			<<set _shown[_parentID] = true>>
 
 			<<for _childID, _dummy range _children>>
 				<<if _npcs.has(_childID)>>
 					<<set _outs[_reltype][_parentID] ??= []>>
-					<<set _outs[_reltype][_parentID].push(setup.player.npcRelationText2(_npcs.get(_childID), true, true))>>
+					<<set _outs[_reltype][_parentID].push(setup.player.npcRelationText2(_npcs.get(_childID), true, true)) + (_number.get(_childID) ?? '')>>
 					<<set _shown[_childID] = true>>
 				<</if>>
 			<</for>>
@@ -338,10 +338,19 @@
 	<</for>>
 <</for>>
 
+<<set _horse = ''>>
 <<for _reltype range ['orphan', 'single']>>
 	<<for _npcID, _dummy range _rels[_reltype]>>
 		<<if  _npcs.has(_npcID) && !_shown[_npcID] && !_shownPreg[_npcID]>>
-			<<set _outs[_reltype].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :''))>>
+/*
+			<<set _outs[_reltype].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :'') + ' ' + (_number.get(_npcID) ?? ''))>>
+			<<set _shown[_npcID] = true>>
+*/
+			<<if _npcID === 'horse'>>
+				<<set _horse = setup.player.npcNameColor(_npcs.get(_npcID)) + ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong> ' + (_number.get(_npcID) ?? '')>>
+			<<else>>
+				<<set _outs[_reltype].push(setup.player.npcNameColor(_npcs.get(_npcID)) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :'') + ' ' + (_number.get(_npcID) ?? ''))>>
+			<</if>>
 			<<set _shown[_npcID] = true>>
 		<</if>>
 	<</for>>
@@ -350,7 +359,7 @@
 <table class="mc-stats-table">
 	<<if  (_outs.males ?? []).length>>
 		<tr><td colspan="2">Males with families</td></tr>
-		<tr><td></td> <td><<=_outs.males.sort().join('<br/>')>></td></tr>
+		<tr><td></td> <td colspan ="2"><<=_outs.males.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
@@ -360,7 +369,7 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
@@ -372,7 +381,7 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
@@ -384,7 +393,7 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
@@ -392,7 +401,7 @@
 
 	<<if  (_outs.females ?? []).length>>
 		<tr><td colspan="2">Unconnected females with families</td></tr>
-		<tr><td></td> <td><<=_outs.females.sort().join('<br/>')>></td></tr>
+		<tr><td></td> <td colspan ="2"><<=_outs.females.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
@@ -402,7 +411,7 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
@@ -414,15 +423,9 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
-		<tr><td>&nbsp;</td></tr>
-	<</if>>
-
-	<<if  (_outs.orphan ?? []).length>>
-		<tr><td colspan="2">Orphan children</td></tr>
-		<tr><td></td> <td><<=_outs.orphan.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
@@ -432,16 +435,62 @@
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
 				<td>_name</td>
-				<td><<=_text.sort().join('<br/>')>></td>
+				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
-	<<if  (_outs.single ?? []).length>>
-		<tr><td colspan="2">All other singles</td></tr>
+/* 	<<if  (_outs.single ?? []).length>>
+		<tr><td colspan="2">All other singles without family</td></tr>
 		<tr><td></td> <td><<=_outs.single.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
+	<</if>>
+ */
+/* 	<<if  (_outs.orphan ?? []).length>>
+		<tr><td colspan="2">Orphan children without family</td></tr>
+		<tr><td></td> <td><<=_outs.orphan.sort().join('<br/>')>></td></tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+ */
+
+ 	<tr><td colspan="3"><hr/></td></tr>
+
+	/* 	+---------+---------+---------+
+		| singles           | orphans |
+		+---------+---------+---------+
+		| ½ list  | ½ list  |         |
+		+---------+---------+ list    +
+		| horse - 2 columns |         |
+		+---------+---------+---------+
+    */
+	<<set _singlesCount = (_outs.single ?? []).length>>
+	<<set _orphansCount = (_outs.orphan ?? []).length>>
+	<<if  _singlesCount || _horse !== '' || _orphansCount>>
+		<tr>
+			<td colspan="2">
+				<<=(_singlesCount || _horse !== '') ? 'Singles without family' : ''>>
+			</td>
+			<td>
+				<<=(_orphansCount) ? 'Orphans without family' : ''>>
+			</td>
+		</tr>
+
+		<tr>
+			<<if _singlesCount>>
+				<<set _half = (_singlesCount + (_singlesCount %2 ? 1 : 0))/2>>
+				<<set _outs.single = _outs.single.sort()>>
+				<<set 
+					_col1 = _outs.single.toSpliced(_half, _half),
+					_col2 = _outs.single.slice(_half)>>
+				<td  valign="top"> <<=_col1.join('<br/>')>> </td>
+				<td  valign="top"> <<=_col2.join('<br/>')>> </td>
+			<<else>>
+				<td colspan="2"></td>
+			<</if>>
+			<td rowspan="2" valign="top"><<=_outs.orphan.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td colspan="2"><<=_horse>></td></tr>
 	<</if>>
 
 </table>
