@@ -106,6 +106,27 @@
 		</div>
 	<</if>>
 
+	<<if !$tmpGirl.gender && _guysLikingGirls.length > 1>>
+		<<set
+			_guysLikingGirls=setup.shuffling(_guysLikingGirls),
+			_guy0 = $guests[_guysLikingGirls[0]],
+			_guy1 = $guests[_guysLikingGirls[1]],
+			_linkName = _guy0.name + ' & ' + _guy1.name
+		>>
+
+		<div>
+			<span @class="'gender-guy'">
+				<<link _linkName>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_k], [_guysLikingGirls[0], _guysLikingGirls[1]]]>>
+					<<goto 'Guesthouse [Event] - males on female'>>
+				<</link>>
+			</span>
+		</div>
+	<</if>>
+
 	<<if !$tmpGirl.gender && _girlsLikingBoth.length > 0 && _guysLikingGirls > 0 >>
 		<<set
 			_girlsLikingBoth=setup.shuffling(_girlsLikingBoth),
