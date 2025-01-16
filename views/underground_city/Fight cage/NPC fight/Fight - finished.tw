@@ -1,3 +1,119 @@
 :: NPC fight cage - fight finished [bg-fight-cage]
 <h1 class="ptitle">FIGHT CAGE</h1>
 <br />
+<<set _win = Object.keys($fightCage.fighters).length > 0>>
+
+As the defeated fighter is dragged off, the opposing leader approaches. 
+He’s a wiry, snake-like man with a perpetual sneer, dressed in a patchwork of scavenged armor. 
+His sharp eyes flick over you, studying you as if trying to find the cracks in your armor.
+<br /><br />
+<center>
+    <<image 'places/cage_fight/npc_fight_finish1.jpg'>>
+</center>
+<br /><br/>
+<<newguy>>
+<<sayNpc $tmpGuy>>
+        Well, a deal’s a deal.
+<</sayNpc>>
+<br />
+He says, his voice carrying the oily slickness of someone used to making bargains in dark alleys.
+<br /><br />
+<<if _win>>
+    <<if $fightClubPrize === 'caps'>>
+        <<set $player.money += 50>>
+        He reaches into a pouch slung at his side, pulling out a heavy handful of coins—metallic caps.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            Your cut.
+        <</sayNpc>>
+        <br />
+        <center>
+            <<image 'places/cage_fight/npc_fight_caps.jpg'>>
+        </center>
+        <br /><br />
+        <strong>You received 50 caps</strong>
+        <br /><br />
+        He shoves the money into your hand, his fingers lingering for just a moment too long, a subtle warning in his touch.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            Spend it wisely. Luck doesn’t last forever.
+        <</sayNpc>>
+        <br />
+        The adrenaline still thrums in your veins as you pocket the money, the weight of it a reminder of what you’ve won—and what’s at stake. 
+        The fight is over, but you know this is just the beginning. Every victory here earns you enemies as well as rewards. If you want to survive, you’ll have to keep winning.
+        <br /><br />
+    <<elseif $fightClubPrize === 'fighters'>>
+        He gestures toward the cag,  where his fighters are laying on the ground, resting.
+        Each one is distinct, their demeanor radiating strength and danger. The leader steps closer, lowering his voice.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            Choose one.
+        <</sayNpc>>
+        <br />
+        <table id="slaves" class="npc-list">
+            <<for _fighterI, _enemyFighter range $fightCage.enemiesLost>>
+                <<capture _enemyFighter, _fighterI>>
+                    <<set _genderClass = 'gender-' + setup.genderClass(_enemyFighter)>>
+                    <tr class="item">
+                        <td>
+                            <label><<radiobutton "_enemyFighterChoose" _fighterI>> <<=setup.displayName(_enemyFighter)>></label>
+                        </td>
+				        <td style="min-width: 25%">
+                            <<=setup.npcListInfo(_enemyFighter)>>
+                        </td>
+                        <td>
+                            <<npcListView _enemyFighter>>
+                        </td>
+                    </tr>
+                <</capture>>
+            <</for>>
+        </table>
+    <</if>>
+<<else>>
+    <<sayNpc $tmpGuy>>
+        Well, well. Looks like your luck ran out.
+    <</sayNpc>>
+    <br />
+    <<if $fightClubPrize === 'caps'>>
+        <center>
+            <<image 'places/cage_fight/npc_fight_caps.jpg'>>
+        </center>
+        <br /><br />
+        Reluctantly, you reach into your pouch, pulling out the caps—the metallic coins clinking together as you count them out. Each one feels like a piece of your pride being chipped away. You shove the pile into his waiting hand, your jaw tight as his grin widens.
+        <br /><br />
+        <strong>You lost 50 caps</strong>
+        <br /><br />
+        Behind him, his victorious fighter wipes the blood from their knuckles, shooting you a cocky smirk before disappearing into the crowd.
+        <br /><br />
+    <<elseif $fightClubPrize === 'fighters'>>
+        <<sayNpc $tmpGuy>>
+            You bet your fighter, and now they’re mine.
+        <</sayNpc>>
+        <br />
+        Your stomach twists as his words sink in. You glance toward the cage, where your fighter is being dragged off by medics. 
+        Their battered body looks fragile under the harsh light, a cruel contrast to the strength they displayed just minutes ago.
+        <br /><br />
+        You watch, helpless, as the men march past you and toward your injured fighter. They hoist your champion up like a sack of grain, dragging them toward the exit. Your fighter doesn’t struggle—they’re too weak to resist.
+        <br /><br />
+        <<set _fighter = setup.getRandomElement($fightCage.fightersLost)>>
+        <strong>He decides to pick <<=setup.displayName(_fighter)>></strong>
+        <br /><br />
+        <<set _splitNpcKey = _fighter.key.split(',')>>
+        <<if _splitNpcKey[0] === 'guest'>>
+            <<guestRemove _splitNpcKey[1]>>
+        <<else>>
+            <<slaveRemove _splitNpcKey[1]>>
+        <</if>>
+    <</if>>
+<</if>>
+<<link 'Leave'>>
+    <<if _enemyFighterChoose>>
+        <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose])>>
+    <</if>>
+    <<if $player.reputation < 300>>
+        <<set $player.reputation++>>
+    <</if>>
+    <<addhours 1>>
+    <<goto 'Fight cage'>>
+    <<unset $fightClubPrize, $fightCage>>
+<</link>>
