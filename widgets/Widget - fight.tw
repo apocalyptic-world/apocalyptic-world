@@ -299,3 +299,13 @@
 		<<run $enemies.push($tmpGirl)>>
 	<</for>>
 <</widget>>
+
+<<widget strongerEnemies>>
+	<<set _minadd = $args[0] ?? 0>>
+	<<set _maxadd = Math.PI * _minadd>>
+	<<if _minadd>>
+		<<for _enemy range $enemies>>
+			<<set _enemy.strenth +=  randomInteger(_minadd, _maxadd)>>
+		<</for>>
+	<</if>>
+<</widget>>

@@ -19,6 +19,7 @@ His sharp eyes flick over you, studying you as if trying to find the cracks in y
 He says, his voice carrying the oily slickness of someone used to making bargains in dark alleys.
 <br /><br />
 <<if _win>>
+    <<set $fightCage.totalWins = ($fightCage.totalWins ?? 0)+1>>
     <<if $fightClubPrize === 'caps'>>
         <<set $player.money += 50>>
         He reaches into a pouch slung at his side, pulling out a heavy handful of coins—metallic caps.
@@ -56,7 +57,7 @@ He says, his voice carrying the oily slickness of someone used to making bargain
                     <<set _genderClass = 'gender-' + setup.genderClass(_enemyFighter)>>
                     <tr class="item">
                         <td>
-                            <label><<radiobutton "_enemyFighterChoose" _fighterI>> <<=setup.displayName(_enemyFighter)>></label>
+                            <label><<radiobutton "_enemyFighterChoose" _fighterI+1>> <<=setup.displayName(_enemyFighter)>></label>
                         </td>
 				        <td style="min-width: 25%">
                             <<=setup.npcListInfo(_enemyFighter)>>
@@ -108,7 +109,7 @@ He says, his voice carrying the oily slickness of someone used to making bargain
 <</if>>
 <<link 'Leave'>>
     <<if _enemyFighterChoose>>
-        <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose])>>
+        <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose-1])>>
     <</if>>
     <<if $player.reputation < 300>>
         <<set $player.reputation++>>
