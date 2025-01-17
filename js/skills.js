@@ -30,6 +30,10 @@ setup.skills = {
     mechanic: {
         title: "Mechanic",
         description: "Good with mechanics. Sometimes able to fix cars without needing parts"
+    },
+    fighter: {
+        title: "Fighter",
+        description: "Has advantages in cage fights",
     }
 };
 

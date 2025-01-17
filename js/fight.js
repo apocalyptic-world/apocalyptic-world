@@ -54,8 +54,17 @@ setup.fight = {
         const fightType1 = (fighter.gender === 0 ? 'Female' : 'Male');
         const fightType2 = (enemy.gender === 0 ? 'Female' : 'Male');
         const fightType = fightType1 + 'Vs' + fightType2;
+
+        const fighterStrength = fighter.strength;
+        const enemyStrength = enemy.strength
+        if ((fighter.skills ?? []).includes('fighter')) {
+          fighterStrength += (fighterStrength / 2);
+        }
+        if ((enemy.skills ?? []).includes('fighter')) {
+          enemyStrength += (enemyStrength / 2);
+        }
         
-        const fighterWins = fighter.strength > enemy.strength;
+        const fighterWins = fighterStrength > enemyStrength;
         
         const outcomeType = (fighterWins ? 'win' : 'lose');
         
