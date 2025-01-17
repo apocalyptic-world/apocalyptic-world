@@ -57,7 +57,7 @@ He says, his voice carrying the oily slickness of someone used to making bargain
                     <<set _genderClass = 'gender-' + setup.genderClass(_enemyFighter)>>
                     <tr class="item">
                         <td>
-                            <label><<radiobutton "_enemyFighterChoose" _fighterI+1>> <<=setup.displayName(_enemyFighter)>></label>
+                            <label><<radiobutton "_enemyFighterChoose" _fighterI>> <<=setup.displayName(_enemyFighter)>></label>
                         </td>
 				        <td style="min-width: 25%">
                             <<=setup.npcListInfo(_enemyFighter)>>
@@ -108,8 +108,8 @@ He says, his voice carrying the oily slickness of someone used to making bargain
     <</if>>
 <</if>>
 <<link 'Leave'>>
-    <<if _enemyFighterChoose>>
-        <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose-1])>>
+    <<if typeof _enemyFighterChoose !== "undefined">>
+        <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose])>>
     <</if>>
     <<if $player.reputation < 300>>
         <<set $player.reputation++>>
