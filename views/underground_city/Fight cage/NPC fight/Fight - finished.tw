@@ -19,6 +19,7 @@ His sharp eyes flick over you, studying you as if trying to find the cracks in y
 He says, his voice carrying the oily slickness of someone used to making bargains in dark alleys.
 <br /><br />
 <<if _win>>
+    <<set $fightCage.totalWins = ($fightCage.totalWins ?? 0)+1>>
     <<if $fightClubPrize === 'caps'>>
         <<set $player.money += 50>>
         He reaches into a pouch slung at his side, pulling out a heavy handful of coins—metallic caps.
@@ -107,7 +108,7 @@ He says, his voice carrying the oily slickness of someone used to making bargain
     <</if>>
 <</if>>
 <<link 'Leave'>>
-    <<if _enemyFighterChoose>>
+    <<if typeof _enemyFighterChoose !== "undefined">>
         <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose])>>
     <</if>>
     <<if $player.reputation < 300>>

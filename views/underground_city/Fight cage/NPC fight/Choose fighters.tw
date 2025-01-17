@@ -63,6 +63,7 @@
         <<set _enemiesMales = Math.floor(Math.random() * ($fightCage.fightersNeeded + 1))>>
         <<set _enemiesFemales = $fightCage.fightersNeeded - _enemiesMales>>
         <<generateEnemies _enemiesMales _enemiesFemales>>
+        <<strongerEnemies ($fightCage.totalWins ?? 0)>>
         <<set $fightCage.enemies = $enemies>>
         <<goto 'NPC fight cage - fight'>>
     <</if>>
