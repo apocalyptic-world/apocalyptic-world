@@ -13,10 +13,6 @@
 		_separator ='',
 		_index = 0,
 		_minCorruption = 100,
-		_nbVirgins = 0,
-		_nbAnalVirgins = 0,
-		_nbSmallTits = 0,
-		_nbSquirters = 0,
 		_nbFemaleSadists = 0,
 		_nbMaleMasochists = 0
 	>>
@@ -39,18 +35,6 @@
 			<<set _separator =', '>>
 		<</if>>
 		<<set _girlNames += _separator + $guests[_femaleGuestIds[_i]].name>>
-		<<if $guests[_femaleGuestIds[_i]].virgin>>
-			<<set _nbVirgins += 1>>
-		<</if>>
-		<<if $guests[_femaleGuestIds[_i]].anal < 20>>
-			<<set _nbAnalVirgins += 1>>
-		<</if>>
-		<<if $guests[_femaleGuestIds[_i]].breasts == 'small'>>
-			<<set _nbSmallTits += 1>>
-		<</if>>
-		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('squirter')>>
-			<<set _nbSquirters += 1>>
-		<</if>>
 		<<if ($guests[_femaleGuestIds[_i]].traits ?? []).includes('sadistic')>>
 			<<set _nbFemaleSadists += 1>>
 		<</if>>
@@ -69,47 +53,98 @@
 		<</if>>
 	<</for>>
 
-	<<set _r = Math.floor(random(0, _minCorruption-1)/20)>>
+	<<set _r = 1 + Math.floor(random(0, _minCorruption-1)/25)>>
 	<<if _r < 0>>
 		<<set _r = 0>>
 	<</if>>
-	<<set _sexActions = [
-		['kissing','handjob','handjob','footjob','footjob'][random(0, _r)],
-		['bj','bj','titjob','titjob','dp'][random(0, _r)],
-		['nipple_lick','nipple_lick','nipple_lick','pussy_lick','pussy_lick'][random(0, _r)],
-		['pussy_lick','pussy_fingering','pussy_fingering','anal_fingering','anal_fingering'][random(0, _r)],
-		['pussy','pussy','pussy','anal','anal'][random(0, _r)],
-		['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
-	]>>
-	
-	<<if _sexActions[1] == 'titjob' && _nbSmallTits == _femaleGuestIds.length>>
-		<<set _sexActions[1] = 'dp'>>
+
+	<<if _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
+		<<set _sexActions = [
+			['kissing','kissing','nipple_lick','nipple_lick','nipple_lick'][random(0, _r)],
+			['pussy_fingering','pussy_fingering','pussy_lick','pussy_lick','pussy_lick'][random(0, _r)],
+			['bj_reverse','anal_reverse','bj_reverse_anal_reverse','nipple_lick_anal_reverse','pussy_lick_anal_reverse'][random(0, _r)],		
+			['anal_reverse','bj_reverse_anal_reverse','nipple_lick_anal_reverse','pussy_lick_anal_reverse','handjob_anal_reverse'][random(0, _r)],
+			['handjob_anal_reverse','bj_anal_reverse','sn_anal_reverse','pussy_anal_reverse','pussy_anal_reverse'][random(0, _r)],
+			'anal_reverse_cum'
+		]>>
+		<<if _sexActions[1] == 'pussy_fingering' && $guests[_guestIds[0]].virgin>>
+			<<set _sexActions[1] = 'anal_fingering'>>
+		<</if>>
+		<<if _sexActions[4] == 'pussy_anal_reverse' && $guests[_guestIds[0]].virgin>>
+			<<set
+				_sexActions[4] = 'sn_anal_reverse'
+			>>
+		<</if>>
+	<<elseif $guests[_guestIds[0]].virgin && $guests[_guestIds[0]].anal < 20>>
+		<<set _sexActions = [
+			['kissing','kissing','nipple_lick','nipple_lick','nipple_lick'][random(0, _r)],
+			['pussy_lick','pussy_lick','pussy_lick','anal_fingering','anal_fingering'][random(0, _r)],
+			['handjob','handjob','handjob','titjob','titjob'][random(0, _r)],
+			['bj','bj','sn','sn','sn'][random(0, _r)],
+			['dp','dp','dp','footjob','footjob'][random(0, _r)],
+			['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
+		]>>
+		<<if _sexActions[2] == 'titjob' && $guests[_guestIds[0]].breasts == 'small'>>
+			<<set _sexActions[2] = 'bj'>>
+		<</if>>
+		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
+			<<set _sexActions[2] = 'squirt'>>
+		<</if>>
+
+	<<elseif $guests[_guestIds[0]].virgin>>
+		<<set _sexActions = [
+			['kissing','nipple_lick','handjob','titjob','footjob'][random(0, _r)],
+			['pussy_lick','pussy_lick','bj','bj','dp'][random(0, _r)],
+			['dp','sn','sn','anal_fingering','anal_fingering'][random(0, _r)],
+			['bj_b_anal','bj_b_anal','anal','anal','anal_b_bj'][random(0, _r)],
+			['anal_b_bj','anal_a_pussy_lick','anal_a_pussy_lick','anal_fisting','anal_fisting'][random(0, _r)],
+			['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
+		]>>
+		<<if _sexActions[0] == 'titjob' && $guests[_guestIds[0]].breasts == 'small'>>
+			<<set _sexActions[0] = 'handjob'>>
+		<</if>>
+		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
+			<<set _sexActions[3] = 'squirt'>>
+		<</if>>
+
+	<<elseif $guests[_guestIds[0]].anal < 20>>
+		<<set _sexActions = [
+			['kissing','nipple_lick','handjob','titjob','footjob'][random(0, _r)],
+			['pussy_lick','bj','dp','sn','anal_fingering'][random(0, _r)],
+			['pussy_fingering','pussy_fingering','bj_b_pussy','bj_b_pussy','pussy'][random(0, _r)],
+			['pussy','pussy_a_sn','pussy_a_sn','pussy_a_pussy_lick','pussy_a_pussy_lick'][random(0, _r)],
+			['pussy_pussy_lick','pussy_pussy_lick','pussy_pussy_lick','pussy_a_pussy','pussy_a_pussy'][random(0, _r)],
+			['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
+		]>>
+		<<if _sexActions[0] == 'titjob' && $guests[_guestIds[0]].breasts == 'small'>>
+			<<set _sexActions[0] = 'handjob'>>
+		<</if>>
+		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
+			<<set _sexActions[3] = 'squirt'>>
+		<</if>>
+		<<if _sexActions[4] == 'pussy_a_pussy' && $guests[_guestIds[1]].virgin>>
+			<<set _sexActions[4] = 'pussy_a_sn'>>
+		<</if>>
+	<<else>>
+		<<set _sexActions = [
+			['kissing','nipple_lick','handjob','titjob','footjob'][random(0, _r)],
+			['pussy_lick','bj','dp','sn','anal_fingering'][random(0, _r)],
+			['pussy_fingering','bj_b_pussy','pussy','pussy_a_sn','pussy_a_pussy_lick'][random(0, _r)],
+			['bj_b_anal','anal','anal_b_bj','anal_a_pussy_lick','anal_fisting'][random(0, _r)],
+			['pussy_pussy_lick','pussy_a_pussy','pussy_b_anal','anal_b_pussy','anal_b_pussy'][random(0, _r)],
+			['cum_on_ass','cum_on_tits','cum_on_stomach','cum_on_face','cum_in_mouth'][random(0, _r)]
+		]>>
+		<<if _sexActions[0] == 'titjob' && $guests[_guestIds[0]].breasts == 'small'>>
+			<<set _sexActions[0] = 'handjob'>>
+		<</if>>
+		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
+			<<set _sexActions[3] = 'squirt'>>
+		<</if>>
+		<<if _sexActions[4] == 'pussy_a_pussy' && $guests[_guestIds[1]].virgin>>
+			<<set _sexActions[4] = 'pussy_a_pussy_lick'>>
+		<</if>>
 	<</if>>
-	<<if _sexActions[2] == 'pussy_lick' && _nbSquirter > 0>>
-		<<set _sexActions[3] = 'squirt_lick'>>
-	<</if>>
-	<<if _sexActions[3] == 'pussy_fingering' && _nbVirgin == _femaleGuestIds.length>>
-		<<set _sexActions[3] = 'anal_fingering'>>
-	<</if>>
-	<<if _sexActions[4] == 'pussy' && _nbVirgin == _femaleGuestIds.length>>
-		<<set
-			_sexActions[4] = 'anal',
-			_sexActions[5] = 'cum_in_ass'
-		>>
-	<</if>>
-	<<if _sexActions[4] == 'anal' && _nbAnalVirgin == _femaleGuestIds.length>>
-		<<set
-			_sexActions[4] = 'dp',
-			_sexActions[5] = 'cum_in_mouth'
-		>>
-	<</if>>
-	<<if _r > 2 && _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
-		<<set
-			_sexActions[3] = 'bj_reverse',
-			_sexActions[4] = 'anal_reverse',
-			_sexActions[5] = 'anal_reverse_cum'
-		>>
-	<</if>>
+
 	
 	<<set $randEvent = [
 		_guestIds,
