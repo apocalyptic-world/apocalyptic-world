@@ -192,19 +192,40 @@
 <<widget actionDream>>
 	<<set _actions = ['anal', 'bj']>>
 	<<set _places = ['basement', 'default', 'forest', 'nightclub', 'shower']>>
-	<<set _genders = ['female']>>
-	<<if settings.gaysEnabled>>
+	<<set _dreamText = 'You went to bed horny and dreamt about fucking someone.'>>
+	<<set _genders = []>>
+
+	<<if settings.gaysDreamsEnabled>>
 		<<set _genders.push('male')>>
 	<</if>>
-	<<if settings.transEnabled>>
+	<<if settings.transDreamsEnabled>>
 		<<set _genders.push('transfemale')>>
+	<</if>>
+	<<if settings.lesbiansDreamsEnabled>>
+		<<set _genders.push('female_on_female-2')>>
+		<<set _genders.push('female_on_female-3')>>
+	<</if>>
+	<<if settings.lesbiansDreamsEnabled && settings.transDreamsEnabled>>
+		<<set _genders.push('transfemale_on_female')>>
+		<<set _genders.push('transfemale_on_transfemale')>>
+	<</if>>
+	<<if settings.straightDreamsEnabled || _genders.length === 0>>
+		<<set _genders.push('female')>>
 	<</if>>
 	
 	<<set _gender = either(_genders)>>
 	<<if _gender === 'female'>>
-		<<run _actions.push('pussy')>>
+		<<set _actions.push('pussy')>>
 		<<set _places.push('kitchen', 'maid', 'bathhouse')>>
+	<<elseif _gender === 'female_on_female-2' || _gender === 'female_on_female-3'>>
+		<<set _actions = ['sn_pussy', 'scissoring', 'masturbating']>>
+		<<set _places = ['default']>>
+		<<set _dreamText = 'You went to bed horny and dreamt about hot lesbians fucking.'>>
+	<<elseif _gender === 'transfemale_on_female' || _gender === 'transfemale_on_transfemale'>>
+		<<set _places = ['default']>>
+		<<set _dreamText = 'You went to bed horny and dreamt about hot transfemales fucking.'>>
 	<</if>>
+	
 	<<set _sleepAction = {
 		place: either(_places),
 		type: either(_actions)
@@ -216,6 +237,8 @@
 	<</if>>
 
 	<<actionImageOutput _dreamImg>>
+	<br />
+	<<print _dreamText>>
 <</widget>>
 
 <<widget actionImageOutput>>
