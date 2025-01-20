@@ -29,7 +29,7 @@
         <<include 'MC fuck flaccid'>>
     <</if>>
     <<if $sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')>>
-        <<set $tmpGirl.horny += 30>>
+        <<set $tmpGirl.horny = Math.min(($tmpGirl.horny += 30), 100)>>
     <</if>>
     <<if _showSex>>
 	    <<actionImage $tmpGirl $sexAction>>
@@ -68,18 +68,17 @@
     <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
 		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
 		<br />
-		
-		<<if $tmpGirl.horny >= 100>>
-			<<include 'Mc fuck orgasm'>>
-			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
-			<br />
-			<<set
-				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
-				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
-            <<set $tmpGirl.orgasms ??= 0>>
-            <<set $tmpGirl.orgasms++>>
-		<</if>>	
     <</if>>
+    <<if $tmpGirl.horny >= 100>>
+		<<include 'Mc fuck orgasm'>>
+		<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+		<br />
+		<<set
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+        <<set $tmpGirl.orgasms ??= 0>>
+        <<set $tmpGirl.orgasms++>>
+	<</if>>	
 
     <<if _sexActions[$sexAction]?.stats>>
         <<if setup.percentageChance(70)>>
