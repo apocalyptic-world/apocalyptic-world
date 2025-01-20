@@ -32,10 +32,13 @@
   <</if>>
 </div>
 
-<<if $game.day > 100 && $game.cabinName && !$player?.quests?.base_building>>
+<<if $game.day > 70 && $game.cabinName && !$player?.quests?.base_building>>
   <<goto 'Vincent - base building'>>
 <<elseif !$player?.quests?.milk_farm && $game.day > 110 && $game.cabinName && $player?.quests?.base_building>>
   <<goto 'Vincent - milk farm'>>
+<<elseif !($locationEvents.outside ?? false) && $player?.quests?.base_building && $game.day > 120 && timeBetween('08:00', '10:00') && setup.percentageChance(1)>>
+  <<set $locationEvents.outside = true>>
+  <<goto 'Outside - safe haven'>>
 <</if>>
 
 

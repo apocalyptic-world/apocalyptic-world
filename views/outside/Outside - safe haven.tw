@@ -1,0 +1,71 @@
+:: Outside - safe haven
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+The air is still as you step beyond the reinforced gates of the settlement. 
+The usual rustle of wind through the broken remnants of the old world carries something else—a faint, haunting sound. 
+You pause, listening. A cry. Thin, wavering, undeniably human.
+<br /><br />
+At first, you think it might be a trap—bandits often use such tricks to lure the unsuspecting—but something in the sound tugs at your instincts. Blade in hand, you move cautiously toward the source. 
+As you approach, you see it: a small figure.
+<br /><br />
+<center>
+    <<image 'places/outside/new_haven.jpg'>>
+</center>
+<br /><br />
+A child, barely more than a few weeks old, wrapped in a tattered, patchwork blanket.
+<br /><br />
+You freeze, scanning the area. A parent? A threat? The wasteland teaches you to be careful, and yet, there’s nothing but silence. The child’s cries grow louder, his tiny hands flailing weakly in the cold, unforgiving air.
+<br /><br />
+You crouch down, your shadow falling over the child. His cries falter for a moment, and his wide, innocent eyes lock onto yours. For a moment, you see your reflection in those eyes—not the hardened survivor the wasteland has made you, but the person you once were, long ago.
+<br /><br />
+<<if setup.percentageChance(50)>>
+    <<newgirl>>
+    <<set _child = $tmpGirl>>
+<<else>>
+    <<newguy>>
+    <<set _child = $tmpGirl>>
+<</if>>
+<<set _dateNow = clone($gameDate)>>
+<<set _randomDays = Math.floor(Math.random() * (28 - 7 + 1)) + 7>>
+<<run _dateNow.setDate(_dateNow.getDate() - _randomDays)>>
+<<set _child.birthDate = _dateNow>>
+<strong>
+    That's a <<=(!_child.gender ? 'girl' : 'boy')>>.
+</strong>
+<br />
+The cries grow softer now, almost pleading, as if the child senses the weight of your decision. What will you do?
+<br /><br />
+<<set _linkNameTake = 'Take ' + setup.pronounceWho(_child) + ' in'>>
+<<set _linkNameLeave = 'Leave ' + setup.pronounceWho(_child) + ' for someone else'>>
+<div id="option_take">
+    <<linkreplace _linkNameTake>>
+        <<run $('#option_leave').hide()>>
+		What will be <<=setup.pronounceWhos(_child)>> name: <<textbox "_childName" _child.name>>?
+        <br /><br />
+        <<link _linkNameTake>>
+            <<set _child.name = _childName>>
+            <<if ($game.location.nursery ?? false)>>
+				<<run $nursery.push(_child)>>
+                <<goto 'Nursery'>>
+			<<else>>
+				<<run $guests.push(_child)>>
+                <<goto 'Guest house'>>
+			<</if>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_leave">
+    <<linkreplace _linkNameLeave>>
+        <<run $('#option_take').hide()>>
+        <<set $player.goodwill -= 10>>
+        The child’s cries grow quieter as you stand there, motionless, the weight of the decision pressing down on you. 
+        You look at the settlement behind you, its gates closed tight, a reminder of the hard life you’ve fought to protect. Inside, resources are stretched thin, and every new mouth to feed is a risk—not just to yourself, but to everyone who calls that place home.
+        <br /><br />
+        You glance back at the child, bundled in scraps, her tiny fingers grasping at the air. 
+        Her wide eyes seem to plead with you, searching for comfort, safety, or hope. But out here, hope is a luxury you stopped believing in long ago.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+</div>
