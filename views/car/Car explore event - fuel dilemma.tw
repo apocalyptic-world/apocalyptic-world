@@ -20,18 +20,19 @@ Her face is a mix of desperation and urgency, and you can sense that something i
 </center>
 <br /><br />
 <<newgirl>>
-<<set $tmpGirl.race = 'white'>>
+<<set _npcGirl = clone($tmpGirl)>>
+<<set _npcGirl.race = 'white'>>
 <div id="option_stop">
     <<linkreplace 'Stop'>>
         <<run $('#option_ignore').hide()>>
         <<run $('#option_leave').show()>>
         Intrigued and concerned, you ease off the accelerator and come to a halt a short distance away from her. The rest of the camp watches curiously as the young woman approaches your vehicle, her eyes locked on yours.
         <br /><br />
-        <<sayNpc $tmpGirl>>
+        <<sayNpc _npcGirl>>
             Thank you for stopping! 
         <</sayNpc>>
         <br />
-        <<sayNpc $tmpGirl>>
+        <<sayNpc _npcGirl>>
             We're really struggling out here. Our generators are barely running on fumes, and without more fuel, we won't be able to keep warm or power essential equipment.
         <</sayNpc>>
         <br />
@@ -60,7 +61,7 @@ Her face is a mix of desperation and urgency, and you can sense that something i
                     
                     <<set $player.goodwill += randomInteger(3, 5)>>
                     <<run $('#option_bj, #option_fuck').hide()>>
-                    <<sayNpc $tmpGirl>>
+                    <<sayNpc _npcGirl>>
                         Really? Thank you so much
                     <</sayNpc>>
                     <br />
@@ -77,7 +78,7 @@ Her face is a mix of desperation and urgency, and you can sense that something i
                     <<set $player.reputation += 2>>
                     She nods gratefully, clutching the container tightly. 
                     <br /><br />
-                    <<sayNpc $tmpGirl>>
+                    <<sayNpc _npcGirl>>
                         Thank you. This will make a world of difference for us. We won't forget your kindness.
                     <</sayNpc>>
                     <br />
@@ -91,6 +92,7 @@ Her face is a mix of desperation and urgency, and you can sense that something i
                     <br /><br />
                     <<link 'Fight them'>>
                         <<generateEnemies 3 2>>
+                        <<set $tmpGirl = _npcGirl>>
                         <<run $enemies.push($tmpGirl)>>
                         <<fight $enemies 'Garage' 'Garage'>>
                     <</link>>
@@ -99,7 +101,7 @@ Her face is a mix of desperation and urgency, and you can sense that something i
             <div id="option_bj">
                 <<linkreplace 'Ask for a blowjob'>>
                     <<run $('#option_give, #option_fuck').hide()>>
-                    <<sayNpc $tmpGirl>>
+                    <<sayNpc _npc>>
                         Fuck you all! You're all the same... Give me the fuel and I will suck you off.
                     <</sayNpc>>
                     <br />
@@ -124,7 +126,7 @@ Her face is a mix of desperation and urgency, and you can sense that something i
                     <<horny_reset>>
                     As you start to cum in her mouth, she instantly pulls your dick out and spits out all cum you managed to shot in her mouth. She slowly continues to jerk you off as you keep cumming.
                     <br /><br />
-                    <<sayNpc $tmpGirl>>
+                    <<sayNpc _npc>>
                         Deal is a deal. Now leave. Thank you.
                     <</sayNpc>>
                     <br /><br />
