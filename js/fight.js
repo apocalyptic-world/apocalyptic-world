@@ -55,8 +55,9 @@ setup.fight = {
         const fightType2 = (enemy.gender === 0 ? 'Female' : 'Male');
         const fightType = fightType1 + 'Vs' + fightType2;
 
-        const fighterStrength = fighter.strength;
-        const enemyStrength = enemy.strength
+
+        let fighterStrength = fighter.strength;
+        let enemyStrength = enemy.strength
         if ((fighter.skills ?? []).includes('fighter')) {
           fighterStrength += (fighterStrength / 2);
         }
