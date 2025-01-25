@@ -1,25 +1,41 @@
 :: Mc fuck orgasm
 
-<<if ($tmpGirl.traits ?? []).includes('squirter')>>
-	<br />
-	<<if $sexAction == 'pussy'>>
-		<<actionImage $tmpGirl squirt>>
-	<<elseif $sexAction == 'anal'>>
-		<<actionImage $tmpGirl squirt_anal>>
-	<<elseif $sexAction == 'anal_fingering'>>
-		<<actionImage $tmpGirl squirt_anal_fingering>>
-	<<elseif $sexAction == 'pussy_lick'>>
-		<<actionImage $tmpGirl squirt_lick>>
-	<<elseif $sexAction == 'pussy_fingering'>>
-		<<actionImage $tmpGirl squirt_fingering>>
+<br />
+<<if $tmpGirl.gender == 0>>
+	<<if ($tmpGirl.traits ?? []).includes('squirter')>>
+		<<if $sexAction == 'pussy'>>
+			<<actionImage $tmpGirl 'squirt'>>
+		<<elseif $sexAction == 'anal'>>
+			<<actionImage $tmpGirl 'squirt_anal'>>
+		<<elseif $sexAction == 'anal_fingering'>>
+			<<actionImage $tmpGirl 'squirt_anal_fingering'>>
+		<<elseif $sexAction == 'pussy_lick'>>
+			<<actionImage $tmpGirl 'squirt_lick'>>
+		<<elseif $sexAction == 'pussy_fingering'>>
+			<<actionImage $tmpGirl 'squirt_fingering'>>
+		<</if>>
+	<<else>>
+		<<if $sexAction == 'pussy'>>
+			<<actionImage $tmpGirl 'orgasm_pussy'>>
+		<<elseif $sexAction == 'pussy_lick'>>
+			<<actionImage $tmpGirl 'orgasm_pussy_lick'>>
+		<</if>>
 	<</if>>
-	<br />
-<<else>>
-	<br />
-	<<if $sexAction == 'pussy' || $sexAction === 'cum_in_pussy'>>
-		<<actionImage $tmpGirl orgasm_pussy>>
-	<<elseif $sexAction == 'pussy_lick'>>
-		<<actionImage $tmpGirl orgasm_pussy_lick>>
+<<elseif $tmpGirl.gender == 1>>
+	<<if $sexAction == 'anal'>>
+		<<actionImage $tmpGirl 'anal_reverse_cum' 'no-text'>>
+	<<elseif $sexAction == 'anal_reverse'>>
+		<<actionImage $tmpGirl 'cum_in_ass' 'no-text'>>
+	<<elseif $sexAction == 'bj_reverse'>>
+		<<actionImage $tmpGirl 'cum_on_face' 'no-text'>>
 	<</if>>
-	<br />
+<<elseif $tmpGirl.gender == 2>>
+	<<if $sexAction == 'anal'>>
+		<<actionImage $tmpGirl 'orgasm_anal'>>
+	<<elseif $sexAction == 'anal_reverse'>>
+		<<actionImage $tmpGirl 'orgasm_anal_reverse'>>
+	<<elseif $sexAction == 'bj_reverse'>>
+		<<actionImage $tmpGirl 'orgasm_bj_reverse'>>
+	<</if>>
 <</if>>
+<br />
