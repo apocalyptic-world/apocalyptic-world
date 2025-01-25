@@ -91,7 +91,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 		<<set $automatization ??= {}>>
 		<<set _item = 'pickaxe'>>
 		<<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
-		<<set _autoMiningOk = ($automatization.job ?? fals) && setup.cabinInventory.has(_item, _itemcount)>>
+		<<set _autoMiningOk = ($automatization.job ?? false) && setup.cabinInventory.has(_item, _itemcount)>>
 		<<if setup.npcInventoryHas($tmpGirl, _item) || _autoMiningOk>>
 			<<link 'Assign to quarry'>>
 				<<assignedTo $tmpGirl 'quarry'>>
