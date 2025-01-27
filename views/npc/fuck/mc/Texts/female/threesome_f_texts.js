@@ -39,9 +39,6 @@ setup.actionText.female = {
     threesome_f_bj_reverse_anal_reverse: [
         "%name% fucks your mouth while %name2% fucks your ass with their strapons."
     ],
-    threesome_f_cum: [
-        "You jerk off with %name% and %name2%'s hands tightly gripped around your cock."
-    ],
     threesome_f_cum_in_ass: [
         "With a groan, you cum in %name%'s ass."
     ],
@@ -81,6 +78,9 @@ setup.actionText.female = {
     threesome_f_handjob_anal_reverse: [
         "%name% gives you a handjob while %name2% fucks your ass with her strapon."
     ],
+    threesome_f_handjob_cum: [
+        "You jerk off with %name% and %name2%'s hands tightly gripped around your cock."
+    ],
     threesome_f_kissing: [
         "%name% and %name2% are kissing you and each other sweetly."
     ],
@@ -112,7 +112,7 @@ setup.actionText.female = {
         "You finger %name% and %name2%'s pussies, they are getting very wet!"
     ],
     threesome_f_pussy_lick: [
-        "You lick %name%'s clits, she seems to like it a lot!"
+        "You lick %name%'s clit, she seems to like it a lot!"
     ],
     threesome_f_pussy_lick_anal_reverse: [
         "You lick %name%'s pussy while %name2% fucks your ass with her strapon."
@@ -128,5 +128,5 @@ setup.actionText.female = {
     ],
     threesome_f_titjob: [
         "%name% and %name2% give you a nice titjob!"
-    ],	
+    ]
 };
