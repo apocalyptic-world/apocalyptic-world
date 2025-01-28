@@ -111,6 +111,9 @@
 			<<if _allyHasKnife>>
 				<<set _allyStrength += randomInteger(2, 5)>>
 			<</if>>
+			<<if ($fight.allies[_i].skills ?? []).includes('fighter')>>
+         		<<set _allyStrength += (__allyStrength / 2)>>
+        	<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
 			<</if>>
@@ -144,50 +147,54 @@
 		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
 
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
+		<<set _enemyStrength >>
+		<<if ($fight.enemies[_i].skills ?? []).includes('fighter')>>
+         		<<set _enemyStrength += (__allyStrength / 2)>>
+        	<</if>>
 		<<if _enemyHasKnife>>
-			<<set $enemyStrength = Math.round(($fight.enemies[_i].strength / 2), 0) + 20>>
+			<<set _enemyStrength += 20>>
 			<<if _isPlayerTarget>>
 				<<if $player.endurance > 0>>
-					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+					<<set _enemyStrength = Math.max(_enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
 				<</if>>
 				<<set _bleedingChance = 100>>
 				<<if $backpack.has('body_armor')>>
 					<<set _bleedingChance -= 70>>
-					<<set $enemyStrength = Math.round($enemyStrength / 2, 0)>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
 				<</if>>
 				<<if setup.percentageChance(_bleedingChance)>>
 					<<perkAdd 'bleeding'>>
 				<</if>>
 			<<else>>
 				<<if setup.npcInventoryHas($fight.allies[_randomEnemyTarget], 'body_armor')>>
-					<<set $enemyStrength = Math.round($enemyStrength / 2, 0)>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
 				<</if>>
 				<<set $fight.allies[_randomEnemyTarget].attacks ??= []>>
 				<<set $fight.allies[_randomEnemyTarget].attacks.push('knife')>>
 			<</if>>
-			<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + $enemyStrength + ')')>>
+			<<run $fight.messages.push($fight.enemies[_i].name + ' stabbed ' + _targetName + ' (-' + _enemyStrength + ')')>>
 			<<if setup.percentageChance(10)>>
 				<<run setup.npcInventoryRemove($fight.enemies[_i], 'knife')>>
 				<<run $fight.messages.push($fight.enemies[_i].name + ' knife broke')>>
 			<</if>>
 		<<else>>
-			<<set $enemyStrength = Math.round($fight.enemies[_i].strength / 3, 0) + randomInteger(0, 10)>>
+			<<set _enemyStrength = Math.round(_enemyStrength / 3, 0) + randomInteger(0, 10)>>
 			<<if _isPlayerTarget>>
 				<<if $player.endurance > 0>>
-					<<set $enemyStrength = Math.max($enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+					<<set _enemyStrength = Math.max(_enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
 				<</if>>
 			<</if>>
 			<<run $fight.messages.push($fight.enemies[_i].name + ' ' + either(
 			  'punched ' + _targetName + ' in the head', 
 			  'kicked ' + _targetName + ' in the stomach', 
 			  'hit ' + _targetName + ' with an elbow'
-			) + ' (- ' + $enemyStrength + ')')>>
+			) + ' (- ' + _enemyStrength + ')')>>
 		<</if>>
 		
 		<<if _isPlayerTarget>>
-			<<set $fight.hp -= $enemyStrength>>
+			<<set $fight.hp -= _enemyStrength>>
 		<<else>>
-			<<set $fight.allies[_randomEnemyTarget].hp -= $enemyStrength>>
+			<<set $fight.allies[_randomEnemyTarget].hp -= _enemyStrength>>
 		<</if>>
 		
 		<<if !_isPlayerTarget>>
@@ -198,7 +205,7 @@
 		<</if>>
 	<</for>>
 	
-	<<unset $enemyStrength>>
+	<<unset _enemyStrength>>
 	
 	<<if !$fight.enemies.length>>
 		<<if $fight.skipEnding>>
