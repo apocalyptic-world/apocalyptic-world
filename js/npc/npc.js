@@ -460,6 +460,9 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 	if (npc.sleeping) {
 		output += '<span class="sleeping-info" data-balloon-length="medium" aria-label="Sleeping" data-balloon-pos="up-right"></span>';
 	}
+	if (npc.notes) {
+		output += '<span class="glyph" data-balloon-length="large" aria-label="' + npc.notes + '" data-balloon-pos="up-left">&#128456;</span>';
+	}
 
 	return output;
 }
