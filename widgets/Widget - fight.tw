@@ -109,19 +109,29 @@
 			<</if>>
 
 			/* since knife can break high-strength npcs punches instead of using knives. Can npc know enemy health? npc.strength > 300 or npc.strength > enemy.hp */
-			<<if _allyHasCrossbow>>
+			<<set _usePunch = false, _useKnife = false>>
+			<<set _isFighter = ($fight.allies[_i].skills ?? []).includes('fighter')>>
+			<<set _punchStrength = _allyStrength + (_isFighter? _allyStrength / 2 : 0)>>
+			<<set _enemyHP = $fight.enemies[_randomEnemyKey].hp ?? 0>>
+			<<if  _punchStrength >=100 || ((_isFighter || setup.percentageChance(21)) && _punchStrength >= _enemyHP)>>
+				<<set _usePunch = true>>
+			<<elseif _allyHasKnife && (_punchStrength+2 >=100 || ((_isFighter || setup.percentageChance(21)) &&  _punchStrength+2 >= _enemyHP))>>
+				<<set _useKnife = true>>
+			<</if>>
+			
+			<<if _allyHasCrossbow && !_usePunch && !_useKnife>>
 				<<set _allyStrength += randomInteger(20, 30)>>
-			<<elseif _allyHasKnife>>
+			<<elseif _allyHasKnife && !_usePunch>>
 				<<set _allyStrength += randomInteger(2, 5)>>
 			<</if>>
 			<<if ($fight.allies[_i].skills ?? []).includes('fighter') && !_allyHasCrossbow>>
-         		<<set _allyStrength += (__allyStrength / 2)>>
+         		<<set _allyStrength += (_allyStrength / 2)>>
         	<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
 			<</if>>
 			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
-			<<if _allyHasCrossbow>>
+			<<if _allyHasCrossbow && !_usePunch && !_useKnife>>
 				<<if setup.percentageChance(60)>>
 					<<set $fight.arrowsOnGround ??= 0>>
 					<<set $fight.arrowsOnGround++>>
@@ -133,7 +143,7 @@
 
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('crossbow')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' shot ' + $fight.enemies[_randomEnemyKey].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + _allyStrength + ')')>>				
-			<<elseif _allyHasKnife>>
+			<<elseif _allyHasKnife && !_usePunch>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' stabbed ' + $fight.enemies[_randomEnemyKey].name + ' in the chest (-' + _allyStrength + ')')>>
 				
@@ -164,7 +174,7 @@
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
 		<<set _enemyStrength = $fight.enemies[_i].strength ?? 0>>
 		<<if ($fight.enemies[_i].skills ?? []).includes('fighter')>>
-         		<<set _enemyStrength += (__allyStrength / 2)>>
+         		<<set _enemyStrength += (_allyStrength / 2)>>
         	<</if>>
 		<<if _enemyHasKnife>>
 			<<set _enemyStrength += 20>>
