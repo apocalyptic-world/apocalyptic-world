@@ -465,7 +465,9 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             ($characters.octavia.quests.new_plan2       && !$characters.octavia.quests.new_plan3  ? 
                 ($characters.octavia.quests.new_plan2_day + 0 >= $game.day? 
                     'Visit Octavia tomorrow' : 
-                    'Visit Octavia in her room and go with her to investigate the last lead. <strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>') : '') + '',
+                    'Visit Octavia in her room and go with her to investigate the last lead. <strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>') : '') + '' +
+            ($characters.octavia.quests.new_plan3 ?
+                    '<strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>' : '')
     },
 
     happy_eve: {
@@ -513,7 +515,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'Dom will invite you to a meeting if you impress him. To do this you have to do:<ul>' +
             '<li>' + ($game.day < 100 ? 'Wait untill day 100 (as a trial period)' : '<s>Trial period over.</s>') + '</li>' +
             '<li>' + ($player.reputation < 100 ? 'Have 100 reputation to  be respected.' : '<s>Being respected in various communities.</s>') + '</li>' +
-            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
+            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at least four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
             '<li>' + (!($characters.dom?.quests?.invite ?? false) ? 
                 'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
                 '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deal ends the Dom & Isabel quest lines.</span> <span style="color: green">Accepting the deal continues them.</span>'
