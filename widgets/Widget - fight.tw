@@ -100,6 +100,7 @@
 				<<continue>>
 			<</if>>
 			<<set _allyHasKnife = setup.npcInventoryHas($fight.allies[_i], 'knife')>>
+			<<set _allyHasCrossbow = setup.npcInventoryHas($fight.allies[_i], 'crossbow') && setup.npcInventoryHas($fight.allies[_i], 'arrow')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
 			<<set _allyStrength = Math.round(($fight.allies[_i].strength ?? 5) / 3, 0)>>
 
@@ -108,17 +109,31 @@
 			<</if>>
 
 			/* since knife can break high-strength npcs punches instead of using knives. Can npc know enemy health? npc.strength > 300 or npc.strength > enemy.hp */
-			<<if _allyHasKnife>>
+			<<if _allyHasCrossbow>>
+				<<set _allyStrength += randomInteger(20, 30)>>
+			<<elseif _allyHasKnife>>
 				<<set _allyStrength += randomInteger(2, 5)>>
 			<</if>>
-			<<if ($fight.allies[_i].skills ?? []).includes('fighter')>>
+			<<if ($fight.allies[_i].skills ?? []).includes('fighter') && !_allyHasCrossbow>>
          		<<set _allyStrength += (__allyStrength / 2)>>
         	<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
 			<</if>>
 			<<set $fight.enemies[_randomEnemyKey].hp -= _allyStrength>>
-			<<if _allyHasKnife>>
+			<<if _allyHasCrossbow>>
+				<<if setup.percentageChance(60)>>
+					<<set $fight.arrowsOnGround ??= 0>>
+					<<set $fight.arrowsOnGround++>>
+				<</if>>
+				<<run setup.npcInventoryRemove($fight.allies[_i], 'arrow', 1)>>
+				<<if $fight.enemies[_randomEnemyKey].hp < 0 && setup.percentageChance(30)>>
+					<<set $fight.enemies[_randomEnemyKey].killed = true>>
+				<</if>>
+
+				<<set $fight.enemies[_randomEnemyKey].attacks.push('crossbow')>>
+				<<set $fight.messages.push($fight.allies[_i].name + ' shot ' + $fight.enemies[_randomEnemyKey].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + _allyStrength + ')')>>				
+			<<elseif _allyHasKnife>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' stabbed ' + $fight.enemies[_randomEnemyKey].name + ' in the chest (-' + _allyStrength + ')')>>
 				
@@ -147,7 +162,7 @@
 		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
 
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
-		<<set _enemyStrength >>
+		<<set _enemyStrength = $fight.enemies[_i].strength ?? 0>>
 		<<if ($fight.enemies[_i].skills ?? []).includes('fighter')>>
          		<<set _enemyStrength += (__allyStrength / 2)>>
         	<</if>>
