@@ -499,4 +499,16 @@ setup.npc = {
 		}
 		return number;
 	},
+
+	getGenderAsName: function(npc)
+	{
+		const _genders = [
+			'female',
+			'male',
+			'transfemale',
+			'transmale'
+		]
+
+		return _genders[npc.gender] ?? 'unknown';
+	}
 }
