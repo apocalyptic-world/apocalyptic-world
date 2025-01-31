@@ -40,6 +40,14 @@
 		30 caps
 	<</linkdesc>>
 <</if>>
+<<if settings.gaysEnabled && $player.money >= 30 && $characters.vincent.delivery_done && !$backpack.has('dick_pump')>>
+	<<link 'Buy dick pump'>>
+		<<set $characters.vincent.relationship+=5>>
+		<<set $player.money -=30>>
+		<<pickup $backpack 'dick_pump' 1>>
+		<<goto 'Farm'>>
+	<</link>>
+<</if>>
 <<if $game.day >= 10 && !$characters.vincent.delivery>>
 	<<set $characters.vincent.relationship++>>
 	<<link 'Talk' 'Farm - quest delivery'>>
