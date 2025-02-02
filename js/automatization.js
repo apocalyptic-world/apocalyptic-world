@@ -68,7 +68,7 @@ setup.automatization = {
    * tool_<job> in "Inventory items.tw" -- To be worked on later
    */
   job_tools: {
-    companion: ['knife', 'gas_mask', 'body_armor'],
+    companion: ['knife', 'gas_mask', 'body_armor', 'arrow', 'crossbow'],
     companion_slave: ['gas_mask'],
     forest: ['axe'],
     garden: [],
