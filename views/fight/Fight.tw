@@ -65,13 +65,18 @@
 					<div class="enemy-hp-count"><<=$fight.allies[_i].hp>></div>
 				</div>
 				</div>
-				<<if setup.npcInventoryHas($fight.allies[_i], 'knife')>>
-					<div class="enemy-weapons">
+				<div class="enemy-weapons">
+					<<if setup.npcInventoryHas($fight.allies[_i], 'knife')>>
 						<div class="fight-weapon-icon">
 							[img[setup.ImagePath+'/game/inventory/knife.png']]
 						</div>
-					</div> 
-				<</if>>
+					<</if>>
+					<<if setup.npcInventoryHas($fight.allies[_i], 'crossbow') && setup.npcInventoryHas($fight.allies[_i], 'arrow')>>
+						<div class="fight-weapon-icon">
+							[img[setup.ImagePath+'/game/inventory/crossbow.png']]
+						</div>
+					<</if>>
+				</div>
 			</div>
 		<</capture>>
 	<</for>>

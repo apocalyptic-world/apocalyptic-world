@@ -53,7 +53,10 @@ setup.fight = {
 
         const fightType1 = (fighter.gender === 0 ? 'Female' : 'Male');
         const fightType2 = (enemy.gender === 0 ? 'Female' : 'Male');
-        const fightType = fightType1 + 'Vs' + fightType2;
+        const fightTypeText = fightType1 + 'Vs' + fightType2;
+
+        const fightTypeImage1 = setup.npc.getGenderAsName(fighter);
+        const fightTypeImage2 = setup.npc.getGenderAsName(enemy);
 
 
         let fighterStrength = fighter.strength;
@@ -69,7 +72,7 @@ setup.fight = {
         
         const outcomeType = (fighterWins ? 'win' : 'lose');
         
-        const result = fightOutcomes[fightType][outcomeType][Math.floor(Math.random() * fightOutcomes[fightType][outcomeType].length)];
+        const result = fightOutcomes[fightTypeText][outcomeType][Math.floor(Math.random() * fightOutcomes[fightTypeText][outcomeType].length)];
         
         const text = result.replace(/\[Male A\]/g, setup.displayName(fighter)).replace(/\[Male B\]/g, setup.displayName(enemy))
                      .replace(/\[Female A\]/g, setup.displayName(fighter)).replace(/\[Female B\]/g, setup.displayName(enemy));
@@ -77,7 +80,8 @@ setup.fight = {
         return {
             'win': fighterWins,
             'text': text,
-            'type': fightType1.toLowerCase() + '_vs_' + fightType2.toLowerCase()
+            'type': fightType1.toLowerCase() + '_vs_' + fightType2.toLowerCase(),
+            'imageType': fightTypeImage1.toLowerCase() + '_vs_' + fightTypeImage2.toLowerCase(),
         };
       }
 };

@@ -20,7 +20,7 @@
                          (<<=$backpack.count(_inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-link">
-                            <<if ($automatization.dup ?? false) && setup.npcInventoryHas($tmpGirl, _inventoryNpcMcItem)>>
+                            <<if ($automatization.dup ?? false) && setup.npcInventoryHas($tmpGirl, _inventoryNpcMcItem) && !setup.npcInventoryMultipleItems.includes(_inventoryNpcMcItem)>>
                                 ≯≯  
                             <<else>>
                                 <<link '>>'>>

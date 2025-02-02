@@ -54,6 +54,7 @@ setup.items = {
             {name:'condom',price:12,sell:false},
             {name:'chastity_belt',price:30,sell:false},
             {name:'lube',price:10,sell:false},
+            {name:'glass',price:15,sell:false},
         ],
         sanctuary: [
             {name:'metal',price:10,sell:false},

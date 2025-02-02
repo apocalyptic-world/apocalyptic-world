@@ -1,43 +1,57 @@
 :: Slave market - buy [bg-underground] {"position":"2179,1690","size":"100,100"}
 <h1 class="ptitle">SLAVE MARKET</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/underground/slave_market_head.jpg']]
-</div>
 <br /><br />
 
-<<unset $slaveId, $guestId, $charId>>
-<<newgirl>>
-<<set $tmpGirl.sub += randomInteger(10, 20)>>
+<<unset $slaveId, $guestId, $charId, $childId>>
+
+<<set _genders = [
+	'female',
+	'male'
+]>>
+<<if settings.transEnabled>>
+	<<run _genders.push('transfemale')>>
+<</if>>
+<<set _npcGender = setup.getRandomElement(_genders)>>
+<<if _npcGender === 'female'>>
+	<<newgirl>>
+	<<set _npc = $tmpGirl>>
+<<elseif _npcGender === 'male'>>
+	<<newguy>>
+	<<set _npc = $tmpGuy>>
+<<else>>
+	<<newtransgirl>>
+	<<set _npc = $tmpGirl>>
+<</if>>
+<<set _npc.sub += randomInteger(10, 20)>>
 <<if ($player.quests.slave_market_vip ?? false)>>
-	<<set $tmpGirl.sub += randomInteger(10, 20)>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + randomInteger(10, 15), 100)>>
-	<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(18, 30))>>
-	<<if setup.getAge($tmpGirl) < 18>>
-		<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
+	<<set _npc.sub += randomInteger(10, 20)>>
+	<<set _npc.beauty = Math.min(_npc.beauty + randomInteger(10, 15), 100)>>
+	<<set _npc.birthDate = setup.getBirthDate(randomInteger(18, 30))>>
+	<<if setup.getAge(_npc) < 18>>
+		<<run _npc.birthDate.setFullYear(_npc.birthDate.getFullYear() - 1)>>
 	<</if>>
 	<<if setup.percentageChance(50)>>
-		<<set $tmpGirl.traits = setup.getRandomTraits(2)>>
+		<<set _npc.traits = setup.getRandomTraits(2)>>
 	<</if>>
 <</if>>
-<<slaveValue $tmpGirl 2>>
+<<slaveValue _npc 2>>
 <<set _isSlaveMarket = true>>
 <<include 'NPC info'>>
-<<if $tmpGirl.virgin>>
+<<if _npc.virgin>>
 	<div>
-		<strong>She's a virgin!</strong>
+		<strong><<=setup.pronounceWhat(_npc)>>'s a virgin!</strong>
 	</div>
 <</if>>
-<br /><br />
 Slave cost <strong><<=$tmpGirl.value>></strong> caps.
 <br /><br />
 
 <<if timeBetween('14:00', '19:00')>>
-  <<if $slaves.length < $basementLimit && $player.money >= $tmpGirl.value>>
+  <<if $slaves.length < $basementLimit && $player.money >= _npc.value>>
 	  <br /><br />
 	<<link 'Buy'>>
-		<<set $tmpGirl.capture = false>>
-		<<set $slaves.push($tmpGirl)>>
-		<<set $player.money -= $tmpGirl.value>>
+		<<set _npc.capture = false>>
+		<<set $slaves.push(_npc)>>
+		<<set $player.money -= _npc.value>>
 		<<goto 'Slave market - buy'>>
 	<</link>>
   <<else>>

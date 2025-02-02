@@ -156,6 +156,24 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description:  ($game.location?.workbench ?? false) ?  'You have the <span style="color: green">workbench</span>!' :
             'From day 5 you have a chance to find a workbench when exploring. This important item will allow you to improve your base and build items',
     },
+
+    randomm_fight: {
+        show: true,
+        done:  false,
+        category: 'Gameplay',
+        title: 'Guide to fine fighting!',
+        description: 'All the random fights follow the same pattern: First you attack, then your allies and lastly the enemies attack either you or one of your allies. If both sides have people standing repeat until we have a winning side.<br/>Wepons and protection avaiable:<dl>' +
+          '<dt>Hands</dt><dd></dd>' +
+          '<dt>Knife</dt><dd>Does more damage than empty hands, Knifes have a chance to break.</dd>' +
+          '<dt>Body armo</dt><dd>Body armor halves knife damage</dd>' +
+          '<dt>Crossbow</dt><dd>Does the most damage of alll weapons. Chance of killing the target.</dd>' +
+          '<dt>Revolver</dt><dd>(Hero only) One hit - one kill!</dd>' +
+          '<dt>Endurance</dt><dd>(Hero only) Reduces damage from enemies.</dd>' +
+        '</dl>',
+
+    },
+
+
     buildings_workbench: {
         show: $game.location.workbench,
         done: $game.location.greenhouse && $game.location.basement &&  $basementLimit >= 30 && $game.location.guesthouse && $guesthouseLimit >= 25 && $game.location.lab && $game.location.nursery && $game.location.shop && $game.location.bathhouse,
@@ -465,7 +483,9 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             ($characters.octavia.quests.new_plan2       && !$characters.octavia.quests.new_plan3  ? 
                 ($characters.octavia.quests.new_plan2_day + 0 >= $game.day? 
                     'Visit Octavia tomorrow' : 
-                    'Visit Octavia in her room and go with her to investigate the last lead. <strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>') : '') + '',
+                    'Visit Octavia in her room and go with her to investigate the last lead. <strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>') : '') + '' +
+            ($characters.octavia.quests.new_plan3 ?
+                    '<strong style="color:yellow">[</strong>To be continued!<strong style="color:yellow">]</strong>' : '')
     },
 
     happy_eve: {
@@ -513,7 +533,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'Dom will invite you to a meeting if you impress him. To do this you have to do:<ul>' +
             '<li>' + ($game.day < 100 ? 'Wait untill day 100 (as a trial period)' : '<s>Trial period over.</s>') + '</li>' +
             '<li>' + ($player.reputation < 100 ? 'Have 100 reputation to  be respected.' : '<s>Being respected in various communities.</s>') + '</li>' +
-            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at leaast four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
+            '<li>' + ((setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4  ? 'Have at least four persons working the streets. If you don\' want street workers you can remove them after meeting Dom.' : '<s>4+ streetworkers</s>') + '</li>' +
             '<li>' + (!($characters.dom?.quests?.invite ?? false) ? 
                 'Visit the underground streets. Dom want to talk to you and invites you to his place. He suggests a better deal than before. Lower tax and better protection for your streetworkers if you are willing to do some odd jobs for him now and then.<br>' +
                 '<span style="color: red">Warning! Important choice!</span> <span style="color: yellow">Rejecting the deal ends the Dom & Isabel quest lines.</span> <span style="color: green">Accepting the deal continues them.</span>'
