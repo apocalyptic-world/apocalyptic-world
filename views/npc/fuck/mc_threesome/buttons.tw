@@ -24,31 +24,31 @@
 	<<energy +5>>
 	<<set $player.sexp++>>
 
-	<<if $sexAction == ['threesome_f_handjob','threesome_f_handjob_anal_reverse'].includes($sexAction)>>
+	<<if ['handjob','handjob_anal_reverse'].includes($sexAction)>>
         <<link 'Handjob cum'>>
-            <<set $sexAction = 'threesome_f_handjob_cum'>>
+            <<set $sexAction = 'handjob_cum'>>
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
-	<<elseif $sexAction == 'threesome_f_footjob'>>
+	<<elseif $sexAction == 'footjob'>>
         <<link 'Footjob cum'>>
-            <<set $sexAction = 'threesome_f_footjob_cum'>>
+            <<set $sexAction = 'footjob_cum'>>
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
-	<<elseif $sexAction == 'threesome_f_titjob'>>
+	<<elseif $sexAction == 'titjob'>>
         <<link 'Cum on tits'>>
-            <<set $sexAction = 'threesome_f_cum_on_tits'>>
+            <<set $sexAction = 'cum_on_tits'>>
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
-    <<elseif $sexAction === 'threesome_f_dp'>>
+    <<elseif $sexAction === 'dp'>>
         <<link 'Cum in throat'>>
             <<horny_reset>>
-	        <<set $sexAction = 'threesome_f_cum_throat'>>
+	        <<set $sexAction = 'cum_throat'>>
 	        <<goto `passage()`>>
 	    <</link>>
-	<<elseif ['threesome_f_pussy','threesome_f_pussy_pussy_lick','threesome_f_pussy_a_pussy_lick','threesome_f_pussy_a_sn','threesome_f_pussy_a_pussy','threesome_f_pussy_b_anal','threesome_f_pussy_anal_reverse'].includes($sexAction)>>
+	<<elseif ['pussy','pussy_pussy_lick','pussy_a_pussy_lick','pussy_a_sn','pussy_a_pussy','pussy_b_anal','pussy_b_bj','pussy_b_handjob','pussy_b_pussy','pussy_anal_reverse'].includes($sexAction)>>
         <<link 'Cum in pussy'>>
             <<horny_reset>>
             <<if _askedToCumInside>>
@@ -56,51 +56,58 @@
                 <<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + _relIncrease, 100)>>
                 <<set $tmpGirl.happy += randomInteger(5, 10)>>
             <</if>>
-            <<set $sexAction = 'threesome_f_cum_in_pussy'>>
+            <<set $sexAction = 'cum_in_pussy'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on pussy'>>
             <<horny_reset>>
-            <<set $sexAction = 'threesome_f_cum_on_pussy'>>
+            <<set $sexAction = 'cum_on_pussy'>>
             <<goto `passage()`>>
         <</link>>	
         <<link 'Cum on stomach'>>
             <<horny_reset>>
-            <<set $sexAction = 'threesome_f_cum_on_stomach'>>
+            <<set $sexAction = 'cum_on_stomach'>>
             <<goto `passage()`>>
         <</link>>
-    <<elseif ['threesome_f_anal','threesome_f_anal_b_pussy','threesome_f_anal_a_pussy_lick','threesome_f_anal_b_bj'].includes($sexAction)>>
+    <<elseif ['anal','anal_a_pussy_lick','anal_b_bj','anal_b_handjob','anal_b_pussy', 'anal_b_anal'].includes($sexAction)>>
         <<link 'Cum in ass'>>
             <<horny_reset>>
-            <<set $sexAction = 'threesome_f_cum_in_ass'>>
+            <<set $sexAction = 'cum_in_ass'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on ass'>>
             <<horny_reset>>
-            <<set $sexAction = 'threesome_f_cum_on_ass'>>
+            <<set $sexAction = 'cum_on_ass'>>
             <<goto `passage()`>>
         <</link>>
         <<link 'Cum on back'>>
             <<horny_reset>>
-            <<set $sexAction = 'threesome_f_cum_on_back'>>
+            <<set $sexAction = 'cum_on_back'>>
+            <<goto `passage()`>>
+        <</link>>
+    <</if>>
+    <<if ['pussy_b_anal'].includes($sexAction) && $tmpGirl2.gender === 1>>
+        <<link 'Double cum'>>
+            <<horny_reset>>
+            <<set $sexAction = 'double_cum'>>
             <<goto `passage()`>>
         <</link>>
     <</if>>
     <<if $sexAction.includes('anal_reverse') >>
         <<link 'Cum while being fucked'>>
             <<horny_reset>>
-	        <<set $sexAction = 'threesome_f_anal_reverse_cum'>>
+	        <<set $sexAction = 'anal_reverse_cum'>>
 	        <<goto `passage()`>>
 	    <</link>>
 	<</if>>
     <<link 'Cum on face'>>
         <<horny_reset>>
-	    <<set $sexAction = 'threesome_f_cum_on_face'>>
+	    <<set $sexAction = 'cum_on_face'>>
 	    <<goto `passage()`>>
 	<</link>>
     <<link 'Cum in mouth'>>
         <<horny_reset>>
-	    <<set $sexAction = 'threesome_f_cum_in_mouth'>>
+	    <<set $sexAction = 'cum_in_mouth'>>
 	    <<goto `passage()`>>
 	<</link>>
 		
@@ -110,9 +117,8 @@
                 <<set _sexOptionHidden = false>>
                 <<for _sexActionKey, _sexAction range _sexActions>>
                     <<capture _sexActionKey, _sexAction>>
-                        <<set _sexActionShortKey = _sexActionKey.replace('threesome_f_', '').replace('threesome_m_', '')>>
                         <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
-                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionShortKey+".png"]]</span>'>>
+                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
                             <<link _linkName>>
                                 <<set $sexAction = _sexActionKey>>
                                 <<goto `passage()`>>
