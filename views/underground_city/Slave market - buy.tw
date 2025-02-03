@@ -36,13 +36,14 @@
 <</if>>
 <<slaveValue _npc 2>>
 <<set _isSlaveMarket = true>>
+<<set $tmpGirl = _npc>>
 <<include 'NPC info'>>
 <<if _npc.virgin>>
 	<div>
 		<strong><<=setup.pronounceWhat(_npc)>>'s a virgin!</strong>
 	</div>
 <</if>>
-Slave cost <strong><<=$tmpGirl.value>></strong> caps.
+Slave cost <strong><<=_npc.value>></strong> caps.
 <br /><br />
 
 <<if timeBetween('14:00', '19:00')>>
