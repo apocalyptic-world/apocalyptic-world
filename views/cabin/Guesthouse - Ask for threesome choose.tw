@@ -28,9 +28,9 @@
 				_j = _interestedGuests[_i],
 				_guestYes = (setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty))),
 				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty))),
-				_mcYes = setup.percentageChance(setup.sexChance($tmpGirl))
+				_mcYes = setup.percentageChance(setup.sexChance(_guest)) || _guest.gender === 1
 			>>
-			<<if setup.getAge(_guest) < 18 || _guest.gender>>
+			<<if setup.getAge(_guest) < 18 || ![0, 1].includes(_guest.gender)>>
 				<<continue>>
 			<</if>>
 
@@ -42,12 +42,10 @@
 							<<set $locationEvents.guesthouse = true>>
 							<<dialogclose>>
 
-							<<if ($guests[_j].gender == 0 && $guests[_k].gender == 0)>>
-								<<set $guestId2 = _j>>
-								<<set $tmpGirl2 = $guests[_j]>>
-        						<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<threesome $tmpGirl $tmpGirl2>>
-							<</if>>
+							<<set $guestId2 = _j>>
+							<<set $tmpGirl2 = $guests[_j]>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<threesome $tmpGirl $tmpGirl2>>
 						<</link>>
 					<</if>>
 				</span>

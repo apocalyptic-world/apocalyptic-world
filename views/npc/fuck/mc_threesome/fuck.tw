@@ -22,17 +22,18 @@
     <</if>>
 	<<set _showSex = true>>
 
-    <<if ['threesome_f_anal','threesome_f_anal_b_pussy','threesome_f_anal_a_pussy_lick','threesome_f_anal_b_bj'].includes($sexAction) >>
+    <<if ['anal','anal_b_pussy','anal_a_pussy_lick','anal_b_bj'].includes($sexAction) >>
         <<include 'Mc fuck anal'>>
     <</if>>
-    <<if !_canFuck && ['threesome_f_bj','threesome_f_handjob'].includes($sexAction)>>
+    <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
         <<include 'MC fuck flaccid'>>
     <</if>>
-    <<if $sexAction === 'threesome_f_cum_in_pussy' && $tmpGirl.traits.includes('breeder')>>
+    <<if ['cum_in_pussy', 'double_cum'].includes($sexAction) && $tmpGirl.traits.includes('breeder')>>
         <<set $tmpGirl.horny += 30>>
     <</if>>
     <<if _showSex>>
-	    <<actionImage $tmpGirl $sexAction>>
+        <<set _sexActionLong = _prefix + $sexAction>>
+	    <<actionImage $tmpGirl _sexActionLong>>
 
         <<if $tmpGirl.virgin && _sexActions[$sexAction]?.stats=='pussy'>>
             <<set $tmpGirl.virgin = false>>
@@ -64,7 +65,7 @@
             $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100),
             $tmpGirl2.happy = Math.min($tmpGirl2.happy + 1, 100)
         >>
-        <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> welcome the attention.<strong> (Happy / Relationship + 1)</strong>
+        <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> are enjoying themselves.<strong> (Happy / Relationship + 1)</strong>
          <br />
 
         <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption && $tmpGirl2.corruption < _sexActions[$sexAction].maxCorruption>>
@@ -88,9 +89,7 @@
         <<else>>
             <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
                 <<if $tmpGirl.horny >= 100>>
-                    <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
                     <<include 'Mc fuck orgasm'>>
-                    <<set $sexAction = 'threesome_f_' + $sexAction>>
                     <<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
                     <br />
                     <<set
@@ -106,7 +105,7 @@
             <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
                 <<if $tmpGirl2.horny >= 100>>
                     <<set $tmpGirl2.horny -= 20>>
-                    <<=setup.displayName($tmpGirl2, true)>> needs some attention. <strong>(Horny - 20)</strong>
+                    <<=setup.displayName($tmpGirl2, true)>> is getting impatient. <strong>(Horny - 20)</strong>
                 <<else>>
                     <<=setup.displayName($tmpGirl2, true)>> is getting hornier and hornier. <strong>(Horny + <<=_npcHornyGained2>>)</strong>
                 <</if>>
@@ -138,11 +137,8 @@
             <</if>>
         <</if>>
 
-        <<set $sexAction = $sexAction.replace('threesome_f_', '')>>
         <<include 'Mc fuck traits'>>
-        <<set $sexAction = 'threesome_f_' + $sexAction>>
-       
-        <<if $sexAction == 'threesome_f_cum_in_pussy'>>
+        <<if ['cum_in_pussy', 'double_cum'].includes($sexAction)>>
             <<include 'Mc fuck cum in pussy'>>
         <</if>>
 
