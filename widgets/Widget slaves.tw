@@ -2,8 +2,8 @@
 <<widget slaveValue>>
 	<<set _age = setup.getAge($args[0])>>
 	<<set _slaveValue = 
-		($args[0].beauty / 2) + 
-		($args[0].sub / 5) +
+		($args[0].beauty ?? 0 / 2) + 
+		($args[0].sub ?? 0 / 5) +
 		((100 - _age) / 5)
 	>>
 	<<if $args[0].virgin>>
@@ -22,10 +22,8 @@
 <</widget>>
 
 <<widget slaveInfo>>
-	<<set _age = setup.getAge($args[0])>>
-	<<set $ageDescription = setup.getNpcAgeDescription($args[0])>>
-	<strong><<=$args[0].name>> - <<=_age>></strong> year old, 
-	<<=$ageDescription>> with <strong><<=$args[0].hair>></strong> hair.
+	<strong><<=$args[0].name>> - <<=setup.getAge($args[0])>></strong> year old, 
+	<<=setup.getNpcAgeDescription($args[0])>> with <strong><<=$args[0].hair>></strong> hair.
 	<br />
 		Beauty score: <<=$args[0].beauty>>
 	<br />
