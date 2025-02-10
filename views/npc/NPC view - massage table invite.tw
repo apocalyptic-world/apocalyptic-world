@@ -1,5 +1,5 @@
 :: NPC view - massage table invite
-<<if !$tmpGirl.gender && $tmpGirl.location == 'bathhouse' && ($game.location.massage_table ?? false)>>
+<<if [0, 2].includes($tmpGirl.gender) && $tmpGirl.location == 'bathhouse' && ($game.location.massage_table ?? false)>>
     <<link 'Suggest a massage'>>
         <<if recall($suppCode) && !$tmpGirl.gender && $tmpGirl.likesGuys && $tmpGirl.horny > 50 && setup.percentageChance(50)>>
             <<goto 'NPC view - Massage proposal'>>

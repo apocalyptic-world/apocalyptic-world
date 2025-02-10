@@ -41,18 +41,31 @@ The warmth of the oil and the rhythm of your movements create a calming effect.
     <br />
     As you massage her ass, you remain attentive to her responses, ensuring that she feels comfortable and relaxed throughout.
     <br /><br />
-    <<if $tmpGirl.relationship < 50>>
+    <<if !setup.percentageChance(setup.sexChance($tmpGirl))>>
         <<sayNpc $tmpGirl>>
             I think it will be enough. Thanks.
         <</sayNpc>>
         <br /><br />
-    <<else>>
+    <<elseif $tmpGirl.gender === 0>>
         <<linkreplace 'Massage her pussy'>>
             <<actionImage $tmpGirl 'massage_pussy'>>
             <br />
             Then you slide your hand between her legs and start to massage her pussy. She moans for a moment before relaxing fully on the table.
             <br />
             She lets you work on her pussy for some time. After that she pulls you closer to her head and slides down your pants.
+            <br /><br />
+            <<link 'Let her suck you'>>
+                <<fuck $tmpGirl>>
+                <<set $sexAction = 'bj'>>
+            <</link>>
+        <</linkreplace>>
+    <<elseif $tmpGirl.gender === 2>>
+        <<linkreplace 'Give her a handjob'>>
+            <<actionImage $tmpGirl 'handjob_reverse'>>
+            <br />
+            Then you put your hand around her cock and start stoking it.
+            <br />
+            She lets you work on her nob for some time. After that she pulls you closer to her head and slides down your pants.
             <br /><br />
             <<link 'Let her suck you'>>
                 <<fuck $tmpGirl>>
