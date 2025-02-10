@@ -5,6 +5,9 @@
   	<<grid race_stadium shop 'Race stadium shop' 'Shop' 0 _isDisabled>>
 </div> 
 <br /><br />
+<<if !$player?.quests?.race_first && $game.day > 160 && setup.percentageChance(40)>>
+	<<goto 'Race stadium - first race'>>
+<</if>>
 
 <<link 'Leave'>>
     <<goto 'Garage'>>

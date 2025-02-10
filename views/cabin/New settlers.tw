@@ -1,0 +1,29 @@
+:: New settlers
+<h1 class="ptitle"><<cabinName>></h1>
+<<set _npc1 = $settlers[0]>>
+<<set _npc2 = $settlers[1]>>
+Their faces soften with a mixture of relief and gratitude. <<=setup.displayName(_npc1)>> nods quickly, reaching for your hand with a grip that speaks of survival, 
+of a person ready to build a life from the ground up, no matter how hard it may be. 
+<br /><br />
+<<sayNpc $tmpGirl>>
+    Thank you so much!
+<</sayNpc>>
+<br />
+You lead them down the worn path through the heart of the settlement, the dirt packed hard from footsteps. 
+The air feels a little warmer here, sheltered from the cold and open wilds beyond the walls, and they relaxes just a fraction as they realize they've made it. 
+<<=setup.displayName(_npc1)>> looks at <<=setup.displayName(_npc2)>> with a smile on <<=setup.pronounceWho(_npc1)>> face.
+<br /><br />
+<center>
+    <<image 'places/cabin/new_settlers2.jpg'>>
+</center>
+<br /><br />
+Finally, you arrive at one of the empty houses. The roof, though patched in places, holds strong, and the door swings open with a soft creak. 
+Dust hangs in the air, disturbed as they step inside, and though the place is bare, it's shelter—a gift of unimaginable value in these times.
+<br /><br />
+<<link 'Leave'>>
+    <<set $player.baseManagement ??= {}>>
+    <<set $player.baseManagement.settlers += $settlers.length>>
+    <<unset $settlers>>
+    <<addhours 1>>
+    <<goto 'Wood cabin'>>
+<</link>>

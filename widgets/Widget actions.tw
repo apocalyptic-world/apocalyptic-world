@@ -232,14 +232,22 @@
 		type: either(_actions)
 	}>>
 	<<if typeof setup.actions !== 'undefined'>>
-		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
+		<<set _image = either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
 	<<else>>
-		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + either(setup.actions[_gender].default[_sleepAction.type])>>
+		<<set _image = either(setup.actions[_gender].default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
 	<</if>>
 
-	<<actionImageOutput _dreamImg>>
+	<<actionImageOutput _dreamImg _image.includes('/')>>
 	<br />
-	<<print _dreamText>>
+	<<print _dreamText>> 
 <</widget>>
 
 <<widget actionImageOutput>>
