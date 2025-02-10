@@ -71,6 +71,10 @@ setup.baseManagement = {
         settlersCount: function ()
         {
             return (variables().player?.baseManagement?.settlers ?? 0);
+        },
+        hasFreeHouse: function() 
+        {
+            return (setup.baseManagement.population.livingHousesCount() * 3) - setup.baseManagement.population.settlersCount() > 0;
         }
     }
 }

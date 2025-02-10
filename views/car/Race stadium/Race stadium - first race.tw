@@ -4,7 +4,7 @@
 As you walk in, boots crunching on broken glass, a group of men approaches you. Greasy, scarred, and grinning like scavengers, they look you over before one speaks.
 <br /><br />
 <center>
-    ####
+    <<image 'places/race_stadium/first_race1.jpg' sfw>>
 </center>
 <br /><br />
 <<newguy>>
@@ -12,19 +12,24 @@ As you walk in, boots crunching on broken glass, a group of men approaches you. 
     Got an open spot in the race.
 <</sayNpc>>
 <br />
-Tapping a wrench against his palm.
-<<sayNpc>>
+He's tapping a wrench against his palm.
+<br /><br />
+<<sayNpc $tmpGuy>>
     Winner takes a car. You in?
 <</sayNpc>>
 <br />
-You glance at the track—a cracked, uneven loop surrounded by barbed wire and rusted wrecks. Their vehicles are monstrous, welded steel plating, spiked wheels, nitrous tanks. Yours? A barely-modified sedan from a lost era, patched together with salvaged parts and hope.
+You glance at the track—a cracked, uneven loop surrounded by barbed wire and rusted wrecks. 
+Their vehicles are monstrous, welded steel plating, spiked wheels, nitrous tanks. 
 <br /><br />
 <center>
-    ####
+    <<image 'places/race_stadium/first_race2.jpg' sfw>>
 </center>
 <br /><br />
+Yours? A barely-modified sedan from a lost era, patched together with salvaged parts and hope.
+<br /><br />
 <<linkreplace 'Sure'>>
-    <<set $characters.quests.race_first = true>>
+    <<run $('#option_no').hide()>>
+    <<set $player.quests.race_first = true>>
     <<you>>
         Sure
     <</you>>
@@ -36,18 +41,45 @@ You glance at the track—a cracked, uneven loop surrounded by barbed wire and r
     You are already falling behind when the first hit comes—one of the racers, a hulking truck with metal tusks, clips your back bumper, sending you skidding into a pile of rubble. 
     Your engine groans as you force the car back onto the track.
     <br /><br />
-    Then come the spikes. A hidden strip of metal teeth, likely placed by the organizers for extra entertainment, tears into your tires. Your front left blows out instantly, forcing you to swerve wildly, barely avoiding a wrecked bus. The crowd howls in approval.
-
-Smoke billows from your hood as you push the car forward, metal grinding against metal. Another racer, a dune buggy rigged with flamethrowers, torches the air near you. You swerve too hard, sending your car into a half-spin before slamming into a rusted barricade. The windshield cracks, your steering barely responding.
-
-By the final stretch, your car is nothing but a coughing, limping wreck, dragging itself forward as the others cross the finish line far ahead. You are dead last.
-
-You sit there, gripping the wheel, waiting for them to strip your car for parts. Instead, the same man from before leans against your window and smirks.
-
-"Damn," he says, shaking his head. "We don't need your junk. Keep it."
-
-They walk off laughing, leaving you in your half-dead vehicle, staring at the track ahead. You might have lost today, but you are still breathing, and in this world, that counts for something.
+    <center>
+        <<image 'places/race_stadium/first_race3.jpg' sfw>>
+    </center>
+    <br /><br />
+    Then come the spikes. A hidden strip of metal teeth, likely placed by the organizers for extra entertainment, tears into your tires. 
+    Your front left blows out instantly, forcing you to swerve wildly, barely avoiding a wrecked bus. The crowd howls in approval.
+    <br /><br />
+    Smoke billows from your hood as you push the car forward, metal grinding against metal. 
+    Another racer, a dune buggy rigged with flamethrowers, torches the air near you. You swerve too hard, 
+    sending your car into a half-spin before slamming into a rusted barricade. The windshield cracks, your steering barely responding.
+    <br /><br />
+    <center>
+        <<image 'places/race_stadium/first_race4.jpg' sfw>>
+    </center>
+    <br /><br />
+    By the final stretch, your car is nothing but a coughing, limping wreck, dragging itself forward as the others cross the finish line far ahead. You are dead last.
+    <br /><br />
+    You sit there, gripping the wheel, waiting for them to strip your car for parts. Instead, the same man from before leans against your window and smirks.
+    <br /><br />
+        <<image 'places/race_stadium/first_race5.jpg' sfw>>
+    <br /><br />
+    <<sayNpc $tmpGuy>>
+        Damn. We don't need your junk. Keep it.
+    <</sayNpc>>
+    <br />
+    They walk off laughing, leaving you in your half-dead vehicle, staring at the track ahead. 
+    You might have lost today, but you are still breathing, and in this world, that counts for something.
+    <br /><br />
+    With car barely moving you somehow manage to get back to your camp.
+    <br /><br />
+    <<link 'Leave'>>
+        <<addhours 6>>
+        <<set $player.car.health = 0>>
+        <<set $player.car.fuel = 0>>
+        <<goto 'Garage'>>
+    <</link>>
 <</linkreplace>>
-<<link 'No'>>
-    <<goto 'Car - Race stadium'>>
-<</link>>
+<div id="option_no">
+    <<link 'No'>>
+        <<goto 'Car - Race stadium'>>
+    <</link>>
+</div>

@@ -57,6 +57,20 @@ The mother notices you and pushes the girl behind her, falling to her knees with
 	<</link>>
 <</if>>
 
+<<if setup.baseManagement.population.hasFreeHouse()>>
+	<<link 'Invite them as settlers to your settlement'>>
+		<<set $settlers = [
+			$tmpGirl,
+			$wanted[$wantedId]
+		]>>
+		<<set $player.reputation_bounty_hunter-->>
+		<<set $player.reputation++>>
+		<<set $player.goodwill += 2>>
+		<<set $wanted.splice($wantedId, 1)>>
+		<<goto 'New settlers'>>
+	<</link>>
+<</if>>
+
 <<link 'Forget about them'>>
 	<<set $player.reputation_bounty_hunter-->>
 	<<set $player.reputation++>>
