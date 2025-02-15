@@ -17,32 +17,37 @@ Underground city has its own rules. House always goes last. If you don't like th
 	stand: false,
 	bj: (typeof $blackjack !== 'undefined' ? $blackjack.bj : false)
 }>>
-Bet: <<textbox "$blackjack.bet" 1>>
-<div id="blackjack-error" style="color:red"></div>
-<br /><br />
-<<link 'Bet'>>
-	<<addmins 15>>
-	<<if typeof $player.gambler === 'undefined'>>
-		<<set $player.gambler = 0>>
-	<</if>>
-	<<set $player.gambler++>>
-	<<set $blackjack.bet = parseInt($blackjack.bet)>>
-	<<if !Number.isInteger($blackjack.bet) || $blackjack.bet < 1>>
-		<<replace "#blackjack-error">>Invalid value<</replace>>
-	<<elseif $player.money < $blackjack.bet>>
-		<<replace "#blackjack-error">>You don't have enough caps<</replace>>
-	<<elseif $blackjack.bet > 100>>
-		<<replace "#blackjack-error">>Bet is too big. Max: 100<</replace>>
-	<<else>>
-	  <<set $blackjack.deck = blackjackDeck()>>
-	  <<set $player.money -= $blackjack.bet>>
-	  <<if (randomInteger(1, 2) === 1) && !$blackjack.bj>>
-	  	<<goto 'Blackjack - bj'>>
-	  <<else>>
-	  	 <<goto 'Blackjack - play'>>
-	  <</if>>
-	<</if>>
-<</link>>
+<<if timeBetween('17:00', '02:00')>>
+	Bet: <<textbox "$blackjack.bet" 1>>
+	<div id="blackjack-error" style="color:red"></div>
+	<br /><br />
+	<<link 'Bet'>>
+		<<addmins 15>>
+		<<if typeof $player.gambler === 'undefined'>>
+			<<set $player.gambler = 0>>
+		<</if>>
+		<<set $player.gambler++>>
+		<<set $blackjack.bet = parseInt($blackjack.bet)>>
+		<<if !Number.isInteger($blackjack.bet) || $blackjack.bet < 1>>
+			<<replace "#blackjack-error">>Invalid value<</replace>>
+		<<elseif $player.money < $blackjack.bet>>
+			<<replace "#blackjack-error">>You don't have enough caps<</replace>>
+		<<elseif $blackjack.bet > 100>>
+			<<replace "#blackjack-error">>Bet is too big. Max: 100<</replace>>
+		<<else>>
+		<<set $blackjack.deck = blackjackDeck()>>
+		<<set $player.money -= $blackjack.bet>>
+		<<if (randomInteger(1, 2) === 1) && !$blackjack.bj>>
+			<<goto 'Blackjack - bj'>>
+		<<else>>
+			<<goto 'Blackjack - play'>>
+		<</if>>
+		<</if>>
+	<</link>>
+<<else>>
+	Blackjack is done for today.
+	<br /><br />
+<</if>>
 <<link 'Leave'>>
 	<<if $blackjack.bj>>
 		<<goto 'Blackjack - bj end'>>

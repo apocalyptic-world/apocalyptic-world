@@ -2,18 +2,25 @@
 <h1 class="ptitle">FIGHT CAGE</h1>
 <br />
 <<newguy>>
-<<sayNpc $tmpGuy>>
-    So what you want to fight for?
-<</sayNpc>>
-<br />
-<<link 'Fighters'>>
-    <<set $fightClubPrize = 'fighters'>>
-    <<goto 'NPC fight cage - choose fighters'>>
-<</link>>
-<<link '50 caps'>>
-    <<set $fightClubPrize = 'caps'>>
-    <<goto 'NPC fight cage - choose fighters'>>
-<</link>>
+<<if timeBetween('08:00', '20:00')>>
+    <<sayNpc $tmpGuy>>
+        So what you want to fight for?
+    <</sayNpc>>
+    <br />
+    <<link 'Fighters'>>
+        <<set $fightClubPrize = 'fighters'>>
+        <<goto 'NPC fight cage - choose fighters'>>
+    <</link>>
+    <<link '50 caps'>>
+        <<set $fightClubPrize = 'caps'>>
+        <<goto 'NPC fight cage - choose fighters'>>
+    <</link>>
+<<else>>
+    <<sayNpc $tmpGuy>>
+        It's late already. Come back tomorrow.
+    <</sayNpc>>
+    <br />
+<</if>>
 <<link 'Leave'>>
     <<addmins 5>>
     <<goto 'Fight cage'>>
