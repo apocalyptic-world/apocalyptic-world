@@ -34,6 +34,8 @@
 	<<goto 'Dom - isabel riot'>>
 <<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
 	<<goto 'Dom - Underground city chaos'>>
+<<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
+	<<goto 'Dom - Return to underground city plan'>>
 <<else>>
 	<<if !$locationEvents.underground>>
 		<<set $randomNumber = randomInteger(0, 100)>>

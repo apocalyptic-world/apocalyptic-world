@@ -1,0 +1,143 @@
+:: Guesthouse \[Event\] - male on female forced [bg-guesthouse]
+<h1 class="ptitle">
+	GUEST HOUSE
+</h1>
+<br />
+<<set _guestIds = [setup.getRandomPersons($tmpEvent[0], 1), setup.getRandomPersons($tmpEvent[1], 1)]>>
+
+<<set _girl = $guests[_guestIds[0]]>>
+<<set _guy = $guests[_guestIds[1]]>>
+<<set _girl.location = 'tied'>>
+<<set _girl.happy -= 50>>
+
+The air is thick, heavy with an unease that prickles the back of your neck. The usual murmur of settlers unwinding after a long day is absent. 
+Instead, there’s only silence… except for something else. Faint, muffled sounds coming from the far corner of the room.
+<br /><br />
+Your instincts flare. You move through the space quickly, past the old furniture and sleeping cots, heart pounding harder with every step. 
+Rounding the corner, the scene unfolds before you.
+<br /><br />
+<<=setup.displayName(_girl)>>. Tied down. Naked. Gagged. Struggling.
+<<=setup.displayName(_guy)>>, one of your own, is on top of her, his hands forcing her down, his breath ragged with sick intent as he holds his dick in her hand, ready to push it inside her pussy. 
+The sheets from the cot bind her wrists, torn and knotted tight.
+<br /><br />
+<center>
+    <<actionImage _girl 'prepare'>>
+</center>
+<br />
+<<=setup.displayName(_girl)>> and <<=setup.displayName(_guy)>> hasn’t noticed you yet.
+<br /><br />
+<<set _linkName = 'Pull ' + _guy.name + ' off her'>>
+<div id="option_watch">
+    <<linkreplace 'Continue to watch'>>
+        <<set _watched = true>>
+        <<set _girl.virgin = false>>
+        <center>
+            <<actionImage _girl 'pussy_back'>>
+        </center>
+        <br />
+        With you standing unnoticed and watching <<=setup.displayName(_guy)>> finally slides his <<=_guy.dick>> dick inside <<=setup.displayName(_girl)>>. 
+        She instantly tries to kick him off but is not strong enough as he slowly increases the speed and depth.
+        <br /><br />
+        As her screams for help and moans get louder he leans closer to her and grabs her by the neck. 
+        <br /><br />
+        <center>
+            <<actionImage _girl 'pussy_back2'>>
+        </center>
+        <br />
+        <<=setup.displayName(_guy)>> somewhat gently chokes her while his chest starts to touch her belly as he pounds <<=setup.displayName(_girl)>>'s pussy from closer distance.
+        <br />
+        He feels powerfull and is trying to take full amount of the pleasure he can get from her. Slowly releasing her neck and feeling her <<=_girl.breasts>> breast.
+        <br /><br />
+        Then with a powerfull move he forcefully turns her around.
+        <br /><br />
+        <center>
+            <<actionImage _girl 'pussy_chest'>>
+        </center>
+        <br />
+        <<=setup.displayName(_girl)>> tries to get out of his touch again with but without success and soon enough he's already fucking her pussy. She looks weakened and look like is slowly giving up.
+        <br />
+        Then with last of her strength she almost manages to throw him off her but fails. She instantly puts both hands on her bnack and holds her down, while as punishment starts to furiusly fuck her even harder.
+        <br /><br />
+        <center>
+            <<actionImage _girl 'pussy_chest2'>>
+        </center>
+        <br />
+        You can clearly see she hides her face in the sheets and just gives up fully while <<=setup.displayName(_guy)>> uses her, hoping that it will end soon. 
+        With each thrust <<=setup.displayName(_guy)>> movements get stronger and stronger and soon enough he pulls his dick out of her pussy and turns her back on her back, pull down her gag.
+        <br /><br />
+        <div id="option_cum">
+            <<linkreplace 'Keep watching'>>
+                <<run _cum = true>>
+                <<run $('#option_pull, #option_join').hide()>>
+                <center>
+                    <<actionImage _girl 'cum_face'>>
+                </center>
+                <br />
+                <<=setup.displayName(_girl)>> doesn't even try to scream anymore. She just accepts her fate in this harsh world, as <<=setup.displayName(_guy)>> cums all over her face. 
+                Then he gets off her and as fast as he can, grabs his clothes and runs away but not before warning her to to mention this to anyone.
+                <<set _guy.horny = 0>>
+                <<set _guy.sub -= 20>>
+                <br /><br />
+                <<link 'Leave'>>
+                    <<goto 'Guest house'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <</linkreplace>>
+</div>
+<div id="option_pull">
+    <<linkreplace _linkName>>
+        <<if !_watched>>
+            <<run $('#option_watch').hide()>>
+        <</if>>
+        You surge forward, grabbing <<=setup.displayName(_guy)>> by the back of his neck and yanking him off <<=setup.displayName(_girl)>> with all your strength. 
+        He barely has time to grunt before you slam him into the floorboards, the impact shaking the room.
+        <br /><br />
+        <<you>>
+            What the hell is going on her?
+        <</you>>
+        <br />
+        You untie <<=setup.displayName(_girl)>>. Without looking back she just runs out of the guest house crying.
+        <br /><br />
+        <<sayNpc _guy>>
+            Please! It won't happen again. 
+        <</sayNpc>>
+        <br />
+        <<link 'Throw him in the basement'>>
+            <<set $tmpGirl = _guy>>
+            <<set $guestId = _guestIds[1]>>
+            <<goto 'Guest move to basement'>>
+        <</link>>
+        <<link 'Forgive him'>>
+            <<goto 'Guest house'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_join">
+    <<linkreplace 'Join him'>>
+        <<run $('#option_pull').hide()>>
+        <<if !_watched>>
+            <<run $('#option_watch').hide()>>
+        <</if>>
+        <<if !_cum>>
+            <<run $('#option_cum').hide()>>
+        <</if>>
+        <<=setup.displayName(_guy)>> pulls his dick out and takes a step back in horror watching at your reaction.
+        <br /><br />
+        <<you>>
+            Calm down you too. I just want to join.
+        <</you>>
+        <br />
+        <<=setup.displayName(_guy)>>'s face shows relief as you take of your clothes and join them together in the bed, untying <<=setup.displayName(_girl)>>. 
+        Seeing your approval she calms down a bit and goes with it.
+        <br /><br />
+        <<link 'Fuck'>>
+            <<set $tmpGirl = _girl>>
+            <<set $tmpGirl2 = _guy>>
+            <<set $tmpGirlViewBack = 'Guest house'>>
+            <<threesome $tmpGirl $tmpGirl2>>
+        <</link>>
+    <</linkreplace>>
+</div>
+
+

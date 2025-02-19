@@ -229,6 +229,11 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			}>>
 			<<goto 'Guesthouse [Event] - take virginity'>>
 		<</if>>
+	<<elseif setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(100)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on female forced'>>
 	<</if>>
 <</if>>
 
