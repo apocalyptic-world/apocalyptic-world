@@ -20,6 +20,10 @@
   
   <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
   <<grid underground shop 'Underground shop' 'Shop' 0 _isDisabled>>
+
+  <<if (($game.location.underground_office ?? false))>>	
+  	<<grid underground underground_office 'Underground city office' 'Office' 0 1>>
+  <</if>>
 </div> 
 <br /><br />
 [[Leave|Outside]]
@@ -36,7 +40,7 @@
 	<<goto 'Dom - Underground city chaos'>>
 <<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
 	<<goto 'Dom - Return to underground city plan'>>
-<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && $characters.dom?.quests?.return_city1_day < $game.day>>
+<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>
 	<<goto 'Dom - Return to underground city execute'>>
 <<else>>
 	<<if !$locationEvents.underground>>

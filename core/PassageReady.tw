@@ -16,7 +16,8 @@
 	church: [],
 	farm: [],
 	lab: [],
-	guesthouse: []
+	guesthouse: [],
+	underground_office: []
 }>>
 <<set 
 	$game.avatars = {},
@@ -24,7 +25,8 @@
 	$game.avatars.rodger = 'people/rodger/avatar.png',
 	$game.avatars.laura = 'people/laura/avatar.jpg',
 	$game.avatars.isabel = 'people/isabel.png',
-	$game.avatars.octavia = 'people/octavia/avatar.png'
+	$game.avatars.octavia = 'people/octavia/avatar.png',
+	$game.avatars.dom = 'people/dom/avatar.png'
 
 >>
 
@@ -57,6 +59,13 @@
 <</if>>
 <<if isMetChar('octavia') && $characters.octavia.quests.next_move>>
 	<<run $charactersInLocation['guesthouse'].push('octavia')>>
+<</if>>
+
+<<if isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
+	<<if !$characters.dom?.quests?.dead>>
+		<<run $charactersInLocation['underground_office'].push('dom')>>
+	<</if>>
+	<<run $charactersInLocation['underground_office'].push('isabel')>>
 <</if>>
 
 <<if isMetChar('blair') && !$game.debugBlair>>
