@@ -12,6 +12,24 @@ setup.companionGet = function(key)
  * "namespace" for companions-list help functions
  */
 setup.companions = {
+    getHorny: function(hornyLevel = 50) {
+        const hornyCompanions = {};
+        for(const companionKey in variables().player.companions) {
+            const splitKey = companionKey.split(':');
+            if (splitKey[0] !== 'guest') {
+                continue;
+            }
+
+            const companion = setup.companionGet(companionKey);
+            if (!companion || companion.horny < hornyLevel) {
+                continue;
+            }
+
+            hornyCompanions[companion.gender] ??= [];
+            hornyCompanions[companion.gender].push(companionKey);
+        }
+        return hornyCompanions;
+    },
     /**
      * All companions who has a certain skill
      * @param {companion} companions

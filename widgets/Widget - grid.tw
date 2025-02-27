@@ -30,7 +30,14 @@
 		enabled: recall($suppCode) && timeBetween('08:00', '16:00'), 
 		passage: 'Cabin - Trespassing',
 		percentage: 3
-	}]
+	}],
+	'Car - Explore': [
+		{
+			enabled: recall($suppCode) && !$locationEvents?.explore_car && (setup.companions.getHorny(50)[0] ?? 0).length > 0,
+			passage: 'Car - explore run ride',
+			percentage: 20
+		}
+	]
 }>>
 
 <<set _props = _args[7] ?? {}>>
@@ -68,6 +75,7 @@
 				<<addhours $args[5]>>
 			<</if>>
 		<</if>>
+		<<run console.log($args[2])>>
 		<<if typeof _randomEvents[$args[2]] !== 'undefined'>>
 			<<for _randomEventI, _randomEvent range _randomEvents[$args[2]]>>
 				<<set _travelEventName = 'travel' + _randomEventI>>
