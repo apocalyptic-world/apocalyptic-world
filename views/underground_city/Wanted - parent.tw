@@ -44,13 +44,15 @@ The mother notices you and pushes the girl behind her, falling to her knees with
 	<<goto 'Wanted - catched'>>
 <</link>>
 
+<<newgirl>>
+<<set _mother = $tmpGirl>>
+<<set _mother.birthDate = setup.getBirthDate(randomInteger(38, 44))>>
+<<set _mother.race = $wanted[$wantedId].race ?? 'white'>>
+<<set _mother.virgin = false>>
+
 <<if $game.location.basement && $slaves.length < $basementLimit && $player.energy >= 30>>
 	<<link 'Take mother as slave'>>
-		<<newgirl>>
-		<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(38, 44))>>
-		<<set $tmpGirl.race = $wanted[$wantedId].race ?? 'white'>>
-		<<set $tmpGirl.virgin = false>>
-		<<run $slaves.push($tmpGirl)>>
+		<<run $slaves.push(_mother)>>
 		<<set $player.reputation_bounty_hunter-->>
 		<<set $wanted.splice($wantedId, 1)>>
 		<<goto 'Bar'>>
@@ -60,7 +62,7 @@ The mother notices you and pushes the girl behind her, falling to her knees with
 <<if setup.baseManagement.population.hasFreeHouse()>>
 	<<link 'Invite them as settlers to your settlement'>>
 		<<set $settlers = [
-			$tmpGirl,
+			_mother,
 			$wanted[$wantedId]
 		]>>
 		<<set $player.reputation_bounty_hunter-->>
