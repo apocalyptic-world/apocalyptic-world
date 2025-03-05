@@ -14,24 +14,26 @@ setup.ageRoll = function() {
 };
 
 setup.raceRoll = function() {
-	var _raceRoll = window.randomInteger(1, 100);
-	var _race = '';
-	if (_raceRoll <= 40) {
-		_race = 'white';
-	} else if (_raceRoll <= 65) {
-		_race = 'latina';
-	} else if (_raceRoll <= 85) {
-		_race = 'black';
-	} else {
-		_race = 'asian';
-	}
-	return _race;
+    var _raceRoll = window.randomInteger(1, 100);
+    var _race = '';
+    if (_raceRoll <= 35) {
+        _race = 'white';
+    } else if (_raceRoll <= 55) {
+        _race = 'latina';
+    } else if (_raceRoll <= 75) {
+        _race = 'black';
+    } else if (_raceRoll <= 90) {
+        _race = 'asian';
+    } else {
+        _race = 'indian';
+    }
+    return _race;
 };
 
 setup.hairRoll = function(_race, _age, _gender) {
 	var _hairRoll = window.randomInteger(1, 100);
 	var _hair = '';
-	if (['asian', 'black', 'latina'].includes(_race) || _hairRoll <= 15) {
+	if (['asian', 'black', 'latina', 'indian'].includes(_race) || _hairRoll <= 15) {
 		_hair = 'black';
 	} else if (_hairRoll <= 50) {
 		_hair = 'brown';

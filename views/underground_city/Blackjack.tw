@@ -8,7 +8,7 @@
 Underground city has its own rules. House always goes last. If you don't like that - you know where the door is. 
 <br /><br />
 <<set $blackjack to {
-	bet: 0,
+	bet: (typeof $blackjack !== 'undefined' ? $blackjack.bet : 1),
 	deck: {},
 	first: true,
 	you: [],
@@ -18,7 +18,7 @@ Underground city has its own rules. House always goes last. If you don't like th
 	bj: (typeof $blackjack !== 'undefined' ? $blackjack.bj : false)
 }>>
 <<if timeBetween('17:00', '02:00')>>
-	Bet: <<textbox "$blackjack.bet" 1>>
+	Bet: <<textbox "$blackjack.bet" `($blackjack.bet ?? 1)`>>
 	<div id="blackjack-error" style="color:red"></div>
 	<br /><br />
 	<<link 'Bet'>>

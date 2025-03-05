@@ -1,13 +1,19 @@
 :: Cheat menu {"position":"29,1203","size":"100,100"}
 <div id="ingame-ui-buttons-side" @class="'cheatmenu ' + settings.sidebarBackground + ''">
-  <<link 'Add 100 caps'>>
-	  <<set $player.money += 100>>
-	  <<goto `passage()`>>
-  <</link>>
+  	<<link 'Add 100 caps'>>
+	  	<<set $player.money += 100>>
+	  	<<goto `passage()`>>
+  	<</link>>
   	<<link 'Add energy'>>
 		<<set $player.energy = $player.maxEnergy>>
 		<<goto `passage()`>>
 	<</link>>
+  	<<if recall($suppCode)>>
+		<<link 'Increase max energy'>>
+			<<set $player.maxEnergy +=10>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
   <<link 'Add slave'>>
 	  <<newgirl>>
 	  <<run $slaves.push($tmpGirl)>>
@@ -23,10 +29,6 @@
 		<<goto `passage()`>> 
 	<</link>>
   <<if recall($suppCode)>>
-	<<link 'Increase max energy'>>
-		<<set $player.maxEnergy +=10>>
-		<<goto `passage()`>>
-	<</link>>
 	<<link 'Set all guest submission to max'>>
   		<<for _cheatGuestI, _cheatGuest range $guests>>
 			<<set $guests[_cheatGuestI].sub = 100>>
@@ -72,6 +74,10 @@
 		<</if>>
 		<<goto `passage()`>> 
   	<</link>>
+	<<link 'Add food (x10)'>>
+		<<pickup $backpack 'food' 10>>
+		<<goto `passage()`>>
+	<</link>>
 	<<link 'Add growth potion'>>
 		<<pickup $backpack 'growth_potion' 1>>
 		<<goto `passage()`>>
@@ -86,6 +92,10 @@
 	<</link>>
 	<<link 'Add revolver'>>
 		<<pickup $backpack 'revolver' 1>>
+		<<goto `passage()`>>
+	<</link>>
+	<<link 'Add revolver bullets (x10)'>>
+		<<pickup $backpack 'bullet_revolver' 10>>
 		<<goto `passage()`>>
 	<</link>>
 	<<link 'Add tribe medallion'>>
