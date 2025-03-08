@@ -63,8 +63,11 @@ setup.actionText.female = {
     threesome_f_cum_on_tits: [
         "Your cum covers %name% and %name2%'s breasts."
     ],
+    threesome_f_cum_throat: [
+        "You grab %name%'s head and hold her as you thrust your throbbing cock deep into her throat. %name2% strokes your tensing balls as she feels you cum deep inside %name%'s throat.."
+    ],
     threesome_f_dp: [
-        "You grab %name%'s head with your hands and drive your hard dick deep into her throats."
+        "You take turns grabbing %name% and %name2%'s heads with your hands, driving your hard dick deep into their throats."
     ],
     threesome_f_footjob: [
         "You pleasure yourself with %name% and %name2%'s feet."
