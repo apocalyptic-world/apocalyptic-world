@@ -161,6 +161,13 @@
 		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
 			<<set _npc.sub++>>
 		<</if>>
+
+		//Birthdays!!
+		<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
+			<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+				<<run setup.sleepMessages.add('Guest: ' + _statsNPC.name + ' (favorite gifts: <strong>' + (_statsNPC.likes ?? 'no preference') + '</strong>)', 'birthdays')>>
+			<</if>>
+		<</for>>
 		
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
