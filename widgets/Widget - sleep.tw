@@ -109,6 +109,24 @@
 	<</if>>
 <</for>>
 
+//Birthdays!!
+<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<run setup.sleepMessages.add('Your guest, <strong>' + _statsNpc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_statsNpc) + '</strong>)! Favorite gift(s): <strong>' + (_statsNpc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+	<</if>>
+<</for>>
+<<for _statsNpcI, _statsNpc range ($slaves ?? [])>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<run setup.sleepMessages.add('Your slave, <strong>' + _statsNpc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_statsNpc) + '</strong>)! Favorite gift(s): <strong>' + (_statsNpc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+	<</if>>
+<</for>>
+<<for _statsNpcI, _statsNpc range ($nursery ?? [])>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<run setup.sleepMessages.add('In the Nursery: <strong>' + _statsNpc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_statsNpc) + '</strong>)!', 'birthdays')>>
+	<</if>>
+<</for>>
+		
+
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<capture _i>>
 		<<set _npc = $slaves[_i]>>
@@ -162,13 +180,6 @@
 			<<set _npc.sub++>>
 		<</if>>
 
-		//Birthdays!!
-		<<for _statsNpcI, _statsNpc range ($guests ?? [])>>
-			<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
-				<<run setup.sleepMessages.add('Guest: ' + _statsNPC.name + ' (favorite gifts: <strong>' + (_statsNPC.likes ?? 'no preference') + '</strong>)', 'birthdays')>>
-			<</if>>
-		<</for>>
-		
 		// Assigned jobs
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
