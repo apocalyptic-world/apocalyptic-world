@@ -366,6 +366,11 @@
 				<<run delete $slaves[_i].rest>>
 			<</if>>
 		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('Your guest, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
 	<</capture>>
 <</for>>
 
@@ -789,6 +794,11 @@
 				<<run delete $guests[_guestI].rest>>
 			<</if>>
 		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('Your guest, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
 	<</capture>>
 <</for>>
 
@@ -821,6 +831,11 @@
 			<<run $guests.push($nursery[_nurseryI])>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
+		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('Your guest, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
 	<</capture>>
 <</for>>
