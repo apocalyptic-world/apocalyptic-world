@@ -50,17 +50,6 @@
 <<if $gameDate.getHours() gte 12>>PM<<else>>AM<</if>>
 <</widget>>
 
-<<widget "timeCycle">>
-	<<if $gameDate.getHours() > 6 && $gameDate.getHours() < 12>>
-		<<set $timeCycle = 'morning'>>
-	<<elseif $gameDate.getHours() > 6 && $gameDate.getHours() < 18>>
-		<<set $timeCycle = 'afternoon'>>
-	<<elseif $gameDate.getHours() > 6 && $gameDate.getHours() < 22>>
-		<<set $timeCycle = 'evening'>>
-	<<else>>
-		<<set $timeCycle = 'night'>>
-	<</if>>
-<</widget>>
 <<widget "time24hr">>
 <<if $gameDate.getHours() lt 10>>0<</if>><<print $gameDate.getHours()>>:<<if $gameDate.getMinutes() lt 10>>0<</if>><<print $gameDate.getMinutes()>>
 <</widget>>

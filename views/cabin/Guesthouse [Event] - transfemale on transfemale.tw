@@ -61,13 +61,13 @@
 <br /><br />
 
 <<set _actionText = setup.actionText>>
+<<set _forcedGender = 'transfemale_on_transfemale'>>
 <div id="choice">
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
-
 	<center>
-		<<actionImageOutput `'actions/transfemale_on_transfemale/default/'+_sexActions[_index]+'/'+ either(setup.actions['transfemale_on_transfemale']['default'][_sexActions[_index]])`>><br />
+		<<actionImage $tmpGirl _sexActions[_index] 'no-text' _forcedGender>>
 	</center>
 	<br />
 	<<print _actionText['transfemale_on_transfemale'][_sexActions[_index]][0].replace(/\%transfemale0\%/g, $guests[_guestIds[0]].name).replace(/\%transfemale\%/g, $guests[_guestIds[1]].name)>>
@@ -99,7 +99,7 @@
 				>>
 			<</for>>
 			<center>
-				<<actionImageOutput `'actions/female_on_female-2/default/caught/'+ either(setup.actions['female_on_female-2']['default']['caught'])`>>
+				<<actionImage $tmpGirl 'caught' 'no-text' _forcedGender>>
 			</center>
 			<br /><br />
 			You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />

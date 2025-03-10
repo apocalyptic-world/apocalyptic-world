@@ -1,86 +1,86 @@
 :: Explore [Place] {"position":"1809,629","size":"200,100"}
-<<set $randomNumber to Math.floor(Math.random() * 100) + 1>>
+<<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<set _hasCompanions = Object.keys($player.companions ?? {}).length > 0>>
 <<energy -30>>
 <<if (!$game.location.forest)>>
 	<<goto "Explore forest first time">>
 <<elseif (!$game.location.farm)>>
 	<<goto "Explore farm first time">>
-<<elseif ($game.day > 5 && !$game.location.workbench && $randomNumber <= 50)>>
+<<elseif ($game.day > 5 && !$game.location.workbench && _randomNumber <= 50)>>
 	<<goto "Explore workbench">>
-<<elseif ($game.day > 150 && !$game.location.quarry && $randomNumber <= 20)>>
+<<elseif ($game.day > 150 && !$game.location.quarry && _randomNumber <= 20)>>
 	<<goto "Explore quarry">>
 <<elseif $game.day >= 200 && !isMetChar('laura')>>
 	<<goto 'Laura - toxic rain'>>
-<<elseif ($game.day > 6 && $randomNumber <= 25)>>
+<<elseif ($game.day > 6 && _randomNumber <= 25)>>
     <<goto "Random event - meet girl #3">>
-<<elseif ($game.day > 4 && $randomNumber <= 35)>>
+<<elseif ($game.day > 4 && _randomNumber <= 35)>>
 	<<goto "Random event - ambush #2">>
-<<elseif ($game.day > 10 && !$randomNumber <= 40 && !$backpack.has('blueprint_hot_shower'))>>
+<<elseif ($game.day > 10 && !_randomNumber <= 40 && !$backpack.has('blueprint_hot_shower'))>>
 	<<goto "Random event - find hot shower blueprint #7">>
-<<elseif $randomNumber <= 38>>
+<<elseif _randomNumber <= 38>>
 	<<goto 'Random event #15 ammo box'>>
-<<elseif $randomNumber <= 40>>
+<<elseif _randomNumber <= 40>>
 	<<goto 'Explore event: The Lost Child'>>
-<<elseif $randomNumber <= 41>>
+<<elseif _randomNumber <= 41>>
 	<<goto 'Explore event: The Elderly Refugee'>>
-<<elseif ($randomNumber <= 42)>>
+<<elseif (_randomNumber <= 42)>>
     <<goto "Random event - quicksand #4">>
-<<elseif ($randomNumber <= 45)>>
+<<elseif (_randomNumber <= 45)>>
 	<<goto 'Random event - bikes #14'>>
-<<elseif ($randomNumber < 52)>>
+<<elseif (_randomNumber < 52)>>
 	<<goto 'Explore event: wolves'>>
-<<elseif ($randomNumber <= 55)>>
+<<elseif (_randomNumber <= 55)>>
     <<goto "Random event - dead guy #1">>
-<<elseif $randomNumber <= 59 && _hasCompanions>>
+<<elseif _randomNumber <= 59 && _hasCompanions>>
 	<<goto 'Explore event - Snake pit'>>
-<<elseif ($randomNumber <= 60 && !$player?.quests?.teacher_killed)>>
+<<elseif (_randomNumber <= 60 && !$player?.quests?.teacher_killed)>>
     <<goto "Random event - teacher #6">>
-<<elseif ($randomNumber <= 63)>>
+<<elseif (_randomNumber <= 63)>>
     <<goto "Explore event - mysterious scream">>
-<<elseif $randomNumber <= 64 && !$player.quests.library_blueprint>>
+<<elseif _randomNumber <= 64 && !$player.quests.library_blueprint>>
 	<<goto 'Explore event - library blueprint'>>
-<<elseif $randomNumber <= 64 &&  $player.quests.library_blueprint>>
+<<elseif _randomNumber <= 64 &&  $player.quests.library_blueprint>>
 	<<goto 'Explore event: Waterfall again'>>
-<<elseif $randomNumber <= 65>>
+<<elseif _randomNumber <= 65>>
 	<<goto "Random event - dig grave #12">>
-<<elseif $randomNumber <= 66>>
+<<elseif _randomNumber <= 66>>
 	<<goto 'Explore event - Wicked family'>>
-<<elseif $randomNumber <= 67>>
+<<elseif _randomNumber <= 67>>
 	<<goto 'Explore event - toxic cave'>>
-<<elseif $randomNumber <= 68>>
+<<elseif _randomNumber <= 68>>
 	<<goto 'Explore event: The Dying Elderly Survivor'>>
-<<elseif $randomNumber <= 69 && _hasCompanions>>
+<<elseif _randomNumber <= 69 && _hasCompanions>>
 	<<goto 'Explore event: toxic waste'>>
-<<elseif $randomNumber <= 70>>
+<<elseif _randomNumber <= 70>>
 	<<goto 'Explore event: The Enslaved Settlement'>>
-<<elseif $randomNumber <= 71>>
+<<elseif _randomNumber <= 71>>
 	<<goto 'Explore event: mysterious illness settlement'>>
-<<elseif $randomNumber <= 72>>
+<<elseif _randomNumber <= 72>>
 	<<goto 'Explore event: Waterfall'>>
-<<elseif $randomNumber <= 73>>
+<<elseif _randomNumber <= 73>>
 	<<goto 'Explore event: Old couple'>>
-<<elseif $randomNumber <= 74>>
+<<elseif _randomNumber <= 74>>
 	<<goto "Random event - food #8">>
-<<elseif $randomNumber <= 75>>
+<<elseif _randomNumber <= 75>>
 	<<goto 'Explore event: Tits bar'>>
-<<elseif $randomNumber <= 76>>
+<<elseif _randomNumber <= 76>>
 	<<goto "Random event - solar panel #5">>
-<<elseif $randomNumber <= 77>>
+<<elseif _randomNumber <= 77>>
 	<<goto 'Explore event: Abandoned mall'>>
-<<elseif $randomNumber <= 78>>
+<<elseif _randomNumber <= 78>>
 	<<goto 'Explore event: Bite in neck'>>
-<<elseif $randomNumber <= 79 && isMetChar('octavia') && $characters.octavia.quests && $characters.octavia.quests.tribe>>
+<<elseif _randomNumber <= 79 && isMetChar('octavia') && $characters.octavia.quests && $characters.octavia.quests.tribe>>
 	<<goto 'Explore event: Tribe'>>
-<<elseif $randomNumber <= 89>>
+<<elseif _randomNumber <= 89>>
 	<<goto "Random event - no face #10">>
-<<elseif $randomNumber <= 93>>
+<<elseif _randomNumber <= 93>>
 	<<goto "Random event - hospital #13">>
-<<elseif $randomNumber <= 98>>
+<<elseif _randomNumber <= 98>>
 	<<goto "Random event - beak humans #11">>
-<<elseif $randomNumber <= 99>>
+<<elseif _randomNumber <= 99>>
 	<<goto 'Explore event: Wicked family daughter'>>
-<<elseif $randomNumber <= 100>>
+<<elseif _randomNumber <= 100>>
 	<<goto "Random event - wood #9">>
 <<else>>
 	<center>

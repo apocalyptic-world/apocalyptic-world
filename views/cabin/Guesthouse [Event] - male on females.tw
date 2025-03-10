@@ -187,13 +187,15 @@
 <br /><br />
 
 <<set _actionText = setup.actionText>>
+<<set _sexAction = 'threesome_f_'+_sexActions[_index]>>
+
 <div id="choice">
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
 	<center>
-		<<set _url = 'actions/female/default/threesome_f_'+_sexActions[_index]+'/'+ either(setup.actions['female']['default']['threesome_f_' + _sexActions[_index]])>>
-		<<actionImageOutput _url>><br />
+		<<set _sexAction = 'threesome_f_'+_sexActions[_index]>>
+		<<actionImage $tmpGirl _sexAction 'no-text'>>
 	</center>
 	<br />
 	<<print _actionText['male_on_females'][_sexActions[_index]][0].replace('%female0%', $guests[_femaleGuestIds[0]].name).replace('%female1%', $guests[_femaleGuestIds[1]].name).replace('%females%', _girlNames).replace('%male%', $guests[_maleGuestIds[0]].name)>>
@@ -225,7 +227,7 @@
 				>>
 			<</for>>
 			<center>
-				<<actionImageOutput `'actions/female/default/caught/'+ either(setup.actions['female']['default']['caught'])`>>
+				<<actionImage $tmpGirl 'caught' 'no-text'>>
 			</center>
 			<br /><br />
 			You walk in on

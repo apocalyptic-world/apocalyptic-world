@@ -53,10 +53,10 @@
 		</div>
 	<<else>>
 		<<set _charsHtml = '';>>
-		<<if typeof $charactersInLocation[$args[1]] !== 'undefined'>>
+		<<if typeof _charactersInLocation[$args[1]] !== 'undefined'>>
 			<div class="grid-chars">
-			  <<for _i to 0; _i lt $charactersInLocation[$args[1]].length; _i++>>
-					[img[setup.ImagePath + $game.avatars[$charactersInLocation[$args[1]][_i]]]]	
+			  <<for _i to 0; _i lt _charactersInLocation[$args[1]].length; _i++>>
+					[img[setup.ImagePath + $game.avatars[_charactersInLocation[$args[1]][_i]]]]	
 			  <</for>>
 			</div>
 		<</if>>

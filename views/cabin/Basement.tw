@@ -208,8 +208,8 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 <br /><br />
 
 <<if _showSlavesCount &&  !$locationEvents.basement>>
-	<<set $randomNumber = randomInteger(1, 10)>>
-	<<if $randomNumber === 0 && _lowSubmissionSlaves.length>>
+	<<set _randomNumber = randomInteger(1, 10)>>
+	<<if _randomNumber === 0 && _lowSubmissionSlaves.length>>
 		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
 		<<if setup.getAge($slaves[$eventSlaveId]) >= 18 && !$slaves[$eventSlaveId].gender>>
 			<<set $locationEvents.basement = true>>
@@ -222,7 +222,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				<<goto 'Basement event - try escape 2'>>
 			<</if>>
 		<</if>>
-	<<elseif $randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender && !$slaves[_hornySlaveId].virgin>>
+	<<elseif _randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender && !$slaves[_hornySlaveId].virgin>>
 		<<set $hornySlaveId = _hornySlaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement event - horny slave'>>

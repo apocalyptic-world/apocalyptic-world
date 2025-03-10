@@ -965,3 +965,20 @@ window.blackoutScreen = function(duration) {
         blackoutDiv.classList.remove('active');
     }, duration);
 };
+
+
+setup.getDayTimeName = function() {
+    let gameDate = variables().gameDate;
+
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 12) {
+        return 'morning';
+    }
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 18) {
+        return 'afternoon';
+    }
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 22) {
+        return 'evening';
+    }
+
+    return 'night';
+};

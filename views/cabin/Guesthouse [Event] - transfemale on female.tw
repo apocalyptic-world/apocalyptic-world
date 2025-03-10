@@ -69,13 +69,14 @@
 <br /><br />
 
 <<set _actionText = setup.actionText>>
+<<set _forcedGender = 'transfemale_on_female'>>
 <div id="choice">
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
 	<</for>>
 
 	<center>
-		<<actionImageOutput `'actions/transfemale_on_female/default/'+_sexActions[_index]+'/'+ either(setup.actions['transfemale_on_female']['default'][_sexActions[_index]])`>><br />
+		<<actionImage $tmpGirl _sexActions[_index] 'no-text' _forcedGender>>
 	</center>
 	<br />
 	<<print _actionText['transfemale_on_female'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name)>>
@@ -107,7 +108,7 @@
 				>>
 			<</for>>
 				<center>
-					<<actionImageOutput `'actions/female_on_female-2/default/caught/'+ either(setup.actions['female_on_female-2']['default']['caught'])`>>
+					<<actionImage $tmpGirl 'caught' 'no-text' _forcedGender>>
 				</center>
 				<br /><br />
 				You walk in on <<=setup.displayName($guests[_guestIds[0]])>> and <<=setup.displayName($guests[_guestIds[1]])>> having sex, they stop and seem unhappy.<br />
@@ -124,7 +125,7 @@
 							<<set $guests[_guestIds[0]].virgin = false>>
 						<</if>>
 						<center>
-							<<actionImageOutput `'actions/transfemale_on_female/default/pussy/'+ either(setup.actions['transfemale_on_female']['default']['pussy'])`>><br />
+							<<actionImage $tmpGirl 'pussy' 'no-text' _forcedGender>>
 						</center>
 						<br />
 						<<print _actionText['transfemale_on_female']['pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name)>>
@@ -133,7 +134,7 @@
 						<<linkreplace 'Continue'>>
 							<<set _orgasm = true>>
 							<center>
-								<<actionImageOutput `'actions/transfemale_on_female/default/cum_in_pussy/'+ either(setup.actions['transfemale_on_female']['default']['cum_in_pussy'])`>><br />
+								<<actionImage $tmpGirl 'cum_in_pussy' 'no-text' _forcedGender>>
 							</center>
 							<br />
 							<<print _actionText['transfemale_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name)>>
