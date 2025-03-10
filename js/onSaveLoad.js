@@ -65,6 +65,10 @@ Save.onLoad.add(function (save) {
         'wantedPron',
         'wantedPron2',
         'wantedPsg',
+        'shooterFight',
+        'timeCycle',
+        'randomNumber',
+        'charactersInLocation',
     ];
     for (var _i = 0; _i <= _oldVariables.length; _i++) {
         if (typeof save.state.history[save.state.index].variables[_oldVariables[_i]] !== 'undefined') {
