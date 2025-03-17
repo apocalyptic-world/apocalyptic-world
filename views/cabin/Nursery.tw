@@ -29,15 +29,20 @@
 			<</if>>
 			<tr class="item">
 				<td style="width: 300px">
+					<<if _nursery.family.mother>>
+						<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
+					<</if>>
 					<span @class="''+_genderClass+''">
-						<<link _nursery.name>>
-							<<unset $guestId, $charId, $slaveId>>
-							<<set $childId = _nurseryI>>
-							<<set $tmpGirl = _nursery>>
-							<<set $tmpGirlBack = 'Nursery'>>
-							<<set $tmpGirlViewBack = 'Child view'>>
-							<<goto 'Child view'>>
-						<</link>>
+						<span data-balloon-length="medium" @aria-label="Mother: '' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
+							<<link _nursery.name>>
+								<<unset $guestId, $charId, $slaveId>>
+								<<set $childId = _nurseryI>>
+								<<set $tmpGirl = _nursery>>
+								<<set $tmpGirlBack = 'Nursery'>>
+								<<set $tmpGirlViewBack = 'Child view'>>
+								<<goto 'Child view'>>
+							<</link>>
+						</span>
 					</span>
 					<<=setup.npcListInfo(_nursery)>>
 				</td>
