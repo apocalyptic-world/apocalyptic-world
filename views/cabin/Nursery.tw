@@ -29,7 +29,8 @@
 			<</if>>
 			<tr class="item">
 				<td style="width: 300px">
-					<<if _nursery.family.mother>>
+					<<set _motherNpc = ''>>
+					<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
 						<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
 					<</if>>
 					<span @class="''+_genderClass+''">
