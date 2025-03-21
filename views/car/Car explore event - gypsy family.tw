@@ -22,6 +22,9 @@ The man steps forward first, his face twisting with suspicion and anger.
 <<set _mother = $tmpGirl>>
 <<newgirl>>
 <<set _daughter = $tmpGirl>>
+
+<<set _daughter.race = _mother.race>>
+
 <<sayNpc $tmpGuy>>
     Get lost!
 <</sayNpc>>
@@ -132,14 +135,14 @@ She says, though her tone lacks the aggression of her husband’s.
     <<video 'explore_car/ghipsy9'>>
     <br /><br />
     <<sayNpc _mother>>
-        Oh deer. Are you good? 
+        Oh dear. Are you good? 
     <</sayNpc>>
     <br />
     <<sayNpc _daughter>>
         Yes mother.. I kinda... Like it..
     <</sayNpc>>
     <br />
-    Daughter's movements get more fluet and agressive as she clearly tries to make you cum as fast and hard as you can. 
+    Daughter's movements get more fluent and agressive as she clearly tries to make you cum as fast and hard as you can. 
     Mother sits down next to her and holds her hand while glancing at your dick once in a while.
     <br /><br />
     <<linkreplace 'Cum'>>
@@ -164,6 +167,334 @@ She says, though her tone lacks the aggression of her husband’s.
             Thank you good sir. Now leave before my husband sees us!
         <</sayNpc>>
         <br />
+
+	<<set _daughterAge = randomInteger(19, 20)>>
+	<<set _momAge = _daughterAge + randomInteger(18, 25)>>
+
+	<<set _mother.birthDate = setup.getBirthDate(_momAge)>>
+	<<set _daughter.birthDate = setup.getBirthDate(_daughterAge)>>
+
+	<<set _mother.traits = setup.getRandomTraits(2)>>
+	<<set _daughter.traits = setup.getRandomTraits(3)>>
+
+	<<set _mother.skills = ['cook', 'shopkeeper']>>
+	<<set _daughter.skills = ['cook']>>
+
+	<<if setup.percentageChance(20)>>
+		<<run _daughter.skills.push('scavenger')>>
+	<</if>>
+	<<if setup.percentageChance(20)>>
+		<<run _daughter.skills.push('woodcraft')>>
+	<</if>>
+
+	<<set _mother.virgin = false>>
+	<<set _daughter.virgin = false>>
+
+	<<set _daughter.family = {
+		mother: _mother.id
+	}>>
+	<<set _mother.family = {
+		kids: [
+		_daughter.id,
+	]}>>
+
+	<<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit)>>
+		<div id="option_invite1">
+			<<linkreplace 'Invite daughter to live with you'>>
+				<<run $('#option_invite2,#option_capture').hide()>>
+
+				<<set _invited = 1>>
+
+			    Before turning to leave, you look over the daughter, realizing she would make a fine addition to your household.
+			    <br /><br />
+			    <<sayNpc _daughter>>
+			        Really?  You want me to come and stay with you?
+			    <</sayNpc>>
+			    <br />
+
+			    Upon seeing your approval and interest in her daughter, the mother has a shrewd expression.
+			    <br /><br />
+			    <<sayNpc _mother>>
+			        She is very useful around the house, and an adequate cook.  It would be very..costly to see her go.
+			    <</sayNpc>>
+			    <br />
+			    Her eyes flick over to the pouch containing your bottle caps with eager interest...
+			    <br /><br />
+
+				<<if $player.int > 50>>
+					<div id="option_convince">
+						<<linkreplace 'Convince her it would be for the good of the daughter'>>
+						    <<run $('#option_pay, #option_capture, #option_capture2').hide()>>
+						    As you remind the mother that you have the means and resources to give her daughter a better life, her expression softens.
+						    <br /><br />
+						    <<sayNpc _mother>>
+						        It is true.. she deserves better than this.  Go, quickly, before her father notices.  I will explain things to him.  He will come around in time.
+						    <</sayNpc>>
+						    <br />
+						    The daughter looks at you, her expression hesitant but hopeful.  She takes your hand as you lead her to the car, and her new life...
+						    <br /><br />
+
+							<<set _daughter.relationship = 50>>
+							<<set _daughter.sub += 10>>
+							<<set $tmpGirl = _daughter>>
+							<<include 'NPC info'>>
+							<<run $guests.push(_daughter)>>
+
+						<</linkreplace>>
+					</div>
+				<</if>>
+
+				<<if $player.money >= 150>>
+					<div id="option_pay">
+						<<linkreplace 'Offer 150 bottle caps'>>
+						    <<run $('#option_convince, #option_capture, #option_capture2').hide()>>
+						    <<set $player.money -= 150>>
+						    The mother's eyes light up with avaricious glee as she sees you pull out a generous pile of bottle caps.
+						    <br /><br />
+						    <<sayNpc _mother>>
+						        That should cover our... sacrifice.
+						    <</sayNpc>>
+						    <br />
+
+						    She scoops up the bottle caps quickly, before you can change your mind.  She turns back to her house, already counting the caps.
+						    <br /><br />
+						    <<sayNpc _mother>>
+						        Thanks. She's your problem now.
+						    <</sayNpc>>
+						    <br />
+
+						    The daughter looks at you with an expression of.. possible relief?  It seems like you may be doing her a favor.
+						    <br /><br />
+
+							<<set _daughter.relationship = 30>>
+							<<set _daughter.sub += 40>>
+							<<set $tmpGirl = _daughter>>
+							<<include 'NPC info'>>
+							<<run $guests.push(_daughter)>>
+
+						<</linkreplace>>
+					</div>
+				<</if>>
+
+			<</linkreplace>>
+		</div>
+	<</if>>
+
+	<<if (($game.location.guesthouse ?? false) && ($guests.length + 2) <= $guesthouseLimit)>>
+		<div id="option_invite2">
+			<<linkreplace 'Invite them both to live with you'>>
+			    <<run $('#option_invite1, #option_capture, #option_capture2').hide()>>
+			    Before turning to leave, you look them both over and decide to invite them both to join your household.
+			    <br /><br />
+			    The mother looks a bit surprised to be included in the offer, a slight blush at her cheeks as she sees you admiring her mature figure.  She glances over at your car and the prosperity it implies.  Then her eyes drift down to your cock, thinking about how much her daughter seemed to enjoy it...
+			    <br /><br />
+			    <<sayNpc _mother>>
+			        A new life would be a welcome change.
+			    <</sayNpc>>
+			    <br />
+
+			    The daughter nods in agreement.
+			    <br /><br />
+			    <<sayNpc _daughter>>
+			        Yes, he will take much better care of us.
+			    <</sayNpc>>
+			    <br />
+			    Then she turns back to you.
+			    <br /><br />
+			    <<sayNpc _daughter>>
+			        And we will make sure you are satisfied with your choice..
+			    <</sayNpc>>
+			    <br />
+
+			    The mother turns with a glance back toward her husband, who is storming around the shack.
+			    <br /><br />
+			    <<sayNpc _mother>>
+			        He will not be happy about it, though.
+			    <</sayNpc>>
+			    <br />
+
+				<<if $player.int > 30 && $player.money >= 200>>
+					<div id="option_bribe">
+						<<linkreplace 'Bribe him to let them go'>>
+						    <<run $('#option_fight, #option_capture, #option_capture2').hide()>>
+						    <<set $player.money -= 200>>
+						    Their readiness to leave tells you that this man has little actual regard for his family&#39;s welfare, all too common in this tattered husk of a society.
+						His attention perks up when you tell him about a club in the underground city where young, beautiful girls are ripe for the picking.  With some caps, a man like him could do quite nicely, without all of the responsibility of a hungry family.  By the time you pull 200 caps out of your pouch, the man is practically drooling.
+						    <br /><br />
+						He grins as he takes the pile of bottle caps, counting them greedily.  For all his bluster, it seems they were just a burden to him.
+						    <br /><br />
+						    <<sayNpc _father>>
+						        I&#39;ve given them enough, time to get what I need.
+						    <</sayNpc>>
+						    <br />
+						    He wanders back into the shack, closing the door behind him on his family and former life.  The mother and daughter hold hands as they follow you to the car and their new life...
+						    <br /><br />
+
+							<<set _daughter.relationship = 50>>
+							<<set _daughter.sub += 30>>
+							<<set _mother.relationship = 50>>
+							<<set _mother.sub += 20>>
+							<<set $tmpGirl = _mother>>
+							<<include 'NPC info'>>
+							<<set $tmpGirl = _daughter>>
+							<<include 'NPC info'>>
+							<<run $guests.push(_mother, _daughter)>>
+
+						<</linkreplace>>
+					</div>
+				<</if>>
+
+				<div id="option_fight">
+					<<linkreplace 'Steal them away to the car'>>
+					    <<run $('#option_bribe, #option_capture').hide()>>
+					    You turn and start leading the women to your car.  The father comes around the corner, bellowing loudly as he sees you taking them away.
+					    <br /><br />
+					    <<sayNpc _father>>
+					        Where do you think you're going!?!?
+					    <</sayNpc>>
+					    <br />
+					    You turn and brace yourself, ready for a fight!
+					    <br /><br />
+
+						<<set _daughter.relationship = 50>>
+						<<set _mother.relationship = 50>>
+						<<set _father.strength = randomInteger(30,70)>>
+						<<set _father.inventory = {
+				                        knife: 1
+						}>>
+
+						<<set _dadAge = _daughterAge + randomInteger(18, 35)>>
+						<<set _father.birthDate = setup.getBirthDate(_dadAge)>>
+
+						<<set _daughter.family['father'] =  _father.id>>
+						<<set _mother.family['husband'] =  _father.id>>
+						<<set _father.family = {
+								wives: [ _mother.id ],
+								kids: [
+								_daughter.id,
+							]}>>
+
+
+						<<set $carTemp = []>>
+						<<run $carTemp.push(_mother)>>
+						<<run $carTemp.push(_daughter)>>
+						<<set $capturing = false>>
+
+						<<link 'Fight'>>
+							<<set $enemies = []>>
+							<<run $enemies.push(_father)>>
+							<<fight $enemies 'Car explore event - gypsy family won' 'Car explore event - gypsy family lost'>>
+						<</link>>
+
+					<</linkreplace>>
+				</div>
+
+			<</linkreplace>>
+		</div>
+	<</if>>
+
+
+	<<if (($game.location.basement ?? false) && ($slaves.length + 1) <= $basementLimit) && ($player.money >= 100)>>
+		<div id="option_capture">
+			<<linkreplace 'Purchase daughter as slave'>>
+			    <<run $('#option_invite1, #option_invite2, #option_capture2').hide()>>
+			    <<set $player.money -= 100>>
+
+			    Before turning to leave, you look over the daughter.  Deciding you'd like to have her as your possession, you take another 100 caps out of your pouch.
+			    <br /><br />
+			    <<sayNpc _daughter>>
+			        What? You want to buy me?
+			    <</sayNpc>>
+			    <br />
+			    The daughter has a look of shock, her eyes darting between you and her mother as the older woman weighs your offer.
+			    <br /><br />
+			    <<sayNpc _mother>>
+			        He enjoyed you too much.  Now he wants to keep you.
+			    <</sayNpc>>
+			    <br />
+			    She considers the bottle caps for a few long moments as she weighs the option, then scoops them up.
+			    <br /><br />
+			    <<sayNpc _mother>>
+			        One less mouth to feed.
+			    <</sayNpc>>
+			    <br />
+			    <<sayNpc _daughter>>
+			        But mother..!
+			    <</sayNpc>>
+			    <br />
+				Her words fall on deaf ears as her mother turns back to the shack and closes the door.  You seize the girl, dragging her back to your car as your newest property.
+			    <br /><br />
+
+				<<set _daughter.relationship = 0>>
+				<<set _daughter.sub += 60>>
+				<<set $tmpGirl = _daughter>>
+				<<include 'NPC info'>>
+				<<run $slaves.push(_daughter)>>
+
+			<</linkreplace>>
+		</div>
+	<</if>>
+
+
+	<<if (($game.location.basement ?? false) && ($slaves.length + 2) <= $basementLimit) && ($player.energy >= 30)>>
+		<div id="option_capture2">
+			<<linkreplace 'Attempt to capture them'>>
+			    <<run $('#option_invite2, #option_capture').hide()>>
+
+				<<if !_invited >>
+				    <<run $('#option_invite1').hide()>>
+				    <br /><br />
+				<<else>>
+				    <<run $('#option_convince, #option_pay').hide()>>
+				    You are finished playing games and bargaining, deciding to just take them by force!
+				    <br /><br />
+				<</if>>
+
+			    The women scream as you overpower them, dragging them towards your car.  The father comes around the corner, grabbing a knife and running to their defense as he sees you taking his family away.
+			    <br /><br />
+			    <<sayNpc _father>>
+			        LET THEM GO!!!
+			    <</sayNpc>>
+			    <br />
+			    You turn and brace yourself, ready for a fight!
+			    <br /><br />
+
+				<<set _daughter.relationship = 0>>
+				<<set _daughter.sub += 70>>
+				<<set _mother.relationship = -20>>
+				<<set _mother.sub += 40>>
+
+				<<set _father.strength = randomInteger(30,70)>>
+				<<set _father.inventory = {
+		                        knife: 1
+		                    }>>
+
+				<<set _dadAge = _daughterAge + randomInteger(18, 35)>>
+				<<set _father.birthDate = setup.getBirthDate(_dadAge)>>
+
+				<<set _daughter.family['father'] =  _father.id>>
+				<<set _mother.family['husband'] =  _father.id>>
+				<<set _father.family = {
+						wives: [ _mother.id ],
+						kids: [
+						_daughter.id,
+					]}>>
+
+
+				<<set $carTemp = []>>
+				<<run $carTemp.push(_mother)>>
+				<<run $carTemp.push(_daughter)>>
+				<<set $capturing = true>>
+
+				<<link 'Fight'>>
+					<<set $enemies = []>>
+					<<run $enemies.push(_father)>>
+					<<fight $enemies 'Car explore event - gypsy family won' 'Car explore event - gypsy family lost'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+
         <<link 'Leave'>>
             <<addhours 1>>
             <<goto 'Garage'>>
