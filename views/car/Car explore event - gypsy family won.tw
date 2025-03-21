@@ -1,0 +1,35 @@
+:: Car explore event - gypsy family won 
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+
+	<<if !$capturing>>
+	    You hold back the angry husband as the women dash into your car.  As you drive off, they take one last look back at their old broken down home, the husband on the side of the road, beaten and sulking as he watches the car drive away.  The turn and settle into their seats, eyes forward as you drive them to their new life in your household.
+	    <br /><br />
+
+		<<for _i to 0; _i lt $carTemp.length; _i++>>
+			<<set $tmpGirl = $carTemp[_i]>>
+			<<include 'NPC info'>>
+
+			<<run $guests.push($carTemp[_i])>>
+		<</for>>
+
+        <<else>>
+
+	    You gather up your defeated captives into the car and drive back to the cabin with your spoils.
+	    <br /><br />
+
+		<<for _i to 0; _i lt $carTemp.length; _i++>>
+			<<set $tmpGirl = $carTemp[_i]>>
+			<<include 'NPC info'>>
+
+			<<run $slaves.push($carTemp[_i])>>
+
+		<</for>>
+
+        <</if>>
+
+        <<link 'Leave'>>
+            <<addhours 1>>
+            <<goto 'Garage'>>
+        <</link>>
+
