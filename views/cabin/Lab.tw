@@ -7,6 +7,18 @@
 <br /><br />
 Samples: <strong><<=$characters.laura.quests.productionSamples>></strong>
 <br /><br />
+<<set _guests = setup.getAvailablePersons18yo($guests)>>
+<<if (_guests[0] ?? []).length && timeBetween('10:00', '11:00')>>
+	<<video 'laura/examin'>>
+	<br /><br />
+	<<set _randomNpc = $guests[setup.getRandomElement(_guests[0])]>>
+	There was <<=setup.displayName(_randomNpc)>> on the table with their legs spread wide open, as Laura carefully inserted her fingers into pussy. 
+	<br /><br />
+	<<laura>>
+		Oh, <<=$player.name>>. I will be done soon. What do you want?
+	<</laura>>
+	<br />
+<</if>>
 <<if (_charactersInLocation['lab'] ?? []).includes('laura')>>
 	<<link 'Talk to Laura'>>
 		<<goto 'Laura - lab talk'>>

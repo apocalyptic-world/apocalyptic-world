@@ -88,8 +88,13 @@ You see some hookers standing against the wall..
 <<if $player.money >= 10 && $player.energy >= 20>>
 	<<link 'Find hooker for 10 caps'>>
 		<<set $player.money -= 10>>
+		<<run console.log('gg')>>
 		<<energy -20>>
-		<<goto 'Streets - fuck hooker'>>
+		<<if setup.percentageChance(50)>>
+			<<goto 'Streets - fuck hooker'>>
+		<<else>>
+			<<goto 'Streets - fuck hooker #2'>>
+		<</if>>
 	<</link>>
 <</if>>
 

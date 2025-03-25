@@ -5,6 +5,11 @@
     What do you want?
 <</dom>>
 <br />
+<<if $characters.dom.quests.return_city_done && !$characters.dom.quests.return_city_done1 && (!$characters.dom.quests.return_city_done_day || ($characters.dom.quests.return_city_done +5) < $game.day)>>
+    <<goto 'Dom - Return city #2'>>
+<<elseif $characters.dom.quests.return_city_done1 && ! $characters.dom.quests.return_city_done2 && ($characters.dom.quests.return_city_done1_day + 2) < $game.day>>
+    <<goto 'Dom - Return city #3'>>
+<</if>>
 <<link 'Leave'>>
     <<addmins 10>>
     <<goto 'Underground city'>>

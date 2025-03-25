@@ -1,0 +1,156 @@
+:: Dom - Return city #2 [bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br />
+<<set $characters.dom.quests.return_city_done1 = true>>
+<<set $characters.dom.quests.return_city_done1_day = $game.day>>
+
+<<set _seenStormtroopers = $characters?.octavia?.quests?.new_plan3>>
+You could feel it in the air as you walked through the dimly lit corridors, past Dom’s men who 
+were still patrolling the tunnels like they were expecting another war to break out at any moment. Some nodded at you in respect. Others barely looked at you at all.
+<br /><br />
+As you reached Dom’s office—a reinforced chamber near the heart of the underground—you saw Isabel standing just outside.
+<br /><br />
+<center>
+    <<image 'people/dom/return2_1.jpg'>>
+</center>
+<br /><br />
+She was leaning against the wall, arms crossed, her gaze distant. But when she saw you, something flickered in her eyes—recognition, maybe relief.
+<br /><br />
+<<isabel>>
+    Something’s wrong.
+<</isabel>>
+<br />
+<<you>>
+    What do you mean?
+<</you>>
+<br />
+She tilted her head toward the heavy steel door. 
+<br /><br />
+<<isabel>>
+    Dom’s pissed. More than usual.
+<</isabel>>
+<br />
+<<you>>
+    Why?
+<</you>>
+<br />
+She hesitated for a second. 
+<br /><br />
+<<isabel>>
+    He won’t say. But… I think he knows something.
+<</isabel>>
+<br />
+That sent a chill through you. You glanced at the door, the weight of what you had planned pressing down on you.
+<br /><br />
+Before you could say anything else, the door swung open.
+<br /><br />
+Dom stood in the doorway, his massive frame filling the space. His knuckles were white against the doorframe, his expression dark.
+<br /><br />
+<center>
+    <<image 'people/dom/return2_2.jpg'>>
+</center>
+<br />
+<<dom>>
+    Get in!
+<</dom>>
+<br />
+You exchanged a quick glance with Isabel before stepping inside.
+<br /><br />
+The office was cluttered, maps and weapons scattered across the large metal desk, old radio equipment humming softly in the corner. 
+Dom didn’t sit. He stayed standing, pacing behind the desk like a caged animal.
+<br /><br />
+<<dom>>
+    I need to know something.
+<</dom>>
+<br />
+You stayed silent, waiting.
+<br />
+Dom exhaled sharply, then leaned forward, his voice lower now.
+<br /><br />
+<<dom>>
+    Have you seen anyone… different around here lately?
+<</dom>>
+<br />
+<<dom>>
+    Someone in white armor. Not like the shit we scavenge—real armor. Plates. Clean. High-grade. And their weapons… better than anything we got.
+<</dom>>
+<br />
+That was strange enough. But what came next sent a chill down your spine.
+<br /><br />
+<<dom>>
+    And their eyes... Black. Completely black.
+<</dom>>
+<br />
+<<if _seenStormtroopers>>
+    <div id="option_yes">
+    <<linkreplace 'Yes'>>
+        <<run $('#option_no').hide()>>
+        <<run $('#continue').show()>>
+        <<you>>
+            Yeah… I’ve seen something.
+        <</you>>
+        <br />
+        <<dom>>
+            When? Where?
+        <</dom>>
+        <br />
+        <<you>>
+            I was out checking on some abandoned routes. Thought I’d investigate a biker camp.
+        <</you>>
+        <br />
+        <<you>>
+            Wanted to know what I knew about this city. About you. I told them nothing, and after a while, they just… let me go.
+        <</you>>
+        <br />
+        Dom grits his teeth.
+        <br /><br />
+        <<dom>>
+            We need to move before they do. I want a full sweep of every camp in a ten-mile radius. If they’re out there, we find them.
+        <</dom>>
+        <br />
+    <</linkreplace>>
+    </div>
+<</if>>
+<div id="option_no">
+    <<set _linkName = 'No' + (_seenStormtroopers ? ' (Lie)' : '')>>
+    <<linkreplace _linkName>>
+        <<run $('#option_yes').hide()>>
+        <<run $('#continue').show()>>
+        <<set $characters.dom.suspicion ??= 0>>
+        <<set $characters.dom.suspicion++>>
+        <<you>>
+            I haven’t seen anything like that.
+        <</you>>
+        <br />
+        Dom narrows his eyes, studying you for a long moment. You can’t tell if he believes you or not.
+        <br /><br />
+        <<dom>>
+            Maybe it’s just some crazy story then. Or maybe it’s something worse.
+        <</dom>>
+        <br />
+        His words hang in the air before he exhales sharply and drops the knife onto his desk.
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="continue" style="display:none">
+    He exhales sharply, rolling his shoulders before forcing a smirk.
+    <br /><br />
+    <<dom>>
+        But first, we need to handle something else. We just won a war—we celebrate like kings.
+    <</dom>>
+    <br />
+    He reaches into a crate, pulling out a half-empty bottle of old champagne.
+    <br /><br />
+    <<dom>>
+        We’re running low, though. I got a lead on more. Big stash, untouched.
+    <</dom>>
+    <br />
+    <<dom>>
+        Give me few days to prepare. We are gonna raid some settlement of the priest.
+    <</dom>>
+    <br />
+    <<link 'Leave'>>
+        <<addmins 30>>
+        <<goto 'Underground city'>>
+    <</link>>
+</div>

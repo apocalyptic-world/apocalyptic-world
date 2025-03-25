@@ -1,0 +1,229 @@
+:: Dom - Return city #3 [bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br />
+<<set $characters.dom.quests.return_city_done2 = true>>
+<<set $characters.dom.quests.return_city_done2_day = $game.day>>
+The door to Dom’s office groaned as you pushed it open. The room was dimly lit, the air thick with the scent of old cigarettes and gun oil. Dom sat behind his desk, idly spinning a knife between his fingers. Isabel was standing by the wall, arms crossed, silent as ever.
+<br />
+As soon as Dom looked up and saw you, he grinned. 
+<br /><br />
+<<dom>>
+    Good. You’re here.
+<</dom>>
+<br />
+He stood, slipping the knife into his belt, and gestured for you to follow.
+<br /><br />
+<center>
+    <<image 'people/dom/knife.jpg'>>
+</center>
+<br /><br />
+<<dom>>
+    We’re heading out. Time to pay a visit to an old friend.
+<</dom>>
+<br />
+You didn’t need to ask who.
+<br />
+As you stepped into the forest, surrounded by Dom’s best men, the route became familiar. 
+The twists, the narrow passages, the incline that led up toward the small mountain. And then it hit you.
+<br /><br />
+You knew exactly where you were going.
+<br /><br />
+<strong>Vincent’s place.</strong>
+<br /><br />
+His settlement had always kept its distance—never interfering, never making trouble. But you also knew one thing for certain.
+<br /><br />
+Dom didn’t make friendly visits.
+<br /><br />
+You glanced at him as you walked. He seemed calm, but there was a sharpness in his eyes. Something dangerous simmering beneath the surface.
+<br /><br />
+<center>
+    <<image 'places/settlement/distance.jpg'>>
+</center>
+<br />
+Vincent’s settlement loomed ahead, a cluster of makeshift buildings. 
+It had always been a quiet place, kept out of the way of the bigger conflicts. A haven, at least by post-apocalyptic standards.
+<br /><br />
+The closer you got, the more uneasy you felt. You weren’t the only one. 
+The men walking with you weren’t talking, weren’t joking around like they usually did before a raid. 
+They had their weapons ready, their fingers twitching near the hilts of their knives and the grips of their pistols.
+<br /><br />
+The settlement wasn’t large, but people immediately took notice as Dom’s men poured in. 
+Women clutched their children, men reached for farm tools they weren’t sure they should draw. The tension was suffocating.
+<br /><br />
+Then Vincent appeared.
+<br /><br />
+<center>
+    <<image 'people/dom/settlement_attack.jpg'>>
+</center>
+<br /><br />
+He stood in the center of the settlement, looking just as shocked as everyone else. His dark coat was dusted from work, and there was a deep crease in his brow as his eyes scanned the group—lingering on you for a moment before locking onto Dom
+<br /><br />
+<<vincent>>
+    What’s going on?
+<</vincent>>
+<br />
+Dom stopped a few paces away, rolling his shoulders like he was getting comfortable.
+<br /><br />
+<<dom>>
+    Vincent, Vincent, Vincent… You know why I’m here.
+<</dom>>
+<br />
+Dom’s smirk faded.
+<br />
+<<dom>>
+    Champagne.
+<</dom>>
+<br />
+<<vincent>>
+    What?
+<</vincent>>
+<br />
+Vincent’s eyes flicked to the men surrounding him, then back to Dom.
+<br /><br />
+<<vincent>>
+    This is a place of a god. Please leave.
+<</vincent>>
+<br />
+Dom’s jaw clenched, and for a second, everything held still.
+<br /><br />
+<<dom>>
+    We will kill all of you and then burn down this place. Is that's what you want? 
+<</dom>>
+<br />
+<div id="option_interfere">
+    <<linkreplace 'Interfere and stop Dom'>>
+        <<run $('#option_ignore').hide()>>
+        Without thinking, you grabbed Dom’s arm, yanking him back.
+        <br /><br />
+        <<set $characters.dom.suspicion ??= 0>>
+        <<set $characters.dom.suspicion++>>
+        <<you>>
+            Enough!
+        <</you>>
+        <br />
+        Dom turned to you, eyes burning with rage.
+        <br /><br />
+        <<dom>>
+            What the hell do you think you’re doing?
+        <</dom>>
+        <br />
+        <<you>>
+            You came for champagne, not a slaughter. This isn’t a war, Dom. This is murder.
+        <</you>>
+        <br />
+        Around you, his men were shifting, gripping weapons tighter. 
+        <br /><br />
+        You took another step forward, lowering your voice.
+        <br /><br />
+        <<you>>
+            This doesn’t help you. You already won the underground. What’s next? Burning every settlement that doesn’t kneel fast enough?
+        <</you>>
+        <br />
+        Dom’s eyes flickered with something unreadable. Then, he let out a slow, exaggerated sigh.
+        <br /><br />
+        <<dom>>
+            You know what? Fine.
+        <</dom>>
+        <br />
+        <<dom>>
+            I’ll be reasonable.
+        <</dom>>
+        <br />
+        Dom signaled to his men, and just like that, the tension eased. No blood was spilled. Not today.
+        <br /><br />
+        But as you walked away, you couldn’t shake the feeling that you had just painted a target on your back.
+        <br /><br />
+        <<link 'Leave'>>
+            <<addhours 4>>
+            <<goto 'Settlement'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_ignore">
+    <<linkreplace 'Keep quiet'>>
+        <<set $characters.dom.quests.settlement_burned = true>>
+        <<set $player.quests.settlement_burned = true>>
+        <<set $characters.vincent.quests.dead = true>>
+        <<set $characters.vincent.quests.dead_day = $game.day>>
+        <<set $game.location.settlement = false>>
+        <<run $('#option_interfere').hide()>>
+        You knew what was coming. You saw the bloodlust in Dom’s eyes, the way his men shifted, itching to draw steel.
+        <br /><br />
+        You could stop this.
+        <br /><br />
+        But you didn’t.
+        <br /><br />
+        You stayed silent as Dom sneered at Vincent, as the last chance for peace slipped away.
+        <br /><br />
+        <<dom>>
+            Kill them.
+        <</dom>>
+        <br />
+        Vincent tried to run away, but Dom’s men were already on him. They hold him down as Dom' slid his knife into his stomach.
+        <br /><br />
+        <center>
+            <<image 'people/dom/vincent_stabbed.jpg'>>
+        </center>
+        <br /><br />
+        Vincent's people barely had time to react before the settlement was drowning in screams.
+        <br /><br />
+        Dom turned to you, watching for a reaction. Maybe he expected disgust. Maybe hesitation.
+        <br /><br />
+        You gave him neither.
+        <br /><br />
+        You just stood there.
+        <br /><br />
+        He grinned, satisfied, before turning back to the slaughter. 
+        <br /><br />
+        <<dom>>
+            Burn it down.
+        <</dom>>
+        <br />
+        The first building went up in an instant.
+        <br /><br />
+        Flames spread like hungry beasts, devouring the dry wooden supports and creeping up the metal walls, turning them into scorching hot barriers that trapped people inside. 
+        Smoke poured into the sky, thick and black, choking the air with the acrid stench of burning flesh and charred wood.
+        <br /><br />
+        And then, there was the church.
+        <br /><br />
+        That small white church—you had helped build it. It had been one of the only places in this godforsaken world that felt pure, untouched by violence. A place where people gathered not just to pray, but to find a shred of hope in a world that had long since abandoned it.
+        <br /><br />
+        Now, it was burning too.
+        <br /><br />
+        <center>
+            <<image 'people/dom/settlement_burn.jpg'>>
+        </center>
+        <br />
+        You could still see it—the place where you had helped raise the beams, hammer the nails, make something real in a world that took everything away. And now it was vanishing before your eyes.
+        <br /><br />
+        A thug, one of Dom’s men, had pinned a woman against the charred remains of a house. His hands were wrapped around her neck, the blade of a knife flashing in the flames' light. 
+        The woman’s eyes were wide with terror, her mouth gaping as she struggled, but it was useless. The thug’s grip was unrelenting.
+        <br /><br />
+        <center>
+            <<image 'people/dom/settlement_attack2.jpg'>>
+        </center>
+        <br /><br />
+        And then, a scream broke through the roar of the fire. It wasn’t the first. It wouldn’t be the last.
+        <br /><br />
+        Turning toward the noise, you saw another thug—tall, menacing—forcing a woman’s head into a barrel of water. Her hands flailed, but there was no one to help. Her legs kicked beneath the surface, her eyes wide with panic, as the thug pressed down harder.
+        <br /><br />
+        <center>
+            <<image 'people/dom/settlement_attack3.jpg'>>
+        </center>
+        <br />
+        The flames licked at the edges of the scene, casting a hellish glow over the whole settlement, but none of it felt real anymore. It was a nightmare, one you couldn’t wake from.
+        <br /><br />
+        <center>
+            <<image 'people/dom/settlement_burn.jpg'>>
+        </center>
+        <br /><br />
+        This was Dom’s world now.
+        <br /><br />
+        You had chosen your path, and the consequences were written in blood.
+        <br /><br />
+        <<link 'Leave'>>
+            <<addhours 6>>
+            <<goto 'Underground city'>>
+        <</link>>
+    <</linkreplace>>
+</div>
