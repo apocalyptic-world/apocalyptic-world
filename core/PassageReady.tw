@@ -17,7 +17,9 @@
 	farm: [],
 	lab: [],
 	guesthouse: [],
-	underground_office: []
+	underground_office: [],
+	hottub: [],
+	bathhouse: []
 }>>
 <<set 
 	$game.avatars = {},
@@ -31,16 +33,18 @@
 >>
 
 <<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
-  <<if timeBetween('08:00', '09:00')>>
-	  <<run _charactersInLocation['kitchen'].push('blair')>>
-  <</if>>
-  <<if timeBetween('22:00', '08:00')>>
-	  <<run _charactersInLocation['bedroom'].push('blair')>>
-  <</if>>
-  
-  <<if timeBetween('12:00', '14:00')>>
-	  <<run _charactersInLocation['farm'].push('blair')>>
-  <</if>>
+  	<<if timeBetween('08:00', '09:00')>>
+		<<run _charactersInLocation['kitchen'].push('blair')>>
+  	<</if>>  
+  	<<if timeBetween('12:00', '14:00')>>
+		<<run _charactersInLocation['farm'].push('blair')>>
+  	<</if>>
+  	<<if timeBetween('23:00', '01:00') && [4, 7].includes(($gameDate.getDay() || 7)) && ($game.location?.hottub ?? false)>>
+		<<run _charactersInLocation['bathhouse'].push('blair')>>
+		<<run _charactersInLocation['hottub'].push('blair')>>
+	<<elseif timeBetween('22:00', '08:00')>>
+		<<run _charactersInLocation['bedroom'].push('blair')>>
+  	<</if>>
 <</if>>
 
 <<if isMetChar('rodger')>>
