@@ -17,6 +17,16 @@ You beat his ass and cuff him as he lies on the ground.
 <<include 'NPC info'>>
 <br />
 <<set _wantedLink = 'Bring ' + _wantedPron + ' in'>>
+
+<<if !$wanted[$wantedId].gender && !$wanted[$wantedId].deal && setup.percentageChance(100)>>
+	<<sayNpc $wanted[$wantedId]>>
+		Stop! Listen me. Lets make a deal.
+	<</sayNpc>>
+	<br />
+	<<link 'Listen to her offer'>>
+		<<goto 'Wanted - deal #1'>>
+	<</link>>
+<</if>>
 <<link `_wantedLink`>>
 	<<goto 'Wanted - collect reward'>>
 <</link>>
