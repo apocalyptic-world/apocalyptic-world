@@ -1,0 +1,47 @@
+:: Laura - breasts surgery NPC [bg-lab]
+<h1 class="ptitle">LAB</h1>
+<br /><br />
+<<laura>>
+    So who you have in mind?
+<</laura>>
+<br />
+<div id="breeder-girls">
+    <table id="slaves">
+    <<for _labSlaveI, _labSlave range $slaves>>
+        <<capture _labSlaveI, _labSlave>>
+            <<if [0, 2].includes(_labSlave.gender) || setup.getAge(_labSlave) < 18>>
+                <<continue>>
+            <</if>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>
+            <tr>
+                <td style="width: 300px">
+                    <span @class="''+_genderClass+''">
+                        <<link _labSlave.name>>
+                            <<run $('#breeder-girls').hide()>>
+                            <<addmins 30>>
+                            <<set $characters.laura.quests.productionSamples-->>
+                            <<if ($slaves[_labSlaveI].traitsLocked ?? []).includes('breeder')>>
+                                <<set _breederTraitLockedKey = setup.getKeyByValue($slaves[_labSlaveI].traitsLocked, 'breeder')>>
+                                <<run $slaves[_labSlaveI].traitsLocked.splice(_breederTraitLockedKey, 1)>>
+                            <</if>>
+                            <<run $slaves[_labSlaveI].traits.push('breeder')>>
+                            <<run $('#breeder-girls-give').show()>>
+                             <<replace ".breeder-girl-name">><<=setup.displayName(_labSlave)>><</replace>>
+                        <</link>>
+                    </span>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+    </table>
+</div>
+
+<div id="continue" style="display:none">
+    
+</div>
+
+
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Laura - lab talk'>>
+<</link>>
