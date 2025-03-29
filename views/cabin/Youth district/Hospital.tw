@@ -94,6 +94,50 @@
 			</tr>
         <</capture>>
     <</for>>
+		<<for _npcI, _npc range $slaves>>
+		<<capture _npcI, _npc>>
+			<<set _isSick = (typeof _npc.sick !== 'undefined')>>
+            <<if !_isSick>>
+                <<continue>>
+            <</if>>
+            <tr>
+				<td style="min-width: 25%">
+					<<if setup.getAge(_npc) < 18>>
+						<span @class="''+_genderClass+''">
+							<<link _npc.name>>
+								<<set $slaveId = _npcI>>
+								<<unset $guestId, $charId, $childId>>
+								<<set $tmpGirl = _npc>>
+								<<set $tmpGirlBack = 'Hospital'>>
+								<<goto 'Child view'>>
+							<</link>>
+						</span>
+					<<else>>
+						<span @class="''+_genderClass+''">
+                            <<=setup.displayName(_npc)>>
+						</span>
+
+						<<=setup.npcListInfo(_npc, _isSick, _isRest)>>
+					<</if>>
+				</td>
+				<td>
+					<<if [0,2].includes(_npc.gender) && setup.getAge(_npc) >= 17>>
+						Beauty: <<=_guest.beauty>>
+					<</if>>
+				</td>
+				<td>
+					Age: <<=setup.getAge(_npc)>>
+				</td>
+				<td>
+					<<if _npc.assignedTo>>
+						(<<=_npc.assignedTo>>)
+				 	 <<elseif typeof $player.companions['slave:' + _npcI] !== 'undefined'>>
+						(companion)
+				 	 <</if>>
+				</td>
+			</tr>
+        <</capture>>
+    <</for>>
 </table>
 <br />
 [[Back|Youth district]]

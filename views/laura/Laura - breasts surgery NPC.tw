@@ -5,11 +5,12 @@
     So who you have in mind?
 <</laura>>
 <br />
+<<unset $slaveId, $charId, $guestId, $childId>>
 <div id="breeder-girls">
     <table id="slaves">
     <<for _labSlaveI, _labSlave range $slaves>>
         <<capture _labSlaveI, _labSlave>>
-            <<if [0, 2].includes(_labSlave.gender) || setup.getAge(_labSlave) < 18>>
+            <<if [1].includes(_labSlave.gender) || setup.getAge(_labSlave) < 18>>
                 <<continue>>
             <</if>>
             <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>
@@ -18,17 +19,12 @@
                     <span @class="''+_genderClass+''">
                         <<link _labSlave.name>>
                             <<run $('#breeder-girls').hide()>>
-                            <<addmins 30>>
-                            <<set $characters.laura.quests.productionSamples-->>
-                            <<if ($slaves[_labSlaveI].traitsLocked ?? []).includes('breeder')>>
-                                <<set _breederTraitLockedKey = setup.getKeyByValue($slaves[_labSlaveI].traitsLocked, 'breeder')>>
-                                <<run $slaves[_labSlaveI].traitsLocked.splice(_breederTraitLockedKey, 1)>>
-                            <</if>>
-                            <<run $slaves[_labSlaveI].traits.push('breeder')>>
-                            <<run $('#breeder-girls-give').show()>>
-                             <<replace ".breeder-girl-name">><<=setup.displayName(_labSlave)>><</replace>>
+                            <<run $('#continue').show()>>
+                             <<replace ".breasts-name">><<=setup.displayName(_labSlave)>><</replace>>
+                             <<set $slaveId = _labSlaveI>>
                         <</link>>
                     </span>
+                      (<<=_labSlave.breasts>>)
                 </td>
             </tr>
         <</capture>>
@@ -37,11 +33,51 @@
 </div>
 
 <div id="continue" style="display:none">
-    
+    <<laura>>
+        You have choosen <span class="breasts-name"></span>. And what size of breasts do you want?
+    <</laura>>
+    <br />
+    <<for _size range ['small', 'medium', 'big']>>
+        <<capture _size>>
+            <<link _size>>
+                <<run $('#continue').hide()>>
+                <<run $('#done').show()>>
+                <<if typeof $slaveId !== 'undefined'>>
+                    <<set _npc = $slaves[$slaveId]>>
+                <<elseif typeof $guestId !== 'undefined'>>
+                    <<set _npc = $guests[$guestId]>>
+                <</if>>
+                <<set _npc.breasts = _size>>
+                <<set _npc.sick = {
+                    days: 5,
+                    desc: 'breasts surgery',
+                    id: 'breasts_surgery'
+                }>>
+                <<replace ".breasts-size">><<=_size>><</replace>>
+            <</link>>
+        <</capture>>
+    <</for>>
 </div>
 
+<div id="done" style="display:none">
+    <strong>
+        You choose <span class="breasts-size"></span> size for <span class="breasts-name"></span>
+    </strong>
+    <br /><br />
+    <center>
+        <<image 'places/lab/breasts_surgery.jpg'>>
+    </center>
+    <br /><br />
+    <<laura>>
+        Don't worry. I will take good care of her. She will need some recovery time too so don't expect her to be working tomorrow.
+    <</laura>>
+    <br />
+    The girl gave you a final glance before closing her eyes, trusting in the process.
+    As the Laura prepared her tools, you stepped back, arms crossed, listening to the distant echoes of a world that had long since fallen apart.
+</div>
 
+<br /><br />
 <<link 'Leave'>>
-    <<addmins 5>>
+    <<addmins 120>>
     <<goto 'Laura - lab talk'>>
 <</link>>
