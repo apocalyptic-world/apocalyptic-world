@@ -20,3 +20,18 @@ setup.baseIntruderChance = function ()
 
     return setup.percentageChance(_chance)
 }
+
+setup.filterNPCs = function(list, criteria) {
+    return list.reduce((result, npc, index) => {
+        if (Object.entries(criteria).every(([key, value]) => {
+            if (typeof value === 'number') {
+                return npc[key] >= value;
+            }
+            return npc[key] === value;
+        })) {
+            result[npc.gender] ??= [];
+            result[npc.gender].push(index);
+        }
+        return result;
+    }, {});
+};

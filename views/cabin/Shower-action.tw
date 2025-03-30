@@ -41,6 +41,17 @@
 	<</for>>
 <</if>>
 
+<<if (!$game.locationEvents?.shower)>>
+	<<set _hornyBlondes = setup.filterNPCs($guests, { hair: 'blonde', horny: 60, 'virgin': false})>>
+	<<if setup.percentageChance(20) && (_hornyBlondes[0] ?? []).length >= 2 && recall($suppCode)>>
+		<<set _hornyBlondes = _hornyBlondes[0].shuffle()>>
+		<<set $tmpEvent = {
+			id1: _hornyBlondes[0],
+			id2: _hornyBlondes[1]
+		}>>
+		<<goto 'Shower - threesome'>>
+	<</if>>
+<</if>>
 <<link 'Back'>>
 	<<if $isBathhouse>>
 		<<goto 'Bathhouse'>>
