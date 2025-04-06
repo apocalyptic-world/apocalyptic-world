@@ -1,28 +1,33 @@
 :: Car mini game - race 
 
-<<newguy>>
+<<set _choices = 6>>
+<<set _correctAnswer = randomInteger(0, (_choices - 1))>>
 <div id="time-bar-container" style="width: 100%; height: 25px; background: #ddd; border-radius: 10px; margin: 10px auto; max-width: 400px;">
   <div id="time-bar" style="width: 100%; height: 100%; border-radius: 10px;"></div>
 </div>
 
 <div class="cars">
-    <<for _i to 0; _i < 4; _i++>>
-        <<set _url = "https://via.placeholder.com/100x60?text=Car" + (_i + 1)>>
-    <img @src="_url"
-        style="width: 200px; height: 120px; margin: 10px; border-radius: 8px; cursor: pointer;"
-        data-index="<<=_i>>"
-        class="car-image">
+    <<for _i to 0; _i < _choices; _i++>>
+        <<if _i === _correctAnswer>>
+          <<set _url = "images/places/race_stadium/race_choice_correct.jpg">>
+        <<else>>
+          <<set _url = "images/places/race_stadium/race_choice" + (_i + 1) + ".jpg">>
+        <</if>>
+        
+        <img @src="_url"
+            style="width: 200px; height: 120px; margin: 10px; border-radius: 8px; cursor: pointer;"
+            data-index="<<=_i>>"
+            class="race-choice">
     <</for>>
 </div>
 
-<div id="message" style="margin-top: 20px; font-weight: bold;"></div>
-
 <script>
-(function() {
+function raceGame() {
   const maxTime = 5.0;
   let timeLeft = maxTime;
   let blinking = false;
-  const correctIndex = State.variables.correctIndex;
+  const correctIndex = SugarCube.State.variables.correctIndex;
+  console.log(correctIndex);
   const timeBar = document.getElementById("time-bar");
 
   const timer = setInterval(() => {
@@ -30,12 +35,10 @@
     const percent = Math.max((timeLeft / maxTime) * 100, 0);
     timeBar.style.width = percent + "%";
 
-    // Green to red color
     const red = Math.min(255, Math.round((1 - timeLeft / maxTime) * 255));
     const green = Math.min(255, Math.round((timeLeft / maxTime) * 200));
     timeBar.style.backgroundColor = `rgb(${red}, ${green}, 50)`;
 
-    // Blinking when under 20%
     if (percent <= 20 && !blinking) {
       blinking = true;
       timeBar.classList.add("blinking");
@@ -43,45 +46,37 @@
 
     if (timeLeft <= 0) {
       clearInterval(timer);
-      endGame("⏰ Time's up! Game over.");
+      SugarCube.Engine.play(SugarCube.State.variables.carRace.passageLost);
     }
   }, 50);
 
-  // Handle image clicks
   const images = document.querySelectorAll(".car-image");
   images.forEach(img => {
     img.addEventListener("click", () => {
       clearInterval(timer);
       const index = parseInt(img.dataset.index);
       if (index === correctIndex) {
-        document.getElementById("message").textContent = "✅ Correct!";
-        State.variables.round++;
-        if (State.variables.round > State.variables.totalRounds) {
-          endGame("🏁 You win! All rounds complete.");
+        SugarCube.State.variables.round++;
+        if (SugarCube.State.variables.round > State.variables.totalRounds) {
+          SugarCube.Engine.play(SugarCube.State.variables.carRace.passageWon);
         } else {
-          State.variables.correctIndex = Math.floor(Math.random() * 4);
-          Engine.play("game");
+          SugarCube.State.variables.correctIndex = Math.floor(Math.random() * 4);
+          SugarCube.Engine.play('Car mini game - race');
         }
       } else {
-        endGame("❌ Wrong car! Game over.");
+        SugarCube.Engine.play(SugarCube.State.variables.carRace.passageLost);
       }
     });
   });
+};
 
-  function endGame(msg) {
-    document.getElementById("message").textContent = msg;
-    setTimeout(() => {
-      Engine.play("start");
-    }, 2000);
-  }
-})();
+raceGame();
 </script>
-
 <style>
-    .cars {
+  .cars {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     #time-bar {
@@ -89,15 +84,15 @@
     }
 
     #time-bar {
-  transition: width 0.05s linear, background-color 0.1s linear;
-}
+      transition: width 0.05s linear, background-color 0.1s linear;
+    }
 
-.blinking {
-  animation: blink 0.5s infinite alternate;
-}
+  .blinking {
+    animation: blink 0.5s infinite alternate;
+  }
 
-@keyframes blink {
-  from { opacity: 1; }
-  to { opacity: 0.4; }
-}
+  @keyframes blink {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
+  }
 </style>

@@ -18,7 +18,7 @@
   	<<set _isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 4)>>
     <<grid outside underground 'Underground city' 'Underground city' 0 _isDisabled>>
   <</if>>
-  <<if ($game.location.settlement ?? false)>>
+  <<if ($game.location.settlement ?? false) && !$player?.quests?.settlement_burned>>
   	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
     <<grid outside settlement 'Settlement' 'Settlement' 0 _isDisabled>>
   <</if>>

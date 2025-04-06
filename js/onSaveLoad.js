@@ -85,6 +85,9 @@ Save.onLoad.add(function (save) {
     if ((variables.game.location.nursery ?? false) || (variables.game.location.library ?? false)) {
         variables.game.location.youth_district = true;
     }
+    if (variables.player?.quests?.settlement_burned && !variables.game.location?.settlement) {
+        variables.game.location.settlement = true;
+    }
 
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
         save.state.history[save.state.index].variables.characters.dom = {
