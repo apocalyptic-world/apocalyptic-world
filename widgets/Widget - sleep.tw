@@ -866,6 +866,12 @@
 		
 		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
+			<<if (setup.percentageChance(75))>>
+				<<set _orientation = 'straight'>>
+			<<else>>	
+				<<set _orientation = 'bisexual'>>
+			<</if>>
+			<<run $nursery[_nurseryI] = setup.setSexuality($nursery[_nurseryI], _orientation)>>
 			<<run $guests.push($nursery[_nurseryI])>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
