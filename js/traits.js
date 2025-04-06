@@ -46,17 +46,24 @@ setup.traits = {
 
 
 
-setup.getRandomTraits = function (count = 1, exclude) {
+setup.getRandomTraits = function (npc, count = 1) {
     const _traitsNotPair = {
         breeder: 'infertile',
         infertile: 'breeder'
     };
     const _traits = clone(setup.traits);
-    if (exclude) {
-        for (let excludeTrait in exclude) {
+    if (npc.traits ?? []) {
+        for (let excludeTrait in npc.traits) {
             delete _traits[exclude[excludeTrait]];
         }
     }
+
+    for (let _trait in _traits) {
+        if (_traits[_trait].gender && _traits[_trait].gender.indexOf(npc.gender) < 0) {
+            delete _traits[_trait];
+        }
+    }
+
     var shuffledTraits = Object.keys(_traits).sort((a, b) => 0.5 - Math.random());
     if (!shuffledTraits.length) {
         return [];

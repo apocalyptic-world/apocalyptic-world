@@ -67,6 +67,7 @@
 <<set _doctorCount = setup.getDoctors()>>
 <<set _miscarrieageChanceBase = 12>>
 <<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
+<<set _isLowFood = ($slaves.length + $guests.length) < setup.cabinInventory.count('food')>>
 
 <<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
@@ -277,6 +278,9 @@
 		// Starvation
 		<<if _isHeatWave>>
 			<<set $slaves[_i].food = -10>>
+		<</if>>
+		<<if _isLowFood>>
+			<<set $slaves[_i].happy -=2>>
 		<</if>>
 		<<if $slaves[_i].food <= 10>>
 			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
@@ -662,6 +666,10 @@
 					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
 					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
 				<</if>>
+				<<if setup.percentageChance(20) && _mistressSlave.corruption < 50>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s corruption')>>
+					<<set $slaves[_mistressSlaveI].corruption = Math.min(100, ($slaves[_mistressSlaveI].corruption + 1))>>
+				<</if>>
 			<</for>>
 		<</if>>
 
@@ -771,6 +779,9 @@
 		// Starvation
 		<<if _isHeatWave>>
 			<<set $guests[_guestI].food = -10>>
+		<</if>>
+		<<if _isLowFood>>
+			<<set $guests[_guestI].happy -=2>>
 		<</if>>
 		<<if $guests[_guestI].food <= 10>>
   			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>

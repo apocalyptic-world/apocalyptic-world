@@ -1,0 +1,103 @@
+:: Car mini game - race 
+
+<<newguy>>
+<div id="time-bar-container" style="width: 100%; height: 25px; background: #ddd; border-radius: 10px; margin: 10px auto; max-width: 400px;">
+  <div id="time-bar" style="width: 100%; height: 100%; border-radius: 10px;"></div>
+</div>
+
+<div class="cars">
+    <<for _i to 0; _i < 4; _i++>>
+        <<set _url = "https://via.placeholder.com/100x60?text=Car" + (_i + 1)>>
+    <img @src="_url"
+        style="width: 200px; height: 120px; margin: 10px; border-radius: 8px; cursor: pointer;"
+        data-index="<<=_i>>"
+        class="car-image">
+    <</for>>
+</div>
+
+<div id="message" style="margin-top: 20px; font-weight: bold;"></div>
+
+<script>
+(function() {
+  const maxTime = 5.0;
+  let timeLeft = maxTime;
+  let blinking = false;
+  const correctIndex = State.variables.correctIndex;
+  const timeBar = document.getElementById("time-bar");
+
+  const timer = setInterval(() => {
+    timeLeft -= 0.05;
+    const percent = Math.max((timeLeft / maxTime) * 100, 0);
+    timeBar.style.width = percent + "%";
+
+    // Green to red color
+    const red = Math.min(255, Math.round((1 - timeLeft / maxTime) * 255));
+    const green = Math.min(255, Math.round((timeLeft / maxTime) * 200));
+    timeBar.style.backgroundColor = `rgb(${red}, ${green}, 50)`;
+
+    // Blinking when under 20%
+    if (percent <= 20 && !blinking) {
+      blinking = true;
+      timeBar.classList.add("blinking");
+    }
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      endGame("⏰ Time's up! Game over.");
+    }
+  }, 50);
+
+  // Handle image clicks
+  const images = document.querySelectorAll(".car-image");
+  images.forEach(img => {
+    img.addEventListener("click", () => {
+      clearInterval(timer);
+      const index = parseInt(img.dataset.index);
+      if (index === correctIndex) {
+        document.getElementById("message").textContent = "✅ Correct!";
+        State.variables.round++;
+        if (State.variables.round > State.variables.totalRounds) {
+          endGame("🏁 You win! All rounds complete.");
+        } else {
+          State.variables.correctIndex = Math.floor(Math.random() * 4);
+          Engine.play("game");
+        }
+      } else {
+        endGame("❌ Wrong car! Game over.");
+      }
+    });
+  });
+
+  function endGame(msg) {
+    document.getElementById("message").textContent = msg;
+    setTimeout(() => {
+      Engine.play("start");
+    }, 2000);
+  }
+})();
+</script>
+
+<style>
+    .cars {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    }
+
+    #time-bar {
+        transition: width 0.05s linear;
+    }
+
+    #time-bar {
+  transition: width 0.05s linear, background-color 0.1s linear;
+}
+
+.blinking {
+  animation: blink 0.5s infinite alternate;
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0.4; }
+}
+</style>

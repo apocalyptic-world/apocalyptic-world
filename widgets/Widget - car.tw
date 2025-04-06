@@ -2,3 +2,15 @@
 <<widget carFuel>>
     <<set $player.car.fuel -= $args[0]>>
 <</widget>>
+
+<<widget carRace>>
+    <<set _props = _args[0]>>
+    <<set $carRace = {
+        passageWon: _props.won ?? null,
+		passageLost: _props.lost ?? null,
+        totalRounds: _props.rounds ?? 3,
+        round: 1,
+        timer: 5
+    }>>
+    <<goto 'Car mini game - race'>>
+<</widget>>
