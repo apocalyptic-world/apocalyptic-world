@@ -16,6 +16,10 @@
 		<<companionAdd 'guest' $guests.length>>
 		<<assignedTo _args[0] 'companion'>>
 	<</if>>
+	/* guests can only have some jobs */
+	<<if !['none', 'garden', 'nightclub'].includes(_args[0].assignedTo ?? 'none')>>
+		<<assignedTo _args[0] 'none'>>
+	<</if>>
 
 	<<companionRearange _companionKey>>
 	<<run $slaves.splice(_args[1], 1)>>
