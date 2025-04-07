@@ -1,7 +1,8 @@
 :: Car mini game - race 
-
+<h1 class="ptitle"><<=$carRace.title>></h1>
+<br />
 <<set _choices = 6>>
-<<set _correctAnswer = randomInteger(0, (_choices - 1))>>
+<<set $carRace.correctChoice = randomInteger(0, (_choices - 1))>>
 <div id="time-bar-container" style="width: 100%; height: 25px; background: #ddd; border-radius: 10px; margin: 10px auto; max-width: 400px;">
   <div id="time-bar" style="width: 100%; height: 100%; border-radius: 10px;"></div>
 </div>
@@ -26,7 +27,7 @@ function raceGame() {
   const maxTime = 5.0;
   let timeLeft = maxTime;
   let blinking = false;
-  const correctIndex = SugarCube.State.variables.correctIndex;
+  const correctIndex = SugarCube.State.variables.carRace.correctChoice;
   console.log(correctIndex);
   const timeBar = document.getElementById("time-bar");
 

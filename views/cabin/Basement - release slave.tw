@@ -27,6 +27,7 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 <<if $tmpGirl.relationship >= 30 && ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
 	<<link `_linkMove`>>
 		<<moveSlaveToGuest $tmpGirl $slaveId>>
+		<<unset $slaveId>>
 		<<goto 'Guest house'>>
 	<</link>>
 <</if>>
@@ -38,6 +39,7 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 	<<slaveRemove $slaveId>>
 
 	<<statsAdd 'slaves_released'>>
+	<<unset $slaveId>>
 	<<goto 'Basement'>>
 <</link>>
 
