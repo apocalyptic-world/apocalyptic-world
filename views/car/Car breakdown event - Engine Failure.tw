@@ -1,0 +1,143 @@
+
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+    The passing dunes become a blur as you drive through the featureless landscape, lost momentarily in your thoughts.  Suddenly your attention is yanked back to reality as you feel an unexpected rumble in the engine.  Moments later, the rumble grows to an violent shudder as the engine struggles to continue, only to lurch violently as the engine seizes.
+    <br /><br />
+    You grumble in frustration as you coast the disabled vehicle to a stop, the indicators on the dashboard making it clear that the damage to the car has caused the engine to fail.
+    <br /><br />
+
+	<<set _mechanics = setup.companions.getBySkill(variables().player.companions, 'mechanic')>>
+	<<if (_mechanics.length > 0)>>
+		<<set _mechanic = either(_mechanics)>>
+		<<set _mechanicName = _mechanic.name>>
+		<<set _what = setup.pronounceWhat(_mechanic, true)>> /* He/She */
+
+		<<if $backpack.has('car_part') >>
+			<<=_mechanicName>> gets out of the car and strides to the front to take a look under the hood, waving the steam out of <<=setup.pronounceWhos(_mechanic)>> face as it rises up from the engine block.
+			<br /><br />
+			<<sayNpc _mechanic>>
+			    Oof, you have to stop giving her such a beating.  She's not a masochist.
+			<</sayNpc>>
+			<br />
+			<<=_mechanicName>> gets to work, pulling out her spare toolkit, and one of the car parts you keep on hand for emergencies.  The rest of your companions mill about as you wait for <<=setup.pronounceWho(_mechanic)>> to complete the repairs, eyes alert for any sign of danger or activity on the horizon...
+			<br /><br />
+			After about an hour of work, <<=_mechanicName>> slaps the side of the car to get your attention.
+			<br /><br />
+			<<sayNpc _mechanic>>
+			    Okay, try it now!
+			<</sayNpc>>
+			<br />
+			You turn the key and make a wish, the car vibrating as the engine cycles and sputters, until suddenly it turns over with a satisfying roar.  <<=_mechanicName>> has once again shown <<=setup.pronounceWhos(_mechanic)>> skills under the hood.  You'll have to make sure to properly reward <<=setup.pronounceWho(_mechanic)>> when you get back home.  In the meantime, you get back on the road, to see what adventures it will bring.
+			<br /><br />
+
+			<<drop $backpack 'car_part' 1>>
+			<<set $player.car.health = Math.min($player.car.health + 10, 100)>>
+
+			<<link 'Leave'>>
+				<<addhours 1>>
+				<<goto 'Car - Explore'>>
+			<</link>>
+
+		<<else>>
+
+			<<=_mechanicName>> gets out of the car, looking pessimistic as <<=setup.pronounceWhat(_mechanic)>> walk around to the front to take a look under the hood.  <<=setup.pronounceWho(_mechanic)>> cough and sputter as <<=setup.pronounceWho(_mechanic)>>  waves the steam that rises up from the engine block out of <<=setup.pronounceWhos(_mechanic)>> face.
+			<br /><br />
+			<<sayNpc _mechanic>>
+			    You've been running her too hard.  I might be able to fix the problem if we had some parts, but I can't conjure them from thin air.
+			<</sayNpc>>
+			<br />
+			With a disappointed sigh, you disengage the brake and direct your team to grab onto the frame and start pushing, eyes ever alert for signs of danger.  Fortunately no threats arise to take advantage of your vulnerable state, though you know better than to let this happen again.  
+			<br/><br/>
+
+			<<if setup.companions.count() > 3>>
+				<<set _pushTime = 2>>
+				It's a long way home, but with <<=setup.companions.count()>> companions sharing the work, you do your best and make it home in a reasonable time.
+				<br/><br/>
+			<<elseif setup.companions.count() > 1>>
+				<<set _pushTime = 3>>
+				With only <<=setup.companions.count()>> companions to push, the trek back is arduous and seems to take forever.  You get back to the cabin exhausted, but at least on one piece..
+				<br/><br/>
+			<<else>>
+				<<set _pushTime = 6>>
+				You and your lone companion set out to push the car down the long trek back home.  You take turns steering to give each other a break, but the trip is exhausting.  Every downhill slope feels like a gift from heaven, and every incline is yet another hellish punishment for your lack of preparation.  But eventually, you make it back to the safety of the garage.
+				<br/><br/>
+			<</if>>
+
+			<<link 'Leave'>>
+				<<addhours _pushTime>>
+				<<goto 'Garage'>>
+			<</link>>
+
+		<</if>>
+
+	<<else>>
+
+		<<if $backpack.has('car_part') && ($player.int >= 70)>>
+			You get out of the car and walk around to the front to take a look under the hood, waving the steam out of your face as it rises up from the engine block.  Fortunately, you've spent enough time working with the vehicle in the garage to know the basics of how it functions, though it would be really handy to have an actual mechanic on hand right now...
+			<br /><br />
+			You get to work, inspecting the engine and trying to sort through the various signs of damage to trace the problem to its source.  It takes a while, but finally you work out where the failure originated, going to the trunk to get one of the car parts you keep on hand for emergencies.  The rest of your companions mill about as you complete the repairs, eyes alert for any sign of danger or activity on the horizon...
+			<br /><br />
+			After a couple of hours of work, you get back into the driver's seat and turn the key, the car vibrating as the engine cycles and sputters, until suddenly it turns over with a satisfying roar.  You smile with satisfaction, relieved that you are spared the arduous task of pushing the car back home.  
+			<br /><br />
+It took longer than it would have for a mechanic, but you still have some time to get back on the road.  You were not able to do anything about the existing damage to the car, so when you get back to the garage you will definitely have to have your mechanic give the vehicle some proper attention.
+			<br /><br />
+
+			<<drop $backpack 'car_part' 1>>
+
+			<<link 'Leave'>>
+				<<addhours 3>>
+				<<goto 'Car - Explore'>>
+			<</link>>
+
+		<<else>>
+
+			You get out of the car, wishing you had brought a mechanic along for the ride, as you walk around to the front to take a look under the hood.  You cough and sputter, waving the steam out of your face as it rises up from the engine block.
+			<br /><br />
+
+			<<if $backpack.has('car_part') >>
+				You have the parts available to fix the car, but your tinkering in the garage has not given you the knowledge you need to figure out a problem like this.
+				<br/><br/>
+			<<else>>
+				You've spent enough time working with the vehicle in the garage to know the basics of how it functions, and you think you can work out how to get the car running again, but you do not have the parts necessary to repair the damage to the engine.
+				<br/><br/>
+			<</if>>
+
+			<<if setup.companions.count() > 3>>
+				<<set _pushTime = 2>>
+				With a disappointed sigh, you disengage the brake and direct your companions to grab onto the frame and start pushing, eyes ever alert for signs of danger.  Fortunately no threats arise to take advantage of your vulnerable state, though you know better than to let this happen again.  
+				<br/><br/>
+
+				It's a long way home, but with <<=setup.companions.count()>> companions sharing the work, you do your best and make it home in a reasonable time.
+				<br/><br/>
+			<<elseif setup.companions.count() > 1>>
+				<<set _pushTime = 3>>
+				With a disappointed sigh, you disengage the brake and direct your companions to grab onto the frame and start pushing, eyes ever alert for signs of danger.  Fortunately no threats arise to take advantage of your vulnerable state, though you know better than to let this happen again.  
+				<br/><br/>
+
+				With only <<=setup.companions.count()>> companions to push, the trek back is arduous and seems to take forever.  You get back to the cabin exhausted, but at least on one piece..
+				<br/><br/>
+			<<elseif setup.companions.count() > 1>>
+				<<set _pushTime = 6>>
+				With a disappointed sigh, you disengage the brake and direct your companion to grab onto the frame and start pushing, eyes ever alert for signs of danger.  Fortunately no threats arise to take advantage of your vulnerable state, though you know better than to let this happen again.  
+				<br/><br/>
+
+				You and your lone companion take on the laborious task of pushing the car along the long trek back home.  You take turns steering to give each other a break, but the trip is exhausting.  Every downhill slope feels like a gift from heaven, and every incline is yet another hellish punishment for your lack of preparation.  But eventually, you make it back to the safety of the garage.
+				<br/><br/>
+			<<else>>
+				<<set _pushTime = 8>>
+				You picked a lousy time to go on a solo drive by yourself.  Opening the driver's side window, you lean in and grab the steering wheel to guide the car as you begin the slow, painstaking process of pushing the car along on your own.  It is truly a miracle that you don't get run down by a bunch of bandits, though they might just take pity on you.
+				<br/><br/>
+				Everyone is long since in bed by the time you drag yourself through the garage.  Wearily you park the car back in its place and head inside to let your household know you are still alive.
+				<br/><br/>
+			<</if>>
+
+			<<link 'Leave'>>
+				<<addhours _pushTime>>
+				<<goto 'Garage'>>
+			<</link>>
+
+		<</if>>
+
+	<</if>>
+
+
