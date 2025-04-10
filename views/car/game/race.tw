@@ -9,7 +9,7 @@
 
 <div class="cars">
     <<for _i to 0; _i < _choices; _i++>>
-        <<if _i === _correctAnswer>>
+        <<if _i === $carRace.correctChoice>>
           <<set _url = "images/places/race_stadium/race_choice_correct.jpg">>
         <<else>>
           <<set _url = "images/places/race_stadium/race_choice" + (_i + 1) + ".jpg">>
@@ -17,18 +17,17 @@
         
         <img @src="_url"
             style="width: 200px; height: 120px; margin: 10px; border-radius: 8px; cursor: pointer;"
-            data-index="<<=_i>>"
+            @data-index="_i"
             class="race-choice">
     <</for>>
 </div>
 
 <script>
 function raceGame() {
-  const maxTime = 5.0;
+  const maxTime = SugarCube.State.variables.carRace.timer;
   let timeLeft = maxTime;
   let blinking = false;
   const correctIndex = SugarCube.State.variables.carRace.correctChoice;
-  console.log(correctIndex);
   const timeBar = document.getElementById("time-bar");
 
   const timer = setInterval(() => {
@@ -51,17 +50,19 @@ function raceGame() {
     }
   }, 50);
 
-  const images = document.querySelectorAll(".car-image");
+  const images = document.querySelectorAll(".race-choice");
   images.forEach(img => {
     img.addEventListener("click", () => {
       clearInterval(timer);
       const index = parseInt(img.dataset.index);
+      console.log(index);
+      console.log('correctIndex', correctIndex);
       if (index === correctIndex) {
-        SugarCube.State.variables.round++;
-        if (SugarCube.State.variables.round > State.variables.totalRounds) {
+        SugarCube.State.variables.carRace.round++;
+        if (SugarCube.State.variables.carRace.round > SugarCube.State.variables.carRace.totalRounds) {
           SugarCube.Engine.play(SugarCube.State.variables.carRace.passageWon);
         } else {
-          SugarCube.State.variables.correctIndex = Math.floor(Math.random() * 4);
+          SugarCube.State.variables.carRace.correctIndex = Math.floor(Math.random() * 4);
           SugarCube.Engine.play('Car mini game - race');
         }
       } else {

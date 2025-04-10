@@ -1,6 +1,31 @@
 :: Race stadium - race [bg-race-stadium]
 <h1 class="ptitle">RACE STADIUM</h1>
 <br />
-<<link '🏁 Start race'>>
-    <<carRace 'RACE STADIUM' {won: 'Race stadium - race won', lost: 'Race stadium - race lost'}>>
+The race line is set. Four machines stand ready, each one more monstrous than the last, engines grumbling in anticipation, smoke curling up from cracked exhaust pipes. 
+The scene is like something out of a nightmare—or a dream, depending on how you look at it.
+<br /><br />
+<center>
+    <<image 'places/race_stadium/first_race2.jpg'>>
+</center>
+<br /><br />
+The race is a death trap wrapped in glory. 
+You’ve heard the stories: engines overheating mid-drift, spike traps in turn three, racers disappearing in the tunnels under lap two. 
+Hell, some say the Syndicate rigs the whole thing just to see who’s desperate enough to survive it.
+<br /><br />
+<<if $player.money >= 30>>
+    <<link '🏁 Start race'>>
+        <<set $player.money -= 30>>
+        <<addmins 30>>
+        <<carRace 'RACE STADIUM' `{won: 'Race stadium - race won', lost: 'Race stadium - race lost'}`>>
+    <</link>>
+    <<linkdesc>>
+        -30 caps
+    <</linkdesc>>
+<<else>>
+    <strong>Not enough caps (30)</strong>
+    <br /><br />
+<</if>>
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Car - Race stadium'>>
 <</link>>
