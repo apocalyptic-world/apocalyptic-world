@@ -453,6 +453,9 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
+		if (npc?.family?.father === 'mc') {
+			output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative" data-balloon-pos="up-right"></span>';
+		}
 		if (isSick && !npc.sleeping) {
 			output += '<span class="sick-info">(sick)</span>';
 		} else if (isRest && !npc.sleeping) {
