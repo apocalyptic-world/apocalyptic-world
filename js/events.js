@@ -23,15 +23,25 @@ setup.baseIntruderChance = function ()
 
 setup.filterNPCs = function(list, criteria) {
     return list.reduce((result, npc, index) => {
-        if (Object.entries(criteria).every(([key, value]) => {
-            if (typeof value === 'number') {
+        const passes = Object.entries(criteria).every(([key, value]) => {
+            if (key.endsWith('_in')) {
+                const actualKey = key.slice(0, -3);
+                return Array.isArray(value) && value.includes(npc[actualKey]);
+            } else if (key.endsWith('_not')) {
+                const actualKey = key.slice(0, -4);
+                return Array.isArray(value) && !value.includes(npc[actualKey]);
+            } else if (typeof value === 'number') {
                 return npc[key] >= value;
+            } else {
+                return npc[key] === value;
             }
-            return npc[key] === value;
-        })) {
+        });
+
+        if (passes) {
             result[npc.gender] ??= [];
             result[npc.gender].push(index);
         }
+
         return result;
     }, {});
 };
