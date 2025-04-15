@@ -75,23 +75,25 @@
 			Dialog.open();
 		<</script>>
 	<</link>>
-	<<link 'Change name color'>>
-		<<script>>
-			Dialog.setup("NPC customize - name color", "NPC customize - name color");
-			Dialog.wiki(Story.get("NPC customize - name color").processText());
-			Dialog.open();
-		<</script>>
-	<</link>>
-	<<link 'Notes'>>
-		<<dialog 'Notes'>>	
-			Notes:<<textbox "_notes" `$tmpGirl.notes ?? ''`>>
-			<<link 'OK'>>
-				<<set $tmpGirl.notes = _notes>>
-				<<dialogclose>>	
-				<<goto 'NPC customize'>>
-			<</link>>
-		<</dialog>>	
-	<</link>>
+<</if>>
+<<link 'Change name color'>>
+	<<script>>
+		Dialog.setup("NPC customize - name color", "NPC customize - name color");
+		Dialog.wiki(Story.get("NPC customize - name color").processText());
+		Dialog.open();
+	<</script>>
+<</link>>
+<<link 'Notes'>>
+	<<dialog 'Notes'>>	
+		Notes:<<textbox "_notes" `$tmpGirl.notes ?? ''`>>
+		<<link 'OK'>>
+			<<set $tmpGirl.notes = _notes>>
+			<<dialogclose>>	
+			<<goto 'NPC customize'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
+<<if setup.getAge($tmpGirl) >= 18>>
 	<<link 'Custom pack'>>
 		<<script>>
 			Dialog.setup("NPC customize - custom pack", "NPC customize - custom pack");
