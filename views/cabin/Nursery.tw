@@ -27,13 +27,17 @@
 			<<if setup.percentageChance(_sleepingChance)>>
 				<<set _nursery.sleeping = true>>
 			<</if>>
+			<<set _customColorStyle = ''>>
+			<<if typeof _nursery.color !== 'undefined' >>
+				<<set _customColorStyle = ' npc-color color-' + _nursery.color >>
+			<</if>>
 			<tr class="item">
 				<td style="width: 300px">
 					<<set _motherNpc = ''>>
 					<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
 						<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
 					<</if>>
-					<span @class="''+_genderClass+''">
+					<span @class="_genderClass + _customColorStyle">
 						<span data-balloon-length="medium" @aria-label="Mother: '' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
 								<<unset $guestId, $charId, $slaveId>>
