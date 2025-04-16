@@ -32,7 +32,11 @@
     <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
         <<include 'MC fuck flaccid'>>
     <</if>>
-    <<if $sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')>>
+    <<if 
+        ($sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')) || 
+        ($sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('cumslut')) || 
+        ($sexAction === 'cum_in_throat' && $tmpGirl.traits.includes('cumslut'))
+    >>
         <<set $tmpGirl.horny = Math.min(($tmpGirl.horny += 30), 100)>>
     <</if>>
     <<if _showSex>>
