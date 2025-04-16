@@ -4,13 +4,13 @@ setup.actionText.female = {
         "%name% moans softly as you fuck her ass."
     ],
     threesome_f_anal_a_pussy_lick: [
-        "You fuck %name% in the ass while she licks %name2%'s pussy!"
+        "You fuck %name% in the ass, while she licks %name2%'s pussy!"
     ],
     threesome_f_anal_b_bj: [
-        "You fuck %name% in the ass while she sucks %name2%'s strapon!"
+        "You fuck %name% in the ass, while she sucks %name2%'s strapon!"
     ],
     threesome_f_anal_b_pussy: [
-        "You fuck %name% in the ass while %name2% fucks her with a strapon!"
+        "You fuck %name% in the ass, while %name2% fucks her with a strapon!"
     ],
     threesome_f_anal_fingering: [
         "Your fingers dig deep into %name%'s tight asshole!"
@@ -19,25 +19,25 @@ setup.actionText.female = {
         "You moan softly as %name% fucks your ass with a strapon."
     ],
     threesome_f_anal_reverse_cum: [
-        "You start to cum while %name%'s strapon is still in your ass!"
+        "You start to cum, while %name%'s strapon is still in your ass!"
     ],
     threesome_f_bj: [
         "%name% and %name2% suck your hard dick in turn with their warm mounths and agile tongues!"
     ], 
     threesome_f_bj_anal_reverse: [
-        "%name% gives you a blowjob while %name2% fucks your ass with her strapon."
+        "%name% gives you a blowjob, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_bj_b_anal: [
-        "%name% sucks your cock while %name2% fucks her in the ass with a strapon!"
+        "%name% sucks your cock, while %name2% fucks her in the ass with a strapon!"
     ],
     threesome_f_bj_b_pussy: [
-        "%name% sucks your cock while %name2% fucks her with a strapon!"
+        "%name% sucks your cock, while %name2% fucks her with a strapon!"
     ],
     threesome_f_bj_reverse: [
         "You suck %name%'s strapon."
     ], 
     threesome_f_bj_reverse_anal_reverse: [
-        "%name% fucks your mouth while %name2% fucks your ass with their strapons."
+        "%name% fucks your mouth, while %name2% fucks your ass with their strapons."
     ],
     threesome_f_cum_in_ass: [
         "With a groan, you cum in %name%'s ass."
@@ -79,7 +79,7 @@ setup.actionText.female = {
         "%name% and %name2% give you a nice handjob, a good start!"
     ],
     threesome_f_handjob_anal_reverse: [
-        "%name% gives you a handjob while %name2% fucks your ass with her strapon."
+        "%name% gives you a handjob, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_handjob_cum: [
         "You jerk off with %name% and %name2%'s hands tightly gripped around your cock."
@@ -91,25 +91,25 @@ setup.actionText.female = {
         "You and %name2% lick %name%'s nipples, and squeeze her tits hard!"
     ],
     threesome_f_nipple_lick_anal_reverse: [
-        "You lick %name%'s nipple while %name2% fucks your ass with her strapon."
+        "You lick %name%'s nipple, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_pussy: [
         "You fuck %name%'s tight pussy"
     ],
     threesome_f_pussy_a_pussy: [
-        "You fuck %name% while she fucks %name2% with a strapon!"
+        "You fuck %name%, while she fucks %name2% with a strapon!"
     ],
     threesome_f_pussy_a_pussy_lick: [
-        "You fuck %name% while she licks %name2%'s pussy!"
+        "You fuck %name%, while she licks %name2%'s pussy!"
     ],
     threesome_f_pussy_a_sn: [
-        "You fuck %name% while she and %name2% lick each others pussy!"
+        "You fuck %name%, while she and %name2% lick each others pussy!"
     ],
     threesome_f_pussy_anal_reverse: [
-        "You fuck %name%'s pussy while %name2% fucks your ass with her strapon."
+        "You fuck %name%'s pussy, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_pussy_b_anal: [
-        "You fuck %name% while %name2% fucks her in the ass with a strapon!"
+        "You fuck %name%, while %name2% fucks her in the ass with a strapon!"
     ],
     threesome_f_pussy_fingering: [
         "You finger %name% and %name2%'s pussies, they are getting very wet!"
@@ -118,7 +118,7 @@ setup.actionText.female = {
         "You lick %name%'s clit, she seems to like it a lot!"
     ],
     threesome_f_pussy_lick_anal_reverse: [
-        "You lick %name%'s pussy while %name2% fucks your ass with her strapon."
+        "You lick %name%'s pussy, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_pussy_pussy_lick: [
         "You fuck %name%'s tight pussy, while licking %name2%'s clit."
@@ -127,7 +127,7 @@ setup.actionText.female = {
         "You lick %name%'s pussy, while she licks %name2%'s pussy, who is sucking your dick!"
     ],
     threesome_f_sn_anal_reverse: [
-        "You lick %name%'s pussy while she gives you a blowjob and %name2% fucks your ass with her strapon."
+        "You lick %name%'s pussy, while she gives you a blowjob and %name2% fucks your ass with her strapon."
     ],
     threesome_f_titjob: [
         "%name% and %name2% give you a nice titjob!"
@@ -139,13 +139,13 @@ setup.actionText.female = {
         "%name% screams as %name2% and you fuck her ass at the same time."
     ],
     threesome_m_anal_b_bj: [
-        "You fuck %name% in the ass while she sucks %name2%'s dick!"
+        "You fuck %name% in the ass, while she sucks %name2%'s dick!"
     ],
     threesome_m_anal_b_handjob: [
-        "You fuck %name% in the ass while she gives %name2% a handjob."
+        "You fuck %name% in the ass, while she gives %name2% a handjob."
     ],
     threesome_m_anal_b_pussy: [
-        "You fuck %name% in the ass while %name2% fucks her pussy!"
+        "You fuck %name% in the ass, while %name2% fucks her pussy!"
     ],
     threesome_m_anal_fingering: [
         "Your fingers dig deep into %name%'s tight asshole!"
@@ -157,7 +157,7 @@ setup.actionText.female = {
         "%name% sucks %name2% and you in turn, with her warm mounth and agile tongue!"
     ],
     threesome_m_bj_b_pussy_lick: [
-        "%name% sucks your cock while %name2% licks her pussy!"
+        "%name% sucks your cock, while %name2% licks her pussy!"
     ],
     threesome_m_cum_in_ass: [
         "%name2% and you cum in %name%'s ass."
@@ -199,13 +199,13 @@ setup.actionText.female = {
         "You fuck %name%'s tight pussy"
     ],
     threesome_m_pussy_b_anal: [
-        "You fuck %name% while %name2% fucks her in the ass!"
+        "You fuck %name%, while %name2% fucks her in the ass!"
     ],
     threesome_m_pussy_b_bj: [
-        "You fuck %name% while she gives %name2% a blowjob!"
+        "You fuck %name%, while she gives %name2% a blowjob!"
     ],
     threesome_m_pussy_b_handjob: [
-        "You fuck %name% while she gives %name2% a handjob!"
+        "You fuck %name%, while she gives %name2% a handjob!"
     ],
     threesome_m_pussy_b_pussy: [
         "%name% moeans as %name2% and you fuck her pussy at the same time."
@@ -218,5 +218,152 @@ setup.actionText.female = {
     ],
     threesome_m_titjob: [
         "%name% gives you a nice titjob!"
+    ],
+    threesome_t_anal: [
+        "%name% moans softly as you fuck her ass."
+    ],
+    threesome_t_anal_b_bj: [
+        "You fuck %name% in the ass, while she sucks %name2%'s dick!"
+    ],
+    threesome_t_anal_b_handjob: [
+        "You fuck %name% in the ass, while she gives %name2% a handjob!"
+    ],
+    threesome_t_anal_b_pussy: [
+        "You fuck %name% in the ass, while %name2% fucks her pussy!"
+    ],
+    threesome_t_anal_fingering: [
+        "Your fingers dig deep into %name%'s tight asshole!"
+    ],
+    threesome_t_anal_reverse: [
+        "You moan softly as %name% fucks your ass with a strapon."
+    ],
+    threesome_t_anal_reverse_cum: [
+        "You start to cum, while %name%'s strapon is still in your ass!"
+    ],
+    threesome_t_bj: [
+        "%name% and %name2% suck your hard dick in turn with their warm mounths and agile tongues!"
+    ], 
+    threesome_t_bj_anal_reverse: [
+        "%name% gives you a blowjob, while %name2% fucks your ass."
+    ],
+    threesome_t_bj_a_anal: [
+        "%name% sucks your cock, while she fucks %name2% in the ass with her strapon!"
+    ],
+    threesome_t_bj_b_anal: [
+        "%name% sucks your cock, while %name2% fucks her in the ass!"
+    ],
+    threesome_t_bj_b_pussy: [
+        "%name% sucks your cock, while %name2% fucks her pussy!"
+    ],
+	threesome_t_bj_bj_reverse: [
+        "%name% sucks your cock, while you suck %name2%'s."
+    ], 
+    threesome_t_bj_reverse: [
+        "You suck %name%'s strapon."
+    ], 
+    threesome_t_bj_reverse_anal_reverse: [
+        "%name% fucks your mouth, while %name2% fucks your ass."
+    ],
+    threesome_t_cum_in_ass: [
+        "With a groan, you cum in %name%'s ass."
+    ],
+    threesome_t_cum_in_mouth: [
+        "You fill %name% and %name2%'s mouths with your cum."
+    ],
+    threesome_t_cum_in_pussy: [
+        "You continue to fuck %name% non-stop and pump her pussy full of your seed."
+    ],
+    threesome_t_cum_on_ass: [
+        "With a groan, you cum on %name%'s ass."
+    ],
+    threesome_t_cum_on_back: [
+        "With a groan, you cum on %name% and %name2%'s back sides."
+    ],
+    threesome_t_cum_on_face: [
+        "You cum all over %name% and %name2%'s faces."
+    ],
+    threesome_t_cum_on_stomach: [
+        "You pull out and finish on %name% and %name2%'s stomachs."
+    ],
+    threesome_t_cum_on_tits: [
+        "Your cum covers %name% and %name2%'s breasts."
+    ],
+    threesome_t_cum_throat: [
+        "You grab %name%'s head and hold her as you thrust your throbbing cock deep into her throat. %name2% strokes your tensing balls as she feels you cum deep inside %name%'s throat.."
+    ],
+    threesome_t_dp: [
+        "You take turns grabbing %name% and %name2%'s heads with your hands, driving your hard dick deep into their throats."
+    ],
+    threesome_t_footjob: [
+        "You pleasure yourself with %name% and %name2%'s feet."
+    ],
+    threesome_t_footjob_cum: [
+        "You cover %name% and %name2%'s feet with your seed."
+    ],    
+    threesome_t_handjob: [
+        "%name% and %name2% give you a nice handjob, a good start!"
+    ],
+	threesome_t_handjob_a_anal: [
+        "%name% gives you a nice handjob, while fucking %name2%'s ass with her strapon."
+    ],
+    threesome_t_handjob_anal_reverse: [
+        "%name% gives you a handjob, while %name2% fucks your ass with her strapon."
+    ],
+    threesome_t_handjob_b_bj: [
+        "%name% gives you a nice handjob, while sucking %name2%'s cock."
+    ],
+    threesome_t_handjob_cum: [
+        "You jerk off with %name% and %name2%'s hands tightly gripped around your cock."
+    ],
+    threesome_t_handjob_b_pussy: [
+        "%name% gives you a nice handjob, while %name2% fucks her pussy."
+    ],
+    threesome_t_kissing: [
+        "%name% and %name2% are kissing you and each other sweetly."
+    ],
+    threesome_t_nipple_lick: [
+        "You and %name2% lick %name%'s nipples, and squeeze her tits hard!"
+    ],
+    threesome_t_nipple_lick_anal_reverse: [
+        "You lick %name%'s nipple, while %name2% fucks your ass with her strapon."
+    ],
+    threesome_t_pussy: [
+        "You fuck %name%'s tight pussy"
+    ],
+    threesome_t_pussy_a_sn: [
+        "You fuck %name%, while she and %name2% lick each other!"
+    ],
+    threesome_t_pussy_anal_reverse: [
+        "You fuck %name%'s pussy, while %name2% fucks your ass."
+    ],
+    threesome_t_pussy_b_anal: [
+        "You fuck %name%, while %name2% fucks her in the ass!"
+    ],
+	threesome_t_pussy_b_bj: [
+        "You fuck %name%, while she gives %name2% a blowjob!"
+    ],
+	threesome_t_pussy_bj_reverse: [
+        "You fuck %name%, while giving %name2% a blowjob!"
+    ],
+    threesome_t_pussy_fingering: [
+        "You finger %name%'s pussy, she is getting very wet!"
+    ],
+    threesome_t_pussy_lick: [
+        "You lick %name%'s clit, she seems to like it a lot!"
+    ],
+    threesome_t_pussy_lick_anal_reverse: [
+        "You lick %name%'s pussy, while %name2% fucks your ass."
+    ],
+	threesome_t_pussy_lick_b_bj: [
+        "You lick %name%'s pussy, while she gives %name2% a blowjob."
+    ],
+    threesome_t_sn: [
+        "You lick %name%'s pussy, while she sucks %name2%'s dick, who is sucking yours!"
+    ],
+    threesome_t_sn_anal_reverse: [
+        "You lick %name%'s pussy, while she gives you a blowjob and %name2% fucks your ass."
+    ],
+    threesome_t_titjob: [
+        "%name% and %name2% give you a nice titjob!"
     ]
 };
