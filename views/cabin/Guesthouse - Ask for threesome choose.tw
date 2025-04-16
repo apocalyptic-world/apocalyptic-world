@@ -30,13 +30,13 @@
 				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty))),
 				_mcYes = setup.percentageChance(setup.sexChance(_guest)) || _guest.gender === 1
 			>>
-			<<if setup.getAge(_guest) < 18 || ![0, 1].includes(_guest.gender)>>
+			<<if setup.getAge(_guest) < 18 || ![0, 1, 2].includes(_guest.gender)>>
 				<<continue>>
 			<</if>>
 
 			<div>
 				<span @class="''+_genderClass+''">
-					<<if (_guestYes && _mainYes && _mcYes)>>
+					<<if (_guestYes && _mainYes && _mcYes && (!_guest.gender || !$tmpGirl.gender))>>
 						<<set _prospects++>>
 						<<link _guest.name>>
 							<<set $locationEvents.guesthouse = true>>
