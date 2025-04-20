@@ -881,7 +881,7 @@
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_npc)>>
-			<<if (_npc.family ?? false) &amp;&amp; (_npc.family.mother ?? false)>>
+			<<if (_npc.family ?? false) && (_npc.family.mother ?? false)>>
 				<<set _motherNpc = setup.getNpcById(_npc.family.mother)>>
 			<</if>>
 			<<run setup.sleepMessages.add('Kid <strong><span class="'+_genderClass+'">' + _npc.name + '</span></strong>, child of  ' + (_motherNpc ? _motherNpc.name : "????") + ', has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! ', 'birthdays')>>
