@@ -46,14 +46,14 @@ setup.traits = {
 
 
 
-setup.getRandomTraits = function (npc, count = 1) {
+setup.getRandomTraits = function (npc, count = 1, exclude) {
     const _traitsNotPair = {
         breeder: 'infertile',
         infertile: 'breeder'
     };
     const _traits = clone(setup.traits);
-    if (npc.traits ?? []) {
-        for (let excludeTrait in npc.traits) {
+    if (exclude) {
+        for (let excludeTrait in exclude) {
             delete _traits[exclude[excludeTrait]];
         }
     }
