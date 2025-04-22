@@ -2,6 +2,11 @@
 <<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<energy -30>>
 
+<<set _breakdownRisk = (100 - $player.car.health)/4>>
+<<if setup.percentageChance(_breakdownRisk)>>
+	<<goto 'Car breakdown event - Engine Failure'>>
+<</if>>
+
 <<if _randomNumber <= 20>>
 	<<goto 'Car explore event - girl gas station'>>
 <<elseif _randomNumber <= 40>>
