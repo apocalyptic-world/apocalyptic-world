@@ -41,6 +41,9 @@
     <<set _bp_plus  = [], _bp_minus = []>>
     <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
     <<for _npcI, _npc range _npcs>>
+        <<if setup.getAge(_npc) < 18>>
+            <<continue>>
+        <</if>>
         <<set _job = _companions.has(_npc.id) ? 'companion' :
                  _companionSlaves.has(_npc.id) ? 'companion_slave': (_npc.assignedTo ?? 'none')>>
         <<set _outDupItems = []>>
