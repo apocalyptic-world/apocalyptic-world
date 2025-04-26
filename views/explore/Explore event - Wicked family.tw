@@ -107,199 +107,216 @@ Before you can contemplate your next move, a gruff voice pierces the air, and an
                 <</sayNpc>>
                 <br />
                 <<if recall($suppCode)>>
-
-  
-			<<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit) && ($backpack.count('sextoy') >= 1) && ($player.int > 50)>>
-				<div id="option_invite">
-					<<linkreplace 'Offer a trade for her freedom'>>
-						<<run $('#option_fuck').hide()>>
-				            <<drop $backpack 'sextoy' 1>>
-				            <<set $player.goodwill += 2>>
-
-						<<set _mother = $tmpGirl>>
-
-						<<newgirl>>
-						<<set _daughter = $tmpGirl>>
-						<<set _daughterAge = randomInteger(19, 22)>>
-						<<set _daughter.birthDate = setup.getBirthDate(_daughterAge)>>
-						<<set _daughter.traits = setup.getRandomTraits(3)>>
-						<<set _daughter.likesGirls = true>>
-
-						<<if setup.percentageChance(20)>>
-							<<run _daughter.skills.push('scavenger')>>
-						<</if>>
-						<<if setup.percentageChance(20)>>
-							<<run _daughter.skills.push('garden')>>
-						<</if>>
-
-					 	<<if setup.percentageChance(20)>>
-					           <<set _daughter.sick = {
-					                days: randomInteger(1, 2),
-					                desc: 'abused by her former household',
-					                id: 'neglect'
-					            }>>
-						<</if>>
-
-					    You put away your dick as you look down at the helpless young woman in her tattered rags, clearly being treated as no more than a pet by these people.  You can see a glimmer of hope in her eyes as she catches your gaze. 
-					    <br /><br />
-						Turning to the older woman, you ask, "What is she worth to you?", taking out a handful of bottlecaps.  The woman sneers at your offer.
-					    <br /><br />
-						<<sayNpc _mother>>
-						    Forget it, she's not for sale.  She's too good at eating pussy!
-						<</sayNpc>>
-					    <br />
-						A thought suddenly occurs to you, and you reach into your backpack, pulling out one of the sex toys you bought in the Underground City. "I bet you don't find a lot of these out here in the woods."
-					    <br /><br />
-						The old woman looks over the large, plastic phallus, her tongue sliding over her lips as she thinks about how that might feel.
-					    <br /><br />
-
-						"And it never gets tired..", you add, waving it in front of her.  She smirks and snatches it from your hand.
-					    <br /><br />
-						<<sayNpc _mother>>
-						    Fine, take her.  She never earns her keep anyway.
-						<</sayNpc>>
-				            <br />
-						Crouching down, you reach under the table, offering a hand to the young woman as you ask her name.  She crawls out timidly, looking at the floor as she meekly whispers <<=setup.displayName(_daughter)>>, seemingly afraid to let herself believe this is real.    Only when you finally lead her outside does she allow herself to smile, leaning against you with exhaustion as you take her to her new life.
-					    <br /><br />
-
-						<<set _daughter.relationship = 70>>
-						<<set _daughter.sub += 70>>
-						<<set $tmpGirl = _daughter>>
-						<<include 'NPC info'>>
-						<<run $guests.push(_daughter)>>
-
-					<</linkreplace>>
-				</div>
-			<</if>>
-
-
-		<div id="option_fuck">
-                    <<linkreplace 'Ask to fuck her'>>
-                        <<set $player.goodwill-->>
-                        <<sayNpc $tmpGirl>>
-                            I guess you deserve it.
-                        <</sayNpc>>
-                        <br /><br />
-                        <<video 'explore/wicked_family5'>>
-                        <br /><br />
-                        With a sudden, decisive movement, the old woman pulls the young woman onto the kitchen table, her actions swift and forceful.
-                        She spreads young woman legs and moves away her dirty dress from the way as you put your dick against young woman pussy and slide it in.
-                        <br /><br />
-                        <<video 'explore/wicked_family6'>>
-                        <br /><br />
-                        <<sayNpc $tmpGirl>>
-                            Yes, yes.. Earn that food! Fuck her.
-                        <</sayNpc>>
-                        <br />
-                        The young woman looks directly into your eyes without any emotions on her face as you fuck her tight pussy. 
-                        <br />
-                        Occasionally, she glances at the old woman, and everything seems to satisfy her.
-                        <br /><br />
-                        <<linkreplace 'Cum'>>
-                            <center>
-	                            [img[setup.ImagePath+'game/misc/creampie_on_back.webp']]
-                            </center>
-                            <br />
-                            As young woman lets out moan as you cum deep inside her you pull out and old woman pulls her down from the table. 
-                            <br /><br />
+                    <div id="option_fuck">
+                        <<linkreplace 'Ask to fuck her'>>
+                            <<set _fucked = true>>
+                            <<set $player.goodwill-->>
                             <<sayNpc $tmpGirl>>
-                                Now leave.
+                                I guess you deserve it.
                             <</sayNpc>>
                             <br /><br />
-                            <<horny_reset>>
-
-
-				<<if (($game.location.basement ?? false) && ($slaves.length + 1) <= $basementLimit) && ($player.money >= 100)>>
-					<div id="option_capture">
-						<<linkreplace 'Offer to buy her (-100 caps)'>>
-						    <<run $('#option_invite').hide()>>
-						    <<set $player.money -= 100>>
-					            <<set $player.goodwill-->>
-
-							<<set _mother = $tmpGirl>>
-
-							<<newgirl>>
-							<<set _daughter = $tmpGirl>>
-							<<set _daughterAge = randomInteger(19, 22)>>
-							<<set _daughter.birthDate = setup.getBirthDate(_daughterAge)>>
-							<<set _daughter.traits = setup.getRandomTraits(3)>>
-							<<set _daughter.virgin = false>>
-							<<set _daughter.likesGirls = true>>
-
-							<<if setup.percentageChance(20)>>
-								<<run _daughter.skills.push('scavenger')>>
-							<</if>>
-							<<if setup.percentageChance(20)>>
-								<<run _daughter.skills.push('garden')>>
-							<</if>>
-
-						 	<<if setup.percentageChance(20)>>
-						           <<set _daughter.sick = {
-						                days: randomInteger(2, 3),
-						                desc: 'abused by her former household',
-						                id: 'neglect'
-						            }>>
-							<</if>>
-
-					                <<if setup.pregnancyChance(_daughter)>>
-								<<set _daughter.pregnancy_father = 'mc'>>
-								<<set _daughter.pregnancy = 0>>
-							<</if>>
-
-						    You put away your dick as you look down at panting you woman on the table, her freshly fucked pussy in front of you, her body splayed on the table like an offering, as if ready to be used again.  You can see a look of resignation in her eyes as she catches your gaze. 
-						    <br /><br />
-							Turning to the older woman, you say, "I'd like to enjoy this one some more.  How much to take her off of your hands?", taking out a handful of bottlecaps.  The woman regards your offer warily.
-						    <br /><br />
-							<<sayNpc _mother>>
-							    It would be difficult to let go of her. You saw how good she is for fucking.
-							<</sayNpc>>
-						    <br />
-							You roll your eyes with a sigh, pulling out more bottle caps until a stack of 100 caps sits on the table "This will buy plenty of sex toys next time you visit the Underground City."
-						    <br /><br />
-							The old woman smirks and scoops up the coins.
-						    <br /><br />
-							<<sayNpc _mother>>
-							    Fine, take her.  You probably knocked her up anyway.
-							<</sayNpc>>
-					            <br />
-							Binding the young woman, you lead her off of the table and out of the house.  She follows you timidly, her eyes never lifting from the floor as she plods along beside you, resigned to being an object, traded for food and caps.
-						    <br /><br />
-
-							<<set _daughter.relationship = 0>>
-							<<set _daughter.sub += 85>>
-							<<set $tmpGirl = _daughter>>
-							<<include 'NPC info'>>
-							<<run $slaves.push(_daughter)>>
-
-						<</linkreplace>>
-					</div>
-				<</if>>
-
+                            <<video 'explore/wicked_family5'>>
+                            <br /><br />
+                            With a sudden, decisive movement, the old woman pulls the young woman onto the kitchen table, her actions swift and forceful.
+                            She spreads young woman legs and moves away her dirty dress from the way as you put your dick against young woman pussy and slide it in.
+                            <br /><br />
+                            <<video 'explore/wicked_family6'>>
+                            <br /><br />
+                            <<sayNpc $tmpGirl>>
+                                Yes, yes.. Earn that food! Fuck her.
+                            <</sayNpc>>
+                            <br />
+                            The young woman looks directly into your eyes without any emotions on her face as you fuck her tight pussy. 
+                            <br />
+                            Occasionally, she glances at the old woman, and everything seems to satisfy her.
+                            <br /><br />
+                            <<linkreplace 'Cum'>>
+                                <center>
+                                    <<image 'game/misc/creampie_on_back.webp'>>
+                                </center>
+                                <br />
+                                As young woman lets out moan as you cum deep inside her you pull out and old woman pulls her down from the table. 
+                                <br /><br />
+                                <<sayNpc $tmpGirl>>
+                                    Now leave.
+                                <</sayNpc>>
+                                <br /><br />
+                                <<horny_reset>>
+                            <</linkreplace>>
                         <</linkreplace>>
-                    <</linkreplace>>
-		</div>
-
+                    </div>
                 <<else>>
-			<<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit) && ($backpack.count('sextoy') >= 1) && ($player.int > 50)>>
-	                    <div class="link-internal disabled" style="background: #ccc">
-				<<linkreplace 'Offer a trade for her freedom'>>
-	                        <<notPatreonIcon>>
-	                    </div>
-	                <</if>>
-
                     <div class="link-internal disabled" style="background: #ccc">
                         Ask to fuck her
                         <<notPatreonIcon>>
                     </div>
                 <</if>>
+  
+                <<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit) && ($backpack.count('sextoy') >= 1) && ($player.int > 50)>>
+                    <div id="option_trade">
+                        <<linkreplace 'Offer a sextoy for her freedom'>>
+                            <<if !_fucked>>
+                                <<run $('#option_fuck').hide()>>
+                            <</if>>
+                            <<run $('#option_buy').hide()>>
+                            <<set _mother = $tmpGirl>>
+                            You put away your dick as you look down at the helpless young woman in her tattered rags, clearly being treated as no more than a pet by these people. 
+                            You can see a glimmer of hope in her eyes as she catches your gaze. 
+                            <br /><br />
+                            Turning to the older woman, you ask.
+                            <br /><br />
+                            <<you>>
+                                What is she worth to you?
+                            <</you>>
+                            <br />
+                            As you taking out a handful of bottlecaps. The woman sneers at your offer.
+                            <br /><br />
+                            <<sayNpc _mother>>
+                                Forget it, she's not for sale.  She's too good at eating pussy!
+                            <</sayNpc>>
+                            <br />
+                            A thought suddenly occurs to you, and you reach into your backpack, pulling out one of the sex toys you bought in the Underground City. 
+                            <br /><br />
+                            <center>
+                                ####
+                            </center>
+                            <br /><br />
+                            <<you>>
+                                I bet you don't find a lot of these out here in the woods.
+                            <</you>>
+                            <br /><br />
+                            The old woman looks over the large, plastic phallus, her tongue sliding over her lips as she thinks about how that might feel.
+                            <br /><br />
+                            <<you>>
+                                And it never gets tired..
+                            <</you>>
+                            <br />
+                            You add, waving it in front of her.  She smirks and snatches it from your hand.
+                            <br /><br />
+                            <<sayNpc _mother>>
+                                Fine, take her.  She never earns her keep anyway.
+                            <</sayNpc>>
+                            <br />
+                            <<newgirl>>
+                            <<set _daughter = $tmpGirl>>
+                            Crouching down, you reach under the table, offering a hand to the young woman as you ask her name.  
+                            She crawls out timidly, looking at the floor as she meekly whispers <<=setup.displayName(_daughter)>>, 
+                            seemingly afraid to let herself believe this is real.
+                            <br />
+                            Only when you finally lead her outside does she allow herself to smile, leaning against you with exhaustion as you take her to her new life.
+                            <br /><br />
+                            <<drop $backpack 'sextoy' 1>>
+                            <<set $player.goodwill += 2>>
+                            
+                            <<set _daughter.race = 'white'>>
+                            <<set _daughter.birthDate = setup.getBirthDate(randomInteger(19, 22))>>
+                            <<set _daughter.traits = setup.getRandomTraits(_daughter, 3)>>
+                            <<set _daughter.likesGirls = true>>
+                            <<if setup.percentageChance(20)>>
+                                <<run _daughter.skills.push('scavenger')>>
+                            <</if>>
+                            <<if setup.percentageChance(20)>>
+                                <<run _daughter.skills.push('garden')>>
+                            <</if>>
+                            <<if setup.percentageChance(20)>>
+                                <<set _daughter.sick = {
+                                    days: randomInteger(1, 2),
+                                    desc: 'abused by her former household',
+                                    id: 'neglect'
+                                }>>
+                            <</if>>
+                            <<set _daughter.relationship = 70>>
+                            <<set _daughter.sub += 70>>
+                            <<set $tmpGirl = _daughter>>
+                            <<include 'NPC info'>>
+                            <<run $guests.push(_daughter)>>
+                        <</linkreplace>>
+                    </div>
+                <</if>>
+
+                <<if (($game.location.basement ?? false) && ($slaves.length + 1) <= $basementLimit) && ($player.money >= 100)>>
+                    <div id="option_buy">
+                        <<linkreplace 'Offer to buy her (-100 caps)'>>
+                            <<run $('#option_trade').hide()>>
+                            <<if !_fucked>>
+                                <<run $('#option_fuck').hide()>>
+                            <</if>>
+                            <<set $player.money -= 100>>
+                            <<set $player.goodwill-->>
+                            <<set _mother = $tmpGirl>>
+                            <<if _fucked>>
+                                You put away your dick as you look down at panting you woman on the table, her freshly fucked pussy in front of you, her body splayed on the table like an offering, as if ready to be used again.  You can see a look of resignation in her eyes as she catches your gaze. 
+                            <<else>>
+                                You put away your dick as you look down at the helpless young woman in her tattered rags. 
+                            <</if>>
+                            <br /><br />
+                            Turning to the older woman, you say.
+                            <br /><br />
+                            <<you>>
+                                I'd like to enjoy this one some more. I am ready to pay 100 caps.
+                            <</you>>
+                            <br />
+                            As you taking out a handful of bottlecaps. The woman regards your offer warily.
+                            <br /><br />
+                            <<sayNpc _mother>>
+                                It would be difficult to let go of her. You saw how good she is for fucking.
+                            <</sayNpc>>
+                            <br />
+                            You roll your eyes with a sigh, pulling out more bottle caps until a stack of 100 caps sits on the table.
+                            <br /><br />
+                            <<you>>
+                                This will buy plenty of sex toys next time you visit the Underground City.
+                            <</you>>
+                            <br /><br />
+                            The old woman smirks and scoops up the coins.
+                            <br /><br />
+                            <<sayNpc _mother>>
+                                Fine, take her. <<if _fucked>>You probably knocked her up anyway<</if>>
+                            <</sayNpc>>
+                            <br />
+                            Binding the young woman, you lead her off of the table and out of the house.  
+                            She follows you timidly, her eyes never lifting from the floor as she plods along beside you, resigned to being an object, traded for food and caps.
+                            <br /><br />
+
+                            <<newgirl>>
+                            <<set _daughter = $tmpGirl>>
+                            <<set _daughter.race = 'white'>>
+                            <<set _daughter.birthDate = setup.getBirthDate(randomInteger(19, 22))>>
+                            <<set _daughter.traits = setup.getRandomTraits(3)>>
+                            <<set _daughter.virgin = false>>
+                            <<set _daughter.likesGirls = true>>
+                            <<if setup.percentageChance(20)>>
+                                <<run _daughter.skills.push('scavenger')>>
+                            <</if>>
+                            <<if setup.percentageChance(20)>>
+                                <<run _daughter.skills.push('garden')>>
+                            <</if>>
+                            <<if setup.percentageChance(20)>>
+                                <<set _daughter.sick = {
+                                    days: randomInteger(2, 3),
+                                    desc: 'abused by her former household',
+                                    id: 'neglect'
+                                    }>>
+                            <</if>>
+                            <<if setup.pregnancyChance(_daughter)>>
+                                <<set _daughter.pregnancy_father = 'mc'>>
+                                <<set _daughter.pregnancy = 0>>
+                            <</if>>
+
+                            <<set _daughter.relationship = 0>>
+                            <<set _daughter.sub += 85>>
+                            <<set $tmpGirl = _daughter>>
+                            <<include 'NPC info'>>
+                            <<run $slaves.push(_daughter)>>
+                        <</linkreplace>>
+                    </div>
+                <</if>>
             <</linkreplace>>
         <</linkreplace>>
-    </div>
-
+	</div>
     <<link 'Leave'>>
         <<goto 'Outside'>>
     <</link>>
-
 <</linkreplace>>
 </div>
 <div id="option_leave">
