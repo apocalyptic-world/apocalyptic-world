@@ -24,6 +24,19 @@
         <<goto 'Laura - breasts surgery NPC'>>
     <</link>>
 <</if>>
+<<if $characters.laura.quests.bedroomNotAllowed>>
+    <<link 'Allow to surprise me in the morning'>>
+        <<set $characters.laura.quests.bedroomNotAllowed = false>>
+        <<addmins 5>>
+        <<goto `passage()`>>
+    <</link>>
+<<else>>
+    <<link 'Do not allow to surprise me in the morning'>>
+        <<addmins 5>>
+        <<set $characters.laura.quests.bedroomNotAllowed = true>>
+        <<goto `passage()`>>
+    <</link>>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Lab'>>
 <</link>>

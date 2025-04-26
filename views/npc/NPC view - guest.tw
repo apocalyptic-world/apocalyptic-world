@@ -185,6 +185,14 @@
 	<<goto 'NPC customize'>>
 <</link>>
 
+<<if $player.energy >= 10 && hasTime(1) && ($tmpGirl.traits ?? []).includes('masochist') && setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Punish ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<set $tmpGirl.location = 'basement'>>
+		<<goto 'NPC punish'>>
+	<</link>>
+<</if>>
+
 <<if $slaves.length < $basementLimit && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Move ' + _himOrHer + ' to the basement cell'>>
 	<<link `_linkName`>>
