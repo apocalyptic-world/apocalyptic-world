@@ -52,6 +52,7 @@ setup.getRandomTraits = function (npc, count = 1, exclude) {
         infertile: 'breeder'
     };
     const _traits = clone(setup.traits);
+    
     if (exclude) {
         for (let excludeTrait in exclude) {
             delete _traits[exclude[excludeTrait]];
@@ -64,18 +65,27 @@ setup.getRandomTraits = function (npc, count = 1, exclude) {
         }
     }
 
-    var shuffledTraits = Object.keys(_traits).sort((a, b) => 0.5 - Math.random());
+    var shuffledTraits = Object.keys(_traits).sort(() => 0.5 - Math.random());
     if (!shuffledTraits.length) {
         return [];
     }
 
-    const _givenTraits = shuffledTraits.slice(0, count);
-    for (const _traitsNotPairKey in _traitsNotPair) {
-        if (_givenTraits.includes(_traitsNotPairKey) && _givenTraits.includes(_traitsNotPair[_traitsNotPairKey])) {
-            const _traitKey = _givenTraits.indexOf(_traitsNotPair[_traitsNotPairKey]);
-            _givenTraits.splice(_traitKey, 1);
+    const _givenTraits = [];
+    for (const trait of shuffledTraits) {
+        let conflict = false;
+        for (const existingTrait of _givenTraits) {
+            if (_traitsNotPair[existingTrait] === trait || _traitsNotPair[trait] === existingTrait) {
+                conflict = true;
+                break;
+            }
+        }
+        if (!conflict) {
+            _givenTraits.push(trait);
+            if (_givenTraits.length >= count) {
+                break;
+            }
         }
     }
-    
+
     return _givenTraits;
 };
