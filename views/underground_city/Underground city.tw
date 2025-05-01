@@ -42,6 +42,8 @@
 	<<goto 'Dom - Return to underground city plan'>>
 <<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>
 	<<goto 'Dom - Return to underground city execute'>>
+<<elseif $characters?.dom?.quests?.return_city_done2 && !$characters.dom.quests.return_city_done3 && ($characters.dom.quests.return_city_done2_day + 2) < $game.day && timeBetween('23:00', '03:00')>>
+    <<goto 'Dom - Return city #4'>>
 <<else>>
 	<<if !$locationEvents.underground>>
 		<<set _randomNumber = randomInteger(0, 100)>>
