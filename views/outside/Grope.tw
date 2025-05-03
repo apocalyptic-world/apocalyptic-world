@@ -1,7 +1,9 @@
 :: Grope [sex] {"position":"3112,95","size":"100,100"}
 <<energy -5>>
 <<addmins 15>>
-<center>[img[setup.ImagePath+'places/greenhouse/grope.webp']]</center>
+<center>
+  <<image 'places/greenhouse/grope.webp'>>
+</center>
 <br /><br />
 While <<print $tmpGirl.name>> plows the ground, you lower your hands below her waist and squeeze her ass.
 <br /><br />
@@ -19,6 +21,14 @@ While <<print $tmpGirl.name>> plows the ground, you lower your hands below her w
   <<=either('Oh! I like that...', "What's with you today? Mmm...")>>
 <</sayNpc>>
 <br />
+<<if $tmpGirl.piercing>>
+  <<linkreplace 'Grope her breast'>>
+    <<video 'greenhouse/grope1'>>
+  <</linkreplace>>
+<</if>>
+<<link 'Pull skirt up'>>
+  <<goto 'Grope - fuck'>>
+<</link>>
 <<link 'Back'>>
   <<if $tmpGirlViewBack>>
       <<goto $tmpGirlViewBack>>
