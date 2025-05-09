@@ -6,15 +6,15 @@
 <</laura>>
 <br />
 <div id="breeder-girls">
-    <table id="slaves">
+	<table id="slaves" class="npc-list">
     <<for _labGuestI, _labGuest range $guests>>
         <<capture _labGuestI, _labGuest>>
             <<if _labGuest.gender || (_labGuest.traits ?? []).includes('breeder') || setup.getAge(_labGuest) < 18 || (_labGuest.traits ?? []).includes('infertile')>>
                 <<continue>>
             <</if>>
             <<set _genderClass = 'gender-' + setup.genderClass(_labGuest)>>
-            <tr>
-                <td style="width: 300px">
+            <tr class="item">
+                <td style="min-width:25%">
                     <span @class="''+_genderClass+''">
                         <<link _labGuest.name>>
                             <<run $('#breeder-girls').hide()>>
@@ -31,6 +31,9 @@
                         <</link>>
                     </span>
                 </td>
+                <td>
+                    <<npcListView _labGuest _labGuestI 'guest'>>
+                </td>
             </tr>
         <</capture>>
     <</for>>
@@ -40,8 +43,8 @@
                 <<continue>>
             <</if>>
             <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>
-            <tr>
-                <td style="width: 300px">
+            <tr class="item">
+                <td style="min-width:25%">
                     <span @class="''+_genderClass+''">
                         <<link _labSlave.name>>
                             <<run $('#breeder-girls').hide()>>
@@ -56,6 +59,9 @@
                              <<replace ".breeder-girl-name">><<=setup.displayName(_labSlave)>><</replace>>
                         <</link>>
                     </span>
+                </td>
+                <td>
+                    <<npcListView _labSlave _labSlaveI 'slave'>>
                 </td>
             </tr>
         <</capture>>
