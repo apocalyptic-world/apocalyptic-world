@@ -29,6 +29,7 @@ You crouch down, your shadow falling over the child. His cries falter for a mome
 <<set _randomDays = Math.floor(Math.random() * (28 - 7 + 1)) + 7>>
 <<run _dateNow.setDate(_dateNow.getDate() - _randomDays)>>
 <<set _child.birthDate = _dateNow>>
+<<run delete _child.pregnancy>>
 <strong>
     That's a <<=(!_child.gender ? 'girl' : 'boy')>>.
 </strong>
