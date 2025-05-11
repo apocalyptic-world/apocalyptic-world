@@ -7,6 +7,28 @@
 <<set _currentWanted = $wanted.length>>
 <<set $player.quests = $player.quests ?? {}>>
 <<set $player.quests.wanted = $player.quests.wanted ?? {}>>
+
+<<set _crimes = [
+  "Organ harvesting",
+  "Stole food",
+  "Human trafficking",
+  "Helped a fugitive",
+  "Cannibalism",
+  "Stole bread from a dying child",
+  "Murdered a neighbor over firewood",
+  "Burned another's shelter out of jealousy",
+  "Beat an elder for refusing water",
+  "Sold tainted meat at market",
+  "Spied for a rival clan",
+  "Lied during a food count",
+  "Abandoned a child outside the walls",
+  "Traded fake gold for supplies",
+  "Refused to fight during a camp defense",
+  "Beat a healer for delivering bad news",
+  "Killed a man in his sleep",
+  "Hid stolen boots in the community well",
+  "Mocked the dead during a funeral rite",
+];>>
 <<for _i to 0; _i lt (3 - _currentWanted); _i++>>
 	<<set _additionalAward = 0>>
 	<<if $player.reputation_bounty_hunter >= 10 && typeof $player.quests.wanted.u1 === 'undefined'>>
@@ -29,7 +51,8 @@
 	
 	<<set _wantedPerson.wanted = {
 		value: randomInteger(20, 70) + ($player.hunterRating ?? 0) + _additionalAward,
-		progress: 0
+		progress: 0,
+		crime: setup.getRandomElement(_crimes)
 	}>>
 	<<set _wantedPerson.strength += 50>>
 	<<run $wanted.push(_wantedPerson)>>
@@ -64,6 +87,9 @@
 			  </div>
 			  <div class="wanted-value">
 				  <<=$wanted[_i].wanted.value>> $$
+			  </div>
+			  <div class="wanted-crime">
+				  <<=$wanted[_i].wanted.crime ?? '-'>>
 			  </div>
 			  <div class="wanted-link">
 			  	<<link 'Look around'>>

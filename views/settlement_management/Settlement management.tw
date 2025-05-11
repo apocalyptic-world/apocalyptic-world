@@ -33,6 +33,12 @@
     })>>
     <<set _defaultTab = 'Base management'>>
 <</if>>
+<<if $player.quests.policy_talk>>
+    <<run _tabs.unshift({
+        name: 'policies',
+        title: 'Policies'
+    })>>
+<</if>>
 <<set _currentTab = $game.managementTab ?? _defaultTab>>
 <ul class="tab">
     <<for _tabKey, _tab range _tabs>>

@@ -98,7 +98,7 @@
 			<<goto 'Blair - morning surprise'>>
 		<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
 			<<goto 'Blair - pregnant'>>
-		<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && ($game.location.lab ?? false) && ($characters.laura.quests.productionLastDay ?? 0 + 10) < $game.day && ($characters.laura.quests.morningSampleDay ?? 0 + 20) < $game.day && setup.percentageChance(30) && !setup.player.hasFlaccidDick()>>
+		<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && ($game.location.lab ?? false) && ($characters.laura.quests.productionLastDay ?? 0 + 10) < $game.day && ($characters.laura.quests.morningSampleDay ?? 0 + 20) < $game.day && setup.percentageChance(30) && !setup.player.hasFlaccidDick() && !$characters?.laura?.quests?.bedroomNotAllowed>>
 			<<goto 'Laura - morning sample'>>
 		<<elseif $game.day > 100 && !$player.quests.first_settlers && setup.baseManagement.population.livingHousesCount() > 0 && ((!$player.quests.first_settlers_day || $player.quests.first_settlers_day + 30) < $game.day)>>
 			<<goto 'First settlers'>>

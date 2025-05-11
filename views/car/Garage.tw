@@ -59,10 +59,16 @@
         }>>
         <<if $player.car.explore>>
             <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<if _isDisabled>>
+                <<set _props.disabled = true>>
+            <</if>>
             <<grid garage explore 'Car - Explore' Explore 30 _isDisabled null _props>>
         <</if>>
         <<if ($game.location.car_stadium ?? false)>>
             <<set _isDisabled = (!timeBetween('08:00', '16:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<if _isDisabled>>
+                <<set _props.disabled = true>>
+            <</if>>
             <<grid garage race_stadium 'Car - Race stadium' 'Race stadium' 30 _isDisabled null _props>>
         <</if>>
     </div>
