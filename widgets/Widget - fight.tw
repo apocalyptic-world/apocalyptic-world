@@ -300,6 +300,8 @@
 <<widget generateEnemies>>
 	<<set $enemies = []>>
 
+	<<set _randomItemsList = ['condom', 'food', 'lube', 'candy', 'metal', 'cloth', 'piercing']>>
+
 	<<set _knivesLeft = $args[2] ?? 0>>
 	<<if setup.percentageChance(20)>>
 		<<set _knivesLeft++>>
@@ -319,6 +321,12 @@
 			<<set _knivesLeft-->>
 		<</if>>
 		<<run $enemies.push($tmpGuy)>>
+
+		<<if setup.percentageChance(5)>>
+			<<set _randomItem = setup.getRandomElement(_randomItemsList)>>
+			<<set $tmpGuy.inventory ??= {}>>
+			<<set $tmpGuy.inventory[_randomItem] = 1>>
+		<</if>>
 	<</for>>
 	<<for _i = 0; _i < $args[1]; _i++>>
 		<<newgirl>>
@@ -327,6 +335,12 @@
 				knife: 1
 			}>>
 			<<set _knivesLeft-->>
+
+		<</if>>
+		<<if setup.percentageChance(5)>>
+			<<set _randomItem = setup.getRandomElement(_randomItemsList)>>
+			<<set $tmpGirl.inventory ??= {}>>
+			<<set $tmpGirl.inventory[_randomItem] = 1>>
 		<</if>>
 		<<run $enemies.push($tmpGirl)>>
 	<</for>>

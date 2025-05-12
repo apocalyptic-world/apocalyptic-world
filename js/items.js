@@ -66,7 +66,7 @@ setup.items = {
             {name:'fuel', price: 40, sell:false}
         ],
         cage_fight: [
-            {name:'milk', price:2, sell:true, buy:false}
+            {name:'milk', price:4, sell:true, buy:false}
         ],
         race_stadium: [
             {name:'car_part', price:50, sell:false, buy:true}

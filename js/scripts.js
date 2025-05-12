@@ -812,11 +812,11 @@ setup.suicideChance = function (person) {
     if(age < 18) {
         return 0;
     } else if(age < 25) {
-        chance = 24;
+        chance = 18;
     } else if(age < 40) {
-        chance = 16;
+        chance = 12;
     } else if(age < 60) {
-        chance = 8;
+        chance = 4;
     }
 
     if(breeder) {
