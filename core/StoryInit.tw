@@ -33,6 +33,13 @@ importScripts(setup.Path + "packs/packs.js?v=" + _timestamp)
 		alert("Error: Could not find file 'packs/packs.js'.");
 	}
 );
+importScripts(setup.Path + "packs/packs_custom.js?v=" + _timestamp)
+	.then(function() {
+        memorize('packsCustom', setup.packsCustom);
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'packs/packs_custom.js'.");
+	}
+);
 
 importScripts("https://www.googletagmanager.com/gtag/js?id=G-XVQJZNSBZ6")
      .then(function() {

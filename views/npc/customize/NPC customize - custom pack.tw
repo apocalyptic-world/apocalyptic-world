@@ -26,6 +26,21 @@
             </tr>
         <</capture>>
     <</for>>
+    <<for _packKey, _pack range setup.packsCustom>>
+        <<capture _packKey, _pack>>
+            <<if _pack.extended>>
+                <<continue>>
+            <</if>>
+            <tr>
+                <td>
+                    <<radiobutton "_customPack" _packKey autocheck>>
+                </td>
+                <td>
+                    <<= _pack.name>> 
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
 </table>
 <br /><br />
 <<link 'Save'>>

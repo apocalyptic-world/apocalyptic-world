@@ -101,5 +101,19 @@
 				}
 			);
 		}
+
+		if (typeof setup.actions[key] == 'undefined' && typeof setup.packsCustom[key] !== 'undefined') {
+			importScripts(setup.Path + "packs/" + setup.packsCustom[key].name + "/actions.js")
+				.then(function() {
+					if (setup.packsCustom[key].extended ?? false) {
+						setup.mergeObjects(setup.actions, setup.actions[setup.packsCustom[key].name], setup.packsCustom[key].name + '/actions');
+						setup.actions[key] = true;
+					}
+					memorize('actions', setup.actions);
+				}).catch(function(error) {  // eslint-disable-line
+					alert("Error: Could not load pack 'packs/" + setup.packsCustom[key].name + "/actions.js'.");
+				}
+			);
+		}
 	});
 <</script>>

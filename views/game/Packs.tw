@@ -26,6 +26,27 @@
             </tr>
         <</capture>>
     <</for>>
+    <<for _packKey, _pack range setup.packsCustom>>
+        <<capture _packKey, _pack>>
+            <<set $packs[_packKey] ??= false>>
+            <tr>
+                <td>
+                    <<checkbox '$packs[_packKey]' false true autocheck>>
+                </td>
+                <td>
+                    <<= _pack.name>> 
+                </td>
+                <td>
+                    <div>
+                        <<= _pack.download>>
+                    </div>
+                    <div class="pack-description">
+                        <<= _pack.description>>
+                    </div>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
 </table>
 <br /><br />
 <<link 'Leave'>>
