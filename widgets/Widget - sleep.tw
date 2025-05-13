@@ -390,7 +390,7 @@
 
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
-<<set _isOvercrowded = (($guesthouseLimit - count($guests)) < 3)>>
+<<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 	<<capture _guestI>>
 		<<set _npc = $guests[_guestI]>>
