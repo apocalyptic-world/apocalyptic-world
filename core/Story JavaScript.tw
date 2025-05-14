@@ -2,8 +2,14 @@
 Config.passages.nobr = true;
 Config.history.maxStates = 3;
 Config.saves.maxSlotSaves = 4;
-Config.saves.isAllowed = function (passageName) {
-    return tags().includes('autosave');
+Config.saves.maxAutoSaves = 1;
+Config.enableOptionalDebugging = true;
+Config.saves.isAllowed = function (saveType) {
+    if (saveType === Save.Type.Auto) {
+        return tags().includes("autosave");
+    }
+
+    return true;
 };
 
 //Settings
