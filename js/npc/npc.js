@@ -515,5 +515,137 @@ setup.npc = {
 		]
 
 		return _genders[npc.gender] ?? 'unknown';
+	},
+
+	getSayDialog: function(npc) {
+		const db = {
+			survival: [
+				"Every day is a fight. Some of us are just better at hiding it.",
+				"Food. Water. Ammo. That's all that matters now."
+			],
+			emotional_positive: [
+				"You give me hope... and that’s rare.",
+				"I didn’t think I could smile again until I met you."
+			],
+			emotional_negative: [
+				"Don’t ask me how I’m doing. You already know the answer.",
+				"It’s easier not to feel anything at all."
+			],
+			philosophical: [
+				"What even is ‘humanity’ anymore? Is it worth saving?",
+				"I wonder if we were always doomed. The end just came quicker than expected."
+			],
+			sadistic: [
+				"You should see their faces when they realize I'm not here to help.",
+				"Screams echo beautifully, don’t they?"
+			],
+			masochist: [
+				"Hurt me again. Make me feel like I still exist.",
+				"Pain is my therapy now."
+			],
+			affectionate: [
+				"I feel safest when you're near. Don't go.",
+				"You don't know how much I needed this… us."
+			],
+			hungry: [
+				"I’m so damn hungry I could eat a dead rad-dog.",
+				"I’d kill for a sandwich. Literally."
+			],
+			horny_low: [
+				"It’s been a while… I could use a distraction.",
+				"I’ve got urges I can’t just ignore, you know?"
+			],
+			horny_high: [
+				"If you don't take me right now, I might explode.",
+				"Let’s not pretend this tension doesn’t exist."
+			],
+			drunk: [
+				"The world’s a blur. Makes it easier to forget.",
+				"Another drink? Sure. What’s the worst that can happen?"
+			],
+			corrupted: [
+				"I stopped pretending to care about ‘good’ a long time ago.",
+				"Morality is for the dead. The rest of us just adapt."
+			],
+			mechanical: [
+				"Fixed the generator again. I swear, it’s held together with duct tape and hope.",
+				"If I had proper tools, I could do wonders..."
+			],
+			fighter: [
+				"The best part of a fight? That split-second when you know you’ve won.",
+				"Violence is a language everyone understands."
+			],
+			cook: [
+				"I made stew out of god knows what. But it tastes... edible.",
+				"I miss real food. You know, not rat jerky and canned beans."
+			],
+
+			// SEX STATS-BASED DIALOG
+			sex_innocent: [
+				"I’ve only done it a few times... is that bad?",
+				"Sometimes I wonder if I’m still the same person after my first time."
+			],
+			sex_experienced: [
+				"I've done more than I care to admit... but it kept me alive.",
+				"Sex isn't new to me — it's just part of the game now."
+			],
+			sex_lewd: [
+				"Use me. Ruin me. I live for that.",
+				"I'm dripping just thinking about it again..."
+			],
+			sex_jaded: [
+				"It doesn’t mean anything to me anymore. Just another motion.",
+				"I’ve stopped pretending I feel anything from it now."
+			]
+		}
+
+		let pool = [];
+
+		const {
+			corruption, happy, drunk, food, horny, relationship,
+			traits, personality, location, skills, sexStats
+		} = npc;
+
+		if (happy > 40) pool.push(...db.emotional_positive);
+		else if (happy < -20) pool.push(...db.emotional_negative);
+
+		if (corruption > 80) pool.push(...db.corrupted);
+		if (drunk > 70) pool.push(...db.drunk);
+		if (food < 3) pool.push(...db.hungry);
+
+		if (horny >= 60) pool.push(...db.horny_high);
+		else if (horny >= 20) pool.push(...db.horny_low);
+
+		if (traits.includes("sadistic")) pool.push(...db.sadistic);
+		if (traits.includes("masochist")) pool.push(...db.masochist);
+		if (relationship > 70 || traits.includes("breeder") || personality.includes("extravagant"))
+			pool.push(...db.affectionate);
+
+		if (location === "bedroom" && relationship > 60) pool.push(...db.affectionate);
+
+		if (skills.includes("mechanic")) pool.push(...db.mechanical);
+		if (skills.includes("fighter")) pool.push(...db.fighter);
+		if (skills.includes("cook")) pool.push(...db.cook);
+
+		// === SexStats logic ===
+		if (sexStats) {
+			const { bj = 0, pussy = 0, anal = 0, dp = 0, creampies = 0 } = sexStats;
+			const totalActs = bj + pussy + anal + dp;
+
+			if (totalActs <= 3) pool.push(...db.sex_innocent);
+			else if (totalActs >= 10 && totalActs <= 30) pool.push(...db.sex_experienced);
+
+			if ((creampies > 5 || bj >= 15 || pussy >= 10) && corruption >= 50)
+				pool.push(...db.sex_lewd);
+
+			if (totalActs >= 30 && happy < -10)
+				pool.push(...db.sex_jaded);
+		}
+
+		if (pool.length < 3) pool.push(...db.philosophical);
+		pool.push(...db.survival);
+
+		const unique = [...new Set(pool)];
+		return unique[Math.floor(Math.random() * unique.length)];
 	}
 }
