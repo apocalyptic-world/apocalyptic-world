@@ -390,3 +390,59 @@
 		<</link>>
 	</div>
 <</widget>>
+
+<<widget wakeUp>>
+
+	<<set _weather = either('rain','storm','sun')>>
+	<<if $weather?.daysLeft>>
+		<<set $weather.daysLeft-->>
+	<</if>>
+	<<if !$weather || !$weather?.daysLeft>>
+		<<set $weather = {
+			weather: _weather
+		}>>
+	<</if>>
+	<<if settings.bgVolumeEnabled>>
+		<<set _bgWeather = "bg-" + $weather.weather>>
+		<<set _bgVolume = (settings.bgVolume / 20)>>
+		<<audio _bgWeather loop play volume _bgVolume>>
+	<</if>>
+
+
+	<<if $game.day > 150 && setup.percentageChance(1) && $weather?.weather === 'sun' && !$weather.heatWave && $guests.length > 0>>
+		<<set $weather.heatWave = true>>
+		<<set $weather.daysLeft = randomInteger(4,6)>>
+		<<goto 'Weather - Heat wave'>>
+		<<set _morningEvent = true>>
+	<</if>>
+	<<if $game.day > 130 && setup.percentageChance(1) && $weather.weather === 'storm' && !$weather?.sandStorm && $guests.length > 0>>
+		<<set $weather.sandStorm = true>>
+		<<set $weather.daysLeft = 1>>
+		<<goto 'Weather - Sand storm'>>
+		<<set _morningEvent = true>>
+	<</if>>
+
+	<<if !_morningEvent>>
+		<<set _randomSleepEventInteger = randomInteger(0,2)>>
+		<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0 && !setup.player.hasFlaccidDick()>>
+			<<goto 'Blair quest - morning bj'>>
+			<<set $characters.blair.quests.bj = true>>
+		<<elseif $pregnancyHappening>>
+			<<goto 'Childbirth'>>
+		<<elseif $pregnancyStreetsHappening>>
+			<<goto 'Pregnancy street client'>>
+		<<elseif $scavengingDidntReturn !== null>>
+			<<goto 'Scavenging - didnt came home'>>
+		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
+			<<goto 'Blair - morning surprise'>>
+		<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
+			<<goto 'Blair - pregnant'>>
+		<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && ($game.location.lab ?? false) && ($characters.laura.quests.productionLastDay ?? 0 + 10) < $game.day && ($characters.laura.quests.morningSampleDay ?? 0 + 20) < $game.day && setup.percentageChance(30) && !setup.player.hasFlaccidDick() && !$characters?.laura?.quests?.bedroomNotAllowed>>
+			<<goto 'Laura - morning sample'>>
+		<<elseif $game.day > 100 && !$player.quests.first_settlers && setup.baseManagement.population.livingHousesCount() > 0 && ((!$player.quests.first_settlers_day || $player.quests.first_settlers_day + 30) < $game.day)>>
+			<<goto 'First settlers'>>
+		<<else>>
+			<<goto 'Wood cabin'>>
+		<</if>>
+	<</if>>
+<</widget>>
