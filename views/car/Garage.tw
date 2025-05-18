@@ -22,6 +22,9 @@
                 <td>Damaged:</td>
                 <td><<= 100 - $player.car.health>>%</td>
                 <td>
+                    (In storage: <<=setup.cabinInventory.count('car_part')>>)
+                </td>
+                <td>
                     <<if setup.cabinInventory.has('car_part') && $player.car.health < 100>>
                         <<link 'Fix'>>
                             <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
@@ -35,6 +38,9 @@
             <tr>
                 <td>Fuel:</td>
                 <td><<=$player.car.fuel>>%</td>
+                <td>
+                    (In storage: <<=setup.cabinInventory.count('fuel')>>)
+                </td>
                 <td>
                     <<if setup.cabinInventory.has('fuel') && $player.car.fuel < 100>>
                         <<link 'Fill up'>>
