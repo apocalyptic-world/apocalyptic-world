@@ -45,6 +45,10 @@
 	<<goto 'Nightclub - bathroom introduction'>>
 <<elseif $player.reputation > 170 && ($game.location.gloryhole ?? false) && !$player?.quests?.gloryholeJobAsked && setup.percentageChance(_gloryHoleJobTriggerChance)>>
 	<<goto 'Nightclub - bathroom job'>>
+<<elseif !($locationEvents.nightclub ?? false)>>
+	<<if $gameDate.getDay() === 5>>
+		<<goto 'Nightclub - rave party enter'>>
+	<</if>>
 <</if>>
 
 
