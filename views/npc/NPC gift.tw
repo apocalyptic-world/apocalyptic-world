@@ -39,11 +39,8 @@
 					<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + _giftMultiplier*setup.gifts[_item].rel)>>
 					<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
 
-					<<script>>
-						Dialog.setup("NPC gift");
-        				Dialog.wiki(Story.get("NPC gift").processText());
-        				Dialog.open();
-					<</script>>
+					<<script>>Dialog.close();<</script>>
+					<<goto `passage()`>>
 				<</link>>
 		  </div>
 		<</capture>>

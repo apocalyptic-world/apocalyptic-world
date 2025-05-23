@@ -55,7 +55,6 @@ setup.items = {
             {name:'chastity_belt',price:30,sell:false},
             {name:'lube',price:10,sell:false},
             {name:'glass',price:15,sell:false},
-            {name:'plastic', price:5, sell: false},
             {name:'energy_drink',price:5,sell:false},
         ],
         sanctuary: [
