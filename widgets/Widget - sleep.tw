@@ -68,7 +68,7 @@
 <<set _doctorCount = setup.getDoctors()>>
 <<set _miscarrieageChanceBase = 12>>
 <<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
-<<set _isLowFood = ($slaves.length + $guests.length) < setup.cabinInventory.count('food')>>
+<<set _isLowFood = setup.cabinInventory.count('food') < ($slaves.length + $guests.length)>>
 
 <<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
