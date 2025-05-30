@@ -1,0 +1,27 @@
+:: Underground city office with Dom [bg-underground]
+<h1 class="ptitle">UNDERGROUND OFFICE</h1>
+<br />
+<<dom>>
+    What do you want?
+<</dom>>
+<br />
+<<if $characters.dom.quests.return_city_done && !$characters.dom.quests.return_city_done1 && (!$characters.dom.quests.return_city_done_day || ($characters.dom.quests.return_city_done +5) < $game.day)>>
+    <<goto 'Dom - Return city #2'>>
+<<elseif $characters.dom.quests.return_city_done1 && !$characters.dom.quests.return_city_done2 && ($characters.dom.quests.return_city_done1_day + 2) < $game.day>>
+    <<goto 'Dom - Return city #3'>>
+<<elseif $characters.dom.quests.return_city_done3 && !$characters.dom.quests.breaking_point && ($characters.dom.quests.return_city_done3_day + 2) < $game.day>>
+    <<goto 'Dom - Breaking point'>>
+<<elseif $characters.dom.quests.breaking_point && !$characters.dom.quests.cracks_in_throne && ($characters.dom.quests.breaking_point + 2) < $game.day>>
+    <<goto 'Dom - The Cracks in the Throne'>>
+<<elseif $characters.dom.quests.cracks_in_throne && !$characters.dom.quests.dinner && ($characters.dom.quests.breaking_point + 2) < $game.day && timeBetween('18:00', '22:00')>>
+    <<goto 'Dom - Dinner'>>
+<</if>>
+<<if $characters.dom.quests.dinner && !$characters.dom.quests.new_king && $characters.dom.quests.dinner_day < $game.day>>
+    <<link 'Kill dom'>>
+        <<goto 'Dom - kill'>>
+    <</link>>
+<</if>>
+<<link 'Leave'>>
+    <<addmins 10>>
+    <<goto 'Underground city'>>
+<</link>>

@@ -21,8 +21,9 @@
   <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
   <<grid underground shop 'Underground shop' 'Shop' 0 _isDisabled>>
 
-  <<if (($game.location.underground_office ?? false))>>	
-  	<<grid underground underground_office 'Underground city office' 'Office' 0 1>>
+  <<if (($game.location.underground_office ?? false))>>
+	<<set _officeLocation = ($characters.dom.killed ? 'Underground city office' : 'Underground city office with Dom')>>
+  	<<grid underground underground_office _officeLocation 'Office' 0 1>>
   <</if>>
 </div> 
 <br /><br />
