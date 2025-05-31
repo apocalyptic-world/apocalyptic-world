@@ -1,10 +1,12 @@
 :: Underground city office with Dom [bg-underground]
 <h1 class="ptitle">UNDERGROUND OFFICE</h1>
 <br />
-<<dom>>
-    What do you want?
-<</dom>>
-<br />
+<<if !$characters?.dom?.dead>>
+    <<dom>>
+        What do you want?
+    <</dom>>
+    <br />
+<</if>>
 <<if $characters.dom.quests.return_city_done && !$characters.dom.quests.return_city_done1 && (!$characters.dom.quests.return_city_done_day || ($characters.dom.quests.return_city_done +5) < $game.day)>>
     <<goto 'Dom - Return city #2'>>
 <<elseif $characters.dom.quests.return_city_done1 && !$characters.dom.quests.return_city_done2 && ($characters.dom.quests.return_city_done1_day + 2) < $game.day>>

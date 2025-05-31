@@ -1,4 +1,128 @@
 :: Dom - kill [bg-underground]
 <h1 class="ptitle">UNDERGROUND OFFICE</h1>
 <br />
-...
+Dom’s office door was already half-open when you got there. 
+Inside, he was pouring over old maps, scratching something out with a knife directly into the wood of his desk.
+<br /><br />
+<center>
+    <<image 'people/dom/knife_scratching.jpg' sfw>>
+</center>
+<br />
+He barely looked up.
+<br /><br />
+<<dom>>
+    What do you want? My head hurts.
+<</dom>>
+<br />
+You stepped in and closed the door behind you — slow, quiet.
+<br /><br />
+He finally glanced at you. His eyes were bloodshot, lips cracked. 
+<br /><br />
+<<dom>>
+    You look like hell. Sit.
+<</dom>>
+<br />
+<div id="option_sit">
+    <<linkreplace 'Sit'>>
+        <<run $('#option_stand').hide()>>
+        <<run $('#option_continue').show()>>
+        You sat down across the table
+    <</linkreplace>>
+</div>
+<div id="option_stand">
+    <<linkreplace "Don't">>
+        <<run $('#option_sit').hide()>>
+        <<run $('#option_continue').show()>>
+        You didn’t.
+    <</linkreplace>>
+</div>
+<div id="option_continue" style="display:none">
+    Something in your stillness made him pause.
+    <br /><br />
+    <<dom>>
+        What’s with the look?
+    <</dom>>
+    <br />
+    He asked, setting his knife down with a metallic clink.
+    <br /><br />
+    <center>
+        <<image 'people/dom/sit_table.jpg' sfw>>
+    </center>
+    <br /><br />
+    <<dom>>
+        You look like you’ve seen a ghost.
+    <</dom>>
+    <br />
+    You reached into your pocket.
+    <br /><br />
+    <<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+        <div id="option_revolver">
+            <<linkreplace 'Shot him with revolver'>>
+                <<drop $backpack 'bullet_revolver' 1>>
+                <<run $('#option_leave, #option_knife').hide()>>
+                <<run $('#option_continue2').show()>>
+                <<set _bgVolume = (settings.bgVolume / 20)>>
+		        <<audio 'single-shot' play volume _bgVolume>>
+                <center>
+                    <<image 'game/misc/pistol_shot.gif' sfw>>
+                </center>
+                <br /><br />
+                Your thumb cocked the hammer. The sound was sharp — final — and it hung between you both like a countdown.
+                <br /><br />
+                <center>
+                    <<image 'people/dom/dead.jpg' sfw>>
+                </center>
+                <br />
+                Dom opened his mouth, but the words never came.
+                <br /><br />
+            <</linkreplace>>
+        </div>
+    <</if>>
+    <<if $backpack.has('knife')>>
+        <div id="option_knife">
+            <<linkreplace 'Stab him in the neck'>>
+                In a single breath, you crossed the distance between you. 
+                The knife came from inside your coat — steel glinting for only a second before you slammed it deep into the side of his neck, just under the jaw.
+                <br /><br />
+                <center>
+                    <<image 'people/dom/dead.jpg' sfw>>
+                </center>
+                <br /><br />
+                Dom collapsed like a tower losing its last stone. His head hit the desk with a dull thud before rolling sideways. He twitched once. Then nothing.
+                <br /><br />
+                <<run $('#option_leave, #option_revolver').hide()>>
+                <<run $('#option_continue2').show()>>
+            <</linkreplace>>
+        </div>
+    <</if>>
+    <div id="option_leave">
+        <<link 'Leave'>>
+            <<addmins 10>>
+            <<goto 'Underground city'>>
+        <</link>>
+    </div>
+    <div id="option_continue2" style="display:none">
+        <<generateEnemies 6 0 6>>
+        That’s when the office door burst open.
+        <br /><br />
+        <center>
+            <<image 'people/dom/6men.jpg' sfw>>
+        </center>
+        <br /><br />
+        Six of his lieutenants — rough men, tall, tattooed, blades already drawn. Followed behind, shouting something each of them rushed into the room.
+        <br /><br />
+        They saw the blood. Saw you.
+        <br /><br />
+        <<sayNpc $enemies[0]>>
+            What the fuck did you do!?!?
+        <</sayNpc>>
+        <br /><br />
+        And everything exploded.
+        <br /><br />
+        <<linkreplace 'Fight'>>
+            <<set $game.death_reason = 'knife wound'>>
+            <<fight $enemies 'Dom - kill aftermath' 'Dead'>>
+            <<set $fight.skipEnding = true>>
+        <</linkreplace>>
+    </div>
+</div>
