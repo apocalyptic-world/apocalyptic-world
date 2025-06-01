@@ -2,10 +2,20 @@
 <h1 class="ptitle">UNDERGROUND OFFICE</h1>
 <br />
 
+
 <<if $characters.dom.quests.new_king_day < $game.day && !$characters.isabel.quests.new_boss>>
     <<goto 'Isabel - new boss'>>
 <</if>>
 
+
+<div id="characters-in-location">
+	<<if (_charactersInLocation['underground_office'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Isabel office'>>
+		<</link>>
+	<</if>>
+</div>
+<br /><br />
 <<link 'Leave'>>
     <<goto 'Underground city'>>
 <</link>>

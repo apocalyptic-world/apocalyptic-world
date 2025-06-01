@@ -1,5 +1,5 @@
 :: Isabel - date [bg-guesthouse]
-<h1 class="ptitle">ISABEL'S ROOM</h1>
+<h1 class="ptitle">ISABEL</h1>
 <br /><br />
 <<isabel>>
 	What you have in mind?
@@ -47,7 +47,32 @@
 		<<notPatreonIcon>>
 	</div>
 <</if>>
+<<if $player.quests.underground_boss>>
+	<<if recall($suppCode)>>
+		<<if timeBetween('20:00', '23:59')>>
+		<<link 'Nightclub'>>
+			<<set $player.companionsHome = $player.companions>>
+			<<set $player.companions = {}>>
+			<<goto 'Isabel - date [nightclub]'>>
+		<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				Nightclub
+			</div>
+		<</if>>
+		<<linkdesc>>
+			Time between 20:00-24:00
+		<</linkdesc>>
+	<<else>>
+		<div class="link-internal disabled" style="background: #ccc">
+			Nightclub
+			<<notPatreonIcon>>
+		</div>
+	<</if>>
+<</if>>
 
 <<link 'Leave'>>
-	<<goto 'Isabel room'>>
+	<<set _backLinks = ($dateBack ? $dateBack :  'Isabel room')>>
+	<<goto _backLinks>>
+	<<unset $dateBack>>
 <</link>>
