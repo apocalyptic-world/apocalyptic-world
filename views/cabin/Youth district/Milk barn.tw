@@ -24,10 +24,23 @@
             </td>
         </tr>
 		<tr class="item">
-			<td style="width: 300px">
+			<td style="min-width: 25%">
 				<span @class="''+_genderClass+''">
-				  <<=$slaves[_i].name>>
-                  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
+					<<link $slaves[_i].name>>
+						<<set $tmpGirl to $slaves[_i]>>
+						<<set $tmpGirl.location = 'milk_barn'>>
+						<<set $tmpGirlBack = 'Milk barn'>>
+						<<set $tmpGirl.rape to false>>
+						<<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
+						<<set $slaveId = $slaves[_i]>>
+						<<unset $guestId, $characterId, $childId>>
+						<<set $tmpGirlViewBack = 'NPC view'>>
+						<<goto $tmpGirlViewBack>>
+						<<set $sexForced = true>>
+					<</link>>
+					
+					<<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
 				</span>
 			</td>
 			<td>
