@@ -102,8 +102,85 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<</if>>
 	<</if>>
 
+	<<set _slaveSorter to clone($slaves)>>
+	<<if ($bsortBy === 'N')>>
+		<<set _slaveSorter.sort((a, b) => {
+		  	if (a.name < b.name) {
+		    		return -1;
+	  		}
+	  		if (a.name > b.name) {
+		    		return 1;
+	  		}
+	  		return 0;
+		})>>
+	<<elseif ($bsortBy === 'A')>>
+		<<set _slaveSorter.sort((a, b) => {
+		  	if (!('assignedTo' in a)) {
+				if (typeof $player.companions['slave:' + $slaves.findIndex(obj => obj.id === a.id)] !== 'undefined') {
+					var assignedToTempA = 'companion';
+		  		} else { 
+					var assignedToTempA = 'zzz'; 
+				}
+	  		} else {
+				var assignedToTempA = a.assignedTo;
+			}
+	  		if (!('assignedTo' in b)) {
+				if (typeof $player.companions['slave:' + $slaves.findIndex(obj => obj.id === b.id)] !== 'undefined') {
+					var assignedToTempB = 'companion';
+				} else { 
+					var assignedToTempB = 'zzz'; 
+				}
+	  		} else {
+				var assignedToTempB = b.assignedTo;
+			}
+
+		  	if (assignedToTempA < assignedToTempB) {
+	    			return -1;
+	  		}
+	  		if (assignedToTempA > assignedToTempB) {
+	    			return 1;
+	  		}
+	  		return 0;
+		})>>
+	<</if>>
+
 	<table id="slaves" class="npc-list">
-	<<for _i to 0; _i lt $slaves.length; _i++>>
+
+		<tr class="item">
+			<td style="min-width: 25%">
+				<<if ($bsortBy !== 'N')>>
+					Sort by: <<link 'Name'>>
+						<<set $bsortBy = 'N'>>
+						<<goto 'Basement'>>
+					<</link>>
+				<<else>>
+					Sort by: <strong> Name </strong>
+				<</if>>
+			</td>
+			<td>
+				<<if ($bsortBy !== 'A')>>
+					<<link 'Assignment'>>
+						<<set $bsortBy = 'A'>>
+						<<goto 'Basement'>>
+					<</link>>
+				<<else>>
+					<strong> Assignment </strong>
+				<</if>>
+			</td>
+			<td>
+				<<if ($bsortBy === 'N' || $bsortBy === 'A')>>
+					<<link 'Arrival (default)'>>
+						<<set $bsortBy = 'D'>>
+						<<goto 'Basement'>>
+					<</link>>
+				<<else>>
+					<strong> Arrival (default) </strong>
+				<</if>>
+			</td>
+		</tr>
+
+	<<for _slaveI, _slave range _slaveSorter>>
+		<<set _i = $slaves.findIndex(obj => obj.id === _slave.id) >>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
