@@ -22,7 +22,7 @@
 <<else>>
 
 	<<set _nurserySorter to clone($nursery)>>
-	<<if ($sortBy === 'N')>>
+	<<if ($nsortBy === 'N')>>
 		<<set _nurserySorter.sort((a, b) => {
 		  	if (a.name < b.name) {
 		    		return -1;
@@ -32,7 +32,7 @@
 	  		}
 	  		return 0;
 		})>>
-	<<elseif ($sortBy === 'M')>>
+	<<elseif ($nsortBy === 'M')>>
 		<<set _nurserySorter.sort((a, b) => {
 		  	if ((setup.getNpcById(a.family.mother)?.name ?? 'zzz') < (setup.getNpcById(b.family.mother)?.name ?? 'zzz')) {
 	    			return -1;
@@ -48,9 +48,9 @@
 
 		<tr class="item">
 			<td style="min-width: 25%">
-				<<if ($sortBy !== 'N')>>
+				<<if ($nsortBy !== 'N')>>
 					Sort by: <<link 'Name'>>
-						<<set $sortBy = 'N'>>
+						<<set $nsortBy = 'N'>>
 						<<goto 'Nursery'>>
 					<</link>>
 				<<else>>
@@ -58,9 +58,9 @@
 				<</if>>
 			</td>
 			<td>
-				<<if ($sortBy !== 'M')>>
+				<<if ($nsortBy !== 'M')>>
 					<<link 'Mother'>>
-						<<set $sortBy = 'M'>>
+						<<set $nsortBy = 'M'>>
 						<<goto 'Nursery'>>
 					<</link>>
 				<<else>>
@@ -68,9 +68,9 @@
 				<</if>>
 			</td>
 			<td>
-				<<if ($sortBy === 'N' || $sortBy === 'M')>>
+				<<if ($nsortBy === 'N' || $nsortBy === 'M')>>
 					<<link 'Arrival (default)'>>
-						<<set $sortBy = 'D'>>
+						<<set $nsortBy = 'D'>>
 						<<goto 'Nursery'>>
 					<</link>>
 				<<else>>
@@ -96,7 +96,7 @@
 			<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
 				<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
 			<</if>>
-			<<if $sortby === 'M'>>
+			<<if $nsortby === 'M'>>
 				<<if _motherNpc !== _currentMom>>
 					<br />
 					<<if (_motherNpc?.name ?? false)>>
