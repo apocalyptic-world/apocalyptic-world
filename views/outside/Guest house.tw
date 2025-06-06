@@ -100,12 +100,12 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<tr class="item">
 			<td style="min-width: 25%">
 				<<if ($sortBy !== 'N')>>
-					<<link 'Name'>>
+					Sort by: <<link 'Name'>>
 						<<set $sortBy = 'N'>>
 						<<goto 'Guest house'>>
 					<</link>>
 				<<else>>
-					<strong> Name </strong>
+					Sort by: <strong> Name </strong>
 				<</if>>
 			</td>
 			<td>
@@ -203,24 +203,42 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 							<<run _guests18yoTransWomen.push(_guestI)>>
 						<</if>>
 						<span @class="_genderClass + _customColorStyle">
-							<<link _guest.name>>
-								<<set $tmpGirl to _guest>>
-								<<set $tmpGirl.location = 'bedroom'>>
-								<<set $tmpGirlBack = 'Guest house'>>
-								<<set $tmpGirl.rape to false>>
-								<<set $tmpGirlCapture to false>>
-								<<set $tmpGirlInvite to false>>
-								<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
-								<<unset $slaveId>>
-								<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<if _guest.sleeping && !_guest.gender>>
-									<<goto 'Guesthouse - guest sleeping'>>
-								<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
-									<<goto 'Guesthouse - guest masturbating'>>
-								<<else>>
-							  		<<goto `$tmpGirlViewBack`>>
-								<</if>>
-							<</link>>
+
+							<div class="tooltip">
+								<<set _girlVisual to _guest>>
+								<span class="tooltiptext" style= "left: -130px;  background-color: transparent; opacity: 1;"> 
+        								<div class="say npcsay npc-say-visual" >
+            									<div class="girl_info_picture">
+                									<<if _girlVisual.portrait>>
+                    										<div class="say_custom_portrait">
+                        										<<include 'NPC visual'>>
+                    										</div>
+                									<<else>>
+                    										<<include 'NPC visual'>>
+                									<</if>>                
+										</div>
+									</div>
+								</span>
+
+								<<link _guest.name>>
+									<<set $tmpGirl to _guest>>
+									<<set $tmpGirl.location = 'bedroom'>>
+									<<set $tmpGirlBack = 'Guest house'>>
+									<<set $tmpGirl.rape to false>>
+									<<set $tmpGirlCapture to false>>
+									<<set $tmpGirlInvite to false>>
+									<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
+									<<unset $slaveId>>
+									<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<if _guest.sleeping && !_guest.gender>>
+										<<goto 'Guesthouse - guest sleeping'>>
+									<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
+										<<goto 'Guesthouse - guest masturbating'>>
+									<<else>>
+								  		<<goto `$tmpGirlViewBack`>>
+									<</if>>
+								<</link>>
+							</div>
 						</span>
 
 						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
