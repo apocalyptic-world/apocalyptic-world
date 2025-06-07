@@ -147,35 +147,30 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
-			<td style="min-width: 25%">
-				<<if ($bsortBy !== 'N')>>
-					Sort by: <<link 'Name'>>
-						<<set $bsortBy = 'N'>>
-						<<goto 'Basement'>>
-					<</link>>
-				<<else>>
-					Sort by: <strong> Name </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($bsortBy !== 'A')>>
-					<<link 'Assignment'>>
-						<<set $bsortBy = 'A'>>
-						<<goto 'Basement'>>
-					<</link>>
-				<<else>>
-					<strong> Assignment </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($bsortBy === 'N' || $bsortBy === 'A')>>
-					<<link 'Arrival (default)'>>
-						<<set $bsortBy = 'D'>>
-						<<goto 'Basement'>>
-					<</link>>
-				<<else>>
-					<strong> Arrival (default) </strong>
-				<</if>>
+			<td colspan="2">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($bsortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $bsortBy = 'N'>><<goto 'Basement'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($bsortBy !== 'A')>>
+							<<link 'Assignment'>><<set $bsortBy = 'A'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Assignment</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($bsortBy === 'N' || $bsortBy === 'A')>>
+							<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
 			</td>
 		</tr>
 

@@ -98,35 +98,30 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
-			<td style="min-width: 25%">
-				<<if ($sortBy !== 'N')>>
-					Sort by: <<link 'Name'>>
-						<<set $sortBy = 'N'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					Sort by: <strong> Name </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($sortBy !== 'A')>>
-					<<link 'Assignment'>>
-						<<set $sortBy = 'A'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					<strong> Assignment </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($sortBy === 'N' || $sortBy === 'A')>>
-					<<link 'Arrival (default)'>>
-						<<set $sortBy = 'D'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					<strong> Arrival (default) </strong>
-				<</if>>
+			<td colspan="2">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($sortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $sortBy = 'N'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy !== 'A')>>
+							<<link 'Assignment'>><<set $sortBy = 'A'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Assignment</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy === 'N' || $sortBy === 'A')>>
+							<<link 'Arrival (default)'>><<set $sortBy = 'D'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
 			</td>
 		</tr>
 

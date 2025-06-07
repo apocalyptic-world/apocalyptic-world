@@ -47,35 +47,33 @@
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
-			<td style="min-width: 25%">
-				<<if ($nsortBy !== 'N')>>
-					Sort by: <<link 'Name'>>
-						<<set $nsortBy = 'N'>>
-						<<goto 'Nursery'>>
-					<</link>>
-				<<else>>
-					Sort by: <strong> Name </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($nsortBy !== 'M')>>
-					<<link 'Mother'>>
-						<<set $nsortBy = 'M'>>
-						<<goto 'Nursery'>>
-					<</link>>
-				<<else>>
-					<strong> Mother </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($nsortBy === 'N' || $nsortBy === 'M')>>
-					<<link 'Arrival (default)'>>
-						<<set $nsortBy = 'D'>>
-						<<goto 'Nursery'>>
-					<</link>>
-				<<else>>
-					<strong> Arrival (default) </strong>
-				<</if>>
+			<td colspan="2">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($nsortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $nsortBy = 'N'>><<goto 'Nursery'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($nsortBy !== 'M')>>
+							<<link 'Mother'>>
+								<<set $nsortBy = 'M'>>
+								<<goto 'Nursery'>>
+							<</link>>
+						<<else>>
+							<strong> Mother </strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($nsortBy === 'N' || $nsortBy === 'A')>>
+							<<link 'Arrival (default)'>><<set $nsortBy = 'D'>><<goto 'Nursery'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
 			</td>
 		</tr>
 
