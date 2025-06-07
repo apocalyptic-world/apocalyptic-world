@@ -202,6 +202,12 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 							<div class="tooltip">
 								<<set _girlVisual to _guest>>
 								<span class="tooltiptext" style= "left: -130px;  background-color: transparent; opacity: 1;"> 
+									<<for _skill range (_guest.skills ?? [])>>
+										<div class="trait tooltip">
+											<<=setup.skills[_skill].title>>
+										</div>
+										<br />
+									<</for>>
         								<div class="say npcsay npc-say-visual" >
             									<div class="girl_info_picture">
                 									<<if _girlVisual.portrait>>
@@ -213,6 +219,12 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
                 									<</if>>                
 										</div>
 									</div>
+									<<for _trait range (_guest.traits ?? [])>>
+										<div class="trait tooltip">
+											<<=setup.traits[_trait].title>>
+										</div>
+										<br />
+									<</for>>
 								</span>
 
 								<<link _guest.name>>
