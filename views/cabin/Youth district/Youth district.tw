@@ -18,3 +18,10 @@
       <<grid cabin milk_barn 'Milk barn' 'Milk barn' false 1>>
     <</if>>
 </div>
+
+<<if !($locationEvents.youth_district ?? false)>>
+	<<if !($game.location.school ?? false) && !$player?.quests.school_talk $game.day > 100 && setup.percentageChance(10) && timeBetween('12:00', '16:00') && $weather?.weather === 'sun' && (setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0})[0] ?? []).length>>
+		<<set $locationEvents.youth_district = true>>
+		<<goto 'Event - Youth district - teaching outside'>>
+	<</if>>
+<</if>>
