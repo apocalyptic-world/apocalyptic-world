@@ -433,6 +433,10 @@ Save.onLoad.add(function (save) {
     }
 
     for(var saveCharI in save.state.history[save.state.index].variables.characters) {
+        if (!save.state.history[save.state.index].variables.characters[saveCharI]) {
+            delete save.state.history[save.state.index].variables.characters[saveCharI];
+            continue;
+        }
         if (typeof save.state.history[save.state.index].variables.characters[saveCharI].age !== 'undefined' && typeof save.state.history[save.state.index].variables.characters[saveCharI].birthDate === 'undefined') {
             save.state.history[save.state.index].variables.characters[saveCharI].birthDate = setup.getBirthDate(save.state.history[save.state.index].variables.characters[saveCharI].age);
             delete save.state.history[save.state.index].variables.characters[saveCharI].age;

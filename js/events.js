@@ -33,7 +33,6 @@ setup.filterNPCs = function(list, criteria) {
             } else if (typeof value === 'number') {
                 return npc[key] >= value;
             } else if (key.endsWith('_inc')) {
-                console.log(key);
                 const actualKey = key.slice(0, -4);
                 return Array.isArray(npc[actualKey]) &&
                        Array.isArray(value) &&
