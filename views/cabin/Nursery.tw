@@ -34,10 +34,10 @@
 		})>>
 	<<elseif ($nsortBy === 'M')>>
 		<<set _nurserySorter.sort((a, b) => {
-		  	if ((setup.getNpcById(a.family.mother)?.name ?? 'zzz') < (setup.getNpcById(b.family.mother)?.name ?? 'zzz')) {
+		  	if ((setup.getNpcById(a.family?.mother)?.name ?? 'zzz') < (setup.getNpcById(b.family?.mother)?.name ?? 'zzz')) {
 	    			return -1;
 	  		}
-	  		if ((setup.getNpcById(a.family.mother)?.name ?? 'zzz') > (setup.getNpcById(b.family.mother)?.name ?? 'zzz')) {
+	  		if ((setup.getNpcById(a.family?.mother)?.name ?? 'zzz') > (setup.getNpcById(b.family?.mother)?.name ?? 'zzz')) {
 	    			return 1;
 	  		}
 	  		return 0;
@@ -67,7 +67,7 @@
 						<</if>>
 					</span>
 					<span>
-						<<if ($nsortBy === 'N' || $nsortBy === 'A')>>
+						<<if ($nsortBy == 'N' || $nsortBy === 'M')>>
 							<<link 'Arrival (default)'>><<set $nsortBy = 'D'>><<goto 'Nursery'>><</link>>
 						<<else>>
 							<strong>Arrival (default)</strong>
@@ -94,7 +94,7 @@
 			<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
 				<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
 			<</if>>
-			<<if $nsortby === 'M'>>
+			<<if $nsortBy === 'M'>>
 				<<if _motherNpc !== _currentMom>>
 					<br />
 					<<if (_motherNpc?.name ?? false)>>
