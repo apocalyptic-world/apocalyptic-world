@@ -17,6 +17,7 @@ You order a beer at the bar and start drinking it.
 <<addmins 10>>
 
 <<if settings.transEnabled && !$player.metTransGirl>>
+	<<set _npcShow = true>>
 	You see an <strong class="iitem">odd</strong> looking girl sitting alone at the bar.
 	<br />
 	<<set $player.metTransGirl = true>>
@@ -32,7 +33,7 @@ You order a beer at the bar and start drinking it.
 	<</linkreplace>>
 <</if>>
 
-<<if $player.reputation > 70 && setup.percentageChance(40)>>
+<<if $player.reputation > 70 && setup.percentageChance(40) && _npcShow>>
 	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. You turn around and in front of you, you see a girl dressed all in pink. She asks if you'd like to dance in a quieter corner.
 	<br /><br />
 	<center>

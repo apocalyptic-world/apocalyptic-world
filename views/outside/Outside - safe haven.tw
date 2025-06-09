@@ -18,7 +18,13 @@ You freeze, scanning the area. A parent? A threat? The wasteland teaches you to 
 <br /><br />
 You crouch down, your shadow falling over the child. His cries falter for a moment, and his wide, innocent eyes lock onto yours. For a moment, you see your reflection in those eyes—not the hardened survivor the wasteland has made you, but the person you once were, long ago.
 <br /><br />
-<<newchild>>
+<<if setup.percentageChance(50)>>
+    <<newgirl>>
+    <<set _child = $tmpGirl>>
+<<else>>
+    <<newguy>>
+    <<set _child = $tmpGuy>>
+<</if>>
 <<set _dateNow = clone($gameDate)>>
 <<set _randomDays = Math.floor(Math.random() * (28 - 7 + 1)) + 7>>
 <<run _dateNow.setDate(_dateNow.getDate() - _randomDays)>>
