@@ -8,6 +8,10 @@
 <<set _allyCount = _guards.length + Object.keys($player.companions).length>>
 <<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
 <<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
+<<if $player?.baseManagement?.buildings?.wood_wall >= 80>>
+	<<set _enemyGuyCount -= 1>>
+	<<set _enemyGirlCount -= 1>>
+<</if>>
 <br /><br />
 As you step outside, the cool evening breeze brushes against your face, carrying with it a faint, unfamiliar scent. 
 The tranquility is abruptly shattered by the sound of metal clanging against metal. 
