@@ -1,0 +1,16 @@
+:: Widget - weather [widget]
+
+<<widget weatherAudioStart>>
+    <<if settings.bgVolumeEnabled>>
+		<<set _bgWeather = "bg-" + $weather.weather>>
+		<<set _bgVolume = (settings.bgVolume / 20)>>
+		<<audio _bgWeather loop play volume _bgVolume>>
+	<</if>>
+<</widget>>
+
+<<widget weatherAudioStop>>
+    <<if $weather>>
+	    <<set _bgWeather = 'bg-' + $weather.weather>>
+	    <<audio  _bgWeather stop>>
+    <</if>> 
+<</widget>>

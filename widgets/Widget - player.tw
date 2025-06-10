@@ -402,12 +402,8 @@
 			weather: _weather
 		}>>
 	<</if>>
-	<<if settings.bgVolumeEnabled>>
-		<<set _bgWeather = "bg-" + $weather.weather>>
-		<<set _bgVolume = (settings.bgVolume / 20)>>
-		<<audio _bgWeather loop play volume _bgVolume>>
-	<</if>>
 
+	<<weatherAudioStart>>
 
 	<<if $game.day > 150 && setup.percentageChance(1) && $weather?.weather === 'sun' && !$weather.heatWave && $guests.length > 0>>
 		<<set $weather.heatWave = true>>

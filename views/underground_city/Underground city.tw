@@ -1,5 +1,6 @@
 :: Underground city [Place bg-underground] {"position":"1814,1223","size":"100,100"}
 <h1 class="ptitle">UNDERGROUND CITY</h1>
+<<weatherAudioStop>>
 <div class="menu-grid">
    <<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 0.5)>>
   <<grid underground cage 'Fight cage' 'Fight cage' 0 _isDisabled>>
@@ -27,7 +28,10 @@
   <</if>>
 </div> 
 <br /><br />
-[[Leave|Outside]]
+<<link 'Leave'>>
+	<<weatherAudioStart>>
+	<<goto 'Outside'>>
+<</link>>
 
 <<if !($game.location.streets ?? false) && isMetChar('blair') && ($characters.blair.quests.metOnDay + 3) < $game.day>>
 	<<set $game.location.streets = true>>
