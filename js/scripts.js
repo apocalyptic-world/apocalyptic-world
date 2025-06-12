@@ -670,6 +670,19 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
+setup.getRandomElements = function(list, count) {
+    if (!Array.isArray(list)) return [];
+    const copy = [...list];
+    const result = [];
+
+    while (result.length < count && copy.length > 0) {
+        const index = Math.floor(Math.random() * copy.length);
+        result.push(copy.splice(index, 1)[0]);
+    }
+
+    return result;
+};
+
 setup.commonValues = function(allArrays) {
 	var array = allArrays[0] ?? [];
 	var length = allArrays.length;

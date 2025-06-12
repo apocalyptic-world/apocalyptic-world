@@ -126,7 +126,7 @@
 	<</link>>
 <</if>>
 <<if !($locationEvents.bathhouse ?? false)>>
-	<<set _hornyNpcsBlackHair = setup.filterNPCs($guests, { hair: 'black', horny: 50, 'virgin': false, race_in: ['white', 'latina']})>>
+	<<set _hornyNpcsBlackHair = setup.filterNPCs($guests, { hair: 'black', horny_gte: 50, 'virgin': false, race_in: ['white', 'latina']})>>
 	<<if  (_hornyNpcsBlackHair[0] ?? []).length && setup.percentageChance(10) && recall($suppCode)>>
 		<<set $locationEvents.bathhouse = true>>
 		<<set _hornyNpcsBlackHair = _hornyNpcsBlackHair[0].shuffle()>>

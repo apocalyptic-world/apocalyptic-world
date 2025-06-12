@@ -29,23 +29,38 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 <br />
 As the event draws to a close, the villagers gather around a makeshift bonfire. They share stories and laughter, forming connections that go beyond mere survival. They realize that, in this post-apocalyptic world, their strength lies not only in their physical abilities but also in their collective spirit.
 <br /><br />
-<<if setup.percentageChance(20)>>
+<<set _randomNpcs = setup.filterNPCs($guests, {virgin:false, horny_gte: 50, race_not:['black'], gender: 0, likesGuys: true})>>
+<<if (_randomNpcs[0] ?? []).length >= 3 && setup.percentageChance(100)>>
+	<<set _getRandomNpcs = setup.getRandomElements(_randomNpcs[0], 3)>>
+	<<set _npc1 = $guests[_getRandomNpcs[0]]>>
+	<<set _npc2 = $guests[_getRandomNpcs[1]]>>
+	<<set _npc3 = $guests[_getRandomNpcs[2]]>>
+	<<set 
+		_npc1.horny = 0,
+		_npc2.horny = 0,
+		_npc3.horny = 0
+	>>
 	<<video 'cabin/workout_group1'>>
 	<br /><br />
-	Everyone leaves except you and two other girls. They look at each other with smile on their face and instantly starts to make out in front of you
+	Everyone leaves except you and <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>>. 
+	They look at each other with smile on their face and instantly starts to make out in front of you
 	<br /><br />
 	<<video 'cabin/workout_group2'>>
 	<br /><br />
-	They giggle as one of the girls decides to get on her knees and other girl helps to open your pants. Look like they're decided to have fun without asking you your permission. One girl gently licks your already hard dick as other girl pushes her onto your dick with force...
+	They giggle as <<=setup.displayName(_npc1)>> decides to get on her knees and <<=setup.displayName(_npc2)>> helps to open your pants.
+	Look like they're decided to have fun without asking you your permission. 
+	<<=setup.displayName(_npc1)>> gently licks your already hard dick as <<=setup.displayName(_npc2)>> pushes her onto your dick with force...
 	<br /><br />
 	<<video 'cabin/workout_group3'>>
 	<br /><br />
-	Another one of the girls peeks out through the door and notices what's happening. Instead of showing surprise in her eyes or turning away to leave, she also smiles and comes in your direction. After a moment, she has already knelt down to enjoy your dick.
+	<<=setup.displayName(_npc3)>> peeks out through the door and notices what's happening. 
+	Instead of showing surprise in her eyes or turning away to leave, she also smiles and comes in your direction. 
+	After a moment, she has already knelt down to enjoy your dick.
 	<br /><br />
 	<<linkreplace 'Fuck one of them'>>
 		<<video 'cabin/workout_group4'>>
 		<br /><br />
-			One of the girls bend over and two others get on each of her side and just enjoys the view
+			<<=setup.displayName(_npc1)>> bend over and two others get on each of her side and just enjoys the view
 		<br /><br />
 		<<video 'cabin/workout_group5'>>
 		<br /><br />
@@ -59,7 +74,7 @@ As the event draws to a close, the villagers gather around a makeshift bonfire. 
 			<<image 'places/cabin/workout_group_cum.webp'>>
 		</center>
 		<br /><br />
-		One of the girls took the initiative and pressed her lips against your dick to catch everything that comes out of you.
+		<<=setup.displayName(_npc3)>> took the initiative and pressed her lips against your dick to catch everything that comes out of you.
 		<br /><br />
 	<</linkreplace>>
 <</if>>
