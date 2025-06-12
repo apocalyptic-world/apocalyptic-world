@@ -96,19 +96,21 @@
 			<</if>>
 			<<if $nsortBy === 'M'>>
 				<<if _motherNpc !== _currentMom>>
-					<br />
-					<<if (_motherNpc?.name ?? false)>>
-						Kid(s) of <<=setup.displayName(_motherNpc)>>:
-					<<else>>
-						Orphan(s):
-					<</if>>
-					<br />
+					<tr class="item">
+						<td colspan="3">
+							<<if (_motherNpc?.name ?? false)>>
+								Kid(s) of <<=setup.displayName(_motherNpc)>>:
+							<<else>>
+								Orphan(s):
+							<</if>>
+						</td>
+					</tr>
 					<<set _currentMom = _motherNpc>>
 				<</if>>
 			<</if>>
 
 			<tr class="item">
-				<td style="width: 300px">
+				<td class="min25">
 					<span @class="_genderClass + _customColorStyle">
 						<span data-balloon-length="medium" @aria-label="Mother: '' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
@@ -126,7 +128,7 @@
 				<td>
 					Age: <<=setup.getAge(_nursery)>>
 				</td>
-				<td>
+				<td class="throw-out">
 					<<link 'Throw out'>>
 					  <<dialog 'Throw out'>>
 						  Are you sure you want to throw <<=(_nursery.gender ? 'him' : 'her')>> out?
@@ -144,6 +146,16 @@
 	<</for>>
 	</table>
 <</if>>
+
+<style>
+	.min25 {
+		min-width: 25%;
+	}
+
+	.throw-out {
+    	width: 29%;
+	}
+</style>
 
 [[Back|Youth district]]
 
