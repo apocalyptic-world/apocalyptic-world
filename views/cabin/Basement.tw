@@ -223,26 +223,56 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 					</span>
 				<<else>>
 					<span @class="_genderClass + _customColorStyle">
-					  <<link $slaves[_i].name>>
-						<<set $tmpGirl to $slaves[_i]>>
-						<<set $tmpGirl.location = 'basement'>>
-						<<set $tmpGirlBack = 'Basement'>>
-						<<set $tmpGirl.rape to false>>
-						<<set $tmpGirlCapture to false>>
-						<<set $tmpGirlInvite to false>>
-						<<set $tmpGirlViewBack = 'NPC view'>>
-						<<set $slaveId = _i>>
 
-						<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>
-							<<if typeof $slaves[_i].quests === 'undefined'>>
-								<<set $slaves[_i].quests = {}>>
-							<</if>>
-							<<set $slaves[_i].quests.firstBasementVisit = true>>
-							<<goto 'Basement - first girl visit'>>
-						<<else>>
-							<<goto `$tmpGirlViewBack`>>
-						<</if>>
-					  <</link>>
+						<div class="tooltip">
+							<<set _girlVisual to $slaves[_i]>>
+							<span class="tooltiptext" style= "left: -130px;  background-color: transparent; opacity: 1;"> 
+								<<for _skill range ($slaves[_i].skills ?? [])>>
+									<div class="trait tooltip">
+										<<=setup.skills[_skill].title>>
+									</div>
+									<br />
+								<</for>>
+       								<div class="say npcsay npc-say-visual" >
+           									<div class="girl_info_picture">
+               									<<if _girlVisual.portrait>>
+                   										<div class="say_custom_portrait">
+                       										<<include 'NPC visual'>>
+                   										</div>
+               									<<else>>
+                   										<<include 'NPC visual'>>
+               									<</if>>                
+									</div>
+								</div>
+								<<for _trait range ($slaves[_i].traits ?? [])>>
+									<div class="trait tooltip">
+										<<=setup.traits[_trait].title>>
+									</div>
+									<br />
+								<</for>>
+							</span>
+
+					  		<<link $slaves[_i].name>>
+								<<set $tmpGirl to $slaves[_i]>>
+								<<set $tmpGirl.location = 'basement'>>
+								<<set $tmpGirlBack = 'Basement'>>
+								<<set $tmpGirl.rape to false>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
+								<<set $tmpGirlViewBack = 'NPC view'>>
+								<<set $slaveId = _i>>
+
+								<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>
+									<<if typeof $slaves[_i].quests === 'undefined'>>
+										<<set $slaves[_i].quests = {}>>
+									<</if>>
+									<<set $slaves[_i].quests.firstBasementVisit = true>>
+									<<goto 'Basement - first girl visit'>>
+								<<else>>
+									<<goto `$tmpGirlViewBack`>>
+								<</if>>
+					  		<</link>>
+						</div>
 					</span>
 				  <</if>>
 				  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
