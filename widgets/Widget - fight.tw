@@ -45,7 +45,9 @@
 <</widget>>
 
 <<widget fightAction>>
-	<<if (typeof $args[1] === 'undefined')>>
+	<<if setup.perkHas('drunk') && setup.percentageChance(50)>>
+		<<set $fight.messages.push('You missed your shot because you are drunk')>>
+	<<elseif (typeof $args[1] === 'undefined')>>
 		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 3, 0)>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
