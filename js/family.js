@@ -15,9 +15,7 @@ setup.family = {
             return true;
         }
         // grandchild of mc? mc son's daughter or daughter's daughter
-        return 
-            (npc.family.hasOwnProperty('mother') && setup.family.isBloodToMC(npc.family.mother)) ||
-            (npc.family.hasOwnProperty('father') && setup.family.isBloodToMC(npc.family.father)) ;
+        return (npc.family?.hasOwnProperty('mother') && setup.getNpcById(npc.family.mother) && setup.family.isBloodToMC(setup.getNpcById(npc.family.mother))) || (npc.family?.hasOwnProperty('father') && setup.getNpcById(npc.family.father) && setup.family.isBloodToMC(setup.getNpcById(npc.family.father))) ;
     },
 
     getFamily: function(npc) {
