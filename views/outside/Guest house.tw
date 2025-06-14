@@ -93,6 +93,26 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	  		}
 	  		return 0;
 		})>>
+	<<elseif ($sortBy === 'PA')>>
+		<<set _guestSorter.sort((a, b) => {
+		  	if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) {
+		    		return -1;
+	  		}
+	  		if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) {
+		    		return 1;
+	  		}
+	  		return 0;
+		})>>
+	<<elseif ($sortBy === 'PD')>>
+		<<set _guestSorter.sort((a, b) => {
+		  	if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) {
+		    		return 1;
+	  		}
+	  		if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) {
+		    		return -1;
+	  		}
+	  		return 0;
+		})>>
 	<</if>>
 
 	<table id="slaves" class="npc-list">
@@ -115,7 +135,19 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<</if>>
 					</span>
 					<span>
-						<<if ($sortBy === 'N' || $sortBy === 'A')>>
+						Pregnancy (<<if ($sortBy !== 'PA')>>
+							<<link '&#11167;'>><<set $sortBy = 'PA'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<div style="padding-left:18px"><strong>&#11167;</strong></div>
+						<</if>>
+						<<if ($sortBy !== 'PD')>>
+							<<link '&#11165;'>><<set $sortBy = 'PD'>><<goto 'Guest house'>><</link>>)
+						<<else>>
+							<div style="padding-left:18px"><strong>&#11165;</strong>)</div>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy === 'N' || $sortBy === 'A' || $sortBy === 'PA' || $sortBy === 'PD')>>
 							<<link 'Arrival (default)'>><<set $sortBy = 'D'>><<goto 'Guest house'>><</link>>
 						<<else>>
 							<strong>Arrival (default)</strong>
