@@ -54,64 +54,35 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<else>>
 
 	<<set _guestSorter to clone($guests)>>
-	<<if ($sortBy === 'N')>>
+	<<if $sortBy === 'N'>>
 		<<set _guestSorter.sort((a, b) => {
-		  	if (a.name < b.name) {
-		    		return -1;
-	  		}
-	  		if (a.name > b.name) {
-		    		return 1;
-	  		}
-	  		return 0;
+			if (a.name < b.name) return -1;
+			if (a.name > b.name) return 1;
+			return 0;
 		})>>
-	<<elseif ($sortBy === 'A')>>
+	<<elseif $sortBy === 'A'>>
 		<<set _guestSorter.sort((a, b) => {
-		  	if (!('assignedTo' in a)) {
-				if (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === a.id)] !== 'undefined') {
-					var assignedToTempA = 'companion';
-		  		} else { 
-					var assignedToTempA = 'zzz'; 
-				}
-	  		} else {
-				var assignedToTempA = a.assignedTo;
-			}
-	  		if (!('assignedTo' in b)) {
-				if (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === b.id)] !== 'undefined') {
-					var assignedToTempB = 'companion';
-				} else { 
-					var assignedToTempB = 'zzz'; 
-				}
-	  		} else {
-				var assignedToTempB = b.assignedTo;
-			}
+			let assignedToTempA = ('assignedTo' in a)
+				? a.assignedTo
+				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === a.id)] !== 'undefined')
+					? 'companion'
+					: 'zzz';
 
-		  	if (assignedToTempA < assignedToTempB) {
-	    			return -1;
-	  		}
-	  		if (assignedToTempA > assignedToTempB) {
-	    			return 1;
-	  		}
-	  		return 0;
+			let assignedToTempB = ('assignedTo' in b)
+				? b.assignedTo
+				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === b.id)] !== 'undefined')
+					? 'companion'
+					: 'zzz';
+
+			if (assignedToTempA < assignedToTempB) return -1;
+			if (assignedToTempA > assignedToTempB) return 1;
+			return 0;
 		})>>
-	<<elseif ($sortBy === 'PA')>>
+	<<elseif $sortBy === 'P'>>
 		<<set _guestSorter.sort((a, b) => {
-		  	if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) {
-		    		return -1;
-	  		}
-	  		if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) {
-		    		return 1;
-	  		}
-	  		return 0;
-		})>>
-	<<elseif ($sortBy === 'PD')>>
-		<<set _guestSorter.sort((a, b) => {
-		  	if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) {
-		    		return 1;
-	  		}
-	  		if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) {
-		    		return -1;
-	  		}
-	  		return 0;
+			if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) return 1;
+			if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) return -1;
+			return 0;
 		})>>
 	<</if>>
 
@@ -135,15 +106,10 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<</if>>
 					</span>
 					<span>
-						Pregnancy <<if ($sortBy !== 'PA')>>
-							<<link '&#11167;'>><<set $sortBy = 'PA'>><<goto 'Guest house'>><</link>>
+						<<if ($sortBy !== 'P')>>
+							<<link 'Pregnancy'>><<set $sortBy = 'P'>><<goto 'Guest house'>><</link>>
 						<<else>>
-							<div style="padding-left:18px"><strong>&#11167;</strong></div>
-						<</if>>
-						<<if ($sortBy !== 'PD')>>
-							<<link '&#11165;'>><<set $sortBy = 'PD'>><<goto 'Guest house'>><</link>>
-						<<else>>
-							<div style="padding-left:18px"><strong>&#11165;</strong></div>
+							<strong>Pregnancy</strong>
 						<</if>>
 					</span>
 					<span>
