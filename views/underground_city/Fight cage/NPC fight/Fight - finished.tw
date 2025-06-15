@@ -3,7 +3,55 @@
 <br />
 <<set _win = Object.keys($fightCage.fighters).length > 0>>
 
-As the defeated fighter is dragged off, the opposing leader approaches. 
+<<if _win>>
+	<<set _plural = Object.keys($fightCage.fighters).length > 1>>
+	Your victorious <<=_plural ? 'fighters come' : 'fighter comes'>> out of the ring elated, fists raised in the air as the roaring crowd chants their <<=_plural? 'names':'name'>>!!
+	<br /><br />
+        <<for _fighterI, _Fighter range $fightCage.fighters>>
+		<<sayNpc _Fighter>>
+		        <<=either([
+		            'That was so satisfying!',
+		            "I bet they didn't see that coming!",
+		            "Bring it on!  Who wants some of this?!",
+		            "The truth is painfully simple: You lost because you aren't me.",
+		            "They'll have to train a lot harder to stand a chance.",
+		            "I think one of them bled on me..",
+		            "Are we getting ice cream after this?",
+		            "I bruised my knuckles on that last fighter's face..",
+		            "Mortal Kombat!!!",
+		            "I came here to kick ass and chew bubble gum.  Now where's my bubble gum?",
+		        ])>>
+		<</sayNpc>>
+		<br />
+        <</for>>
+<</if>>
+
+<<if $fightCage.fightersLost ?? false>>
+	<<set _plural = Object.keys($fightCage.fightersLost).length > 1>>
+	Your fallen <<=_plural ? 'fighters limp' : 'fighter limps'>> back from <<=_plural ? 'their matches' : 'the match'>>, nursing a few wounds.  <<=_plural ? 'They return' : 'The fighter returns'>> to you dejected as the crowds behind them cheer for the victors. 
+	<br /><br />
+        <<for _fighterI, _Fighter range $fightCage.fightersLost>>
+		<<sayNpc _Fighter>>
+		        <<=either([
+		            'I should have trained harder!',
+		            "I'm sorry I let you down...",
+		            "Next time, this ends differently.",
+		            "Ouch, my ribs...",
+		            "Someone had to lose.",
+		            "They're putting rocks in their gloves!",
+		            "I think I twisted an ankle!",
+		            "Bitch is going down next time!",
+		            "We can't win them all...",
+		            "I know I'm better than this...",
+		            "I will not fail again, sir.",
+		        ])>>
+		<</sayNpc>>
+		<br />
+        <</for>>
+<</if>>
+<br />
+
+As the last defeated fighter is dragged off, the opposing leader approaches. 
 He’s a wiry, snake-like man with a perpetual sneer, dressed in a patchwork of scavenged armor. 
 His sharp eyes flick over you, studying you as if trying to find the cracks in your armor.
 <br /><br />
