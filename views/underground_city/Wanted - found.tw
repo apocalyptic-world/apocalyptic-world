@@ -23,8 +23,10 @@ You waited for some time and it paid off. <strong>You see <<=_wantedPron2>>!</st
 			<<goto `_gotoLink`>>
 		<<elseif setup.percentageChance(30)>>
 			<<goto 'Wanted - fight'>>
-		<<elseif setup.percentageChance(30) && !$wanted[$wantedId].gender>>
+		<<elseif setup.percentageChance(10) && !$wanted[$wantedId].gender>>
 			<<goto 'Wanted - parent'>>
+		<<elseif setup.percentageChance(10) && !$wanted[$wantedId].gender && recall($suppCode)>>
+			<<goto 'Wanted - brick wall'>>
 		<<else>>
 			<<goto 'Wanted - catched'>>
 		<</if>>
