@@ -54,10 +54,17 @@
 	<<for _i to 0; _i lt $fight.allies.length; _i++>>
 		<<capture _i>>
 			<div class="enemy-div">
-				<div class="girl_info_picture">
-					<<set _girlVisual = $fight.allies[_i]>>
-					<<include 'NPC visual'>>
-				</div>
+				<<if $fight.allies[_i].portrait>>
+					<div class="girl_fight_picture">
+						<<set _girlVisual = $fight.allies[_i]>>
+						<<include 'NPC visual'>>
+					</div>
+				<<else>>
+					<div class="girl_info_picture">
+						<<set _girlVisual = $fight.allies[_i]>>
+						<<include 'NPC visual'>>
+					</div>
+				<</if>>
 				<<=$fight.allies[_i].name>>
 				<div class="enemy-hp">
 				<div class="enemy-hp-border">
