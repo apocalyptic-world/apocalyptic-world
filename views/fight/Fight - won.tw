@@ -7,6 +7,31 @@
 You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight and manage to drop them all on the ground.
 <br /><br />
 
+<<if $fight.hp > 20>>
+	<<if $fight.allies.length > 0>>
+		<<set _plural = $fight.allies.length > 1>>
+		Your victorious <<=_plural ? 'team' : 'partner'>> cheers as the last enemy falls. <<=_plural ? 'They tend to their wounds and help their teammates to their feet as they regroup at your side, ready for the next battle.':'You check your companion for wounds as you assess the results of the fight.'>>
+		<br /><br />
+		<<set _Fighter = either($fight.allies)>>
+		<<sayNpc _Fighter>>
+		        <<=either([
+		            'It feels so good to give a good beat down!',
+		            "They didn't know who they were messing with!",
+		            "What are you going to do with them?",
+		            "Did you get hurt?  I can take care of that for you.",
+		            "The wasteland is always dangerous.  Today we were the danger.",
+		            "I think one of them is crawling away..",
+		            "Are we getting ice cream after this?",
+		            "I think I lost a shoe up that last bandit's ass..",
+		            "War.  War never changes...",
+		            "We came, we saw, we kicked some ass!",
+		        ])>>
+		<</sayNpc>>
+		<br />
+	<strong>You step away from your <<=_plural ? 'team' : 'partner'>> to direct your attention to the fools who tried to fight you.</strong><br />
+	<</if>>
+<</if>>
+
 <<set $fight.enemiesAlive = false>>
 <<set $fight.enemiesCaptured = 0>>
 <<set _enemiesWithAction = 0>>
