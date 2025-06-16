@@ -6,9 +6,11 @@
 		<<capture _i>>
 			<<set _enemyAvatar = [0, 2].includes($fight.enemies[_i].gender) ? 0 : 1>>
 			<div class="enemy-div">
-				<div class="girl_info_picture">
-					<<set _girlVisual = $fight.enemies[_i]>>
-					<<include 'NPC visual'>>
+				<div class="fight-npc-div">
+					<div class="girl_info_picture">
+						<<set _girlVisual = $fight.enemies[_i]>>
+						<<include 'NPC visual'>>
+					</div>
 				</div>
 				<<=$fight.enemies[_i].name>>
 				<div class="enemy-hp">
@@ -53,18 +55,16 @@
 	<div id="fight-allies">
 	<<for _i to 0; _i lt $fight.allies.length; _i++>>
 		<<capture _i>>
-			<div class="enemy-div">
-				<<if $fight.allies[_i].portrait>>
-					<div class="girl_fight_picture">
-						<<set _girlVisual = $fight.allies[_i]>>
-						<<include 'NPC visual'>>
+			<<set _portraitClass = $fight.allies[_i].portrait ? 'portrait' : ''>>
+			<div @class="'enemy-div ' + _portraitClass + ''">
+				<div @class="'fight-npc-div ' + _portraitClass + ''">
+					<div class="girl_info_picture">
+						<div>
+							<<set _girlVisual = $fight.allies[_i]>>
+							<<include 'NPC visual'>>
+						</div>
 					</div>
-				<<else>>
-					<div class="girl_fight_picture">
-						<<set _girlVisual = $fight.allies[_i]>>
-						<<include 'NPC visual'>>
-					</div>
-				<</if>>
+				</div>
 				<<=$fight.allies[_i].name>>
 				<div class="enemy-hp">
 				<div class="enemy-hp-border">
@@ -195,28 +195,35 @@
    	 	margin: 0 auto;
 	}
 	
-	.girl_fight_picture {
-  		max-width: 100% !important;
-		min-width: auto;
-	  	min-height: auto !important;
-  		max-height: auto;
- 		zoom: 100%;
-    		overflow: hidden;
-    		background: darkslategray;
-		!position: relative;
-		padding: 0;
- 	 	display: flex;
+	.fight-npc-div {
+		background: darkslategray;
 		justify-content: space-evenly;
-		!margin: 0 auto;
-  	 	margin-left: -11px;
-  	 	margin-top: -3px;
-		border-width: medium;
+		margin-top: 1px;
 		border-color: brown;
 		border-style: ridge;
+		position: relative;
+		margin-top: 5px;
+		padding-top: 10px;
+		overflow: hidden;
+	}
+
+	.fight-npc-div.portrait img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		margin-left: -30px;
+	}
+
+	#fight-allies div.girl_info_picture, #fight-enemies div.girl_info_picture {
+    	height: 126px;
 	}
 	
 	#fight-your-hp {
 		margin-top: 20px;
+	}
+
+	.enemy-div.portrait {
+    	margin-bottom: 19px;
 	}
 	
 </style>
