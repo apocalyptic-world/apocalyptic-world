@@ -712,3 +712,22 @@ setup.npcGetPackPortrait =  function(npc) {
 
 	return null;
 }
+
+setup.handleBathing = function (guest, newBonus = 0) {
+	const maxBeauty = 100;
+
+	if (!guest.washDays) {
+		guest.washBeauty = Math.min(newBonus, 5); // clamp initial bonus
+		guest.beauty = Math.min(guest.beauty + (guest.washBeauty * 2), maxBeauty);
+	} else {
+		const decay = guest.washBeauty * guest.washDays;
+		guest.beauty = Math.max(guest.beauty - decay, 0);
+
+		// Reapply bonus, safely
+		const adjustedBonus = Math.min(guest.washBeauty, 5);
+		guest.beauty = Math.min(guest.beauty + (adjustedBonus * 2), maxBeauty);
+	}
+
+	guest.washBeauty = Math.min(guest.washBeauty ?? newBonus, 5); // clamp stored bonus too
+	guest.washDays = 2;
+};

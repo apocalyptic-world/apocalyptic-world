@@ -14,14 +14,7 @@
 			)>>
 				<<set $guests[_scheduleGuestI].washedBathhouse = true>>
 				<<set _beautyInc = randomInteger(1, 2)>>
-				<<if !($guests[_scheduleGuestI].washDays ?? false)>>
-					<<set $guests[_scheduleGuestI].washBeauty = _beautyInc>>
-					<<set $guests[_scheduleGuestI].beauty = Math.min($guests[_scheduleGuestI].beauty + (_beautyInc * 2), 100)>>
-				<<else>>
-					<<set $guests[_scheduleGuestI].beauty -= $guests[_scheduleGuestI].washBeauty * $guests[_scheduleGuestI].washDays>>
-					<<set $guests[_scheduleGuestI].beauty = Math.min($guests[_scheduleGuestI].beauty + ($guests[_scheduleGuestI].washBeauty * 2), 100)>>
-				<</if>>
-				<<set $guests[_scheduleGuestI].washDays = 2>>
+				<<run setup.handleBathing($guests[_scheduleGuestI], _beautyInc)>>
 				<<set $guests[_scheduleGuestI].location = 'bathhouse'>>
 				<<setNpcStats 'guest' _scheduleGuestI 'happy' 3>>
 		<</if>>
