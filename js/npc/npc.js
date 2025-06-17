@@ -696,3 +696,19 @@ setup.npc = {
 		return unique[Math.floor(Math.random() * unique.length)];
 	}
 }
+
+setup.npcGetPackPortrait =  function(npc) {
+	if (!npc.pack) {
+		return null;
+	}
+
+	if (setup.packs[npc.pack]?.portrait) {
+		return 'packs/'  + npc.pack + '/' + setup.packs[npc.pack]?.portrait;
+	}
+
+	if (setup.packsCustom[npc.pack]?.portrait) {
+		return 'packs/'  + npc.pack + '/' + setup.packsCustom[npc.pack]?.portrait;
+	}
+
+	return null;
+}

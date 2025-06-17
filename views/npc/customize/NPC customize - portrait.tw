@@ -88,6 +88,22 @@
             <</link>>
         </div>
     </div>
+    <<set _packPortrait = setup.npcGetPackPortrait($tmpGirl)>>
+    <<if _packPortrait>>
+        <div class="custom_portrait_item">
+            <div class="custom_portrait_item_img">
+                [img[_packPortrait]]
+            </div>
+            <div class="custom_portrait_item_link">
+                <<link 'Choose'>>
+                    <<set $tmpGirl.portrait = _packPortrait>>
+                    <<dialogclose>>
+                    <<goto `passage()`>>
+                <</link>>
+            </div>
+        <br />
+        </div>
+    <</if>>
     <<for _key = 1; _key <= _availablePortraits.length; _key++>>
         <<capture _key, _portraitUrl>>
             <div class="custom_portrait_item">
