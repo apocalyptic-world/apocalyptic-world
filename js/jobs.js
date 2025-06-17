@@ -15,9 +15,11 @@ setup.jobs = {
         }
 
         let _moneyEarnedTax = 80;
-        if (variables().characters?.dom?.quests.accepted_deal) {
+        if (variables().characters?.dom?.dead) {
+            _moneyEarnedTax = 0;
+        } else if (variables().characters?.dom?.quests.accepted_deal) {
             _moneyEarnedTax = 40;
-        }
+        } 
 
         _moneyEarned += Math.round(npc.sub / 25, 0);
         _moneyEarned += Math.round(npc.beauty / 25, 0);
