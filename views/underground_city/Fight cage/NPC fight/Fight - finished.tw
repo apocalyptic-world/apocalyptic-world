@@ -7,8 +7,9 @@
 	<<set _plural = Object.keys($fightCage.fighters).length > 1>>
 	Your victorious <<=_plural ? 'fighters come' : 'fighter comes'>> out of the ring elated, fists raised in the air as the roaring crowd chants their <<=_plural? 'names':'name'>>!!
 	<br /><br />
-        <<for _fighterI, _Fighter range $fightCage.fighters>>
-		<<sayNpc _Fighter>>
+    <<for _fighterI, _fighter range $fightCage.fighters>>
+        <<set _npc = $guests[_fighter.key.split(',')[1]]>>
+		<<sayNpc _fighter>>
 		        <<=either([
 		            'That was so satisfying!',
 		            "I bet they didn't see that coming!",
@@ -23,15 +24,22 @@
 		        ])>>
 		<</sayNpc>>
 		<br />
-        <</for>>
+        <<if _npc.fightCage.fightsWon > 50 && !(_npc.skills ?? []).includes('fighter') && setup.percentageChance(30)>>
+            <<set _npc.skills.push('fighter')>>
+            <strong>
+                <<=setup.displayName(_npc)>> got fighter trait!
+            </strong>
+            <br /><br />
+        <</if>>
+    <</for>>
 <</if>>
 
 <<if $fightCage.fightersLost ?? false>>
 	<<set _plural = Object.keys($fightCage.fightersLost).length > 1>>
 	Your fallen <<=_plural ? 'fighters limp' : 'fighter limps'>> back from <<=_plural ? 'their matches' : 'the match'>>, nursing a few wounds.  <<=_plural ? 'They return' : 'The fighter returns'>> to you dejected as the crowds behind them cheer for the victors. 
 	<br /><br />
-        <<for _fighterI, _Fighter range $fightCage.fightersLost>>
-		<<sayNpc _Fighter>>
+        <<for _fighterI, _fighter range $fightCage.fightersLost>>
+		<<sayNpc _fighter>>
 		        <<=either([
 		            'I should have trained harder!',
 		            "I'm sorry I let you down...",
