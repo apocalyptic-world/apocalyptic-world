@@ -16,10 +16,12 @@
 <</widget>>
 
 <<widget weatherIcon>>
-	<<set _icon = $weather.weather>>
-	<<if $weather?.heatWave>>
-		<<set _icon = 'heat_wave'>>
+	<<if $weather?.weather>>
+		<<set _icon = $weather.weather>>
+		<<if $weather?.heatWave>>
+			<<set _icon = 'heat_wave'>>
+		<</if>>
+		<div class="weather-bg" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/weather/' + _icon + '.png\')'">
+		</div>
 	<</if>>
-	<div class="weather-bg" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/weather/' + _icon + '.png\')'">
-	</div>
 <</widget>>
