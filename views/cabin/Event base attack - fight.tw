@@ -1,11 +1,6 @@
 :: Event: Base attack - fight
 
 	<<link 'Attack them'>>
-		<<set $enemies = []>>
-		<<set _guards = setup.getPersonsForLocation($guests, 'guard')>>
-		<<set _allyCount = _guards.length + Object.keys($player.companions).length>>
-		<<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
-		<<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
 		<<generateEnemies _enemyGuyCount _enemyGirlCount _enemyGuyCount>>
 		<<fight $enemies 'Wood cabin' 'Event: Base attack - lost' false _guards>>
 	<</link>>

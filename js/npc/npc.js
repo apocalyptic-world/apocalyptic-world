@@ -453,14 +453,14 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
-		if (setup.family.isBloodToMC(npc)) {
-			output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative" data-balloon-pos="up-right"></span>';
-		}
 		if (isSick && !npc.sleeping) {
 			output += '<span class="sick-info">(sick)</span>';
 		} else if (isRest && !npc.sleeping) {
 			output += '<span class="sick-info">(resting)</span>';
 		}
+	}
+	if (setup.family.isBloodToMC(npc)) {
+		output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative" data-balloon-pos="up-right"></span>';
 	}
 	if (npc.sleeping) {
 		output += '<span class="sleeping-info" data-balloon-length="medium" aria-label="Sleeping" data-balloon-pos="up-right"></span>';
