@@ -1,18 +1,21 @@
 :: Underground city office [bg-underground]
 <h1 class="ptitle">UNDERGROUND OFFICE</h1>
 <br />
-<<dom>>
-    What do you want?
-<</dom>>
-<br />
-<<if $characters.dom.quests.return_city_done && !$characters.dom.quests.return_city_done1 && (!$characters.dom.quests.return_city_done_day || ($characters.dom.quests.return_city_done +5) < $game.day)>>
-    <<goto 'Dom - Return city #2'>>
-<<elseif $characters.dom.quests.return_city_done1 && !$characters.dom.quests.return_city_done2 && ($characters.dom.quests.return_city_done1_day + 2) < $game.day>>
-    <<goto 'Dom - Return city #3'>>
-<<elseif $characters.dom.quests.return_city_done3 && !$characters.dom.quests.breaking_point && ($characters.dom.quests.return_city_done3_day + 2) < $game.day>>
-    <<goto 'Dom - Breaking point'>>
+
+
+<<if $characters.dom.quests.new_king_day < $game.day && !$characters.isabel.quests.new_boss>>
+    <<goto 'Isabel - new boss'>>
 <</if>>
+
+
+<div id="characters-in-location">
+	<<if (_charactersInLocation['underground_office'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Isabel office'>>
+		<</link>>
+	<</if>>
+</div>
+<br /><br />
 <<link 'Leave'>>
-    <<addmins 10>>
     <<goto 'Underground city'>>
 <</link>>

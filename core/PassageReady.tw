@@ -1,5 +1,5 @@
 :: PassageReady
-<<set $suppCode = 'Patreon0.58'>>
+<<set $suppCode = 'Patreon0.61'>>
 <<if $player.energy > $player.maxEnergy>>
 	<<set $player.energy = $player.maxEnergy>>
 <</if>>
@@ -66,7 +66,7 @@
 <</if>>
 
 <<if isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
-	<<if !$characters.dom?.quests?.dead>>
+	<<if !$characters.dom?.dead>>
 		<<run _charactersInLocation['underground_office'].push('dom')>>
 	<</if>>
 	<<run _charactersInLocation['underground_office'].push('isabel')>>
@@ -98,6 +98,20 @@
 					memorize('actions', setup.actions);
 				}).catch(function(error) {  // eslint-disable-line
 					alert("Error: Could not load pack 'packs/" + setup.packs[key].name + "/actions.js'.");
+				}
+			);
+		}
+
+		if (typeof setup.actions[key] == 'undefined' && typeof setup.packsCustom[key] !== 'undefined') {
+			importScripts(setup.Path + "packs/" + setup.packsCustom[key].name + "/actions.js")
+				.then(function() {
+					if (setup.packsCustom[key].extended ?? false) {
+						setup.mergeObjects(setup.actions, setup.actions[setup.packsCustom[key].name], setup.packsCustom[key].name + '/actions');
+						setup.actions[key] = true;
+					}
+					memorize('actions', setup.actions);
+				}).catch(function(error) {  // eslint-disable-line
+					alert("Error: Could not load pack 'packs/" + setup.packsCustom[key].name + "/actions.js'.");
 				}
 			);
 		}

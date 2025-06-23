@@ -13,18 +13,25 @@ setup.baseManagement = {
         },
         production: function ()
         {
+            let isSandStorm = variables().weather?.sandStorm;
+            let isRain = variables().weather?.weather === 'rain';
             let production = 0;
             for (const _building in setup.baseManagement.electricity.list) {
                 if (setup.baseManagement.electricity.list[_building] < 0) {
                     continue;
                 }
+
+                if (_building === 'solar_panel' && (isSandStorm || isRain)) {
+                    continue;
+                }
+
                 production += ((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
             }
             return production;
         },
         total: function ()
         {
-            return setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption();
+            return setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption(); 
         },
         hasElectricity: function()
         {

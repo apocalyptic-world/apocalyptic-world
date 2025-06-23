@@ -670,6 +670,19 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
+setup.getRandomElements = function(list, count) {
+    if (!Array.isArray(list)) return [];
+    const copy = [...list];
+    const result = [];
+
+    while (result.length < count && copy.length > 0) {
+        const index = Math.floor(Math.random() * copy.length);
+        result.push(copy.splice(index, 1)[0]);
+    }
+
+    return result;
+};
+
 setup.commonValues = function(allArrays) {
 	var array = allArrays[0] ?? [];
 	var length = allArrays.length;
@@ -812,11 +825,11 @@ setup.suicideChance = function (person) {
     if(age < 18) {
         return 0;
     } else if(age < 25) {
-        chance = 24;
+        chance = 18;
     } else if(age < 40) {
-        chance = 16;
+        chance = 12;
     } else if(age < 60) {
-        chance = 8;
+        chance = 4;
     }
 
     if(breeder) {

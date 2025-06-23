@@ -29,9 +29,13 @@
 			  <<if Item.get(_item).consumable>>
 			  	  <div>
 					<<link 'Use'>>
-					  <<run $backpack.use(_item)>>
-					  <<script>>Dialog.close();<</script>>
-					  <<script>>state.display(state.active.title, null, "back")<</script>>
+					  	<<run $backpack.use(_item)>>
+						<<script>>
+							Dialog.setup("Inventory");
+							Dialog.wiki(Story.get("Inventory").processText());
+							Dialog.open();
+						<</script>>
+						<<goto `passage()`>>
 					<</link>>
 				  </div>
 			  <</if>>
@@ -46,6 +50,7 @@
 									Dialog.wiki(Story.get("Inventory").processText());
 									Dialog.open();
 							<</script>>
+							<<goto `passage()`>>
 						<</link>>
 					<</dialog>>	
 				<</link>>

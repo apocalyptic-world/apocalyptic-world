@@ -143,8 +143,9 @@
 
 <<include 'NPC view - massage table invite'>>
 
-<<if setup.cabinInventory.has('champagne') && !$tmpGirl.gender>>
-	<<link 'Offer her a drink'>>
+<<if setup.cabinInventory.has('champagne')>>
+	<<set _linkName = 'Offer ' + _himOrHer + ' a drink'>>
+	<<link _linkName>>
 		<<goto 'NPC offer drink'>>
 	<</link>>
 <</if>>

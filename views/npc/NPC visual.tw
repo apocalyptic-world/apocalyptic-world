@@ -2,8 +2,9 @@
 
 <<if _girlVisual.portrait && !_ignoreCustomPortrait>>
 	<div class="npc_custom_visual">
-		<<if  _girlVisual.portrait.includes('http')>>
-			[img[_girlVisual.portrait]]
+		<<if _girlVisual.portrait.includes('http') || _girlVisual.portrait.includes('packs/')>>
+			<<set _url = _girlVisual.portrait>>
+			<img @src="_url" referrerpolicy="no-referrer">
 		<<else>>
 			[img[setup.ImagePath+'custom_portraits/' + _girlVisual.portrait]]
 		<</if>>

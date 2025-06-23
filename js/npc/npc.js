@@ -453,7 +453,7 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
-		if (npc?.family?.father === 'mc') {
+		if (setup.family.isBloodToMC(npc)) {
 			output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative" data-balloon-pos="up-right"></span>';
 		}
 		if (isSick && !npc.sleeping) {
@@ -515,5 +515,219 @@ setup.npc = {
 		]
 
 		return _genders[npc.gender] ?? 'unknown';
+	},
+
+	getSayDialog: function(npc) {
+		const db = {
+			survival: [
+				"Every day is a fight. Some of us are just better at hiding it.",
+				"Food. Water. Ammo. That's all that matters now."
+			],
+			emotional_positive: [
+				"You give me hope... and that’s rare.",
+				"I didn’t think I could smile again until I met you."
+			],
+			emotional_negative: [
+				"Don’t ask me how I’m doing. You already know the answer.",
+				"It’s easier not to feel anything at all."
+			],
+			philosophical: [
+				"What even is ‘humanity’ anymore? Is it worth saving?",
+				"I wonder if we were always doomed. The end just came quicker than expected."
+			],
+			sadistic: [
+				"You should see their faces when they realize I'm not here to help.",
+				"Screams echo beautifully, don’t they?"
+			],
+			masochist: [
+				"Hurt me again. Make me feel like I still exist.",
+				"Pain is my therapy now."
+			],
+			affectionate: [
+				"I feel safest when you're near. Don't go.",
+				"You don't know how much I needed this… us."
+			],
+			hungry: [
+				"I’m so damn hungry I could eat a dead rad-dog.",
+				"I’d kill for a sandwich. Literally."
+			],
+			horny_low: [
+				"It’s been a while… I could use a distraction.",
+				"I’ve got urges I can’t just ignore, you know?"
+			],
+			horny_high: [
+				"If you don't take me right now, I might explode.",
+				"Let’s not pretend this tension doesn’t exist."
+			],
+			drunk: [
+				"The world’s a blur. Makes it easier to forget.",
+				"Another drink? Sure. What’s the worst that can happen?"
+			],
+			corrupted: [
+				"I stopped pretending to care about ‘good’ a long time ago.",
+				"Morality is for the dead. The rest of us just adapt."
+			],
+			mechanical: [
+				"Fixed the generator again. I swear, it’s held together with duct tape and hope.",
+				"If I had proper tools, I could do wonders..."
+			],
+			fighter: [
+				"The best part of a fight? That split-second when you know you’ve won.",
+				"Violence is a language everyone understands."
+			],
+			cook: [
+				"I made stew out of god knows what. But it tastes... edible.",
+				"I miss real food. You know, not rat jerky and canned beans."
+			],
+
+			// SEX STATS-BASED DIALOG
+			sex_innocent: [
+				"I’ve only done it a few times... is that bad?",
+				"Sometimes I wonder if I’m still the same person after my first time."
+			],
+			sex_experienced: [
+				"I've done more than I care to admit... but it kept me alive.",
+				"Sex isn't new to me — it's just part of the game now."
+			],
+			sex_lewd: [
+				"Use me. Ruin me. I live for that.",
+				"I'm dripping just thinking about it again..."
+			],
+			sex_jaded: [
+				"It doesn’t mean anything to me anymore. Just another motion.",
+				"I’ve stopped pretending I feel anything from it now."
+			],
+			family_child: [
+				"I still remember when I used to fall asleep on your lap... before the world went to hell.",
+				"You were always the one keeping me safe. I never said it back then, but thank you.",
+				"Sometimes I wonder if things would be different if we never left home.",
+				
+				"You say you protected me, but look where we are now.",
+				"I didn’t ask to be born into this. You made choices, and I live with them.",
+				"Do you even remember what it means to be a parent anymore?",
+
+				"What were you like before everything fell apart? Were you different?",
+				"Do you think I'd still be me if the world had stayed normal?",
+				"Do you ever wish I hadn't been born into all this chaos?",
+
+				"No matter what happens, I’m glad I have you. Really.",
+				"I feel safe when you're nearby. I know I shouldn't admit it, but I do.",
+				"You're not perfect, but you're all I have. And I need you.",
+
+				"I learned to fight because I had to. Not because I wanted to.",
+				"Softness gets you killed. You taught me that, remember?",
+				"I don't have time to be a kid anymore — we both know that.",
+
+				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
+				"Things have changed between us... and not always for the better.",
+				"The choices we made... some lines can't be uncrossed, right?",
+
+				"People underestimate me because I smile. That’s their mistake.",
+				"I’m not just your child. I’m my own person too, even if the world forgets that.",
+				"I act confident so no one sees the cracks. But you see them, don’t you?",
+
+				"Remember when you tried to teach me how to fix that old generator? You were terrible at it.",
+				"I found that old photo of us… before everything. We looked happy.",
+				"You always said I'd be stronger than you someday. I think that day came."
+			]
+		}
+
+		let pool = [];
+
+		const {
+			corruption, happy, drunk, food, horny, relationship,
+			traits, personality, location, skills, sexStats
+		} = npc;
+
+		if (happy > 40) pool.push(...db.emotional_positive);
+		else if (happy < -20) pool.push(...db.emotional_negative);
+
+		if (corruption > 80) pool.push(...db.corrupted);
+		if (drunk > 70) pool.push(...db.drunk);
+		if (food < 3) pool.push(...db.hungry);
+
+		if (horny >= 60) pool.push(...db.horny_high);
+		else if (horny >= 20) pool.push(...db.horny_low);
+
+		if (traits.includes("sadistic")) pool.push(...db.sadistic);
+		if (traits.includes("masochist")) pool.push(...db.masochist);
+		if (relationship > 70 || traits.includes("breeder") || personality.includes("extravagant"))
+			pool.push(...db.affectionate);
+
+		if (location === "bedroom" && relationship > 60) pool.push(...db.affectionate);
+
+		if (skills.includes("mechanic")) pool.push(...db.mechanical);
+		if (skills.includes("fighter")) pool.push(...db.fighter);
+		if (skills.includes("cook")) pool.push(...db.cook);
+
+		if (npc.family && npc.family.father === "mc") {
+			const emotionalScore = (npc.happy ?? 0) - (npc.corruption ?? 0);
+			const reflective = emotionalScore > 30;
+			const jaded = emotionalScore < -10;
+			
+			if (reflective) {
+				pool.push(...db.family_child.filter(line => line.includes("remember") || line.includes("glad")));
+			} else if (jaded) {
+				pool.push(...db.family_child.filter(line => line.includes("resent") || line.includes("lines")));
+			} else {
+				pool.push(...db.family_child);
+			}
+		}
+
+		// === SexStats logic ===
+		if (sexStats) {
+			const { bj = 0, pussy = 0, anal = 0, dp = 0, creampies = 0 } = sexStats;
+			const totalActs = bj + pussy + anal + dp;
+
+			if (totalActs <= 3) pool.push(...db.sex_innocent);
+			else if (totalActs >= 10 && totalActs <= 30) pool.push(...db.sex_experienced);
+
+			if ((creampies > 5 || bj >= 15 || pussy >= 10) && corruption >= 50)
+				pool.push(...db.sex_lewd);
+
+			if (totalActs >= 30 && happy < -10)
+				pool.push(...db.sex_jaded);
+		}
+
+		if (pool.length < 3) pool.push(...db.philosophical);
+		pool.push(...db.survival);
+
+		const unique = [...new Set(pool)];
+		return unique[Math.floor(Math.random() * unique.length)];
 	}
 }
+
+setup.npcGetPackPortrait =  function(npc) {
+	if (!npc.pack) {
+		return null;
+	}
+
+	if (setup.packs[npc.pack]?.portrait) {
+		return 'packs/'  + npc.pack + '/' + setup.packs[npc.pack]?.portrait;
+	}
+
+	if (setup.packsCustom[npc.pack]?.portrait) {
+		return 'packs/'  + npc.pack + '/' + setup.packsCustom[npc.pack]?.portrait;
+	}
+
+	return null;
+}
+
+setup.handleBathing = function (guest, newBonus = 0) {
+	const maxBeauty = 100;
+
+	if (!guest.washDays) {
+		guest.washBeauty = Math.min(newBonus, 5); // clamp initial bonus
+		guest.beauty = Math.min(guest.beauty + (guest.washBeauty * 2), maxBeauty);
+	} else {
+		const decay = guest.washBeauty * guest.washDays;
+		guest.beauty = Math.max(guest.beauty - decay, 0);
+
+		// Reapply bonus, safely
+		const adjustedBonus = Math.min(guest.washBeauty, 5);
+		guest.beauty = Math.min(guest.beauty + (adjustedBonus * 2), maxBeauty);
+	}
+
+	guest.washBeauty = Math.min(guest.washBeauty ?? newBonus, 5); // clamp stored bonus too
+	guest.washDays = 2;
+};

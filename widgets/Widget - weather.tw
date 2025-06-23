@@ -1,0 +1,27 @@
+:: Widget - weather [widget]
+
+<<widget weatherAudioStart>>
+    <<if settings.bgVolumeEnabled>>
+		<<set _bgWeather = "bg-" + $weather.weather>>
+		<<set _bgVolume = (settings.bgVolume / 20)>>
+		<<audio _bgWeather loop play volume _bgVolume>>
+	<</if>>
+<</widget>>
+
+<<widget weatherAudioStop>>
+    <<if $weather>>
+	    <<set _bgWeather = 'bg-' + $weather.weather>>
+	    <<audio  _bgWeather stop>>
+    <</if>> 
+<</widget>>
+
+<<widget weatherIcon>>
+	<<if $weather?.weather>>
+		<<set _icon = $weather.weather>>
+		<<if $weather?.heatWave>>
+			<<set _icon = 'heat_wave'>>
+		<</if>>
+		<div class="weather-bg" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/weather/' + _icon + '.png\')'">
+		</div>
+	<</if>>
+<</widget>>

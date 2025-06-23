@@ -256,7 +256,7 @@
 </div>
 	<div id="npc_info_right" @data-id="$tmpGirl.id" @class="'girl_info_picture gender-' + $tmpGirl.gender" style="float: right;">
 		<<if typeof $tmpGirl.family !== 'undefined'>>
-			<div id="family-tree">
+			<div id="family-tree" style="left:-20px; top:0px;">
 				<span class="glyph">&#19940;</span>
 				<div id="family-tree-expanded">
 					<<showFamilyTree $tmpGirl.family>>
@@ -265,7 +265,24 @@
 		<</if>>
 	<<set _girlVisual = $tmpGirl>>
 		<<if setup.getAge($tmpGirl) >= 18>>
-			<<include 'NPC visual'>>
+			<<if _girlVisual.portrait>>
+				<div class="npc-div-portrait">
+					<<include 'NPC visual'>>
+					<<capture _girlVisual>>
+						<span style="zoom: 70%;position:absolute; right:20px; top:0px; text-shadow:2px 2px 0px #000000;;">
+							<<link '&#10530;'>>
+								<<dialog _girlVisual.name>>
+									<div class="npc-full-portrait">
+										<<include 'NPC visual'>>
+									</div>
+								<</dialog>>
+							<</link>>
+						</span>
+					<</capture>>
+				</div>
+			<<else>>
+				<<include 'NPC visual'>>
+			<</if>>
 		<</if>>
 	</div>
 </div>
@@ -285,6 +302,43 @@
 <style>
 	#girl_description::first-letter {
 		text-transform:capitalize;
+	}
+
+	.npc-div-portrait {
+    max-height: 145px;
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+    border-color: brown;
+    border-style: inset;
+    border-width: medium;
+    overflow: hidden;
+    border: 1px solid brown;
+    border-radius: 12px;
+	}
+
+	.npc-div-portrait img {
+		display: block;
+		object-fit: contain;
+		margin: 0px;
+		justify-self: center;
+	}
+	.npc-full-portrait {
+		max-height:100%;
+		display: flex;
+		justify-content: center;
+		overflow:hidden; 
+		!border-color:brown; 
+		!border-style:groove; 
+		!border-width:medium;
+	}
+
+	.npc-full-portrait img {
+		display: block;
+		max-height: 100%;
+		object-fit: contain;
+		margin: 0px;
+		justify-self: center;
 	}
 </style>
 

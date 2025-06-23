@@ -33,6 +33,13 @@ importScripts(setup.Path + "packs/packs.js?v=" + _timestamp)
 		alert("Error: Could not find file 'packs/packs.js'.");
 	}
 );
+importScripts(setup.Path + "packs/packs_custom.js?v=" + _timestamp)
+	.then(function() {
+        memorize('packsCustom', setup.packsCustom);
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'packs/packs_custom.js'.");
+	}
+);
 
 importScripts("https://www.googletagmanager.com/gtag/js?id=G-XVQJZNSBZ6")
      .then(function() {
@@ -154,7 +161,7 @@ $characters to {
     <<label '$player.hunger'>>
 	<<colors 'yellow' 'red' 'black'>>
 <</newmeter>>
-<<set $player.horny to 100>>
+<<set $player.horny to 0>>
 <<newmeter '$hornyBar' 1>>
 	<<sizing '100%'>>
     <<label '$player.horny'>>
@@ -173,6 +180,7 @@ $characters to {
 <<cacheaudio "bg-rain" "audio/bg/rain.mp3">>
 <<cacheaudio "bg-storm" "audio/bg/storm.mp3">>
 <<cacheaudio "bg-sun" "audio/bg/sun.mp3">>
+<<cacheaudio "single-shot" "audio/misc/single_shot.mp3">>
 <<createaudiogroup ":bg">>
     <<track "bg-rain">>
     <<track "bg-storm">>

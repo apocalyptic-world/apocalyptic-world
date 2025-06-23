@@ -2,7 +2,11 @@
 <<widget nightclub_suggest_bathroom_link>>
   <<link 'Suggest to go to the bathroom together'>>
 	<<unset $slaveId, $guestId, $charId>>
-  	<<if random(0, 3) === 0>>
+	<<set _ambushChance = 25>>
+	<<if $player?.quests?.underground_boss>>
+		<<set _ambushChance = 5>>
+	<</if>>
+  	<<if setup.percentageChance(_ambushChance)>>
 		<<goto 'Nightclub - outside ask'>>
 	<<else>>
 	  <<if setup.percentageChance(setup.sexChance($tmpGirl))>>

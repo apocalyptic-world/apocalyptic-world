@@ -6,22 +6,7 @@
 		<<set _allyCount = _guards.length + Object.keys($player.companions).length>>
 		<<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
 		<<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
-		<<for _baseAttackI = 0; _baseAttackI < _enemyGuyCount; _baseAttackI++>>
-			<<newguy>>
-			<<set $tmpGuy.strength = randomInteger(40, 70)>>
-			<<if setup.percentageChance(20)>>
-				<<set 
-					$tmpGuy.inventory = {
-						'knife': 1
-					}
-				>>
-			<</if>>
-			<<run $enemies.push($tmpGuy)>>
-		<</for>>
-		<<for _i = 0; _i < _enemyGirlCount; _i++>>
-			<<newgirl>>
-			<<run $enemies.push($tmpGirl)>>
-		<</for>>
+		<<generateEnemies _enemyGuyCount _enemyGirlCount _enemyGuyCount>>
 		<<fight $enemies 'Wood cabin' 'Event: Base attack - lost' false _guards>>
 	<</link>>
 

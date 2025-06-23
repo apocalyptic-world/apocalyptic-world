@@ -54,79 +54,72 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<else>>
 
 	<<set _guestSorter to clone($guests)>>
-	<<if ($sortBy === 'N')>>
+	<<if $sortBy === 'N'>>
 		<<set _guestSorter.sort((a, b) => {
-		  	if (a.name < b.name) {
-		    		return -1;
-	  		}
-	  		if (a.name > b.name) {
-		    		return 1;
-	  		}
-	  		return 0;
+			if (a.name < b.name) return -1;
+			if (a.name > b.name) return 1;
+			return 0;
 		})>>
-	<<elseif ($sortBy === 'A')>>
+	<<elseif $sortBy === 'A'>>
 		<<set _guestSorter.sort((a, b) => {
-		  	if (!('assignedTo' in a)) {
-				if (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === a.id)] !== 'undefined') {
-					var assignedToTempA = 'companion';
-		  		} else { 
-					var assignedToTempA = 'zzz'; 
-				}
-	  		} else {
-				var assignedToTempA = a.assignedTo;
-			}
-	  		if (!('assignedTo' in b)) {
-				if (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === b.id)] !== 'undefined') {
-					var assignedToTempB = 'companion';
-				} else { 
-					var assignedToTempB = 'zzz'; 
-				}
-	  		} else {
-				var assignedToTempB = b.assignedTo;
-			}
+			let assignedToTempA = ('assignedTo' in a)
+				? a.assignedTo
+				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === a.id)] !== 'undefined')
+					? 'companion'
+					: 'zzz';
 
-		  	if (assignedToTempA < assignedToTempB) {
-	    			return -1;
-	  		}
-	  		if (assignedToTempA > assignedToTempB) {
-	    			return 1;
-	  		}
-	  		return 0;
+			let assignedToTempB = ('assignedTo' in b)
+				? b.assignedTo
+				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === b.id)] !== 'undefined')
+					? 'companion'
+					: 'zzz';
+
+			if (assignedToTempA < assignedToTempB) return -1;
+			if (assignedToTempA > assignedToTempB) return 1;
+			return 0;
+		})>>
+	<<elseif $sortBy === 'P'>>
+		<<set _guestSorter.sort((a, b) => {
+			if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) return 1;
+			if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) return -1;
+			return 0;
 		})>>
 	<</if>>
 
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
-			<td style="min-width: 25%">
-				<<if ($sortBy !== 'N')>>
-					<<link 'Name'>>
-						<<set $sortBy = 'N'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					<strong> Name </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($sortBy !== 'A')>>
-					<<link 'Assignment'>>
-						<<set $sortBy = 'A'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					<strong> Assignment </strong>
-				<</if>>
-			</td>
-			<td>
-				<<if ($sortBy === 'N' || $sortBy === 'A')>>
-					<<link 'Arrival (default)'>>
-						<<set $sortBy = 'D'>>
-						<<goto 'Guest house'>>
-					<</link>>
-				<<else>>
-					<strong> Arrival (default) </strong>
-				<</if>>
+			<td colspan="2">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($sortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $sortBy = 'N'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy !== 'A')>>
+							<<link 'Assignment'>><<set $sortBy = 'A'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Assignment</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy !== 'P')>>
+							<<link 'Pregnancy'>><<set $sortBy = 'P'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Pregnancy</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy === 'N' || $sortBy === 'A' || $sortBy === 'PA' || $sortBy === 'P')>>
+							<<link 'Arrival (default)'>><<set $sortBy = 'D'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
 			</td>
 		</tr>
 
@@ -160,7 +153,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick && !_isSandStorm>>
+			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_dayOff && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
 			<<if _guest.assignedTo === 'hospital' and timeBetween('08:00', '22:00')>>
@@ -203,24 +196,54 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 							<<run _guests18yoTransWomen.push(_guestI)>>
 						<</if>>
 						<span @class="_genderClass + _customColorStyle">
-							<<link _guest.name>>
-								<<set $tmpGirl to _guest>>
-								<<set $tmpGirl.location = 'bedroom'>>
-								<<set $tmpGirlBack = 'Guest house'>>
-								<<set $tmpGirl.rape to false>>
-								<<set $tmpGirlCapture to false>>
-								<<set $tmpGirlInvite to false>>
-								<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
-								<<unset $slaveId>>
-								<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<if _guest.sleeping && !_guest.gender>>
-									<<goto 'Guesthouse - guest sleeping'>>
-								<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
-									<<goto 'Guesthouse - guest masturbating'>>
-								<<else>>
-							  		<<goto `$tmpGirlViewBack`>>
-								<</if>>
-							<</link>>
+
+							<div class="tooltip">
+								<<set _girlVisual to _guest>>
+								<span class="tooltiptext" style= "left: -130px;  background-color: transparent; opacity: 1;"> 
+									<<for _skill range (_guest.skills ?? [])>>
+										<div class="trait tooltip">
+											<<=setup.skills[_skill].title>>
+										</div>
+										<br />
+									<</for>>
+        								<div class="say npcsay npc-say-visual" >
+            									<div class="girl_info_picture">
+                									<<if _girlVisual.portrait>>
+                    										<div class="say_custom_portrait">
+                        										<<include 'NPC visual'>>
+                    										</div>
+                									<<else>>
+                    										<<include 'NPC visual'>>
+                									<</if>>                
+										</div>
+									</div>
+									<<for _trait range (_guest.traits ?? [])>>
+										<div class="trait tooltip">
+											<<=setup.traits[_trait].title>>
+										</div>
+										<br />
+									<</for>>
+								</span>
+
+								<<link _guest.name>>
+									<<set $tmpGirl to _guest>>
+									<<set $tmpGirl.location = 'bedroom'>>
+									<<set $tmpGirlBack = 'Guest house'>>
+									<<set $tmpGirl.rape to false>>
+									<<set $tmpGirlCapture to false>>
+									<<set $tmpGirlInvite to false>>
+									<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
+									<<unset $slaveId>>
+									<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<if _guest.sleeping && !_guest.gender>>
+										<<goto 'Guesthouse - guest sleeping'>>
+									<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
+										<<goto 'Guesthouse - guest masturbating'>>
+									<<else>>
+								  		<<goto `$tmpGirlViewBack`>>
+									<</if>>
+								<</link>>
+							</div>
 						</span>
 
 						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>

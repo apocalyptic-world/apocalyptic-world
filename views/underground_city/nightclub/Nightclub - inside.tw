@@ -6,7 +6,7 @@
 <br /><br />
 
 <<if $player.money >=3 && $player.energy >= 10>>
-	<<link 'Drink at the bar (3 caps)'>>
+	<<link 'Drink at the bar (5 caps)'>>
 		<<goto 'Nightclub - drink'>>
 	<</link>>
 <</if>>
@@ -45,6 +45,10 @@
 	<<goto 'Nightclub - bathroom introduction'>>
 <<elseif $player.reputation > 170 && ($game.location.gloryhole ?? false) && !$player?.quests?.gloryholeJobAsked && setup.percentageChance(_gloryHoleJobTriggerChance)>>
 	<<goto 'Nightclub - bathroom job'>>
+<<elseif !($locationEvents.nightclub ?? false)>>
+	<<if $gameDate.getDay() === 5>>
+		<<goto 'Nightclub - rave party enter'>>
+	<</if>>
 <</if>>
 
 

@@ -8,7 +8,7 @@
         minAction: 0,
         horny: 1,
         maxCorruption: 10,
-        show: $tmpGirl.location != 'gloryhole',
+        show: !['gloryhole', 'milk_barn'].includes($tmpGirl.location),
         positive: $tmpGirl.relationship > 15,
         hornyGive: 2,
         maxMcHorny: 20
@@ -17,28 +17,29 @@
         title: 'Handjob',
         minAction: 5,
         horny: 20,
-        maxCorruption: 20
+        maxCorruption: 20,
+        show: $tmpGirl.location != 'milk_barn' && _canFuck,
     },
     footjob: {
         title: 'Footjob',
         minAction: 20,
         horny: 20,
         maxCorruption: 30,
-        show: $tmpGirl.location != 'gloryhole' && _canFuck
+        show: !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && _canFuck
     },
     titjob: {
         title: 'Titjob',
         minAction: 25,
         horny: 20,
         maxCorruption: 40,
-        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && $tmpGirl.location != 'gloryhole' && _canFuck
+        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && _canFuck
     },
     nipple_lick: {
         title: 'Lick nipples',
         minAction: 5,
         horny: 1,
         maxCorruption: 20,
-        show: [0, 2].includes($tmpGirl.gender),
+        show: [0, 2].includes($tmpGirl.gender) && !['gloryhole', 'milk_barn'].includes($tmpGirl.location),
         positive: true,
         hornyGive: 5,
         maxMcHorny: 30
@@ -66,7 +67,7 @@
         minAction: 30,
         horny: 3,
         maxCorruption: 40,
-        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole',
+        show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && !['gloryhole', 'milk_barn'].includes($tmpGirl.location),
         positive: true,
         hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
         maxMcHorny: 60
@@ -76,7 +77,7 @@
         minAction: 30,
         horny: 20,
         maxCorruption: 50,
-        show: !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && _canFuck,
+        show: !$tmpGirl.chastityBelt && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && _canFuck,
         positive: true,
         hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
         orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
@@ -87,7 +88,7 @@
         minAction: 5,
         horny: 5,
         maxCorruption: 25,
-        show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole' && !$tmpGirl.chastityBelt,
+        show: !$tmpGirl.gender && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && !$tmpGirl.chastityBelt,
         positive: true,
         hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 10 : 2),
         maxMcHorny: 60
@@ -107,7 +108,7 @@
         minAction: 80,
         horny: 10,
         maxCorruption: 100,
-        show: !$tmpGirl.gender && $tmpGirl.location != 'gloryhole' && !$tmpGirl.chastityBelt,
+        show: !$tmpGirl.gender && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && !$tmpGirl.chastityBelt,
         positive: $tmpGirl.pussy >= 60,
         hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
         maxMcHorny: 70,
@@ -152,7 +153,7 @@
         minAction: 10,
         horny: 3,
         maxCorruption: 20,
-        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
         positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
         hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 2),
         maxMcHorny: 60
@@ -162,7 +163,7 @@
         minAction: 30,
         horny: 20,
         maxCorruption: 100,
-        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && $tmpGirl.location != 'gloryhole' && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
+        show: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)) && !$tmpGirl.chastityBelt && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && !($sexForced ?? false) && (settings.gaysEnabled || settings.transEnabled),
         positive: (($tmpGirl.traits ?? []).includes('sadistic') || [1,2].includes($tmpGirl.gender)),
         hornyGive: ([1,2].includes($tmpGirl.gender) ? 20 : 5)
     },

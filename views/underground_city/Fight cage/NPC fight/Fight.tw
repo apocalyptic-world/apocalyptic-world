@@ -17,17 +17,22 @@
         <br />
         <<=_fightResult.text>>
     </div>
+
+    <<set _npc = $guests[_fighter.key.split(',')[1]]>>
    
     <<if _fightResult.win>>
         <<set $fightCage.enemiesLost ??= []>>
-        <<set _fighter.fightCage ??= {}>>
-        <<set _fighter.fightCage.fightsWon++>>
+        <<set _npc.fightCage ??= {}>>
+        <<set _npc.fightCage.fightsWon ??= 0>>
+        <<set _npc.fightCage.fightsWon++>>
         <<set _remainingFighters.push(_fighter)>>
         <<run $fightCage.enemiesLost.push($fightCage.enemies[_fighterI])>>
+        
     <<else>>
         <<set $fightCage.fightersLost ??= []>>
-        <<set $fightCage.fighters[_fighterI].fightCage ??= {}>>
-        <<set $fightCage.fighters[_fighterI].fightCage.fightsLost++>>
+        <<set _npc.fightCage ??= {}>>
+        <<set _npc.fightCage.fightsLost ??= 0>>
+        <<set _npc.fightCage.fightsLost++>>
         <<run $fightCage.fightersLost.push(_fighter)>>
         <<set _remainingEnemies.push($fightCage.enemies[_fighterI])>>
     <</if>>

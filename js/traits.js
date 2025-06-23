@@ -53,6 +53,9 @@ setup.getRandomTraits = function (npc, count = 1, exclude) {
     };
     const _traits = clone(setup.traits);
     
+    if (!exclude) {
+        exclude = npc.traitsLocked ?? [];
+    }
     if (exclude) {
         for (let excludeTrait in exclude) {
             delete _traits[exclude[excludeTrait]];

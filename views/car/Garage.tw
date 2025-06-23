@@ -22,6 +22,9 @@
                 <td>Damaged:</td>
                 <td><<= 100 - $player.car.health>>%</td>
                 <td>
+                    (In storage: <<=setup.cabinInventory.count('car_part')>>)
+                </td>
+                <td>
                     <<if setup.cabinInventory.has('car_part') && $player.car.health < 100>>
                         <<link 'Fix'>>
                             <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
@@ -35,6 +38,9 @@
             <tr>
                 <td>Fuel:</td>
                 <td><<=$player.car.fuel>>%</td>
+                <td>
+                    (In storage: <<=setup.cabinInventory.count('fuel')>>)
+                </td>
                 <td>
                     <<if setup.cabinInventory.has('fuel') && $player.car.fuel < 100>>
                         <<link 'Fill up'>>
@@ -59,14 +65,14 @@
         }>>
         <<if $player.car.explore>>
             <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
-            <<if _isDisabled>>
+            <<if _isDisabled === 60>>
                 <<set _props.disabled = true>>
             <</if>>
             <<grid garage explore 'Car - Explore' Explore 30 _isDisabled null _props>>
         <</if>>
         <<if ($game.location.car_stadium ?? false)>>
             <<set _isDisabled = (!timeBetween('08:00', '16:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
-            <<if _isDisabled>>
+            <<if _isDisabled === 60>>
                 <<set _props.disabled = true>>
             <</if>>
             <<grid garage race_stadium 'Car - Race stadium' 'Race stadium' 30 _isDisabled null _props>>

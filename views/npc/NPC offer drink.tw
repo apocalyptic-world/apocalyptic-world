@@ -1,8 +1,12 @@
 :: NPC offer drink
 <h1 class="ptitle">OUTSIDE</h1>
 <br />
- The <<=setup.displayName($tmpGirl)>>'s gaze flickers to the bottle as you approach, curiosity sparking in her eyes. 
- Without a word, you offer her a glass, the bubbles dancing in the dim light of a flickering street lamp.
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+ The <<=setup.displayName($tmpGirl)>>'s gaze flickers to the bottle as you approach, curiosity sparking in <<=_hisOrHer>> eyes. 
+ Without a word, you offer <<=_himOrHer>> a glass, the bubbles dancing in the dim light of a flickering street lamp.
  <br /><br />
 <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
 <<if $tmpGirl.pregnancy > 10 && setup.percentageChance(50)>>
@@ -11,23 +15,25 @@
     <</sayNpc>>
     <br />
 <<else>>
-    Her initial surprise gives way to a cautious smile as she accepts the glass, the effervescence of the champagne a stark contrast to the harsh realities of their world. She raises bottle of champagne.
+    <<=setup.pronounceWhos($tmpGirl, true)>> initial surprise gives way to a cautious smile as <<=_heOrShe>> accepts the glass, the effervescence of the champagne a stark contrast to the harsh realities of their world.
+    <<=setup.pronounceWhos($tmpGirl, true)>> raises bottle of champagne.
     <br /><br />
     <<sayNpc $tmpGirl>>
         A taste of luxury in the midst of chaos
     <</sayNpc>>
     <br />
     <center>
-        [img[setup.ImagePath+'places/cabin/drink_champagne_female.webp']]
+        <<actionImage $tmpGirl 'drink'>>
     </center>
     <br /><br />
     Sitting together on the bench, surrounded by the sounds of the settlement's inhabitants going about their daily routines, you share stories of survival and moments of fleeting joy. 
     The champagne serves as a reminder that even in the darkest of times, there are still moments worth savoring, connections worth forging.
     <br /><br />
     As the time deepens and the stars twinkle faintly through the haze of pollution, the <<=setup.displayName($tmpGirl)>> continues to drink, indulging in the rare luxury. 
-    Her speech becomes slurred, and laughter spills out uncontrollably. It's evident she's become quite drunk, her guard lowered as she shares tales of her past with increasing openness and sentimentality.
+    <<=setup.pronounceWhos($tmpGirl, true)>> speech becomes slurred, and laughter spills out uncontrollably. 
+    It's evident <<=_heOrShe>>'s become quite drunk, <<=_himOrHer>> guard lowered as <<=_heOrShe>> shares tales of <<=_hisOrHer>> past with increasing openness and sentimentality.
     <br /><br />
-    Eventually, as the champagne runs dry, she leans heavily on your shoulder, her words now a jumble of gratitude and nostalgia for a world long lost.
+    Eventually, as the champagne runs dry, <<=_heOrShe>> leans heavily on your shoulder, <<=_hisOrHer>> words now a jumble of gratitude and nostalgia for a world long lost.
     <br /><br />
     <<run setup.cabinInventory.drop('champagne', 1)>>
     <<sayNpc $tmpGirl>>

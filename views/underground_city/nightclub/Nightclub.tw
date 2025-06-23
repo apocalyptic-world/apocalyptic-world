@@ -5,12 +5,24 @@
 </div>
 <br /><br />
 Works from 20:00 - 04:00<br />
-<strong>You need 5 caps to get inside</strong>
+<<if !$player?.quests?.free_nightclub>>
+	<strong>You need 5 caps to get inside</strong>
+<</if>>
 <br /><br />
 <<if $player.money >= 5 && timeBetween('20:00', '04:00')>>
-  <<link 'Go inside (5 caps)'>>
-	  <<set $player.money -=5>>
-	  <<goto 'Nightclub - inside'>>
+	<<set _linkName = 'Go inside'>>
+	<<if !$player?.quests?.free_nightclub>>
+		<<set _linkName += ' (5 caps)'>>
+	<</if>>
+  <<link _linkName>>
+	<<if !$player?.quests?.underground_boss>>
+		<<set $player.money -=5>>
+	<</if>>
+	<<if $player?.quests?.underground_boss && !$player?.quests?.free_nightclub>>
+		<<goto 'Nightclub - new boss'>>
+	<<else>>
+		<<goto 'Nightclub - inside'>>
+	<</if>>
   <</link>>
 <<else>>
 	<<link 'Wait an hour'>>

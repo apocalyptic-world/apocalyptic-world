@@ -30,8 +30,14 @@ setup.filterNPCs = function(list, criteria) {
             } else if (key.endsWith('_not')) {
                 const actualKey = key.slice(0, -4);
                 return Array.isArray(value) && !value.includes(npc[actualKey]);
-            } else if (typeof value === 'number') {
-                return npc[key] >= value;
+            } else if (key.endsWith('_gte')) {
+                const actualKey = key.slice(0, -4);
+                return npc[actualKey] >= value;
+            } else if (key.endsWith('_inc')) {
+                const actualKey = key.slice(0, -4);
+                return Array.isArray(npc[actualKey]) &&
+                       Array.isArray(value) &&
+                       value.some(v => npc[actualKey].includes(v));
             } else {
                 return npc[key] === value;
             }

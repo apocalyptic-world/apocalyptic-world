@@ -8,6 +8,10 @@
 <<set _allyCount = _guards.length + Object.keys($player.companions).length>>
 <<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
 <<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
+<<if $player?.baseManagement?.buildings?.wood_wall >= 80>>
+	<<set _enemyGuyCount -= 1>>
+	<<set _enemyGirlCount -= 1>>
+<</if>>
 <br /><br />
 As you step outside, the cool evening breeze brushes against your face, carrying with it a faint, unfamiliar scent. 
 The tranquility is abruptly shattered by the sound of metal clanging against metal. 
@@ -30,7 +34,7 @@ In front of you are standing <strong>10 guys, all holding knives</strong> in the
 <<generateEnemies 8 0 8>>
 <<for _enemyI = 0; _enemyI < $enemies.length; _enemyI++ >>
     <<set $enemies[_enemyI].strength += randomInteger(50, 130)>>
-    <<set $enemies[_enemyI].endurace += randomInteger(50, 130)>>
+    <<set $enemies[_enemyI].endurance += randomInteger(50, 130)>>
 <</for>>
 <<set $enemies[2].inventory.car_part = 1>>
 

@@ -112,6 +112,7 @@
 	<<if ($game.location.settlement ?? false) && isMetChar('rodger')>>
 		<h2>Rodger</h2>
 		<div>Relationship: <<=$characters.rodger.relationship ?? 0>></div>
+		<div>Eve corruption: <<=$characters.eve.corruption ?? 0>></div>
 		<<if !($game.location.settlement_church ?? false)>>
 			Help him finish the church
 		<<elseif !$characters.rodger.quests.book>>
@@ -220,11 +221,26 @@
 			Visit Underground city in night (from 23:00 - 03:00) after few days
 		<<elseif $characters.dom.quests.return_city_done3 && !$characters.dom.quests.breaking_point>>
 			Visit Dom's office after few days
+		<<elseif $characters.dom.quests.breaking_point && !$characters.dom.quests.cracks_in_throne>>
+			Visit Dom's office after few days
+		<<elseif $characters.dom.quests.cracks_in_throne && !$characters.dom.quests.dinner>>
+			Visit Dom's office after few days in the evening (from 18:00 to 22:00)
+		<<elseif $characters.dom.quests.dinner && !$characters.dom.quests.new_king>>
+			Kill Dom
 		<<else>>
 			That's all for now
 		<</if>>
 	<<else>> 
 		That's all for now
+	<</if>>
+
+	<<if isMetChar('dom') && $characters.dom.dead>>
+		<h2>Isabel</h2>
+		<<if !$characters.isabel.quests.new_boss>>
+			Wait a day and visit her in Dom's old office
+		<<else>>
+			That's all for now
+		<</if>>
 	<</if>>
 
 	<<if ($game.location.settlement ?? false) && isMetChar('rodger') && isMetChar('octavia')>>

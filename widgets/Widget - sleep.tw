@@ -68,7 +68,7 @@
 <<set _doctorCount = setup.getDoctors()>>
 <<set _miscarrieageChanceBase = 12>>
 <<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
-<<set _isLowFood = ($slaves.length + $guests.length) < setup.cabinInventory.count('food')>>
+<<set _isLowFood = setup.cabinInventory.count('food') < ($slaves.length + $guests.length)>>
 
 <<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
@@ -390,10 +390,13 @@
 
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
-
+<<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 	<<capture _guestI>>
 		<<set _npc = $guests[_guestI]>>
+		<<if _isOvercrowded>>
+			<<setNpcStats 'guest' _guestI 'happy' -1>>
+		<</if>>
 		<<set $guests[_guestI].talked to false>>
 		<<set $guests[_guestI].milked to false>>
 		<<set $guests[_guestI].groped to false>>

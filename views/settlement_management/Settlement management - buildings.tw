@@ -45,7 +45,7 @@
            blueprint_hospital: 1,
            wood: 30,
            glass: 30,
-           cloth: 20
+           cloth: 30
 		},
 		energy: 90,
 		after: function() {
@@ -62,7 +62,7 @@
 		title: "Milk barn",
 		description: "Automatically milks assigned pregnant women.",
 		required: {
-           wood: 50,
+           wood: 70,
            glass: 10,
            cloth: 20,
 		   rope: 30,
@@ -73,6 +73,26 @@
             $player.baseManagement.buildings ??= {};
             $player.baseManagement.buildings.milk_barn = 1;
             $game.location.milk_barn = true;
+			$game.location.youth_district = true;
+		},
+		goto: "Settlement management",
+   },
+   school: {
+		show: !($game.location.school ?? false) && $player?.quests?.school_talk,
+		title: "School",
+		description: "It allows people to learn things.",
+		required: {
+           wood: 50,
+           glass: 10,
+           cloth: 20,
+		   rope: 30,
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.school = 1;
+            $game.location.school = true;
 			$game.location.youth_district = true;
 		},
 		goto: "Settlement management",
