@@ -153,6 +153,43 @@
 					<br /><br />					
 				<</if>>
 			<</linkreplace>>
+			<<linkreplace 'Ask to join them'>>
+				<<set _yesGuestIds = []>>
+				<<for _i = 0; _i < _guestIds.length; _i++>>
+					<<if setup.percentageChance(setup.sexChance($guests[_guestIds[_i]]))>>
+						<<set _yesGuestIds.push(_guestIds[_i])>>
+					<</if>>
+				<</for>>
+
+				<<if _yesGuestIds.length == 0>>
+					They refuse and leave the room at once!
+				<<else>>
+					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
+						<<set $guests[$guestId] = $tmpGirl>>
+					<</if>>
+					<<if _yesGuestIds.length == 1>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<fuck $tmpGirl>>
+						<</linkreplace>>
+					<<else>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> and <<=setup.displayName($guests[_yesGuestIds[1]], true)>> agree to have a threesome with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]],
+							$guestId2 = _yesGuestIds[1],
+							$tmpGirl2 = $guests[_yesGuestIds[1]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+							<<threesome $tmpGirl $tmpGirl2>>
+						<</linkreplace>>					
+					<</if>>
+				<</if>>
+			<</linkreplace>>
 		<</replace>>
 	<</link>>
 </div>

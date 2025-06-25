@@ -1,0 +1,224 @@
+:: Guesthouse \[Event\] - male on female and transfemale {"position":"336,1079","size":"100,100"}
+<h1 class="ptitle">GUEST HOUSE</h1>
+
+<<set _actionText = setup.actionText>>
+
+<<if typeof $randEvent === 'undefined'>>
+	<<set
+		_femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 1),
+		_transfemaleGuestIds = setup.getRandomPersons($tmpEvent[1], 1),
+		_maleGuestIds = setup.getRandomPersons($tmpEvent[2], 1),
+		_guestIds = [_femaleGuestIds[0], _transfemaleGuestIds[0], _maleGuestIds[0]],
+		_minCorruption = Math.min($guests[_guestIds[0]].corruption, $guests[_guestIds[1]].corruption, $guests[_guestIds[2]].corruption),
+		_isVirgin = $guests[_guestIds[0]].virgin,
+		_isAnalVirgin = ($guests[_guestIds[0]].anal < 20),
+		_isAnalVirginT = ($guests[_guestIds[1]].anal < 20),
+		_isAnalVirginM = ($guests[_guestIds[1]].anal < 20),
+		_index = 0
+	>>
+
+	<<set _r = 1 + Math.floor(random(0, _minCorruption-1)/25)>>
+	<<if _r < 0>>
+		<<set _r = 0>>
+	<</if>>
+
+	<<if _isVirgin && _isAnalVirgin>>
+		<<set _sexActions = [
+		['kissing','kissing','kissing','handjob','handjob'][random(0, _r)],
+		['handjob','nipple_lick','nipple_lick','nipple_lick','pussy_lick'][random(0, _r)],
+		['pussy_lick','pussy_lick','pussy_lick_b_bj','pussy_lick_b_bj','pussy_lick_b_bj'][random(0, _r)],
+		['bj','bj','bj','bj_b_handjob','bj_b_handjob'][random(0, _r)],
+		['bj_b_handjob','handjob_b_bj','handjob_b_bj','handjob_b_bj','handjob_b_bj'][random(0, _r)],
+		['cum_on_stomach','cum_on_tits','handjob_cum','cum_in_mouth','cum_on_face'][random(0, _r)]
+		]>>
+
+	<<elseif _isAnalVirgin>>
+		<<set _sexActions = [
+		['kissing','kissing','handjob','handjob','nipple_lick'][random(0, _r)],
+		['nipple_lick','pussy_lick','pussy_lick','bj','bj'][random(0, _r)],
+		['bj_b_handjob','bj_b_handjob','handjob_b_bj','handjob_b_bj','pussy_lick_b_bj'][random(0, _r)],
+		['pussy_lick_b_bj','handjob_b_pussy','handjob_b_pussy','pussy','pussy'][random(0, _r)],
+		['pussy','bj_b_pussy','bj_b_pussy','pussy_b_bj','pussy_b_bj'][random(0, _r)],
+		['cum_on_stomach','cum_on_tits','handjob_cum','cum_in_mouth','cum_on_face'][random(0, _r)]
+		]>>
+	
+	<<elseif _isVirgin>>
+		<<set _sexActions = [
+		['kissing','kissing','handjob','handjob','nipple_lick'][random(0, _r)],
+		['nipple_lick','pussy_lick','pussy_lick','pussy_lick_b_bj','pussy_lick_b_bj'][random(0, _r)],
+		['bj','bj','bj','bj_b_handjob','bj_b_handjob'][random(0, _r)],
+		['bj_b_handjob','handjob_b_bj','handjob_b_bj','handjob_b_bj','anal'][random(0, _r)],
+		['anal','anal','anal_b_bj','anal_b_bj','anal_b_bj'][random(0, _r)],
+		['cum_on_stomach','cum_on_tits','handjob_cum','cum_in_mouth','cum_on_face'][random(0, _r)]
+		]>>
+
+	<<else>>
+		<<set _sexActions = [
+		['kissing','nipple_lick','pussy_lick','pussy_lick_b_bj','handjob'][random(0, _r)],
+		['handjob_b_bj','bj','bj_b_handjob','bj_b_handjob','bj_b_pussy'][random(0, _r)],
+		['bj_b_pussy','handjob_b_pussy','handjob_b_pussy','pussy','pussy'][random(0, _r)],
+		['pussy_b_bj','pussy_b_bj','anal','anal','anal_b_bj'][random(0, _r)],
+		['anal_b_bj','anal_b_pussy','anal_b_pussy','pussy_b_anal','pussy_b_anal'][random(0, _r)],
+		['cum_on_stomach','cum_on_tits','handjob_cum','cum_in_mouth','cum_on_face'][random(0, _r)]
+		]>>
+	<</if>>
+
+	<<set $randEvent = [
+		_guestIds,
+		_sexActions,
+		_index
+	]>>
+
+	As you approach the dormitory, you hear muffled sounds.<br />
+	You take a peek and see <<=setup.displayName($guests[_guestIds[0]])>> having sex with <<=setup.displayName($guests[_guestIds[1]])>> and <<=setup.displayName($guests[_guestIds[2]])>>.<br />
+
+<<else>>
+	<<addmins 5>>
+	<<set 
+		_guestIds = $randEvent[0],
+		_sexActions = $randEvent[1],
+		_index = $randEvent[2]
+	>>
+<</if>>
+
+<br /><br />
+
+<<set _actionText = setup.actionText>>
+<<set _sexAction = 'threesome_t_'+_sexActions[_index]>>
+
+<div id="choice">
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
+	<</for>>
+	<center>
+		<<set _sexAction = 'threesome_t_'+_sexActions[_index]>>
+		<<actionImage $guests[_guestIds[0]] _sexAction 'no-text'>>
+	</center>
+
+	<br />
+	<<print _actionText['male_on_female_and_transfemale'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name).replace('%male%', $guests[_guestIds[2]].name)>>
+	<br /><br />
+	<<if $player.horny >= 100>>
+		<<linkreplace 'Cum'>>
+			<<horny_reset>>
+			<center>
+				[img[setup.ImagePath+'game/misc/cum.webp']]
+			</center>
+		<</linkreplace>>
+	<</if>>
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[2] = _index + 1>>
+		<<if $player.horny < 100>>
+			[[Masturbate|passage()][$player.horny += 20]]
+		<</if>>		
+		[[Just watch|passage()]]
+	<</if>>
+	<<link 'Interrupt them'>>
+		<<set _interrupted = true>>
+		<<replace "#choice">>
+			<<for _i = 0; _i < _guestIds.length; _i++>>
+				<<set 
+					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+				>>
+			<</for>>
+			<center>
+				<<actionImage $guests[_guestIds[0]] 'caught' 'no-text'>>
+			</center>
+			<br /><br />
+			You walk in on <<=setup.displayName($guests[_guestIds[0]])>> having sex with <<=setup.displayName($guests[_guestIds[1]])>> and <<=setup.displayName($guests[_guestIds[2]])>>, they stop and seem unhappy.<br />
+			<br />
+			<<linkreplace 'Ask for a creampie in pussy'>>
+				<<if setup.percentageChance(setup.sexChance($guests[_guestIds[0]]))>>
+					<<if $guests[_guestIds[0]].virgin>>
+						<center>
+							<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text'>>
+						</center>
+						<br />
+						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+						<br /><br />
+						<<set $guests[_guestIds[0]].virgin = false>>
+					<</if>>
+
+					<center>
+						<<actionImage $guests[_guestIds[0]] 'threesome_t_pussy' 'no-text'>>
+					</center>
+					<br />
+					<<print _actionText['male_on_female']['pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
+					<br /><br />
+
+					<<linkreplace 'Continue'>>
+						<<set _orgasm = true>>
+
+						<center>
+							<<actionImage $guests[_guestIds[0]] 'cum_in_pussy' 'no-text'>>
+						</center>
+						<br />
+						<<print _actionText['male_on_female']['cum_in_pussy'][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
+						<br /><br />
+
+						<<if setup.percentageChance(setup.pregnancyChance($guests[_guestIds[0]]))>>
+							<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[2]].id>>
+							<<set $guests[_guestIds[0]].pregnancy = 0>>
+						<</if>>
+					<</linkreplace>>
+				<<else>>
+					<<=setup.displayName($guests[_guestIds[0]])>> says no and leaves the room half naked.
+					<br /><br />					
+				<</if>>
+			<</linkreplace>>
+			<<linkreplace 'Ask to join them'>>
+				<<set _yesGuestIds = []>>
+				<<for _i = 0; _i < _guestIds.length; _i++>>
+					<<if setup.percentageChance(setup.sexChance($guests[_guestIds[_i]]))>>
+						<<set _yesGuestIds.push(_guestIds[_i])>>
+					<</if>>
+				<</for>>
+
+				<<if _yesGuestIds.length == 0>>
+					They refuse and leave the room at once!
+				<<else>>
+					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
+						<<set $guests[$guestId] = $tmpGirl>>
+					<</if>>
+					<<if _yesGuestIds.length == 1>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<fuck $tmpGirl>>
+						<</linkreplace>>
+					<<else>>
+						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> and <<=setup.displayName($guests[_yesGuestIds[1]], true)>> agree to have a threesome with you!
+						<<linkreplace 'Continue'>>
+							<<set $guestId = _yesGuestIds[0],
+							$tmpGirl = $guests[_yesGuestIds[0]],
+							$guestId2 = _yesGuestIds[1],
+							$tmpGirl2 = $guests[_yesGuestIds[1]]>>
+							<<unset $randEvent, $tmpEvent>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+							<<threesome $tmpGirl $tmpGirl2>>
+						<</linkreplace>>					
+					<</if>>
+				<</if>>
+			<</linkreplace>>
+		<</replace>>
+	<</link>>
+</div>
+
+<<link 'Leave'>>
+	<<if _orgasm || !_interrupted>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<set 
+				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
+				$guests[_guestIds[_i]].horny = 0
+			>>
+		<</for>>
+	<</if>>
+	<<unset $randEvent, $tmpEvent>>
+	<<goto 'Guest house'>>
+<</link>>

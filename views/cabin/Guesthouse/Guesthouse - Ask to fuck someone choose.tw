@@ -7,8 +7,16 @@
 	_prospects = 0,
 	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id),
 	_girlsLikingGirls = [],
+	_girlsLikingGuys = [],
 	_girlsLikingBoth = [],
-	_guysLikingGirls = [];
+	_girlsLikingTrans = [],
+	_girlsLikingAll3 = [],
+
+	_guysLikingGirls = [],
+	_guysLikingGuys = [],
+	_guysLikingBoth = [],
+	_guysLikingTrans = [],
+	_guysLikingAll3 = []
 >>
 <<run _interestedGuests.delete(_k)>>
 
@@ -34,12 +42,41 @@
 				<<set _girlsLikingGirls.push(_j)>>
 			<</if>>
 
+			<<if _guestYes && _mainYes && !_guest.gender && _guest.likesGuys>>
+				<<set _girlsLikingGuys.push(_j)>>
+			<</if>>
+
 			<<if _guestYes && _mainYes && !_guest.gender && _guest.likesGirls && _guest.likesGuys>>
 				<<set _girlsLikingBoth.push(_j)>>
 			<</if>>
 
+			<<if _guestYes && _mainYes && !_guest.gender && _guest.likesTGirls>>
+				<<set _girlsLikingTrans.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && !_guest.gender && _guest.likesGirls && _guest.likesTGirls && _guest.likesGuys>>
+				<<set _girlsLikingAll3.push(_j)>>
+			<</if>>
+
+
 			<<if _guestYes && _mainYes && _guest.gender == 1 && _guest.likesGirls>>
 				<<set _guysLikingGirls.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && _guest.gender == 1 && _guest.likesGuys>>
+				<<set _guysLikingGuys.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && _guest.gender == 1 && _guest.likesGirls && _guest.likesGuys>>
+				<<set _guysLikingBoth.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && _guest.gender == 1 && _guest.likesTGirls>>
+				<<set _guysLikingTrans.push(_j)>>
+			<</if>>
+
+			<<if _guestYes && _mainYes && _guest.gender == 1 && _guest.likesGirls && _guest.likesTGirls && _guest.likesGuys>>
+				<<set _guysLikingAll3.push(_j)>>
 			<</if>>
 
 			<div>
@@ -63,7 +100,7 @@
 								<<set $tmpEvent = [_j, _k]>>
 								<<goto 'Guesthouse [Event] - male on male'>>					
 							<<elseif ($guests[_j].gender == 2 && $guests[_k].gender == 1)>>
-								<<set $tmpEvent = [[_j], [_k]]>>					
+								<<set $tmpEvent = [[_j], [_k]]>>				
 								<<goto 'Guesthouse [Event] - male on transfemale'>>					
 							<<elseif ($guests[_k].gender == 2 && $guests[_j].gender == 1)>>
 								<<set $tmpEvent = [[_k], [_j]]>>		
@@ -127,7 +164,7 @@
 		</div>
 	<</if>>
 
-	<<if !$tmpGirl.gender && _girlsLikingBoth.length > 0 && _guysLikingGirls > 0 >>
+	<<if !$tmpGirl.gender && _girlsLikingBoth.length > 0 && _guysLikingGirls.length > 0 >>
 		<<set
 			_girlsLikingBoth=setup.shuffling(_girlsLikingBoth),
 			_girl0 = $guests[_girlsLikingBoth[0]],
@@ -143,7 +180,7 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_k,_girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = [[_k, _girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
 					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
@@ -155,7 +192,7 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_k,_girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = [[_k, _girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
 					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
@@ -178,6 +215,76 @@
 
 					<<set $tmpEvent = [[_girlsLikingBoth[0], _girlsLikingBoth[1]], [_k]]>>
 					<<goto 'Guesthouse [Event] - male on females'>>
+				<</link>>
+			</span>
+		</div>
+	<</if>>
+
+	<<if $tmpGirl.gender == 1 && _girlsLikingGuys.length > 0 && _guysLikingGirls.length > 0 >>
+		<<set
+			_girlsLikingGuys=setup.shuffling(_girlsLikingGuys),
+			_girl0 = $guests[_girlsLikingGuys[0]],
+			_guysLikingGirls=setup.shuffling(_guysLikingGirls),
+			_guy0 = $guests[_guysLikingGirls[0]],
+			_linkName = _girl0.name,
+			_linkName2 = _guy0.name
+		>>
+
+		<div>
+			<span @class="'gender-girl'">
+				<<link _linkName>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_girlsLikingGuys[0]], [_k,_guysLikingGirls[0]]]>>
+					<<goto 'Guesthouse [Event] - males on female'>>
+				<</link>>
+			</span>
+			<span>
+				 & 
+			</span>
+			<span @class="'gender-guy'">
+				<<link _linkName2>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_girlsLikingGuys[0]], [_k,_guysLikingGirls[0]]]>>
+					<<goto 'Guesthouse [Event] - males on female'>>
+				<</link>>
+			</span>
+		</div>
+	<</if>>
+
+	<<if $tmpGirl.gender == 2 && _girlsLikingAll3.length > 0 && _guysLikingAll3.length > 0 >>
+		<<set
+			_girlsLikingAll3=setup.shuffling(_girlsLikingAll3),
+			_girl0 = $guests[_girlsLikingAll3[0]],
+			_guysLikingAll3=setup.shuffling(_guysLikingAll3),
+			_guy0 = $guests[_guysLikingAll3[0]],
+			_linkName = _girl0.name,
+			_linkName2 = _guy0.name
+		>>
+
+		<div>
+			<span @class="'gender-girl'">
+				<<link _linkName>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_girlsLikingAll3[0]], [_k], [_guysLikingAll3[0]]]>>
+					<<goto 'Guesthouse [Event] - male on female and transfemale'>>
+				<</link>>
+			</span>
+			<span>
+				 & 
+			</span>
+			<span @class="'gender-guy'">
+				<<link _linkName2>>
+					<<set $locationEvents.guesthouse = true>>
+					<<dialogclose>>
+
+					<<set $tmpEvent = [[_girlsLikingAll3[0]], [_k], [_guysLikingAll3[0]]]>>
+					<<goto 'Guesthouse [Event] - male on female and transfemale'>>
 				<</link>>
 			</span>
 		</div>
