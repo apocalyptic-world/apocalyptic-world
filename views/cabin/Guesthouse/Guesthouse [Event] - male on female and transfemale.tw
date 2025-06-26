@@ -12,8 +12,6 @@
 		_minCorruption = Math.min($guests[_guestIds[0]].corruption, $guests[_guestIds[1]].corruption, $guests[_guestIds[2]].corruption),
 		_isVirgin = $guests[_guestIds[0]].virgin,
 		_isAnalVirgin = ($guests[_guestIds[0]].anal < 20),
-		_isAnalVirginT = ($guests[_guestIds[1]].anal < 20),
-		_isAnalVirginM = ($guests[_guestIds[1]].anal < 20),
 		_index = 0
 	>>
 
@@ -83,9 +81,6 @@
 
 <br /><br />
 
-<<set _actionText = setup.actionText>>
-<<set _sexAction = 'threesome_t_'+_sexActions[_index]>>
-
 <div id="choice">
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
@@ -96,6 +91,7 @@
 	</center>
 
 	<br />
+	<<set _actionText = setup.actionText>>
 	<<print _actionText['male_on_female_and_transfemale'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%transfemale%', $guests[_guestIds[1]].name).replace('%male%', $guests[_guestIds[2]].name)>>
 	<br /><br />
 	<<if $player.horny >= 100>>
