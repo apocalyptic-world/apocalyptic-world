@@ -85,7 +85,6 @@
 
 <br /><br />
 
-<<set _actionText = setup.actionText>>
 <div id="choice">
 	<<for _i = 0; _i < _guestIds.length; _i++>>
 		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
@@ -96,6 +95,7 @@
 	</center>
 
 	<br />
+	<<set _actionText = setup.actionText>>
 	<<print _actionText['males_on_female'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name).replace('%male2%', $guests[_guestIds[2]].name)>>
 	<br /><br />
 	<<if $player.horny >= 100>>
