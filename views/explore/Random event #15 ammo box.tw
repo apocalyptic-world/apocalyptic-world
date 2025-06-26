@@ -1,4 +1,4 @@
-:: Random event #15 ammo box {"position":"6331,461","size":"100,100"}
+:: Random event #15 ammo box
 <h1 class="ptitle">CITY</h1>
 <br /><br />
 
@@ -8,6 +8,31 @@ You decide to investigate what's happening in one of the corners of the destroye
  [img[setup.ImagePath+'places/explore/police_car.jpg']]
  </center>
  <br /><br />
+<<set _mechanics = setup.companions.getBySkill(variables().player.companions, 'mechanic')>>
+<<if (_mechanics.length > 0)>>
+	<<set _mechanic = either(_mechanics)>>
+	Your companion <<=setup.displayName(_mechanic)>>, the group's mechanic, steps forward, eyes already scanning the vehicle.
+	<br /><br />
+	<<sayNpc _mechanic>>
+		Give me a sec... Might be able to salvage a part or two.
+	<</sayNpc>>
+	<br />
+	While <<=setup.displayName(_mechanic)>> ducks under the hood with a quiet hum of approval, you begin checking the interior.
+	<<addmins 15>>
+	<br /><br />
+	<<if setup.percentageChance(50)>>
+		A few minutes later, <<=setup.displayName(_mechanic)>> straightens up, holding a grimy but intact <strong class="iitem">one car part</strong>.
+		<<pickup $backpack 'car_part' 1>>
+		<br /><br />
+	<<else>>
+		After a few minutes, <<=setup.displayName(_mechanic)>> stands and wipes grease from his hands, frowning.
+		<br /><br />
+		<<sayNpc _mechanic>>
+			No luck. Everything’s either stripped or corroded beyond use. Damn shame.
+		<</sayNpc>>
+		<br />
+	<</if>>
+<</if>>
  <<if setup.percentageChance(30)>>
 	The car is partially destroyed. You try to open the trunk of the vehicle but are met with no initial success. 
 	<br />

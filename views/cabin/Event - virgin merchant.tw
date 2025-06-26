@@ -27,9 +27,28 @@ Then came his chilling request, delivered with a casualness that made your blood
     I need a virgin voman. I am willing to pay you 100 caps.
 <</anonguy>>
 <br /><br />
-<<link 'I accept, choose one'>>
-	<<goto 'Event - virgin merchant sell'>>
-<</link>>
-<<link 'Maybe some other time'>>
-	<<goto 'Wood cabin'>>
-<</link>>
+<div id="options">
+    <<link 'I accept, choose one'>>
+        <<goto 'Event - virgin merchant sell'>>
+    <</link>>
+    <<link 'Maybe some other time'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+</div>
+<<linkreplace 'Kill him'>>
+	<<run $('#options').hide()>>
+	<center>	
+        <<image 'places/cabin/baby_merchant_killed.jpg' sfw>>					
+	</center>
+	<br /><br />
+	Looking into his eyes, you find an old, rusted pipe within arm's reach, and you strike him in the head with it. He wasn't prepared for it and falls dead to the ground. Within seconds, the ground around him turns red.
+	<br />
+	<br />
+	<strong>People like him will leave you alone for a while.</strong>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+	<<set $player.goodwill-->>
+	<<set $game.virgin_merchant_day = $game.day>>
+<</linkreplace>>
