@@ -1,11 +1,11 @@
 :: sleepGarage [include]
 
-<<if setup.cabinInventory.has('fuel') && $player.car.fuel < 100>>
+<<if setup.cabinInventory.has('fuel') && $player?.car && $player.car.fuel < 100>>
     <<set $player.car.fuel = Math.min($player.car.fuel + 20, 100)>>
     <<run setup.cabinInventory.drop('fuel', 1)>>
 <</if>>
 
-<<if $player.car.health < 100>>
+<<if $player?.car && $player.car.health < 100>>
     <<if setup.cabinInventory.has('car_part')>>
         <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
         <<run setup.cabinInventory.drop('car_part', 1)>>
