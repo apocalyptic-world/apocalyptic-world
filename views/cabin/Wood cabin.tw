@@ -46,7 +46,11 @@
 <</if>>
 
 <<if $tmpEventWedding && timeBetween('18:00', '22:00')>>
-	<<goto 'NPC between marry'>>
+	<<if setup.getNpcById($tmpEventWedding.id1) && setup.getNpcById($tmpEventWedding.id2)>>
+		<<goto 'NPC between marry'>>
+	<<else>>
+		<<unset $tmpEventWedding>>
+	<</if>>
 <</if>>
 
 <<if !($locationEvents.cabin ?? false)>>
