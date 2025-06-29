@@ -39,6 +39,12 @@
 <<elseif !($locationEvents.outside ?? false) && $player?.quests?.base_building && $game.day > 120 && timeBetween('08:00', '10:00') && setup.percentageChance(1)>>
   <<set $locationEvents.outside = true>>
   <<goto 'Outside - safe haven'>>
+<<elseif 
+  (
+    ($characters?.rodger?.quests?.dead_day + 3) < $game.day || 
+    !$characters?.dom?.quests?.accepted_deal && $game.day > 400 && $characters?.rodger?.quests.eve_pregnant ||
+    $characters?.dom?.dead && !$player.quests.settlement_burned
+  ) && !$characters?.eve?.quests?.new_home
+>>
+  <<goto 'Eve - new home'>>
 <</if>>
-
-

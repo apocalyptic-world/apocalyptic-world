@@ -1,0 +1,103 @@
+:: Eve - new home
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+The morning air was sharp and still, carrying with it the scent of dew and rusted metal. You stepped outside your settlement, stretching your arms as you prepared to begin the day’s journey—just another routine check on the outer perimeters. The sky was dull, blanketed in the kind of gray that always seemed to warn of something unspoken. You glanced down the dirt road, expecting the usual silence.
+<br /><br />
+Then you saw her.
+<br /><br />
+Eve.
+<br /><br />
+<center>
+    <<image 'people/eve/new_home.jpg' sfw>>
+</center>
+<br />
+She was running—barefoot, wild, her dress torn at the edges, hair tangled and wind-blown. Her breath came in ragged gasps, and though her face lit up when she saw you, her eyes betrayed the truth. Red. Swollen. Hollow. The kind of eyes that had cried so hard there was nothing left.
+<br /><br />
+She stumbled, then collapsed at your feet, falling hard to her knees in the dirt. Her hands clutched at your pants, trembling. When she looked up at you, her face was soaked in fresh tears.
+<br /><br />
+<center>
+    <<image 'people/eve/new_home2.jpg' sfw>>
+</center>
+<br />
+<<eve>>
+    They’re dead. They’re all dead. Everyone.
+<</eve>>
+<br />
+You dropped to your knees beside her, trying to catch her shoulders, to steady her.
+<br /><br />
+<<if $player?.quests?.settlement_burned>>
+    You didn’t answer at first.
+    <br /><br />
+    <strong>
+        Because you did know.
+    </strong>
+    <br /><br />
+<<else>>
+    <<you>>
+        Eve—what are you talking about? What happened?
+    <</you>>
+<</if>>
+<br />
+She broke then, truly broke. Her whole body folded into itself as she sobbed, pressing her forehead against your chest like she was trying to bury herself 
+in the only familiar thing left. You held her, your heart thudding louder with every second.
+<br /><br />
+<<eve>>
+    I went for a walk—just a walk, I wasn’t gone long...
+<</eve>>
+<br />
+You held her tighter, rage and disbelief boiling beneath your skin. Rodger’s settlement hadn’t been perfect—it had been twisted in its own ways—but it had been stable. A haven, compared to most. And now, it was gone.
+<br /><br />
+<<eve>>
+    There was blood everywhere. I didn’t see who did it—I didn’t see anything. I just saw what was left.
+<</eve>>
+<br />
+<<eve>>
+    What will I do now? They were my family. I have noone else.
+<</eve>>
+<br/ >
+<<you>>
+    You can stay with me. As long as you need
+<</you>>
+<br />
+Eve looked at you for a long moment. Her features were still raw with exhaustion, but her expression changed—softened.
+<br /><br />
+<<eve>>
+    Are you sure?
+<</eve>>
+<br />
+<center>
+    <<image 'people/eve/new_home3.jpg' sfw>>
+</center>
+<br />
+You helped her carry what few belongings she had—just a threadbare satchel and a pendant that had somehow survived the burning. 
+It was all that remained of the old world she’d just lost.
+<br /><br />
+Back in your place, you guided her down the narrow hallway, past your own quarters and into one of the empty rooms you’d long ago kept closed. 
+It still smelled faintly of cedar and dust. Sheets were clean, a lantern was ready. A small window looked out toward the edge of the settlement.
+<br /><br />
+<center>
+    <<image 'people/eve/new_home4.jpg' sfw>>
+</center>
+<br />
+Eve stood in the center of the room, silent. Then slowly, she sat on the bed and let out a long, trembling breath.
+<br /><br />
+<<eve>>
+    Thank you!
+<</eve>>
+<br />
+You closed the door behind you, leaving her in peace for the first time in days. 
+As you walked down the hall, you felt something settle in your chest — a quiet certainty that, even in this broken world, small acts of refuge still mattered.
+<br /><br />
+<<link 'Leave'>>
+    <<if !$player?.quests?.settlement_burned>>
+        <<set $player.quests.settlement_burned = true>>
+        <<set $characters.rodger.quests.dead = true>>
+        <<set $characters.rodger.quests.dead_day = $game.day>>
+        <<set $game.location.settlement = false>>
+    <</if>>
+    <<set $characters.eve.quests.new_home = true>>
+    <<set $characters.eve.quests.new_home_day = $game.day>>
+    <<set $characters.eve.quests.cabinType = 1>>
+    <<goto 'Guest house'>>
+    <<addhours 2>>
+<</link>>

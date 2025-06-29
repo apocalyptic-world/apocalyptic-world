@@ -149,6 +149,16 @@
 		<br /><br />
 	<</if>>
 
+	<<if $player.quests.settlement_burned>>
+		<h2>Eve</h2>
+		<div>Relationship: <<=$characters.eve.relationship ?? 0>></div>
+		<<if !$characters?.eve?.quests?.new_home>>
+			Wait few days
+		<<else>>
+			That's all for now
+		<</if>>
+	<</if>>
+
 	<h2>Dom</h2>
 	<<if isMetChar('dom') && !$characters.dom.quests.invite>>
 		<<if $game.day < 100 || $player.reputation < 100 || (setup.getPersonsForLocation($slaves, 'streets').length + setup.getPersonsForLocation($guests, 'streets').length) < 4>>
@@ -228,7 +238,7 @@
 		<<elseif $characters.dom.quests.dinner && !$characters.dom.quests.new_king>>
 			Kill Dom
 		<<else>>
-			That's all for now
+			Finished
 		<</if>>
 	<<else>> 
 		That's all for now
