@@ -6,6 +6,15 @@
 </h1>
 <br />
 <<warning 'Work in progress.'>>
+<<if !$locationEvents.school>>
+    <<if !$player.quests.school_built>>
+        <<set _teachers = setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0, 'race_in':['white', 'latina']})[0] ?? []>>
+        <<if _teachers.length>>
+            <<set $locationEvents.school = true>>
+            <<goto 'School built'>>
+        <</if>>
+    <</if>>
+<</if>>
 <br /><br />
 <<link 'Leave'>>
     <<goto 'Youth district'>>
