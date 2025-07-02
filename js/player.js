@@ -112,7 +112,7 @@ setup.player = {
      * @param {*} showMC 
      * @returns         string
      */
-    npcRelationText: function(npcID, pregCheck = true, showMC = false) {
+    npcRelationText: function(npcID, pregCheck = true, showMC = false, hideRel = '') {
         if(((npcID ?? 'unknown') === 'unknown') || (!showMC && npcID === 'mc'))
         {            
             return '';
@@ -124,7 +124,7 @@ setup.player = {
         if(npcID === 'mc') {
             npc.id = npcID;
         }
-        return this.npcRelationText2(npc, pregCheck, showMC);
+        return this.npcRelationText2(npc, pregCheck, showMC, hideRel);
     },
 
     /**
@@ -134,10 +134,23 @@ setup.player = {
      * @param {*} showMC 
      * @returns 
      */
-    npcRelationText2: function(npc, pregCheck = true, showMC = false) {
+    npcRelationText2: function(npc, pregCheck = true, showMC = false, hideRel = '') {
         const npcID =npc.id;
 
-        let npcText = setup.player.npcNameColor(npc) + ' (';
+	let family_container = 'display:flex;width:100;padding-inline:5px;align-items:flex-start;';
+	let npc_name = 'flex:0 0 16%;padding-right:15px;display:flex;align-items:center;justify-content:left;';
+	let name_display = 'text-align:left;';
+	let family_details = 'flex:1;display:flex;flex-direction:column;padding-left:15px;';
+	let relation_group = 'display:flex;margin-bottom:0px;align-items:baseline;';
+	let relation_label = 'flex: 0 0 16%;padding-right:10px;text-align:right;min-width:100px;text-transform:capitalize;';
+	let relation_names = 'flex:1;';
+
+	let charDead = false;
+	if ((variables().characters[npcID]?.dead ?? false) || (variables().characters[npcID]?.quests?.dead ?? false)) {
+		charDead = true;
+	}
+
+        let npcText = '<div style="' + family_container + '"><div style="' + npc_name + '"><span style="' + name_display + '">' + setup.player.npcNameColor(npc) + (charDead ? ' (deceased)' : '') + ': </span></div><div style="' + family_details + '">';
         const family = npc.family ?? {};
         for(const relation in family) {
             if (['wives','kids'].includes(relation)) {
@@ -145,22 +158,62 @@ setup.player = {
                 for(const id of (family[relation] ?? [])) {
  /*                  if(((npcID ?? 'unknown') !== 'unknown') || (showMC && npcID === 'mc')) */
 
-                    if((id ?? 'unknown') !== 'mc' || showMC) {
+                    if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
                         const rel = setup.getNpcById(id);
                         if(rel) {
-                            out.push(setup.player.npcNameColor(rel));
+				if (relation == 'kids') {
+					if (rel.family['father'] == 'mc') {
+						out.push('Your |' + setup.player.npcNameColor(rel));
+					} else if ((rel.family['father'] ?? false) && (setup.getNpcById(rel.family['father']) ?? false)) {
+						let kidDad = setup.getNpcById(rel.family['father']);
+		                            	out.push(setup.player.npcNameColor(kidDad) + "'s |" + setup.player.npcNameColor(rel));
+					} else {
+						if (hideRel == 'husband') {
+			                            	out.push("Your step-|" + setup.player.npcNameColor(rel));
+						} else {
+			                            	out.push("Other |" + setup.player.npcNameColor(rel));
+						}
+					}
+				} else {
+                            		out.push(setup.player.npcNameColor(rel));
+				}
                         } 
                     } 
                 }
                 if(out.length) {
-                    npcText += relation + ': ' + out.sort().join(', ') + '; ';
+			if (relation !== 'kids') {
+                    		npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + out.sort().join(', ') + '</span></div> ';
+			} else {
+				let lastDad = '';
+				for (const kidWithDad of out.sort()) {
+					let parts = kidWithDad.split('|');
+					let myKid = parts[1];
+					let myDad = parts[0];
+
+					if (lastDad == '') {
+						npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + myDad + relation + ': </span><span style="' + relation_names + '">';
+						lastDad = myDad;
+					} else if (myDad !== lastDad) {
+						npcText += '</span></div> <div style="' + relation_group + '"><span style="' + relation_label + '">' + myDad + relation + ': </span><span style="' + relation_names + '">';
+						lastDad = myDad;
+					} else {
+						npcText += ' - ';
+					}
+					npcText += myKid;
+				}
+				npcText += '</span></div> ';
+			}
                 }
             } else {
                 const id = family[relation];
-                if((id ?? 'unknown') !== 'mc' || showMC) {
+                if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
                     const rel = setup.getNpcById(id);
                     if(rel) {
-                        npcText += relation + ': ' + setup.player.npcNameColor(rel) + '; ';
+			let charDead = false;
+			if ((variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false)) {
+				charDead = true;
+			}
+                        npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.npcNameColor(rel) + (charDead ? ' (deceased)' : '') + '</span></div> ';
                     }
                 }
             }
@@ -169,14 +222,14 @@ setup.player = {
             const fatherId = npc.pregnancy_father ?? 'unknown';
             const father = setup.getNpcById(fatherId);
             if(fatherId === 'mc') {
-                npcText += 'pregnant with your child';
+                npcText += '<div style="' + relation_group + '">Pregnant with your child</div>';
             } else if (father) {
-                npcText += 'pregnant with child of ' + setup.player.npcNameColor(father);
+                npcText += '<div style="' + relation_group + '">Pregnant with child of ' + setup.player.npcNameColor(father) + '</div>';
             } else {
-                npcText += 'pregnant with another guys child';
+                npcText += '<div style="' + relation_group + '">Pregnant with another guys child</div>';
             }
         }
-        npcText += ')';
+        npcText += '</div></div>';
         return npcText;
     },
 
