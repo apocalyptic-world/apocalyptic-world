@@ -531,12 +531,12 @@ Save.onLoad.add(function (save) {
         variables.backpack.pickup('blueprint_hot_tub', 1);
     }
     /* name & -change 0.45 dumberbell -> 0.46 kettlebell */
-    if (variables.backpack.has('dumberbell')) {
+    if (variables.backpack && variables.backpack.has('dumberbell')) {
         const count = variables.backpack.count('dumberbell');
         variables.backpack.pickup('kettlebell', count);
         variables.backpack.drop('dumberbell', count);
     }
-    if (variables.storage.has('dumberbell')) {
+    if (variables.storage && variables.storage.has('dumberbell')) {
         const count = variables.storage.count('dumberbell');
         variables.storage.pickup('kettlebell', count);
         variables.storage.drop('dumberbell', count);

@@ -45,6 +45,25 @@ She looks at you, her expression a mixture of exhaustion and something else.
     <<link 'Sleep'>>
         <<goto 'Sleep eval'>>
     <</link>>
+    <<if ['white','latina'].includes($tmpGirl.race)>>
+        <<if recall($suppCode)>>
+            <<linkreplace 'Grind against her ass'>>
+                <<if $tmpGirl.relationship > 50 && $tmpGirl.likesGuys>>
+                    <<goto 'Bedroom - sleepover grind'>>
+                <<else>>
+                    <<sayNpc _npc>>
+                        Please don't. Let's just sleep.
+                    <</sayNpc>>
+                    <br />
+                <</if>>
+            <</linkreplace>>
+        <<else>>
+            <div class="link-internal disabled" style="background: #ccc">
+                Grind against her ass
+                <<notPatreonIcon>>
+            </div>
+        <</if>>
+    <</if>>
     <<link 'Fuck'>>
         <<set $tmpGirlViewBack = 'Sleep eval'>>
 	    <<set $tmpGirlBack = 'Sleep eval'>>
