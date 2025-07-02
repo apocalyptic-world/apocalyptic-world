@@ -15,13 +15,13 @@
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
 		<<set _shown[_wifeId] = true>>
-		<<set _wifeText = setup.player.npcRelationText(_wifeId) + (_number.get(_wifeid) ?? '')>>
+		<<set _wifeText = setup.player.npcRelationText(_wifeId, true, false, 'husband') + (_number.get(_wifeid) ?? '')>>
 		<<if _wifeText>>
 			<<set _wivesTexts.push(_wifeText)>>
 		<</if>>
 	<</for>>
 	<<if _wivesTexts.length>>
-		<tr><td colspan ="2">Wives you married</td></tr>
+		<tr><td colspan ="2"><strong>Wives you married</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_wivesTexts.sort().join('<br/>')>></td>
@@ -38,7 +38,7 @@
 		<</if>>
 	<</for>>
 	<<if _childmothersTexts.length>>
-		<tr><td colspan ="2">Mothers to your children</td></tr>
+		<tr><td colspan ="2"><strong>Mothers to your children</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_childmothersTexts.sort().join('<br/>')>></td>
@@ -49,13 +49,13 @@
 	<<set _kidsTexts = []>>
 	<<for _kidId range $player.family?.kids ?? []>>
 		<<set _shown[_kidId] = true>>
-		<<set _kidText = setup.player.npcRelationText(_kidId) + (_number.get(_kidid) ?? '')>>
+		<<set _kidText = setup.player.npcRelationText(_kidId, true, false, 'father') + (_number.get(_kidid) ?? '')>>
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
 		<</if>>
 	<</for>>
 	<<if _kidsTexts.length>>
-		<tr><td colspan ="2">Children you fathered</td></tr>
+		<tr><td colspan ="2"><strong>Children you fathered</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_kidsTexts.sort().join('<br/>')>></td>
@@ -97,7 +97,7 @@
 		<</if>>
 	<</for>>
 	<<if _pregTexts.length>>
-		<tr><td colspan ="2">Pregnant carrying your child</td></tr>
+		<tr><td colspan ="2"><strong>Pregnant carrying your child</strong></td></tr>
 		<tr>
 			<td></td>
 			<td><<=_pregTexts.sort().join('<br/>')>></td>
@@ -106,7 +106,7 @@
 	<</if>>
 </table>
 
-<h2>Other's family trees (Test)</h2>
+<h2>Other's family trees</h2>
 /* <<warning 'Might show up in coming version of the game. Maybe!'>> */
 
 <<set _npcs = new Map>>
@@ -358,17 +358,17 @@
 
 <table class="mc-stats-table">
 	<<if  (_outs.males ?? []).length>>
-		<tr><td colspan="2">Males with families</td></tr>
+		<tr><td colspan="2"><strong>Males with families</strong></td></tr>
 		<tr><td></td> <td colspan ="2"><<=_outs.males.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
 	<<if Object.keys(_outs.marriage).length>>
-		<tr><td>Husband</td> <td>Wives</td></tr>
+		<tr><td><strong>Husband</strong></td> <td><strong>Wives</strong></td></tr>
 		<<for _id, _text range _outs.marriage>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -376,11 +376,11 @@
 	<</if>>
 
 	<<if Object.keys(_outs.parent).length>>
-		<tr><td>Father</td> <td>Mother</td></tr>
+		<tr><td><strong>Father</strong></td> <td><strong>Mother</strong></td></tr>
 		<<for _id, _text range _outs.parent>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -388,11 +388,11 @@
 	<</if>>
 
 	<<if Object.keys(_outs.father).length>>
-		<tr><td>Father</td> <td>Children</td></tr>
+		<tr><td><strong>Father</strong></td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.father>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -400,17 +400,17 @@
 	<</if>>
 
 	<<if  (_outs.females ?? []).length>>
-		<tr><td colspan="2">Unconnected females with families</td></tr>
+		<tr><td colspan="2"><strong>Unconnected females with families</strong></td></tr>
 		<tr><td></td> <td colspan ="2"><<=_outs.females.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
 	<<if Object.keys(_outs.mother).length>>
-		<tr><td>Single mother</td> <td>Children</td></tr>
+		<tr><td><strong>Single mother</strong></td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.mother>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -418,11 +418,11 @@
 	<</if>>
 
 	<<if Object.keys(_outs.child).length>>
-		<tr><td>Parent<br/>(this shouldn't happen)</td> <td>Children</td></tr>
+		<tr><td><strong>Parent</strong><br/>(this shouldn't happen)</td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.child>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -430,11 +430,11 @@
 	<</if>>
 
 	<<if Object.keys( _outs.pregnancy).length>>
-		<tr><td>"Spermdonor"</td> <td>Pregnant</td></tr>
+		<tr><td><strong>"Spermdonor"</strong></td> <td><strong>Pregnant</strong></td></tr>
 		<<for _id, _text range _outs.pregnancy>>
 			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
 			<tr>
-				<td>_name</td>
+				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
@@ -469,10 +469,10 @@
 	<<if  _singlesCount || _horse !== '' || _orphansCount>>
 		<tr>
 			<td colspan="2">
-				<<=(_singlesCount || _horse !== '') ? 'Singles without family' : ''>>
+				<<=(_singlesCount || _horse !== '') ? '<strong>Singles without family</strong>' : ''>>
 			</td>
 			<td>
-				<<=(_orphansCount) ? 'Orphans without family' : ''>>
+				<<=(_orphansCount) ? '<strong>Orphans without family</strong>' : ''>>
 			</td>
 		</tr>
 
