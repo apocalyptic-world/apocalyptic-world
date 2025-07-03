@@ -1,0 +1,75 @@
+:: Car explore event - dead convoy
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+Your tires crunch gravel as you ease off the gas. The wind carries the low hum of decay.
+<br /><br />
+Up ahead, the road is partially blocked by three rust-choked vehicles: a military truck with faded green paint and two civilian cars riddled with bullet holes.
+<br /><br />
+<center>
+    <<image 'places/explore_car/dead_convoy1.jpg' sfw>>
+</center>
+<br />
+The truck’s cab door hangs open, swinging in the breeze with a rusty groan. 
+Flies buzz thick around a torn canvas tarp in the back. One car is burned out, the other crushed against a rusting road sign
+<br /><br />
+Empty shell casings glint in the dirt. A child's shoe lies in the middle of the road.
+<br /><br />
+The whole place feels dead, but not forgotten.
+<br /><br />
+<div id="option_search">
+    <<linkreplace 'Stop and search the convoy'>>
+        <<run $('#option_avoid').hide()>>
+        <<if setup.percentageChance(50)>>
+            <center>
+                <<image 'places/explore_car/dead_convoy2.jpg' sfw>>
+            </center>
+            <br />
+            Inside the truck’s locked crate, you find old supplies.
+            <br /><br />
+            <<set _food = randomInteger(1,5)>>
+            You found <strong class="iitem"><<=_food>> food</strong>
+            <<pickup $backpack 'food' _food>>
+            <br />
+            <<if setup.percentageChance(10)>>
+                You found <stron class="iitem">1 gas mask</strong>
+                <<pickup $backpack 'gas_mask'>>
+            <</if>>
+        <<else>>
+            <center>
+                <<image 'places/explore_car/dead_convoy3.jpg' sfw>>
+            </center>
+            <br /><br />
+            When you open the trunk of the civilian car, a rigged crossbow goes off with a deafening bang. 
+            You’re grazed in the arm—minor injury—and your vehicle’s window is shattered by the blast. Someone set this up and never came back for it.
+            <<perkAdd 'bleeding'>>
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_avoid">
+    <<linkreplace 'Drive around and avoid it'>>
+        <<run $('#option_search').hide()>>
+        <<if setup.percentageChance(50)>>
+            You turn onto a broken side path through dry brush. Takes longer, but you avoid any contact.
+            <br />
+            You catch sight of distant shapes watching from a ridge, but they don’t follow.
+        <<else>>
+            <center>
+                <<image 'places/explore_car/dead_convoy4.jpg' sfw>>
+            </center>
+            <br />
+            As you pull off-road, your front tire suddenly deflates—a spike strip buried under loose gravel. 
+            <br />
+            Takes 30 minutes to patch or swap. You get the uneasy feeling this wasn’t an accident.
+            <<addmins 30>>
+            <<set $player.car.health -=5>>
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
