@@ -1,5 +1,22 @@
 :: Widget - weather [widget]
 
+<<widget weatherGenerate>>
+	<<set _weather = either('rain','storm','sun')>>
+	<<if $weather?.daysLeft>>
+		<<set $weather.daysLeft-->>
+	<</if>>
+	<<if !$weather || !$weather?.daysLeft>>
+		<<set _previous = $weather.weather>>
+		<<if $weather.sandStorm>>
+			<<set _previous = 'sandStorm'>>
+		<</if>>
+		<<set $weather = {
+			weather: _weather,
+			previous: _previous
+		}>>
+	<</if>>
+<</widget>>
+
 <<widget weatherAudioStart>>
     <<if settings.bgVolumeEnabled>>
 		<<set _bgWeather = "bg-" + $weather.weather>>

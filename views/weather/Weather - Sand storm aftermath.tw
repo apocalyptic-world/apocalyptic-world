@@ -1,0 +1,34 @@
+:: Weather - Sand storm aftermath 
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+<<run delete $weather.previous>>
+The wind finally dies sometime in the early hours, just before dawn. After two straight days of sand howling like a rabid animal, the sudden quiet feels unnatural. 
+Heavy. You wake to a strange stillness, unsure at first if it's real—or just another cruel silence before the storm returns.
+<br /><br />
+<center>
+    <<image 'places/cabin/sandstorm_aftermath2.jpg' sfw>>
+</center>
+<br /><br />
+When you step outside, your boots sink into fresh dunes that weren't there yesterday. 
+The air tastes dry and metallic, but the sky is clearer than expected—washed in a hazy orange, thin trails of dust curling on the horizon like smoke.
+<br /><br />
+<<set _panelsCount = $player?.baseManagement?.buildings?.solar_panel ?? 0>>
+<<if _panelsCount>>
+    <<set _damagePercent = random(20, 30)>>
+    <<set _damagedPanels = Math.floor(_panelsCount * (_damagePercent / 100))>>
+    <<if _damagedPanels>>
+    <center>
+        <<image 'places/cabin/sandstorm_aftermath1.jpg' sfw>>
+    </center>
+    <br /><br />
+    The panels took the worst of it. Several are cracked clean through, glass splintered like a spiderweb. Some have sand embedded so deep, they’re beyond saving. You manage to pry two off the racks that might still be usable with rewiring. The rest? Dead weight. Unrepairable.
+    <br /><br />
+    <strong class="iitem">You lost <<=_damagedPanels>> solar panel<<=(_damagedPanels > 1 ? 's' : '')>></strong>
+    <<set $player.baseManagement.buildings.solar_panel -= _damagedPanels>>
+    <br /><br />
+    <</if>>
+<</if>>
+<<link 'Leave'>>
+    <<addmins 15>>
+    <<goto 'Wood cabin'>>
+<</link>>

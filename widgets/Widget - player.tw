@@ -392,26 +392,18 @@
 <</widget>>
 
 <<widget wakeUp>>
-
-	<<set _weather = either('rain','storm','sun')>>
-	<<if $weather?.daysLeft>>
-		<<set $weather.daysLeft-->>
-	<</if>>
-	<<if !$weather || !$weather?.daysLeft>>
-		<<set $weather = {
-			weather: _weather
-		}>>
-	<</if>>
-
+	<<weatherGenerate>>
 	<<weatherAudioStart>>
 
-	<<if $game.day > 150 && setup.percentageChance(1) && $weather?.weather === 'sun' && !$weather.heatWave && $guests.length > 0>>
+	<<if $weather?.previous === 'sandStorm'>>
+		<<goto 'Weather - Sand storm aftermath'>>
+		<<set _morningEvent = true>>
+	<<elseif $game.day > 150 && setup.percentageChance(1) && $weather?.weather === 'sun' && !$weather.heatWave && $guests.length > 0>>
 		<<set $weather.heatWave = true>>
 		<<set $weather.daysLeft = randomInteger(4,6)>>
 		<<goto 'Weather - Heat wave'>>
 		<<set _morningEvent = true>>
-	<</if>>
-	<<if $game.day > 130 && setup.percentageChance(1) && $weather.weather === 'storm' && !$weather?.sandStorm && $guests.length > 0>>
+	<<elseif $game.day > 130 && setup.percentageChance(1) && $weather.weather === 'storm' && !$weather?.sandStorm && $guests.length > 0>>
 		<<set $weather.sandStorm = true>>
 		<<set $weather.daysLeft = 1>>
 		<<goto 'Weather - Sand storm'>>
