@@ -20,12 +20,18 @@ setup.baseManagement = {
                 if (setup.baseManagement.electricity.list[_building] < 0) {
                     continue;
                 }
+                let electricityIncrease = ((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
 
-                if (_building === 'solar_panel' && (isSandStorm || isRain)) {
-                    continue;
+                if (_building === 'solar_panel') {
+                    if (isSandStorm) {
+                        continue;
+                    }
+                    if (isRain) {
+                        electricityIncrease = Math.round(electricityIncrease / 2, 0);
+                    }
                 }
 
-                production += ((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
+                production += electricityIncrease;
             }
             return production;
         },
