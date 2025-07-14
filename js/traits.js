@@ -41,6 +41,11 @@ setup.traits = {
         title: "milker",
         description: "Can produce breast milk without being pregnant",
         gender: [0]
+    },
+    sensitive_tits: {
+        title: "Sensitive tits",
+        description: "Breasts are extra responsive, making it easier to reach orgasm from chest stimulation",
+        gender: [0]
     }
 };
 
