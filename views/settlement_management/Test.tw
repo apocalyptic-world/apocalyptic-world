@@ -359,14 +359,14 @@
 <table class="mc-stats-table">
 	<<if  (_outs.males ?? []).length>>
 		<tr><td colspan="2"><strong>Males with families</strong></td></tr>
-		<tr><td></td> <td colspan ="2"><<=_outs.males.sort().join('<br/>')>></td></tr>
+		<tr><td colspan ="2"><<=_outs.males.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
 	<<if Object.keys(_outs.marriage).length>>
 		<tr><td><strong>Husband</strong></td> <td><strong>Wives</strong></td></tr>
 		<<for _id, _text range _outs.marriage>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = setup.getNpcById(_id)?.name ?? '-'>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -401,7 +401,7 @@
 
 	<<if  (_outs.females ?? []).length>>
 		<tr><td colspan="2"><strong>Unconnected females with families</strong></td></tr>
-		<tr><td></td> <td colspan ="2"><<=_outs.females.sort().join('<br/>')>></td></tr>
+		<tr><td colspan ="2"><<=_outs.females.sort().join('<br/>')>></td></tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 

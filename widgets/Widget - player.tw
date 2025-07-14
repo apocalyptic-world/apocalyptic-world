@@ -110,7 +110,8 @@
 						<<include 'NPC visual'>>
 					</div>
 				</div>
-				<<link 'x'>>
+				<<if !tags().includes('event')>>
+					<<link 'x'>>
 						<<dialog 'Remove companion'>>
 							Remove <<=_girlVisual.name>> from companions?
 							<br />
@@ -121,6 +122,7 @@
 							<</link>>	
 						<</dialog>>
 					<</link>>
+				<</if>>
 			<</capture>>
 		<</capture>>
 	<</for>>

@@ -142,6 +142,12 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	  		}
 	  		return 0;
 		})>>
+	<<elseif $bsortBy === 'P'>>
+		<<set _slaveSorter.sort((a, b) => {
+			if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) return 1;
+			if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) return -1;
+			return 0;
+		})>>
 	<</if>>
 
 	<table id="slaves" class="npc-list">
@@ -164,7 +170,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<</if>>
 					</span>
 					<span>
-						<<if ($bsortBy === 'N' || $bsortBy === 'A')>>
+						<<if ($bsortBy !== 'P')>>
+							<<link 'Pregnancy'>><<set $bsortBy = 'P'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Pregnancy</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if (!$bsortBy || $bsortBy !== 'D')>>
 							<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
 						<<else>>
 							<strong>Arrival (default)</strong>
