@@ -962,6 +962,17 @@
 	<<run setup.sleepMessages.add('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!', 'weather')>>
 <</if>>
 
+// electricity
+<<if setup.baseManagement.electricity.storageMax()>>
+	<<set $player.baseManagement.electricityStorage = Math.max(
+		0, 
+		Math.min(
+			setup.baseManagement.electricity.storageMax(), 
+			($player.baseManagement.electricityStorage ?? 0) + setup.baseManagement.electricity.total()
+		)
+	)>>
+<</if>>
+
 <<if $player.hunger <= 0 && !_sleepDead>>
 	<<set _sleepDead = 'hunger'>>
 <</if>>

@@ -24,6 +24,10 @@
                 <td>Consumed:</td>
                 <td class="red"><<=setup.baseManagement.electricity.consumption()>></td>
             </tr>
+            <tr>
+                <td>Storage:</td>
+                <td><<=setup.baseManagement.electricity.storage()>>/<<=setup.baseManagement.electricity.storageMax()>></td>
+            </tr>
         </table>
     </div>
     <div class="base-management-item">
@@ -97,7 +101,11 @@
 					  </div>
 				  </td>
 				  <td style="width: 10%">
-					  <<if _itemHasResources && timeBetween('08:00', '23:59')>>
+                    <<if _baseBuilding.int && $player.int < _baseBuilding.int>>
+                        <div class="workbench-not-enough">
+                            Not enough intelligence
+                        </div>
+					<<elseif _itemHasResources && timeBetween('08:00', '23:59')>>
 						<<link 'Build'>>
 
 							<<energy `-_workEnergy`>>

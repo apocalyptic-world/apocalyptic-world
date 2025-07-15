@@ -35,13 +35,27 @@ setup.baseManagement = {
             }
             return production;
         },
-        total: function ()
+        storage: function() {
+            return variables().player?.baseManagement?.electricityStorage ?? 0;
+        },
+        storageMax: function() {
+            let max = 0;
+            let esuEnergy = (variables().player?.baseManagement?.buildings.esu ?? 0) * 50;
+
+            return max + esuEnergy;
+        },
+        total: function (withStorage)
         {
-            return setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption(); 
+            let total = setup.baseManagement.electricity.production() - setup.baseManagement.electricity.consumption(); 
+            if (withStorage) {
+                total += setup.baseManagement.electricity.storage();
+            }
+
+            return total;
         },
         hasElectricity: function()
         {
-            return setup.baseManagement.electricity.production() && setup.baseManagement.electricity.total() >= 0;
+            return setup.baseManagement.electricity.total(true) >= 0;
         },
         list: {
             solar_panel: 1,

@@ -17,6 +17,27 @@
 		goto: "Settlement management",
         currentCount: true
 	},
+	esu: {
+		show: true,
+		title: "Energy Storage Unit",
+		description: "Stores excess energy from generators for later use. Max power: 50",
+		required: {
+			car_battery: 4,
+			plastic: 5,
+			metal: 4
+		},
+		currentCount: true,	
+		minutes: 360,
+		energy: 20,
+		int: 40,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.esu ??= 0;
+            $player.baseManagement.buildings.esu++;
+		},
+		goto: "Settlement management"
+	},
 	house: {
 		show: true,
 		title: "Small house",
@@ -117,5 +138,5 @@
 		percentage: true,
 		currentTitle: 'Around settlement',
 		minutes: 60
-   }
+   	},
 }>>
