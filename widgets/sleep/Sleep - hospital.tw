@@ -24,7 +24,7 @@
             <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. Unfortunately they were not successful and baby died.')>>
         <<else>>
             <<set _childsCount = 1>>
-            <<if setup.percentageChance(10)>>
+            <<if setup.percentageChance(10) || (_mother.traits ?? []).includes('breeder')>>
                 <<set _childsCount++>>
             <</if>>
 
