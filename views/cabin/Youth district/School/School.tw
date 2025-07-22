@@ -1,11 +1,67 @@
 :: School [bg-milk-barn]
 <br />
 <h1 class="ptitle">
-	<<backButton 'Youth district'>>
+	<<backButton 'Youth district' 'State.setVar("$teach", undefined)'>>
     SCHOOL
 </h1>
 <br />
-<<warning 'Work in progress.'>>
+<<set _teachOptions = ['random', 'garden', 'cook', 'doctor', 'shopkeeper', 'teacher', 'hunter']>>
+<<set _teacherList = setup.getPersonsForLocation($guests, 'school')>>
+
+<<if _teacherList.length > 0 && timeBetween('08:00', '15:00')>>
+    <<set _teacher = $guests[_teacherList[0]]>>
+    <<set _teacher.location = 'school'>>
+    <center>
+        <<actionImage _teacher teaching>>
+    </center>
+    <br />
+    <<=setup.displayName($tmpGirl)>> is writing something on the board.
+    <br /><br />
+    <table id="slaves" class="npc-list">
+        <<for _nurseryI, _nursery range $nursery>>
+            <<set _age = setup.getAge(_nursery)>>
+            <<if _age < 5>>
+                <<continue>>
+            <</if>>
+
+            <<set _genderClass = 'gender-' + setup.genderClass(_nursery)>>
+            <<set _customColorStyle = ''>>
+            <<if typeof _nursery.color !== 'undefined'>>
+                <<set _customColorStyle = ' npc-color color-' + _nursery.color>>
+            <</if>>
+
+            <<if !$nursery[_nurseryI].teach>>
+                <<set $nursery[_nurseryI].teach = 'random'>>
+            <</if>>
+            <<set _localTeach = $nursery[_nurseryI].teach>>
+            <tr class="item">
+                <td class="min25">
+                    <span @class="_genderClass + _customColorStyle">
+                        <<= setup.displayName(_nursery)>>
+                    </span>
+                    <<= setup.npcListInfo(_nursery)>>
+                </td>
+                <td>
+                    Age: <<= _age >>
+                </td>
+                <td>
+                    <<set _teachVar = "$nursery[" + _nurseryI.toString() + "].teach">>
+                    <<for _teachOption range _teachOptions>>
+                        <label>
+                            <<radiobutton _teachVar _teachOption autocheck>> <<= _teachOption >>
+                        </label>
+                    <</for>>
+
+                    <<set $nursery[_nurseryI].teach = _localTeach>>
+                </td>
+            </tr>
+        <</for>>
+    </table>
+<<else>>
+    No teacher assigned to school.
+    <br /><br />
+<</if>>
+
 <<if !$locationEvents.school>>
     <<if !$player.quests.school_built>>
         <<set _teachers = setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0, 'race_in':['white', 'latina']})[0] ?? []>>
@@ -16,6 +72,8 @@
     <</if>>
 <</if>>
 <br /><br />
+
 <<link 'Leave'>>
+    <<unset $teach>>
     <<goto 'Youth district'>>
 <</link>>

@@ -107,7 +107,7 @@
 	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.virgin_merchant_day || ($game.virgin_merchant_day + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - virgin merchant'>>
-	<<elseif $game.cabinName && setup.percentageChance(1)>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && ($player?.quests?.gateDoneDay )>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Base attack'>>
 	<<elseif $game.cabinName && setup.percentageChance(1) && $game.day > 100>>

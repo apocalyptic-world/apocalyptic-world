@@ -386,9 +386,13 @@
 
 <<widget backButton>>
 	<<set _backLink =  ($args[0] ?? '')>>
+	<<set _onClickScript = $args[1] ?? ''>>
 	<div id="back-button">
 		<<link '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g data-name="86.Arrow Left"><path d="M12 24a12 12 0 1 1 12-12 12.013 12.013 0 0 1-12 12zm0-22a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2z"/><path d="M10.293 14.707 5.586 10l4.707-4.707 1.414 1.414L8.414 10l3.293 3.293-1.414 1.414z"/><path d="M16 18h-2v-5a1.882 1.882 0 0 0-2-2H7V9h5a3.888 3.888 0 0 1 4 4z"/></g></svg>'>>
 			<<goto `_backLink`>>
+			<<if _onClickScript !== ''>>
+				<<run eval(_onClickScript)>>
+			<</if>>
 		<</link>>
 	</div>
 <</widget>>
