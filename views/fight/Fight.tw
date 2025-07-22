@@ -1,6 +1,14 @@
 :: Fight {"position":"3381,755","size":"100,100"}
 <h1 class="ptitle">FIGHT</h1>
 <h2>Enemies</h2>
+<<if $fight.beforeMsgs.length>>
+	<<for _i to 0; _i lt $fight.beforeMsgs.length; _i++>>
+		<div class="morning-message">
+			<<print $fight.beforeMsgs[_i]>>
+		</div>
+	<</for>>
+	<<set $fight.beforeMsgs = []>>
+<</if>>
 <div id="fight-enemies">
 	<<for _i to 0; _i lt $fight.enemies.length; _i++>>
 		<<capture _i>>

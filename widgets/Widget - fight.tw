@@ -13,7 +13,8 @@
 		passageWon: $args[1] ?? null,
 		passageLost: $args[2] ?? null,
 		public: ($args[3] ?? false),
-		xtraAllies: $args[4] ?? []
+		xtraAllies: $args[4] ?? [],
+		beforeMsgs: []
 	}>>
 	
 	<<for _i to 0; _i lt $args[0].length; _i++>>
@@ -40,6 +41,26 @@
 		<<set _tmpAlly.extra = true>>
 		<<run $fight.allies.push(_tmpAlly)>>
 	<</for>>
+
+	<<if $player.reputation > 250 && $fight.enemies.length > 1>>
+		<<set _enemies = []>>
+		<<for _enemyI, _enemy range $fight.enemies>>
+			<<if setup.percentageChance(30)>>
+				<<set _fleeTextOpts to [
+					_enemy.name + ' fled the fight before it even started.',
+					_enemy.name + ' took one look at you and ran for their life.',
+					'Intimidated by your reputation, ' + _enemy.name + ' turned tail and fled.',
+					_enemy.name + ' decided this wasn’t a battle worth dying for.',
+					'You barely raised a hand before ' + _enemy.name + ' bolted.',
+					_enemy.name + ' lost their nerve and vanished into the shadows.',
+					'Without a word, ' + _enemy.name + ' retreated at the sight of you.'
+				]>>
+				<<run $fight.beforeMsgs.push(_fleeTextOpts.random())>>
+			<<else>>
+				<<run _enemies.push(_enemy)>>
+			<</if>>
+		<</for>>
+	<</if>>
 	
 	<<goto 'Fight'>>
 <</widget>>
