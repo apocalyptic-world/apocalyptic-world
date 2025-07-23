@@ -1,0 +1,23 @@
+:: NPC customize - gag ball add [girlview no-redirect]
+<h1 class="ptitle">GAG BALL</h1>
+<br />
+<<if $guestId !== null && $tmpGirl.sub < 20>>
+	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
+	<br /><br />
+	<strong>Submission too low</strong>
+<<else>>
+	<<set $tmpGirl.gagBall = true>>
+	<<drop $backpack 'gagball' 1>>
+	<br /><br />
+    <center>
+        <<actionImage $tmpGirl gagball>>
+    </center>
+	<br /><br />
+	<<=setup.displayName($tmpGirl)>> lays down on <<=setup.pronounceWhos($tmpGirl)>> knees, <<=setup.pronounceWhat($tmpGirl)>> holds still as you slowly put gag ball around <<=setup.pronounceWhos($tmpGirl)>> mouth. 
+    That feels uncomfortable but is generally tolerable.
+	<<addmins 10>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>

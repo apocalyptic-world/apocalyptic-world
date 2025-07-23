@@ -56,6 +56,7 @@ setup.items = {
             {name:'lube',price:10,sell:false},
             {name:'glass',price:15,sell:false},
             {name:'energy_drink',price:5,sell:false},
+            {name:'gagball',price:15,sell:false},
         ],
         sanctuary: [
             {name:'metal',price:10,sell:false},
