@@ -1,5 +1,36 @@
 :: Sleep - school [widget]
 
 <<widget sleepSchool>>
-    <<run console.log('do magic')>>
+    <<set _skillJobMapping = {
+        'gardener': 'garden', 
+        'cook': 'kitchen',
+        'doctor': 'hospital',
+        'teacher': 'school',
+        'hunter': 'forest'
+    }>>
+
+    <<set _hasTeacher = (setup.getPersonsForLocation($guests, 'school') ?? []).length>>
+    <<if _hasTeacher>>
+        <<for _nurseryI, _nursery range $nursery>>
+            <<set _age = setup.getAge(_nursery)>>
+            <<if _age < 5>>
+                <<continue>>
+            <</if>>
+
+            <<set _learnWhat = _nursery.teach ?? 'random'>>
+            <<if setup.percentageChance(40)>>
+                 <<if _learnWhat == 'random'>>
+                    <<set _learnWhat = either(...Object.keys(_skillJobMapping))>>
+                <</if>>
+                <<set _skillJob = _skillJobMapping[_learnWhat]>>
+                <<set _nursery.stats ??= {}>>
+                <<set _nursery.stats[_skillJob] ??= 0>>
+                <<set _nursery.stats[_skillJob]++>>
+
+                <<if (_nursery.stats[_skillJob] ?? 0) >= 100 && !(_nursery.skills ?? []).includes(_learnWhat)>>
+                    <<run setup.sleepMessages.addJob('<span class="skill">' + _nursery.name + ' learned the ' + _learnWhat + ' skill</span>', 'school')>>
+                <</if>>
+            <</if>>
+        <</for>>
+    <</if>>
 <</widget>>
