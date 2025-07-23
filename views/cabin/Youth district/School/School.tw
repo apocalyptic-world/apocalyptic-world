@@ -8,7 +8,7 @@
 <<set _teachOptions = ['random', 'garden', 'cook', 'doctor', 'shopkeeper', 'teacher', 'hunter']>>
 <<set _teacherList = setup.getPersonsForLocation($guests, 'school')>>
 
-<<if _teacherList.length > 0 && timeBetween('08:00', '15:00')>>
+<<if _teacherList.length > 0 && timeBetween('09:00', '15:00')>>
     <<set _teacher = $guests[_teacherList[0]]>>
     <<set _teacher.location = 'school'>>
     <center>
@@ -16,6 +16,19 @@
     </center>
     <br />
     <<=setup.displayName($tmpGirl)>> is writing something on the board.
+    <br /><br />
+    <<set _girlGuestLink = 'Approach ' + _teacher.name>>
+	<<link `_girlGuestLink`>>
+        <<set $tmpGirl = _teacher>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $tmpGirlBack = 'School'>>
+		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirlInvite to false>>
+		<<set $guestId = _teacherList[0]>>
+		<<unset $slaveId, $charId, $childId>>
+		<<goto 'NPC view - guest'>>
+	<</link>>
     <br /><br />
     <table id="slaves" class="npc-list">
         <<for _nurseryI, _nursery range $nursery>>
@@ -57,11 +70,7 @@
             </tr>
         <</for>>
     </table>
-<<else>>
-    No teacher assigned to school.
-    <br /><br />
 <</if>>
-
 <<if !$locationEvents.school>>
     <<if !$player.quests.school_built>>
         <<set _teachers = setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0, 'race_in':['white', 'latina']})[0] ?? []>>
