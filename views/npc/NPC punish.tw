@@ -4,6 +4,7 @@
 <<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
 <<set _heOrSheU = setup.pronounceWhat($tmpGirl, true)>>
 <<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _hisOrHerU = setup.pronounceWhos($tmpGirl, true)>>
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
 
 <<set _isMasochist = ($tmpGirl.traits ?? []).includes('masochist')>>
@@ -17,7 +18,8 @@
     paddle: { show: true, relStats: 2, subStats: 2, viewSuffix: '_paddle' },
     beat: { show: true, relStats: 1, subStats: 1, viewSuffix: '_hit' },
     piss: { show:true, relStats: 2, subStats: 2, viewSuffix: '_piss' },
-	choke: { show: !$tmpGirl.gender, relStats: 0, subStats: 3, viewSuffix: '_choke'}
+	choke: { show: !$tmpGirl.gender, relStats: 0, subStats: 3, viewSuffix: '_choke'},
+	whip: { show: !$tmpGirl.gender, relStats: 0, subStats: 3, viewSuffix: '_whip'}
 }>>
 
 <<set _punishTypeSettings = _punishSettings[$punishType] ?? { relStats: 1, subStats: 1, viewSuffix: '' }>>
@@ -83,6 +85,11 @@
 		<<elseif $punishCount < 3>>
 			<<=setup.displayName($tmpGirl)>> eyes gets sleepy as she looks straight at you and tries to tell something.
 		<</if>>
+	<<elseif $punishType === 'whip'>>
+		<strong>
+			Strike landed with a clean snap—loud in the cramped space. <<=_heOrSheU>> flinched, but made no sound.
+			Second. Third. <<=_hisOrHerU>> breath hitched on the fourth
+		</strong>
 	<<elseif _isMasochist>>
 		<strong><<=setup.displayName($tmpGirl)>></strong> moans in enjoyment while looking over <<=_hisOrHer>> shoulder straight in your eyes.
 		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 100)>>
@@ -120,7 +127,11 @@
 				<<goto `passage()`>>
 			<</link>>
 		<</if>>
-  <</if>>
+  	<</if>>
+	<<link 'Punish (whip)'>>
+		<<set $punishType = 'whip'>>
+		<<goto `passage()`>>
+	<</link>>
   	<<set _linkName = 'Piss on ' + _himOrHer>>
   	<<link _linkName>>
 		<<set $punishType = 'piss'>>
