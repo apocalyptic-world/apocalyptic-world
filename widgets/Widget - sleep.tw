@@ -473,6 +473,9 @@
 				<<set $guests[_guestI].stats['garden'] = 0>>
 			<</if>>
 			<<set $guests[_guestI].stats['garden']++>>
+			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set $guests[_guestI].stats['garden']++>>
+			<</if>>
 
 			// Learn skill
 			<<if $guests[_guestI].stats['garden'] > 100 && !($guests[_guestI].skills ?? []).includes('gardener')>>
@@ -558,7 +561,10 @@
 				<<set $guests[_guestI].stats['forest'] = 0>>
 			<</if>>
 			<<set $guests[_guestI].stats['forest']++>>
-			
+			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set $guests[_guestI].stats['forest']++>>
+			<</if>>
+
 			// Learn skill
 			<<if $guests[_guestI].stats['forest'] > 100 && !($guests[_guestI].skills ?? []).includes('woodcraft')>>
 				<<if typeof $guests[_guestI].skills === 'undefined'>>
@@ -597,7 +603,9 @@
 		<<if $guests[_guestI].assignedTo === 'kitchen' && !_isSick>>
 			<<set $guests[_guestI].stats['kitchen'] ??= 0>>
 			<<set $guests[_guestI].stats['kitchen']++>>
-
+			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set $guests[_guestI].stats['kitchen']++>>
+			<</if>>
 			// Learn skill
 			<<if $guests[_guestI].stats['kitchen'] > 100 && !($guests[_guestI].skills ?? []).includes('cook')>>
 				<<if typeof $guests[_guestI].skills === 'undefined'>>
@@ -614,6 +622,9 @@
 				<<set $guests[_guestI].stats['scavenging'] = 0>>
 			<</if>>
 			<<set $guests[_guestI].stats['scavenging']++>>
+			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set $guests[_guestI].stats['scavenging']++>>
+			<</if>>
 			
 			// Learn skill
 			<<if $guests[_guestI].stats['scavenging'] > 100 && !($guests[_guestI].skills ?? []).includes('scavenger')>>
