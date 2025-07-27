@@ -107,10 +107,10 @@
 	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.virgin_merchant_day || ($game.virgin_merchant_day + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - virgin merchant'>>
-	<<elseif $game.cabinName && setup.percentageChance(1) && ($player?.quests?.gateDoneDay )>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && (($player?.quests?.gateDoneDay ?? 0 + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Base attack'>>
-	<<elseif $game.cabinName && setup.percentageChance(1) && $game.day > 100>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && (($player?.quests?.gateDoneDay ?? 0 + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - Base attack with car'>>
 	<<elseif $game.cabinName && isMetChar('rodger') && ($characters.rodger.quests.horse ?? false) && !$player.horse && setup.percentageChance(1)>>

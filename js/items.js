@@ -43,6 +43,7 @@ setup.items = {
             {name:'fertility_potion', price: 15},
             {name:'pregnancy_speed_potion', price: 30},
             {name:'plastic', price: 10, sell: false},
+            {name:'metal', price: 10},
             {name:'hair_dye_kit', price: 10},
             {name:'buttplug', price: 30},
             {name:'cloth', price: 5},
