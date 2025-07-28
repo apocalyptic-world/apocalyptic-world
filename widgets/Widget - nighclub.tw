@@ -1,7 +1,7 @@
 :: Widget - nighclub [widget] {"position":"25,1083","size":"100,100"}
 <<widget nightclub_suggest_bathroom_link>>
   <<link 'Suggest to go to the bathroom together'>>
-	<<unset $slaveId, $guestId, $charId>>
+	<<unset $slaveId, $guestId, $charId, $childId>>
 	<<set _ambushChance = 25>>
 	<<if $player?.quests?.underground_boss>>
 		<<set _ambushChance = 5>>
@@ -10,14 +10,18 @@
 		<<goto 'Nightclub - outside ask'>>
 	<<else>>
 	  <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
-			<<unset $guestId, $slaveId, $charId>>
-		  <<set $tmpGirl.rape to false>>
-		  <<set $tmpGirlCapture to false>>
-		  <<set $tmpGirlInvite to false>>
-		  <<set $tmpGirlBack = 'Nightclub - invite'>>
-		  <<set $tmpGirlViewBack = $tmpGirlBack>>
-		  <<set $orgasmsBefore = $tmpGirl.orgasms>>
-		  <<fuck $tmpGirl>>
+		<<unset $guestId, $slaveId, $charId>>
+		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>>
+		<<set $tmpGirlInvite to false>>
+		<<set $tmpGirlBack = 'Nightclub - invite'>>
+		<<set $tmpGirlViewBack = $tmpGirlBack>>
+		<<set $orgasmsBefore = $tmpGirl.orgasms>>
+		<<if recall($suppCode) && setup.percentageChance(50) && $tmpGirl.race == 'white'>>
+			<<goto 'Nightclub - wc fun'>>
+		<<else>>
+			<<fuck $tmpGirl>>
+		<</if>>
 	  <<else>>
   		  <<goto 'Nightclub - girl decline'>>
 	  <</if>>
