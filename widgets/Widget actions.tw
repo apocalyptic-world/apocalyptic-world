@@ -78,8 +78,6 @@
 		_genderDesc + _race + _hair,
 		_genderDesc + _race + _breasts,
 		_genderDesc + _race + _hair + _breasts,
-		_genderDesc + _gagBall,
-		_genderDesc + _race + _gagBall,
 		_genderDesc + _race,
 		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
 		_genderDesc + _ageDesc + _pregnancyDesc,		
@@ -91,6 +89,10 @@
 		_genderDesc + _breasts,
 		_genderDesc
 		]>>
+
+		<<if _gagBall>>
+			<<run _morphs.splice(12, 0, _genderDesc + _gagBall)>>
+		<</if>>
 
 		<<set _actions = clone(setup.actions)>>
 		<<set _location = $args[0].location>>

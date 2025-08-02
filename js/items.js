@@ -26,6 +26,7 @@ setup.items = {
             {name:'tobacco',price:6,sell:false},
             {name:'glue',price:8,sell:false},
             {name:'soda',price:8,sell:false},
+            {name:'hay',price:1,sell:false},
             // name:'milk', price:10, sell:false
         ],
         settlement: [
