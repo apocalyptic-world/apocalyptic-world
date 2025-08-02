@@ -237,8 +237,38 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 		<</for>>
 	</table>
 	<br /><br />
+	<<set _guestsGirls = setup.propertyMatchIndexes($guests, 'gender', 0)>>
+	<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
+	<<set _guestsGay = setup.propertyMatchIndexes($guests, 'likesGuys', true, '!=')>>
+	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay])>>
+	
+	<<if _guestsLikesGirls && setup.percentageChance(40)>>
+		<<set _randomLesbianId = setup.getRandomElement(_guestsLikesGirls)>>
+		You stood in the hallway for a moment, not quite ready to call it a night. That’s when you saw her - <<=setup.displayName($guests[_randomLesbianId])>>.
+		<br /><br />
+		<center>
+			<<image 'places/guesthouse/drunk_lesbian.jpg' sfw>>
+		</center>
+		<br />
+		An almost-empty bottle dangled from her fingers, tilted at an angle like she’d forgotten she was holding it.
+		<br /><br />
+		You’d always known she liked girls—she never exactly hid it.
+		<br /><br />
+		<<if setup.cabinInventory.has('champagne')>>
+			<<link 'Offer her another champagne'>>
+				<<run setup.cabinInventory.drop('champagne', 1)>>
+				<<addmins 30>>
+				<<set $tmpEvent = {
+					id: _randomLesbianId
+				}>>
+				<<goto 'House party - lesbian conversion'>>
+			<</link>>
+			<<linkdesc>>
+				-1 champagne
+		  <</linkdesc>>
+		<</if>>
+	<</if>>
 </div>
-
 <<link 'End party'>>
 	<<goto 'Bedroom'>>
 <</link>>
