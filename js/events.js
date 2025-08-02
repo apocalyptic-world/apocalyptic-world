@@ -38,6 +38,8 @@ setup.filterNPCs = function(list, criteria) {
                 return Array.isArray(npc[actualKey]) &&
                        Array.isArray(value) &&
                        value.some(v => npc[actualKey].includes(v));
+            } else if (key === 'inventory_has') {
+                return setup.npcInventoryHas(npc, value);
             } else {
                 return npc[key] === value;
             }

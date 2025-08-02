@@ -275,6 +275,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 <<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 
 <<if !($locationEvents.guesthouse ?? false)>>
+	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
 	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
@@ -293,6 +294,12 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<set $guests[$tmpEvent.id].horny += 20>>
 			<<goto 'Guest house - surprise releave'>>
 		<</if>>
+	<<elseif (_npcsWithDildos[0] ?? []).length && setup.percentageChance(100)>>
+		<<set $locationEvents.guesthouse = true>>
+		<<set $tmpEvent = {
+			id: setup.getRandomElement(_npcsWithDildos[0])
+		}>>
+		<<goto 'Guesthouse [Event] - Sextoy alone time'>>
 	<<elseif !$player?.baseManagement?.noSex || setup.percentageChance(5)>>
 		<<include 'Guesthouse - guests sex'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
