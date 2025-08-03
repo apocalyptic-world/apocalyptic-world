@@ -27,6 +27,7 @@ You decide to investigate what's happening in one of the corners of the destroye
 	<<elseif setup.percentageChance(50)>>
 		A few minutes later, <<=setup.displayName(_mechanic)>> straightens up, holding a grimy but intact <strong class="iitem">one car battery</strong>.
 		<<pickup $backpack 'car_battery' 1>>
+		<<set _batteryFound = true>>
 		<br /><br />
 	<<else>>
 		After a few minutes, <<=setup.displayName(_mechanic)>> stands and wipes grease from his hands, frowning.
@@ -37,7 +38,7 @@ You decide to investigate what's happening in one of the corners of the destroye
 		<br />
 	<</if>>
 <</if>>
-	<<if setup.percentageChance(30) && $player.int > 30>>
+	<<if setup.percentageChance(30) && $player.int > 30 && !_batteryFound>>
 		The car is partially destroyed. You try to open the trunk of the vehicle and notice grimy but intact <strong class="iitem">one car battery</strong>.
 		<<pickup $backpack 'car_battery' 1>>
  	<<elseif setup.percentageChance(30)>>

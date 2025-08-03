@@ -16,10 +16,15 @@ You won.
 <br /><br />
 The car stutters to a halt half a klick past the line. You rip the door open and stumble out, armor scorched, visor cracked, lungs full of smoke and adrenaline. 
 <br /><br />
-<strong>You won 60 caps!</strong>
+<<if setup.percentageChance(20)>>
+    One of the competitors didn't had enough caps so instead he gave you <strong class="iitem">one car battery</strong>.
+	<<pickup $backpack 'car_battery' 1>>
+<<else>>
+    <<set $player.money += 60>>
+    <strong>You won 60 caps!</strong>
+<</if>>
 <br /><br />
 <<link 'Leave'>>
-    <<set $player.money += 60>>
     <<addmins 10>>
     <<goto 'Car - Race stadium'>>
 <</link>>
