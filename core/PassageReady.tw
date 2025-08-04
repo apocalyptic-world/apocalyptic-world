@@ -48,7 +48,11 @@
   	<</if>>
 <</if>>
 <<if isMetChar('eve') && $characters.eve.quests.cabinType > 0>>
-  	<<run _charactersInLocation['guesthouse'].push('eve')>>
+	<<if timeBetween('08:00', '09:00')>>
+		<<run _charactersInLocation['bathhouse'].push('eve')>>
+	<<else>>
+  		<<run _charactersInLocation['guesthouse'].push('eve')>>
+	<</if>>
 <</if>>
 
 <<if isMetChar('rodger')>>

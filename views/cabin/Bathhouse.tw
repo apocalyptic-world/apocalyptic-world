@@ -2,10 +2,17 @@
 <h1 class="ptitle">BATHHOUSE</h1>
 <br />
 <<if $game.location.hottub ?? false>>
-<div class="menu-grid">   
-  <<grid bathhouse hottub 'Hottub' 'Hottub'>>
-</div>
+	<div class="menu-grid">   
+	<<grid bathhouse hottub 'Hottub' 'Hottub'>>
+	</div>
 <</if>>
+<div id="characters-in-location">
+	<<if (_charactersInLocation['bathhouse'] ?? []).includes('eve')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+			<<goto 'Eve - shower'>>
+		<</link>>
+	<</if>>
+</div>
 <<set _peopleInBathhouse = {}>>
 <table id="slaves">
 	<<for _bathGuestI, _bathGuest range $guests>>
