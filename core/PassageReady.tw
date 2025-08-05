@@ -70,7 +70,11 @@
 	<<run _charactersInLocation['guesthouse'].push('isabel')>>
 <</if>>
 <<if isMetChar('octavia') && $characters.octavia.quests.next_move>>
-	<<run _charactersInLocation['guesthouse'].push('octavia')>>
+	<<if timeBetween('09:00', '09:30')>>
+		<<run _charactersInLocation['bathhouse'].push('octavia')>>
+	<<else>>
+  		<<run _charactersInLocation['guesthouse'].push('octavia')>>
+	<</if>>
 <</if>>
 
 <<if isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
