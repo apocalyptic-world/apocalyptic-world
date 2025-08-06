@@ -17,140 +17,151 @@ You dropped to one knee, holding out the makeshift ring.
     <<=$tmpGirl.name>>, will you marry me?
 <</you>>
 <br />
-Tears welled up in <<=setup.displayName($tmpGirl)>>'s eyes as she looked down at you, overwhelmed with emotions.
-<br /><br />
-<<sayNpc $tmpGirl>>
-    Yes, <<=$player.name>>, a thousand times yes!
-<</sayNpc>>
-<br />
-You embraced tightly, the weight of your journey and this newfound commitment washing over you. After a moment, <<=setup.displayName($tmpGirl)>> pulled back, her eyes sparkling with determination.
-<br /><br />
-<<sayNpc $tmpGirl>>
-    Should we have a big celebration, <<=$player.name>>? Or keep it simple, just the two of us?
-<</sayNpc>>
-<br />
+<<if $tmpGirl?.family?.husband && setup.percentageChance(40)>>
+    <<addmins 10>>
+    <<sayNpc $tmpGirl>>
+        What? No. I am already married.
+    <</sayNpc>>
+    <br />
+    <<link 'Leave'>>
+        <<goto $tmpGirlViewBack>>
+    <</link>>
+<<else>>
+    Tears welled up in <<=setup.displayName($tmpGirl)>>'s eyes as she looked down at you, overwhelmed with emotions.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Yes, <<=$player.name>>, a thousand times yes!
+    <</sayNpc>>
+    <br />
+    You embraced tightly, the weight of your journey and this newfound commitment washing over you. After a moment, <<=setup.displayName($tmpGirl)>> pulled back, her eyes sparkling with determination.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Should we have a big celebration, <<=$player.name>>? Or keep it simple, just the two of us?
+    <</sayNpc>>
+    <br />
 
-<div id="option_two">
-    <<linkreplace 'Just the two of us'>>
-        <<set $tmpGirl.location = 'wedding'>>
-        <<run $('#option_others').hide()>>
-        <center>
-	        [img[setup.ImagePath+'places/kitchen/blair_propose_yes.gif']]
-        </center>
-        <<setNpcStats 'guest' $guestId 'happy' 50>>
-        <<for _marryGuestI, _marryGuest range $guests>>
-            <<if !_marryGuest.married>>
-                <<continue>>
-            <</if>>
-            <<setNpcStats 'guest' _marryGuestI 'happy' -10>>
-        <</for>>
-        <br /><br />
-        You pull her closer to you and slowly slide the ring onto her finger. 
-        There is a wide smile on her face. For a moment, she admires the ring and then tells you to go to your bedroom, running out of the room herself.
-        <br />
-        After a while, she comes to your bedroom with a borrowed wedding dress that the village girls share among themselves.
-        <br /><br />
-        <center>
-            <<actionImage $tmpGirl 'undress' 'no-text'>>
-        </center>
-        <br /><br />
-        In front of you she takes of her clothes and asks you to help her put on wedding dress.
-        <br />
-        As she's done, she pushes you onto your bed.
-        <br /><br />
-        <<sayNpc $tmpGirl>>
-            I've always wanted to do it in a wedding dress
-        <</sayNpc>>
-        <br />
-        <center>
-            <<actionImage $tmpGirl 'bj' 'no-text'>>
-        </center>
-        <br /><br />
-        She unbuttons your pants and slides her hand in to grab your dick. She strokes it few times while looking right into your eyes before pulling it out and sliding it into her mouth.
-        <br />
-        She catches her breath for a moment and you decide to take the lead.
-        <br /><br />
-        <<linkreplace 'Deepthroat her'>>
+    <div id="option_two">
+        <<linkreplace 'Just the two of us'>>
+            <<set $tmpGirl.location = 'wedding'>>
+            <<run $('#option_others').hide()>>
             <center>
-                <<actionImage $tmpGirl 'dp' 'no-text'>>
+                [img[setup.ImagePath+'places/kitchen/blair_propose_yes.gif']]
+            </center>
+            <<setNpcStats 'guest' $guestId 'happy' 50>>
+            <<for _marryGuestI, _marryGuest range $guests>>
+                <<if !_marryGuest.married>>
+                    <<continue>>
+                <</if>>
+                <<setNpcStats 'guest' _marryGuestI 'happy' -10>>
+            <</for>>
+            <br /><br />
+            You pull her closer to you and slowly slide the ring onto her finger. 
+            There is a wide smile on her face. For a moment, she admires the ring and then tells you to go to your bedroom, running out of the room herself.
+            <br />
+            After a while, she comes to your bedroom with a borrowed wedding dress that the village girls share among themselves.
+            <br /><br />
+            <center>
+                <<actionImage $tmpGirl 'undress' 'no-text'>>
             </center>
             <br /><br />
-            She deepthroats your dick with determination to get it all inside her tight mouth and still - without taking eyes off you. She really enjoys this moment.
+            In front of you she takes of her clothes and asks you to help her put on wedding dress.
+            <br />
+            As she's done, she pushes you onto your bed.
             <br /><br />
-        <</linkreplace>>
-
-        <<if !$tmpGirl.gender>>
-            <<linkreplace 'Eat her pussy'>>
+            <<sayNpc $tmpGirl>>
+                I've always wanted to do it in a wedding dress
+            <</sayNpc>>
+            <br />
+            <center>
+                <<actionImage $tmpGirl 'bj' 'no-text'>>
+            </center>
+            <br /><br />
+            She unbuttons your pants and slides her hand in to grab your dick. She strokes it few times while looking right into your eyes before pulling it out and sliding it into her mouth.
+            <br />
+            She catches her breath for a moment and you decide to take the lead.
+            <br /><br />
+            <<linkreplace 'Deepthroat her'>>
                 <center>
-                    <<actionImage $tmpGirl 'pussy_lick' 'no-text'>>
+                    <<actionImage $tmpGirl 'dp' 'no-text'>>
                 </center>
                 <br /><br />
-                You decide to reward your lovely wife by eating her pussy.
+                She deepthroats your dick with determination to get it all inside her tight mouth and still - without taking eyes off you. She really enjoys this moment.
                 <br /><br />
             <</linkreplace>>
-            
-            <<if $tmpGirl.virgin>>
-                <<set _linkName = 'Fuck her virgin pussy'>>
+
+            <<if !$tmpGirl.gender>>
+                <<linkreplace 'Eat her pussy'>>
+                    <center>
+                        <<actionImage $tmpGirl 'pussy_lick' 'no-text'>>
+                    </center>
+                    <br /><br />
+                    You decide to reward your lovely wife by eating her pussy.
+                    <br /><br />
+                <</linkreplace>>
+                
+                <<if $tmpGirl.virgin>>
+                    <<set _linkName = 'Fuck her virgin pussy'>>
+                <<else>>
+                    <<set _linkName = 'Fuck her pussy'>>
+                <</if>>
+                <<linkreplace `_linkName`>>
+                    <<if $tmpGirl.virgin>>
+                        <<set $tmpGirl.virgin = false>>
+                        <<set _virginityLost = true>>
+                    <</if>>
+                    <center>
+                        <<actionImage $tmpGirl 'pussy' 'no-text'>>
+                    </center>
+                    <br /><br />
+                    You enter her warm pussy and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
+                    <br /><br />
+                    <<if _virginityLost>>
+                        <strong>She lost her virginity!</strong>
+                        <br /><br />
+                    <</if>>
+                <</linkreplace>>
+            <</if>>
+
+            <<if $tmpGirl.anal < 20>>
+                <<set _linkName = 'Fuck her tight ass'>>
             <<else>>
-                <<set _linkName = 'Fuck her pussy'>>
+                <<set _linkName = 'Fuck her ass'>>
             <</if>>
             <<linkreplace `_linkName`>>
-                <<if $tmpGirl.virgin>>
-                    <<set $tmpGirl.virgin = false>>
-                    <<set _virginityLost = true>>
-                <</if>>
                 <center>
-                    <<actionImage $tmpGirl 'pussy' 'no-text'>>
+                    <<actionImage $tmpGirl 'anal' 'no-text'>>
                 </center>
                 <br /><br />
-                You enter her warm pussy and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
-                <br /><br />
-                <<if _virginityLost>>
-                    <strong>She lost her virginity!</strong>
-                    <br /><br />
+                <<if $tmpGirl.anal < 20>>
+                    You enter her tight ass and start ramming her while she tries to control her pain, glancing at her ring for comfort.
+                <<else>>
+                    You enter her warm ass and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
                 <</if>>
+                <br /><br />
             <</linkreplace>>
-        <</if>>
 
-        <<if $tmpGirl.anal < 20>>
-            <<set _linkName = 'Fuck her tight ass'>>
-        <<else>>
-            <<set _linkName = 'Fuck her ass'>>
-        <</if>>
-        <<linkreplace `_linkName`>>
-            <center>
-                <<actionImage $tmpGirl 'anal' 'no-text'>>
-            </center>
-            <br /><br />
-            <<if $tmpGirl.anal < 20>>
-                You enter her tight ass and start ramming her while she tries to control her pain, glancing at her ring for comfort.
-            <<else>>
-                You enter her warm ass and start ramming her while she moans louder and louder, as she glances at her ring every now and then.
-            <</if>>
-            <br /><br />
+            <<linkreplace 'Continue'>>
+                <<set _cum = !$tmpGirl.gender ? 'cum_on_pussy' : 'cum'>>
+                <center>
+                    <<actionImage $tmpGirl _cum 'no-text'>>
+                </center>
+                <br /><br />
+                <<if !$tmpGirl.gender>>
+                    You throw her on her back and cum all over her pussy.
+                <<else>>
+                    You pull out your dick and you both lay on your back. You stroke your dick as she massages your balls. You both cum together.
+                <</if>>
+                <br /><br />
+                <<link 'Fuck some more'>>
+                    <<fuck $tmpGirl>>
+                <</link>>
+                <<link 'Leave'>>
+                    <<horny_reset>>
+                    <<goto $tmpGirlViewBack>>
+                <</link>>
+            <</linkreplace>>
         <</linkreplace>>
-
-        <<linkreplace 'Continue'>>
-            <<set _cum = !$tmpGirl.gender ? 'cum_on_pussy' : 'cum'>>
-            <center>
-                <<actionImage $tmpGirl _cum 'no-text'>>
-            </center>
-            <br /><br />
-            <<if !$tmpGirl.gender>>
-                You throw her on her back and cum all over her pussy.
-            <<else>>
-                You pull out your dick and you both lay on your back. You stroke your dick as she massages your balls. You both cum together.
-            <</if>>
-            <br /><br />
-            <<link 'Fuck some more'>>
-                <<fuck $tmpGirl>>
-            <</link>>
-            <<link 'Leave'>>
-                <<horny_reset>>
-                <<goto $tmpGirlViewBack>>
-            <</link>>
-        <</linkreplace>>
-    <</linkreplace>>
-</div>
-<div id="option_others">
-</div>
+    </div>
+    <div id="option_others">
+    </div>
+<</if>>

@@ -639,6 +639,9 @@ setup.npc = {
 			traits, personality, location, skills, sexStats
 		} = npc;
 
+		traits ??= [];
+		skills ??= [];
+
 		if (happy > 40) pool.push(...db.emotional_positive);
 		else if (happy < -20) pool.push(...db.emotional_negative);
 

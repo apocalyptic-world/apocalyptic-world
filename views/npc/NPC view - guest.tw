@@ -163,7 +163,7 @@
 	<</if>>
 <</if>>
 
-<<if [0, 2].includes($tmpGirl.gender) && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
+<<if [0, 2].includes($tmpGirl.gender) && $game.canMarry && !$tmpGirl.married && $tmpGirl?.family?.husband !== 'mc' && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
