@@ -269,14 +269,15 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	</table>
 <</if>>
 
-<<set _virginList = setup.getAvailablePersons18yoVirgins($guests)>>
-<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
-<<set _hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 25, '>=')>>
-<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsNoChastityBelt, _hornyGuests])>>
-<<set _guestsLikesGuys = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guestsNoChastityBelt, _hornyGuests])>>
-<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
-
 <<if !($locationEvents.guesthouse ?? false)>>
+	<<set _guestsNotMaxSubmission = setup.propertyMatchIndexes($guests, 'sub', 100, '<')>>
+	<<set _virginList = setup.getAvailablePersons18yoVirgins($guests)>>
+	<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
+	<<set _hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 25, '>=')>>
+	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsNoChastityBelt, _hornyGuests])>>
+	<<set _guestsLikesGuys = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guestsNoChastityBelt, _hornyGuests])>>
+	<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
+
 	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
 	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {

@@ -395,7 +395,7 @@
 	<<capture _guestI>>
 		<<set _npc = $guests[_guestI]>>
 		<<if _isOvercrowded>>
-			<<setNpcStats 'guest' _guestI 'happy' -1>>
+			<<setNpcStats 'guest' _guestI 'happy' -5>>
 		<</if>>
 		<<set $guests[_guestI].talked to false>>
 		<<set $guests[_guestI].milked to false>>
@@ -442,7 +442,7 @@
 			<<set _npc.sub++>>
 		<</if>>
 
-		<<if (_npc?.quests?.lastInteractionDay + 5) < $game.day>>
+		<<if (_npc?.quests?.lastInteractionDay + 7) < $game.day && setup.percentageChance>>
 			<<set _npc.sub = Math.max(0, (_npc.sub - 1))>>
 		<</if>>
 		
