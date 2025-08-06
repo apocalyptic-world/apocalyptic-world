@@ -27,15 +27,15 @@ setup.fight = {
             },
             MaleVsFemale: {
               win: [
-                "[Female A] evades [Male B]'s heavy attacks and counters with an elbow strike to his face, bringing him to his knees for the win.",
-                "[Female A] uses her agility to outmaneuver [Male B], locking him into an armbar until he taps out.",
-                "With surprising strength, [Female A] catches [Male B] in a guillotine choke, forcing him to submit to the shock of the audience."
+                "[Male A] uses his size to overpower [Female B], slamming her into the cage wall before delivering the final blow.",
+                "[Male A] takes advantage of his reach, landing a solid punch that knocks [Female B] out cold.",
+                "After a long exchange, [Male A] catches [FemaleB] with a knee strike, leaving her unable to stand and ending the fight."
               ],
               lose: [
-                "[Male B] uses his size to overpower [Female A], slamming her into the cage wall before delivering the final blow.",
-                "[Male B] takes advantage of his reach, landing a solid punch that knocks [Female A] out cold.",
-                "After a long exchange, [Male B] catches [Female A] with a knee strike, leaving her unable to stand and ending the fight."
-              ]
+                "[Female B] evades [Male A]'s heavy attacks and counters with an elbow strike to his face, bringing him to his knees for the win.",
+                "[Female B] uses her agility to outmaneuver [Male A], locking him into an armbar until he taps out.",
+                "With surprising strength, [Female B] catches [Male A] in a guillotine choke, forcing him to submit to the shock of the audience."
+              ],
             },
             FemaleVsMale: {
               win: [
@@ -51,13 +51,13 @@ setup.fight = {
             }
           }
 
-        const fightType1 = (fighter.gender === 0 ? 'Female' : 'Male');
-        const fightType2 = (enemy.gender === 0 ? 'Female' : 'Male');
+        const fightType1 = ([0, 2].includes(fighter.gender) ? 'Female' : 'Male');
+        const fightType2 = ([0, 2].includes(enemy.gender) ? 'Female' : 'Male');
         const fightTypeText = fightType1 + 'Vs' + fightType2;
+
 
         const fightTypeImage1 = setup.npc.getGenderAsName(fighter);
         const fightTypeImage2 = setup.npc.getGenderAsName(enemy);
-
 
         let fighterStrength = fighter.strength;
         let enemyStrength = enemy.strength
