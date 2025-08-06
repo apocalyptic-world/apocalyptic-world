@@ -32,12 +32,14 @@ His words trail off, lost in the abyss of unspoken yearning.
 <br />
 <div id="option_allow">
     <<link 'Allow him'>>
+        <<set _guest.relationship = (Math.min(100, _guest.relationship + 10))>>
         <<goto 'Basement - guest asks to fuck slave - allow'>>
     <</link>>
 </div>
 <div id="option_threesome">
     <<if recall($suppCode)>>
         <<link "Let's do it together">>
+            <<set _guest.relationship = (Math.min(100, _guest.relationship + 5))>>
             <<goto 'Basement - guest asks to fuck slave - threesome'>>
         <</link>>
     <<else>>
@@ -49,6 +51,7 @@ His words trail off, lost in the abyss of unspoken yearning.
 </div>
 <<linkreplace 'No'>>
     <<run $('#option_allow, #option_threesome').hide()>>
+    <<set _guest.relationship = (Math.max(0, _guest.relationship - 10))>>
     <br /><br />
     As <<=setup.displayName(_guest)>> nods silently, retreating into the shadows of the basement, you can't help but wonder how much of your humanity you have already sacrificed in the name of survival. 
     The line between right and wrong blurs in the harsh light of a world that has crumbled, leaving you to pick up the shattered pieces of your existence.
