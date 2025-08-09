@@ -105,6 +105,7 @@
 		<</if>>
 		
 		<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
+			<<run console.log(_morphs[_imageI])>>
 			<<if
 			typeof _actions[_morphs[_imageI]] !== 'undefined' && 
 			typeof _actions[_morphs[_imageI]][$args[0].location] !== 'undefined' && 
@@ -114,6 +115,7 @@
 					<<set _subActionsPath = ''>>
 					<<set _imageIsPack = false>>
 				<</if>>
+				<<run console.log('use',_morphs[_imageI])>>
 				<<set _image = either(_actions[_morphs[_imageI]][_location][$args[1]])>>
 				<<if _image.includes('/')>>
 					<<actionImageOutput `'packs/' + _image` true>>
