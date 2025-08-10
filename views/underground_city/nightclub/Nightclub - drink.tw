@@ -33,8 +33,10 @@ You order a beer at the bar and start drinking it.
 	<</linkreplace>>
 <</if>>
 
-<<if $player.reputation > 70 && setup.percentageChance(40) && _npcShow>>
-	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. You turn around and in front of you, you see a girl dressed all in pink. She asks if you'd like to dance in a quieter corner.
+<<if $player.reputation > 70 && setup.percentageChance(40)>>
+	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. 
+	<br />
+	You turn around and in front of you, you see a girl dressed all in pink. She asks if you'd like to dance in a quieter corner.
 	<br /><br />
 	<center>
 		<<image 'places/nightclub/girl1.jpg' sfw>>
@@ -43,6 +45,22 @@ You order a beer at the bar and start drinking it.
 	<<link 'Accept her offer'>>
 		<<goto 'Nightclub - girl 1'>>
 	<</link>>
+<<elseif $player.reputation > 90 && setup.percentageChance(40) && recall($suppCode)>>
+	You lift the glass that the bartender has just placed in front of you when someone taps you on the back. 
+	<br />
+	You turn around and in front of you, you see a girl dressed in black panties and white top. She asks if you'd like to dance in a quieter corner.
+	<br /><br />
+	<strong>Just for 30 caps</strong>
+	<center>
+		<<image 'places/nightclub/girl_dance.jpg' sfw>>
+	</center>
+	<br /><br />
+	<<if $player.money >= 30>>
+		<<link 'Accept her offer'>>
+			<<set $player.money -= 30>>
+			<<goto 'Nightclub - girl 2'>>
+		<</link>>
+	<</if>>
 <<elseif $player.reputation > 100 && setup.percentageChance(20)>>
 	<<goto 'Nightclub - buy drinks for girls'>>
 <</if>>
