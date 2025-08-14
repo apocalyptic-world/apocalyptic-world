@@ -242,7 +242,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<<set _guestsGay = setup.propertyMatchIndexes($guests, 'likesGuys', true, '!=')>>
 	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay])>>
 	
-	<<if _guestsLikesGirls && setup.percentageChance(40)>>
+	<<if _guestsLikesGirls.length && setup.percentageChance(40)>>
 		<<set _randomLesbianId = setup.getRandomElement(_guestsLikesGirls)>>
 		You stood in the hallway for a moment, not quite ready to call it a night. That’s when you saw her - <<=setup.displayName($guests[_randomLesbianId])>>.
 		<br /><br />
