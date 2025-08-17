@@ -3,23 +3,25 @@
 <<set $guests[_girlGuest[0]].location = 'mistress'>>
 <<set $tmpGirl.location = 'basement-mistress.' + setup.genderPath($guests[_girlGuest[0]])>>
 
+<<set _npcMistress = $guests[_girlGuest[0]]>>
+<<run console.log(_npcMistress)>>
 <<set _sexActions = {
     mistress_handjob: {
         title: 'Handjob',
         minAction: 10,
-        show: [1,2].includes($guests[_girlGuest[0]].gender),
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && !_npcMistress.chastityBelt,
         maxCorruption: 20
     },
     mistress_footjob: {
         title: 'Footjob',
         minAction: 20,
-        show: [1,2].includes($guests[_girlGuest[0]].gender),
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && !_npcMistress.chastityBelt,
         maxCorruption: 30
     },
     mistress_titjob: {
         title: 'Titjob',
         minAction: 30,
-        show: [1,2].includes($guests[_girlGuest[0]].gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && !_npcMistress.chastityBelt,
         maxCorruption: 40
     },
     mistress_face_strapon: {
@@ -38,11 +40,12 @@
     mistress_licked: {
         title: 'Sit on face',
         minAction: 40,
-        show: $guests[_girlGuest[0]].gender == 0,
+        show: $guests[_girlGuest[0]].gender == 0 && !_npcMistress.chastityBelt,
         maxCorruption: 50
     },
     mistress_bj: {
         title: 'Blowjob',
+        show: !_npcMistress.gender || !_npcMistress.chastityBelt,
         minAction: 40,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
         maxCorruption: 50,
@@ -59,12 +62,13 @@
         orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         maxCorruption: 60,
         positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
+        show: !_npcMistress.gender || !_npcMistress.chastityBelt,
         stats: 'dp'
     },
     mistress_pussy: {
         title: 'Fuck pussy',
         minAction: 50,
-        show: typeof $tmpGirl.pussy !== 'undefined',
+        show: typeof $tmpGirl.pussy !== 'undefined' && (!_npcMistress.gender || !_npcMistress.chastityBelt),
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
         stats: 'pussy'
