@@ -1,5 +1,18 @@
 :: Cheat menu {"position":"29,1203","size":"100,100"}
 <div id="ingame-ui-buttons-side" @class="'cheatmenu ' + settings.sidebarBackground + ''">
+	<<if recall($suppCode)>>
+		<<if settings?.subDecayDisabled>>
+			<<link 'Enable submission decay (Each day npc submission lowers)'>>
+				<<set settings.subDecayDisabled = false>>
+				<<script>>Dialog.setup("Cheat menu", "Cheat menu"); Dialog.wiki(Story.get("Cheat menu").processText()); Dialog.open();<</script>>
+			<</link>>
+		<<else>>
+			<<link 'Disable submission decay (Each day npc submission lowers)'>>
+				<<set settings.subDecayDisabled = true>>
+				<<script>>Dialog.setup("Cheat menu", "Cheat menu"); Dialog.wiki(Story.get("Cheat menu").processText()); Dialog.open();<</script>>
+			<</link>>
+		<</if>>
+	<</if>>
   	<<link 'Add 100 caps'>>
 	  	<<set $player.money += 100>>
 	  	<<goto `passage()`>>
