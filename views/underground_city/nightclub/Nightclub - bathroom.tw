@@ -1,7 +1,7 @@
 :: Nightclub - bathroom [bg-underground]
 <h1 class="ptitle">NIGHTCLUB WC</h1>
 
-<table id="slaves">
+<table id="slaves" class="npc-list">
 	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
         <<set _hasWorkers = true>>
 		<<capture _streetGuestI, _streetGuest>>
@@ -13,8 +13,8 @@
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set _assignedToStreets = true>>
-		<tr>
-			<td style="width: 300px">
+		<tr class="item">
+			<td style="width: 25%">
 				<span @class="''+_genderClass+''">
 				  <<link _streetGuest.name>>
 					<<set $tmpGirl to _streetGuest>>
@@ -30,14 +30,10 @@
 					<<goto $tmpGirlViewBack>>
 				  <</link>>
 				</span>
+				<<=setup.npcListInfo(_streetGuest)>>
 			</td>
 			<td>
-				<<if [0,2].includes(_streetGuest.gender) && setup.getAge(_streetGuest) >= 17>>
-					Beauty score: <<print _streetGuest.beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge(_streetGuest)>>
+				<<npcListView _streetGuest _streetGuestI 'guest'>>
 			</td>
 		</tr>
 		<</capture>>
