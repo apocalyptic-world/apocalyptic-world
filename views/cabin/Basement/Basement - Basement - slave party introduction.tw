@@ -5,10 +5,9 @@
 <<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
 <<set _mistress = $guests[_mistress[0]]>>
 <<set _slaves = setup.getAvailablePersons18yo($slaves)>>
-<<if _slaves[0].length>>
-    <<set _randomSlave = $slaves[setup.getRandomElement(_slaves[0])]>>
-    <<set _npc = _randomSlave>>
-<</if>>
+<<set _randomSlave = $slaves[setup.getRandomElement(_slaves[0] ?? _slaves[1])]>>
+<<set _npc = _randomSlave>>
+<<set _npc.location = 'basement'>>
 
 <<set _url = _npc.gender == 1 ? 'male' : 'female'>>
 <center>
@@ -48,7 +47,7 @@ You swallowed hard, the bitter taste of fear coating your tongue like poison.
 <br /><br />
 <<if _npc>>
     <center>
-        [img[setup.ImagePath+'places/basement/horny_slave_beg.webp']]
+        <<actionImage _npc begging>>
     </center>
     <br />
     <<sayNpc _npc>>
