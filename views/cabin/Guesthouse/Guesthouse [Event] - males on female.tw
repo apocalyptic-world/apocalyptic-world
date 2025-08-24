@@ -237,6 +237,12 @@
 			>>
 		<</for>>
 	<</if>>
+	<<if !_interrupted>>
+		<<if setup.percentageChance(30) && setup.pregnancyChance($guests[_guestIds[0]])>>
+			<<set $guests[_guestIds[0]].pregnancy = 0>>
+			<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+		<</if>>
+	<</if>>
 	<<unset $randEvent, $tmpEvent>>
 	<<goto 'Guest house'>>
 <</link>>
