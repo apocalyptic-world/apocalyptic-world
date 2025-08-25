@@ -28,6 +28,14 @@
 	<</link>>
 <</if>>
 
+<<if $tmpGirl.canPunish && $player.energy > 30>>
+	<<set $tmpGirl.location = 'basement'>>
+	<<set _linkName = 'Punish ' + _himOrHer + ' in basement'>>
+	<<link `_linkName`>>
+		<<goto 'NPC punish'>>
+	<</link>>
+<</if>>
+
 <<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
 	<<if $backpack.has('pregnancy_potion')>>
 		<<link 'Give pregnancy termination potion'>>

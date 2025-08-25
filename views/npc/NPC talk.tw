@@ -28,6 +28,9 @@
 <<set $tmpGirl.quests ??= {}>>
 <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
 
+<<if $charId && $tmpGirl.corruption > 50 && !$tmpGirl.canPunish>>
+	<<set $tmpGirl.canPunish = true>>
+<</if>>
 <<link 'Back'>>
   	<<if $tmpGirlViewBack>>
 		<<goto $tmpGirlViewBack>>

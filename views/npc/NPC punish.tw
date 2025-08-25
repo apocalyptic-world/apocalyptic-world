@@ -41,8 +41,12 @@
 <<set $punishCount++>>
 <<set _dead = false>>
 <<if $punishType === 'choke' && $punishCount >= 3>>
-	<<set _dead = true>>
-	<<set _punishView = 'punish_dead'>>
+	<<if $charId>>
+		<<set $tmpGirl.happy = Math.min(0, ($tmpGirl.happy -= 10))>>
+	<<else>>
+		<<set _dead = true>>
+		<<set _punishView = 'punish_dead'>>
+	<</if>>
 <</if>>
 <<if typeof $punishType === 'undefined'>>
 	<<if $tmpGirl.gender == 1>>
@@ -154,7 +158,11 @@
 	<<if _dead>>
 		<<goto 'Basement'>>
 	<<else>>
-		<<goto 'NPC view'>>
+		<<if $tmpGirlViewBack>>
+			<<goto $tmpGirlViewBack>>
+		<<else>>
+			<<goto 'NPC view'>>
+		<</if>>
 	<</if>>
 <</link>>
 
