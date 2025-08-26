@@ -65,6 +65,8 @@
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
 
 <<set _hasWorkingHospital = setup.hasWorkingHospital()>>
+<<set _milkwarden = setup.getPersonsForLocation($guests, 'milkwarden')>>
+<<set _hasMilkwarden = _milkwarden.length>>
 <<set _doctorCount = setup.getDoctors()>>
 <<set _miscarrieageChanceBase = 12>>
 <<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
@@ -211,7 +213,7 @@
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow a small fruit tree while working in the garden. <strong class="iitem">+1 wood</strong>', 'garden')>>
 			<</if>>
 		<</if>>
-		<<if _npc.assignedTo == 'milk_barn' && !_dayOff>>
+		<<if _npc.assignedTo == 'milk_barn' && !_dayOff && _hasMilkwarden>>
 			<<if typeof _npc.milkingDay === 'undefined'>>
 				<<set _npc.milkingDay = 0>>
 			<</if>>
@@ -982,6 +984,13 @@
 			($player.baseManagement.electricityStorage ?? 0) + setup.baseManagement.electricity.total()
 		)
 	)>>
+<</if>>
+
+// Milk warden
+<<if _hasMilkwarden && setup.cabinInventory.count('milk') >= 3>>
+	<<run setup.sleepMessages.addJob($guests[_milkwarden[0]].name + ' produced 2 cheese\'s (food) from milk', 'milk_barn')>>
+	<<run setup.cabinInventory.pickup('food', 2)>>
+	<<run setup.cabinInventory.drop('milk', 3)>>
 <</if>>
 
 <<if $player.hunger <= 0 && !_sleepDead>>

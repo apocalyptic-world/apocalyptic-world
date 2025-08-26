@@ -3,53 +3,64 @@
     MILK BARN
 </h1>
 <br />
-<table id="slaves" class="npc-list">
-	<<for _i to 0; _i lt $slaves.length; _i++>>
-		<<capture _i>>
-		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
-		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
-		<<set _dayOff = _isSick || _isRest>>
-		<<if $slaves[_i].assignedTo != 'milk_barn' || !timeBetween('12:00', '18:00') || _dayOff>>
-			<<continue>>
-		<</if>>
-        <<set $slaves[_i].milking = true>>
-		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
-        <tr>
-            <td colspan="3">
-                <center>
-                    <<set $slaves[_i].location = 'milk_barn'>>
-                    <<set _npc = clone($slaves[_i])>>
-                    <<actionImage _npc 'milking' 'no-text'>>
-                </center>
-            </td>
-        </tr>
-		<tr class="item">
-			<td style="min-width: 25%">
-				<span @class="''+_genderClass+''">
-					<<link $slaves[_i].name>>
-						<<set $tmpGirl to $slaves[_i]>>
-						<<set $tmpGirl.location = 'milk_barn'>>
-						<<set $tmpGirlBack = 'Milk barn'>>
-						<<set $tmpGirl.rape to false>>
-						<<set $tmpGirlCapture to false>>
-						<<set $tmpGirlInvite to false>>
-						<<set $slaveId = _i>>
-						<<unset $guestId, $characterId, $childId>>
-						<<set $tmpGirlViewBack = 'NPC view'>>
-						<<goto $tmpGirlViewBack>>
-						<<set $sexForced = true>>
-					<</link>>
-					
-					<<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
-				</span>
-			</td>
-			<td>
-				<<npcListView $slaves[_i] _i 'slave'>>
-			</td>
-		</tr>
-		<</capture>>
-	<</for>>
-</table>
+<<set _milkwarden = setup.getPersonsForLocation($guests, 'milkwarden')>>
+<<run console.log(_milkwarden)>>
+<<set _hasMilkwarden = _milkwarden.length>>
+<<if _hasMilkwarden>>
+	<<set _milkwarden = $guests[_milkwarden[0]]>>
+	<<=setup.displayName(_milkwarden)>> working in the barn.
+	<br /><br />
+	<table id="slaves" class="npc-list">
+		<<for _i to 0; _i lt $slaves.length; _i++>>
+			<<capture _i>>
+			<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+			<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+			<<set _dayOff = _isSick || _isRest>>
+			<<if $slaves[_i].assignedTo != 'milk_barn' || !timeBetween('12:00', '18:00') || _dayOff>>
+				<<continue>>
+			<</if>>
+			<<set $slaves[_i].milking = true>>
+			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
+			<tr>
+				<td colspan="3">
+					<center>
+						<<set $slaves[_i].location = 'milk_barn'>>
+						<<set _npc = clone($slaves[_i])>>
+						<<actionImage _npc 'milking' 'no-text'>>
+					</center>
+				</td>
+			</tr>
+			<tr class="item">
+				<td style="min-width: 25%">
+					<span @class="''+_genderClass+''">
+						<<link $slaves[_i].name>>
+							<<set $tmpGirl to $slaves[_i]>>
+							<<set $tmpGirl.location = 'milk_barn'>>
+							<<set $tmpGirlBack = 'Milk barn'>>
+							<<set $tmpGirl.rape to false>>
+							<<set $tmpGirlCapture to false>>
+							<<set $tmpGirlInvite to false>>
+							<<set $slaveId = _i>>
+							<<unset $guestId, $characterId, $childId>>
+							<<set $tmpGirlViewBack = 'NPC view'>>
+							<<goto $tmpGirlViewBack>>
+							<<set $sexForced = true>>
+						<</link>>
+						
+						<<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
+					</span>
+				</td>
+				<td>
+					<<npcListView $slaves[_i] _i 'slave'>>
+				</td>
+			</tr>
+			<</capture>>
+		<</for>>
+	</table>
+<<else>>
+	Milk warden not assigned
+	<br /><br />
+<</if>>
 <br />
 <<link 'Back'>>
     <<goto 'Youth district'>>
