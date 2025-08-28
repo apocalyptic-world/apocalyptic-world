@@ -830,6 +830,8 @@ setup.suicideChance = function (person) {
         chance = 12;
     } else if(age < 60) {
         chance = 4;
+    } else {
+        chance = 2;
     }
 
     if(breeder) {

@@ -11,6 +11,7 @@ Two naked girls are coming so you decide to jump out.  You freeze as soon as you
 <br /><br />
 
 <<if $player.int >= 20>>
+    <<set _canHelp = true>>
     <<linkreplace 'Follow them'>>
         A tense silence envelops you as you weigh your options. The forest seems to hold its breath, waiting for your decision. Your instincts urge you to follow, to uncover the purpose behind this macabre procession.
         <br /><br />
@@ -48,7 +49,7 @@ Two naked girls are coming so you decide to jump out.  You freeze as soon as you
 <</if>>
 <div id="option_leave">
     <<link 'Leave'>>
-        <<if !_help>>
+        <<if !_help && _canHelp>>
             <<set $player.goodwill -= 5>>
         <</if>>
         <<goto 'Outside'>>
