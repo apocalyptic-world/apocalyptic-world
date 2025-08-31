@@ -89,6 +89,11 @@ Save.onLoad.add(function (save) {
         variables.game.location.settlement = true;
     }
 
+    if (save.state.history[save.state.index].variables.workersLimitGarden < 9) {
+        save.state.history[save.state.index].variables.workersLimitGarden = 9;
+        save.state.history[save.state.index].variables.workersLimitHunter = 9;
+    }
+
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
         save.state.history[save.state.index].variables.characters.dom = {
             quests: {},
