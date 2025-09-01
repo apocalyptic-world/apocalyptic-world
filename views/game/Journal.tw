@@ -111,40 +111,44 @@
 
 	<<if ($game.location.settlement ?? false) && isMetChar('rodger')>>
 		<h2>Rodger</h2>
-		<div>Relationship: <<=$characters.rodger.relationship ?? 0>></div>
-		<div>Eve corruption: <<=$characters.eve.corruption ?? 0>></div>
-		<<if !($game.location.settlement_church ?? false)>>
-			Help him finish the church
-		<<elseif !$characters.rodger.quests.book>>
-			Talk with him in the church
-		<<elseif !$characters.rodger.quests.champagne>>
-			Talk with him in the church
-		<<elseif $characters.rodger.quests.champagne && !$characters.eve.quests.sex>>
-			<<if $game.cabinName>>
+		<<if !$characters?.rodger?.quests?.dead>>
+			<div>Relationship: <<=$characters.rodger.relationship ?? 0>></div>
+			<div>Eve corruption: <<=$characters.eve.corruption ?? 0>></div>
+			<<if !($game.location.settlement_church ?? false)>>
+				Help him finish the church
+			<<elseif !$characters.rodger.quests.book>>
 				Talk with him in the church
-			<<else>>
-				Progress with Blair
-			<</if>>
-		<<elseif !($game.location.settlement_shop ?? false)>>
-			<<if !$characters.rodger.quests.shop_talk>>
+			<<elseif !$characters.rodger.quests.champagne>>
 				Talk with him in the church
+			<<elseif $characters.rodger.quests.champagne && !$characters.eve.quests.sex>>
+				<<if $game.cabinName>>
+					Talk with him in the church
+				<<else>>
+					Progress with Blair
+				<</if>>
+			<<elseif !($game.location.settlement_shop ?? false)>>
+				<<if !$characters.rodger.quests.shop_talk>>
+					Talk with him in the church
+				<<else>>
+					Help him build shop
+				<</if>>
+			<<elseif ($game.location.settlement_shop ?? false) && !$characters.rodger.quests.horse>>
+				Talk with him in the church
+			<<elseif $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
+				<<if $game.day < 80>>
+					Continue living for a while (reach 80 days)
+				<<else>>
+					Go to the Rodger's settlement
+				<</if>>
+			<<elseif !$characters.rodger.quests.cheat>>
+				Increase Eve corruption to 30 and visit talk to Rodger after 120 days
+			<<elseif !$characters.rodger.quests.eve_pregnant>>
+				Wait two weeks and then visit Settlement.
 			<<else>>
-				Help him build shop
+				That's all for now
 			<</if>>
-		<<elseif ($game.location.settlement_shop ?? false) && !$characters.rodger.quests.horse>>
-			Talk with him in the church
-		<<elseif $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
-			<<if $game.day < 80>>
-				Continue living for a while (reach 80 days)
-			<<else>>
-				Go to the Rodger's settlement
-			<</if>>
-		<<elseif !$characters.rodger.quests.cheat>>
-			Increase Eve corruption to 30 and visit talk to Rodger after 120 days
-		<<elseif !$characters.rodger.quests.eve_pregnant>>
-			Wait two weeks and then visit Settlement.
 		<<else>>
-			That's all for now
+			Story finished. 
 		<</if>>
 		<br /><br />
 	<</if>>
@@ -238,7 +242,7 @@
 		<<elseif $characters.dom.quests.dinner && !$characters.dom.quests.new_king>>
 			Kill Dom
 		<<else>>
-			Finished
+			Story finished.
 		<</if>>
 	<<else>> 
 		That's all for now

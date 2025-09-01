@@ -4,7 +4,7 @@
 <<drop $backpack 'tribe_medallion' 1>>
 <<addmins 5>>
 <center>
-    [img[setup.ImagePath+'people/octavia/medallion.jpg']]
+    <<image 'people/octavia/medallion.jpg' sfw>>
 </center>
 <br />
 You extended the tribe medallion towards her, its weight a tangible reminder of the trials endured and the lives lost in the pursuit of victory. 
@@ -76,7 +76,7 @@ With a nod of acknowledgment, she accepted the medallion, deftly turning it over
             <<run $('#option_fuck').hide()>>
             <<horny_reset>>
             <center>
-                [img[setup.ImagePath+'people/octavia/cum_face.webp']]
+                <<image 'people/octavia/cum_face.webp'>>
             </center>
             <br />
             Your load is so big that, with a wave of shock, she drops onto her backside, catching herself with her hands. She remains still as you cum all over her face, leaving no clean place untouched.            
@@ -86,13 +86,21 @@ With a nod of acknowledgment, she accepted the medallion, deftly turning it over
             <</octavia>>
             <br /><br />
             <<link 'Leave'>>
-                <<goto 'Settlement - Octavia'>>
+                <<if $characters?.rodger?.quests?.dead>>
+                    <<goto 'Outside'>>
+                <<else>>
+                    <<goto 'Settlement - Octavia'>>
+                <</if>>
             <</link>>
         <</linkreplace>>
     <</linkreplace>>
     <div id="option_leave">
         <<link 'Maybe some other time'>>
-            <<goto 'Settlement - Octavia'>>
+            <<if $characters?.rodger?.quests?.dead>>
+                <<goto 'Outside'>>
+            <<else>>
+                <<goto 'Settlement - Octavia'>>
+            <</if>>
         <</link>>
     </div>
 <</linkreplace>>

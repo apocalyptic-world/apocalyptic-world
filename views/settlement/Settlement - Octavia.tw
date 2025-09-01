@@ -22,7 +22,11 @@
 <</if>>
 <<link 'Leave'>>
     <<addmins 15>>
-    <<goto 'Settlement'>>
+    <<if $characters?.rodger?.quests?.dead>>
+        <<goto 'Outside'>>
+    <<else>>
+        <<goto 'Settlement'>>
+    <</if>>
 <</link>>
 
 <<if $characters.octavia.relationship >= 40 && !$characters.octavia.quests.ultimatum>>

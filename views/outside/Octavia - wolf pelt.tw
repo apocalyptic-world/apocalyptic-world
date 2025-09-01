@@ -26,7 +26,11 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
     <</if>>
     <<link 'Leave'>>
         <<addmins 15>>
-        <<goto 'Settlement'>>
+        <<if $characters?.rodger?.quests?.dead>>
+            <<goto 'Outside'>>
+        <<else>>
+            <<goto 'Settlement'>>
+        <</if>>
     <</link>>
 <<else>>
     <<octavia>>
@@ -100,7 +104,11 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
                 With a sharp kick, she strikes you right in the groin. You groan, but the dirty cloth in your mouth muffles almost all sound. She slowly walks around you and pushes you away, telling you to gather yourself and leave
                 <br /><br />
                 <<link 'Leave'>>
-                    <<goto 'Settlement'>>
+                    <<if $characters?.rodger?.quests?.dead>>
+                        <<goto 'Outside'>>
+                    <<else>>
+                        <<goto 'Settlement'>>
+                    <</if>>
                 <</link>>
             <</if>>
         <</linkreplace>>
@@ -111,7 +119,11 @@ You take out <strong class="iitem"><<=_peltCount>></strong> wolf pelt<<=(_peltCo
                     <strong>Octavia's submission increased by 1</strong>
                 <</if>>
                 <<link 'Continue'>>
-                    <<goto 'Settlement'>>
+                    <<if $characters?.rodger?.quests?.dead>>
+                        <<goto 'Outside'>>
+                    <<else>>
+                        <<goto 'Settlement'>>
+                    <</if>>
                 <</link>>
             <</linkreplace>>
         </div>

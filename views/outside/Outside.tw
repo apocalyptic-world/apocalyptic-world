@@ -22,6 +22,10 @@
   	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
     <<grid outside settlement 'Settlement' 'Settlement' 0 _isDisabled>>
   <</if>>
+  <<if $characters?.rodger?.quests?.dead && !$characters.octavia.quests.next_move>>
+		<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+		<<grid settlement octavia 'Settlement - Octavia' 'Octavia' 0 _isDisabled>>
+  <</if>>
   <<if ($game.location.sanctuary ?? false)>>
   	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>
     <<grid outside sanctuary 'Sanctuary' 'Sanctuary' 0 _isDisabled>>
