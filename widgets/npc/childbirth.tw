@@ -42,7 +42,7 @@
 
     <<if !_child.gender>>
 		<<set _child.traits = _mother.traits ?? []>>
-		<<set _additionalTrait = setup.getRandomTraits(_child, 1)>>
+		<<set _additionalTrait = setup.getRandomTraits(_child, 1, (_mother.traits ?? []))>>
 		<<if _additionalTrait>>
 			<<set _child.traits = _child.traits.concat(_additionalTrait)>>
 		<</if>>

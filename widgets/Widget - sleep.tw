@@ -444,7 +444,7 @@
 			<<set _npc.sub++>>
 		<</if>>
 
-		<<if (_npc?.quests?.lastInteractionDay + 7) < $game.day && setup.percentageChance && !settings?.subDecayDisabled>>
+		<<if (_npc?.quests?.lastInteractionDay + 7) < $game.day && setup.percentageChance && !$player?.quests?.subDecayDisabled>>
 			<<set _npc.sub = Math.max(0, (_npc.sub - 1))>>
 		<</if>>
 		

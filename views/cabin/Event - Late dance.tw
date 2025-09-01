@@ -1,16 +1,14 @@
 :: Event: Late dance
 <h1 class="ptitle"><<cabinName>></h1>
 <br />
-<<set _npcList = setup.getAvailablePersons18yo($guests)[0]>>
-<<set _randomNpc = setup.getRandomElement(_npcList)>>
-<<set _npc = $guests[_randomNpc]>>
+<<set _npc = $guests[$tmpEvent.id]>>
 The silhouette of a woman sways sensually to a rhythm only she can hear, her movements reflecting a mixture of grace and desperation. 
 The worn-out wooden floorboards creak beneath her bare feet as she loses herself in the dance. 
 <br />
 The flickering shadows cast by the dancing flames seem to dance along with her, creating an otherworldly atmosphere.
 <br /><br />
-<center>						
-	[img[setup.ImagePath+'places/cabin/late_dance.jpg']]
+<center>	
+    <<image 'places/cabin/late_dance.jpg'>>
 </center>
 <br />
 As you stand there, a silent observer in the doorway, <<=setup.displayName(_npc)>> doesn't seem to notice your presence at first. 
@@ -77,14 +75,14 @@ She takes a step toward you, her eyes locked with yours. The firelight accentuat
     With her hands, she pushes against your legs and increases the pace even more.
     <br /><br />
     <<linkreplace 'Cum'>>
+        <<addmins 20>>
         <<addhours 1>>
         <<horny_reset>>
-        <<set $guests[_randomNpc].happy += 10>>
-        <<set $guests[_randomNpc].horny = 0>>
-        <<set $guests[_randomNpc].virgin = false>>
-        <<if setup.pregnancyChance($guests[_randomNpc])>>
-			<<set $guests[_randomNpc].pregnancy_father = 'mc'>>
-			<<set $guests[_randomNpc].pregnancy = 0>>
+        <<set _npc.happy += 10>>
+        <<set _npc.horny = 0>>
+        <<if setup.pregnancyChance(_npc)>>
+			<<set _npc.pregnancy_father = 'mc'>>
+			<<set _npc.pregnancy = 0>>
 		<</if>>
 
         <center>						
@@ -99,12 +97,15 @@ She takes a step toward you, her eyes locked with yours. The firelight accentuat
         <br /><br />
         <<link 'Leave'>>
             <<goto 'Wood cabin'>>
+            <<unset $tmpEvent>>
         <</link>>
     <</linkreplace>>
 <</linkreplace>>
 
 <div id="option_no">
     <<linkreplace 'Decline offer'>>
+        <<addmins 5>>
         <<goto 'Wood cabin'>>
+        <<unset $tmpEvent>>
     <</linkreplace>>
 </div>
