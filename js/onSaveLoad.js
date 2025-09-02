@@ -89,9 +89,11 @@ Save.onLoad.add(function (save) {
         variables.game.location.settlement = true;
     }
 
-    if (save.state.history[save.state.index].variables.workersLimitGarden < 9) {
-        save.state.history[save.state.index].variables.workersLimitGarden = 9;
-        save.state.history[save.state.index].variables.workersLimitHunter = 9;
+    console.log(variables.workersLimitGarden);
+
+    if (variables.workersLimitGarden < 9) {
+        variables.workersLimitGarden = 9;
+        variables.workersLimitHunter = 9;
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
@@ -160,12 +162,6 @@ Save.onLoad.add(function (save) {
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
-    }
-    if (typeof save.state.history[save.state.index].variables.workersLimitGarden === 'undefined') {
-        save.state.history[save.state.index].variables.workersLimitGarden = 8;
-    }
-    if (save.state.history[save.state.index].variables.workersLimitGarden !== 8) {
-        save.state.history[save.state.index].variables.workersLimitGarden = 8;
     }
     if (typeof save.state.history[save.state.index].variables.characters.blair === 'undefined') {
         save.state.history[save.state.index].variables.characters.blair = {};
