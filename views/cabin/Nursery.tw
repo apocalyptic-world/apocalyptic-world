@@ -134,9 +134,10 @@
 						  Are you sure you want to throw <<=(_nursery.gender ? 'him' : 'her')>> out?
 						  <br />
 						  <<link 'Yes' 'Nursery'>>
-							  <<run $nursery.splice(_nurseryI, 1)>>
-							  <<dialogclose>>
-							  <<set $player.goodwill -= 2>>
+							<<set _nurseryI = $nursery.findIndex(obj => obj.id === _nursery.id) >>
+							<<run $nursery.splice(_nurseryI, 1)>>
+							<<dialogclose>>
+							<<set $player.goodwill -= 2>>
 						  <</link>>	
 					  <</dialog>>
 					<</link>>
