@@ -24,8 +24,8 @@ Slaves who had once been strangers found themselves sharing stories and laughter
 
 <<set _slavesAvailable = setup.getAvailablePersons18yo($slaves)>>
 <<for _slaveI, _slave range $slaves>>
-    <<set $slaves[_slaveI].happy += 20>>
-    <<set $slaves[_slaveI].relationship += 10>>
+    <<set $slaves[_slaveI].happy = Math.min($slaves[_slaveI].happy + 20, 100)>>
+    <<set $slaves[_slaveI].relationship = Math.min($slaves[_slaveI].relationship + 10, 100)>>
     <<set $slaves[_slaveI].quests ??= {}>>
     <<set $slaves[_slaveI].quests.lastInteractionDay = $game.day>>
 <</for>>
@@ -41,8 +41,8 @@ Slaves who had once been strangers found themselves sharing stories and laughter
             Slaves, emboldened by the heady concoction, cast aside their reservations and embraced one another with newfound fervor.
             <br /><br />
             <<for _slaveI, _slave range $slaves>>
-                <<set $slaves[_slaveI].happy += 10>>
-                <<set $slaves[_slaveI].relationship += 5>>
+                <<set $slaves[_slaveI].happy = Math.min($slaves[_slaveI].happy + 10, 100)>>
+                <<set $slaves[_slaveI].relationship = Math.min($slaves[_slaveI].relationship + 5, 100)>>
             <</for>>
             <<if ((_slavesAvailable[0] ?? []).length) >= 4 && ((_slavesAvailable[1] ?? []).length) >= 3>>
                 <<include 'Basement - slave party orgy'>>
@@ -87,7 +87,7 @@ Slaves who had once been strangers found themselves sharing stories and laughter
     <<linkreplace 'Cum'>>
         <<horny_reset>>
         <center>
-            [img[setup.ImagePath+'places/basement/slave_party_cum.webp']]
+            <<image 'places/basement/slave_party_cum.webp'>>
         </center>
         <br />
         As you cum on <<=setup.displayName(_npc1)>> face, <<=setup.displayName(_npc2)>> wants some of you and decides to lick your cum off her face.
