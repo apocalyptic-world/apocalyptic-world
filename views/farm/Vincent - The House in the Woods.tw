@@ -1,0 +1,112 @@
+:: Vincent - The House in the Woods [bg-farm]
+<br /><br />
+<h1 class="ptitle">FARM</h1>
+<<vincent>>
+    You’re early. Good. Means we’ll have more daylight.
+<</vincent>>
+<br />
+Then, after a pause, he gave you a nod.
+<br /><br />
+<<vincent>>
+    Is your car ready for a drive?
+<</vincent>>
+<br />
+<<if $player.car.explore && $player.car.fuel === 100 && $player.car.health === 100>>
+    <<linkreplace 'Yes. Lets go'>>
+        <<set $characters.vincent.quests.wood_house = true>>
+        <<set $player.companionsHome = $player.companions>>
+		<<set $player.companions = {}>>
+        <<carFuel 60>>
+        You both loaded up the old car, tossing in supplies and checking the weapons twice. 
+        The engine coughed to life, echoing through the still morning air, and soon the farm was shrinking in the rearview mirror as you drove out into the wastes.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house.jpg' sfw>>
+        </center>
+        <br /><br />
+        The drive stretched on. Broken roads, skeletons of towns long abandoned, and the silent reminder of a world that had collapsed. 
+        Vincent was quiet for most of it, staring out the window with that haunted look he always carried. Finally, after hours of monotony, he leaned forward.
+        <br /><br />
+        For a while, Vincent said nothing, eyes fixed ahead. Then, his voice broke the quiet — low, almost thoughtful.
+        <br /><br />
+        <<vincent>>
+            Hard to believe Rodger’s gone.
+        <</vincent>>
+        <br />
+        You nodded slowly. The memory of that day still weighed on you both.
+        <br />
+        Vincent kept one hand on the wheel, the other resting against his leg. His face was hard, but his voice carried a quiet grief.
+        <br /><br />
+        <<vincent>>
+            He was younger than me. Stronger too. Always figured if anyone could make it through all this, it’d be him. Guess that’s just how it is, though. 
+        <</vincent>>
+        <br />
+        <<vincent>>
+            No one’s safe anymore. Doesn’t matter how fast, or how tough.
+        <</vincent>>
+        <br />
+        Neither of you answered that thought. The silence that followed wasn’t empty — it was full of Rodger’s absence, full of the reality that in this world, survival was never guaranteed.
+        <br /><br />
+        After a long while, Vincent cleared his throat and pointed ahead, changing the subject.
+        <br /><br />
+        <<vincent>>
+            Take that side road. Off the main path. Let’s see where it goes.
+        <</vincent>>
+        <br />
+        The car turned, leaving the cracked asphalt behind as trees swallowed the light.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house2.jpg' sfw>>
+        </center>
+        <br />
+        The dirt track clawed its way into the forest, branches scraping the car as though trying to hold you back. 
+        Eventually, a fallen tree blocked the road, its roots twisted like broken fingers. You killed the engine, the sudden silence unnerving.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house3.jpg' sfw>>
+        </center>
+        <br />
+        That’s when Vincent crouched low, motioning for you to do the same.
+        <br /><br />
+        <<vincent>>
+            Look there!
+        <</vincent>>
+        <br />
+        Tire tracks. Thin, shallow. A bike, maybe two. Fresh.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house4.jpg' sfw>>
+        </center>
+        <br />
+        Cautiously, you followed the trail deeper into the woods, the trees swallowing the last rays of daylight. 
+        After a while, a shape emerged between the branches — a small house, nearly invisible under ivy and moss. 
+        It looked forgotten, like it belonged to another century.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house5.jpg' sfw>>
+        </center>
+        <br /><br />
+        And then you heard it.
+        <br /><br />
+        Screams. Muffled, panicked, raw.
+        <br /><br />
+        Vincent’s eyes met yours for only a second before you both rushed forward, weapons ready.
+        <br /><br />
+        Inside, the scene was chaos. Two men, rough and sneering, had cornered a woman and her young daughter. 
+        The mother fought wildly with a broken chair leg, trying to shield the girl. 
+        The child screamed, her small hands pushing against one of the men as he grabbed at her mother.
+        <br /><br />
+        <center>
+            <<image 'places/farm/wood_house6.jpg' sfw>>
+        </center>
+        <br /><br />
+        <<link 'Fight them'>>
+            <<generateEnemies 2 0 2>>
+            <<fight $enemies 'Vincent - The House in the Woods #2' 'Dead'>>
+        <</link>>
+    <</linkreplace>>
+<<else>>
+    <<link 'No, need to prepare'>>
+        <<goto 'Farm'>>
+    <</link>>
+<</if>>

@@ -77,6 +77,13 @@
             <</if>>
             <<grid garage race_stadium 'Car - Race stadium' 'Race stadium' 30 _isDisabled null _props>>
         <</if>>
+        <<if $game.location.elsa>>
+            <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 60 || $player.car.health < 20 ? 60 : 4)>>
+            <<if _isDisabled === 60>>
+                <<set _props.disabled = true>>
+            <</if>>
+            <<grid garage wood_house 'Elsa - Wood house' Explore 30 _isDisabled null _props>>
+        <</if>>
     </div>
 <br /><br />
 <<if $tmpGirl>>

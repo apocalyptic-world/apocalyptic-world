@@ -53,7 +53,15 @@
 		<<elseif ($game.location.garage ?? false) && !$characters.vincent.quests.military_base>>
 			Wait few days
 		<<else>>
-			That's all for now
+			<<if !$characters?.rodger?.quests?.dead>>
+				Progress with Dom's story or wait.
+			<<else>>
+				<<if !$characters.vincent.quests.wood_house>>
+					Talk with Vincent in the farm
+				<<else>>
+					That's all for now#
+				<</if>>
+			<</if>>
 		<</if>>
 	<</if>>
 
@@ -361,5 +369,12 @@
 	<<else>>
 		Train yourself in underground city (Reach 30 strength) 
 	<</if>>
-
+	<<if isMetChar('elsa')>>
+		<h2>Elsa</h2>
+		<<if !$characters.elsa.quests.food_delivery>>
+			Bring her and her mother 30 food and 30 wood
+		<<else>>
+			That's all for now
+		<</if>>
+	<</if>>
 </div>
