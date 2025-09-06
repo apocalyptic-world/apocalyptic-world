@@ -1,7 +1,23 @@
 :: Elsa - Wood house [bg-forest]
 <br /><br />
-<h1 class="ptitle">FOREST</h1>
+<h1 class="ptitle">ELSA'S HOUSE</h1>
 <br />
+<<elsa>>
+    Hey...
+<</elsa>>
+<br />
+<<sayNpc $characters.elsa.mother>>
+    Hey! What's bring you here?
+<</sayNpc>>
+<br />
+<<if !$characters.elsa.quests.food_delivery && $backpack.count('food') >= 30 && $backpack.count('wood') >= 30>>
+    <<link 'Give them food and wood'>>
+        <<goto 'Elsa - food delivery'>>
+    <</link>>
+    <<linkdesc>>
+        -30 food, -30 wood
+    <</linkdesc>>
+<</if>>
 <<link 'Leave'>>
     <<addhours 2>>
     <<goto 'Garage'>>
