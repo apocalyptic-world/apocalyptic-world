@@ -6,7 +6,7 @@ As you approach <<=setup.displayName($tmpGirl)>> bed, you notice the rhythmic mo
 You freeze, realization sinking in as you glimpse her hand moving beneath the fabric, lost in a private moment of pleasure she thought no one would disturb.
 <br /><br />
 <<set _action = 'masturbate'>>
-<<if !$tmpGirl.gender && setup.npcInventoryHas($tmpGirl, 'sextoy') && setup.percentageChance(90)>>
+<<if !$tmpGirl.gender && setup.npcInventoryHas($tmpGirl, 'sextoy') && setup.percentageChance(50)>>
     <<set _action = 'masturbate_dildo'>>
 <</if>>
 <center>
@@ -40,6 +40,19 @@ The air between you grows thick with the sudden, unspoken tension, the fragile i
     She bites her lip, looking away, her shoulders hunching as if trying to disappear beneath the blanket. 
     Shame radiates from her, but there’s something else in her eyes—a vulnerability she struggles to hide.
     <br /><br />
+    <<if setup.npcInventoryHas($tmpGirl, 'sextoy')>>
+        <<linkreplace 'Take away her toy'>>
+            You reach for the dildo resting in her hands, its wet from all her juicy pussy.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                Please… No. I really enjoyed it.
+            <</sayNpc>>
+            <<set $tmpGirl.happy -= randomInteger(20, 30)>>
+            <<run setup.npcInventoryRemove($tmpGirl, 'sextoy')>>
+            <<pickup $backpack 'sextoy' 1>>
+            <br /><br />
+        <</linkreplace>>
+    <</if>>
     <<link 'Approach her'>>
         <<goto 'NPC view - guest'>>
     <</link>>
