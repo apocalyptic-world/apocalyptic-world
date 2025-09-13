@@ -7,7 +7,6 @@
     <<goto 'Isabel - new boss'>>
 <</if>>
 
-
 <div id="characters-in-location">
 	<<if (_charactersInLocation['underground_office'] ?? []).includes('isabel')>>
 		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
@@ -16,6 +15,13 @@
 	<</if>>
 </div>
 <br /><br />
+<<link 'Sleep'>>     
+	<<if $characters.isabel.horny >= 50 && setup.percentageChance(50)>>
+		<<goto 'Isabel - good night in the office'>>
+	<<else>>
+		<<sleep 'Underground city office'>> 
+	<</if>>
+<</link>>
 <<link 'Leave'>>
     <<goto 'Underground city'>>
 <</link>>
