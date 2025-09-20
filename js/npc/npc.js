@@ -328,6 +328,11 @@ setup.genderDescription = function(person) {
 };
 
 setup.genderPath = function(person) {
+	return setup.genderPathByValue(person.gender);
+};
+
+setup.genderPathByValue = function (value)
+{
 	const _mapping = [
 		'female',
 		'male',
@@ -335,8 +340,8 @@ setup.genderPath = function(person) {
 		'transmale'
 	];
 
-	return _mapping[person.gender];
-};
+	return _mapping[value];
+}
 
 setup.agePeriod = function(age) {
 	var _unit = age.toString()[1];

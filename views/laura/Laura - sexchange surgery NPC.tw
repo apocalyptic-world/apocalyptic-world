@@ -1,0 +1,89 @@
+:: Laura - sexchange surgery NPC [bg-lab]
+<h1 class="ptitle">LAB</h1>
+<br /><br />
+<<laura>>
+    So who you have in mind?
+<</laura>>
+<br />
+<<unset $slaveId, $charId, $guestId, $childId>>
+<div id="breeder-girls">
+    <table id="slaves">
+    <<for _labSlaveI, _labSlave range $slaves>>
+        <<capture _labSlaveI, _labSlave>>
+            <<if setup.getAge(_labSlave) < 18 || _labSlave.sexChanged>>
+                <<continue>>
+            <</if>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_labSlave)>>
+            <tr>
+                <td style="width: 300px">
+                    <span @class="''+_genderClass+''">
+                        <<link _labSlave.name>>
+                            <<run $('#option-gender-' + setup.genderPathByValue(_labSlave.gender)).hide()>>
+                            <<run $('#breeder-girls').hide()>>
+                            <<run $('#continue').show()>>
+                             <<replace ".breasts-name">><<=setup.displayName(_labSlave)>><</replace>>
+                             <<set $slaveId = _labSlaveI>>
+                        <</link>>
+                    </span>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+    </table>
+</div>
+
+<div id="continue" style="display:none">
+    <<laura>>
+        You have choosen <span class="breasts-name"></span>. And what gender do you want?
+    <</laura>>
+    <br />
+    <<for _gender range [0, 1, 2]>>
+        <<capture _gender>>
+            <div @id="'option-gender-' + setup.genderPathByValue(_gender) + ''">
+                <<link setup.genderPathByValue(_gender)>>
+                    <<if typeof $slaveId !== 'undefined'>>
+                        <<set _npc = $slaves[$slaveId]>>
+                    <<elseif typeof $guestId !== 'undefined'>>
+                        <<set _npc = $guests[$guestId]>>
+                    <</if>>
+                    <<run $('#continue').hide()>>
+                    <<run $('#done').show()>>
+                    
+                    <<set _npc.gender = _gender>>
+                    <<set _npc.sick = {
+                        days: 15,
+                        desc: 'sexchange surgery',
+                        id: 'sexchange_surgery'
+                    }>>
+                    <<set _npc.sexChanged = true>>
+                    <<replace ".breasts-size">><<=setup.genderPathByValue(_gender)>><</replace>>
+                    <<addmins 240>>
+                <</link>>
+            </div>
+        <</capture>>
+    <</for>>
+</div>
+
+<div id="done" style="display:none">
+    <strong>
+        You choose <span class="breasts-size"></span> for <span class="breasts-name"></span>
+    </strong>
+    <br /><br />
+    <center>
+        <<image 'places/lab/breasts_surgery.jpg'>>
+    </center>
+    <br /><br />
+    <<laura>>
+        Don't worry. It all should be good. Will be out for some time tho. Probably something about two weeks.
+    <</laura>>
+    <br />
+    <span class="breasts-name"></span> got on the table.
+    <br />
+    As the Laura prepared her tools, you stepped back, arms crossed, listening to the distant echoes of a world that had long since fallen apart.
+</div>
+
+<br /><br />
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Laura - lab talk'>>
+<</link>>
