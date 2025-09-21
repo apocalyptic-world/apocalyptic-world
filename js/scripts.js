@@ -812,7 +812,7 @@ setup.suicideChance = function (person) {
   setup.pregnancyChance = function (person, fertility = false) {
     var chance = 0;
     var infertile = (person.traits ?? []).includes('infertile');
-    if (infertile) {
+    if (infertile || person.sexChanged) {
         return chance;
     }
     var age = setup.getAge(person);

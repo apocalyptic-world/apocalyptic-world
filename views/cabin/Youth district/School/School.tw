@@ -27,7 +27,11 @@
 		<<set $tmpGirlInvite to false>>
 		<<set $guestId = _teacherList[0]>>
 		<<unset $slaveId, $charId, $childId>>
-		<<goto 'NPC view - guest'>>
+        <<if $tmpGirl.horny >= 50 && $tmpGirl.likesGuys && $tmpGirl.race == 'white' && !$tmpGirl.gender && recall($suppCode)>>
+            <<goto 'School - teacher break'>>
+        <<else>>
+		    <<goto 'NPC view - guest'>>
+        <</if>>
 	<</link>>
     <br /><br />
     <table id="slaves" class="npc-list">
