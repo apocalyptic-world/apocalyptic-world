@@ -135,11 +135,13 @@
 		<<goto 'Laura story - New home'>>
 	<<elseif !$locationEvents.cabin && (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 1 && setup.percentageChance(100) && recall($suppCode) && timeBetween('22:00', '00:00')>>
 		<<set _npcs = setup.filterNPCs($guests, { gender: 0, horny_gte: 50, 'virgin': false, chasityBelt: 0, race_in: ['white', 'latina']})>>
-		<<set $tmpEvent = {
-			id: setup.randomElement(_npcs[0])
-		}>>
-		<<set $locationEvents.cabin = true>>
-		<<goto 'Event: Late dance'>>
+		<<if _npcs[0] ?? [].length>>
+			<<set $tmpEvent = {
+				id: setup.randomElement(_npcs[0])
+			}>>
+			<<set $locationEvents.cabin = true>>
+			<<goto 'Event: Late dance'>>
+		<</if>>
 	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
 		<<goto 'Vincent - Strange note'>>
 	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && !$player.quests?.settlement_burned &&  (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
