@@ -256,6 +256,9 @@ Save.onLoad.add(function (save) {
         if (save.state.history[save.state.index].variables.player.quests.settlement_burned && !save.state.history[save.state.index].variables.game.location.settlement) {
             save.state.history[save.state.index].variables.game.location.settlement = true;
         }
+        if (save.state.history[save.state.index].variables.player.quests.settlement_burned && !save.state.history[save.state.index].variables.characters.rodger.quests.dead) {
+            save.state.history[save.state.index].variables.characters.rodger.quests.dead = true;
+        }
         save.state.history[save.state.index].variables.characters.eve.quests ??= {};
         save.state.history[save.state.index].variables.characters.eve.id ??= 'eve';
         if (variables.characters.eve.id !== 'eve') {
