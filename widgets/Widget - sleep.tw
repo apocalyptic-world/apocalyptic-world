@@ -149,7 +149,11 @@
 		// Wash beauty
 		<<if typeof $slaves[_i].washDays !== 'undefined'>>
 			<<set $slaves[_i].washDays-->>
-			<<set $slaves[_i].beauty -= $slaves[_i].washBeauty>>
+			<<if $slaves[_i].baseBeauty>>
+				<<set $slaves[_i].beauty = Math.max($slaves[_i].baseBeauty, ($slaves[_i].beauty - $slaves[_i].washBeauty))>>
+			<<else>>
+				<<set $slaves[_i].beauty -= $slaves[_i].washBeauty>>
+			<</if>>
 			<<if $slaves[_i].washDays <= 0>>
 				<<run delete $slaves[_i].washDays>>
 			<</if>>

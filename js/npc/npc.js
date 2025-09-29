@@ -725,6 +725,7 @@ setup.handleBathing = function (guest, newBonus = 0) {
 	const maxBeauty = 100;
 
 	if (!guest.washDays) {
+		guest.baseBeauty = guest.beauty;
 		guest.washBeauty = Math.min(newBonus, 5); // clamp initial bonus
 		guest.beauty = Math.min(guest.beauty + (guest.washBeauty * 2), maxBeauty);
 	} else {

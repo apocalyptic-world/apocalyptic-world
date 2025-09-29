@@ -35,6 +35,7 @@
 				<<set $slaves[_scheduleSlaveI].washedBathhouse = true>>
 				<<set _beautyInc = randomInteger(1, 2)>>
 				<<if !($slaves[_scheduleSlaveI].washDays ?? false)>>
+					<<set $slaves[_scheduleSlaveI].baseBeauty = $slaves[_scheduleSlaveI].beauty>>
 					<<set $slaves[_scheduleSlaveI].washBeauty = _beautyInc>>
 					<<set $slaves[_scheduleSlaveI].beauty = Math.min($slaves[_scheduleSlaveI].beauty + (_beautyInc * 2), 100)>>
 				<<else>>
