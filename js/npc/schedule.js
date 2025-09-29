@@ -6,5 +6,5 @@ setup.bathSchedule = {
     mistress: { from: '23:00', to: '24:00', p: 70 },
     streets: { from: '10:00', to: '12:00', p: 20 },
     nightclub: { from: '19:00', to: '02:00', p: 60 },
-    school: { from: '09:00', to: '15:00', p: 60 }
+    school: { from: '15:00', to: '22:00', p: 60 }
 };

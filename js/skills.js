@@ -1,39 +1,51 @@
 setup.skills = {
     gardener: {
         title: 'Gardener',
-        description: 'Gives additional bonus while assigned to the garden.'
+        description: 'Gives additional bonus while assigned to the garden.',
+        learnable: true
     },
     woodcraft: {
         title: 'Woodcraft',
-        description: 'Can gather more wood.'
+        description: 'Can gather more wood.',
+        learnable: true,
+        descriptionExtra: 'Required for the hunters.' 
     },
     scavenger: {
         title: 'Scavenger',
-        description: 'More likely to find stuff, and less likely to get into trouble.'
+        description: 'More likely to find stuff, and less likely to get into trouble.',
+        learnable: true
     },
     shopkeeper: {
         title: 'Shopkeeper',
-        description: 'Can work in shop and manage your goods.'
+        description: 'Can work in shop and manage your goods.',
+        learnable: false
     },
     cook: {
         title: 'Cook',
-        description: 'Decreases chance of rotten food.'
+        description: 'Decreases chance of rotten food and for milkwarden',
+        learnable: true,
+        descriptionExtra: 'Useable for kitchen and milk farm assignment.'
     },
     doctor: {
         title: 'Doctor',
-        description: 'Decreases chance of miscarriage and heals people twice as fast.'
+        description: 'Decreases chance of miscarriage and heals people twice as fast.',
+        learnable: false,
+        descriptionExtra: 'A must skill to work in the hospital. Decreases chance of miscarriage, treats knife wounds and reduces sickdays'
     },
     teacher: {
         title: "Teacher",
+        learnable: false,
         description: "Can teach childrens in school"
     },
     mechanic: {
         title: "Mechanic",
-        description: "Good with mechanics. Sometimes able to fix cars without needing parts"
+        description: "Good with mechanics. Sometimes able to fix cars without needing parts",
+        learnable: false,
     },
     fighter: {
         title: "Fighter",
         description: "Has advantages in cage fights",
+        learnable: true,
     }
 };
 

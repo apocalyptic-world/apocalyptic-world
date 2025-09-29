@@ -224,6 +224,9 @@
 		<<run setup.npcInventoryRemove($slaves[_args[0]], _inventory, _inventoryCount)>>
 		<<pickup $backpack _inventory _inventoryCount>>
 	<</for>>
+	<<if $slaves[_args[0]].buttplug>>
+		<<pickup $backpack 'buttplug' 1>>
+	<</if>>	
 	<<set $player.reputation++>>
 	<<set $player.goodwill-=5>>
 	<<set $player.money += $slaves[_args[0]].value>>

@@ -99,16 +99,12 @@ Another note! Since the game is a work-in-progress with new versions all the tim
 <</button>>Important skills and traits</h2>
 <div id="skills" style="display:none;">
 <dl>
-<<set _skills = setup.help.skills()>>
-<<for _skillID range Object.keys(_skills).sort()>>
-    <<set _skill = _skills[_skillID]>>
-    <<set _name = _skill.name, _desc = _skill.desc>>
+<<for _skill range setup.skills>>
     <<set _learn = 
             typeof _skill.learnable === 'undefined' ? '<span style="color: yellow">(Learnable ?)</span>.' : 
             _skill.learnable ? '<span style="color: green">Learnable</span>.' : 
             '<span style="color: red">Not learnable</span>.'>>
-    <<set _xtra = _skill.xtra ?? ''>>
-    <dt><<=_name>></dt><dd><<=_desc>> <<=_learn>> <<=_xtra>></dd>
+    <dt><<=_skill.title>></dt><dd><<=_skill.description>> <<=_learn>> <<=_skill.descriptionExtra ?? ''>></dd>
 <</for>>
 </dl>
 <br /><hr /><br />

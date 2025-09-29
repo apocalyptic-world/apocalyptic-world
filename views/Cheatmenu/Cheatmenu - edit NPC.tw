@@ -18,10 +18,10 @@
     </tr>
     <tr>
         <td>
-            Age:
+            Birth date:
         </td>
         <td>
-            <<numberbox "_age" setup.getAge($tmpGirl)>>
+            <<textbox "_birthDate" setup.formatDate($tmpGirl.birthDate)>>
         </td>
     </tr>
     <tr>
@@ -238,12 +238,7 @@
             <<run $tmpGirl.skills.push(_skillKey)>>
         <</if>>
     <</for>>
-    <<if setup.getAge($tmpGirl) !== _age>>
-        <<set $tmpGirl.birthDate = setup.getBirthDate(_age)>>
-        <<if setup.getAge($tmpGirl) < 18>>
-	        <<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
-        <</if>>
-    <</if>>
+    <<set $tmpGirl.birthDate = setup.formatDateToObject(_birthDate)>>
     <<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
         <<set $tmpGirl.breasts = _breasts>>
     <</if>>

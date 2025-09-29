@@ -29,15 +29,6 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 <<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura && _done.boris>>
 
 <<set _helpguide = {
-/*  template
-    x: {
-        show: x,
-        done: x,
-        category: '',
-        title: '',
-        description: '',
-    },
- */
     max_energy: {
         show:  $player.maxEnergy <  140 && ($game.location?.underground || $game.location?.hottub),
         done:  $player.maxEnergy >= 140,
@@ -105,7 +96,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             '</ul>',
     },
     intelligence: {
-        show: $characters.rodger.quests?.book || ($game.location.library ?? false),
+        show: $characters.rodger?.quests?.book || ($game.location.library ?? false),
         done: $player.int > 100,
         category: 'Hint',
         title: 'Intelligence',
@@ -121,7 +112,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                 : '<s>Done with the lone travelling teacher</s>') + '</li>' +
             '<li>' + ($player.int < 50 
                 ? 'Visit settlement church and read the <strong>Book of Knowledge</strong> and gain a point of intelligence. ' +
-                    (!($characters.rodger.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
+                    (!($characters.rodger?.quests?.book ?? false) ? '(Do quests for Rodger first!)' : '')
                 : '<s>Reading book in settlement church.</s>') + '</li>' +
             '<li>Some random explore events can also give you points.</li>' +
             '</ul>',
@@ -207,7 +198,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             'From day 10 you have a chance to find a blueprint for a hot shower when exploring. Hot showers recovers more energy than cold showers',
     },
     blueprints: {
-        show: $game.location?.workbench || $player.quests.base_building,
+        show: $game.location?.workbench || $player.quests?.base_building,
         done:  $backpack.hasAll('blueprint_hot_shower','blueprint_hot_tub', 'blueprint_library') && ($game.hotShower ?? false) && ($game.location.hottub ?? false) && ($game.location.library ?? false) && ($game.location.hospital ?? false),
         category: 'Gameplay',
         title: 'Blueprints for home & base improvement',
@@ -236,8 +227,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'Plant your seed and make a woman pregnant (slave, guest or important woman). Vincent will tell you how to terminate unwanted pregnancies and provide the means to do it.',
     },
     find_book : {
-        show: !$characters.rodger.quests?.book && $game.location?.settlement_church,
-        done:  $characters.rodger.quests?.book,
+        show: !$characters.rodger?.quests?.book && $game.location?.settlement_church,
+        done:  $characters.rodger?.quests?.book,
         category: 'Gameplay',
         title: 'Book of Knowledge',
         description: 'Visit settlement church; Talk with Rodger; He might ask you to go find the <strong>Book of Knowledge</strong>.',
@@ -253,8 +244,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         '',
     },
     basement_fun: {
-        show: !$characters.blair.quests?.basement  &&  $game?.cabinName,
-        done:  $characters.blair.quests?.basement,
+        show: !$characters.blair?.quests?.basement  &&  $game?.cabinName,
+        done:  $characters.blair?.quests?.basement,
         category: 'Gameplay',
         title: 'Basement fun',
         description: 
@@ -307,8 +298,8 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
         description: 'Befriend blair; follow journal - Increase relationship by talking to her in kitchen or bedroom (20)',
     },
     blair_save_ashley: {
-        show: $characters.blair.relationship >= 20 && !$characters.blair.quests?.bj_day,
-        done: $characters.blair.quests?.bj_day,
+        show: $characters.blair.relationship >= 20 && !$characters.blair?.quests?.bj_day,
+        done: $characters.blair?.quests?.bj_day,
         category: 'Story',
         title: 'A girl in trouble',
         description: 
@@ -419,46 +410,46 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     burn_settlement: {
         show: isMetChar('octavia') && $game.location?.settlement,
-        done: $characters.octavia.quests?.burned_settlement,
+        done: $characters.octavia?.quests?.burned_settlement,
         category: 'Story',
         title: 'Settlement on fire',
         description: 
             ($game.day < 80 ? 'From day 80 there is a chance you find something burning in the settlement.<br/>' : '') +
-            (!$characters.octavia.quests.burned_settlement ? 'Octavia is burning the settlement! Resolve the situation.' : '<s>Octavia tried to burn the settlement.</s>' ),
+            (!$characters.octavia?.quests.burned_settlement ? 'Octavia is burning the settlement! Resolve the situation.' : '<s>Octavia tried to burn the settlement.</s>' ),
     },
     eve_kidnapped: {
-        show: $characters.octavia.quests?.burned_settlement,
-        done: $characters.octavia.quests?.canTalk ,
+        show: $characters.octavia?.quests?.burned_settlement,
+        done: $characters.octavia?.quests?.canTalk ,
         category: 'Story',
         title: 'Eve kidnapped',
         description: 'A few days (5) after the burning, visit the Settlement and find that Octavia has misbehaved again. This time Eve has ben taken. Resolve the situation.',
     },
     octavia_rivals: {
-        show: $characters.octavia.quests.eve_kidnapped,
-        done: $characters.octavia.quests.kidnapped_found,
+        show: $characters.octavia?.quests.eve_kidnapped,
+        done: $characters.octavia?.quests.kidnapped_found,
         category: 'Story',
         title: 'Octavia and her rivals',
         description: 'Octavia has set up camp next to the settlement. Visit her!<br>' +
             ($characters.octavia.relationship < 40 ? 'Octavia wants wolf pelts for her tribe. Give pelts and raise her relations to 40. <span style="color: yellow">Tip!</span> Give her 3 wolf pelts at a time for the most action.' : 'You can continue to give Octavia 3 wolf pelts at a time for fun if you want.') + '<br/>' +
-            (!$characters.octavia.quests.ultimatum ? 'A messenger from a rival tribe gives Octavia an ultimatum. She asks you for advice!' : '<s>Rival tribe ultimatum</s>') + '<br/>' +
+            (!$characters.octavia?.quests.ultimatum ? 'A messenger from a rival tribe gives Octavia an ultimatum. She asks you for advice!' : '<s>Rival tribe ultimatum</s>') + '<br/>' +
             ($characters.octavia.relationship < 60 ? 'Octavia wants medallions carried by high-level members of the rival tribe. You can encounter groups from the rival tribe by going exploring' : 'You can continue to give Octavia medallions for fun if you want.') + '<br/>' +
-            (!$characters.octavia.quests.kidnapped_found ?
+            (!$characters.octavia?.quests.kidnapped_found ?
                 'A mountain tribe has attacked the camp and taken Octavia.<br/>' +
                 ($backpack.count('tribe_medallion') < 3 ? 'Weaken the oppositon - Get more tribe medallions (3)' : '<s>Have weakened the opposition</s>') +
                 '<span style="color: red">Warning: Hard fight with many enemies (with knives)!</span> Before rescuing her make sure you have trained your strength and endurance really hard. Bring maximium number of fighting companions. The stronger the better' : 
                 '<s>Octavia kidnapped and rescued.</s>'),
     },
     faith: {
-        show: $characters.rodger.quests?.horse && $characters.octavia.quests.eve_kidnapped,
-        done: $characters.rodger.quests?.faith,
+        show: $characters.rodger?.quests?.horse && $characters.octavia?.quests.eve_kidnapped,
+        done: $characters.rodger?.quests?.faith,
         category: 'Story',
         title: 'Testing of the Faith',
         description: 
             'Vist the settlement. Some bandits have blocked the water supply. Fix!',
     },
     more_octavia: {
-        show: $characters.octavia.quests?.kidnapped_found,
-        done: $characters.octavia.quests.new_plan3,
+        show: $characters.octavia?.quests?.kidnapped_found,
+        done: $characters.octavia?.quests.new_plan3,
         category: 'Story',
         title: 'More of Octavia',
         description: 
@@ -662,7 +653,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     },
 
     negan: {
-        show: $game.location?.slave_market || $characters.dom.quests?.quest4_done_day,
+        show: $game.location?.slave_market || $characters.dom?.quests?.quest4_done_day,
         done: $characters?.negan?.quests?.quest2 ?? false,
         category: 'Story',
         title: 'Negan and the blondes',
@@ -673,7 +664,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     negan_bad: {
         show: ($player.stats?.slaves_sold ?? 0) || $characters?.dom?.quests?.quest5,
-        done: $characters.negan.quests?.quest5 || (_closed.dom && $characters?.negan?.quests?.fuel_slaves),
+        done: $characters.negan?.quests?.quest5 || (_closed.dom && $characters?.negan?.quests?.fuel_slaves),
         category: 'Story',
         title: 'Negan - the bad guy that likes blondes',
         description: '<ul>' +
@@ -700,7 +691,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     boris: {
         show: $game.location?.underground,
-        done: $characters.boris.quests?.fight2,
+        done: $characters.boris?.quests?.fight2,
         category: 'Story',
         title: 'Boris fight cage',
         description: 
