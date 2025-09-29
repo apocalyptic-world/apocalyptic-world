@@ -31,11 +31,15 @@
     <<if ['cum_in_pussy', 'double_cum'].includes($sexAction) && $tmpGirl.traits.includes('breeder') && _sexActions[$sexAction]?.positive>>
         <<set $tmpGirl.horny += 30>>
     <</if>>
+
     <<if _showSex>>
+        <<if settings.buttons_on_top>>
+            <<include 'Mc threesome buttons'>>
+        <</if>>
         <<set _sexActionLong = _prefix + $sexAction>>
 	    <<actionImage $tmpGirl _sexActionLong>>
 
-        <<if $tmpGirl.virgin && _sexActions[$sexAction]?.stats=='pussy'>>
+        <<if $tmpGirl.virgin && _sexActions[$sexAction]?.stats=='pussy' || Array.isArray(_sexActions[$sexAction]?.stats) && ['pussy'].includes(_sexActions[$sexAction]?.stats)>>
             <<set $tmpGirl.virgin = false>>
             <<=setup.displayName($tmpGirl, true)>> seems tense, a bit of <strong>blood</strong> trickles out of her newly <strong>deflowered</strong> pussy.
             <br />
@@ -114,15 +118,23 @@
         <</if>>
 
         <<if _sexActions[$sexAction]?.stats>>
-            <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
-            <<if typeof $sexStats[_sexActions[$sexAction].stats] === 'undefined'>>
-                <<set 
-                    $tmpGirl.statsSex ??= {},
-                    $tmpGirl.statsSex[_sexActions[$sexAction].stats] ??= 0,
-                    $tmpGirl.statsSex[_sexActions[$sexAction].stats]++,
-                    $sexStats[_sexActions[$sexAction].stats] = true
-                >>
+            <<if Array.isArray(_sexActions[$sexAction]?.stats)>>
+                <<set _sexStats = _sexActions[$sexAction]?.stats>>
+            <<else>>
+                <<set _sexStats = [_sexActions[$sexAction]?.stats]>>
             <</if>>
+            
+            <<for _sexStat range _sexStats>>
+                <<set $tmpGirl[_sexStat]++>>
+                <<if typeof $sexStats[_sexStat] === 'undefined'>>
+                    <<set 
+                        $tmpGirl.statsSex ??= {},
+                        $tmpGirl.statsSex[_sexStat] ??= 0,
+                        $tmpGirl.statsSex[_sexStat]++,
+                        $sexStats[_sexStat] = true
+                    >>
+                <</if>>
+            <</for>>
         <</if>>
 
         <<if _sexActions[$sexAction]?.stats2>>

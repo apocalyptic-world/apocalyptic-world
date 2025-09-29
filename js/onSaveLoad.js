@@ -89,8 +89,6 @@ Save.onLoad.add(function (save) {
         variables.game.location.settlement = true;
     }
 
-    console.log(variables.workersLimitGarden);
-
     if (variables.workersLimitGarden < 9) {
         variables.workersLimitGarden = 9;
         variables.workersLimitHunter = 9;
