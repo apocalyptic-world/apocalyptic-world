@@ -62,15 +62,17 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if !setup.getPersonsForLocation($guests, 'milkwarden').length && !$tmpGirl.assignedTo && ($game.location.farm ?? false) && ($tmpGirl.skills ?? []).includes('cook')>>
-	<div>
-	  <<link 'Assign as milk warden'>>
-		  <<assignedTo $tmpGirl 'milkwarden'>>
-		  <<dialogclose>>
-		  <<goto `$tmpGirlViewBack`>>
-	  <</link>> (Caretaker and overseer of milk-gathering in farm and making cheese)
-	</div>
-<</if>>
+<div>
+	<<if !setup.getPersonsForLocation($guests, 'milkwarden').length && !$tmpGirl.assignedTo && ($game.location.farm ?? false) && ($tmpGirl.skills ?? []).includes('cook')>>
+		<<link 'Assign as milk warden'>>
+			<<assignedTo $tmpGirl 'milkwarden'>>
+			<<dialogclose>>
+			<<goto `$tmpGirlViewBack`>>
+		<</link>> (Caretaker and overseer of milk-gathering in farm and making cheese)
+	<<else>>
+		Assign as milk warden [Need cook skill and built milk farm]
+	<</if>>
+</div>
 
 <<if [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
 	<div>
