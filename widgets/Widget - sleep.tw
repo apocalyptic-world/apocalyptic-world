@@ -267,7 +267,25 @@
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
+
+						<<if setup.percentageChance(50)>>
+							<<set $slaves[_i].statsSex['pussy'] ??= 0>>
+							<<set $slaves[_i].statsSex['pussy']++>>
+						<</if>>
 					<</if>>
+
+					<<if setup.percentageChance(50)>>
+						<<set $slaves[_i].statsSex['bj'] ??= 0>>
+						<<set $slaves[_i].statsSex['bj']++>>
+					<</if>>
+
+					<<if setup.percentageChance(20)>>
+						<<set $slaves[_i].statsSex['anal'] ??= 0>>
+						<<set $slaves[_i].statsSex['anal']++>>
+					<</if>>
+					
+					<<set _randomAction = [];>>
+
 					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
 					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
@@ -546,6 +564,21 @@
 				<<if randomInteger(0, 1) === 0>>
 					<<if !_npc.chastityBelt>>
 						<<set _npc.virgin = false>>
+
+						<<if setup.percentageChance(50)>>
+							<<set _npc.statsSex['pussy'] ??= 0>>
+							<<set _npc.statsSex['pussy']++>>
+						<</if>>
+					<</if>>
+
+					<<if setup.percentageChance(50)>>
+						<<set _npc.statsSex['bj'] ??= 0>>
+						<<set _npc.statsSex['bj']++>>
+					<</if>>
+
+					<<if setup.percentageChance(20)>>
+						<<set _npc.statsSex['anal'] ??= 0>>
+						<<set _npc.statsSex['anal']++>>
 					<</if>>
 					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
