@@ -18,7 +18,7 @@
     <</if>>
     <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? null)>>
     <<if (_maxMcHorny === null || $player.horny < _maxMcHorny)>>
-        <<set _hornyIncrease = setup.sex.calcHornyIncrease(($tmpGirl.beauty ?? 100), _hornyGained)>>
+        <<set _hornyIncrease = setup.sex.calcHornyIncrease($tmpGirl, _hornyGained, $sexAction)>>
         <<horny _hornyIncrease>>
     <</if>>
 	<<set _showSex = true>>

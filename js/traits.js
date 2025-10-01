@@ -46,6 +46,11 @@ setup.traits = {
         title: "Sensitive tits",
         description: "Breasts are extra responsive, making it easier to reach orgasm from chest stimulation",
         gender: [0]
+    },
+    tight_vagina: {
+        title: "Tight vagina",
+        description: "Very tight vagina. MC or others gets more pleasure",
+        gender: [0]
     }
 };
 
