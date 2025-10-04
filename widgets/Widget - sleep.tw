@@ -1031,6 +1031,7 @@
 
 // Milk warden
 <<if _hasMilkwarden && setup.cabinInventory.count('milk') >= 3>>
+	<<set _milkwarden = setup.getPersonsForLocation($guests, 'milkwarden')>>
 	<<run setup.sleepMessages.addJob($guests[_milkwarden[0]].name + ' produced 2 cheese\'s (food) from milk', 'milk_barn')>>
 	<<run setup.cabinInventory.pickup('food', 2)>>
 	<<run setup.cabinInventory.drop('milk', 3)>>
