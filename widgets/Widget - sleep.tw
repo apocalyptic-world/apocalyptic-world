@@ -265,9 +265,9 @@
 					<<setNpcStats 'slave' _i 'happy' -5>>
 				<</if>>
 				<<if randomInteger(0, 1) === 0>>
+					<<set $slaves[_i].statsSex ??= {}>>
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
-
 						<<if setup.percentageChance(50)>>
 							<<set $slaves[_i].statsSex['pussy'] ??= 0>>
 							<<set $slaves[_i].statsSex['pussy']++>>
@@ -1057,7 +1057,6 @@
 	<<else>>
 		<<goto "Bedroom-sleep">>
 	<</if>>
-	<<unset $sleepOver>>
 <</if>>
 <<else>>
 	<<set $game.death_reason = _sleepDead>>

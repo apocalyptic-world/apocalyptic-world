@@ -21,7 +21,7 @@
             Birth date:
         </td>
         <td>
-            <<textbox "_birthDate" setup.formatDate($tmpGirl.birthDate)>>
+            <<textbox "_birthDate" setup.formatDate($tmpGirl.birthDate)>> <span id="npc_edit_age"></span>
         </td>
     </tr>
     <tr>
@@ -252,3 +252,32 @@
     <<goto `passage()`>>
     <<dialogclose>>
 <</link>>
+
+
+<script>
+    function calculateAge(birthDateStr)
+    {
+        const gameDateStr = SugarCube.State.variables.gameDate;
+
+        if (!birthDateStr || !gameDateStr) return;
+
+        const birthDate = new Date(birthDateStr);
+        const gameDate = new Date(gameDateStr);
+
+        let age = gameDate.getFullYear() - birthDate.getFullYear();
+        const m = gameDate.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && gameDate.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        $("#npc_edit_age").text("Age: " + age);
+    }
+
+    let nodeBirthDate = 'input[name="textbox--birthdate"]';
+    $(document).on('input', nodeBirthDate, function() {
+        calculateAge($(this).val());
+    });
+    $(document).ready(function() {
+        calculateAge($(nodeBirthDate).val());
+    });
+</script>
