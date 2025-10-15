@@ -22,13 +22,7 @@ She’s bruised, her clothes torn, but still conscious and defiant. She stands u
         <div id="option_invite">
             <<linkreplace 'Offer your place to live in'>>
                 <<set _invited = true>>
-                <<if !$tmpGirl.gender>>
-                    Scared she looks at the men laying on the ground...
-                    <br /><br />
-                    <<sayNpc $tmpGirl>>
-                        Thanks, but I will pass.
-                    <</sayNpc>>
-                <<elseif setup.percentageChance(50)>>
+                <<if setup.percentageChance(50)>>
                     <<run $('#option_slave').hide()>>
                     You're a life savior. I recently started to look for a new place<br /> I'll go live with you! 
                     <br /><br />
