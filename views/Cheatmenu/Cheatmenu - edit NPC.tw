@@ -254,11 +254,10 @@
 <</link>>
 
 
-<script>
-    function calculateAge(birthDateStr)
-    {
-        const gameDateStr = SugarCube.State.variables.gameDate;
+<script>    
 
+    function calculateNpcAge (birthDateStr) {
+        const gameDateStr = SugarCube.State.variables.gameDate;
         if (!birthDateStr || !gameDateStr) return;
 
         const birthDate = new Date(birthDateStr);
@@ -270,14 +269,14 @@
             age--;
         }
 
-        $("#npc_edit_age").text("Age: " + age);
-    }
+        return age;
+    };
 
-    let nodeBirthDate = 'input[name="textbox--birthdate"]';
-    $(document).on('input', nodeBirthDate, function() {
-        calculateAge($(this).val());
+    $(document).one(":dialogopened", function () {
+        $("#npc_edit_age").text("Age: " + calculateNpcAge($('input[name="textbox--birthdate"]').val()));
+        $(document).on('input', 'input[name="textbox--birthdate"]', function() {
+            $("#npc_edit_age").text("Age: " + calculateNpcAge($(this).val()));
+        });
     });
-    $(document).ready(function() {
-        calculateAge($(nodeBirthDate).val());
-    });
+
 </script>
