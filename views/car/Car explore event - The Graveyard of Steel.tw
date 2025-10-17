@@ -1,0 +1,95 @@
+:: The Graveyard of Steel [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+The road had been silent except for the low hum of your engine. Dust clouds rose behind the car as you drove through the remains of a forgotten highway. 
+On both sides, rusted carcasses of vehicles littered the cracked asphalt — a car graveyard stretching as far as the eye could see.
+<br /><br />
+<center>
+    <<image 'places/explore_car/car_graveyard.jpg'>>
+</center>
+<br />
+You slowed down and pulled over. Something about the place had drawn you in — maybe it was the scavenger’s instinct, maybe just curiosity. 
+The air had smelled of rust and oil. Crows perched on twisted metal frames, watching in silence. You stepped out, your boots crunching on shattered glass.
+<br /><br />
+<<video 'explore_car/graveyard_steel1'>>
+<br /><br />
+For a moment, it had been peaceful — just the wind whistling through hollow car shells. Then, faintly, you heard voices.
+<br />
+You crouched behind a burned-out truck, your heart pounding. The voices grew clearer — rough, angry tones bouncing between the wrecks.
+<br /><br />
+<<newguy>>
+<<set _npc1 = $tmpGuy>>
+<<newguy>>
+<<set _npc2 = $tmpGuy>>
+<<sayNpc _npc1>>
+    …heard they’ve been traveling this way.
+<</sayNpc>>
+<br />
+<<sayNpc _npc2>>
+    Good. We find ‘em, we take everything. Leave no one breathing.
+<</sayNpc>>
+<br />
+Your stomach tightened. They were talking about you.
+<br /><br />
+<<set _awaySuccess = 50>>
+<<set _searchSuccess = 10>>
+<<if $player.int >= 50>>
+    <<set _awaySuccess += 30>>
+    <<set _searchSuccess += 30>>
+<</if>>
+<div id="option_search">
+    <<linkreplace 'Keep searching'>>
+        <<set _search = true>>
+        <<set _awaySuccess -= randomInteger(10, 20)>>
+        Despite the danger, you stayed low and continued to scavenge, moving quietly between the cars. 
+        Every creak of metal sounded like thunder, every whisper of wind felt like footsteps closing
+        <br /><br />
+        <<if setup.percentageChance(_searchSuccess)>>
+            But luck was on your side — behind a collapsed hood, you found <strong class="iitem">two usable car parts</strong>. 
+            You stuffed them into your pack just as one of the voices grew closer.
+            <<pickup $backpack 'car_part' 2>>
+        <<else>>
+            You searched desperately, crawling through twisted frames and broken glass, but everything had already been stripped bare. 
+            Nothing useful remained. Then a voice echoed far too close
+        <</if>>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_away">
+    <<linkreplace 'Get away'>>
+        <<if !_search>>
+            <<run $('#option_search').hide()>>
+        <</if>>
+        <<if setup.percentageChance(_awaySuccess)>>
+            You bolted on instinct, low and fast between sun-bleached fenders. One of them barked an order; a flashlight beam cut across the rust like a blade. 
+            You didn’t look back. You dove into the driver’s seat, slammed the door, and fumbled the key into the ignition
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Garage'>>
+            <</link>>
+        <<else>>
+            You reached for the car, but a boot slammed into your shoulder and a hand yanked you off balance. 
+            A flashlight lanced across your face — three silhouettes loomed, weapons raised. There was no clean escape anymore.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Hey! He's here!
+            <</sayNpc>>
+            <br />
+            <<link 'Fight'>>
+                <<newguy>>
+                <<set _npc1.inventory = {
+                    knife: 1
+                }>>
+                <<set _npc2.inventory = {
+                    knife: 1
+                }>>
+                <<set _enemies = [
+                    _npc1,
+                    _npc2,
+                    $tmpGuy
+                ]>>
+                <<fight _enemies 'Garage' 'Garage'>>
+            <</link>>
+        <</if>>
+    <</linkreplace>>
+</div>
