@@ -1,0 +1,81 @@
+:: Car explore event - The last light [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+You spotted a faint glow ahead — a flicker of firelight on the broken highway. You slowed the car, engine growling softly.
+<br /><br />
+<center>
+    <<image 'places/explore_car/last_light2.jpg'>>
+</center>
+<br />
+As you rolled closer, you saw it: a small camp by the roadside, a half-collapsed tent, and a single figure sitting beside the fire. 
+The flames licked against the cold metal of a wheelchair. The person turned slowly as your tires crunched over the gravel — an older man, gray-haired and hollow-eyed
+<br /><br />
+<center>
+    <<image 'places/explore_car/last_light3.jpg'>>
+</center>
+<br />
+He didn’t raise it.
+<br /><br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    Don’t come too close
+<</sayNpc>>
+<br />
+<<sayNpc $tmpGuy>>
+    I’m not lookin’ for trouble. Just waiting to die where it’s quiet.
+<</sayNpc>>
+<br />
+<center>
+    <<image 'places/explore_car/last_light1.jpg'>>
+</center>
+<br /><br />
+You stopped a few paces away, keeping your hands visible. His leg was gone below the knee, bandaged with filthy rags. 
+A small tin of food and an empty water bottle sat beside him. He must’ve been stranded for days.
+<br /><br />
+He looked at you, eyes hollow but strangely calm.
+<br /><br />
+<div id="option_give">
+    <<if $backpack.has('food')>>
+        <<linkreplace 'Give him some food'>>
+            <<set _food = true>>
+            <<run $('#option_steal').hide()>>
+            You reached into your pack, pulled out a sealed can, and handed it to him. He stared at it like it was a miracle, fingers trembling as he accepted it. He ate slowly, each bite careful and reverent, and when he finished he closed his eyes and said
+            <br /><br />
+            <<sayNpc $tmpGuy>>
+                Thank you!
+            <</sayNpc>>
+            <br />
+            <<set $player.goodwill += 3>>
+            <<drop $backpack 'food' 1>>
+        <</linkreplace>>
+    <</if>>
+</div>
+<div id="option_steal">
+    <<linkreplace 'Steal his last food'>>
+        <<set _steal = true>>
+        He turned mid-sip and saw you with your hand on the pack. His face didn’t show surprise — only a small, defeated understanding, like he’d been waiting for this outcome.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            I knew there’d be those who’d take.
+        <</sayNpc>>
+        <br />
+        <<run $('#option_give').hide()>>
+        <<set $player.goodwill -= 2>>
+        <<pickup $backpack 'food' 1>>
+        You stole <strong> 1 food</strong>
+        <br /><br />
+    <</linkreplace>>
+</div>
+<<linkreplace 'Leave'>>
+    <<if !_steal>>
+        <<run $('#option_steal').hide()>>
+    <</if>>
+    <<if !_food>>
+        <<run $('#option_food').hide()>>
+    <</if>>
+    In your mirror, the firelight grew smaller and smaller until it was swallowed by the haze. You told yourself it was mercy — letting him face the end his own way.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+<</linkreplace>>
