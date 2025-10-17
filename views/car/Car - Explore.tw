@@ -7,7 +7,9 @@
 	<<goto 'Car breakdown event - Engine Failure'>>
 <</if>>
 
-<<if _randomNumber <= 20>>
+<<if _randomNumber <= 10 && $weather?.weather === 'rain'>>
+	<<goto 'The Graveyard of Steel'>>
+<<elseif _randomNumber <= 20>>
 	<<goto 'Car explore event - girl gas station'>>
 <<elseif _randomNumber <= 40>>
 	<<goto 'Car explore event - injured guy'>>
