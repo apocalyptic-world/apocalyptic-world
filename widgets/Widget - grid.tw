@@ -2,9 +2,14 @@
 <<widget grid>>
 
 <<set _eventHorseCart = {
-        enabled: timeBetween('08:00', '16:00'),
-        passage: 'Travel event - Trapper horse cart',
-        percentage: 5
+    enabled: timeBetween('08:00', '16:00'),
+    passage: 'Travel event - Trapper horse cart',
+    percentage: 5
+}>>
+<<set _eventMedalion = {
+    enabled: true,
+    passage: 'Travel event - tribe camp',
+    percentage: ($characters?.octavia?.quests?.kidnapped && !$characters?.octavia?.quests?.kidnapped_found ? 45 : 8)
 }>>
 <<set _randomEvents = {
     Settlement: [{
@@ -13,11 +18,7 @@
         percentage: 5
     },
 	_eventHorseCart,
-	{
-        enabled: true,
-        passage: 'Travel event - tribe camp',
-        percentage: ($characters?.octavia?.quests?.kidnapped && !$characters?.octavia?.quests?.kidnapped_found ? 45 : 8)
-    }
+	_eventMedalion,
 	],
     "Underground city": [{
         enabled: true,
@@ -37,6 +38,9 @@
 			passage: 'Car - explore run ride',
 			percentage: 20
 		}
+	],
+	'Settlement - Octavia': [
+		_eventMedalion
 	]
 }>>
 
