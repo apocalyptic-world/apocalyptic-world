@@ -19,3 +19,66 @@ The slavers were arguing — one shouting about fuel rations, the other about.
 <br />
 The slaves barely moved. One of them, a woman in a torn coat, glanced toward your car — her eyes meeting yours for only a heartbeat before she was shoved forward again.
 <br /><br />
+<center>
+    <<image 'places/explore_car/chain_road2.jpg'>>
+</center>
+<br />
+<div id="option_ignore">
+    <<linkreplace 'Ignore them'>>
+        <<run $('#option_deal, #option_fight').hide()>>
+        <<set _ignore = true>>
+        You stayed hidden. The convoy trudged past, slow and miserable, until the dust swallowed them.
+        You told yourself it wasn’t your fight — you had no spare fuel, no ammo, no reason to die for strangers. Still, long after you drove off, you couldn’t shake the image of the woman’s eyes.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_deal">
+    <<linkreplace 'Make a deal'>>
+        <<run $('#option_ignore, #option_fight').hide()>>
+        You drove closer, hands raised, and called out that you wanted to trade. 
+        The slavers eyed your car, your pack, and laughed. After a tense moment, they lowered their guns.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            You want one? Costs 30 caps.
+        <</sayNpc>>
+        <br />
+        As she shoves one of the girl towards you.
+        <br /><br />
+        <<newgirl>>
+        <<set $tmpGirl.beauty = Math.max(100, $tmpGirl.beauty + 30)>>
+        <<include 'NPC info'>>
+        <<if $slaves.length < $basementLimit && $player.money >= 30>>
+            <br /><br />
+            <<link 'Buy'>>
+                <<set _npc.capture = false>>
+                <<set $slaves.push(_npc)>>
+                <<set $player.money -= _npc.value>>
+                <<goto 'Garage'>>
+            <</link>>
+        <</if>>
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_fight">
+    <<linkreplace 'Intervene'>>
+        <<run $('#option_ignore, #option_deal').hide()>>
+        You couldn’t just watch. 
+        <br />
+        You started the car, revved the engine, and burst from behind cover. 
+        The slavers turned in surprise — one dropping his pack, the other drawing a long, jagged knife. 
+        You rammed the lead guy hard enough to send him rocking onto the side of the highway.
+        <br /><br />
+        Before they could recover, you kicked open the door and charged.
+        <br /><br />
+        <<link 'Fight'>>
+            <<generateEnemies 3 0>>
+            <<run $enemies.push($tmpGuy)>>
+            <<fight $enemies 'Car explore event - The Chain Road won' 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
