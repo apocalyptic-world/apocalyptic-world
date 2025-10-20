@@ -2,14 +2,99 @@
 <h1 class="ptitle">OUTSIDE</h1>
 <br />
 The dust still hung in the air, thick and bitter with the smell of oil and blood. You leaned against the dented hood of your car, catching your breath.
-<br/ ><br />
+<br /><br />
 The road was quiet again, except for the faint rattle of the chains you’d just broken.
 <br /><br />
 Most of the captives had scattered during the fight, fleeing into the dunes before you could even call out. But four remained.
 <br /><br />
 <center>
-    ####
+    <<image 'places/explore_car/chain_road3.jpg'>>
 </center>
 <br />
 They stood a few paces away, the rope still dangling from their wrists, faces gaunt and sunburned. Each of them looked at you differently — one with gratitude, one with suspicion, another with blank exhaustion, and the last with something unreadable in her eyes.
 <br /><br />
+<<newgirl>>
+<<set _npc1 = $tmpGirl>>
+<<newgirl>>
+<<set _npc2 = $tmpGirl>>
+<<newgirl>>
+<<set _npc3 = $tmpGirl>>
+<<newgirl>>
+<<set _npc4 = $tmpGirl>>
+<<sayNpc _npc1>>
+    What now? What will you do with us?
+<</sayNpc>>
+<br />
+<div id="option_free">
+    <<linkreplace 'You are free to go'>>
+        <<run $('#option_capture, #option_housing').hide()>>
+        You cut the last of their bindings and released them.
+        <br /><br />
+        <<you>>
+            You are free to go.
+        <</you>>
+        <br />
+        <<sayNpc _npc2>>
+            Really? Than you good sir.
+        <</sayNpc>>
+        <br />
+        They hesitated, unsure whether to trust you, but eventually started walking. 
+        The youngest looked back once, lips parting as if to say something — then turned away.
+        You watched until they disappeared into the heat haze.
+        <br /><br />
+        <<set $player.goodwill += 15>>
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<set _freeSpace = $basementLimit - $slaves.length>>
+<<if ($game.location.basement ?? false) && _freeSpace>>
+    <<set _linkName = 'Capture ' + (_freeSpace >= 4 ? 'all of them' : _freeSpace + 'of them')>>
+	<div id="option_capture">
+        <<linkreplace _linkName>>
+            <<run $('#option_free, #option_housing').hide()>>
+            You looked at the ropes and at the empty horizon. The world had taught you to prioritize survival. You told them bluntly: they could come with you, but not as guests — as labor.
+            <br /><br />
+            <<sayNpc _npc3>>
+                Oh god, next one... You stupid bitch
+            <</sayNpc>>
+            <br /><br />
+            They reacted differently — one spat, another bowed her head, the youngest stared with a mix of fear and calculation. 
+            You bound them so they couldn’t bolt immediately, not with cruel knots or humiliation, but with firm cuffs and a carved token on each wrist that marked them as yours.
+            <br /><br />
+            <<run $slaves.push(_npc1)>>
+            <<run $slaves.push(_npc2)>>
+            <<run $slaves.push(_npc3)>>
+            <<run $slaves.push(_npc4)>>
+            <<link 'Leave'>>
+                <<goto 'Garage'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</if>>
+<<if setup.baseManagement.population.hasFreeHouse()>>
+    <div id="option_housing">
+        <<linkreplace 'Invite as settlers'>>
+            <<run $('#option_capture, #option_free').hide()>>
+            You told them about your settlement — a place where they would be safe and could live their own lives.
+            <br /><br />
+            They exchanged uncertain looks. Finally, the eldest nodded.
+            <br /><br />
+            <<sayNpc _npc3>>
+                Not me. I better will try to take my chances.
+            <</sayNpc>>
+            <br />
+            Others agreed.
+            <br /><br />
+            <<set $player.goodwill += 6>>
+            <<set $player.baseManagement ??= {}>>
+            <<set $player.baseManagement.settlers += 3>>
+            <<set $player.baseManagement.settlersFemales ??= 0>>
+            <<set $player.baseManagement.settlersFemales += 3>>
+            <<link 'Leave'>>
+                <<goto 'Garage'>>
+            <</link>>
+        <</linkreplace>>
+    </div>
+<</if>>
