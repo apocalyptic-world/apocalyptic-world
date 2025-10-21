@@ -16,6 +16,9 @@ You order a beer at the bar and start drinking it.
 <<if $game.day > 150 && $player.reputation > 150 && !($locationEvents.bar ?? false) && setup.percentageChance(4)>>
 	<<goto 'Bar - A strange offer'>>
 	<<set $locationEvents.bar = true>>
+<<elseif $player.reputation > 100 && !($locationEvents.bar ?? false) && setup.percentageChance(10) && recall($suppCode) && timeBetween('22:00', '23:30')>>
+	<<set $locationEvents.bar = true>>
+	<<goto 'Bar - WC surprise'>>
 <<elseif !($locationEvents.bar ?? false) && setup.percentageChance(5)>>
 	<<set $locationEvents.bar = true>>
 	<<goto 'Bar - girl in danger'>>
