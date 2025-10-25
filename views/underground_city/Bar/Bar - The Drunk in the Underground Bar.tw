@@ -1,0 +1,158 @@
+:: Bar - The Drunk in the Underground Bar [bg-underground]
+<h1 class="ptitle">BAR</h1>
+<br />
+You sat at the counter with a drink in hand, listening to the low hum of murmurs and the faint buzz of a generator somewhere in the shadows.
+<br /><br />
+<center>
+    <<image 'places/bar/drink.webp' sfw>>
+</center>
+<br />
+Some guy slid onto the stool next to you with a grunt, almost toppling into the floor before catching himself. 
+His coat was torn, hair greasy and matted, and he smelled like a mixture of cheap liquor and mold.
+<br /><br />
+<center>
+    <<image 'places/bar/radio1.jpg' sfw>>
+</center>
+<br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    You… you buy me a drink
+<</sayNpc>>
+<br />
+He slurred, pointing with a trembling hand at the bartender. His words were ragged, his accent thick from months of neglect.
+<br /><br />
+<<if $player.money >= 10>>
+    <div id="option_buy1">
+        <<linkreplace 'Buy him a drink'>>
+            <<addmins 10>>
+            <<set $player.money -= 10>>
+            <<run $('#option_buy1_desc').hide()>>
+            You hesitated, then sighed and signaled to the bartender. Two glasses clinked onto the counter.
+            <br /><br />
+            The drunk grinned with broken teeth.
+            <br /><br />
+            <center>
+                <<image 'places/bar/hobo_drink.gif' sfw>>
+            </center>
+            <br />
+            <<sayNpc $tmpGuy>>
+                Good man. Been a rough day. Rough… year. Hell, rough forever, huh?
+            <</sayNpc>>
+            <br />
+            You didn’t answer.
+            <br /><br >
+            He wiped his mouth with the back of his hand, peered at your glass, then leaned closer.
+            <br /><br />
+            <<sayNpc $tmpGuy>>
+                Tell you what… since you’re a generous soul, how ’bout another round?
+            <</sayNpc>>
+            <br />
+            <<if $player.money >= 10>>
+                <div id="option_buy2">
+                    <<linkreplace 'Buy him another drink'>>
+                        <<addmins 10>>
+                        <<set $player.money -= 10>>
+                        <<run $('#option_buy2_desc').hide()>>
+                        You rolled your eyes, but you waved again. Two more drinks.
+                        <br /><br />
+                        He took his, half spilling it before he even got it to his lips.
+                        <br /><br />
+                        <<sayNpc $tmpGuy>>
+                            Ahhhh, Now that’s proper fire.
+                        <</sayNpc>>
+                        <br />
+                        <center>
+                            <<image 'places/bar/hobo_drink.gif' sfw>>
+                        </center>
+                        The man’s words grew jumbled, slurred, and sometimes nonsensical.
+                        <br /><br />
+                        <<sayNpc $tmpGuy>>
+                            Ahhh… you, yeah, you’re… you listen, right? Another drink?
+                        <</sayNpc>>
+                        <br />
+                        <<if $player.money >= 10>>
+                            <div id="option_buy3">
+                                <<linkreplace 'Buy him another drink'>>
+                                    <<addmins 10>>
+                                    <<run $('#option_ignore').hide()>>
+                                    <<set $player.money -= 10>>
+                                    <<run $('#option_buy3_desc').hide()>>
+                                    You sighed but signaled anyway. Another drink landed in front of him. He grabbed it, almost spilling it, and chugged it down with a hiccup.
+                                    <br /><br />
+                                    <<sayNpc $tmpGuy>>
+                                        Yeahhh… now… now we… talkin’, yeah… talkin’
+                                    <</sayNpc>>
+                                    <br />
+                                    Then, after a pause — eyes darting, voice lowering, words dragging out — he leaned in close, swaying dangerously, almost falling onto the counter:
+                                    <br /><br />
+                                    <<sayNpc $tmpGuy>>
+                                        Lissen… lissen, friend… there’s… there’s a place… down in… the… the tunnels… old… yeah… old tunnels… east… east side… dark… so dark… you’ll… you’ll… hear it… a… a box… it… it… talks… talks… yeahhh… whispers… static… voices…
+                                    <</sayNpc>>
+                                    <br />
+                                    He hiccuped, slapped the counter, and mumbled through a grin.
+                                    <br /><br />
+                                    <<sayNpc $tmpGuy>>
+                                        M-maybe… maybe nothin’, maybe… maybe… but… somethin’… right?    
+                                    <</sayNpc>>
+                                    <br />
+                                    Then he stumbled off, muttering to himself, weaving between tables until he disappeared into the shadows of the tunnels beyond.
+                                    <br /><br />
+                                    <<perkAdd 'drunk'>>
+                                    <<linkreplace 'Go to the tunnels'>>
+                                        <<set $player.quests.radio = true>>
+                                        <<set _tunnels = true>>
+                                        You paused occasionally, listening. Nothing but dripping water and distant scurrying noises — rats, maybe, or something larger. 
+                                        Every so often, you caught a faint hum or vibration that could have been the generator from the bar… or something else entirely.
+                                        <br /><br />
+                                        <center>
+                                            <<image 'places/bar/radio2.jpg' sfw>>
+                                        </center>
+                                        <br />
+                                        The tunnels twisted and turned, some partially collapsed. You had to crawl through a few tight spaces, kick aside debris, and brace yourself against falling rocks. 
+                                        You debated turning back several times, every sense screaming at you to leave. But the memory of the drunk’s words — slurred, fragmented, desperate — pushed you onward.
+                                        <br />
+                                        Finally, in a small alcove beneath a broken stairwell, you found it: a pile of old debris, a metal box half-hidden beneath fallen boards and rusted pipes. Your heart pounded as you cleared the rubble.
+                                        <br /><br />
+                                        The box was small, scratched, and dented.
+                                        <br /><br />
+                                        <center>
+                                            <<image 'places/bar/radio3.jpg' sfw>>
+                                        </center>
+                                        <br />
+                                        There it was: part of an old analog radio. The device was battered, missing a few knobs and with frayed wires sticking out. The screen flickered faintly, but no sound came. It wasn’t working… not yet.
+                                        <br /><br />
+                                        <strong>You picked up <strong class="iitem">broken radio</strong></strong>
+                                        <<pickup $backpack 'radio_broken' 1>>
+                                        <br /><br />
+                                    <</linkreplace>>
+                                    <<link 'Leave'>>
+                                        <<if _tunnels>>
+                                            <<goto 'Underground city'>>
+                                        <<else>>
+                                            <<goto 'Bar'>>
+                                        <</if>>
+                                    <</link>>
+                                <</linkreplace>>
+                            </div>
+                            <div id="option_buy3_desc">
+                                -10 caps
+                            </div>
+                        <</if>>
+                    <</linkreplace>>
+                </div>
+                <div id="option_buy2_desc">
+                    -10 caps
+                </div>
+            <</if>>
+        <</linkreplace>>
+    </div>
+    <div id="option_buy1_desc">
+        -10 caps
+    </div>
+<</if>>
+<div id="option_ignore">
+    <<link 'Ignore him'>>
+        <<addmins 5>>
+        <<goto 'Bar'>>
+    <</link>>
+</div>

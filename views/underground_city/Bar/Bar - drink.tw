@@ -22,6 +22,9 @@ You order a beer at the bar and start drinking it.
 <<elseif !($locationEvents.bar ?? false) && setup.percentageChance(5)>>
 	<<set $locationEvents.bar = true>>
 	<<goto 'Bar - girl in danger'>>
+<<elseif !($locationEvents.bar ?? false) && $game.day > 100 && setup.percentageChance(10) && $player?.quests?.radio && timeBetween('20:00', '23:59')>>
+	<<set $locationEvents.bar = true>>
+	<<goto 'Bar - The Drunk in the Underground Bar'>>
 <<elseif randomInteger(1,5) === 1>>
 	<<goto 'Bar - random event #1'>>
 <</if>>
