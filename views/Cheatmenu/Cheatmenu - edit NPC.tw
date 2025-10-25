@@ -9,13 +9,15 @@
 
 <table id="edit_npc">
 <tr>
-        <td>
-            Name:
-        </td>
-        <td>
-            <<textbox "_name" $tmpGirl.name>>
-        </td>
-    </tr>
+    <td>
+        Name:
+    </td>
+    <td>
+        <<textbox "_name" $tmpGirl.name>>
+        <<set _isVirgin = $tmpGirl.virgin ? 'checked' : null>>
+         virgin <<checkbox "_virgin" false true _isVirgin>> 
+    </td>
+</tr>
     <tr>
         <td>
             Birth date:
@@ -225,6 +227,7 @@
         <</for>>
     <</if>>
     <<set $tmpGirl.name = _name>>
+    <<set $tmpGirl.virgin = _virgin>>
     <<set $tmpGirl.beauty = _beauty>>
     <<set $tmpGirl.strength = _strength>>
     <<set $tmpGirl.eyes = _eyes>>

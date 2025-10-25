@@ -89,9 +89,9 @@ Save.onLoad.add(function (save) {
         variables.game.location.settlement = true;
     }
 
-    if (variables.workersLimitGarden < 9) {
-        variables.workersLimitGarden = 9;
-        variables.workersLimitHunter = 9;
+    if (variables.workersLimitGarden < 10) {
+        variables.workersLimitGarden = 10;
+        variables.workersLimitHunter = 10;
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
