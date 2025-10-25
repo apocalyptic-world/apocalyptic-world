@@ -23,7 +23,7 @@ She doesn’t wait for a response, quickly disappearing around the corner and in
     The pipes groan as the water sputters to life, a steady stream cascading down over her.
     <br /><br />
     <center>
-	    [img[setup.ImagePath+'places/cage_fight/ambush1.jpg']]
+        <<image 'places/cage_fight/ambush1.jpg'>>
     </center>
     <br />
     <<linkreplace 'Ambush her'>>
@@ -71,6 +71,7 @@ She doesn’t wait for a response, quickly disappearing around the corner and in
         </div>
         <div id="option_fuck">
             <<linkreplace 'Face fuck her'>>
+                <<set $tmpGirl.virgin = false>>
                 <<run $('#option_release').hide()>>
                 While loosening your grib, you manage to hold her down with one hand as you unzip your pants and pull out already hard dick. With a slap on her face you remind her what will happen if she tries something funny. 
                 Then you shove it deep into her mouth.
@@ -108,20 +109,38 @@ She doesn’t wait for a response, quickly disappearing around the corner and in
                 You feel that she gets more relaxed and pushes her chest against yours to get additional support. Her ass is lifted high up as you keep bounding her pussy while her breasts are fully pressed against your chest.
                 <br /><br />
                 <<linkreplace 'Cum'>>
+                    <<horny_reset>>
                     <center>
-                        [img[setup.ImagePath+'game/misc/creampie_cowgirl.webp']]
+                        <<image 'game/misc/creampie_cowgirl.webp'>>
                     </center>
                     <br />
                     You cum deep inside her pussy. She seems not to notice it but in the end not you but she's the one who's moving up and down your dick.
                     <br /><br />
                     Without a word, she scrambles to her feet, slipping slightly on the wet tiles before finding her balance. 
-                    She barely takes the time to gather herself as she sprints out of the shower room, her wet footsteps echoing loudly as she rushes away. 
                     <br /><br />
+                    <<if $game.location.basement && $slaves.length < $basementLimit && $player.energy >= 30>>
+                        <<linkreplace 'Capture her'>>
+                            <<if setup.percentageChance(50)>>
+                                <<set _captured = true>>
+                                <<run $slaves.push($tmpGirl)>>
+                                As she was ready to sprint out of the shower room, you managed to grab her by hand. 
+                                <br />
+                                She tried to resist but failed as you put ducktape around her mouth to silence her.
+                            <<else>>
+                                <strong>You tried to grab her hand but failed.</strong>
+                                <br />
+                                She barely takes the time to gather herself as she sprints out of the shower room, her wet footsteps echoing loudly as she rushes away. 
+                            <</if>>
+                            <br /><br />
+                        <</linkreplace>>
+                    <</if>>
                     <<link 'Leave'>>
-                        <<goto 'Fight cage'>>
+                        <<if _captured>>
+                            <<goto 'Basement'>>
+                        <<else>>
+                            <<goto 'Fight cage'>>
+                        <</if>>
                     <</link>>
-
-                    <<horny_reset>>
                 <</linkreplace>>
             <</linkreplace>>
         </div>
