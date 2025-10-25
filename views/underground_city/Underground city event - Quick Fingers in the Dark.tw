@@ -1,0 +1,118 @@
+:: Underground city event - Quick Fingers in the Dark [bg-underground]
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+You moved through the crowd with your hand close to your belt, more out of habit than caution. 
+The press of bodies was constant — a shove here, a brush there — nothing unusual in the Warrens. But then you felt it: the faintest tug, a whisper of movement where none should be. 
+Instinct made you check your satchel. The clasp hung open. Your ration card was gone.
+<br /><br />
+<center>
+    <<image 'places/underground/pickpocket.jpg' sfw>>
+</center>
+<br /><br />
+You froze for half a heartbeat, then scanned the shifting crowd. There — a flicker of motion, 
+a small figure darting between stalls, slipping through a tangle of people and pipes. 
+You pushed after them, shoving aside a vendor’s crate of scrap that clattered to the ground in protest.
+<br /><br />
+The figure glanced back once — a flash of pale face beneath a torn hood — then bolted down a side corridor. 
+You followed, boots slapping against damp concrete, breath loud in the narrow tunnel. 
+The lights here buzzed weakly, throwing shadows that danced like ghosts on the walls. 
+<br /><br />
+<<set _chanceSuccess = Math.min($player.int, 50)>>
+<<set _caught = setup.percentageChance(_chanceSuccess)>>
+<<if _caught>>
+    <<run $('#option_leave').hide()>>
+    The thief stumbled on a loose cable, and that was all the opening you needed.
+    <br /><br />
+    You caught her wrist and slammed her gently — but firmly — against the wall. The impact echoed through the metal pipes. She was young, barely more than a girl, her face smeared with grime and fear. A small blade slipped from her sleeve, clattering to the floor.
+    <br /><br />
+    <center>
+        <<image 'places/underground/pickpocket2.jpg' sfw>>
+    </center>
+    <br />
+    <<newgirl>>
+    <<sayNpc $tmpGirl>>
+        Let me go. I wasn’t gonna hurt you. I just needed - 
+    <</sayNpc>>
+    <br />
+    Her words faltered. She avoided your eyes, glancing toward the floor where the knife lay. Her pulse beat fast beneath your fingers.
+    <br /><br />
+    You could see it now — the tremor in her hands, the thinness of her frame. She wasn’t some hardened cutpurse, just another starving soul trying to last one more day in the dark. Around you, the tunnel hummed with distant machinery, indifferent to both of you.
+    <br /><br />
+    <div id="option_suck">
+        <<linkreplace 'Force her to suck you off'>>
+            <<set $player.goodwill -= 3>>
+            Without waiting for a response, you reached down, your hand gripping her chin, forcing her to look up at you. 
+            Her eyes widened in surprise and a flicker of something else—curiosity, perhaps, or a spark of something more primal. 
+            You could see the pulse at her neck, rapid and erratic, a testament to the adrenaline coursing through her veins.
+            <br /><br />
+            <<you>>
+                You're going to make this up to me. On your knees.
+            <</you>>
+            <br />
+            You unzipped your pants, your cock already hard and ready, aching with a mix of anger and desire. 
+            She looked up at you, her eyes filled with a mix of disgust and something else—a flicker of interest, perhaps, or a glimmer of submission. 
+            You grabbed a handful of her hair, guiding her head towards your cock, a silent command that left no room for misunderstanding.
+            <br /><br />
+            <center>
+                <<image 'places/underground/pickpocket_bj1.webp'>>
+            </center>
+            <br />
+            Her lips parted, and she took you into her mouth, her movements slow and reluctant at first. 
+            But as you guided her, your hips thrusting gently but insistently, she began to relax, her tongue swirling around your shaft, her lips creating a tight, 
+            wet seal that sent jolts of pleasure coursing through your body.
+            <br /><br />
+            <center>
+                <<image 'places/underground/pickpocket_bj2.webp'>>
+            </center>
+            <br />
+            With a final, deep thrust, you sent her over the edge, your cock pulsing in her mouth as you found your release. Your hot cum shot into her throat, coating her tongue, filling her completely
+            <br /><br />
+            <<horny_reset>>
+            <center>
+                <<image 'places/underground/pickpocket_bj3.webp'>>
+            </center>
+            <br />
+            She tried to pull away, her eyes wide with surprise and a hint of panic, but you held her firmly, your hand tangling in her hair, guiding her through it, 
+            ensuring she swallowed every last drop.
+            <br /><br />
+        <</linkreplace>>
+    </div>
+    <<if $game.location.basement && $slaves.length < $basementLimit>>
+        <div id="option_capture">
+            <<link 'Capture her'>>
+                <<addmins 20>>
+                <<run $slaves.push($tmpGirl)>>
+                <<set $player.goodwill-->>
+                <<goto 'Basement'>>
+            <</link>>
+        </div>
+    <</if>>
+    <div id="option_letgo">
+        <<link 'Let her go'>>
+            <<set $player.goodwill += 4>>
+            <<addmins 20>>
+            <<goto 'Underground city'>>
+        <</link>>
+    </div>
+<<else>>
+    By the time you cleared them, the corridor was empty. 
+    The only sign of life was the soft drip of water and the echo of retreating footsteps fading into the dark. 
+    You stood there, breathing hard, the taste of metal and frustration thick in your mouth.
+    <br /><br />
+    <<set _maxLost = 50>>
+    <<set _capsMissing = ($player.money - _maxLost > 0 ? _maxLost : $player.money)>>
+    <<if _capsMissing>>
+        <<set $player.money -= _capsMissing>>
+        You checked pockets and some caps were missing.
+        <br />
+        <strong>You lost <<=_capsMissing>> caps</strong>
+        <br /><br />
+    <</if>>
+<</if>>
+<<if !_caught>>
+    <div id="option_leave">
+        <<link 'Leave'>>
+            <<goto 'Underground city'>>
+        <</link>>
+    </div>
+<</if>>
