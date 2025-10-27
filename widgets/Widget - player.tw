@@ -351,6 +351,17 @@
 			</div>
 		<</for>>
 	<</if>>
+	<<if $args[0].siblings>>
+		Siblings: <br />
+		<<for _familyTreeChildI, _familyTreeChild range $args[0].siblings>>
+			<div>
+			<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+				<<if _familyMember>>
+					<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
+				<</if>>
+			</div>
+		<</for>>
+	<</if>>
 <</widget>>
 
 <<widget statsAdd>>

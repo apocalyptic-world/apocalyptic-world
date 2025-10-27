@@ -1,0 +1,140 @@
+:: Random event - Random event - The Strangers by the Fire
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+When you reached the edge of a town, you saw it: a faint flicker of light cutting through the darkness. A fire.
+You moved closer, careful, your boots crunching over broken glass.
+<br /><br />
+<center>
+    <<image 'places/explore/strangers1.jpg' sfw>>
+</center>
+<br />
+Inside an old diner — half-collapsed, windows shattered — two figures sat beside a barrel fire. 
+The glow danced across the walls, painting them in shades of gold and shadow. The man looked up first, his hand moving instantly to a knife.
+<br /><br />
+<<newguy>>
+<<newgirl>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(randomInteger(18, 19))>>
+<<set $tmpGirl.race = 'white'>>
+<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(25, 32))>>
+<<set $tmpGuy.race = 'white'>>
+<<set $tmpGirl.family = {
+	siblings: [$tmpGuy.id],
+}>>
+<<set $tmpGuy.family = {
+	siblings: [$tmpGirl.id],
+}>>
+<<sayNpc $tmpGuy>>
+    That’s close enough
+<</sayNpc>>
+<br />
+<center>
+    <<image 'places/explore/strangers2.jpg' sfw>>
+</center>
+<br />
+He looked about thirty — strong, unshaven, his face lined from too many sleepless nights. His coat was patched and his stance tense, like someone who had spent too long in the crosshairs of danger.
+<br /><br />
+<center>
+    <<image 'places/explore/strangers3.jpg' sfw>>
+</center>
+<br /><br />
+Beside him sat a girl, maybe seventeen. Her hair was tied in a loose braid, her knife gripped tightly though her hands shook slightly. 
+They looked alike — brother and sister — both carrying the same gray eyes that had seen too much loss.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    You alone?
+<</sayNpc>>
+<br />
+Before you could answer, the girl spoke quietly.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    <<=$tmpGuy.name>>, he doesn’t look like a raider
+<</sayNpc>>
+<br />
+You noticed small details that told their story...
+<br /><br />
+- Photo lay near their packs — two adults and these same siblings smiling, long ago. Someone had drawn an X through the parents’ faces.
+<br />
+- A folded map rested beside the fire, marked with circles and lines. They had been traveling for a long time.
+<br /><br />
+The night wind sighed through the diner’s broken walls. You had a choice to make.
+<br /><br />
+<div id="option_peace">
+    <<linkreplace 'Approached peacefully'>>
+        <<run $('#option_leave').hide()>>
+        <<you>>
+            Easy. I wasn’t looking for trouble
+        <</you>>
+        <br />
+        <<=$tmpGuy.name>>'s eyes studied you for a long moment before he finally lowered his knife.
+        <br /><br />
+        She told you about the road they had taken — the flooded valleys in the south, the rumors of a safe zone to the north called <<= $game.cabinName ?? 'Heaven'>>. 
+        <br />
+        <<=$tmpGuy.name>> said little, but his silence spoke of pain and weariness.
+        <br /><br />
+        <<if $game.cabinName>>
+            <<you>>
+                I know <<= $game.cabinName>>
+            <</you>>
+            <br />
+            <<=$tmpGuy.name>>'s eyes snapped up. His hand tightened on his knife, though not in threat — more in disbelief.
+            <br /><br />
+            <<sayNpc $tmpGuy>>
+                You’re from <<= $game.cabinName>>?
+            <</sayNpc>>
+            <br />
+            You nodded.
+            <br /><br />
+        <</if>>
+        <<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+            <div id="option_guests">
+                <<linkreplace 'Invite them as guests'>>
+                    <<run $('#option_settlers').hide()>>
+                    <<sayNpc $tmpGirl>>
+                        You’re serious? There’s… food? People?
+                    <</sayNpc>>
+                    <br />
+                    <<sayNpc $tmpGuy>>
+                        We’ve been running too long. If what you’re saying is true… maybe it’s time we stopped.
+                    <</sayNpc>>
+                    <br />
+                    <strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
+                    <br />
+                    <strong><<=$tmpGuy.name>> moved in your guesthouse</strong>
+					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>
+                    <<set $tmpGuy.relationship = Math.min($tmpGuy.relationship + 30, 100)>>
+					<<run $guests.push($tmpGirl)>>
+                    <<run $guests.push($tmpGuy)>>
+                    <br /><br />
+                <</linkreplace>>
+            </div>
+        <</if>>
+        <<if setup.baseManagement.population.hasFreeHouse()>>
+            <div id="option_settlers">
+                <<linkreplace 'Invite as settlers'>>
+                    <<run $('#option_guests').hide()>>
+                    You told them about your settlement — a place where they would be safe and could live their own lives.
+                    <br /><br />
+                    They exchanged uncertain looks. Finally, the brother nodded.
+                    <br /><br />
+                    <<set $player.goodwill += 6>>
+                    <<set $player.baseManagement ??= {}>>
+                    <<set $player.baseManagement.settlers += 2>>
+                    <<set $player.baseManagement.settlersFemales ??= 0>>
+                    <<set $player.baseManagement.settlersFemales += 1>>
+                    <<link 'Leave'>>
+                        <<goto 'Outside'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <</if>>
+        <<link 'Leave'>>
+            <<goto 'Guest house'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_leave">
+    <<link 'Go away'>>
+        <<addmins 10>>
+        <<goto 'Outside'>>
+    <</link>>
+</div>
