@@ -23,6 +23,12 @@ The glow danced across the walls, painting them in shades of gold and shadow. Th
 <<set $tmpGuy.family = {
 	siblings: [$tmpGirl.id],
 }>>
+<<set $tmpGuy.inventory = {
+    knife: 1
+}>>
+<<set $tmpGirl.inventory = {
+    knife: 1
+}>>
 <<sayNpc $tmpGuy>>
     That’s close enough
 <</sayNpc>>
@@ -60,7 +66,7 @@ The night wind sighed through the diner’s broken walls. You had a choice to ma
 <br /><br />
 <div id="option_peace">
     <<linkreplace 'Approached peacefully'>>
-        <<run $('#option_leave').hide()>>
+        <<run $('#option_leave, #option_attack').hide()>>
         <<you>>
             Easy. I wasn’t looking for trouble
         <</you>>
@@ -131,6 +137,12 @@ The night wind sighed through the diner’s broken walls. You had a choice to ma
             <<goto 'Guest house'>>
         <</link>>
     <</linkreplace>>
+</div>
+<div id="option_attack">
+    <<link 'Attack them'>>
+        <<set _enemies = [$tmpGuy, $tmpGirl]>>
+        <<fight _enemies 'Outside' 'Outside'>>
+    <</link>>
 </div>
 <div id="option_leave">
     <<link 'Go away'>>
