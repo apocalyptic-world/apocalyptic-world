@@ -19,6 +19,9 @@
 <<sayNpc $tmpGirl>>
 	<<=setup.npc.getSayDialog($tmpGirl)>>
 <</sayNpc>>
+<<if $guestId && setup.percentageChance(30)>>
+	<<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 10))>>
+<</if>>
 <<if $slaveId !== undefined && $tmpGirl.relationship > 30 && !$tmpGirl.gender>>
 	<br /><br />
 	She had <strong><<=$tmpGirl.orgasms>></strong> orgasms
