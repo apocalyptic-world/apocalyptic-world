@@ -32,8 +32,12 @@ Underground city has its own rules. House always goes last. If you don't like th
 			<<replace "#blackjack-error">>Invalid value<</replace>>
 		<<elseif $player.money < $blackjack.bet>>
 			<<replace "#blackjack-error">>You don't have enough caps<</replace>>
-		<<elseif $blackjack.bet > 100>>
+		<<elseif $player.reputation < 50 && $blackjack.bet > 100>>
 			<<replace "#blackjack-error">>Bet is too big. Max: 100<</replace>>
+		<<elseif $player.reputation < 100 && $blackjack.bet > 150>>
+			<<replace "#blackjack-error">>Bet is too big. Max: 150<</replace>>
+		<<elseif $blackjack.bet > 200>>
+			<<replace "#blackjack-error">>Bet is too big. Max: 200<</replace>>
 		<<else>>
 		<<set $blackjack.deck = blackjackDeck()>>
 		<<set $player.money -= $blackjack.bet>>

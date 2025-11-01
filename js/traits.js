@@ -51,6 +51,10 @@ setup.traits = {
         title: "Tight vagina",
         description: "Very tight vagina. MC or others gets more pleasure",
         gender: [0]
+    },
+    pacifist: {
+        title: "Pacifist",
+        description: "Does not engage in fights"
     }
 };
 

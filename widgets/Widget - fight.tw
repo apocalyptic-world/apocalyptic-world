@@ -25,7 +25,7 @@
 	<<for _ally, _allyId range $player.companions>>
 		<<set _tmpAlly = setup.companionGet(_ally)>>
 		<<set _allyKey = _ally.split(':')>>
-		<<if _allyKey[0] !== 'guest'>>
+		<<if _allyKey[0] !== 'guest' || _tmpAlly.traits.includes('pacifist')>>
 			<<continue>>
 		<</if>>
 		<<set _tmpAlly.key = _ally>>
@@ -194,12 +194,35 @@
 		<<set _isPlayerTarget = (_randomEnemyTarget === 'you')>>
 		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
 
+		<<set _enemyHasCrossbow = setup.npcInventoryHas($fight.enemies[_i], 'crossbow')>>
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
 		<<set _enemyStrength = $fight.enemies[_i].strength ?? 0>>
 		<<if ($fight.enemies[_i].skills ?? []).includes('fighter')>>
          		<<set _enemyStrength += (_enemyStrength / 2)>>
         	<</if>>
-		<<if _enemyHasKnife>>
+		<<if _enemyHasCrossbow>>
+			<<set _enemyStrength += 30>>
+			<<if _isPlayerTarget>>
+				<<if $player.endurance > 0>>
+					<<set _enemyStrength = Math.max(_enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+				<</if>>
+				<<set _bleedingChance = 50>>
+				<<if $backpack.has('body_armor')>>
+					<<set _bleedingChance -= 20>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
+				<</if>>
+				<<if setup.percentageChance(_bleedingChance)>>
+					<<perkAdd 'bleeding'>>
+				<</if>>
+			<<else>>
+				<<if setup.npcInventoryHas($fight.allies[_randomEnemyTarget], 'body_armor')>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
+				<</if>>
+				<<set $fight.allies[_randomEnemyTarget].attacks ??= []>>
+				<<set $fight.allies[_randomEnemyTarget].attacks.push('crowssbow')>>
+			<</if>>
+			<<run $fight.messages.push($fight.enemies[_i].name + ' shoot a crossbow arrow at ' + _targetName + ' (-' + _enemyStrength + ')')>>
+		<<elseif _enemyHasKnife>>
 			<<set _enemyStrength += 20>>
 			<<if _isPlayerTarget>>
 				<<if $player.endurance > 0>>
@@ -326,8 +349,12 @@
 	<<set _randomItemsList = ['condom', 'food', 'lube', 'candy', 'metal', 'cloth', 'piercing']>>
 
 	<<set _knivesLeft = $args[2] ?? 0>>
+	<<set _crossbowLeft = 0>>
 	<<if setup.percentageChance(20)>>
 		<<set _knivesLeft++>>
+	<</if>>
+	<<if setup.percentageChance(10)>>
+		<<set _crossbowLeft++>>
 	<</if>>
 	<<if $player.reputation > 50 && setup.percentageChance(20)>>
 		<<set _knivesLeft++>>
@@ -337,7 +364,12 @@
 	<</if>>
 	<<for _i = 0; _i < $args[0]; _i++>>
 		<<newguy>>
-		<<if _knivesLeft>>
+		<<if _crossbowLeft>>
+			<<set $tmpGuy.inventory = {
+				crossbow: 1
+			}>>
+			<<set _crossbowLeft-->>
+		<<elseif _knivesLeft>>
 			<<set $tmpGuy.inventory = {
 				knife: 1
 			}>>
@@ -353,8 +385,13 @@
 	<</for>>
 	<<for _i = 0; _i < $args[1]; _i++>>
 		<<newgirl>>
-		<<if _knivesLeft>>
-			<<set $tmpGuy.inventory = {
+		<<if _crossbowLeft>>
+			<<set $tmpGirl.inventory = {
+				crossbow: 1
+			}>>
+			<<set _crossbowLeft-->>
+		<<elseif _knivesLeft>>
+			<<set $tmpGirl.inventory = {
 				knife: 1
 			}>>
 			<<set _knivesLeft-->>
