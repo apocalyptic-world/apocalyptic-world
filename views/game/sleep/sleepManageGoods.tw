@@ -8,6 +8,10 @@
             <<set _count  = $storage.count(_manageGoodsName)>>
             <<set _price  = setup.inventoryManageable[_manageGoodsName].price>>
             <<if _manageGoods.min && _count < _manageGoods.min>>
+                <<if _manageGoods.priority>>
+                    <<set _chance += 40>>
+                    <<set _price *= 2>>
+                <</if>>
                 <<if setup.percentageChance(_chance)>>
                     <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), Math.floor($player.money/_price))>>
                     <<set _totalPrice = _price * _amount>>

@@ -15,7 +15,8 @@
 	<<if typeof $player.manageGoods[_shopInventoryItemId] === 'undefined'>>
 		<<set $player.manageGoods[_shopInventoryItemId] = {
 			min: 0,
-			max: 0
+			max: 0,
+			priority: false
 		}>>
 	<</if>>
 <</for>>
@@ -30,6 +31,7 @@
 			<td>Storage</td>
 			<td>Min</td>
 			<td>Max</td>
+			<td>High priority</td>
 		</tr>
 		<<for _shopInventoryItemId, _shopInventoryItem range setup.inventoryManageable>>
 			<<capture _shopInventoryItemId>>
@@ -48,6 +50,9 @@
 				</td>
 				<td>
 					<<numberbox `"$player.manageGoods[_shopInventoryItemId].max"` `setup.shopGetDefaultInput(_shopInventoryItemId, 'max')`>>
+				</td>
+				<td>
+					<<checkbox `"$player.manageGoods[_shopInventoryItemId].priority"` false true autocheck>>
 				</td>
 			</tr>
 			<</capture>>
@@ -69,6 +74,9 @@
 		</div>
 		<div>
 			* max - maximum amount of item you want to have in your storage.
+		</div>
+		<div>
+			* high priority - Restock at Any Cost (Shopkeeper will focus and buy even with high price)
 		</div>
 	</div>
 
