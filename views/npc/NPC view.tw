@@ -65,43 +65,11 @@
 	<</link>>
 <</if>>
 
-<<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
-	<<link 'Assign to garden'>>
-		<<assignedTo $tmpGirl 'garden'>>
-		<<set $tmpGirl.gardenDay = 0>>
-		<<if $tmpGirlBack>>
-			<<set $slaves[$slaveId] = $tmpGirl>>
-			<<set $slaveId to null>>
-			<<goto $tmpGirlBack>>
-		<<else>>
-			<<goto 'NPC view'>>
-		<</if>>
-	<</link>>
-<</if>>
-
-<<if [0,2].includes($tmpGirl.gender) && $tmpGirl.relationship >= 50 && $slaveId !== undefined && !$tmpGirl.assignedTo>>
-	<<link 'Assign to streets'>>
-		<<assignedTo $tmpGirl 'streets'>>
-		<<if $tmpGirlBack>>
-			<<set $slaves[$slaveId] = $tmpGirl>>
-			<<set $slaveId to null>>
-			<<goto $tmpGirlBack>>
-		<<else>>
-			<<goto 'NPC view'>>
-		<</if>>
-	<</link>>
-<</if>>
-
-<<if [0].includes($tmpGirl.gender) && $slaveId !== undefined && !$tmpGirl.assignedTo && $game?.location?.milk_barn && ($tmpGirl.pregnancy >= 7 || ($tmpGirl.traits ?? []).includes('milker'))>>
-	<<link 'Assign to milk barn'>>
-		<<assignedTo $tmpGirl 'milk_barn'>>
-		<<if $tmpGirlBack>>
-			<<set $slaves[$slaveId] = $tmpGirl>>
-			<<set $slaveId to null>>
-			<<goto $tmpGirlBack>>
-		<<else>>
-			<<goto 'NPC view'>>
-		<</if>>
+<<if !$tmpGirl.assignedTo && !($player.companions['slave:' + $slaveId] ?? false)>>
+	<<link 'Assign to'>>
+		<<dialog 'Assign to'>>
+			<<include 'Slave view assign to'>>	
+		<</dialog>>
 	<</link>>
 <</if>>
 

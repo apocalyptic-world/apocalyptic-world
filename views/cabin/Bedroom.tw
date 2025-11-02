@@ -3,9 +3,19 @@
 <br /><br />
 <center>
 <<set _girlGuest = setup.getPersonsForLocation($guests, 'maid')>>
-<<set _isMaidInRoom = _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
-<<if _isMaidInRoom>>
-	<<set $tmpGirl = $guests[_girlGuest[0]]>>
+<<set _npcSlave = setup.getPersonsForLocation($slaves, 'maid')>>
+
+<<if _girlGuest.length>>
+	<<set _npc = $guests[_girlGuest[0]]>>
+	<<set _guestId = _girlGuest[0]>>
+<<elseif _npcSlave.length>>
+	<<set _npc = $slaves[_npcSlave[0]]>>
+	<<set _slaveId = _npcSlave[0]>>
+	<<set _isSlave = true>>
+<</if>>
+
+<<if _npc && timeBetween('09:00', '15:00')>>
+	<<set $tmpGirl = _npc>>
 	<<set $tmpGirl.location = 'maid'>>
 	<center>
 		<<actionImage $tmpGirl cleaning>>
@@ -14,14 +24,19 @@
 	<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
+		<<set $tmpGirlViewBack = _isSlave ? 'NPC view' : 'NPC view - guest'>>
+		<<if _isSlave>>
+			<<unset $guestId, $childId, $charId>>
+			<<set $slaveId = _slaveId>>
+		<<else>>
+			<<unset $slaveId, $childId, $charId>>
+			<<set $guestId = _guestId>>
+		<</if>>
 		<<set $tmpGirlBack = 'Bedroom'>>
 		<<set $tmpGirl.rape to false>>
 		<<set $tmpGirlCapture to false>> 
 		<<set $tmpGirlInvite to false>>
-		<<set $guestId = _girlGuest[0]>>
-		<<unset $slaveId, $charId, $childId>>
-		<<set $tmpGirlViewBack = 'NPC view - guest'>>
-		<<goto 'NPC view - guest'>>
+		<<goto $tmpGirlViewBack>>
 	<</link>>
 	<br /><br />
 <</if>>

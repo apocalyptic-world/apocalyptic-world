@@ -2,14 +2,24 @@
 <h1 class="ptitle">KITCHEN</h1>
 <br /><br />
 <<set _girlGuest = setup.getPersonsForLocation($guests, 'kitchen')>>
-<<if _girlGuest.length > 0 && timeBetween('08:00', '22:00')>>
+<<set _npcSlave = setup.getPersonsForLocation($slaves, 'kitchen')>>
+
+<<if _girlGuest.length>>
+	<<set _npc = $guests[_girlGuest[0]]>>
+	<<set _guestId = _girlGuest[0]>>
+<<elseif _npcSlave.length>>
+	<<set _npc = $slaves[_npcSlave[0]]>>
+	<<set _slaveId = _npcSlave[0]>>
+	<<set _isSlave = true>>
+<</if>>
+<<if _npc && timeBetween('08:00', '22:00')>>
 	<<set _isKitchenGirlAssigned = true>>
 	<<if $player.hunger <= 50 && $backpack.has('food')>>
 		<<set $player.hunger = 100>>
 		<<drop $backpack 'food' 1>>
 		<<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
 	<</if>>
-	<<set $tmpGirl = $guests[_girlGuest[0]]>>
+	<<set $tmpGirl = _npc>>
 	<<set $tmpGirl.location = 'kitchen'>>
 	<center>
 		<<actionImage $tmpGirl cooking>>
@@ -17,15 +27,19 @@
 	<<=setup.displayName($tmpGirl)>> is cooking in the kitchen, <<=setup.pronounceWhat($tmpGirl)>> notices you and gives you a warm smile<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
-		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $tmpGirlViewBack = _isSlave ? 'NPC view' : 'NPC view - guest'>>
+		<<if _isSlave>>
+			<<unset $guestId, $childId, $charId>>
+			<<set $slaveId = _slaveId>>
+		<<else>>
+			<<unset $slaveId, $childId, $charId>>
+			<<set $guestId = _guestId>>
+		<</if>>
 		<<set $tmpGirlBack = 'Kitchen-room'>>
 		<<set $tmpGirl.rape to false>>
 		<<set $tmpGirlCapture to false>> 
 		<<set $tmpGirlInvite to false>>
-		<<set $guestId = _girlGuest[0]>>
-		<<run delete $slaveId>>
-		<<run delete $charId>>
-		<<goto 'NPC view - guest'>>
+		<<goto $tmpGirlViewBack>>
 	<</link>>
 <</if>>
 <<if $backpack.has('food') && (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
@@ -54,7 +68,10 @@
 <<if !($locationEvents.kitchen ?? false)>>
 	<<if _isKitchenGirlAssigned && !$tmpGirl.gender && setup.percentageChance(5)>>
 		<<set $locationEvents.kitchen = true>>
-		<<set $guestId = _girlGuest[0]>>
+		<<set $tmpEvent = {
+			type: _isSlave ? 'slave' : 'guest',
+			npcId: _isSlave ? _slaveId : _guestId 
+		}>>
 		<<goto 'Event: Kitchen stuck'>>
 	<<elseif _guestsWomen.length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
 		<<set $locationEvents.kitchen = true>>

@@ -1,4 +1,4 @@
-:: Event: Kitchen stuck {"position":"286,1625","size":"100,100"}
+:: Event: Kitchen stuck
 <h1 class="ptitle">KITCHEN</h1>
 <br /><br />
 <<video 'kitchen/stuck1'>>
@@ -20,7 +20,7 @@ Entering the kitchen, you see <<=setup.displayName($tmpGirl)>>. She's pulling so
 	<<linkreplace 'Have some fun'>>
 		<<set _hadFun = true>>
 		<<addmins 30>>
-		<<set $guests[$guestId].horny = 0>>
+		<<set $tmpGirl = 0>>
 		<<run $('#option_help').hide()>>
 		<<video 'kitchen/stuck2'>>
 		<br /><br />
@@ -53,6 +53,7 @@ Entering the kitchen, you see <<=setup.displayName($tmpGirl)>>. She's pulling so
 	<</say>>
 	<br /><br />
 	<<link 'Leave'>>
+		<<unset $tmpEvent>>
 		<<goto 'Kitchen-room'>>
 	<</link>>
 </div>

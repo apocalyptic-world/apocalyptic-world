@@ -12,7 +12,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if !setup.getPersonsForLocation($guests, 'kitchen').length && !$tmpGirl.assignedTo>>
+<<if !setup.assignedToCount('kitchen') && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign to kitchen'>>
 		  <<assignedTo $tmpGirl 'kitchen'>>
@@ -22,7 +22,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if ($tmpGirl.skills ?? []).includes('teacher') && !setup.getPersonsForLocation($guests, 'school').length && !$tmpGirl.assignedTo && $game.location.school>>
+<<if ($tmpGirl.skills ?? []).includes('teacher') && !setup.getPersonsForLocation($guests, 'school').length && $game.location.school>>
 	<div>
 	  <<link 'Assign to school'>>
 		  <<assignedTo $tmpGirl 'school'>>
@@ -32,7 +32,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if [0,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
+<<if [0,2].includes($tmpGirl.gender) && !setup.assignedToCount('maid')>>
 	<div>
 	  <<link 'Assign as maid'>>
 		  <<assignedTo $tmpGirl 'maid'>>
@@ -52,7 +52,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>> 
 
-<<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
+<<if !setup.getPersonsForLocation($guests, 'shop').length && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
 	<div>
 	  <<link 'Assign to shop'>>
 		  <<assignedTo $tmpGirl 'shop'>>
@@ -63,7 +63,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <</if>>
 
 <div>
-	<<if !setup.getPersonsForLocation($guests, 'milkwarden').length && !$tmpGirl.assignedTo && ($game.location.farm ?? false) && ($tmpGirl.skills ?? []).includes('cook')>>
+	<<if !setup.getPersonsForLocation($guests, 'milkwarden').length && ($game.location.farm ?? false) && ($tmpGirl.skills ?? []).includes('cook')>>
 		<<link 'Assign as milk warden'>>
 			<<assignedTo $tmpGirl 'milkwarden'>>
 			<<dialogclose>>
@@ -74,7 +74,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	<</if>>
 </div>
 
-<<if [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
+<<if [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && ($tmpGirl.traits ?? []).includes('sadistic')>>
 	<div>
 	  <<link 'Assign as mistress'>>
 		  <<assignedTo $tmpGirl 'mistress'>>
@@ -147,7 +147,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 </div>
 
 <div>
-<<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
+<<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender)>>
 	<<link 'Assign to streets'>>
 		<<assignedTo $tmpGirl 'streets'>>
 		<<dialogclose>>
@@ -155,7 +155,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	<</link>> (Earns you money as hooker)
 <</if>>
 </div>
-<<if $player?.quests?.gloryholeJob && $tmpGirl.relationship >= 70 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
+<<if $player?.quests?.gloryholeJob && $tmpGirl.relationship >= 70 && [0,2].includes($tmpGirl.gender)>>
 	<div>
 		<<link 'Assign to nightclub'>>
 			<<assignedTo $tmpGirl 'nightclub'>>
