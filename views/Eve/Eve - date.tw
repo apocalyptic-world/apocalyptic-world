@@ -1,0 +1,25 @@
+:: Eve - date
+<h1 class="ptitle">EVE</h1>
+<br /><br />
+<<eve>>
+	What you have on your mind?
+<</eve>>
+<br /><br />
+<<if timeBetween('08:00', '20:00')>>
+    <<if recall($suppCode)>>
+        <<link 'Go find some champagne'>>
+            <<set $player.companionsHome = $player.companions>>
+            <<set $player.companions = {}>>
+            <<goto 'Eve - date [champagne]'>>
+        <</link>>
+    <<else>>
+        <div class="link-internal disabled" style="background: #ccc">
+            Go find some champagne
+            <<notPatreonIcon>>
+        </div>
+    <</if>>
+<</if>>
+
+<<link 'Leave'>>
+	<<goto 'Eve room'>>
+<</link>>
