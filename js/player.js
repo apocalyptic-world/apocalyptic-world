@@ -27,7 +27,7 @@ setup.player = {
             recognitionPercentageReputation = Math.floor(variables().player.reputation / 2);
         }
 
-        return Math.max(recognitionPercentage, recognitionPercentage);
+        return setup.percentageChance(Math.max(recognitionPercentage, recognitionPercentageReputation));
     },
 
     /**
