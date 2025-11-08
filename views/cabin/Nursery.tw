@@ -112,7 +112,7 @@
 			<tr class="item">
 				<td class="min25">
 					<span @class="_genderClass + _customColorStyle">
-						<span data-balloon-length="medium" @aria-label="Mother: '' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
+						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
 								<<unset $guestId, $charId, $slaveId>>
 								<<set $childId = $nursery.findIndex(obj => obj.id === _nursery.id)>>
@@ -126,7 +126,9 @@
 					<<=setup.npcListInfo(_nursery)>>
 				</td>
 				<td>
-					Age: <<=setup.getAge(_nursery)>>
+					<span data-balloon-length="medium" @aria-label="'Born: ' + (_nursery ? _nursery.birthDate.toDateString() : '????') + ''" data-balloon-pos="up-left">
+						Age: <<=setup.getAge(_nursery)>>
+					</span>
 				</td>
 				<td class="throw-out">
 					<<link 'Throw out'>>
