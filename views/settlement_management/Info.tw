@@ -26,6 +26,7 @@
 	happylvl: {
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
+	people: {adult: 0, student: 0},
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
 	milk: 0,
@@ -103,8 +104,13 @@
 	<<elseif _job === 'quarry'>>
 		<<set _settlementStatsData.mining += 1 + (_statsNpc.strength >= 50 ? 0.25 : 0)>>
 	<</if>>
-	<<if  setup.getAge(_statsNpc) > 3>>
+	<<if  setup.getAge(_statsNpc) >= 5>>
 		<<set _settlementStatsData.food.consume++>>
+		<<if  setup.getAge(_statsNpc) >= 18>>
+			<<set _settlementStatsData.people.adult++>>
+		<<else>>
+			<<set _settlementStatsData.people.student++>>
+		<</if>>
 	<<else>>
 		<<set _settlementStatsData.food.none++>>
 	<</if>>
@@ -173,8 +179,10 @@
 	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
 	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
 	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
-	<tr><td>Total (people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
-	<tr><td>(kids < 3 years)</td><td><<=_settlementStatsData.food.none>></td></tr>
+	<tr><td>Total people ≥ 5 years (normal food consumption)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
+	<tr><td>... Adults (≥ 18 years)</td><td><<=_settlementStatsData.people.adult>></td></tr>
+	<tr><td>... School-age (5 to 17 years)</td><td><<=_settlementStatsData.people.student>></td></tr>
+	<tr><td>Babies < 5 years (neglible food consumption)</td><td><<=_settlementStatsData.food.none>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><th colspan="3">Working</th></tr>
 	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 10)>>)</td></tr>
@@ -210,12 +218,15 @@
 			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max ' + ($workersLimitHospital ?? 3) + ')' >>
 		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
 
+		<tr><td>Working as milk warden:</td><td><<=_settlementStatsData.work.milkwarden ?? 0>></td><td>(Max 1)</td></tr>
 		<<set _text = !$player.quests?.milk_farm ? '(Vincent have an idea → build milk barn → assign dairy cattle)' : !$game.location?.milk_barn ? '(Build milk barn → assign dairy cattle)' : !_settlementStatsData.work?.milk_barn ? '(Assign dairy cattle)' : '(Average milk/day: ' + setup.ppFraction(_settlementStatsData.milk) + ')'>>
 		<tr><td>Dairy cattle in milk barn:</td><td><<=_settlementStatsData.work.milk_barn ?? 0>></td><td><<=_text>></td></tr>
 	<</if>>
 
 	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
 	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
+	<tr><td>... in school:</td><td><<=_settlementStatsData.people.student ?? 0>></td></tr>
+	<tr><td>... babies, pre-school:</td><td><<=_settlementStatsData.food.none ?? 0>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><th colspan="3">Interesting?</th></tr>
 	<tr><td># pregnant women</td><td><<=_settlementStatsData.pregnant ?? 0>></td>
