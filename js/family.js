@@ -18,6 +18,10 @@ setup.family = {
         return (npc.family?.hasOwnProperty('mother') && setup.getNpcById(npc.family.mother) && setup.family.isBloodToMC(setup.getNpcById(npc.family.mother))) || (npc.family?.hasOwnProperty('father') && setup.getNpcById(npc.family.father) && setup.family.isBloodToMC(setup.getNpcById(npc.family.father))) ;
     },
 
+    isBlood: function (npc, npc2) {
+        return this.isBloodToMC(npc) && this.isBloodToMC(npc2);
+    },
+
     getFamily: function(npc) {
         function getNPCList() {
             const npcs = (variables().slaves ?? []).concat((variables().guests ?? []), (variables().nursery ?? []), Object.values(variables().characters ?? {}));
