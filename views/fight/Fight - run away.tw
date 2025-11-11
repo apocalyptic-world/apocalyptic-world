@@ -13,9 +13,11 @@ As you run away you dropped few things.
 
 <<if _capsMissing > 0>>
 	<strong>You dropped <<=_capsMissing>> caps</strong><br />
+	<<set $player.money -= _capsMissing>>
 <</if>>
 <<if _foodMissing > 0>>
 	<strong>You dropped <<=_foodMissing>> food</strong><br />
+	<<drop $backpack 'food' _foodMissing>>
 <</if>>
 
 <br /><br />
