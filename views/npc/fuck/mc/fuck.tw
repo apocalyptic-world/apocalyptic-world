@@ -32,14 +32,6 @@
     <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
         <<include 'MC fuck flaccid'>>
     <</if>>
-    <<if 
-        ($sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')) || 
-        ($sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('cumslut')) || 
-        ($sexAction === 'cum_in_throat' && $tmpGirl.traits.includes('cumslut')) || 
-        (['nipple_lick', 'titjob'].includes($sexAction) && $tmpGirl.traits.includes('sensitive_tits'))
-    >>
-        <<set $tmpGirl.horny = Math.min(($tmpGirl.horny += 30), 100)>>
-    <</if>>
     <<if _showSex>>
         <<if settings.buttons_on_top>>
             <<include 'Mc fuck buttons'>>
@@ -48,7 +40,10 @@
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
             <<set _npcHornyGained = (_sexActions[$sexAction].hornyGive ?? 20)>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _npcHornyGained, 100)>>
+            <<set _maxNpcHorny = (_sexActions[$sexAction]?.maxHorny ?? null)>>
+            <<if (_maxNpcHorny === null || $tmpGirl.horny < _maxNpcHorny)>>
+                <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _npcHornyGained, 100)>>
+            <</if>>
         <</if>>
         <<set _npcHorny = clone($tmpGirl.horny)>>
         <<showmeter '$npcHornyBar' '_npcHorny / 100'>>

@@ -32,6 +32,9 @@
         minAction: 25,
         horny: 20,
         maxCorruption: 40,
+        maxHorny: 60,
+        positive: $tmpGirl.traits.includes('sensitive_tits'),
+        hornyGive: 10,
         show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && !['gloryhole', 'milk_barn'].includes($tmpGirl.location) && _canFuck
     },
     nipple_lick: {
@@ -41,7 +44,8 @@
         maxCorruption: 20,
         show: [0, 2].includes($tmpGirl.gender) && !['gloryhole', 'milk_barn'].includes($tmpGirl.location),
         positive: true,
-        hornyGive: 5,
+        hornyGive: $tmpGirl.traits.includes('sensitive_tits') ? 10 : 5,
+        maxHorny: 60,
         maxMcHorny: 30
     },
     bj: {
@@ -177,9 +181,14 @@
         minAction: 45,
         positive: (($tmpGirl.traits ?? []).includes('cumslut') && $tmpGirl.horny <= 79)
     },
-    cum_throat: {
+    cum_in_throat: {
         show: false,
         minAction: 50,
         positive: ($tmpGirl.traits ?? []).includes('cumslut') || ($tmpGirl.traits ?? []).includes('deepthroat')
+    },
+    cum_in_pussy: {
+        show: false,
+        positive: true,
+        hornyGive: $tmpGirl.traits.includes('cumslut') || $tmpGirl.traits.includes('breeder') ? 30 : 10
     }
 }>>
