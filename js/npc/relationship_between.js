@@ -19,6 +19,22 @@ setup.relationshipBetween = {
         return false;
     },
 
+    increaseByParty: function() 
+    {
+        for (let _guestI in this.guests) {
+            let _guest = this.guests[_guestI];
+            if (this.npc.id === _guest.id) {
+                continue;
+            }
+
+            this.npc.relationshipBetween.stats[_guest.id]??=0;
+            this.npc.relationshipBetween.stats[_guest.id] = Math.min(
+                (this.npc.relationshipBetween.stats[_guest.id] + randomInteger(-5, 10)),
+                100
+            );
+        }
+    },
+
     increaseByAssignedTo: function() 
     {
         let colleagues = setup.getPersonsForLocation(variables().guests, this.npc.assignedTo);
@@ -57,6 +73,25 @@ setup.relationshipBetween = {
         this.npc.relationshipBetween.likes = setup.getRandomElement(likeableGuests);
     },
 
+    setDislike: function() {
+        let dislikeableGuests = [];
+
+        for (let targetNpcId in this.npc.relationshipBetween.stats) {
+            let stat = this.npc.relationshipBetween.stats[targetNpcId];
+            let targetNpc = setup.getNpcById(targetNpcId);
+
+            if (targetNpc && stat <= -70) {
+                dislikeableGuests.push(targetNpcId);
+            }
+        }
+
+        if (!dislikeableGuests.length) {
+            return;
+        }
+
+        this.npc.relationshipBetween.dislikes = setup.getRandomElement(dislikeableGuests);
+    },
+
     run: function() {
         let start = Date.now();
         this.guests = variables().guests;
@@ -76,13 +111,37 @@ setup.relationshipBetween = {
                 delete this.npc.relationshipBetween.likes;
             }
             if (setup.percentageChance(5) && this.npc.relationshipBetween.likes === null) {
-                this.setLike()
+                this.setLike();
             }
         }
 
         let end = Date.now() - start;
 
         this.getMatches();
+    },
+
+    runParty: function() {
+        let start = Date.now();
+        this.guests = variables().guests;
+        let guestsCount = this.guests.length;
+    
+        for (let i = 0; i < guestsCount; i++) {
+            this.npc = this.guests[i];
+            this._init();
+            this.increaseByParty();
+
+            if (this.npc.relationshipBetween.likes !== null && this.npc.relationshipBetween.likes === this.npc.id) {
+                delete this.npc.relationshipBetween.likes;
+            }
+            if (setup.percentageChance(5) && this.npc.relationshipBetween.likes === null) {
+                this.setLike();
+            }
+            if (setup.percentageChance(5) && this.npc.relationshipBetween.dislikes === null) {
+                this.setDislike();
+            }
+        }
+
+        let end = Date.now() - start;
     },
 
     getMatches: function(notMarried) {
