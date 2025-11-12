@@ -624,6 +624,17 @@
             hornyGive: 5,
             maxMcHorny: 30
         },
+        nipple_lick_b_anal: {
+            title: 'Lick nipples + girl ass fucked',
+            minAction: 50,
+            horny: 1,
+            maxMcHorny: 30,
+            maxCorruption: 100,
+            positive: $tmpGirl.anal >= 20,
+            hornyGive: 20,
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+            stats: 'anal'
+        },
         handjob: {
             title: 'Handjob',
             minAction: 5,
@@ -671,6 +682,16 @@
             orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
             stats: 'bj'
         },
+        bj_b_bj: {
+            title: 'Blowjob + girl gives blowjob',
+            minAction: 30,
+            horny: 20,
+            maxCorruption: 50,
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
+            positive2: true,
+            hornyGive2: 20,
+            stats: 'bj'
+        },
         bj_a_anal: {
             title: 'Blowjob + tgirl gets fucked',
             minAction: 70,
@@ -705,6 +726,26 @@
             hornyGive2: 20,
             stats: 'pussy'
         },
+        bj_b_anal: {
+            title: 'Blowjob + girl ass fucked',
+            minAction: 70,
+            horny: 20,
+            maxCorruption: 100,
+            show: $tmpGirl.anal >= 20,
+            hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && ($tmpGirl.traits ?? []).includes('cumslut'),
+            stats: ['anal', 'bj']
+        },
+        dp: {
+            title: 'Deepthroat',
+            minAction: 40,
+            horny: 20,
+            maxCorruption: 60,
+            show: _canFuck && !$tmpGirl.gagBall,
+            positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
+            stats: 'dp'
+        },
         pussy_lick: {
             title: 'Lick pussy',
             minAction: 30,
@@ -725,6 +766,28 @@
             hornyGive2: 20,
             maxMcHorny: 60,
             stats: 'bj'
+        },
+        pussy: {
+            title: 'Fuck pussy',
+            minAction: 40,
+            horny: 20,
+            maxCorruption: 60,
+            show: !$tmpGirl.gender && !$tmpGirl.chastityBelt && _canFuck,
+            positive: !$tmpGirl.virgin,
+            hornyGive: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+            stats: 'pussy'
+        },
+        pussy_b_handjob: {
+            title: 'Fuck pussy + girl gives handjob',
+            minAction: 40,
+            horny: 20,
+            maxCorruption: 60,
+            show: _canFuck,
+            positive: !$tmpGirl.virgin,
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+            positive2: true,
+            hornyGive2: 20,
+            stats: 'pussy'
         },
         pussy_b_bj: {
             title: 'Fuck pussy + girl gives blowjob',
@@ -828,6 +891,29 @@
             positive: ($tmpGirl.traits ?? []).includes('sadistic'),
             hornyGive: 5
         },
+        nipple_lick_anal_reverse: {
+            title: 'Lick tits & get ass fucked',
+            minAction: 30,
+            horny: 20,
+            maxCorruption: 100,
+            show: ($tmpGirl2.traits ?? []).includes('sadistic'),
+            positive: true,
+            hornyGive: 5,
+            positive2: ($tmpGirl2.traits ?? []).includes('sadistic'),
+            hornyGive2: 5,
+            stats: 'anal'
+        },
+        handjob_anal_reverse: {
+            title: 'Handjob & get ass fucked',
+            minAction: 30,
+            horny: 20,
+            maxCorruption: 100,
+            show: ($tmpGirl2.traits ?? []).includes('sadistic'),
+            positive: true,
+            hornyGive: 20,
+            positive2: ($tmpGirl2.traits ?? []).includes('sadistic'),
+            hornyGive2: 5
+        },
         bj_anal_reverse: {
             title: 'Blowjob & get ass fucked',
             minAction: 30,
@@ -872,6 +958,11 @@
         cum_on_face: {
             show: false,
             minAction: 35
+        },
+        cum_in_mouth: {
+            show: false,
+            minAction: 45,
+            positive: (($tmpGirl.traits ?? []).includes('cumslut') && $tmpGirl.horny <= 79)
         }
     }>>
 <<elseif $tmpGirl.gender === 2 && $tmpGirl2.gender === 0>>
@@ -896,6 +987,28 @@
             positive: true,
             hornyGive: 5,
             maxMcHorny: 30
+        },
+        nipple_lick_a_bj: {
+            title: 'Lick nipples + tgirl gets a blowjob',
+            minAction: 30,
+            horny: 1,
+            maxCorruption: 20,
+            positive: true,
+            hornyGive: 5,
+            maxMcHorny: 30,
+            orConditionTrue: ($tmpGirl2.traits ?? []).includes('cumslut'),
+            stats2: 'bj'
+        },
+        nipple_lick_b_anal: {
+            title: 'Lick nipples + tgirl gets fucked',
+            minAction: 50,
+            horny: 1,
+            maxMcHorny: 30,
+            maxCorruption: 100,
+            positive: $tmpGirl.anal >= 20,
+            hornyGive: 20,
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+            stats: 'anal'
         },
         handjob: {
             title: 'Handjob',
@@ -965,6 +1078,17 @@
             hornyGive2: 2,
             stats: 'bj'
         },
+        anal_fingering: {
+            title: 'Finger ass',
+            minAction: 60,
+            horny: 2,
+            maxCorruption: 70,
+            positive: $tmpGirl.anal >= 10,
+            hornyGive: (($tmpGirl.traits ?? []).includes('analslut') ? 10 : 2),
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+            maxMcHorny: 60,
+            stats: 'anal'
+        },
         anal: {
             title: 'Fuck ass',
             minAction: 50,
@@ -986,7 +1110,7 @@
             hornyGive: 20,
             orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
             positive2: true,
-            hornyGive2: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+            hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
             stats: 'anal'
         },
         anal_a_pussy_lick: {
@@ -999,7 +1123,7 @@
             hornyGive: 20,
             orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
             positive2: true,
-            hornyGive2: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+            hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
             stats: 'anal'
         },
         anal_a_handjob: {
@@ -1035,9 +1159,23 @@
             hornyGive: 20,
             orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
             positive2: true,
-            hornyGive2: (!($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5),
+            hornyGive2: (!($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
             stats: 'anal',
             stats2: 'pussy'
+        },
+        anal_a_anal: {
+            title: 'Fuck ass + tgirl fucks ass',
+            minAction: 50,
+            horny: 20,
+            maxCorruption: 100,
+            show: _canFuck,
+            positive: $tmpGirl.anal >= 20,
+            hornyGive: 20,
+            orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+            positive2: $tmpGirl2.anal >= 20,
+            hornyGive2: (($tmpGirl2.traits ?? []).includes('analslut') ? 20 : 5),
+            stats: 'anal',
+            stats2: 'anal'
         },
         bj_reverse: {
             title: 'Give a blowjob',
@@ -1046,6 +1184,17 @@
             maxCorruption: 20,
             positive: true,
             hornyGive: 20,
+            maxMcHorny: 60
+        },
+        bj_reverse_a_pussy_lick: {
+            title: 'Give a blowjob + tgirl licks pussy',
+            minAction: 10,
+            horny: 3,
+            maxCorruption: 20,
+            positive: true,
+            hornyGive: 20,
+            positive2: true,
+            hornyGive2: 20,
             maxMcHorny: 60
         },
         bj_reverse_b_anal: {
