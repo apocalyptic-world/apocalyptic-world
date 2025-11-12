@@ -93,6 +93,9 @@ setup.actionText.transfemale = {
     threesome_f_anal: [
         "%name% moans softly as you fuck her ass."
     ],
+    threesome_f_anal_a_anal: [
+        "You fuck %name% in the ass, while she fucks %name2% in the ass!"
+    ],
     threesome_f_anal_a_bj: [
         "You fuck %name% in the ass, while %name2% gives her a blowjob!"
     ],
@@ -143,6 +146,9 @@ setup.actionText.transfemale = {
     ],
     threesome_f_bj_reverse: [
         "You suck %name%'s dick."
+    ],
+    threesome_f_bj_reverse_a_pussy_lick: [
+        "You suck %name%'s dick, while she licks %name2%'s pussy!"
     ], 
     threesome_f_bj_reverse_anal_reverse: [
         "%name% fucks your mouth, while %name2% fucks your ass with her strapons."
@@ -194,6 +200,12 @@ setup.actionText.transfemale = {
     ],
     threesome_f_nipple_lick: [
         "You and %name2% lick %name%'s nipples, and squeeze her tits hard!"
+    ],
+    threesome_f_nipple_lick_a_bj: [
+        "You lick %name%'s nipples, while %name2% gives her a blowjob!"
+    ],
+    threesome_f_nipple_lick_b_anal: [
+        "You lick %name%'s nipples, while %name2% fucks her in the ass with a strapon!"
     ],
     threesome_f_nipple_lick_anal_reverse: [
         "You lick %name%'s nipple, while %name2% fucks your ass with her strapon."

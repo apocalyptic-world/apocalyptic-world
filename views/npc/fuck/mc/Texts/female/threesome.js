@@ -91,7 +91,7 @@ setup.actionText.female = {
         "You and %name2% lick %name%'s nipples, and squeeze her tits hard!"
     ],
     threesome_f_nipple_lick_anal_reverse: [
-        "You lick %name%'s nipple, while %name2% fucks your ass with her strapon."
+        "You lick %name%'s nipples, while %name2% fucks your ass with her strapon."
     ],
     threesome_f_pussy: [
         "You fuck %name%'s tight pussy"
@@ -242,6 +242,9 @@ setup.actionText.female = {
     ],
     threesome_t_bj: [
         "%name% and %name2% suck your hard dick in turn with their warm mounths and agile tongues!"
+    ],
+    threesome_t_bj_b_bj: [
+        "%name% sucks your hard dick and %name2%'s in turn!"
     ], 
     threesome_t_bj_anal_reverse: [
         "%name% gives you a blowjob, while %name2% fucks your ass."
@@ -307,7 +310,7 @@ setup.actionText.female = {
         "%name% gives you a nice handjob, while fucking %name2%'s ass with her strapon."
     ],
     threesome_t_handjob_anal_reverse: [
-        "%name% gives you a handjob, while %name2% fucks your ass with her strapon."
+        "%name% gives you a handjob, while %name2% fucks your ass."
     ],
     threesome_t_handjob_b_bj: [
         "%name% gives you a nice handjob, while sucking %name2%'s cock."
@@ -325,7 +328,10 @@ setup.actionText.female = {
         "You and %name2% lick %name%'s nipples, and squeeze her tits hard!"
     ],
     threesome_t_nipple_lick_anal_reverse: [
-        "You lick %name%'s nipple, while %name2% fucks your ass with her strapon."
+        "You lick %name%'s nipples, while %name2% fucks your ass."
+    ],
+    threesome_t_nipple_lick_b_anal: [
+        "You lick %name%'s nipples, while %name2% fucks her ass."
     ],
     threesome_t_pussy: [
         "You fuck %name%'s tight pussy"
@@ -341,6 +347,9 @@ setup.actionText.female = {
     ],
 	threesome_t_pussy_b_bj: [
         "You fuck %name%, while she gives %name2% a blowjob!"
+    ],
+    threesome_t_pussy_b_handjob: [
+        "You fuck %name%, while she gives %name2% a handjob!"
     ],
 	threesome_t_pussy_bj_reverse: [
         "You fuck %name%, while giving %name2% a blowjob!"
