@@ -642,26 +642,19 @@ setup.getHornyPersons = function (persons) {
 };
 
 setup.decrypt = function(encryptedText) {
-    var decrypted = '';
-    for (var i = 0; i < encryptedText.length; i++) {
-        var char = encryptedText.charAt(i);
-        if (char.match(/[a-zA-Z0-9]/)) {
-            const charCode = char.charCodeAt(0);
-            var offset = 0;
+    const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let decrypted = "";
 
-            if (char.match(/[a-z]/)) {
-                offset = 97;
-            } else if (char.match(/[A-Z]/)) {
-                offset = 65;
-            } else if (char.match(/[0-9]/)) {
-                offset = 48;
-            }
-
-            var decryptedChar = String.fromCharCode(((charCode - offset - 1 + 36) % 36) + offset);
-            decrypted += decryptedChar;
-        } else {
+    for (let char of encryptedText) {
+        const lower = char.toLowerCase();
+        const index = alphabet.indexOf(lower);
+        if (index === -1) {
             decrypted += char;
+            continue;
         }
+        const newIndex = (index - 1 + 36) % 36;
+        const newChar = alphabet[newIndex];
+        decrypted += newChar;
     }
     return decrypted;
 };
