@@ -59,7 +59,7 @@ He hands you a small, intricately carved wedding ring.
         <</link>>
     <</linkreplace>>
 </div>
-<<if ($guests.length + 2) < $guesthouseLimit>>
+<<if ($game.location.guesthouse ?? false) && ($guests.length + 2) < $guesthouseLimit>>
     <div id="option_house">
         <<linkreplace 'Invite them to live with you'>>
             <<run $('#option_accept, #option_demand').hide()>>

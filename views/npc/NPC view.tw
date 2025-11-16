@@ -65,7 +65,7 @@
 	<</link>>
 <</if>>
 
-<<if !$tmpGirl.assignedTo && !($player.companions['slave:' + $slaveId] ?? false)>>
+<<if typeof $slaveId !== 'undefined' && !$tmpGirl.assignedTo && !($player.companions['slave:' + $slaveId] ?? false)>>
 	<<link 'Assign to'>>
 		<<dialog 'Assign to'>>
 			<<include 'Slave view assign to'>>	
