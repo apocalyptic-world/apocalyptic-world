@@ -91,10 +91,16 @@
 								<<set $tmpEvent = [_j, _k]>>
 								<<goto 'Guesthouse [Event] - female on female'>>
 							<<elseif ($guests[_j].gender == 0 && $guests[_k].gender == 1)>>
-								<<set $tmpEvent = [[_j], [_k]]>>
+								<<set $tmpEvent = {
+									maleGuestIds: [_k],
+									femaleGuestIds: [_j]
+								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>
 							<<elseif ($guests[_k].gender == 0 && $guests[_j].gender == 1)>>
-								<<set $tmpEvent = [[_k], [_j]]>>
+								<<set $tmpEvent = {
+									maleGuestIds: [_j],
+									femaleGuestIds: [_k]
+								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>
 							<<elseif ($guests[_j].gender == 1 && $guests[_k].gender == 1)>>
 								<<set $tmpEvent = [_j, _k]>>
@@ -157,7 +163,10 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_k], [_guysLikingGirls[0], _guysLikingGirls[1]]]>>
+					<<set $tmpEvent = {
+						maleGuestIds: [_guysLikingGirls[0], _guysLikingGirls[1]],
+						femaleGuestIds: [_k]
+					}>>
 					<<goto 'Guesthouse [Event] - males on female'>>
 				<</link>>
 			</span>
@@ -180,7 +189,10 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_k, _girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = {
+						femaleGuestIds: [_k, _girlsLikingBoth[0]],
+						maleGuestIds: [_guysLikingGirls[0]]
+					}>>
 					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
@@ -193,6 +205,10 @@
 					<<dialogclose>>
 
 					<<set $tmpEvent = [[_k, _girlsLikingBoth[0]], [_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = {
+						femaleGuestIds: [_k, _girlsLikingBoth[0]],
+						maleGuestIds: [_guysLikingGirls[0]]
+					}>>
 					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
@@ -213,7 +229,10 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_girlsLikingBoth[0], _girlsLikingBoth[1]], [_k]]>>
+					<<set $tmpEvent = {
+						femaleGuestIds: [_girlsLikingBoth[0], _girlsLikingBoth[1]],
+						maleGuestIds: [_k]
+					}>>
 					<<goto 'Guesthouse [Event] - male on females'>>
 				<</link>>
 			</span>
@@ -236,7 +255,10 @@
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
 
-					<<set $tmpEvent = [[_girlsLikingGuys[0]], [_k,_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = {
+						maleGuestIds: [_k,_guysLikingGirls[0]],
+						femaleGuestIds: [_girlsLikingGuys[0]]
+					}>>
 					<<goto 'Guesthouse [Event] - males on female'>>
 				<</link>>
 			</span>
@@ -247,8 +269,10 @@
 				<<link _linkName2>>
 					<<set $locationEvents.guesthouse = true>>
 					<<dialogclose>>
-
-					<<set $tmpEvent = [[_girlsLikingGuys[0]], [_k,_guysLikingGirls[0]]]>>
+					<<set $tmpEvent = {
+						maleGuestIds: [_k,_guysLikingGirls[0]],
+						femaleGuestIds: [_girlsLikingGuys[0]]
+					}>>
 					<<goto 'Guesthouse [Event] - males on female'>>
 				<</link>>
 			</span>
