@@ -55,12 +55,13 @@
 		<<set $player.nap = true>>
 		<<addhours 1>>
 		<<energy 20>>
-		<<if setup.getPersonsForLocation($guests, 'maid').length>>
+		<<if _npc>>
 			<<energy 20>>
 		<</if>>
-		<<if _isMaidInRoom && setup.percentageChance(30) && $tmpGirl.likesGuys && !($locationEvents.bedroom ?? false)>>
+		<<if _npc && setup.percentageChance(30) && _npc.likesGuys && !($locationEvents.bedroom ?? false)>>
 			<<set $tmpEvent = {
-				id: _girlGuest[0]
+				id: _isSlave ? _slaveId : _guestId,
+				isSlave: _isSlave
 			}>>
 			<<set $locationEvents.bedroom = true>>
 			<<goto 'Bedroom event - maid surprise'>>

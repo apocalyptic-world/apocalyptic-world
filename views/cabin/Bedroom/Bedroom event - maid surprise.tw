@@ -5,7 +5,7 @@ You stirred from your nap, slowly becoming aware of your surroundings. As you wo
 Confused, you opened your eyes to find <<=setup.displayName($tmpGirl)>> holding your blanket as she passionatly sucks your dick.
 <br /><br />
 <center>
-	[img[setup.ImagePath+'places/bedroom/maid1.webp']]
+    <<image 'places/bedroom/maid1.webp'>>
 </center>
 <br />
 <<sayNpc $tmpGirl>>
@@ -20,17 +20,21 @@ As you stretched and kicked off your blanket, she took a step back and checked y
     <</sayNpc>>
     <br />
     <center>
-        [img[setup.ImagePath+'places/bedroom/maid2.webp']]
+        <<image 'places/bedroom/maid2.webp'>>
     </center>
     <br />
     As she looked at you with warm smile, she slowly slides down her top straps and later removes her top and let's it fall on the ground.
     <br /><br />
     <<link 'Fuck her'>>
+        <<set $tmpGirlViewBack = $tmpEvent.isSlave ? 'NPC view' : 'NPC view - guest'>>
+        <<if $tmpEvent.isSlave>>
+			<<unset $guestId, $childId, $charId>>
+			<<set $slaveId = $tmpEvent.id>>
+		<<else>>
+			<<unset $slaveId, $childId, $charId>>
+			<<set $guestId = $tmpEvent.id>>
+		<</if>>
         <<set $tmpGirlBack = 'Bedroom'>>
-		<<set $guestId = $tmpEvent.id>>
-		<<run delete $slaveId>>
-		<<run delete $charId>>
-		<<set $tmpGirlViewBack = 'NPC view - guest'>>
         <<fuck $tmpGirl>>
     <</link>>
 <</linkreplace>>
