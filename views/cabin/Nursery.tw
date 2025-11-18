@@ -42,6 +42,16 @@
 	  		}
 	  		return 0;
 		})>>
+	<<elseif ($nsortBy === 'A')>>
+		<<set _nurserySorter.sort((a, b) => {
+		  	if (setup.getAge(b) < setup.getAge(a)) {
+		    		return -1;
+	  		}
+	  		if (setup.getAge(b) > setup.getAge(a)) {
+		    		return 1;
+	  		}
+	  		return 0;
+		})>>
 	<</if>>
 
 	<table id="slaves" class="npc-list">
@@ -67,7 +77,17 @@
 						<</if>>
 					</span>
 					<span>
-						<<if ($nsortBy == 'N' || $nsortBy === 'M')>>
+						<<if ($nsortBy !== 'A')>>
+							<<link 'Age (descending)'>>
+								<<set $nsortBy = 'A'>>
+								<<goto 'Nursery'>>
+							<</link>>
+						<<else>>
+							<strong> Age (descending) </strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($nsortBy == 'N' || $nsortBy == 'M' || $nsortBy == 'A')>>
 							<<link 'Arrival (default)'>><<set $nsortBy = 'D'>><<goto 'Nursery'>><</link>>
 						<<else>>
 							<strong>Arrival (default)</strong>
