@@ -613,28 +613,40 @@
 				<<run setup.sleepMessages.addJob('<span class="skill">' + $guests[_guestI].name + ' learned the woodcraft skill</span>', 'forest')>>
 			<</if>>
 
-			<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
-			<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
-				<<set _giveWood++>>
+			<<set _chanceOfNotComingHome = 6>>
+			<<if $guests[_guestI].strength >= 30>>
+				<<set _changeOfNotComingHome -=4>>
 			<</if>>
-			<<if setup.npcInventoryHas($guests[_guestI], 'axe')>>
-				<<set _giveWood = _giveWood * 2>>
+	
+			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
+				<<set _chanceOfNotComingHome -=1>>
 			<</if>>
-			<<set _totals.wood += _giveWood>>
-			<<if _isStorageAvailable>>
-				<<pickup $storage 'wood' _giveWood>>
+			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
+				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
-				<<pickup $backpack 'wood' _giveWood>>
-			<</if>>
-			<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest', 'forest')>>
-			<<if setup.percentageChance(10)>>
-				<<set _totals.food++>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'food' 1>>
-				<<else>>
-					<<pickup $backpack 'food' 1>>
+				<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
+				<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
+					<<set _giveWood++>>
 				<</if>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>', 'forest')>>
+				<<if setup.npcInventoryHas($guests[_guestI], 'axe')>>
+					<<set _giveWood = _giveWood * 2>>
+				<</if>>
+				<<set _totals.wood += _giveWood>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'wood' _giveWood>>
+				<<else>>
+					<<pickup $backpack 'wood' _giveWood>>
+				<</if>>
+				<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest', 'forest')>>
+				<<if setup.percentageChance(10)>>
+					<<set _totals.food++>>
+					<<if _isStorageAvailable>>
+						<<pickup $storage 'food' 1>>
+					<<else>>
+						<<pickup $backpack 'food' 1>>
+					<</if>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>', 'forest')>>
+				<</if>>
 			<</if>>
 		<</if>>
 		<<unset _hunter_no_bow>>
@@ -675,7 +687,7 @@
 			<</if>>
 
 			<<set _chanceOfNotComingHome = 10>>
-			<<if $guests[_guestI].strength >= 30>>
+			<<if $guests[_guestI].strength >= 40>>
 				<<set _changeOfNotComingHome -=4>>
 			<</if>>
 			<<if ($guests[_guestI].skills ?? []).includes('scavenger')>>
