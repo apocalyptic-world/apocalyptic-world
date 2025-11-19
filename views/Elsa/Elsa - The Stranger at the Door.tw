@@ -1,0 +1,174 @@
+:: Elsa - The Stranger at the Door [bg-forest]
+<br /><br />
+It was late afternoon by the time you reached Elsa’s home again.
+Birds circled lazily above the tree line.
+A calm day — one of the few left in this world.
+<br /><br />
+<center>
+    <<image 'places/farm/wood_house5.jpg' sfw>>
+</center>
+<br />
+But the moment you approached the cabin, you sensed something was wrong.
+<br /><br />
+Elsa’s mother stood outside, arms crossed tightly over her chest.
+Elsa peeked from behind her, eyes wide and anxious.
+Both of them were staring at the same thing.
+<br /><br />
+<center>
+    <<image 'people/elsa/stranger1.jpg' sfw>>
+</center>
+<br />
+<strong>
+    A man sat slumped against the wall of the cabin
+</strong>
+<br /><br />
+Dirty.
+<br />
+Bloodied.
+<br />
+Barely conscious.
+<br />
+Not one of Negan’s men — you would’ve recognized the markings immediately.
+He wore no insignia, no weapon you could see. His breathing was shallow, strained.
+<br /><br />
+Elsa’s mother looked at you with a storm of uncertainty in her eyes.
+<br /><br />
+<<sayNpc $characters.elsa.mother>>
+    He staggered out of the woods an hour ago… and collapsed right there.
+    I didn’t touch him. I didn’t move him.
+<</sayNpc>>
+<br />
+Elsa whispered.
+<br /><br />
+<<elsa>>
+    Mom said not to go near him.
+<</elsa>>
+<br />
+<<sayNpc $characters.elsa.mother>>
+    Could be scouting. Could be bait.
+    Could be dying.
+<</sayNpc>>
+<br />
+She stepped closer to you, lowering her voice.
+<br /><br />
+<<sayNpc $characters.elsa.mother>>
+    I don’t know if we should help him… or send him away before trouble comes.
+<</sayNpc>>
+<br />
+The man groaned faintly.
+His eyes cracked open just enough to meet yours — weary, terrified, pleading.
+<br /><br />
+<center>
+    <<image 'people/elsa/stranger2.jpg' sfw>>
+</center>
+<br />
+He tried to speak.
+<br /><br />
+<<newguy>>
+<<sayNpc $tmpGuy>>
+    P… plea… se… don’t let them… find me…
+<</sayNpc>>
+<br />
+Elsa flinched, clutching her mother’s arm.
+<br /><br />
+<<elsa>>
+    He’s scared…
+<</elsa>>
+<br />
+Her mother’s jaw tightened.
+<br /><br />
+<<sayNpc $characters.elsa.mother>>
+    Or pretending. That’s how groups lure people out. They leave someone half-dead, and when you help—
+    the rest come out of the trees.
+<</sayNpc>>
+<br />
+<<sayNpc $characters.elsa.mother>>
+    I trust you. So you decide.
+<</sayNpc>>
+<br />
+<div id="option_int">
+    <<linkreplace 'Intorigate him'>>
+        <<set _int = true>>
+        Elsa stood a few steps back, watching anxiously.
+        Her mother hovered near the doorway, hand resting on the handle of a kitchen knife — not trusting the stranger, but trusting you.
+        <br /><br />
+        You tapped the man’s cheek lightly.
+        <br /><br />
+        <<you>>
+            Hey. Wake up.
+        <</you>>
+        <br />
+        His eyes fluttered open. They were unfocused, glassy, but alive.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            D… don’t… don’t send me back…
+        <</sayNpc>>
+        <br />
+        His voice was thin, trembling.
+        He tried lifting his head, failed, then forced himself again.
+        <br /><br />
+        <<you>>
+            Who were you running from?
+        <</you>>
+        <br />
+        <<sayNpc $tmpGuy>>
+            Group… six of ‘em… hunters… not the animal kind…
+        <</sayNpc>>
+        <br />
+        His throat worked as he swallowed painfully.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            They take people… trade them… sell what’s left…
+        <</sayNpc>>
+        <br />
+        You watched him carefully.
+        His breathing, the twitch in his hands, the terror behind his voice — it all felt real.
+        <br /><br />
+        <<you>>
+            What do you want from us?
+        <</you>>
+        <br />
+        His head drooped again, exhausted.
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_leave">
+    <<linkreplace 'He stays'>>
+        <<if !_int>>
+            <<run $('#option_int').hide()>>
+        <</if>>
+        <<you>>
+            He stays
+        <</you>>
+        <br />
+        <<=setup.displayName($characters.elsa.mother)>> eyes widened — not in disagreement, but in surprise at how confidently you said it.
+        <br /><br />
+        <<sayNpc $characters.elsa.mother>>
+            Here? In this house?
+        <</sayNpc>>
+        <br />
+        <<you>>
+            Outside he’ll die. Inside he’ll live. And he won’t be a threat in this condition
+        <</you>>
+        <br />
+        <<sayNpc $characters.elsa.mother>>
+            Fine.
+            <br />
+            But he sleeps on the floor near the stove. And I’m keeping the knife.
+        <</sayNpc>>
+        <br />
+        Her mother looked at you.
+        For a moment, her stern expression softened.
+        <br /><br />
+        <<sayNpc $characters.elsa.mother>>
+            You’re putting a lot of trust in a stranger…
+        <</sayNpc>>
+        <br />
+        You nodded.
+        <br /><br />
+         <<link 'Leave'>>
+            <<set $characters.elsa.quests.stranger_at_doors_day = $game.day>>
+            <<goto 'Elsa - Wood house'>>
+        <</link>>
+    <</linkreplace>>
+</div>

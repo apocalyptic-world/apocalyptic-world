@@ -10,6 +10,11 @@
     Hey! What's bring you here?
 <</sayNpc>>
 <br />
+<<if $characters.elsa.quests.penetration_day && !$characters.elsa.quests.stranger_at_doors_day && ($characters.elsa.quests.penetration_day + 3) < $game.day>>
+    <<goto 'Elsa - The Stranger at the Door'>>
+<<elseif $characters.elsa.quests.stranger_at_doors_day && !$characters.elsa.quests.stranger_peeking_day && ($characters.elsa.quests.stranger_at_doors_day + 6) < $game.day>>
+    <<goto 'Elsa - The Stranger peeking'>>
+<</if>>
 <<if !$characters.elsa.quests.food_delivery && $backpack.count('food') >= 30 && $backpack.count('wood') >= 30>>
     <<link 'Give them food and wood'>>
         <<goto 'Elsa - food delivery'>>
