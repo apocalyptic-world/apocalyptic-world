@@ -1,0 +1,129 @@
+:: Elsa - Shadows at the Well [bg-forest]
+<br /><br />
+The forest greeted you with its usual quiet — the crunch of old leaves, the whisper of branches swaying overhead, the distant cry of a lone bird.
+<br /><br />
+<center>
+    <<image 'places/farm/wood_house5.jpg' sfw>>
+</center>
+<br /><br />
+But something felt… off.
+A tension in the air you couldn’t quite place.
+<br /><br />
+As you approached the clearing, you stopped.
+<br /><br />
+<center>
+    <<image 'people/elsa/shower1.jpg' sfw>>
+</center>
+<br />
+The man you had taken in — the stranger you had saved — stood behind the cabin, half-hidden by the wooden wall.
+<br /><br />
+He leaned forward, peering around the corner with intent focus.
+<br /><br />
+He looked healthier now.
+<br />
+Color in his cheeks.
+<br />
+Stronger posture.
+<br />
+Able to stand on his own.
+<br />
+You narrowed your eyes and stepped closer, silent as a shadow.
+<br />
+It wasn’t until you were almost beside him that you saw what he was staring at:
+<br /><br />
+<center>
+    <<image 'people/elsa/shower1.webp'>>
+</center>
+<br />
+Elsa’s mother, rinsing water from her hair in the makeshift outdoor shower behind the cabin.
+<br />
+Her hands moved over her body with a familiar, almost ritualistic touch, soaping and rinsing, 
+cleansing the layers of dirt and sweat that had accumulated over the course of her labors. 
+But as the water continued to flow, her movements took on a different quality, a shift from necessity to something more intimate and personal.
+<br /><br />
+<div id="option_scold">
+    <<linkreplace 'Scold him'>>
+        <<run $('#option_look').hide()>>
+        <<run $('#option_continue').show()>>
+        He jumped, stumbling back, nearly tripping over a stump behind him.
+        <br /><br />
+        <<set $player.goodwill++>>
+        <<you>>
+            What the hell do you think you’re doing?
+        <</you>>
+        <br />
+        Your glare hardened.
+        <br /><br />
+        He swallowed, breath shaking.
+        <br /><br />
+        <<sayNpc $characters.elsa.stranger>>
+            I’m sorry. Really… I’m sorry.
+        <</sayNpc>>
+        <br />
+        <<you>>
+            You’re alive because we let you stay. Don’t ever mistake that for permission to spy on her.
+        <</you>>
+        <br />
+        He turned and walked away toward the front of the cabin, shame visibly weighing on him.
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_look">
+    <<linkreplace 'Look together'>>
+        <<run $('#option_continue').show()>>
+        <<horny 10>>
+        <<run $('#option_scold').hide()>>
+        <<set $player.goodwill-->>
+        <<set $characters.elsa.quests.shower_look = true>>
+        <center>
+            <<image 'people/elsa/shower2.webp'>>
+        </center>
+        <br />
+        At times, her movements became more deliberate, more purposeful, her fingers tracing patterns and paths that sent shivers of pleasure coursing through her body. She leaned against the wood wall, her breath coming in soft, ragged gasps, her eyes closed, lost in the sensations that washed over her.
+        <br /><br />
+        As the water began to cool and the light faded, she reluctantly stepped out of the shower, her body still tingling with the aftershocks of her self-exploration. She wrapped herself in a tattered towel
+        <br /><br />
+    <</linkreplace>>
+</div>
+<div id="option_continue" style="display:none">
+    Elsa’s mother emerged from behind the shower curtain’s frame, wrapped in the towel, her hair dripping, strands clinging to her collarbone.
+    Her face was calm, but her eyes carried the faint concern of someone who sensed tension without knowing why.
+    <br /><br />
+    <center>
+        <<image 'people/elsa/shower2.jpg' sfw>>
+    </center>
+    <br />
+    <<sayNpc $characters.elsa.mother>>
+        Oh, <<=$player.name>>, hey!. Good that you are here. I wanted to talk about something. Because something happened yesterday…
+    <</sayNpc>>
+    <br />
+    She hesitated, then stepped a little closer, lowering her voice.
+    <br /><br />
+    <<sayNpc $characters.elsa.mother>>
+        I went out collecting berries near the old path. And I saw… men.
+    <</sayNpc>>
+    <br />
+    <<sayNpc $characters.elsa.mother>>
+        Three of them. Standing by the village well.
+    <</sayNpc>>
+    <br />
+    <<you>>
+        Did they see you?
+    <</you>>
+    <br />
+    <<sayNpc $characters.elsa.mother>>
+        No. I left as soon as I realized they weren’t travelers. They were searching for something. Or someone.
+    <</sayNpc>>
+    <br />
+    <<you>>
+        I will investigate it later.
+    <</you>>
+    <br />
+    A small breath of relief escaped her.
+    <br /><br />
+    <<link 'Leave'>>
+        <<addhours 2>>
+        <<set $characters.elsa.quests.shower_day = $game.day>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>

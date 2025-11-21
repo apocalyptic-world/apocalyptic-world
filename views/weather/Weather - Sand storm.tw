@@ -9,16 +9,19 @@ You awaken to the sound of a loud, howling wind outside. The wooden walls of you
 <br />
 As you open the cabin doors, a gust of wind pushes back, making it difficult to keep your balance. Outside, a massive sandstorm engulfs the landscape, turning the sky into a swirling, opaque mass of sand and debris. The trees in the forest surrounding your settlement bend and sway, their dense canopy providing some protection, but the storm is relentless.
 <br /><br />
-<<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
-<<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
-<<set _npc = $guests[_randomGuestId[0]]>>
+<<if $guests.length>>
+    <<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
+    <<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
 
-Stepping back inside, you see <<=setup.displayName(_npc)>> running towards you, their face partially covered with a makeshift scarf to keep the sand at bay.
-<br /><br />
-<<sayNpc _npc>>
-    It's sand storm. It's a bad one. We won't be able to get outside the camp today.
-<</sayNpc>>
-<br />
+    <<set _npc = $guests[_randomGuestId[0]]>>
+
+    Stepping back inside, you see <<=setup.displayName(_npc)>> running towards you, their face partially covered with a makeshift scarf to keep the sand at bay.
+    <br /><br />
+    <<sayNpc _npc>>
+        It's sand storm. It's a bad one. We won't be able to get outside the camp today.
+    <</sayNpc>>
+    <br />
+<</if>>
 <strong class="iitem">
     Today, no one who works outside the camp will be able to work.
 </strong>

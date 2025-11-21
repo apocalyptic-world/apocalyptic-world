@@ -7,7 +7,9 @@
 	<<goto 'Car breakdown event - Engine Failure'>>
 <</if>>
 
-<<if _randomNumber <= 5 && $weather?.weather === 'sun'>>
+<<if $characters?.elsa?.quests?.shower_day && !$characters?.elsa?.quests.well_day>>
+	<<goto 'Elsa - Village well'>>
+<<elseif _randomNumber <= 5 && $weather?.weather === 'sun'>>
 	<<goto 'Car explore event - The Chain Road'>>
 <<elseif _randomNumber <= 10 && $weather?.weather === 'rain'>>
 	<<goto 'Car explore event - The Graveyard of Steel'>>
