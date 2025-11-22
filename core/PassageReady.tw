@@ -120,7 +120,7 @@
 			importScripts(setup.Path + "packs/" + setup.packsCustom[key].name + "/actions.js")
 				.then(function() {
 					if (setup.packsCustom[key].extended ?? false) {
-						setup.mergeObjects(setup.actions, setup.actions[setup.packsCustom[key].name], setup.packsCustom[key].name + '/actions');
+						setup.actions = setup.mergeObjects(setup.actions, setup.actions[setup.packsCustom[key].name], setup.packsCustom[key].name + '/actions');
 						setup.actions[key] = true;
 					}
 					memorize('actions', setup.actions);
