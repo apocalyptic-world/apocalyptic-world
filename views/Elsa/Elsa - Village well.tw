@@ -1,3 +1,110 @@
 :: Elsa - Village well [bg-forest]
 <br /><br />
-....
+The drive to the old village felt wrong from the moment you turned onto the cracked dirt road.
+<br /><br />
+By the time you reached the outskirts of the abandoned settlement, nothing moved.
+No animals.
+No wind.
+Just an unsettling stillness pressing against the world.
+<br /><br />
+You killed the engine.
+<br /><br />
+Silence dropped like a stone.
+<br /><br />
+Near the stone well — half-collapsed, coated in moss — you saw them.
+<br /><br />
+<center>
+    <<image 'people/elsa/well1.jpg' sfw>>
+</center>
+<br />
+<strong>
+    Three men.
+</strong>
+<br /><br />
+Not travelers.
+<br />
+Not scavengers.
+<br /><br />
+Predators
+<br /><br />
+The men sat around it, laughing at something — a cruel, unrestrained kind of laughter that made your stomach knot.
+<br /><br />
+Over the fire hung a large iron pot.
+<br /><br />
+And whatever they were cooking…
+<br /><br />
+It wasn’t food.
+<br /><br />
+You couldn’t see the details — just shapes, fragments, something unmistakably wrong.
+A piece of someone’s past life tossed into a pot like it meant nothing.
+<br /><br />
+<center>
+    <<image 'people/elsa/well2.jpg' sfw>>
+</center>
+<br />
+One man jabbed a stick into the pot, poked something inside, and flicked it aside with childish amusement.
+<br /><br />
+The others roared with laughter.
+<br /><br />
+Your breath hardened.
+<br /><br />
+These weren’t men surviving the apocalypse.
+<br /><br />
+They were thriving in it.
+<br /><br />
+<<generateEnemies 3 0 3>>
+<<set _npc1 = $enemies[0]>>
+<<set _npc2 = $enemies[1]>>
+<<set _npc3 = $enemies[2]>>
+<<linkreplace 'Apprach them'>>
+    <<run $('#option_attack').hide()>>
+    At about thirty feet away, the tall one with the jagged scar across his skull noticed you.
+    His grin widened into something feral.
+    <br /><br />
+    <<sayNpc _npc1>>
+        Well, look at this. You lost, friend?
+    <</sayNpc>>
+    <br />
+    The other two rose slowly, stretching like bored wolves who just smelled meat.
+    <br /><br />
+    You didn’t answer. You simply stood there, chin high, eyes locked on all three.
+    <br /><br />
+    <<sayNpc _npc1>>
+        We’re looking for someone. A man. Early forties. Thin. Limp in his left leg.
+    <</sayNpc>>
+    <br />
+    Your pulse tightened.
+    <br /><br />
+    That description fit <strong>the stranger you found</strong>, the one recovering at Elsa’s home.
+    <br /><br />
+    <<sayNpc _npc1>>
+        He ran from one of our camps a few days ago. Took some things that weren’t his.
+    <</sayNpc>>
+    <br />
+    <<sayNpc _npc2>>
+        And he hurt someone on his way out. Hurt her real bad.
+    <</sayNpc>>
+    <br />
+    <<sayNpc _npc3>>
+        We don’t aim to kill him. Just want justice.
+    <</sayNpc>>
+    <br />
+    Their words sounded rehearsed.
+    <br /><br />
+    Too clean.
+    <br />
+    Too aligned.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+<</linkreplace>>
+<<link 'Attack them'>>
+    <<for _enemyI, _enemy range $enemies>>
+         <<set _enemy.cantKill = true>>
+         <<set _enemy.strength += randomInteger(10, 20)>>
+    <</for>>
+    <<set $player.goodwill -= 5>>
+    <<fight $enemies 'Elsa - Village well won' 'Garage'>>
+<</link>>
+<<set $characters.elsa.quests.well_day = $game.day>>

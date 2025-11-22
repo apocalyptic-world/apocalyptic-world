@@ -86,7 +86,9 @@
 	<<elseif $args[1] === 'revolver'>>
 		<<drop $backpack 'bullet_revolver' 1>>
 		<<set $fight.enemies[$args[0]].hp = 0>>
-		<<set $fight.enemies[$args[0]].killed = true>>
+		<<if !$fight.enemies[$args[0]].cantKill>>
+			<<set $fight.enemies[$args[0]].killed = true>>
+		<</if>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
