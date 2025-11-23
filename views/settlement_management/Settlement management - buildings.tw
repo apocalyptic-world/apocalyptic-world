@@ -78,6 +78,26 @@
 		},
 		goto: "Settlement management",
    },
+   church: {
+		show: !($game.location.church ?? false),
+		title: "Chuch",
+		description: "Could give people hope and increase happiness and maybe something more",
+		required: {
+           blueprint_church: 1,
+           wood: 150,
+           glass: 50,
+           cloth: 50
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.church = 1;
+            $game.location.church = true;
+            $game.location.youth_district = true;
+		},
+		goto: "Settlement management",
+   },
     milk_barn: {
 		show: !($game.location.milk_barn ?? false) && $player?.quests?.milk_farm,
 		title: "Milk barn",

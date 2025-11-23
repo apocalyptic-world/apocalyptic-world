@@ -166,6 +166,10 @@
 		<div>Relationship: <<=$characters.eve.relationship ?? 0>></div>
 		<<if !$characters?.eve?.quests?.new_home>>
 			Wait few days
+		<<elseif !$characters?.eve?.quests?.church_talk && !$game.location.church>>
+			Wait some time
+		<<elseif !$game.location.church>>
+			Build church
 		<<else>>
 			That's all for now
 		<</if>>
