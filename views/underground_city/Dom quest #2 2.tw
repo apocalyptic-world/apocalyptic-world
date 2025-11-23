@@ -238,46 +238,4 @@ You slowly and quietly approach the source of the smoke and notice that they are
 	</div>
 <</linkreplace>>
 
-<<widget domQuest2Invite>>
-	<<newgirl>>
-	<<set _mother = $tmpGirl>>
-	<<set _mother.race = 'white'>>
-	<<set _mother.birthDate = setup.getBirthDate(41)>>
-	<<set _mother.traits = ['analslut']>>
-	<<set _mother.skills = ['gardener', 'shopkeeper']>>
-	<<set _mother.sub = 90>>
-	<<set _mother.relationship = 100>>
-	<<set _mother.virgin = false>>
-	<<newgirl>>
-	<<set _daughter1 = $tmpGirl>>
-	<<set _daughter1.race = 'white'>>
-	<<set _daughter1.birthDate = setup.getBirthDate(19)>>
-	<<set _daughter1.skills = ['gardener']>>
-	<<set _daughter1.family = {
-		mother: _mother.id
-	}>>
-	<<set _daughter1.virgin = false>>
-	<<set _daughter1.relationship = 80>>
-	<<newgirl>>
-	<<set _daughter2 = $tmpGirl>>
-	<<set _daughter2.race = 'white'>>
-	<<set _daughter2.birthDate = setup.getBirthDate(20)>>
-	<<set _daughter2.skills = ['gardener']>>
-	<<set _daughter2.family = {
-		mother: _mother.id
-	}>>
-	<<set _daughter2.virgin = false>>
-	<<set _daughter2.relationship = 80>>
-	<<set _mother.family = {
-		kids: [
-		_daughter1.id,
-		_daughter2.id
-	]}>>
-	<<if $args[0] == 'guests'>>
-		<<run $guests.push(_mother, _daughter1, _daughter2)>>
-	<<else>>
-		<<run $slaves.push(_mother, _daughter1, _daughter2)>>
-	<</if>>
-<</widget>>
-
 
