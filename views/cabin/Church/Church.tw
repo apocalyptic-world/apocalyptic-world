@@ -1,8 +1,19 @@
 :: Church[bg-guesthouse]
 <h1 class="ptitle">CHURCH</h1>
 <br />
+<div id="characters-in-location">
+	<<if (_charactersInLocation['church'] ?? []).includes('eve')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+			<<goto 'Eve room'>>
+		<</link>>
+	<</if>>
+</div>
+<br />
 <<warning 'Work in progress.'>>
 <br />
+<<if $characters?.eve?.quests?.cabinType && !$characters.eve.quests.church_built_day>>
+    <<goto 'Eve - new church'>>
+<</if>>
 <<link 'Leave'>>
     <<addmins 5>>
     <<goto 'Youth district'>>
