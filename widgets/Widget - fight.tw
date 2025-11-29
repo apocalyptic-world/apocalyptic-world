@@ -367,6 +367,9 @@
 	<</if>>
 	<<for _i = 0; _i < $args[0]; _i++>>
 		<<newguy>>
+		<<if $tmpGuy.traits.includes("pacifist")>>
+			<<set $tmpGuy.traits = $tmpGuy.traits.filter(t => t !== "pacifist")>>
+		<</if>>
 		<<if _crossbowLeft>>
 			<<set $tmpGuy.inventory = {
 				crossbow: 1
@@ -388,6 +391,9 @@
 	<</for>>
 	<<for _i = 0; _i < $args[1]; _i++>>
 		<<newgirl>>
+		<<if $tmpGirl.traits.includes("pacifist")>>
+			<<set $tmpGirl.traits = $tmpGirl.traits.filter(t => t !== "pacifist")>>
+		<</if>>
 		<<if _crossbowLeft>>
 			<<set $tmpGirl.inventory = {
 				crossbow: 1
