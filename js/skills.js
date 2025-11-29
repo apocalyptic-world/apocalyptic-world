@@ -49,8 +49,13 @@ setup.skills = {
     }
 };
 
-setup.getRandomSkills = function (count = 1) {
-    var shuffledSkills = Object.keys(setup.skills).sort((a, b) => 0.5 - Math.random());
+setup.getRandomSkills = function (npc, count = 1) {
+    let availableSkills = Object.keys(setup.skills);
+    if (npc.traits && npc.traits.includes('pacifist')) {
+        availableSkills = availableSkills.filter(skill => skill !== "fighter");
+    }
+
+    const shuffledSkills = availableSkills.sort(() => 0.5 - Math.random());
 
     return shuffledSkills.slice(0, count);
 };
