@@ -5,7 +5,7 @@
 <<elseif $characters.blair.quests.missing_friend_found && !$characters.blair.quests.missing_friend_found_finished>>
 	<<set $characters.blair.quests.missing_friend_found_finished = true>>
 	<<goto 'Blair - quest missing friend found'>>
-<<elseif isMetChar('rodger') && $characters.rodger.quests.champagne && !$characters.blair.quests.house_party>>
+<<elseif isMetChar('rodger') && ($characters.rodger.quests.champagne || $characters?.rodger?.quests?.dead) && !$characters.blair.quests.house_party>>
 	<<set $characters.blair.quests.house_party = true>>
 	<<goto 'Blair - house party'>>
 <<elseif $characters.blair.quests.house_party_finished && !$characters.blair.quests.gate>>

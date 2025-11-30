@@ -93,9 +93,9 @@
 		<<elseif !$characters.blair.quests.bj>>
 			Wait till she makes a move on you
 			<br />
-		<<elseif !($characters.rodger.quests.champagne ?? false)>>
+		<<elseif !($characters.rodger.quests.champagne ?? false) && !$characters?.rodger?.quests.dead>>
 			Progress with Rodger
-		<<elseif ($characters.rodger.quests.champagne ?? false) && !$characters.blair.quests.house_party>>	
+		<<elseif (($characters.rodger.quests.champagne ?? false) || $characters?.rodger?.quests.dead) && !$characters.blair.quests.house_party>>	
 			Talk with her in the morning
 		<<elseif $characters.blair.quests.house_party && !$characters.blair.quests.house_party_finished>>	
 			Make a house party at fire place at 20:00 and invite any guest to your bedroom
