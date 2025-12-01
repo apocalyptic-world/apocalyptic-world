@@ -43,9 +43,11 @@
 	<</for>>
 
 	<<if $player.reputation > 250 && $fight.enemies.length > 1>>
+		<<set _enemiesLeftCount = $fight.enemies.length>>
 		<<set _enemies = []>>
 		<<for _enemyI, _enemy range $fight.enemies>>
-			<<if setup.percentageChance(30)>>
+			<<if setup.percentageChance(30) && _enemiesLeftCount > 1>>
+				<<set _enemiesLeftCount -= 1>>
 				<<set _fleeTextOpts to [
 					_enemy.name + ' fled the fight before it even started.',
 					_enemy.name + ' took one look at you and ran for their life.',

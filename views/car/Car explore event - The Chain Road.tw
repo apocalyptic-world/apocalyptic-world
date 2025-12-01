@@ -50,14 +50,17 @@ The slaves barely moved. One of them, a woman in a torn coat, glanced toward you
         <<newgirl>>
         <<set $tmpGirl.beauty = Math.max(100, $tmpGirl.beauty + 30)>>
         <<include 'NPC info'>>
-        <<if $slaves.length < $basementLimit && $player.money >= 30>>
+        <<if $slaves.length < $basementLimit && $player.money >= 50>>
             <br /><br />
             <<link 'Buy'>>
                 <<set _npc.capture = false>>
                 <<set $slaves.push(_npc)>>
-                <<set $player.money -= _npc.value>>
+                <<set $player.money -= 50>>
                 <<goto 'Garage'>>
             <</link>>
+            <<linkdesc>>
+                -50 caps
+            <</linkdesc>>
         <</if>>
         <<link 'Leave'>>
             <<goto 'Garage'>>

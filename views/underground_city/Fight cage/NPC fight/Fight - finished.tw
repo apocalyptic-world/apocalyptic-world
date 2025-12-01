@@ -8,7 +8,12 @@
 	Your victorious <<=_plural ? 'fighters come' : 'fighter comes'>> out of the ring elated, fists raised in the air as the roaring crowd chants their <<=_plural? 'names':'name'>>!!
 	<br /><br />
     <<for _fighterI, _fighter range $fightCage.fighters>>
-        <<set _npc = $guests[_fighter.key.split(',')[1]]>>
+        <<set _splitKey = _fighter.key.split(',')>>
+        <<if _splitKey[0] === 'guest'>>
+            <<set _npc = $guests[_splitKey[1]]>>
+        <<else>>
+            <<set _npc = $slaves[_splitKey[1]]>>
+        <</if>>
 		<<sayNpc _fighter>>
 		        <<=either([
 		            'That was so satisfying!',

@@ -29,6 +29,7 @@
                 <<set _nursery.stats[_skillJob]++>>
 
                 <<if (_nursery.stats[_skillJob] ?? 0) >= 100 && !(_nursery.skills ?? []).includes(_learnWhat)>>
+                    <<run _nursery.skills.push(_learnWhat)>>
                     <<run setup.sleepMessages.addJob('<span class="skill">' + _nursery.name + ' learned the ' + _learnWhat + ' skill</span>', 'school')>>
                 <</if>>
             <</if>>

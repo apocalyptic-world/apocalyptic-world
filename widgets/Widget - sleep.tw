@@ -299,6 +299,22 @@
 				<</if>>
 			<</if>>
 		<</if>>
+
+		<<if _npc.assignedTo === 'kitchen' && !_isSick>>
+			<<set _npc.stats['kitchen'] ??= 0>>
+			<<set _npc.stats['kitchen']++>>
+			<<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set _npc.stats['kitchen']++>>
+			<</if>>
+			// Learn skill
+			<<if _npc.stats['kitchen'] > 100 && !(_npc.skills ?? []).includes('cook')>>
+				<<if typeof _npc.skills === 'undefined'>>
+					<<set _npc.skills = []>>
+				<</if>>
+				<<run _npc.skills.push('cook')>>
+				<<run setup.sleepMessages.addJob('<span class="skill">Guest ' + _npc.name + ' learned the cook skill</span>', 'kitchen')>>
+			<</if>>
+		<</if>>
 		
 		// Starvation
 		<<if _isHeatWave>>
@@ -651,18 +667,18 @@
 		<</if>>
 		<<unset _hunter_no_bow>>
 
-		<<if $guests[_guestI].assignedTo === 'kitchen' && !_isSick>>
-			<<set $guests[_guestI].stats['kitchen'] ??= 0>>
-			<<set $guests[_guestI].stats['kitchen']++>>
-			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set $guests[_guestI].stats['kitchen']++>>
+		<<if _npc.assignedTo === 'kitchen' && !_isSick>>
+			<<set _npc.stats['kitchen'] ??= 0>>
+			<<set _npc.stats['kitchen']++>>
+			<<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+				<<set _npc.stats['kitchen']++>>
 			<</if>>
 			// Learn skill
-			<<if $guests[_guestI].stats['kitchen'] > 100 && !($guests[_guestI].skills ?? []).includes('cook')>>
-				<<if typeof $guests[_guestI].skills === 'undefined'>>
-					<<set $guests[_guestI].skills = []>>
+			<<if _npc.stats['kitchen'] > 100 && !(_npc.skills ?? []).includes('cook')>>
+				<<if typeof _npc.skills === 'undefined'>>
+					<<set _npc.skills = []>>
 				<</if>>
-				<<run $guests[_guestI].skills.push('cook')>>
+				<<run _npc.skills.push('cook')>>
 				<<run setup.sleepMessages.addJob('<span class="skill">Guest ' + _npc.name + ' learned the cook skill</span>', 'kitchen')>>
 			<</if>>
 
