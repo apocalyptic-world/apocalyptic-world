@@ -18,7 +18,12 @@
         <<=_fightResult.text>>
     </div>
 
-    <<set _npc = $guests[_fighter.key.split(',')[1]]>>
+    <<set _splitKey = _fighter.key.split(',')>>
+        <<if _splitKey[0] === 'guest'>>
+            <<set _npc = $guests[_splitKey[1]]>>
+        <<else>>
+            <<set _npc = $slaves[_splitKey[1]]>>
+        <</if>>
    
     <<if _fightResult.win>>
         <<set $fightCage.enemiesLost ??= []>>
