@@ -7,11 +7,18 @@
     <<set _props = _args[3] ?? {}>>
     <<if (_props.beauty ?? true)>>
         <div class="item-beauty">
-            &#x1F484; <<=_npc.beauty>>
+            <<set _categories = ['Repulsive looking', 'Hideous', 'Ugly', 'Unattractive', 'Plain looking', 'Average looking', 'Attractive', 'Beautiful', 'Gorgeous', 'Stunning']>>
+            <<set _categoryIndex = Math.floor((_npc.beauty - 1) / 10)>>
+
+	        <span data-balloon-length="medium" @aria-label="(_npc.beauty > 100 ? 'Celestial' : _categories[Math.max(_categoryIndex, 0)])" data-balloon-pos="up-left">
+                &#x1F484; <<=_npc.beauty>>
+	        </span>
         </div>
     <</if>>
     <div class="item-age">
-        &#128197; <<=setup.getAge(_npc)>>
+	    <span data-balloon-length="medium" @aria-label="'Bday: ' + (_npc ? _npc.birthDate.toDateString() : '????') + ((_npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()) ?  '. &#x1F381; Happy Birthday! &#x1F382; ' : '')" data-balloon-pos="up-left">
+            &#128197; <<=setup.getAge(_npc)>>
+	    </span>
     </div>
     <div class="item-happy">
         <<happyIcon _npc>>
