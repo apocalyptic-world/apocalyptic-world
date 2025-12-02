@@ -144,9 +144,14 @@
 						</span>
 					</span>
 					<<=setup.npcListInfo(_nursery)>>
+					<<if setup.getAge(_nursery) >= 5>>
+						<span data-balloon-length="medium" @aria-label="'Student: ' + _nursery.teach" data-balloon-pos="up-left">
+							&#x1F392;
+						</span>
+					<</if>>
 				</td>
 				<td>
-					<span data-balloon-length="medium" @aria-label="'Born: ' + (_nursery ? _nursery.birthDate.toDateString() : '????') + ''" data-balloon-pos="up-left">
+					<span data-balloon-length="medium" @aria-label="'Born: ' + (_nursery ? _nursery.birthDate.toDateString() : '????') + ((_nursery.birthDate.getDate() == $gameDate.getDate() && _nursery.birthDate.getMonth() == $gameDate.getMonth()) ?  '. &#x1F381; Happy Birthday! &#x1F476; ' : '')" data-balloon-pos="up-left">
 						Age: <<=setup.getAge(_nursery)>>
 					</span>
 				</td>
