@@ -1,10 +1,26 @@
-:: Inventory {"position":"563,9","size":"100,100"}
+:: Inventory
+<div id="inventory-header">
+	<<set _linkName = $player?.settings?.hideBlueprints ? 'Show blueprints' : 'Hide blueprints'>>
+	<<link _linkName>>
+		<<set $player.settings ??= {}>>
+		<<set $player.settings.hideBlueprints = !$player?.settings?.hideBlueprints>>
+		<<script>>
+			Dialog.setup("Inventory", "Inventory");
+			Dialog.wiki(Story.get("Inventory").processText());
+			Dialog.open();
+		<</script>>
+		<<goto `passage()`>>
+	<</link>>
+</div>
 <div id="inventory">
     <<for _item, _amount range $backpack.table>>
 		<<capture _item, _amount>>
 		  <<set _icon = _item>>
 		  <<if _icon.indexOf("blueprint") !== -1>>
-			  <<set _icon = 'blueprint'>>
+			<<if $player?.settings?.hideBlueprints>>
+				<<continue>>
+			<</if>>
+			<<set _icon = 'blueprint'>>
 		  <</if>>
 		  <<if _icon.indexOf("note") !== -1>>
 			  <<set _icon = 'note'>>
