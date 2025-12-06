@@ -292,6 +292,21 @@ setup.inventoryManageable = {
         range: [1, 3],
         chance: 30
     },
+    flower: {
+        price: 5,
+        range: [1, 10],
+        chance: 50
+    },
+    candy: {
+        price: 5,
+        range: [1, 10],
+        chance: 50
+    },
+    candy: {
+        price: 7,
+        range: [1, 10],
+        chance: 20
+    },
 };
 
 setup.getPersonsForLocation = function (persons, location) {
