@@ -549,7 +549,7 @@ setup.npc = {
 				"Pain is my therapy now."
 			],
 			affectionate: [
-				"I feel safest when you're near. Don't go.",
+				"I feel safest when you're near. Don't go, %mcName%",
 				"You don't know how much I needed this… us."
 			],
 			hungry: [
@@ -595,7 +595,7 @@ setup.npc = {
 				"Sex isn't new to me — it's just part of the game now."
 			],
 			sex_lewd: [
-				"Use me. Ruin me. I live for that.",
+				"Use me %mcName%. Ruin me. I live for that.",
 				"I'm dripping just thinking about it again..."
 			],
 			sex_jaded: [
@@ -603,7 +603,7 @@ setup.npc = {
 				"I’ve stopped pretending I feel anything from it now."
 			],
 			family_child: [
-				"I still remember when I used to fall asleep on your lap... before the world went to hell.",
+				"I still remember when I used to fall asleep on your lap...",
 				"You were always the one keeping me safe. I never said it back then, but thank you.",
 				"Sometimes I wonder if things would be different if we never left home.",
 				
@@ -631,8 +631,7 @@ setup.npc = {
 				"I’m not just your child. I’m my own person too, even if the world forgets that.",
 				"I act confident so no one sees the cracks. But you see them, don’t you?",
 
-				"Remember when you tried to teach me how to fix that old generator? You were terrible at it.",
-				"I found that old photo of us… before everything. We looked happy.",
+				"%mcNameUC%, remember when you tried to teach me how to fix that old generator? You were terrible at it.",
 				"You always said I'd be stronger than you someday. I think that day came."
 			]
 		}
@@ -701,7 +700,9 @@ setup.npc = {
 		pool.push(...db.survival);
 
 		const unique = [...new Set(pool)];
-		return unique[Math.floor(Math.random() * unique.length)];
+		return unique[Math.floor(Math.random() * unique.length)]
+			.replace(/%mcNameUC%/g, setup.npc.mcName(npc, true))
+    		.replace(/%mcName%/g, setup.npc.mcName(npc, false));
 	}
 }
 
@@ -739,4 +740,30 @@ setup.handleBathing = function (guest, newBonus = 0) {
 
 	guest.washBeauty = Math.min(guest.washBeauty ?? newBonus, 5); // clamp stored bonus too
 	guest.washDays = 2;
+};
+
+setup.npc = {
+	isMcNameUc: false,
+
+	mcNameUC: function (name)
+	{
+		if (!this.isMcNameUc) {
+			return name;
+		}
+
+        return name.charAt(0).toUpperCase() + name.slice(1);
+	},
+
+	mcName: function (npc, ucfirst) {
+		this.isMcNameUc = ucfirst;
+		if (npc?.family?.father === 'mc') {
+			return this.mcNameUC('dad')
+		}
+
+		if (npc.sub > 90 && npc.relationship < 20) {
+			return this.mcNameUC('sir');
+		}
+		
+		return variables().player.name;
+	}
 };
