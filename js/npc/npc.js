@@ -765,5 +765,49 @@ setup.npc = {
 		}
 		
 		return variables().player.name;
+	},
+
+	isMarried: function (npc) {
+		const fam = npc.family || {};
+		return (
+			(fam.wives && fam.wives.length > 0) ||
+			(fam.husband && fam.husband !== "")
+		);
+	},
+
+	areMarriedToEachOther: function (npcA, npcB) {
+		const famA = npcA.family || {};
+		const famB = npcB.family || {};
+
+		const spousesA = [
+			...(famA.wives || []),
+			...(famA.husband ? [famA.husband] : [])
+		];
+
+		const spousesB = [
+			...(famB.wives || []),
+			...(famB.husband ? [famB.husband] : [])
+		];
+
+		return (
+			spousesA.includes(npcB.id) ||
+			spousesB.includes(npcA.id)
+		);
+	},
+
+	canHaveSexBetween: function(npc1, npc2) {
+		const AIsMarried = setup.npc.isMarried(npc1);
+		const BIsMarried = setup.npc.isMarried(npc2);
+
+		if (!AIsMarried && !BIsMarried) {
+			return true;
+		}
+
+		if (setup.npc.areMarriedToEachOther(npc1, npc2)) {
+			return true;
+		}
+
+		// 1% cheating
+		return Math.random() <= 0.01;
 	}
 };
