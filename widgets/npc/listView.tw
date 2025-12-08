@@ -11,7 +11,13 @@
             <<set _categoryIndex = Math.floor((_npc.beauty - 1) / 10)>>
 
 	        <span data-balloon-length="medium" @aria-label="(_npc.beauty > 100 ? 'Celestial' : _categories[Math.max(_categoryIndex, 0)])" data-balloon-pos="up-left">
-                &#x1F484; <<=_npc.beauty>>
+    			<<if ((_npc.washDays ?? 0) == 0)>>
+        			<div style="color: lightskyblue">
+            		    &#x1F484; <<=_npc.beauty>>
+			        </div>
+    			<<else>>
+            	    &#x1F484; <<=_npc.beauty>>
+			    <</if>>
 	        </span>
         </div>
     <</if>>
