@@ -760,7 +760,11 @@ setup.npc = {
 			return this.mcNameUC('dad')
 		}
 
-		if (npc.sub > 90 && npc.relationship < 20) {
+		if (variables().slaveId && (variables().slaves[variables().slaveId].id == npc.id)) {
+	        return this.mcNameUC('master');
+        }
+
+		if (npc.sub > 90) {
 			return this.mcNameUC('sir');
 		}
 		
