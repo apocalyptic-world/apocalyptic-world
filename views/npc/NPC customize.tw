@@ -98,6 +98,16 @@
 		<</link>>
 	<</dialog>>	
 <</link>>
+<<link 'Change name for MC'>>
+	<<dialog 'Change name for MC'>>	
+		<<=$tmpGirl.name>> currently calls you '<<=setup.npc.mcName($tmpGirl)>>'.  Enter new name for <<=setup.pronounceWho($tmpGirl)>> to call you:<br /><<textbox "_myMcName" `$tmpGirl.myMcName ?? ''`>>
+		<<link 'OK'>>
+			<<set $tmpGirl.myMcName = _myMcName>>
+			<<dialogclose>>	
+			<<goto 'NPC customize'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
 <<if setup.getAge($tmpGirl) >= 18>>
 	<<link 'Custom pack'>>
 		<<script>>
