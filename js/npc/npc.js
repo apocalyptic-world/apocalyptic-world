@@ -487,6 +487,74 @@ setup.NpcInHome = function(_npc) {
 }
 
 setup.npc = {
+		isMcNameUc: false,
+
+	mcNameUC: function (name)
+	{
+		if (!this.isMcNameUc) {
+			return name;
+		}
+
+        return name.charAt(0).toUpperCase() + name.slice(1);
+	},
+
+	mcName: function (npc, ucfirst) {
+		this.isMcNameUc = ucfirst;
+		if (npc?.family?.father === 'mc') {
+			return this.mcNameUC('dad')
+		}
+
+		if (npc.sub > 90 && npc.relationship < 20) {
+			return this.mcNameUC('sir');
+		}
+		
+		return variables().player.name;
+	},
+
+	isMarried: function (npc) {
+		const fam = npc.family || {};
+		return (
+			(fam.wives && fam.wives.length > 0) ||
+			(fam.husband && fam.husband !== "")
+		);
+	},
+
+	areMarriedToEachOther: function (npcA, npcB) {
+		const famA = npcA.family || {};
+		const famB = npcB.family || {};
+
+		const spousesA = [
+			...(famA.wives || []),
+			...(famA.husband ? [famA.husband] : [])
+		];
+
+		const spousesB = [
+			...(famB.wives || []),
+			...(famB.husband ? [famB.husband] : [])
+		];
+
+		return (
+			spousesA.includes(npcB.id) ||
+			spousesB.includes(npcA.id)
+		);
+	},
+
+	canHaveSexBetween: function(npc1, npc2) {
+		const AIsMarried = setup.npc.isMarried(npc1);
+		const BIsMarried = setup.npc.isMarried(npc2);
+
+		if (!AIsMarried && !BIsMarried) {
+			return true;
+		}
+
+		if (setup.npc.areMarriedToEachOther(npc1, npc2)) {
+			return true;
+		}
+
+		// 1% cheating
+		return Math.random() <= 0.01;
+	},
+
 	/**
 	 * For people with the same name, get a number som we can differiate them
 	 * @returns list of these
@@ -740,74 +808,4 @@ setup.handleBathing = function (guest, newBonus = 0) {
 
 	guest.washBeauty = Math.min(guest.washBeauty ?? newBonus, 5); // clamp stored bonus too
 	guest.washDays = 2;
-};
-
-setup.npc = {
-	isMcNameUc: false,
-
-	mcNameUC: function (name)
-	{
-		if (!this.isMcNameUc) {
-			return name;
-		}
-
-        return name.charAt(0).toUpperCase() + name.slice(1);
-	},
-
-	mcName: function (npc, ucfirst) {
-		this.isMcNameUc = ucfirst;
-		if (npc?.family?.father === 'mc') {
-			return this.mcNameUC('dad')
-		}
-
-		if (npc.sub > 90 && npc.relationship < 20) {
-			return this.mcNameUC('sir');
-		}
-		
-		return variables().player.name;
-	},
-
-	isMarried: function (npc) {
-		const fam = npc.family || {};
-		return (
-			(fam.wives && fam.wives.length > 0) ||
-			(fam.husband && fam.husband !== "")
-		);
-	},
-
-	areMarriedToEachOther: function (npcA, npcB) {
-		const famA = npcA.family || {};
-		const famB = npcB.family || {};
-
-		const spousesA = [
-			...(famA.wives || []),
-			...(famA.husband ? [famA.husband] : [])
-		];
-
-		const spousesB = [
-			...(famB.wives || []),
-			...(famB.husband ? [famB.husband] : [])
-		];
-
-		return (
-			spousesA.includes(npcB.id) ||
-			spousesB.includes(npcA.id)
-		);
-	},
-
-	canHaveSexBetween: function(npc1, npc2) {
-		const AIsMarried = setup.npc.isMarried(npc1);
-		const BIsMarried = setup.npc.isMarried(npc2);
-
-		if (!AIsMarried && !BIsMarried) {
-			return true;
-		}
-
-		if (setup.npc.areMarriedToEachOther(npc1, npc2)) {
-			return true;
-		}
-
-		// 1% cheating
-		return Math.random() <= 0.01;
-	}
 };
