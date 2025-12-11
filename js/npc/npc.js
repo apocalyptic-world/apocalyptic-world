@@ -500,11 +500,20 @@ setup.npc = {
 
 	mcName: function (npc, ucfirst) {
 		this.isMcNameUc = ucfirst;
+
+		if (npc?.myMcName) {
+			return this.mcNameUC(npc.myMcName)
+		}
+
 		if (npc?.family?.father === 'mc') {
 			return this.mcNameUC('dad')
 		}
 
-		if (npc.sub > 90 && npc.relationship < 20) {
+		if (variables().slaveId && variables().slaves[variables().slaveId].id ==  npc.id) {
+	        return this.mcNameUC('master');
+		}
+
+		if (npc.sub > 90) {
 			return this.mcNameUC('sir');
 		}
 		
