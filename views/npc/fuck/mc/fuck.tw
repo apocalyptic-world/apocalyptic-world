@@ -87,6 +87,13 @@
         <<set $tmpGirl.orgasms++>>
 	<</if>>	
 
+	<<if !$sexForced &&  $tmpGirl.relationship >= 40 && setup.percentageChance(15)>>
+	    <br />
+	    <<include 'Reactions'>>
+
+	    <br />
+	<</if>>
+
     <<if _sexActions[$sexAction]?.stats>>
         <<if setup.percentageChance(70)>>
             <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
