@@ -12,11 +12,13 @@ You kick the door open and bring <<=_wantedPron2>> in. As you walk to the reward
 <strong>Your bounty hunter reputation increased by 1</strong><br />
 <strong>You collected <<=$wanted[$wantedId].wanted.value>> caps</strong>
 
-<<set $player.reputation_bounty_hunter++>>
-<<set $player.money += $wanted[$wantedId].wanted.value>>
-<<set $wanted.splice($wantedId, 1)>>
 <<addmins 60>>
 <br /><br />
-[[Leave|Bar]]
+<<link 'Leave'>>
+    <<set $player.reputation_bounty_hunter++>>
+    <<set $player.money += $wanted[$wantedId].wanted.value>>
+    <<set $wanted.splice($wantedId, 1)>>
+    <<goto 'Bar'>>
+<</link>>
 
 
