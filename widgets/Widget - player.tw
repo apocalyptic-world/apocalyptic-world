@@ -340,11 +340,28 @@
 			</div>
 		<</for>>
 	<</if>>
-	<<if $args[0].mother >>
-		<<set _motherNpc = setup.getNpcById($args[0].mother)>>
-		<<if (_motherNpc.family.kids.length > 1)>>
-			Siblings: <br />
-			<<for _familyTreeChildI, _familyTreeChild range _motherNpc.family.kids>>
+	<<if $args[0].mother || $args[0].siblings >>
+		<<if $args[0].mother >>
+			<<set _motherNpc = setup.getNpcById($args[0].mother)>>
+			<<if (_motherNpc.family.kids.length > 1)>>
+				Siblings: <br />
+				<<set _siblingLabel = 1>>
+				<<for _familyTreeChildI, _familyTreeChild range _motherNpc.family.kids>>
+					<div>
+					<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+						<<if _familyMember && $tmpGirl.id != _familyTreeChild>>
+							<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
+						<</if>>
+					</div>
+				<</for>>
+			<</if>>
+		<</if>>
+		<<if $args[0].siblings >>
+			<<if !_siblingLabel>>
+				Siblings: <br />
+				<<set _siblingLabel = 1>>
+			<</if>>
+			<<for _familyTreeChildI, _familyTreeChild range $args[0].siblings>>
 				<div>
 				<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
 					<<if _familyMember && $tmpGirl.id != _familyTreeChild>>
