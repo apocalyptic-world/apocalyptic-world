@@ -1,0 +1,47 @@
+:: Strip club - renovate [bg-underground]
+<h1 class="ptitle">STRIP CLUB</h1>
+<br />
+<<if $characters.isabel.quests.strip_club_resources_day>>
+    Resources delivered. Need to wait while club is being renovated.
+    <br /><br />
+<<else>>
+    <<set 
+        _needWood = 200,
+        _needGlass = 100,
+        _needCloth = 100,
+        _needMetal = 100
+    >>
+    Need for renovation:
+    <br />
+    <strong class="iitem"><<=_needWood>> wood</strong>
+    <br />
+    <strong class="iitem"><<=_needGlass>> glass</strong>
+    <br />
+    <strong class="iitem"><<=_needCloth>> fabric</strong>
+    <br />
+    <strong class="iitem"><<=_needMetal>> metal</strong>
+    <br /><br />
+    <<if
+        !$characters.isabel.quests.strip_club_resources_day && 
+        $backpack.count('wood') >= _needWood && 
+        $backpack.count('glass') >= _needGlass &&
+        $backpack.count('cloth') >= _needCloth &&
+        $backpack.count('metal') >= _needMetal
+    >>
+        <<link 'Give resources for renovation'>>
+            <<run $backpack.drop('wood', _needWood)>>
+            <<drop $backpack 'wood' _needWood>>
+            <<drop $backpack 'glass' _needGlass>>
+            <<drop $backpack 'cloth' _needCloth>>
+            <<drop $backpack 'metal' _needMetal>>
+            <<set $characters.isabel.quests.strip_club_resources_day = $game.day>>
+            <<goto 'Strip club - renovate'>>
+        <</link>>
+    <<else>>
+        You don't have enough resources.
+        <br /><br />
+    <</if>>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Underground city'>>
+<</link>>
