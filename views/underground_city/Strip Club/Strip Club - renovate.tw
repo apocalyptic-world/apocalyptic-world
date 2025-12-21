@@ -2,7 +2,11 @@
 <h1 class="ptitle">STRIP CLUB</h1>
 <br />
 <<if $characters.isabel.quests.strip_club_resources_day>>
-    Resources delivered. Need to wait while club is being renovated.
+    <<if ($characters.isabel.quests.strip_club_resources_day + 5) < $game.day>>
+        <<goto 'Strip Club - renovation finished'>>
+    <<else>>
+        Resources delivered. Need to wait while club is being renovated.
+    <</if>>
     <br /><br />
 <<else>>
     <<set 

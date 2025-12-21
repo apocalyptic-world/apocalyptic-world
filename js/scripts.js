@@ -302,7 +302,7 @@ setup.inventoryManageable = {
         range: [1, 10],
         chance: 50
     },
-    candy: {
+    plush: {
         price: 7,
         range: [1, 10],
         chance: 20

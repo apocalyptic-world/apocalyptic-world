@@ -1,0 +1,82 @@
+:: Strip Club [bg-underground]
+<h1 class="ptitle">STRIP CLUB</h1>
+<br />
+<<if !$characters.isabel.quests.strip_club_opening>>
+    <<goto 'Strip Club - opening night'>>
+<</if>>
+
+<table id="slaves" class="npc-list">
+	<<for _i to 0; _i lt $slaves.length; _i++>>
+		<<capture _i>>
+		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
+		<<if $slaves[_i].assignedTo != 'strip_club' || !timeBetween('18:00', '06:00') || _dayOff>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
+		<tr class="item">
+			<td style="min-width: 25%">
+				<span @class="''+_genderClass+''">
+				  <<link $slaves[_i].name>>
+					<<set $tmpGirl to $slaves[_i]>>
+					<<set $tmpGirl.location = 'strip_club'>>
+					<<set $tmpGirlBack = 'Strip Club'>>
+					<<set $tmpGirl.rape to false>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirlInvite to false>>
+					<<set $slaveId = _i>>
+					<<run delete $charId>>
+					<<run delete $guestId>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+					<<goto $tmpGirlViewBack>>
+				  <</link>>
+				</span>
+				<<=setup.npcListInfo($slaves[_i])>>
+			</td>
+			<td>
+				<<npcListView $slaves[_i] _i 'save'>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
+		<<capture _streetGuestI, _streetGuest>>
+		<<set _isSick = (typeof $guests[_streetGuestI].sick !== 'undefined')>>
+		<<set _isRest = (typeof $guests[_streetGuestI].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
+		<<if _streetGuest.assignedTo != 'strip_club' || !timeBetween('18:00', '06:00') || _dayOff>>
+			<<continue>>
+		<</if>>
+		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
+		<tr class="item">
+			<td style="width: 300px">
+				<span @class="''+_genderClass+''">
+				  <<link _streetGuest.name>>
+					<<set $tmpGirl to _streetGuest>>
+					<<set $tmpGirl.location = 'strip_club'>>
+					<<set $tmpGirlBack = 'Strip Club'>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirlInvite to false>>
+					<<set $tmpGirl.rape to false>>
+					<<set $guestId = _streetGuestI>>
+					<<run delete $charId>>
+					<<run delete $slaveId>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<goto $tmpGirlViewBack>>
+				  <</link>>
+				</span>
+				<<=setup.npcListInfo(_streetGuest)>>
+			</td>
+			<td>
+				<<npcListView _streetGuest _streetGuestI 'guest'>>
+			</td>
+		</tr>
+		<</capture>>
+	<</for>>
+</table>
+<br />
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Underground city'>>
+<</link>>

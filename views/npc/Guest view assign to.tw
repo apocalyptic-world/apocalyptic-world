@@ -155,6 +155,15 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	<</link>> (Earns you money as hooker)
 <</if>>
 </div>
+<<if $game.location.strip_club && $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender)>>
+	<div>
+		<<link 'Assign to strip club'>>
+			<<assignedTo $tmpGirl 'strip_club'>>
+			<<dialogclose>>
+			<<goto `$tmpGirlViewBack`>>
+		<</link>> (Earns you money as dancer)
+	</div>
+<</if>>
 <<if $player?.quests?.gloryholeJob && $tmpGirl.relationship >= 70 && [0,2].includes($tmpGirl.gender)>>
 	<div>
 		<<link 'Assign to nightclub'>>
