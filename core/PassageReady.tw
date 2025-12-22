@@ -75,9 +75,6 @@
 	<</if>>
 <</if>>
 
-<<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.dom_return>>
-	<<run _charactersInLocation['guesthouse'].push('isabel')>>
-<</if>>
 <<if isMetChar('octavia') && $characters.octavia.quests.next_move>>
 	<<if timeBetween('09:00', '09:30')>>
 		<<run _charactersInLocation['bathhouse'].push('octavia')>>
@@ -86,13 +83,21 @@
 	<</if>>
 <</if>>
 
-<<if isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
+<!-- Isabel -->
+<<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.dom_return>>
+	<<run _charactersInLocation['guesthouse'].push('isabel')>>
+<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
 	<<if !$characters.dom?.dead>>
 		<<run _charactersInLocation['underground_office'].push('dom')>>
 	<</if>>
-	<<run _charactersInLocation['underground_office'].push('isabel')>>
+	<<if timeBetween('18:00', '02:00') && $game.location.strip_club>>
+		<<run _charactersInLocation['strip_club'].push('isabel')>>
+	<<else>>
+		<<run _charactersInLocation['underground_office'].push('isabel')>>
+	<</if>>
 <</if>>
 
+<!-- Blair -->
 <<if isMetChar('blair') && !$game.debugBlair>>
 	<<set $game.debugBlair = $characters.blair.quests.metOnDay>>
 <</if>>
