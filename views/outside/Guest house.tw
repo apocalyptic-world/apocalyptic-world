@@ -173,6 +173,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'school' && timeBetween('09:00', '15:00')>>
 				<<continue>>
 			<</if>>
+			<<if $slaves[_i].assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm>>
+				<<continue>>
+			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
 				<<continue>>
 			<</if>>

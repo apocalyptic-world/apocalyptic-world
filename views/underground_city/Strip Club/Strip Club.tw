@@ -5,13 +5,27 @@
     <<goto 'Strip Club - opening night'>>
 <</if>>
 
+<div id="characters-in-location">
+	<<if (_charactersInLocation['strip_club'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Strip Club - Isabel'>>
+		<</link>>
+	<</if>>
+</div>
+<br /><br />
+
+<<if !timeBetween('18:00', '04:00')>>
+	Strip club is open from 18:00 to 04:00
+<</if>>
+<<set _isSandStorm = $weather?.sandStorm ?? false>>
+
 <table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
-		<<if $slaves[_i].assignedTo != 'strip_club' || !timeBetween('18:00', '06:00') || _dayOff>>
+		<<if $slaves[_i].assignedTo != 'strip_club' || !timeBetween('18:00', '04:00') || _dayOff || _isSandStorm>>
 			<<continue>>
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
@@ -45,7 +59,7 @@
 		<<set _isSick = (typeof $guests[_streetGuestI].sick !== 'undefined')>>
 		<<set _isRest = (typeof $guests[_streetGuestI].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
-		<<if _streetGuest.assignedTo != 'strip_club' || !timeBetween('18:00', '06:00') || _dayOff>>
+		<<if _streetGuest.assignedTo != 'strip_club' || !timeBetween('18:00', '04:00') || _dayOff || _isSandStorm>>
 			<<continue>>
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
@@ -76,6 +90,11 @@
 	<</for>>
 </table>
 <br />
+<<link 'Sit down in random seat'>>
+	<<newgirl>>
+	<<set $tmpGirl.location = 'strip_club'>>
+	<<goto 'Strip Club - dance'>>
+<</link>>
 <<link 'Leave'>>
     <<addmins 5>>
     <<goto 'Underground city'>>
