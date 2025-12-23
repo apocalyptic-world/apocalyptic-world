@@ -57,6 +57,13 @@
 	<</if>>
 <</if>>
 
+<<if !$tmpGirl.gender && $tmpGirl.location === 'strip_club' && $player.energy >= 20>>
+	<<set $tmpGirlViewBack = 'NPC view'>>
+	<<link 'Ask for a lap dance'>>
+		<<goto 'Strip Club - dance'>>
+	<</link>>
+<</if>>
+
 <<if $slaveId !== undefined && !($player.companions['slave:' + $slaveId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
 	<<link 'Add as companion'>>
 		<<companionAdd 'slave' $slaveId>>

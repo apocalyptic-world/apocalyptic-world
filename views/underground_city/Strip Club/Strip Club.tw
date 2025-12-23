@@ -12,13 +12,42 @@
 		<</link>>
 	<</if>>
 </div>
-<br /><br />
+<br />
 
-<<if !timeBetween('18:00', '04:00')>>
+<<if timeBetween('18:00', '04:00')>>
+	<<set _isOpen = true>>
+<<else>>
 	Strip club is open from 18:00 to 04:00
 <</if>>
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
 
+<style>
+	#strip_club_list {
+		display: flex;
+    	gap: 10px;
+	}
+
+	#strip_club_list img {
+		height: 200px;
+		width: auto;
+	}
+</style>
+<<if _isOpen>>
+	Some Isabel's girls are dancing at the dance poles
+	<br /><br />
+	<div id="strip_club_list">
+		<<set _images = ["dancing1", "dancing2", "dancing3", "dancing4"].shuffle()>>
+
+		<<set _randomGirlsCount = randomInteger(2, 4)>>
+		<<for _i = 0; _i < _randomGirlsCount; _i++>>
+			<<capture $tmpGirl>>
+				<<newgirl>>
+				<<set _imageUrl = 'places/strip_club/' + _images[_i] + '.webp'>>
+				<<image _imageUrl>>
+			<</capture>>
+		<</for>>
+	</div>
+<</if>>
 <table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>

@@ -27,6 +27,13 @@
 	[[Grope|Grope]]
 <</if>>
 
+<<if !$tmpGirl.gender && $tmpGirl.location === 'strip_club' && $player.energy >= 20>>
+	<<set $tmpGirlViewBack = 'NPC view - guest'>>
+	<<link 'Ask for a lap dance'>>
+		<<goto 'Strip Club - dance'>>
+	<</link>>
+<</if>>
+
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
 	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
