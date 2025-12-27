@@ -1,0 +1,25 @@
+:: sleepStripClub [include]
+
+/* check for pickaxe */
+
+<<if typeof _npc.stats['strip_club'] === 'strip_club'>>
+    <<set _npc.stats['strip_club'] = 0>>
+<</if>>
+<<set _npc.stats['strip_club']++>>
+
+<<set _randomHappy = randomInteger(-2, 3)>>
+<<setNpcStats 'guest' _guestI 'happy' _randomHappy>>
+
+<<if $guests[_guestI].gender == 0>>
+	<<set _moneyEarned = randomInteger(3, 6)>>
+<<elseif $guests[_guestI].gender == 2>>			
+	<<set _moneyEarned = randomInteger(2, 5)>>
+<<else>>
+	<<set _moneyEarned = randomInteger(1, 3)>>
+<</if>>
+<<set _moneyEarned = parseInt(_moneyEarned)>>
+<<set $player.money += _moneyEarned>>
+<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
+<<run setup.sleepMessages.addJob(_npc.name + ' had a client in the strip club. She got you <strong>' + _moneyEarned + '</strong> caps', 'strip_club')>>
+		
+
