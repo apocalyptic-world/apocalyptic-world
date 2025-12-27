@@ -26,13 +26,26 @@
             &#128197; <<=setup.getAge(_npc)>>
 	    </span>
     </div>
-    <div class="item-happy">
-        <<happyIcon _npc>>
-    </div>
-    <<if (_props.orientation ?? true)>>
-        <div class="item-orientation">
-            <<=setup.displayOrientationIcon(_npc)>>
-        </div>
+	<<if ((_npc.horny ?? 0) >= 80)>>
+		<div style="background-image: radial-gradient(pink 10%, black 90%)">
+		    <div class="item-happy">
+		        <<happyIcon _npc>>
+    		</div>
+    		<<if (_props.orientation ?? true)>>
+        		<div class="item-orientation">
+            		<<=setup.displayOrientationIcon(_npc)>>
+        		</div>
+    		<</if>>
+	    </div>
+	<<else>>
+	    <div class="item-happy">
+        	<<happyIcon _npc>>
+    	</div>
+    	<<if (_props.orientation ?? true)>>
+	        <div class="item-orientation">
+            	<<=setup.displayOrientationIcon(_npc)>>
+        	</div>
+    	<</if>>
     <</if>>
     <div class="item-strength">
         &#x1F4AA; <<=_npc.strength>>
