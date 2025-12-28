@@ -1,0 +1,43 @@
+:: Weather - Cold snap
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br /><br />
+The morning began with a wrongness you could feel in your bones before you even opened your eyes. The usual distant clatter of scrap-metal shutters, the quiet crackle of early cooking fires, and the low voices of settlers starting their routines were all missing.
+<br /><br />
+When you stepped outside your cabin, the world felt muted—like someone had pressed a hand over the entire settlement and smothered the sound.
+<br /><br />
+A violent wind tore across the compound, carrying dust instead of snow, yet the air burned with a deadly, biting cold. The sky hung low with bruised gray clouds swirling like a slow-motion vortex. Tools left out overnight were rimmed with frost so thick they looked dipped in crystal.
+<br /><br />
+<center>
+    <<image 'places/cabin/cold_snap.jpg' sfw>>
+</center>
+<br />
+Your breath fogged instantly. Frost formed across your eyelashes. A few seconds more in that air and your fingers began to numb.
+<br /><br />
+A cold snap—out of nowhere. No snowfall, no warning. Just a killing freeze wrapped in a storm.
+<br /><br />
+<<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
+<<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
+<<set _npc = $guests[_randomGuestId[0]]>>
+
+<<if !$player.quests.coldSnap>>
+    <<set $player.quests.coldSnap = true>>
+    <<sayNpc _npc>>
+        Cold snap... Again... We have a bit prepared, so we should be fine.
+    <</sayNpc>>
+<<else>>
+    <<sayNpc _npc>>
+        When the cold comes with no snow, the sky has lost its way. hese freezes pass… six to ten days. But this one feels like a warning.
+    <</sayNpc>>
+    <br />
+<</if>>
+<<sayNpc _npc>>
+    No chance that someone can survive outside more than an a hour.
+<</sayNpc>>
+<br />
+You glanced at the sky again.
+<br /><br />
+The storm seemed to groan like something alive.
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Wood cabin'>>
+<</link>>

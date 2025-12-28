@@ -63,6 +63,7 @@
 
 <<set _isHeatWave = $weather?.heatWave ?? false>>
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
+<<set _isColdSnap = $weather?.coldSnap ?? false>>
 
 <<set _hasWorkingHospital = setup.hasWorkingHospital()>>
 <<set _milkwarden = setup.getPersonsForLocation($guests, 'milkwarden')>>
@@ -240,7 +241,7 @@
 				<</if>>
 			<</if>>
 		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm>>
+		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($slaves[_i].strength ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
@@ -553,7 +554,7 @@
 		<</if>>
 		
 		
-		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff && !_isSandStorm>>
+		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($guests[_guestI].strength ?? 0) > 20>>
 				<<set _girlChanceToDie = 3>>
@@ -611,7 +612,7 @@
 		
 		<<set _hunter_no_bow = ( $automatization.hunter ?? false) &&
 			$guests[_guestI].assignedTo === 'hunter' && !setup.npcInventoryHas($guests[_guestI], 'bow') >>
-		<<if (_hunter_no_bow || $guests[_guestI].assignedTo === 'forest')  && !_isSick && !_isSandStorm>>
+		<<if (_hunter_no_bow || $guests[_guestI].assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<if typeof $guests[_guestI].stats['forest'] === 'undefined'>>
 				<<set $guests[_guestI].stats['forest'] = 0>>
 			<</if>>
@@ -684,7 +685,7 @@
 
 		<</if>>
 
-		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick && !_isSandStorm>>
+		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<if typeof $guests[_guestI].stats['scavenging'] === 'undefined'>>
 				<<set $guests[_guestI].stats['scavenging'] = 0>>
 			<</if>>
@@ -755,7 +756,7 @@
 			<</for>>
 		<</if>>
 
-		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick && setup.npcInventoryHas($guests[_guestI], 'bow') && !_isSandStorm>>
+		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick && setup.npcInventoryHas($guests[_guestI], 'bow') && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<set _percentageHunter = 10>>
 			<<if $guests[_guestI].strength > 50>>
 				<<set _percentageHunter += 25>>
@@ -781,7 +782,7 @@
 			<</if>>
 		<</if>>
 
-		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSandStorm>>
+		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<setNpcStats 'guest' _guestI 'happy' -5>>
 			<<if $guests[_guestI].gender == 0>>
 				<<set _moneyEarned = randomInteger(5, 9)>>

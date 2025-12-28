@@ -20,19 +20,18 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 <<set _slavesInBasement = []>>
 <<set _isHeatWave = $weather?.heatWave ?? false>>
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
+<<set _isColdSnap = $weather?.coldSnap ?? false>>
 
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 	<<set _dayOff = _isSick || _isRest>>
-	<<set _isHeatWave = $weather?.heatWave ?? false>>
-	<<set _isSandStorm = $weather?.sandStorm ?? false>>
 
 	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
 		<<set _workingInGarden++>>
 		<<continue>>
 	<</if>>
-	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm>>
+	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
 		<<set _workingOnStreets++>>
 		<<continue>>
 	<</if>>

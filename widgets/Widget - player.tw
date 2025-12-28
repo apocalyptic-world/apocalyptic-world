@@ -449,6 +449,11 @@
 		<<set $weather.daysLeft = 1>>
 		<<goto 'Weather - Sand storm'>>
 		<<set _morningEvent = true>>
+	<<elseif $game.day > 140 && setup.percentageChance(1) && $weather?.weather === 'storm' && !$weather?.coldSnap && $guests.length > 0>>
+		<<set $weather.coldSnap = true>>
+		<<set $weather.daysLeft = randomInteger(6,10)>
+		<<goto 'Weather - Cold snap'>>
+		<<set _morningEvent = true>>
 	<</if>>
 
 	<<if !_morningEvent>>
