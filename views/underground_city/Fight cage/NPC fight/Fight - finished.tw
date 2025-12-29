@@ -176,6 +176,20 @@ He says, his voice carrying the oily slickness of someone used to making bargain
         <<set $player.reputation++>>
     <</if>>
     <<addhours 1>>
-    <<goto 'Fight cage'>>
-    <<unset $fightClubPrize, $fightCage>>
+    <<if _win>>
+        <<set _fighterWomen = setup.filterNPCs($fightCage.fighters, {gender: 0, race_in: ['white', 'indian']})>>
+        <<if (_fighterWomen[0] ?? []).length && setup.percentageChance(10)>>
+            <<set $tmpEvent = {
+                npc: $fightCage.fighters[_fighterWomen[0][0]]
+            }>>
+            <<unset $fightClubPrize, $fightCage>>
+            <<goto 'NPC fight cage - proposal'>>
+        <<else>>
+            <<unset $fightClubPrize, $fightCage>>
+            <<goto 'Fight cage'>>
+        <</if>>
+    <<else>>
+        <<unset $fightClubPrize, $fightCage>>
+        <<goto 'Fight cage'>>
+    <</if>>
 <</link>>

@@ -1,0 +1,148 @@
+:: NPC fight cage - proposal [bg-fight-cage]
+<h1 class="ptitle">FIGHT CAGE</h1>
+<br />
+<<set _splitKey = $tmpEvent.npc.key.split(',')>>
+<<newguy>>
+<<if _splitKey[0] === 'guest'>>
+    <<set _npc = $guests[_splitKey[1]]>>
+<<else>>
+    <<set _npc = $slaves[_splitKey[1]]>>
+<</if>>
+The arena dust hadn’t even settled when the man approached us — thin, jittery, the kind of scavver who looked like he’d pawned his conscience long before he ever bartered with caps.
+<br /><br />
+<center>
+    <<image 'places/cage_fight/buy_prize1.jpg' sfw>>
+</center>
+<br />
+<<=setup.displayName(_npc)>> stood beside me, bruised and breathing hard, still streaked with blood that wasn’t all her own. 
+She had won — and the crowd’s echoes still clung to the broken walls like ghosts.
+<br /><br />
+The man didn’t congratulate her.
+He didn’t even look at her like a person.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    Forty caps. I want her in a room with me. You can stay. Watch. Make sure nothing gets… out of hand.
+<</sayNpc>>
+<br />
+You've lived in the wastes long enough to know this wasn’t the worst offer you have heard — just the most pathetic one that day.
+<br /><br />
+<<sayNpc _npc>>
+    Really? wow... that's low...
+<</sayNpc>>
+<<if !_npc.likesGuys>>
+    <<sayNpc _npc>>
+        Fuck that guy! I won't do it.
+    <</sayNpc>>
+    <br />
+<</if>>
+<br />
+The man rattled the caps in his pouch.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    I just want to fuck her. Your winner...
+<</sayNpc>>
+<br />
+<<linkreplace 'Take the 40 caps'>>
+    <<set _npc.relationship -= randomInteger(20, 40)>>
+    <<set _npc.sub -= randomInteger(10, 20)>>
+    <<set $player.money += 10>>
+    <<set _npc.horny = 0>>
+    <<run $('#option_ignore').hide()>>
+    He led the way through the shadowed alleys of the settlement, past flickering barrel fires and huddled survivors, to a derelict shack on the outskirts. 
+    The door creaked open to reveal a dim, cramped room lit only by a single dangling bulb that buzzed faintly.
+    <br /><br />
+    <center>
+        <<image 'places/cage_fight/buy_prize2.jpg' sfw>>
+    </center>
+    <br />
+    <<=setup.displayName(_npc)>> crossed her arms over her chest, her gaze flicking between you and him with barely concealed disgust.
+    <br /><br />
+    <<sayNpc _npc>>
+        This is bullshit...
+    <</sayNpc>>
+    <br />
+    He fumbled with his own pants, freeing his thick, veined cock—already hard and throbbing, pre-cum glistening at the tip.
+    <br /><br />
+    Without preamble, he grabbed her hips, lifting one of her legs to hook over his arm, and thrust forward.
+    <br /><br />
+    <<video 'cage_fight/buy_prize1'>>
+    <br /><br />
+    The head of his dick parted her folds, pushing into her dry tightness with a grunt from him and a sharp hiss from her. 
+    <<=setup.displayName(_npc)>>'s eyes widened, a flash of pain crossing her features before she bit her lip, trying to adjust. 
+    He didn't care; he slammed in deeper, burying half his length in her pussy with a wet slap
+    <br /><br />
+    <<video 'cage_fight/buy_prize2'>>
+    <br /><br />
+    He groaned, picking up speed, his balls slapping against her ass with each drive.
+    <br /><br />
+    <<sayNpc $tmpGuy>>
+        Fuck, you're tight
+    <</sayNpc>>
+    <br />
+    He growled, one hand sliding up to yank her tank top down, exposing her breasts.
+    <br /><br />
+    <<video 'cage_fight/buy_prize3'>>
+    <br /><br />
+    <<=setup.displayName(_npc)>>'s pussy began to slicken despite herself, juices coating his length as her body betrayed her reluctance. 
+    She closed her eyes briefly, a flicker of unwanted pleasure crossing her face
+    <br /><br />
+    <<video 'cage_fight/buy_prize4'>>
+    <br /><br />
+    when she opened them again, the disgust lingered—jaw clenched, brows furrowed—even as her hips rocked back tentatively, meeting his thrusts halfway. 
+    She was trying, grinding her clit against his pubic bone on each inward plunge, chasing a spark of relief amid the violation.
+    <br />
+    Suddenly he slapped her.
+    <br /><br />
+    <<linkreplace 'Continue to watch'>>
+        <<run $('#option_attack').hide()>>
+        <br /><br />
+        <<if setup.percentageChance(50)>>
+            <center>
+                <<image 'game/misc/creampie_prone.webp'>>
+            </center>
+            <br /><br />
+            Suddenly without any warning he cummed inside her pussy. No hesitation, just dedication on his face.
+            <br /><br />
+            <<sayNpc _npc>>
+                What a fuck!?
+            <</sayNpc>>
+            <br />
+            <<if setup.pregnancyChance(_npc)>>
+                <<set _npc.pregnancy = 0>>
+            <</if>>
+            He pulled out with a slick pop, cum dribbling down her inner thigh as he tucked himself away, smirking
+            <br /><br />
+        <<else>>
+            <<video 'cage_fight/buy_prize5'>>
+            <br /><br />
+            With a guttural roar, he yanked out of her gripping heat at the last second, his hand flying to his shaft. 
+            Thick spurts of cum erupted from his tip, splattering across her exposed pussy and dripping down to coat the firm cheeks of her ass.
+            <br /><br />
+        <</if>>
+        <<sayNpc $tmpGuy>>
+            Worth every cap.
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc)>> straightened her clothes in silence, wiping her face with the back of her hand
+        <br /><br />
+        <div id="option_leave">
+            <<link 'Leave'>>
+                <<unset $tmpEvent>>
+                <<goto 'Fight cage'>>
+            <</link>>
+        </div>
+    <</linkreplace>>
+    <div id="option_attack">
+        <<link 'Attack him'>>
+            <<set _enemies = [$tmpGuy]>>
+            <<fight _enemies 'Fight cage' 'Fight cagg'>>
+        <</link>>
+    </div>
+<</linkreplace>>
+<div id="option_ignore">
+    <<link 'Ignore him'>>
+        <<set _npc.relationship = Math.min(_npc.relationship + 5, 100)>>
+        <<unset $tmpEvent>>
+        <<goto 'Fight cage'>>
+    <</link>>
+</div>
