@@ -208,7 +208,8 @@ setup.inventoryNpc = [
     'body_armor',
     'pickaxe',
     'crossbow',
-    'arrow'
+    'arrow',
+    'coat_wolf'
 ];
 
 setup.inventoryManageable = {

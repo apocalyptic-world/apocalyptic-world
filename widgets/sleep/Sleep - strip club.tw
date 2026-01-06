@@ -1,10 +1,6 @@
 :: sleepStripClub [include]
 
-/* check for pickaxe */
-
-<<if typeof _npc.stats['strip_club'] === 'strip_club'>>
-    <<set _npc.stats['strip_club'] = 0>>
-<</if>>
+<<set _npc.stats['strip_club'] ??= 0>>
 <<set _npc.stats['strip_club']++>>
 
 <<set _randomHappy = randomInteger(-2, 3)>>

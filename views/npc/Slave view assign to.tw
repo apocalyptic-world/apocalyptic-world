@@ -51,9 +51,11 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <</if>>
 
 <<if [0].includes($tmpGirl.gender) && $game?.location?.milk_barn && ($tmpGirl.pregnancy >= 7 || ($tmpGirl.traits ?? []).includes('milker'))>>
-	<<link 'Assign to milk barn'>>
-		<<assignedTo $tmpGirl 'milk_barn'>>
-		<<dialogclose>>
-		<<goto `$tmpGirlViewBack`>>
-	<</link>>
+	<div>
+		<<link 'Assign to milk barn'>>
+			<<assignedTo $tmpGirl 'milk_barn'>>
+			<<dialogclose>>
+			<<goto `$tmpGirlViewBack`>>
+		<</link>>
+	</div>
 <</if>>
