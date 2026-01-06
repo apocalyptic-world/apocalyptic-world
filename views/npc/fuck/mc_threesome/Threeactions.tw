@@ -1,0 +1,398 @@
+:: Threeactions
+
+<<if !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('mother') && $tmpGirl.family?.mother === $tmpGirl2.id>>
+	<<set _partnerName = 'mom'>>
+<<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === $tmpGirl2.id>>
+	<<set _partnerName = 'dad'>>
+<<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('kids') && $tmpGirl.family?.kids.includes($tmpGirl2.id)>>
+	<<set _partnerName = 'sweetie'>>
+<<else&gt>
+	<<set _partnerName = $tmpGirl2.name>>
+<</if&gt>
+
+
+<<if $tmpGirl.horny  >= 80 && $tmpGirl.horny  < 100 && setup.percentageChance(50)  >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            setup.npc.mcName($tmpGirl, 1) + ",  " + _partnerName + ", you're gonna make me cum!",
+            "Don't stop, " + setup.npc.mcName($tmpGirl) + ".  I'm almost there...",
+            "You make us feel so good, " + setup.npc.mcName($tmpGirl) + "!"
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $tmpGirl.horny  >= 100 && setup.percentageChance(90)  >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "I'm cumming, " + setup.npc.mcName($tmpGirl) + "!",
+            "YES! YES! YES, " + setup.npc.mcName($tmpGirl) + "!",
+            "Mmm, gods yes, " + setup.npc.mcName($tmpGirl) + ", I'm cumming!",
+            "*shaking* Ahh, mmmmhh, Yes " + setup.npc.mcName($tmpGirl) + "!"
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'kissing' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmmmhhh, " + setup.npc.mcName($tmpGirl) + "...",
+            "Hmm, who's the better kisser, " + setup.npc.mcName($tmpGirl) + ",  " + _partnerName + " or me...?",
+            "Mmmm " + setup.npc.mcName($tmpGirl) + ", " + _partnerName + ", I love you...",
+            "We love your kisses so much, " + setup.npc.mcName($tmpGirl) + "..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'handjob' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Do our hands feel good, " + setup.npc.mcName($tmpGirl) + "..?",
+            "*bites her lip* Wow... Isn't " + setup.npc.mcName($tmpGirl) + " big, " + _partnerName + "? ",
+            "Which do you like better, " + _partnerName + ", " + setup.npc.mcName($tmpGirl) + "'s shaft, or his balls?"
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'bj' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmmh.. you taste so good, " + setup.npc.mcName($tmpGirl) + "...",
+            "Mmmm, I'll suck on " + setup.npc.mcName($tmpGirl) + "'s head " + _partnerName + ", while you work his balls...",
+            "Do you like when we do this with our tongues, " + setup.npc.mcName($tmpGirl) + "?",
+            "*muffled* Are we doing it right, " + setup.npc.mcName($tmpGirl) + "?"
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_lick' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            setup.npc.mcName($tmpGirl, 1) + ",  " + _partnerName + ", your tongues feel amazing!",
+            "Ahh!  Ahh! Right there, " + setup.npc.mcName($tmpGirl) + "...",
+            "Do I taste good, " + setup.npc.mcName($tmpGirl) + "?"
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_fisting' || $sexAction === 'anal_fisting' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Nnngh!  I can't believe you fit the whole thing, " + setup.npc.mcName($tmpGirl) + "!",
+            setup.npc.mcName($tmpGirl, 1) + ", that's a really tight fit...",
+            "Ahh!  Ahh! So full, " + setup.npc.mcName($tmpGirl) + "..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'anal_reverse' >>
+
+		<<if ($tmpGirl.traits ?? []).includes('sadistic') && setup.percentageChance(60)>>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "Yeah, take it, " + setup.npc.mcName($tmpGirl) + ". Take it like a bitch!",
+              "*Spank* Your ass is mine, " + setup.npc.mcName($tmpGirl) + "...",
+              "Mmm, tight!  Just the way I like it, " + setup.npc.mcName($tmpGirl) + "."
+          ])>>
+      <</sayNpc>>
+
+		<<elseif !$tmpGirl.gender >>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "Like getting pegged, " + setup.npc.mcName($tmpGirl) + "?",
+              "Mmm, you make me wish I had a real one, " + setup.npc.mcName($tmpGirl) + "...",
+              "You like switching things up, " + setup.npc.mcName($tmpGirl) + "?"
+          ])>>
+      <</sayNpc>>
+
+		<<else>>
+
+		   <<sayNpc $tmpGirl>>
+		        <<=either([
+		            "Mmmh, you've got the best ass, " + setup.npc.mcName($tmpGirl) + "!",
+		            "Ahhh, " + setup.npc.mcName($tmpGirl) + "'s ass feels so good on my cock, " + _partnerName + ".",
+		            "Nngh, yes!  Squeeze my cock with your ass, " + setup.npc.mcName($tmpGirl) + "...",
+		            "Mmm, " + _partnerName + ", do you like how " + setup.npc.mcName($tmpGirl) + "'s ass looks on my cock?",
+		            "Yess... take it deeper, " + setup.npc.mcName($tmpGirl) + "..."
+		        ])>>
+		    <</sayNpc>>
+
+		<</if>>
+
+	<<elseif $sexAction === 'bj_reverse' >>
+
+		<<if ($tmpGirl.traits ?? []).includes('sadistic') && setup.percentageChance(60)>>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "Yeah, suck it, " + setup.npc.mcName($tmpGirl) + ". Suck it like a bitch!",
+              "Enough talking, " + setup.npc.mcName($tmpGirl) + ".  Use that mouth for what it's good for!",
+              "Mmmm, you look so good down on your knees, " + setup.npc.mcName($tmpGirl) + ".."
+          ])>>
+      <</sayNpc>>
+
+		<<elseif !$tmpGirl.gender >>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "Get that toy nice and wet, " + setup.npc.mcName($tmpGirl) + "!",
+              "Damn, this makes me wish I had a real one, " + setup.npc.mcName($tmpGirl) + "...",
+              "You like that hard rubber in your mouth, " + setup.npc.mcName($tmpGirl) + "?"
+          ])>>
+      <</sayNpc>>
+
+		<<else>>
+
+		   <<sayNpc $tmpGirl>>
+		        <<=either([
+		            "Damn, you've got the best mouth skills, " + setup.npc.mcName($tmpGirl) + "!",
+		            "Mmmh, " + _partnerName + ", " + setup.npc.mcName($tmpGirl) + "'s lips feel so good on my cock!",
+		            "Mmm, doesn't " + setup.npc.mcName($tmpGirl) + "'s mouth look so sexy on my cock, " + _partnerName + "...",
+		            "Do you like how my cock tastes, " + setup.npc.mcName($tmpGirl) + "?",
+		            "Mmmm... show me how deep you can take it, " + setup.npc.mcName($tmpGirl) + "..."
+		        ])>>
+		    <</sayNpc>>
+
+		<</if>>
+
+	<<elseif $sexAction === 'pussy' >>
+
+		<<if !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(30)>>
+
+		     <<sayNpc $tmpGirl>>
+		        <<=either([
+		            "I know it's wrong, " + _partnerName + ".. but daddy feels so right....",
+		            "Mmmm, don't judge me " + _partnerName + ", Daddy feels so amazing...",
+		            "Do you like watching daddy fuck me, " + _partnerName + "?"
+		        ])>>
+		    <</sayNpc>>
+
+		<<else>>
+
+		   <<sayNpc $tmpGirl>>
+		        <<=either([
+		            "Mmmh, " + _partnerName + ", you should feel how good " + setup.npc.mcName($tmpGirl) + "'s cock feels.",
+		            "You're the perfect fit, " + setup.npc.mcName($tmpGirl) + "...",
+		            "Yes, " + setup.npc.mcName($tmpGirl) + ", take us both, you stallion!",
+		            "Oh " + _partnerName + ", " + setup.npc.mcName($tmpGirl) + " feels so much better than a toy.",
+		            "Mmmm... Deeper, " + setup.npc.mcName($tmpGirl) + "..."
+		        ])>>
+		    <</sayNpc>>
+
+		<</if>>
+
+	<<elseif $sexAction === 'anal'  && $tmpGirl.anal >= 20 >>
+
+		<<if !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(30)>>
+
+		     <<sayNpc $tmpGirl>>
+		        <<=either([
+		           "I know it's so naughty, " + _partnerName + " but you know how good daddy feels....",
+		           "Do you like watching me take daddy in my ass, " + _partnerName + "?"
+		        ])>>
+		    <</sayNpc>>
+
+		<<else>>
+
+		    <<sayNpc $tmpGirl>>
+		        <<=either([
+		            "You feel so good in my ass, " + setup.npc.mcName($tmpGirl) + "!",
+		            "It's so big, " + setup.npc.mcName($tmpGirl) + "... I don't know if  " + _partnerName + " can take it like I do.",
+		            "Mmph.. gods  " + _partnerName + ", you should feel how deep " + setup.npc.mcName($tmpGirl) + " fills me..."
+		        ])>>
+		    <</sayNpc>>
+
+		<</if>>
+
+	<<elseif $sexAction === 'anal'  && $tmpGirl.anal < 20 && ($tmpGirl.traits ?? []).includes('masochist') >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Ahh! Ungh! " + setup.npc.mcName($tmpGirl,1) + ", it hurts, but don't stop!",
+            "Ow! It's too tight, " + setup.npc.mcName($tmpGirl) + "!  Give me more...",
+            "Mmph! Keep going, " + setup.npc.mcName($tmpGirl) + "!  I like it rough...",
+            "Hahh, " + setup.npc.mcName($tmpGirl) + ", keep going.  Stretch me out like I deserve..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'cum_on_face' || $sexAction === 'cum_on_back' || $sexAction === 'cum_on_stomach' || $sexAction === 'cum_on_tits' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Do we look pretty, " + setup.npc.mcName($tmpGirl) + "?",
+            "Mmmmhh, it feels so nice and warm, doesn't it " + _partnerName + "...",
+            "Yes, " + setup.npc.mcName($tmpGirl) + ", paint us with your cum...",
+            "You've marked us " + setup.npc.mcName($tmpGirl) + "... We're all yours..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'cum_in_mouth' ||  $sexAction === 'cum_in_throat' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmmm.. doesn't " + setup.npc.mcName($tmpGirl) + " taste so good,  " + _partnerName + "?",
+            "Do you want me to swallow, " + setup.npc.mcName($tmpGirl) + ", or share it with  " + _partnerName + "?",
+            "Mmmh,  " + _partnerName + ", share it with me...",
+            "Mmmm yes, " + _partnerName + ", I love the taste of " + setup.npc.mcName($tmpGirl) + "'s cum on your lips..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'cum_in_pussy' >>
+
+		<<if !$player.baseManagement.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(30)>>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "*gasps*  " + _partnerName + ", daddy just came inside me!  He's so naughty..",
+              "Mmmmh, " + _partnerName + ", do you like watching daddy plant his seed inside me?",
+              "Daddy!  You like letting " + _partnerName + " watch you breed your girl...?"
+          ])>>
+      <</sayNpc>>
+
+		<<else>>
+
+      <<sayNpc $tmpGirl>>
+          <<=either([
+              "Ahh, " + _partnerName + ", he's cumming!  Mmmmh, " + setup.npc.mcName($tmpGirl) + ", it feels so warm filling me...",
+              "Sorry, " + _partnerName + ", it's my turn to feel " + setup.npc.mcName($tmpGirl) + "'s heat inside me.",
+              "Mmm, it feels so good when you throb inside me, " + setup.npc.mcName($tmpGirl) + "...",
+              "Oh " + _partnerName + ", he's cumming so hard.  It feels amazing!"
+          ])>>
+      <</sayNpc>>
+
+		<</if>>
+
+	<<elseif $sexAction === 'cum_in_ass' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "*gasps* " + _partnerName + ", he's cumming so deep inside me!",
+            "Mmmmhh, " + _partnerName + ", you should feel how good " + setup.npc.mcName($tmpGirl) + " feels pumping into my ass...",
+            "Oh " + setup.npc.mcName($tmpGirl) + ", I feel it throbbing so strong inside me..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'bj_b_pussy' || $sexAction === 'bj_b_anal' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmmph, " + setup.npc.mcName($tmpGirl) + ", " + _partnerName + ", I love feeling you in both ends!",
+            "Mmmmhh, you taste so nice, " + setup.npc.mcName($tmpGirl) + ", and " + _partnerName + " feels so good inside me..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_pussy_lick' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Oh yes, " + _partnerName + ", let's ride " + setup.npc.mcName($tmpGirl) + " together!",
+            "Mmmmhh, " + _partnerName + ", his cock feels so good.  Tell me how his tongue feels...",
+            "Yes " + setup.npc.mcName($tmpGirl) + ", eat " + setup.npc.mcName($tmpGirl) + "'s pussy while I ride you."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_a_pussy_lick' || $sexAction === 'anal_a_pussy_lick' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Ahh, yes " + setup.npc.mcName($tmpGirl) + ", make me moan into  " + _partnerName + "'s pussy!",
+            "Does you like my tongue on your clit, " + _partnerName + "?  I hope it's as amazing as " + setup.npc.mcName($tmpGirl) + "'s cock feels...",
+            "Mmmmhh, you taste so nice, " + _partnerName + ", and " + setup.npc.mcName($tmpGirl) + " feels so good inside me..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_a_sn' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Ahh, " + _partnerName + ", lick his balls while he fills my pussy!",
+            "Mmmmhh, " + _partnerName + ", do you like watching " + setup.npc.mcName($tmpGirl) + " slide into me?",
+            "Oh " + _partnerName + ", lick my clit while " + setup.npc.mcName($tmpGirl) + " is inside me."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_a_pussy' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmm, harder, " + setup.npc.mcName($tmpGirl) + ", I want  " + _partnerName + " to feel you thrusting inside me.",
+            "Mmmmhh, I love being in a " + _partnerName + " and " + setup.npc.mcName($tmpGirl) + " sandwich.",
+            "Oh " + setup.npc.mcName($tmpGirl) + ", " + _partnerName + ", we move so well together..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_b_anal' || $sexAction === 'anal_b_pussy' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Oh gods, " + _partnerName + ", " + setup.npc.mcName($tmpGirl) + " you're both filling me so deep!",
+            "Mmmmhh, I love being in a " + _partnerName + " and " + setup.npc.mcName($tmpGirl) + " sandwich.",
+            "Nnngh, you both feel so good inside me..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'anal_b_bj' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmmph, " + setup.npc.mcName($tmpGirl) + ", " + _partnerName + ", I love feeling you in both ends!",
+            "Mmmmhh, you feel so good in my mouth, " + _partnerName + ", and " + setup.npc.mcName($tmpGirl) + " feels so good inside me..."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'handjob_anal_reverse' || $sexAction === 'bj_anal_reverse' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Oh wow, " + setup.npc.mcName($tmpGirl) + ", you get so hard when you have a cock in your ass!",
+            "Mmmmhh, " + setup.npc.mcName($tmpGirl) + ", I can feel you throbbing every time " + _partnerName + " fills your ass...",
+            "Keep thrusting like that, " + _partnerName + ". I can feel how much " + setup.npc.mcName($tmpGirl) + " likes it."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'nipple_lick_anal_reverse' || $sexAction === 'pussy_lick_anal_reverse' || $sexAction === 'sn_anal_reverse' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Gods, " + setup.npc.mcName($tmpGirl) + ", you look so hot with a cock in your ass!",
+            "Mmmmhh, " + setup.npc.mcName($tmpGirl) + ", you look so good with " + _partnerName + " in your ass...",
+            "Oh " + setup.npc.mcName($tmpGirl) + ", it's such a turn on seeing you take " + _partnerName + "'s cock so deep.",
+            "That's it " + setup.npc.mcName($tmpGirl) + ", take " + _partnerName + "'s cock nice and deep."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'pussy_anal_reverse' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Mmm, harder, " + _partnerName + ", I want  to feel you thrusting inside " + setup.npc.mcName($tmpGirl) + "!",
+            "Yess, " + setup.npc.mcName($tmpGirl) + ", I can feel you throbbing every time " + _partnerName + " fills your ass...",
+            "Mmmmhh, " + _partnerName + ", I love making a  " + setup.npc.mcName($tmpGirl) + " sandwich with you.",
+            "Keep thrusting like that, " + _partnerName + ". I can feel how much " + setup.npc.mcName($tmpGirl) + " likes it."
+        ])>>
+    <</sayNpc>>
+
+	<<elseif $sexAction === 'bj_reverse_anal_reverse' >>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Gods, " + setup.npc.mcName($tmpGirl) + ", you look so hot with a cock in your mouth and ass!",
+            "Ahhh, " + setup.npc.mcName($tmpGirl) + ", we love taking you in both ends!",
+            "Mmmm, " + _partnerName + ", doesn't " + setup.npc.mcName($tmpGirl) + " make a good finger-trap?",
+            "Mmmmhh, " + _partnerName + ", I wonder if " + setup.npc.mcName($tmpGirl) + "'s mouth feels as good as his ass..."
+        ])>>
+    <</sayNpc>>
+
+	<<else>>
+
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Ahh, " + setup.npc.mcName($tmpGirl) + ".. mmmh, " + _partnerName + "... yess...",
+            "Don't stop, " + setup.npc.mcName($tmpGirl) + ".  We like it like that!",
+            "Oh yes, " + setup.npc.mcName($tmpGirl) + "!  Give us more...",
+            "Mmmmhh.." + setup.npc.mcName($tmpGirl) + ", " + _partnerName + ", you're both so good..."
+        ])>>
+    <</sayNpc>>
+
+	<</if>>
