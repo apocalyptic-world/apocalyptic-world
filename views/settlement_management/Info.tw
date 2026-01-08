@@ -33,6 +33,7 @@
 	mining: 0,
 	scav: 0,
 	streets: 0, streets_die: 0, nightclub: 0,
+	strip_club: 0,
 	wood: 0,
 	birthday: [],
 	pregnant: 0
@@ -101,6 +102,10 @@
 		<<set _money = Math.round(_money*(100-_percentTaxNightclub)/100)>>
 
 		<<set _settlementStatsData.nightclub += _money>>
+	<<elseif _job === 'strip_club'>>
+		<<set _money =  (_statsNpc.gender == 0 ? 4 : _statsNpc.gender == 2 ? 3 : 2)>>
+
+		<<set _settlementStatsData.strip_club += _money>>
 	<<elseif _job === 'quarry'>>
 		<<set _settlementStatsData.mining += 1 + (_statsNpc.strength >= 50 ? 0.25 : 0)>>
 	<</if>>
@@ -173,6 +178,8 @@
 <<set _streetsText =  (_streets > 0 ? 'Average earnings/day: ' + _streets : '') + (_streets_die > 0 ? '; Average deaths/day: ' + _streets_die_fraction + ' %': '')>>
 <<set _nightclub = _settlementStatsData.nightclub.toFixed(1)>>
 <<set _nightclubText = (!$player?.quests?.gloryholeJob ? '(Make a deal with the glory hole manager first)' : '') + (_nightclub > 0 ? 'Average earnings/day: ' + _nightclub : '')>>
+<<set _strip_club =  _settlementStatsData.strip_club.toFixed(1)>>
+<<set _strip_clubText = (!$characters?.isabel?.quests?.strip_club_opening ? '(Renovate and open a strip club first) ' : '') + (_strip_club > 0 ? 'Average earnings/day: ' + _strip_club : '')>>
 
 <table class="mc-stats-table">
 	<tr><th colspan="3">Living</th></tr>
@@ -189,6 +196,7 @@
 	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
 	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
 	<tr><td>Working in nightclub:</td><td><<=_settlementStatsData.work.nightclub ?? 0>></td><td><<=_nightclubText>></td></tr>
+	<tr><td>Working in strip club:</td><td><<=_settlementStatsData.work.strip_club ?? 0>></td><td><<=_strip_clubText>></td></tr>
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td>(Max <<=($workersLimitHunter ?? 8)>>) <<=_avgWolf>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
