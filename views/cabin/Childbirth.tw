@@ -79,6 +79,12 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 		<br /><br />
 		<<set _mother = $tmpGirl>>
 		<<newchild _childGender _mother>>
+		
+		<<if !(_mother.traits ?? []).includes('milker') && setup.percentageChance(10) && ['big', 'medium'].includes(_mother.breasts)>>
+			<<run _mother.traits.push('milker')>>
+			<<=setup.displayName(_mother)>> got a milker trait!
+			<br /><br />
+		<</if>>
 		<<set _randomName = $newChild.name>>
 		What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" _randomName>>
 		<br /><br />

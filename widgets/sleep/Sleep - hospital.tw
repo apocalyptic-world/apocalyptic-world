@@ -47,6 +47,12 @@
             <<set _textDesc = _childNames.length > 1 ? '<strong>twins</strong>. ' : ''>>
         
             <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. She went to the hospital and gave birth to ' + _textDesc + _childNames.join(', ') + '.', 'hospital')>>
+
+            <<if !(_mother.traits ?? []).includes('milker') && setup.percentageChance(10) && ['big', 'medium'].includes(_mother.breasts)>>
+			    <<run _mother.traits.push('milker')>>
+                <<run setup.sleepMessages.add(setup.displayName(_mother) + ' got milker trait.', 'hospital')>>
+		    <</if>>
+        
         <</if>>
         <<unset $pregnancyHappening,  $pregnancysHappeningHospital>>
     <</for>>
