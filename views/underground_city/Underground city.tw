@@ -25,7 +25,8 @@
   <<if (($game.location.strip_club_wip ?? false))>>
   	<<grid underground strip_club_wip 'Strip club - renovate' 'Strip club' 0 1>>
   <<elseif (($game.location.strip_club ?? false))>>
-  	<<grid underground strip_club 'Strip Club' 'Strip Club' 0 1>>
+	<<set _stripClubName = $locationData?.strip_club?.name ?? 'Strip Club'>>
+  	<<grid underground strip_club 'Strip Club' _stripClubName 0 1>>
   <</if>>
   <<if (($game.location.underground_office ?? false))>>
 	<<set _officeLocation = ($characters.dom.dead ? 'Underground city office' : 'Underground city office with Dom')>>

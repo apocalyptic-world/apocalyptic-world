@@ -1,0 +1,30 @@
+:: Strip Club - office [bg-underground]
+<h1 class="ptitle"><<stripClubName>></h1>
+<br />
+<div id="characters-in-location">
+	<<if (_charactersInLocation['strip_club'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Strip Club - Isabel'>>
+		<</link>>
+	<</if>>
+</div>
+<br />
+<<link 'Change strip club name'>>
+		<<dialog 'Change name'>>	
+            <<set _currentName = ($locationData?.strip_club?.name ?? 'STRIP CLUB')>>
+			What's the name of strip club? <<textbox "_stripClubName" _currentName>>
+			<<link 'OK'>>
+                <<if typeof $locationData.strip_club === 'undefined'>>
+                    <<set $locationData = {
+                        strip_club: {}
+                    }>>
+                <</if>>
+                <<set $locationData.strip_club.name = _stripClubName>>
+				<<dialogclose>>	
+				<<goto 'Strip Club - office'>>
+			<</link>>
+		<</dialog>>	
+	<</link>>
+<<link 'Leave'>>
+    <<goto 'Strip Club'>>
+<</link>>
