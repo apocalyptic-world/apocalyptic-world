@@ -5,21 +5,75 @@
 </h1>
 <div id="characters-in-location">
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
-			<<goto 'Isabel room'>>
-		<</link>>
+		<<if ($characters?.isabel?.horny &gt= 80)>>
+			<span class="char-horny">
+				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+					<<goto 'Isabel room'>>
+				<</link>>
+			</span>
+		<<else>>
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+				<<goto 'Isabel room'>>
+			<</link>>
+		<</if>>
+	<</if>>
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('laura')>>
+		<<if ($characters?.laura?.horny &gt= 80)>>
+			<span class="char-horny">
+				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
+					<<set _guests = setup.getAvailablePersons18yo($guests)>>
+					<<if (_guests[0] ?? []).length && timeBetween('10:00', '11:00')>>
+						<<goto 'Lab'>>
+					<<else>>		
+						<<goto 'Laura - lab talk'>>
+					<</if>>
+				<</link>>
+			</span>
+		<<else>>
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
+				<<set _guests = setup.getAvailablePersons18yo($guests)>>
+				<<if (_guests[0] ?? []).length && timeBetween('10:00', '11:00')>>
+					<<goto 'Lab'>>
+				<<else>>		
+					<<goto 'Laura - lab talk'>>
+				<</if>>
+			<</link>>
+		<</if>>
 	<</if>>
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('octavia')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
-			<<goto 'Octavia room'>>
-		<</link>>
+		<<if ($characters?.octavia?.horny &gt= 80)>>
+			<span class="char-horny">
+				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
+					<<goto 'Octavia room'>>
+				<</link>>
+			</span>
+		<<else>>
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
+				<<goto 'Octavia room'>>
+			<</link>>
+		<</if>>
 	<</if>>
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('eve')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
-			<<goto 'Eve room'>>
-		<</link>>
+		<<if ($characters?.eve?.horny &gt= 80)>>
+			<span class="char-horny">
+				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+					<<goto 'Eve room'>>
+				<</link>>
+			</span>
+		<<else>>
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+				<<goto 'Eve room'>>
+			<</link>>
+		<</if>>
 	<</if>>
 </div>
+<style>
+	.char-horny a {
+		box-shadow: 0px 5px 5px -1px pink, 0px -5px 5px -1px pink !important;
+	}
+</style>
+
+
 <<if ($game.location.lab ?? false)>>
 	<br />
 	<<link 'Lab'>>
