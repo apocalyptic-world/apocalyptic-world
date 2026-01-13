@@ -18,6 +18,7 @@
 			<<if $slaves[_i].assignedTo != 'milk_barn' || !timeBetween('12:00', '18:00') || _dayOff>>
 				<<continue>>
 			<</if>>
+			<<set _hasCow = true>>
 			<<set $slaves[_i].milking = true>>
 			<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 			<tr>
@@ -61,6 +62,11 @@
 	<br /><br />
 <</if>>
 <br />
+<<if _hasCow && !$player.drinkMilk>>
+	<<link 'Drink milk'>>
+		<<goto 'Milk barn - drink milk'>>
+	<</link>>
+<</if>>
 <<link 'Back'>>
     <<goto 'Youth district'>>
 <</link>>
