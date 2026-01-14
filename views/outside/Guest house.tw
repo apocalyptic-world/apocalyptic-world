@@ -5,31 +5,16 @@
 </h1>
 <div id="characters-in-location">
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
-		<<if ($characters?.isabel?.horny &gt= 80)>>
-			<span class="char-horny">
-				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
-					<<goto 'Isabel room'>>
-				<</link>>
-			</span>
-		<<else>>
+		<<set _hornyClass = ($characters?.isabel?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
 			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
 				<<goto 'Isabel room'>>
 			<</link>>
-		<</if>>
+		</span>
 	<</if>>
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('laura')>>
-		<<if ($characters?.laura?.horny &gt= 80)>>
-			<span class="char-horny">
-				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
-					<<set _guests = setup.getAvailablePersons18yo($guests)>>
-					<<if (_guests[0] ?? []).length && timeBetween('10:00', '11:00')>>
-						<<goto 'Lab'>>
-					<<else>>		
-						<<goto 'Laura - lab talk'>>
-					<</if>>
-				<</link>>
-			</span>
-		<<else>>
+		<<set _hornyClass = ($characters?.laura?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
 			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
 				<<set _guests = setup.getAvailablePersons18yo($guests)>>
 				<<if (_guests[0] ?? []).length && timeBetween('10:00', '11:00')>>
@@ -38,33 +23,23 @@
 					<<goto 'Laura - lab talk'>>
 				<</if>>
 			<</link>>
-		<</if>>
+		</span>
 	<</if>>
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('octavia')>>
-		<<if ($characters?.octavia?.horny &gt= 80)>>
-			<span class="char-horny">
-				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
-					<<goto 'Octavia room'>>
-				<</link>>
-			</span>
-		<<else>>
+		<<set _hornyClass = ($characters?.octavia?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
 			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
 				<<goto 'Octavia room'>>
 			<</link>>
-		<</if>>
+		</span>
 	<</if>>
 	<<if (_charactersInLocation['guesthouse'] ?? []).includes('eve')>>
-		<<if ($characters?.eve?.horny &gt= 80)>>
-			<span class="char-horny">
-				<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
-					<<goto 'Eve room'>>
-				<</link>>
-			</span>
-		<<else>>
+		<<set _hornyClass = ($characters?.eve?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
 			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
 				<<goto 'Eve room'>>
 			<</link>>
-		<</if>>
+		</span>
 	<</if>>
 </div>
 <style>
