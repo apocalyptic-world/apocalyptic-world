@@ -11,7 +11,7 @@
 <<set _girlsCompetition = []>>
 <<set _guestGirlsInGreenhouse = []>>
 <<set _isHeatWave = $weather?.heatWave ?? false>>
-<table id="slaves">
+<table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined' || _isHeatWave>>
@@ -22,8 +22,8 @@
 		<</if>>
 		<<set _assignedToGreenhouse = true>>
         <<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
-		<tr>
-			<td style="width: 300px">
+		<tr class="item">
+			<td style="min-width: 25%">
            		 <span @class="''+_genderClass+''">
                       <<link $slaves[_i].name>>
                         <<set $tmpGirl to $slaves[_i]>>
@@ -41,12 +41,7 @@
 				<<=setup.npcListInfo($slaves[_i])>>
 			</td>
 			<td>
-				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-					Beauty: <<print $slaves[_i].beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge($slaves[_i])>>
+				<<npcListView $slaves[_i] _i 'slave'>>
 			</td>
 		</tr>
 		<</capture>>
@@ -63,7 +58,7 @@
 		<</if>>
         <<set _genderClass = 'gender-' + setup.genderClass(_gardenGuest)>>
 		<tr>
-			<td style="width: 300px">
+			<td style="min-width: 25%">
             		<span @class="''+_genderClass+''">
                           <<link _gardenGuest.name>>
                           <<set $tmpGirlViewBack = 'NPC view - guest'>>
@@ -82,12 +77,7 @@
 				<<=setup.npcListInfo(_gardenGuest)>>
 			</td>
 			<td>
-				<<if [0,2].includes(_gardenGuest.gender) && setup.getAge(_gardenGuest) >= 17>>
-					Beauty: <<print _gardenGuest.beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge(_gardenGuest)>>
+				<<npcListView $slaves[_i] _i 'guest'>>
 			</td>
 		</tr>
 		<</capture>>
