@@ -1,0 +1,53 @@
+:: sleepForest [include]
+
+<<if typeof _npc.stats['forest'] === 'undefined'>>
+    <<set _npc.stats['forest'] = 0>>
+<</if>>
+<<set _npc.stats['forest']++>>
+<<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
+	<<set _npc.stats['forest']++>>
+<</if>>
+
+// Learn skill
+<<if _npc.stats['forest'] > 100 && !(_npc.skills ?? []).includes('woodcraft')>>
+	<<if typeof _npc.skills === 'undefined'>>
+		<<set _npc.skills = []>>
+	<</if>>
+	<<run _npc.skills.push('woodcraft')>>
+	<<run setup.sleepMessages.addJob('<span class="skill">' + _npc.name + ' learned the woodcraft skill</span>', 'forest')>>
+<</if>>
+<<set _chanceOfNotComingHome = 6>>
+<<if _npc.strength >= 30>>
+	<<set _changeOfNotComingHome -=4>>
+<</if>>
+
+<<if setup.npcInventoryHas(_npc, 'knife')>>
+	<<set _chanceOfNotComingHome -=1>>
+<</if>>
+<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30) && _isGuest>>				
+	<<set $scavengingDidntReturn = _guestI>>
+<<else>>
+	<<set _giveWood = (_npc.strength > 30 ? 2 : 1)>>
+	<<if (_npc.skills ?? []).includes('woodcraft')>>
+		<<set _giveWood++>>
+	<</if>>
+	<<if setup.npcInventoryHas(_npc, 'axe')>>
+		<<set _giveWood = _giveWood * 2>>
+	<</if>>
+	<<set _totals.wood += _giveWood>>
+	<<if _isStorageAvailable>>
+		<<pickup $storage 'wood' _giveWood>>
+	<<else>>
+		<<pickup $backpack 'wood' _giveWood>>
+	<</if>>
+	<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest', 'forest')>>
+	<<if setup.percentageChance(10)>>
+		<<set _totals.food++>>
+		<<if _isStorageAvailable>>
+			<<pickup $storage 'food' 1>>
+		<<else>>
+			<<pickup $backpack 'food' 1>>
+		<</if>>
+		<<run setup.sleepMessages.addJob(_npc.name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>', 'forest')>>
+	<</if>>
+<</if>>

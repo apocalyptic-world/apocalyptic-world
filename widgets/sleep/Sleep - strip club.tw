@@ -4,11 +4,15 @@
 <<set _npc.stats['strip_club']++>>
 
 <<set _randomHappy = randomInteger(-2, 3)>>
-<<setNpcStats 'guest' _guestI 'happy' _randomHappy>>
+<<if _isGuest>>
+	<<setNpcStats 'guest' _guestI 'happy' _randomHappy>>
+<<else>>
+	<<setNpcStats 'slave' _i 'happy' _randomHappy>>
+<</if>>
 
-<<if $guests[_guestI].gender == 0>>
+<<if _npc.gender == 0>>
 	<<set _moneyEarned = randomInteger(3, 6)>>
-<<elseif $guests[_guestI].gender == 2>>			
+<<elseif _npc.gender == 2>>			
 	<<set _moneyEarned = randomInteger(2, 5)>>
 <<else>>
 	<<set _moneyEarned = randomInteger(1, 3)>>

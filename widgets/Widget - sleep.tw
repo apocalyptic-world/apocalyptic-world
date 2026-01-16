@@ -325,6 +325,11 @@
 		<<if _npc.assignedTo === 'strip_club' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepStripClub'>>
 		<</if>>
+		<<set _hunter_no_bow = ( $automatization.hunter ?? false) && _npc.assignedTo === 'hunter' && !setup.npcInventoryHas(_npc, 'bow') >>
+		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
+			<<include 'sleepForest'>>
+		<</if>>
+		<<unset _hunter_no_bow>>
 		
 		// Starvation
 		<<if _isHeatWave>>
@@ -618,64 +623,7 @@
 				<</if>>
 			<</if>>
 		<</if>>
-		
-		<<set _hunter_no_bow = ( $automatization.hunter ?? false) &&
-			$guests[_guestI].assignedTo === 'hunter' && !setup.npcInventoryHas($guests[_guestI], 'bow') >>
-		<<if (_hunter_no_bow || $guests[_guestI].assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
-			<<if typeof $guests[_guestI].stats['forest'] === 'undefined'>>
-				<<set $guests[_guestI].stats['forest'] = 0>>
-			<</if>>
-			<<set $guests[_guestI].stats['forest']++>>
-			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set $guests[_guestI].stats['forest']++>>
-			<</if>>
-
-			// Learn skill
-			<<if $guests[_guestI].stats['forest'] > 100 && !($guests[_guestI].skills ?? []).includes('woodcraft')>>
-				<<if typeof $guests[_guestI].skills === 'undefined'>>
-					<<set $guests[_guestI].skills = []>>
-				<</if>>
-				<<run $guests[_guestI].skills.push('woodcraft')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">' + $guests[_guestI].name + ' learned the woodcraft skill</span>', 'forest')>>
-			<</if>>
-
-			<<set _chanceOfNotComingHome = 6>>
-			<<if $guests[_guestI].strength >= 30>>
-				<<set _changeOfNotComingHome -=4>>
-			<</if>>
 	
-			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
-				<<set _chanceOfNotComingHome -=1>>
-			<</if>>
-			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
-				<<set $scavengingDidntReturn = _guestI>>
-			<<else>>
-				<<set _giveWood = ($guests[_guestI].strength > 30 ? 2 : 1)>>
-				<<if ($guests[_guestI].skills ?? []).includes('woodcraft')>>
-					<<set _giveWood++>>
-				<</if>>
-				<<if setup.npcInventoryHas($guests[_guestI], 'axe')>>
-					<<set _giveWood = _giveWood * 2>>
-				<</if>>
-				<<set _totals.wood += _giveWood>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'wood' _giveWood>>
-				<<else>>
-					<<pickup $backpack 'wood' _giveWood>>
-				<</if>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest', 'forest')>>
-				<<if setup.percentageChance(10)>>
-					<<set _totals.food++>>
-					<<if _isStorageAvailable>>
-						<<pickup $storage 'food' 1>>
-					<<else>>
-						<<pickup $backpack 'food' 1>>
-					<</if>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' managed to find some berries while working in the forest. <strong class="iitem">+1 food</strong>', 'forest')>>
-				<</if>>
-			<</if>>
-		<</if>>
-		<<unset _hunter_no_bow>>
 
 		<<if _npc.assignedTo === 'kitchen' && !_isSick>>
 			<<set _npc.stats['kitchen'] ??= 0>>
@@ -791,19 +739,25 @@
 			<</if>>
 		<</if>>
 
+		<<set _isGuest = true>>
 		<<if _npc.assignedTo === 'quarry' && !_dayOff && !_isSandStorm>>
 			<<include 'sleepQuarry'>>
 		<</if>>
 		<<if _npc.assignedTo === 'garage' && !_dayOff>>
 			<<include 'sleepGarage'>>
 		<</if>>
-		<<set _isGuest = true>>
 		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepNightClub'>>
 		<</if>>
 		<<if _npc.assignedTo === 'strip_club' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepStripClub'>>
 		<</if>>
+		<<set _hunter_no_bow = ( $automatization.hunter ?? false) &&
+			_npc.assignedTo === 'hunter' && !setup.npcInventoryHas(_npc, 'bow') >>
+		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
+			<<include 'sleepForest'>>
+		<</if>>
+		<<unset _hunter_no_bow>>
 
 		// Pregnancy
 		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
