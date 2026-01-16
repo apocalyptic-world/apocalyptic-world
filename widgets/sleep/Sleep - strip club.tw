@@ -17,6 +17,9 @@
 <<else>>
 	<<set _moneyEarned = randomInteger(1, 3)>>
 <</if>>
+
+<<set _moneyEarned += Math.round(_npc.beauty/40)>>
+
 <<set _moneyEarned = parseInt(_moneyEarned)>>
 <<set $player.money += _moneyEarned>>
 <<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
