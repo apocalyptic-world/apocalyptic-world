@@ -174,6 +174,10 @@ setup.player = {
 			                            	out.push("Other |" + setup.player.npcNameColor(rel));
 						}
 					}
+					for (const kidID of (rel.family['kids'] ?? [])) {
+			            const gkid = setup.getNpcById(kidID);
+		                out.push("\u200BGrand-|" + setup.player.npcNameColor(gkid) + " (" + rel.name + ")");
+					}
 				} else {
                             		out.push(setup.player.npcNameColor(rel));
 				}
