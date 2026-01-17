@@ -33,7 +33,7 @@ Your intelligence increased by <<=_giveInt>>.
     <</if>>
 <</if>>
 <br /><br />
-<<if _npc && setup.percentageChance(100)>>
+<<if _npc && setup.percentageChance(80)>>
     <<sayNpc _npc>>
         Lost in another world, I see.
     <</sayNpc>>
@@ -45,6 +45,7 @@ Your intelligence increased by <<=_giveInt>>.
     <</sayNpc>>
     <br />
     <<linkreplace 'Unzip your pants'>>
+        <<run $('#option_no').hide()>>
         <center>
             <<image 'places/library/bj.webp'>>
         </center>
@@ -93,6 +94,21 @@ Your intelligence increased by <<=_giveInt>>.
             <br /><br />
         <</linkreplace>>
     <</linkreplace>>
+    <div id="option_no">
+        <<if recall($suppCode)>>
+            <<link 'Tell her that you will continue to read the book'>>
+                <<set $tmpEvent = {
+                    id: _randomGuestId
+                }>>
+                <<goto 'Library - read book 2'>>
+            <</link>>
+        <<else>>
+            <div class="link-internal disabled" style="background: #ccc">
+                Tell her that you will continue to read the book
+                <<notPatreonIcon>>
+            </div>
+        <</if>>
+    </div>
 <</if>>
 <<link 'Leave'>>
     <<goto 'Library'>>
