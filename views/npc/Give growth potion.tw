@@ -22,8 +22,18 @@ Then, it began.
 <br /><br />
 
 <<set _randomGrowthYears = $yearsGrow ?? 8>>
+<<run
+    const origDay = $tmpGirl.birthDate.getDate();
+    const origMonth = $tmpGirl.birthDate.getMonth();
 
-<<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - _randomGrowthYears)>>
+    $tmpGirl.birthDate.setFullYear(
+        $tmpGirl.birthDate.getFullYear() - _randomGrowthYears
+    );
+
+    if ($tmpGirl.birthDate.getMonth() !== origMonth) {
+        $tmpGirl.birthDate.setDate(0);
+    }
+>>
 <<set _ageEnd = setup.getAge($tmpGirl)>>
 <<if _ageEnd <  18>>
 	<<set _endImg = 'kid'>>
