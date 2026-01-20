@@ -12,6 +12,10 @@
 
     <<set _hasTeacher = (setup.getPersonsForLocation($guests, 'school') ?? []).length>>
     <<if _hasTeacher>>
+
+    	<<set _teachers = setup.filterNPCs($guests,  { assignedTo: 'school'})[0]>>
+	    <<set _teacher = $guests[_teachers[0]]>>
+
         <<for _nurseryI, _nursery range $nursery>>
             <<set _age = setup.getAge(_nursery)>>
             <<if _age < 5>>
@@ -19,10 +23,17 @@
             <</if>>
 
             <<set _learnWhat = _nursery.teach ?? 'random'>>
-            <<if setup.percentageChance(40)>>
-                 <<if _learnWhat == 'random'>>
-                    <<set _learnWhat = either(...Object.keys(_skillJobMapping))>>
-                <</if>>
+            <<if _learnWhat == 'random'>>
+                <<set _learnWhat = either(...Object.keys(_skillJobMapping))>>
+            <</if>>
+
+            <<if (_teacher.skills ?? []).includes(_learnWhat)>>
+                <<set _learnChance = 60>>
+            <</else>>
+                <<set _learnChance = 40>>
+            <</if>>
+
+            <<if setup.percentageChance(_learnChance)>>
                 <<set _skillJob = _skillJobMapping[_learnWhat]>>
                 <<set _nursery.stats ??= {}>>
                 <<set _nursery.stats[_skillJob] ??= 0>>
