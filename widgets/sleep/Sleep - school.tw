@@ -14,7 +14,7 @@
     <<if _hasTeacher>>
 
     	<<set _teachers = setup.filterNPCs($guests,  { assignedTo: 'school'})[0]>>
-	    <<set _teacher = $guests[_teachers[0]]>>
+	    <<set _teacher = $guests[_teachers[0]] ?? null>>
 
         <<for _nurseryI, _nursery range $nursery>>
             <<set _age = setup.getAge(_nursery)>>
@@ -27,9 +27,9 @@
                 <<set _learnWhat = either(...Object.keys(_skillJobMapping))>>
             <</if>>
 
-            <<if (_teacher.skills ?? []).includes(_learnWhat)>>
+            <<if _teacher && (_teacher.skills ?? []).includes(_learnWhat)>>
                 <<set _learnChance = 60>>
-            <</else>>
+            <<else>>
                 <<set _learnChance = 40>>
             <</if>>
 
