@@ -39,6 +39,40 @@
 			</tr>
 		<</capture>>
 	<</for>>
+	<<for _slaveI, _slave range $slaves>>
+		<<capture _slaveI, _slave>>
+			<<if _slave.assignedTo !== 'forest' || !timeBetween('08:00', '18:00') || typeof _slave.sick !== 'undefined'>>
+				<<continue>>
+			<</if>>		
+			<tr class="item">
+				<td style="width: 300px">
+					<<set _genderClass = 'gender-' + setup.genderClass(_slave)>>
+					<<if setup.getAge(_slave) < 17>>
+						<span class="name-no-click"><<=_slave.name>></span>
+					<<else>>
+						<span @class="''+_genderClass+''">
+						<<link _slave.name>>
+						  <<set $tmpGirl to _slave>>
+						  <<set $tmpGirl.location = 'forest'>>
+						  <<set $tmpGirlBack = 'Forest'>>
+						  <<set $tmpGirl.rape to false>>
+						  <<set $tmpGirlCapture to false>>
+						  <<set $tmpGirlInvite to false>>
+						  <<set $slaveId = _slaveI>>
+					  	  <<run delete $guestId, $charId, $childId>>						  
+						  <<set $tmpGirlViewBack = 'NPC view' >>
+						  <<goto 'NPC view'>>
+					  	<</link>>
+						</span>
+					<</if>>
+					<<=setup.npcListInfo(_slave)>>
+				</td>
+				<td>
+					 <<npcListView _slave _slaveI 'slave'>>
+				</td>
+			</tr>
+		<</capture>>
+	<</for>>
 	</table>
 <br /><br />
 <center>
