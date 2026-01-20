@@ -1,0 +1,30 @@
+:: Daily Update
+
+	<center>
+		<<if ($dailyUpdate ?? false)>>
+			<h3>Updates from last night's activity</h3>
+			<br />
+			<<for _morningMessageType, _morningMessages range ($dailyUpdate ?? {})>>
+				<<for _morningMessageSubType, _morningMessagesSub range _morningMessages ?? {}>>
+					<<if _morningMessagesSub.length>>
+					<div @class="'morning-messages ' + _morningMessagesType + ''">
+						<fieldset>
+							<legend><<=_morningMessageType>> <<=(_morningMessageSubType ? '(' + _morningMessageSubType + ')' : '')>> (<<=_morningMessagesSub.length>>)</legend>
+						<<for _i to 0; _i lt _morningMessagesSub.length; _i++>>
+							<div class="morning-message">
+								<<print _morningMessagesSub[_i]>>
+							</div>
+						<</for>>
+						</fieldset>
+					</div>
+					<</if>>
+				<</for>>
+			<</for>>
+		<<else>>
+			<h3>No updates currently recorded</h3>
+		<</if>>
+	</center>
+<br />
+<<link 'Back'>>
+	<<dialogclose>>
+<</link>>
