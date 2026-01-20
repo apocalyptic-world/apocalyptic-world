@@ -283,3 +283,11 @@
 		<tr><td colspan="2">Your horse <<=$player.horse>> </td><td>have enough hay for <<=setup.cabinInventory.count('hay')>> days</td></tr>
 	<</if>>
 </table>
+
+<<link "View daily update from the night before">>
+	  <<script>>
+		Dialog.setup("Daily Update", "Daily Update");
+		Dialog.wiki(Story.get("Daily Update").processText());
+		Dialog.open();
+	  <</script>>
+<</link>>
