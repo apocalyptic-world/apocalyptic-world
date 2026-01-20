@@ -14,17 +14,18 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
     dom: ($characters.dom.quests?.invite && !$characters.dom.quests?.accepted_deal),
 }>>
 <<set _done = {
-    vincent: $player.car?.explore,
-    blair:   $characters.blair.quests?.basement,
-    rodger:  $characters.rodger.quests?.eve_pregnant,
-    eve:     $characters.rodger.quests?.eve_pregnant,
-    octavia: $characters.octavia.quests.new_plan3,
-    dom:     $characters.isabel.quests?.dom_return || _closed.dom,
-    isabel:  $characters.isabel.quests?.dom_return || _closed.dom,
-    negan:   $characters?.negan?.quests?.quest5 ?? false,
-    laura:   $characters?.laura?.quests?.breeder_trait ?? false,
-    boris:   $characters.boris.quests?.fight2,
+    vincent: $player?.car?.explore,
+    blair:   $characters?.blair?.quests?.basement,
+    rodger:  $characters.rodger?.quests?.eve_pregnant,
+    eve:     $characters.rodger?.quests?.eve_pregnant,
+    octavia: $characters.octavia?.quests.new_plan3,
+    dom:     ($characters.isabel?.quests?.dom_return || _closed.dom),
+    isabel:  ($characters.isabel?.quests?.dom_return || _closed.dom),
+    negan:   ($characters?.negan?.quests?.quest5 ?? false),
+    laura:   ($characters?.laura?.quests?.breeder_trait ?? false),
+    boris:   $characters.boris?.quests?.fight2,
 }>>
+<<run console.log(_done)>>
 <<set _doneSome = _done.vincent || _done.blair || _done.rodger || _done.eve || _done.octavia ||  _done.dom || _closed.dom  || _done.isabel || _done.negan || _done.laura || _done.boris>>
 <<set _doneAll  = _done.vincent && _done.blair && _done.rodger && _done.eve && _done.octavia && (_done.dom || _closed.dom) && _done.isabel && _done.negan && _done.laura && _done.boris>>
 
