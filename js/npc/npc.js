@@ -506,15 +506,15 @@ setup.npc = {
 		}
 
 		if (npc?.family?.father === 'mc') {
-			return this.mcNameUC('dad')
+			return this.mcNameUC(variables().mcNameOff ?? 'dad')
 		}
 
 		if (variables().slaveId && variables().slaves[variables().slaveId].id ==  npc.id) {
-	        return this.mcNameUC('master');
+	        return this.mcNameUC(variables().mcNameSlave ?? 'master');
 		}
 
 		if (npc.sub > 90) {
-			return this.mcNameUC('sir');
+			return this.mcNameUC(variables().mcNameSub ?? 'sir');
 		}
 		
 		return variables().player.name;
