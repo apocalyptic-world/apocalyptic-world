@@ -290,6 +290,21 @@
 				<<goto 'Car explore event - The Chain Road'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>
+
+			<<set _teachers = setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0})[0]>>
+			<<set _linkName = 'Event: Teaching outside'>>
+			<<if !(_teachers ?? []).length>>
+				<<set _linkName += ' (Will add guest with teacher skill)'>>
+			<</if>>
+			<<link _linkName>>
+				<<if !(_teachers ?? []).length>>
+					<<newgirl>>
+					<<run $tmpGirl.skills.push('teacher')>>
+					<<run $guests.push($tmpGirl)>>
+				<</if>>
+				<<goto 'Event - Youth district - teaching outside'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
 		</fieldset>
 	<</if>>
 </div>
