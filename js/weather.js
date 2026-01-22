@@ -1,5 +1,5 @@
 setup.weather = {
-    isColdSpan: function() {
+    isColdSnap: function() {
         return variables().weather?.coldSnap ?? false;
     }
 };

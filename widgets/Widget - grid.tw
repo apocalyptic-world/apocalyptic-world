@@ -84,26 +84,31 @@
 				<<addhours $args[5]>>
 			<</if>>
 		<</if>>
-		<<if typeof _randomEvents[$args[2]] !== 'undefined'>>
-			<<for _randomEventI, _randomEvent range _randomEvents[$args[2]]>>
-				<<set _travelEventName = 'travel' + _randomEventI>>
-				<<if _randomEvent.enabled && setup.percentageChance(_randomEvent.percentage) && !($locationEvents[_travelEventName] ?? false)>>
-					<<set $locationEvents[_travelEventName] = true>>
-					<<set $travelPassage = $args[2]>>
-					<<set _randomTravelEvent = _randomEvent.passage>>
-					<<break>>
-				<</if>>
-			<</for>>
-		<</if>>
 
-		<<if _props.fuel ?? 0>>
-			<<carFuel _props.fuel>>
-		<</if>>
-		
-		<<if _randomTravelEvent>>
-			<<goto `_randomTravelEvent`>>
+		<<if setup.weather.isColdSnap()>>
+			<<goto 'Car explore - cold start'>>
 		<<else>>
-	  		<<goto $args[2]>>
+			<<if typeof _randomEvents[$args[2]] !== 'undefined'>>
+				<<for _randomEventI, _randomEvent range _randomEvents[$args[2]]>>
+					<<set _travelEventName = 'travel' + _randomEventI>>
+					<<if _randomEvent.enabled && setup.percentageChance(_randomEvent.percentage) && !($locationEvents[_travelEventName] ?? false)>>
+						<<set $locationEvents[_travelEventName] = true>>
+						<<set $travelPassage = $args[2]>>
+						<<set _randomTravelEvent = _randomEvent.passage>>
+						<<break>>
+					<</if>>
+				<</for>>
+			<</if>>
+
+			<<if _props.fuel ?? 0>>
+				<<carFuel _props.fuel>>
+			<</if>>
+			
+			<<if _randomTravelEvent>>
+				<<goto `_randomTravelEvent`>>
+			<<else>>
+				<<goto $args[2]>>
+			<</if>>
 		<</if>>
 	  <</link>>
 	<</if>>
