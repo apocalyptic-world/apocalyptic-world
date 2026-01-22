@@ -5,9 +5,9 @@
 <<set _breakdownRisk = (100 - $player.car.health)/4>>
 <<if setup.percentageChance(_breakdownRisk)>>
 	<<goto 'Car breakdown event - Engine Failure'>>
-<</if>>
-
-<<if $characters?.elsa?.quests?.shower_day && !$characters?.elsa?.quests.well_day>>
+<<elseif setup.weather.isColdSpan()>>
+	<<goto 'Car explore - cold start'>>
+<<elseif $characters?.elsa?.quests?.shower_day && !$characters?.elsa?.quests.well_day>>
 	<<goto 'Elsa - Village well'>>
 <<elseif _randomNumber <= 5 && $weather?.weather === 'sun'>>
 	<<goto 'Car explore event - The Chain Road'>>
