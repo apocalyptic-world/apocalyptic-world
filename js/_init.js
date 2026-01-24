@@ -4,26 +4,20 @@ setup.range = function (start, end) {
 };
 
 window.timeBetween = function (from, to) {
-  var current = new Date(variables().gameDate);
+    const current = new Date(variables().gameDate);
 
-  var minTime = new Date(current);
-  var minTimeSplit = from.split(':');
-  minTime.setHours(minTimeSplit[0]);
-  minTime.setMinutes(minTimeSplit[1]);
-  if (current.getHours() < 8) {
-      minTime.setDate(minTime.getDate() - 1);
-  }
+    const [fh, fm] = from.split(':').map(Number);
+    const [th, tm] = to.split(':').map(Number);
 
-  var maxTime = new Date(current);
-  var maxTimeSplit = to.split(':');
-  if (from > to) {
-      maxTime.setDate(maxTime.getDate() + 1);
-  }
-  maxTime.setHours(maxTimeSplit[0]);
-  maxTime.setMinutes(maxTimeSplit[1]);
-  if (current.getHours() < 8) {
-      maxTime.setDate(maxTime.getDate() - 1);
-  }
+    const minTime = new Date(current);
+    minTime.setHours(fh, fm, 0, 0);
 
-  return current >= minTime && current < maxTime;
+    const maxTime = new Date(current);
+    maxTime.setHours(th, tm, 0, 0);
+
+    if (maxTime <= minTime) {
+        maxTime.setDate(maxTime.getDate() + 1);
+    }
+
+    return current >= minTime && current < maxTime;
 };
