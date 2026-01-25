@@ -5,27 +5,20 @@
 	What you have in mind?
 <</isabel>>
 <br /><br />
-<<if recall($suppCode)>>
-    <<if $player?.car?.fuel >= 20 && $player?.car?.health > 0>>
-    <<link 'Car ride'>>
-	    <<set $player.companionsHome = $player.companions>>
+<<if $player?.car?.fuel >= 20 && $player?.car?.health > 0>>
+	<<link 'Car ride'>>
+		<<set $player.companionsHome = $player.companions>>
 		<<set $player.companions = {}>>
 		<<goto 'Isabel - date [car ride]'>>
 	<</link>>
-    <<else>>
-        <div class="link-internal" style="background: #ccc">
-			Car ride
-		</div>
-    <</if>>
-    <<linkdesc>>
-		Car in driving condition
-	<</linkdesc>>
 <<else>>
-	<div class="link-internal disabled" style="background: #ccc">
+    <div class="link-internal" style="background: #ccc">
 		Car ride
-		<<notPatreonIcon>>
 	</div>
 <</if>>
+<<linkdesc>>
+	Car in driving condition
+<</linkdesc>>
 <<if recall($suppCode)>>
     <<if timeBetween('08:00', '16:00')>>
     <<link 'Lake visit'>>

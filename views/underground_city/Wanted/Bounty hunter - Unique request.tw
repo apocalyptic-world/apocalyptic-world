@@ -1,0 +1,92 @@
+:: Bounty hunter - Unique request
+<h1 class="ptitle">BAR</h1>
+<br />
+<<set $player.quests.wanted.u2 = true>>
+<<newgirl>>
+<<set $tmpGirl.race = 'white'>>
+The neon hum buzzed in your skull as you headed for the door, ready to disappear into the night.
+<br /><br />
+You didn’t make it three steps outside before someone spoke behind you.
+<br /><br />
+You turned.
+<br /><br />
+<center>
+    <<image 'places/bar/request.jpg' sfw>>
+</center>
+<br />
+A woman stood in the alley’s half-light, leaning casually against the rusted doorframe. 
+Her coat was patchworked leather, reinforced at the seams like she’d sewn it together from scavenged armor plates. 
+A hood cast her face in shadow, but you caught the glint of sharp eyes studying you—calculating, impressed, and cautious all at once.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I’ve been watching you work. You’re efficient. Disciplined. That’s… rare.
+<</sayNpc>>
+<br />
+People didn’t compliment you unless they wanted something. You folded your arms and waited for the ask.
+<br /><br />
+She let out a slow breath, scraping a hand through her short-cropped hair.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I’m a finder. Track people, items, debts… the usual. And I’ve got a client who hired me to find someone important to him. His woman.
+<</sayNpc>>
+<br />
+<<sayNpc $tmpGirl>>
+    She disappeared two weeks ago. 
+<</sayNpc>>
+<br />
+You frowned.
+<br /><br />
+<<you>>
+    People don’t vanish without making a mess.
+<</you>>
+<br />
+<<sayNpc $tmpGirl>>
+    Yeah... I’ve followed every rumor. Checked every trading post and scavenger camp between here and the coast. Nobody’s seen her. 
+    Nobody’s heard her.
+<</sayNpc>>
+<br />
+<<you>>
+    And your client?
+<</you>>
+<br />
+Her jaw tightened.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    He’s losing his mind. He’s not some petty thug you can shrug off—he’s got people, resources, reach. The kind of man who blames the nearest person when he’s hurting.
+<</sayNpc>>
+<br />
+You understood then. Her fear wasn’t for the missing woman. It was for herself.
+<br /><br />
+You could walk away. This wasn’t your problem. Her client sounded like the kind of man you avoided on purpose. 
+But the desperation in her voice… that was real. And someone out there—a woman who should’ve come home and didn’t—might still be alive. Or might not.
+<br /><br />
+<<linkreplace 'Accept to help her'>>
+    <<run $('#option_ignore').hide()>>
+    She stepped closer and handed over everything she had—details about the missing woman, Lira Voss, gathered from days of fruitless searching. Notes on her appearance, habits, and daily routines. The places she frequented, the people she trusted, the quiet life she’d lived before she vanished. 
+    There were no signs of danger in her background, no debts, no enemies, nothing that explained why someone like her would disappear.    
+    <br /><br />
+    <<newgirl>>
+    <<set _wantedPerson = $tmpGirl>>
+    <<set 
+        _wantedPerson.race = 'white',
+        _wantedPerson.name = 'Lira Voss',
+        _wantedPerson.unique = true,
+        _wantedPerson.uniqueKey = 'Lira Voss'
+    >>
+
+    <<set _wantedPerson.wanted = {
+		value: randomInteger(20, 70) + ($player.hunterRating ?? 0) + 300,
+		progress: 0,
+		crime: 'Missing'
+	}>>
+	<<set _wantedPerson.strength += 50>>
+	<<run $wanted.push(_wantedPerson)>>
+    <<link 'Leave'>>
+        <<goto 'Bar'>>
+    <</link>>
+<</linkreplace>>
+<div id="option_ignore">
+    <<link 'Ignore her'>>
+        <<goto 'Bar'>>
+    <</link>>
+</div>

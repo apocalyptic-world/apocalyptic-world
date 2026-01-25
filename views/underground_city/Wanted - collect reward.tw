@@ -18,7 +18,12 @@ You kick the door open and bring <<=_wantedPron2>> in. As you walk to the reward
     <<set $player.reputation_bounty_hunter++>>
     <<set $player.money += $wanted[$wantedId].wanted.value>>
     <<set $wanted.splice($wantedId, 1)>>
-    <<goto 'Bar'>>
+
+    <<if $player.reputation_bounty_hunter >= 50 && !$player?.quests?.wanted.u2>>
+        <<goto 'Bounty hunter - Unique request'>>
+    <<else>>
+        <<goto 'Bar'>>
+    <</if>>
 <</link>>
 
 
