@@ -1,0 +1,33 @@
+:: Bar - drunk passed out [bg-underground]
+<br /><br />
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br />
+<<set _lossPercent = 20>>
+<<set _capsMissing = Math.floor($player.money * (_lossPercent / 100))>>
+You woke up face-down in the dirt, your skull pounding like someone had set off a mine inside it.
+<br />
+Slowly, you pushed yourself up, brushing off bits of cracked asphalt and dry weeds clinging to your clothes.
+<br /><br />
+<center>
+    <<image 'game/misc/drunk_wake_up.gif' sfw>>
+</center>
+<br />
+Out of old habit, you checked your pockets.
+<br /><br />
+Empty.
+<br /><br />
+Or at least, emptier than they should’ve been.
+<br /><br />
+You searched again, slower this time, hoping the hangover was just messing with you. But no—your stash was lighter. Much lighter.
+<br /><br />
+You cursed under your breath.
+<br /><br />
+<<if _capsMissing>>
+    <strong>You lost <<=_capsMissing>> caps</strong>
+    <br /><br />
+    <<set $player.money -= _capsMissing>>
+<</if>>
+<<link 'Leave'>>
+    <<addhours 2>>
+    <<goto 'Underground city'>>
+<</link>>

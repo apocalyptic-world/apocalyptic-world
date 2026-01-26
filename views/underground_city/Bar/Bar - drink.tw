@@ -7,7 +7,7 @@
 
 <h1 class="ptitle">BAR</h1>
 <center>
-	[img[setup.ImagePath+'places/bar/drink.webp']]
+	<<image 'places/bar/drink.webp'>>
 </center>
 <br /><br />
 You order a beer at the bar and start drinking it.
@@ -29,6 +29,12 @@ You order a beer at the bar and start drinking it.
 	<<goto 'Bar - random event #1'>>
 <</if>>
 
-[[Continue|Bar]]
+<<link 'Continue'>>
+	<<if $player.drunk >= 100>>
+		<<sleep 'Bar - drunk passed out'>> 
+	<<else>>
+		<<goto 'Bar'>>
+	<</if>>
+<</link>>
 
 
