@@ -11,6 +11,7 @@
 <<set _number = setup.npc.checkDuplicateName()>>
 <<set _shown = { mc: true}>>
 <<set _shownPreg = {}>>
+<<set _shownSib = []>>
 <table class="mc-stats-table">
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
@@ -118,6 +119,7 @@
 	mother:    {}, /* {mother}{kid} */
 	parent:    {}, /* {father}{mother} */
 	pregnancy: {}, /* {spermdonor}{pregnant} */
+	siblings:  {}, /* {sister}{brother} */
 	single:    {}  /* {person} */
 }>>
 <<set _outs = {
@@ -130,6 +132,7 @@
 	mother:    {},
 	parent:    {}, 
 	pregnancy: {}, 
+	siblings:  [],
 	single:    []  
 }>>
 
@@ -285,6 +288,15 @@
 					<</if>>
 				<</if>>
 			<</for>>
+		<<elseif _reltype === 'siblings'>>
+			<<if !(_shownSib[_npc.id] ?? false)>>
+				<<set _siblings = _data>>
+				<<set _rels.siblings[_npc.id] ??= {}>>
+				<<for _siblingID range _siblings>>
+					<<set _rels.siblings[_npc.id][_siblingID] = true>>
+					<<set _shownSib[_siblingID] = true>> 
+				<</for>>
+			<</if>>
 		<<else>>
 			DBG Strange relation: <<=_reltype>><br/><br/>
 		<</if>>
@@ -332,6 +344,23 @@
 					<<set _outs[_reltype][_parentID] ??= []>>
 					<<set _outs[_reltype][_parentID].push(setup.player.npcRelationText2(_npcs.get(_childID), true, true)) + (_number.get(_childID) ?? '')>>
 					<<set _shown[_childID] = true>>
+				<</if>>
+			<</for>>
+		<</if>>
+	<</for>>
+<</for>>
+
+<<for _reltype range ['siblings']>>
+	<<for _npcID, _siblings range (_rels[_reltype] ?? [])>>
+		<<if _npcs.has(_npcID) >>
+			<<set _outs[_reltype][_npcID] ??= []>>
+			<<set _outs[_reltype][_npcID].push(setup.player.npcRelationText2(_npcs.get(_npcID), true, true)) + (_number.get(_npcID) ?? '')>>
+			<<set _shown[_npcID] = true>>
+
+			<<for _siblingID, _dummy range _siblings>>
+				<<if _npcs.has(_siblingID)>>
+					<<set _outs[_reltype][_npcID].push(setup.player.npcRelationText2(_npcs.get(_siblingID), true, true)) + (_number.get(_siblingID) ?? '')>>
+					<<set _shown[_siblingID] = true>>
 				<</if>>
 			<</for>>
 		<</if>>
@@ -436,6 +465,17 @@
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
+			</tr>
+		<</for>>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+
+	<<if Object.keys(_outs.siblings).length>>
+		<tr><td><strong>Siblings without Parents:</strong></td> <td></td></tr>
+		<<for _id range Object.keys(_outs.siblings)>>
+			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<tr style='border-bottom: 1px inset gray'>
+				<td colspan ="2"><<=_outs.siblings[_id].sort().join('<br/>')>></td>
 			</tr>
 		<</for>>
 		<tr><td>&nbsp;</td></tr>
