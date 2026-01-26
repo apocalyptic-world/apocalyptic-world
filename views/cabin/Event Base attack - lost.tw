@@ -1,8 +1,8 @@
 :: Event: Base attack - lost {"position":"458,1083","size":"100,100"}
 <h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
 <br /><br />
-<center>						
-	[img[setup.ImagePath+'places/cabin/event_base_attack_capture.jpg']]
+<center>		
+	<<image 'places/cabin/event_base_attack_capture.jpg' sfw>>				
 </center>
 <br /><br />
 
@@ -20,7 +20,9 @@ They took:
 <<set _beforeSlaves = clone($slaves)>>
 <<for _eventBaseAttackSlaveListId, _eventBaseAttackSlaveList range _eventBaseAttackSlaveListIds>>
 	<<capture _eventBaseAttackSlaveListId>>
-		<strong class="iitem"><<=$slaves[_eventBaseAttackSlaveList].name>></strong><br />
+		<div>
+			<strong><<=setup.displayName($slaves[_eventBaseAttackSlaveList])>></strong>
+		</div>
 		<<set $slaves.splice(_eventBaseAttackSlaveList, 1)>>
 	<</capture>>
 <</for>>
