@@ -1,4 +1,185 @@
 :: Wanted - unique #Lira Voss
 <h1 class="ptitle">OUTSIDE</h1>
+<<set _npc = $wanted[$wantedId]>>
 <br />
-...
+You approached cautiously, but even caution wasn’t enough.
+<br /><br />
+Something moved behind you—a soft shift of weight on old boards—and before you could fully turn, a blunt strike hit the back of your shoulder. The blow drove you to one knee, but you rolled with it, caught her wrist, and brought her down before she could bolt. A moment later, she was pinned, then tied with the rope you always carried.
+<br /><br />
+<<perkAdd 'beaten'>>
+<<video 'bounty_hunter/request1'>>
+<br /><br />
+Only once she realized fighting was useless did she start talking.
+<br /><br />
+And everything spilled out at once.
+<br /><br />
+<<sayNpc _npc>>
+    Don’t take me back. Please… don’t.
+<</sayNpc>>
+<br />
+<<video 'bounty_hunter/request2'>>
+<br /><br />
+She wasn’t missing. She wasn’t kidnapped. She wasn’t taken by raiders or pulled into some wandering nightmare. 
+She had run—deliberately, desperately—away from the life she shared with her husband. 
+The picture she painted of him was far different from the version her finder had described.
+<br /><br />
+<<sayNpc _npc>>
+    He’s a boring man. A small man. He killed everything in our home just by existing. 
+    Couldn’t satisfy me, couldn’t make a decision, couldn’t even pretend to care about anything beyond his own shadow.
+<</sayNpc>>
+<br />
+<<set _moneyGive = 50>>
+<<sayNpc _npc>>
+    Don't do this. I can pay you—more than he's offering. Just let me go. I can pay you <<=_moneyGive>> caps
+<</sayNpc>>
+<br />
+<<linkreplace 'Tore of her clothes'>>
+    <<video 'bounty_hunter/request3'>>
+    <br /><br />
+    Her pleas turned to begs, sharp and desperate, as you gripped the fabric and yanked hard. 
+    The shirt tore open with a ragged rip, buttons scattering across the dusty floor, exposing her full breasts.
+    <br /><br />
+    <<sayNpc _npc>>
+        Stop! Please, God, stop!
+    <</sayNpc>>
+    <br />
+    <<video 'bounty_hunter/request4'>>
+    <br /><br />
+    Your hands moved lower, seizing the waistband of her threadbare pants and underwear in one rough pull. The material gave way easily, shredding under your force, leaving her completely bare from the waist down. 
+    <br /><br />
+    <<sayNpc _npc>>
+        Please... Stop!
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Offer to let her go if she fucks you'>>
+        <<set _fucked = true>>
+        <<set $player.goodwill -= 2>>
+        <<you>>
+            I'll let you go after you suck me off and let me fuck you. Do that, and you're free.
+        <</you>>
+        <br />
+        Disgust twisted her features, her lips pressing into a thin line, eyes squeezing shut as if to block you out. 
+        But the resignation was there too—she nodded once, a jerky motion, her voice barely audible.
+        <br /><br />
+        <<video 'bounty_hunter/request5'>>
+        <br /><br />
+        <<sayNpc _npc>>
+            Fine... just... do it quick.
+        <</sayNpc>>
+        <br />
+        Your tongue pushed past her teeth, tasting her reluctance, feeling the way she recoiled inside even as her body stayed still. 
+        Her face contorted under your grip, revulsion clear in the tense lines around her mouth and the way her breath hitched in shallow bursts.
+        <br /><br />
+        <<video 'bounty_hunter/request6'>>
+        <br /><br />
+        You pulled back just enough to free your cock, shoving your pants down and fisting the thick length until it stood rigid, veins pulsing.
+        <br /><br />
+        <<video 'bounty_hunter/request10'>>
+        <br /><br />
+        Her lips stretched around your shaft, tongue flat and unwilling as you pushed deeper, the wet heat of her throat resisting the intrusion. She gagged immediately, eyes watering, but you held her there, fucking her face with short, insistent pumps
+        <br /><br />
+        Not done yet. You untied her wrists just enough to flip her over, shoving her onto her hands and knees on the creaking floorboards.
+        <br /><br />
+        <<video 'bounty_hunter/request7'>>
+        <br /><br />
+        You gripped her hips, fingers bruising the soft flesh, and started pounding—deep, relentless strokes that slapped your pelvis against her ass, making her cheeks jiggle with every impact. 
+        <br /><br />
+        <<video 'bounty_hunter/request8'>>
+        <br /><br />
+        She buried her face in her arms, sobs shaking her frame, but her body betrayed her with each involuntary rock back, inner muscles 
+        fluttering as you hammered her core. 
+        <br /><br />
+        <<video 'bounty_hunter/request9'>>
+        <br /><br />
+        <<sayNpc _npc>>
+            That's enough!
+        <</sayNpc>>
+        <br />
+        <div id="cum_creampie">
+            <<linkreplace 'Cum inside her'>>
+                <<horny_reset>>
+                <<run $('#option_cum_back').hide()>>
+                <center>
+                    <<image 'game/misc/creampie.webp'>>
+                </center>
+                <br />
+                The pressure crested, and you buried yourself to the hilt, groaning as you unloaded—hot spurts of cum flooding her depths, 
+                spilling out around your base as her pussy overflowed.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Now let me go, please...
+                <</sayNpc>>
+                <br />
+            <</linkreplace>>
+        </div>
+        <div id="option_cum_back">
+            <<linkreplace 'Pull out'>>
+                <<horny_reset>>
+                <<run $('#cum_creampie').hide()>>
+                <center>
+                    <<image 'game/misc/cum_on_back.webp'>>
+                </center>
+                <br />
+                Thick ropes of cum erupted from your tip, splattering across her arched back in hot, sticky bursts. The first shot landed between her shoulder blades, white streaks painting her pale skin, while the next arced higher, dripping down the curve of her spine toward the dimples above her ass
+                <br /><br />
+                <<sayNpc _npc>>
+                    Now let me go, please...
+                <</sayNpc>>
+                <br />
+            <</linkreplace>>
+        </div>
+    <</linkreplace>>
+<</linkreplace>>
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<<linkreplace 'Invite her home as a guest'>>
+		<<set $wanted[$wantedId].relationship += _rel>>
+		<<set $tmpGirlInvite = false>>
+    	<<set _strongGirl = false>>
+    	<<set _relation   = $wanted[$wantedId].relationship ?? 0>>
+    	<<set _countComp  = $player.companions.length ?? 0>>
+    	<<set _reputation = $player.reputation ?? 0>>
+    	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
+    	<<set _no = !_yes || (_fucked ?? false) || (_relation <= 0)>>
+    	 <<if _no>>
+			<br />
+			<<sayNpc $wanted[$wantedId]>>
+            	No, I don't want to come to live with you. Please let me go!
+			<</sayNpc>>
+    	<<else>>
+			<<set $guests.push($wanted[$wantedId])>>
+			<<set $wanted[$wantedId].capture = false>>
+			<<set $wanted.splice($wantedId, 1)>>
+			<<set $player.reputation_bounty_hunter-->>
+			<<set $player.goodwill++>>
+			<<addhours 1>>
+			<<goto 'Guest house'>>
+		<</if>>
+	<</linkreplace>>
+<</if>>
+<div id="option_go">
+    <<link 'Let her go'>>
+        <<set $player.goodwill += 20>>
+        <<if !_fucked>>
+            <<set $player.money += 50>>
+        <</if>>
+        <<addmins 30>>
+		<<set $wanted.splice($wantedId, 1)>>
+		<<goto 'Outside'>>
+    <</link>>
+</div>
+<div id="option_reward">
+    <<linkreplace 'Bring her back and collect reward'>>
+        <br />
+        <<sayNpc _npc>>
+            <<if _fucked>>
+                No! You promised me!
+            <<else>>
+                Please, don't!
+            <</if>>
+        <</sayNpc>>
+        <br />
+        <<link 'Bring her in'>>
+            <<goto 'Wanted - collect reward'>>
+        <</link>>
+    <</linkreplace>>
+</div>
