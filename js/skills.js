@@ -84,7 +84,7 @@ setup.hasWorkingHospital = function() {
  * @returns 
  */
 setup.hasDoctor = function() {
-    return setup.hasWorkingHospital() || setup.getDoctors().length;
+    return setup.hasWorkingHospital() || setup.getDoctors().length || variables().characters?.laura?.quests?.living;
 };
 
 /**
