@@ -830,7 +830,7 @@ setup.suicideChance = function (person) {
     return new Date(year, month - 1, day); 
   }
 
-  setup.pregnancyChance = function (person, fertility = false) {
+  setup.pregnancyChance = function (person) {
     var chance = 0;
     var infertile = (person.traits ?? []).includes('infertile');
     if (infertile || person.sexChanged) {
@@ -859,7 +859,7 @@ setup.suicideChance = function (person) {
         chance = Math.min(100, chance*2);
     }
 
-    if(fertility) {
+    if(setup.perkHas('fertility')) {
         chance = Math.min(100, chance*2);
     }
 
