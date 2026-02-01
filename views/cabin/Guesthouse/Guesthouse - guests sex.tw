@@ -11,7 +11,7 @@
 		$tmpEvent.femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 2);
 		$tmpEvent.maleGuestIds = setup.getRandomPersons($tmpEvent[1], 1);
 	>>
-	<<if !setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && !setup.family.isBlood($tmpEvent.femaleGuestIds[1], $tmpEvent.maleGuestIds[0])>>
+	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && (!setup.family.isBlood($tmpEvent.femaleGuestIds[1], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest)>>
 		<<goto 'Guesthouse [Event] - male on females'>>
 	<</if>>
 <<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 1 && setup.percentageChance(10)>>
@@ -25,7 +25,7 @@
 		$tmpEvent.femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 1);
 		$tmpEvent.maleGuestIds = setup.getRandomPersons($tmpEvent[1], 2);
 	>>
-	<<if !setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && !setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[1])>>
+	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[1]) || !$player?.baseManagement?.noIncest)>>
 		<<goto 'Guesthouse [Event] - males on female'>>
 	<</if>>
 <<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesTGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGirls, _guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
@@ -53,7 +53,7 @@
 		$tmpEvent.femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 1);
 		$tmpEvent.maleGuestIds = setup.getRandomPersons($tmpEvent[1], 1);
 	>>
-	<<if !setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0])>>
+	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0])>>
 		<<goto 'Guesthouse [Event] - male on female'>>
 	<</if>>
 <<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
