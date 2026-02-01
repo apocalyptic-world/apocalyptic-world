@@ -15,9 +15,18 @@ window.timeBetween = function (from, to) {
     const maxTime = new Date(current);
     maxTime.setHours(th, tm, 0, 0);
 
-    if (maxTime <= minTime) {
-        maxTime.setDate(maxTime.getDate() + 1);
+    if (to < from) {
+        if (current < minTime) {
+            minTime.setDate(minTime.getDate() - 1);
+        } else {
+            maxTime.setDate(maxTime.getDate() + 1);
+        }
     }
+
+    console.log(current);
+    console.log(minTime);
+    console.log(maxTime);
+    console.log('------------');
 
     return current >= minTime && current < maxTime;
 };
