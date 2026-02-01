@@ -1,0 +1,39 @@
+:: Public punishment - pillory
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+By midday, a platform had been assembled in the center of the settlement—simple, crude, and impossible to ignore. 
+<<=setup.displayName($tmpGirl)>> laid down in the pillory, wrists and neck secured in the wooden frame. 
+She was fully naked, pale but steady, eyes fixed somewhere beyond the crowd.
+<br /><br />
+<<set $tmpGirl.location = 'pillory'>>
+<center>
+    <<actionImage $tmpGirl 'punish'>>
+</center>
+<br />
+No one cheered. No one jeered. They simply watched, silent and grim, reminded of the rules that kept us alive.
+<br /><br />
+She would remain there until sunset—a full day—exposed, not to shame her, but to imprint the consequence on every mind that still ached for closeness.
+<br /><br />
+<<for _guestI, _guest range $guests>>
+	<<if setup.getAge(_guest) < 18>>
+		<<continue>>
+	<</if>>
+    <<set _randomSubInc = randomInteger(10, 20)>>
+	<<setNpcStats 'guest' _guestI 'sub' _randomSubInc>>
+
+	<<=$guests[_guestI].name>> submission increased by <<=_randomSubInc>>
+    <br />
+	<<if typeof $guests[_guestI].quests === 'undefined'>>
+		<<set $guests[_guestI].quests = {}>>
+	<</if>>
+	<<set $guests[_guestI].quests.lastInteractionDay = $game.day>>
+<</for>>
+<br /><br />
+<<link 'Leave'>>
+    <<addmins 30>>
+    <<set 
+        $tmpGirl.sub = Math.min(100, $tmpGirl.sub += 20),
+        $tmpGirl.happy -= 40
+    >>
+    <<goto 'Wood cabin'>>
+<</link>>
