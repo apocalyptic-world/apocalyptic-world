@@ -502,7 +502,7 @@
 		<</if>>
 		
 		// Leave
-		<<if $guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70>>
+		<<if ($guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70) && setup.getAge(_npc) >= 18>>
 			<<run setup.sleepMessages.addMain(_npc.name + ' was missing in the morning, ' + setup.pronounceWhat(_npc) + ' probably decided to leave this place.')>>
 			<<guestLeft _guestI >>
 			<<set _guestI-->>
