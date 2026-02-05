@@ -120,6 +120,10 @@ Save.onLoad.add(function (save) {
             delete save.state.history[save.state.index].variables.characters.isabel.submission;
         }
 
+        if(!variables?.characters?.isabel?.canTalk) {
+            variables.characters.isabel.canTalk = true;
+        }
+
         if (
             typeof save.state.history[save.state.index].variables.charId !== 'undefined' && 
             save.state.history[save.state.index].variables.charId === 'isabel' && 
@@ -160,6 +164,10 @@ Save.onLoad.add(function (save) {
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
+    }
+    if(variables?.characters?.octavia?.quests?.canTalk) {
+         variables.characters.octavia.canTalk = true;
+         delete variables.characters.octavia.quests.canTalk;
     }
     if (typeof save.state.history[save.state.index].variables.characters.blair === 'undefined') {
         save.state.history[save.state.index].variables.characters.blair = {};

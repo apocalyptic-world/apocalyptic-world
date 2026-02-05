@@ -23,10 +23,5 @@ window.timeBetween = function (from, to) {
         }
     }
 
-    console.log(current);
-    console.log(minTime);
-    console.log(maxTime);
-    console.log('------------');
-
     return current >= minTime && current < maxTime;
 };
