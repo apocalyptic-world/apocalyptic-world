@@ -169,6 +169,9 @@ Save.onLoad.add(function (save) {
          variables.characters.octavia.canTalk = true;
          delete variables.characters.octavia.quests.canTalk;
     }
+    if(variables?.characters?.octavia?.quests?.canDate && !variables?.characters?.octavia?.canFuck) {
+         variables.characters.octavia.canFuck = true;
+    }
     if (typeof save.state.history[save.state.index].variables.characters.blair === 'undefined') {
         save.state.history[save.state.index].variables.characters.blair = {};
     }

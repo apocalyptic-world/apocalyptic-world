@@ -16,7 +16,9 @@ Well, not exactly what I had imagined, but having a roof over their head will de
 <<set _tempCompanions = []>>
 <<for _nursCompI, _nursComp range $player.companions ?? []>>
 	<<set _nursCompKey = _nursCompI.split(':')>>
-	<<run _tempCompanions.push($guests[_nursCompKey[1]].name + ':' + $guests[_nursCompKey[1]].birthDate.getTime())>>
+	<<if _nursCompKey[0] === 'guest'>>
+		<<run _tempCompanions.push($guests[_nursCompKey[1]].name + ':' + $guests[_nursCompKey[1]].birthDate.getTime())>>
+	<</if>>
 <</for>>
 
 <<set $nursery = []>>
