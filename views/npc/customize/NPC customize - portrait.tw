@@ -1,33 +1,11 @@
 :: NPC customize - portrait [girlview no-redirect]
-
-<<set _portraitsList = {
-    female: {
-        asian: setup.range(1, 12),
-        black: setup.range(1, 10),
-        white: setup.range(1, 25),
-        latina: setup.range(1, 9),
-        indian: setup.range(1, 10)
-    },
-    male: {
-        asian: setup.range(1, 4),
-        black: setup.range(1, 4),
-        white: setup.range(1, 8),
-        latina: setup.range(2, 4)
-    },
-    transfemale: {
-        asian: setup.range(1, 5),
-        black: setup.range(1, 5),
-        white: setup.range(1, 20),
-        latina: setup.range(1, 5),
-        indian: setup.range(1, 8)
-    }
-}>>
 <<set _mapping = [
     'female',
     'male',
     'transfemale'
 ]>>
-<<set _availablePortraits = (_portraitsList[_mapping[$tmpGirl.gender]][$tmpGirl.race] ?? [])>>
+<<run console.log(setup.portraits[_mapping[$tmpGirl.gender]])>>
+<<set _availablePortraits = (setup.portraits[_mapping[$tmpGirl.gender]][$tmpGirl.race] ?? [])>>
 <div id="custom_portraits">
     <div class="custom_portrait_item">
             <div class="custom_portrait_item_img">
@@ -106,7 +84,7 @@
         <br />
         </div>
     <</if>>
-    <<for _key = 1; _key <= _availablePortraits.length; _key++>>
+    <<for _key = 1; _key <= _availablePortraits; _key++>>
         <<capture _key, _portraitUrl>>
             <div class="custom_portrait_item">
                 <div class="custom_portrait_item_img">

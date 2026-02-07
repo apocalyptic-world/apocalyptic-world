@@ -26,6 +26,14 @@ importScripts(setup.Path + "js/actions.js?v=" + _timestamp)
 		alert("Error: Could not find file 'actions.js'.");
 	}
 );
+importScripts(setup.Path + "js/portraits.js?v=" + _timestamp)
+	.then(function() {
+		Engine.play(passage(), true);
+		LoadScreen.unlock(setup.lockID);
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'portraits.js'.");
+	}
+);
 importScripts(setup.Path + "packs/packs.js?v=" + _timestamp)
 	.then(function() {
         memorize('packs', setup.packs);
