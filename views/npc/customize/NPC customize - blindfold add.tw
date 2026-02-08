@@ -1,0 +1,21 @@
+:: NPC customize - blindfold add [girlview no-redirect]
+<h1 class="ptitle">BLINDFOLD</h1>
+<br />
+<<if $guestId !== null && $tmpGirl.sub < 20>>
+	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
+	<br /><br />
+	<strong>Submission too low</strong>
+<<else>>
+	<<set $tmpGirl.blindFold = true>>
+	<br /><br />
+    <center>
+        <<actionImage $tmpGirl customize_blindfold>>
+    </center>
+	<br /><br />
+	<<=setup.displayName($tmpGirl)>> lays down on <<=setup.pronounceWhos($tmpGirl)>> knees, <<=setup.pronounceWhat($tmpGirl)>> holds still as you slowly put blindfold around her eyes.
+	<<addmins 10>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>
