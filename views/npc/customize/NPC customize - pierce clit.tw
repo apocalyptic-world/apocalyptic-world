@@ -1,0 +1,25 @@
+:: NPC customize - pierce clit [girlview no-redirect]
+<h1 class="ptitle">CLIT PIERCING</h1>
+<br /><br />
+<<if $guestId !== null && $tmpGirl.sub < 20>>
+	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
+	<br /><br />
+	<strong>Submission too low</strong>
+<<else>>
+	<<set $tmpGirl.piercedClit = true>>
+	<<drop $backpack 'piercing' 1>>
+	<center>
+		<<actionImage $tmpGirl 'customize_clit_piercing'>>
+	</center>
+	<br /><br />
+	<<=setup.displayName($tmpGirl)>> feels a brief , sharp sensation as the needle passes through the clit tissue. That feels uncomfortable but is generally tolerable.
+	<br /><br />
+	<<addmins 60>>
+	After a couple minutes it's done and <<=setup.pronounceWhat($tmpGirl)>> shows <<=setup.pronounceWhos($tmpGirl)>> clit pierced.
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>
+
+
