@@ -52,7 +52,7 @@
 	<<set _child.family.mother = _mother.id>>
 	<<if _mother.pregnancy_father>>
 		<<set _child.family.father = _mother.pregnancy_father>>
-		<<if _child.family.father === 'unnkown' && typeof _mother.pregnancy_event !== 'undefined'>>
+		<<if _child.family.father === 'unknown' && typeof _mother.pregnancy_event !== 'undefined'>>
 				<<set child.family.father = '(' + _mother..pregnancy_event + ')'>>
 		<</if>>
 		<<set _father = setup.getNpcById(_child.family.father)>>
@@ -60,6 +60,17 @@
 			<<set _father.family ??= {kids: []}>>
 			<<set _father.family.kids ??= []>>
 			<<run _father.family.kids.push(_child.id)>>
+
+
+			<<if _father.traits>>
+				<<set _excluded = _child.traits.concat(_child.traitsLocked ?? [])>>
+				<<set _fatherTrait = setup.getRandomTraits({
+					gender: _child.gender
+				}, 1, _excluded.filter(t => !_father.traits.includes(t)))>>
+				<<if _fatherTrait && _fatherTrait.length>>
+					<<set _child.traits.push(_fatherTrait[0])>>
+				<</if>>
+			<</if>>	
 		<</if>>
 	<</if>>
 	
