@@ -110,6 +110,12 @@
 	<</for>>
 </table>
 <br />
+<<if !($locationEvents.strip_club ?? false)>>
+	<<if !_isOpen && timeBetween('14:00', '17:59') && recall($suppCode) && setup.percentageChance(5)>>
+		<<set $locationEvents.strip_club = true>>
+		<<goto 'Strip Club - casting'>>
+	<</if>>
+<</if>>
 <<link 'Office'>>
 	<<goto 'Strip Club - office'>>
 <</link>>
