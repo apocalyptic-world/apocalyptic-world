@@ -34,6 +34,20 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 <<link `_linkLeave`>>
 	<<goto 'Basement'>>
 <</link>>
+<<if setup.baseManagement.population.hasFreeHouse()>>
+	<<link 'Release as settler'>>
+		<<assignedTo $tmpGirl 'none'>>
+		<<slaveRemove $slaveId>>
+		<<statsAdd 'slaves_released'>>
+		<<unset $slaveId>>
+		<<set $player.baseManagement.settlers += 1>>
+		<<if !$tmpGirl.gender>>
+			<<set $player.baseManagement.settlersFemales ??= 0>>
+			<<set $player.baseManagement.settlersFemales += 1>>
+		<</if>>
+		<<goto 'Basement'>>
+	<</link>>
+<</if>>
 <<link `_linkRelease`>>
 	<<assignedTo $tmpGirl 'none'>>
 	<<slaveRemove $slaveId>>
