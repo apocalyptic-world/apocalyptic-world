@@ -1,0 +1,17 @@
+:: Mirror [Place bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br /><br />
+<<link 'Change name'>>
+	<<dialog 'Change name'>>	
+		<<textbox "_mcName" `$player.name ?? ''`>>
+		<<link 'OK'>>
+			<<set $player.name = _mcName>>
+			<<dialogclose>>	
+			<<goto 'Mirror'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
+<<link 'Leave'>>
+    <<addmins 5>>
+    <<goto 'Bedroom'>>
+<</link>>
