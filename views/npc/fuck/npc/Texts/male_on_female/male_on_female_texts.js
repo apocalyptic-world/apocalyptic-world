@@ -74,5 +74,15 @@ setup.actionText.male_on_female = {
     ],
     titjob: [
         "%male%'s dick digs deep in %female%'s cleavage, all slippery from his pre-cum."
+    ],
+    pussy_dildo: [
+        "%female% lowers her dripping pussy onto the thick dildo, grinding down hard while wrapping her lips around %male%'s throbbing cock and sucking greedily.",
+        "%female% bounces rhythmically on the veined dildo, her ass cheeks slapping against the base as she deepthroats %male%'s shaft with wet slurps.",
+        "%female% rides the suction-cup dildo mounted on the floor, her hips rolling in circles while she bobs her head, tongue swirling over %male%'s swollen head.",
+        "%female% impales herself on the girthy dildo, moaning around %male%'s cock as she sucks it deeper, her throat bulging with each thrust.",
+        "%female% grinds her clit against the dildo's base while riding it furiously, her mouth full of %male%'s pulsing dick, saliva dripping down her chin.",
+        "%female% positions the dildo at her entrance and sinks down slowly, then leans forward to engulf %male%'s cock in her hot, eager mouth.",
+        "%female% fucks herself on the ridged dildo with urgent bucks, her tongue lapping at %male%'s balls before sliding up to suck his length.",
+        "%female% spreads her legs wide over the dildo, plunging onto it repeatedly as she hollows her cheeks around %male%'s cock, humming vibrations along it."
     ]
 };
