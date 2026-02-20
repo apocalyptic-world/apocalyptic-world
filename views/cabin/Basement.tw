@@ -229,6 +229,14 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<<run _lowSubmissionSlaves.push(_i)>>
 		<</if>>
 		<<run _slavesInBasement.push(_i)>>
+		<<if (timeBetween('20:00', '23:59') && setup.npcInventoryHas($slaves[_i], 'alcohol') && !($slaves[_i].pregnancy >= 7)  && $slaves[_i].drunk <= ($slaves[_i].happy >= 50 ? 55 : ($slaves[_i].happy >= 0 ? 60 : 70)) && setup.percentageChance($slaves[_i].happy >= 50 ? 5 : ($slaves[_i].happy >= 0 ? 15 : 45)))>>
+			<<set $slaves[_i].drunk =  Math.min(99, $slaves[_i].drunk + randomInteger(20, 55))>>
+			<<set $slaves[_i].happy =  Math.min(100, $slaves[_i].happy + ($slaves[_i].drunk <= 50 ? 1 : ($slaves[_i].drunk <= 75 ? 2 : ($slaves[_i].drunk < 95 ? 0 : -5))))>>
+
+			<<if setup.percentageChance(50)>>
+			    <<run setup.npcInventoryRemove($slaves[_i], 'alcohol')>>
+			<</if>>
+		<</if>>
 		<tr class="item">
 			<td style="min-width: 25%">
 				<<if setup.getAge($slaves[_i]) < 18>>
@@ -299,6 +307,11 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 					</span>
 				  <</if>>
 				  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
+				  <<if ($slaves[_i].drunk >= 20)>>
+					  <span data-balloon-length="medium" @aria-label="setup.pronounceWhat($slaves[_i], true) + ' looks ' + setup.drunkDescription($slaves[_i])" data-balloon-pos="up-right">
+						  &#x1F37A;
+					  </span>
+				  <</if>>
 			</td>
 			<td>
 				<<npcListView $slaves[_i] _i 'slave'>>
