@@ -42,6 +42,7 @@
             <<set _npcHornyGained = (_sexActions[$sexAction].hornyGive ?? 20)>>
             <<set _maxNpcHorny = (_sexActions[$sexAction]?.maxHorny ?? null)>>
             <<if (_maxNpcHorny === null || $tmpGirl.horny < _maxNpcHorny)>>
+                <<set _npcHornyIncreased = true>>
                 <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _npcHornyGained, 100)>>
             <</if>>
         <</if>>
@@ -72,7 +73,7 @@
         <br />
     <</if>>
 
-    <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+    <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive && _npcHornyIncreased>>
 		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
 		<br />
     <</if>>

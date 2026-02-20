@@ -6,7 +6,7 @@ Hours pass as you labor tirelessly, welding and reinforcing the structure, fashi
 Finally, as the last bolt is tightened and the final sealant applied, the hot tub stands ready, a testament to your ingenuity amidst the chaos.
 <br /><br />
 <<set _guests = setup.getAvailablePersons18yo($guests)>>
-<<if _guests[0].length>>
+<<if (_guests[0] ?? []).length>>
     <<set _randomGuest = $guests[setup.getRandomElement(_guests[0])]>>
     <<if _randomGuest.horny > 50>>
         <<set _npc = _randomGuest>>

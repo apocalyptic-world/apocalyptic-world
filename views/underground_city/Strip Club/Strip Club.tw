@@ -112,6 +112,7 @@
 <br />
 <<if !($locationEvents.strip_club ?? false)>>
 	<<if !_isOpen && timeBetween('14:00', '17:59') && recall($suppCode) && setup.percentageChance(5)>>
+		<<unset $charId, $slaveId, $guestId, $childId>>
 		<<set $locationEvents.strip_club = true>>
 		<<goto 'Strip Club - casting'>>
 	<</if>>
@@ -122,6 +123,7 @@
 <<if _isOpen>>
 	<<link 'Sit down in random seat'>>
 		<<newgirl>>
+		<<unset $charId, $slaveId, $guestId, $childId>>
 		<<set $tmpGirl.location = 'strip_club'>>
 		<<set $tmpGirl.hair = 'red'>>
 		<<set $tmpGirl.race = 'white'>>
