@@ -212,6 +212,19 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if setup.percentageChance(_sleepingChance)>>
 				<<set _guest.sleeping = true>>
 			<</if>>
+			<<if (timeBetween('20:00', '23:59') && setup.npcInventoryHas(_guest, 'alcohol') && !(_guest.pregnancy >= 7)  && !_guest.sleeping && _guest.drunk <= (_guest.happy >= 50 ? 55 : (_guest.happy >= 0 ? 60 : 70)) && setup.percentageChance(_guest.happy >= 50 ? 5 : (_guest.happy >= 0 ? 15 : 45)))>>
+				<<set _guest.drunk =  Math.min(99, _guest.drunk + randomInteger(20, 55))>>
+				<<set $guests[$guests.findIndex(obj => obj.id === _guest.id)].drunk =  _guest.drunk>>
+				<<set _guest.happy =  Math.min(100, _guest.happy + (_guest.drunk <= 50 ? 1 : (_guest.drunk <= 75 ? 2 : (_guest.drunk < 95 ? 0 : -5))))>>
+				<<set $guests[$guests.findIndex(obj => obj.id === _guest.id)].happy =  _guest.happy>>
+
+				<<if setup.percentageChance(_guest.drunk - 10)>>
+					<<set _guest.sleeping = true>>
+				<</if>>
+				<<if setup.percentageChance(50)>>
+	            	<<run setup.npcInventoryRemove($guests[$guests.findIndex(obj =&gt; obj.id === _guest.id)], 'alcohol')>>
+				<</if>>
+			<</if>>
 			<tr class="item">
 				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>
@@ -290,6 +303,11 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						</span>
 
 						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
+						<<if (_guest.drunk >= 20)>>
+							<span data-balloon-length="medium" @aria-label="setup.pronounceWhat(_guest, true) + ' looks ' + setup.drunkDescription(_guest)" data-balloon-pos="up-right">
+								&#x1F942;
+							</span>
+						<</if>>
 					<</if>>
 				</td>
 				<td>
