@@ -473,7 +473,7 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 	if (npc.notes) {
 		output += '<span class="glyph" data-balloon-length="large" aria-label="' + npc.notes + '" data-balloon-pos="up-left">&#128456;</span>';
 	}
-	if (npc.drunk >= 30) {
+	if (npc.drunk >= 20) {
 		output += '<span class="glyph" data-balloon-length="medium" aria-label="' + setup.pronounceWhat(npc, true) + ' looks ' + setup.drunkDescription(npc) +'" data-balloon-pos="up-left">&#x1F942;</span>';
 	}
 	return output;
