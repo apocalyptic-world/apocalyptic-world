@@ -1,0 +1,85 @@
+:: Elsa - Attack [bg-forest]
+<br /><br />
+<h1 class="ptitle">ELSA'S HOUSE</h1>
+<br /><br />
+The forest road was quiet—too quiet—until the sound hit you.
+<br /><br />
+A scream.
+<br />
+Shrill.
+<br />
+Pained.
+<br />
+Echoing across the trees.
+<br /><br />
+You slammed the brakes before the mind could finish the thought.
+The engine barely stopped when you were already throwing the door open.
+<br /><br />
+You ran.
+<br /><br />
+Branches whipped past you as you burst through the last line of pines and into the clearing around the homestead.
+<br /><br />
+And then you froze
+<br /><br />
+<strong>
+    At least five men surrounded the house.
+</strong>
+<br /><br />
+<center>
+    <<image 'people/elsa/attack1.jpg' sfw>>
+</center>
+<br />
+Not the same group from the well—these were leaner, hungrier, more confident.<br />
+Two stood near the front door throwing stones, heavy ones, shattering wood and glass.<br />
+Another kicked over the rabbit cages.<br />
+Two more circled toward the back.
+<br /><br />
+They were jeering, calling out mockery as they pelted the house.
+<br />
+<br />
+From inside, a crossbow bolt shot through a window—<br />
+wild, panicked—<br />
+and lodged uselessly in a tree.<br />
+<br /><br />
+<center>
+    <<image 'people/elsa/attack2.jpg' sfw>>
+</center>
+<br />
+<<newguy>>
+<<set _npc1 = $tmpGuy>>
+<<sayNpc _npc1>>
+    Try again, sweetheart!
+<</sayNpc>>
+<br />
+You stepped forward, boots crunching loudly on the forest floor.
+<br /><br />
+One of the men heard it first and turned.
+<br /><br />
+His smirk died when he saw you striding toward them—
+not hesitating, not slowing, not hiding.
+<br /><br />
+The others gradually turned too, their amusement leaking away into something darker, speculative.
+<br /><br />
+<<newguy>>
+<<set _npc2 = $tmpGuy>>
+<<sayNpc _npc2>>
+    Well, look what wandered in.
+<</sayNpc>>
+<br />
+<<link 'Attack them'>>
+    <<generateEnemies 3 0>>
+    <<set _npc1.inventory = {
+        knife: 1
+    }>>
+    <<set _npc2.inventory = {
+        knife: 1
+    }>>
+    <<run $enemies.push(_npc1)>>
+    <<run $enemies.push(_npc2)>>
+    <<set $game.death_reason = 'bleeding out'>>
+    <<fight $enemies 'Elsa - Attack won' 'Dead'>>
+    <<set 
+        $fight.canRunAway = false,
+        $fight.skipEnding = true
+    >>
+<</link>>
