@@ -36,6 +36,7 @@
     <br /><br />
     <table id="slaves" class="npc-list">
         <<for _nurseryI, _nursery range $nursery>>
+			<<capture _nurseryI>>
             <<set _age = setup.getAge(_nursery)>>
             <<if _age < 5>>
                 <<continue>>
@@ -53,6 +54,33 @@
             <<set _localTeach = $nursery[_nurseryI].teach>>
             <tr class="item">
                 <td class="min25">
+			        <<if ($nursery[_nurseryI].teachAdvStudy ?? 0) > 0 >>
+						<span style="margin-left: 18px; font-size:140%" data-balloon-length="medium" @aria-label="'Advanced Study active'" data-balloon-pos="up-left">
+							&#x1F4D6;
+						</span>
+		        	<<elseif setup.cabinInventory.count('book') >>
+						<span data-balloon-length="medium" @aria-label="'Enable Advanced Study'" data-balloon-pos="up-left">
+							<<link '&#x1F4D8;'>>
+								<<dialog 'Begin Advanced Study'>>	
+						       		<<if (setup.cabinInventory.count('book')  ?? 0) > 0  >>
+										Do you want to consume one book to enroll <<= $nursery[_nurseryI].name>> in advanced study? <br />(Accelerates learning, lasts 5-10 days) <br />
+										<<link 'OK'>>
+							               	<<set $nursery[_nurseryI].teachAdvStudy = randomInteger(5,10)>>
+											<<run setup.cabinInventory.drop('book', 1)>>
+											<<dialogclose>>	
+											<<goto 'School'>>
+										<</link>>
+						        	<<else>>
+										You need at least one book in inventory to enroll a student in advanced study. <br />
+										<<link 'OK'>>
+											<<dialogclose>>	
+										<</link>>
+						        	<</if>>
+								<</dialog>>	
+							<</link>>
+						</span>
+		        	<</if>>
+
                     <span @class="_genderClass + _customColorStyle">
                         <<= setup.displayName(_nursery)>>
                     </span>
@@ -72,6 +100,7 @@
                     <<set $nursery[_nurseryI].teach = _localTeach>>
                 </td>
             </tr>
+			<</capture>>
         <</for>>
     </table>
 <</if>>
