@@ -75,19 +75,32 @@
 
 <<if tags().includes('Place') && settings.fastTravelEnabled && !$weather?.sandStorm>>
 	<div id="fast-travel">
-		<br /><br />
-		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to bedroom" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/bedroom_icon.jpg"]]</div>'>>
-			<<addmins 10>>
-			<<goto 'Bedroom'>>
-		<</link>>
-		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to cabin" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/cabin_icon.jpg"]]</div>'>>
-			<<addmins 10>>
-			<<goto 'Wood cabin'>>
-		<</link>>
-		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to outside" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/outside_icon.jpg"]]</div>'>>
-			<<addmins 10>>
-			<<goto 'Outside'>>
-		<</link>>
+		<div>
+			<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to bedroom" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/bedroom_icon.jpg"]]</div>'>>
+				<<addmins 10>>
+				<<goto 'Bedroom'>>
+			<</link>>
+		</div>
+		<div>
+			<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to cabin" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/cabin_icon.jpg"]]</div>'>>
+				<<addmins 10>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		</div>
+		<div>
+			<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to outside" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/outside_icon.jpg"]]</div>'>>
+				<<addmins 10>>
+				<<goto 'Outside'>>
+			<</link>>
+		</div>
+		<<if $game?.location?.garage>>
+			<div>
+				<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to garage" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/garage_icon.jpg"]]</div>'>>
+					<<addmins 10>>
+					<<goto 'Garage'>>
+				<</link>>
+			</div>
+		<</if>>
 	</div>
 <</if>>
 
