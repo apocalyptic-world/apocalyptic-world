@@ -63,7 +63,7 @@
 							<<link '&#x1F4D8;'>>
 								<<dialog 'Begin Advanced Study'>>	
 						       		<<if (setup.cabinInventory.count('book')  ?? 0) > 0  >>
-										Do you want to consume one book to enroll <<= $nursery[_nurseryI].name>> in advanced study? <br />(Accelerates learning, lasts 5-10 days) <br />
+										Do you want to consume one book (you have <<= setup.cabinInventory.count('book') >>) to enroll <<= $nursery[_nurseryI].name>> in advanced study? <br />(Accelerates learning, lasts 5-10 days) <br />
 										<<link 'OK'>>
 							               	<<set $nursery[_nurseryI].teachAdvStudy = randomInteger(5,10)>>
 											<<run setup.cabinInventory.drop('book', 1)>>
