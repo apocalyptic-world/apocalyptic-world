@@ -19,6 +19,7 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 	<</if>>
 	<<set _genderClass = 'gender-' + setup.genderClass(_workoutGuest)>>
 	<<set $guests[_workoutGuestI].strength++>>
+	<<set $guests[_workoutGuestI].horny += randomInteger(10, 20)>>
 	<span @class="''+_genderClass+''" style="font-weight:bold">
 		<<=_workoutGuest.name>>
 	</span> strength increased by 1
@@ -58,6 +59,7 @@ As the event draws to a close, the villagers gather around a makeshift bonfire. 
 	After a moment, she has already knelt down to enjoy your dick.
 	<br /><br />
 	<<linkreplace 'Fuck one of them'>>
+		<<set _hadSex = true>>
 		<<video 'cabin/workout_group4'>>
 		<br /><br />
 			<<=setup.displayName(_npc1)>> bend over and two others get on each of her side and just enjoys the view
@@ -79,7 +81,13 @@ As the event draws to a close, the villagers gather around a makeshift bonfire. 
 	<</linkreplace>>
 <</if>>
 <<link 'Leave'>>
-	<<goto 'Wood cabin'>>
+	<<set _randomNpcs = setup.filterNPCs($guests, {gender:0, race_in:['latina', 'white',hair_in: ['black','brown']],horny_gte: 50,virgin:false})[0]>>
+	<<if !_hadSex && _randomNpcs && recall($suppCode) && setup.percentageChance(10)>>
+		<<set $tmpEvent = { id: setup.getRandomElement(_randomNpcs) }>>
+		<<goto 'Group workout - the view after'>>
+	<<else>>
+		<<goto 'Wood cabin'>>
+	<</if>>
 <</link>>
 
 
