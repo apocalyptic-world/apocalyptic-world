@@ -863,7 +863,13 @@ setup.suicideChance = function (person) {
         chance = Math.min(100, chance*2);
     }
 
-    return chance;
+    return setup.percentageChance(chance);
+};
+
+setup.canGetPregnant = function(person) {
+    if ((person.traits ?? []).includes('infertile') || person.sexChanged) return false;
+    if (typeof person.pregnancy !== 'undefined' || person.gender) return false;
+    return setup.getAge(person) >= 18;
 };
 
 setup.drink = function (person, glass = 1, alcohol = 25) {
