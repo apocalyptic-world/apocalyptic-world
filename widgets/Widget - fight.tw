@@ -112,9 +112,40 @@
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('crossbow')>>
 		<<set $fight.messages.push('You shot ' + $fight.enemies[$args[0]].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + Math.round($player.strength / 1.5, 0) + ')')>>
+	<<elseif $args[1] === 'shotgun'>>
+		<<drop $backpack 'shotgun_shell' 1>>
+		<<set _shotgunDamage = Math.round($player.strength / 1.3, 0)>>
+		<<set _primaryEnemy = $fight.enemies[$args[0]]>>
+		<<set _primaryEnemy.hp -= _shotgunDamage>>
+		<<if typeof _primaryEnemy.attacks === 'undefined'>>
+			<<set _primaryEnemy.attacks = []>>
+		<</if>>
+		<<set _primaryEnemy.attacks.push('shotgun')>>
+		<<set $fight.messages.push('You blast ' + _primaryEnemy.name + ' with the shotgun (-' + _shotgunDamage + ')')>>
+		/* Handle primary defeat now so splash loop indices are clean */
+		<<if _primaryEnemy.hp <= 0>>
+			<<set $fight.messages.push(_primaryEnemy.name + ' is blasted off their feet')>>
+			<<run $fight.defeatedEnemies.push(_primaryEnemy)>>
+			<<run $fight.enemies.splice($args[0], 1)>>
+		<</if>>
+		/* Splash damage to all remaining enemies */
+		<<if $fight.enemies.length > 0>>
+			<<set _splashDamage = Math.round(_shotgunDamage * 0.3, 0)>>
+			<<for _si to $fight.enemies.length - 1; _si >= 0; _si-->>
+				<<if $fight.enemies[_si] !== _primaryEnemy>>
+					<<set $fight.enemies[_si].hp -= _splashDamage>>
+					<<set $fight.messages.push('Shotgun blast also hits ' + $fight.enemies[_si].name + ' (-' + _splashDamage + ')')>>
+					<<if $fight.enemies[_si].hp <= 0>>
+						<<set $fight.messages.push($fight.enemies[_si].name + ' goes down from the blast')>>
+						<<run $fight.defeatedEnemies.push($fight.enemies[_si])>>
+						<<run $fight.enemies.splice(_si, 1)>>
+					<</if>>
+				<</if>>
+			<</for>>
+		<</if>>
 	<</if>>
-	
-	<<if $fight.enemies[$args[0]].hp <= 0>>
+
+	<<if $fight.enemies[$args[0]] && $fight.enemies[$args[0]].hp <= 0>>
 		<<if (typeof $args[1] === 'undefined')>>
 			<<set $fight.messages.push($fight.enemies[$args[0]].name + ' falls to the ground and is knocked out')>>
 		<</if>>
