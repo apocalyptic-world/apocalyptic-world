@@ -138,6 +138,25 @@
 		},
 		goto: "Settlement management",
    },
+   freezer: {
+		show: !($player?.baseManagement?.buildings?.freezer ?? false),
+		title: "Freezer",
+		description: "Cold storage that keeps food fresh longer. Reduces chance of food spoilage events and decreases the amount of food lost when they occur. Consumes 3 electricity.",
+		required: {
+			metal: 20,
+			plastic: 15,
+			glass: 5,
+			car_battery: 2
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.freezer = 1;
+            $game.location.freezer = true;
+		},
+		goto: "Settlement management",
+   },
    wood_wall: {
 		show: ($player?.baseManagement?.buildings?.wood_wall ?? 0) < 100,
 		title: "Wood wall",

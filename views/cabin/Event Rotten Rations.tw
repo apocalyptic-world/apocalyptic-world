@@ -19,7 +19,7 @@
 A weary <strong><<=setup.displayName(_person)>></strong> reports grave news. Some of the food rations appear to have gone bad. Somebody had forgotten to shield them properly, allowing bugs to get into the containers.
 <br /><br />
 
-<<set _rottenPercentage = 20>>
+<<set _rottenPercentage = ($game.location.freezer && setup.baseManagement.electricity.hasElectricity()) ? 10 : 20>>
 
 <<set _countFood = $backpack.count('food')>>
 <<set _foodOutBackpack = Math.round( (1.0 * _rottenPercentage / 100) * _countFood, 0)>> 

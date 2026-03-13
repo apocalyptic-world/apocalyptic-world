@@ -61,7 +61,8 @@ setup.baseManagement = {
             solar_panel: 1,
             hospital: -5,
             house: -0.5,
-            milk_barn:-5
+            milk_barn: -5,
+            freezer: -3
         },
     },
     defense: {
