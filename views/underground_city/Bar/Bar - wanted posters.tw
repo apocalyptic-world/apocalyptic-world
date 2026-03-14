@@ -33,13 +33,23 @@
 	<<set _additionalAward = 0>>
 	<<if $player.reputation_bounty_hunter >= 10 && typeof $player.quests.wanted.u1 === 'undefined'>>
 		<<newguy>>
-		<<set 
+		<<set
 			$tmpGuy.unique = true,
 			$tmpGuy.uniqueKey = 1,
 			$tmpGuy.cantKill = true
 		>>
 		<<set $player.quests.wanted.u1 = true>>
 		<<set _additionalAward = 200>>
+		<<set _wantedPerson = $tmpGuy>>
+	<<elseif $player.reputation_bounty_hunter >= 30 && typeof $player.quests.wanted.u_bh === 'undefined'>>
+		<<newguy>>
+		<<set
+			$tmpGuy.unique = true,
+			$tmpGuy.uniqueKey = 'bounty_hunter',
+			$tmpGuy.cantKill = false
+		>>
+		<<set $player.quests.wanted.u_bh = true>>
+		<<set _additionalAward = 150>>
 		<<set _wantedPerson = $tmpGuy>>
 	<<elseif random(0,2) == 2>>
 		<<newgirl>>

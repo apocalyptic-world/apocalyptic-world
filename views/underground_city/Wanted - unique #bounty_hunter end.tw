@@ -1,0 +1,29 @@
+:: Wanted - unique #bounty_hunter end
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+You grabbed shotgun from the table.
+<br /><br />
+
+<<set _shells = randomInteger(3, 6)>>
+A well-worn shotgun sits on the bench, loaded and ready. Next to it, a crate with a few shells.
+<<pickup $backpack 'shotgun' 1>>
+<<pickup $backpack 'shotgun_shell' _shells>>
+<br /><br />
+You picked up <strong class="iitem">shotgun</strong> and <strong class="iitem"><<= _shells>> shotgun shells</strong>
+
+<br /><br />
+<<if $wantedBHFought>>
+	<<link 'Collect the bounty'>>
+		<<unset $wantedBHFought>>
+		<<goto 'Wanted - collect reward'>>
+	<</link>>
+<<else>>
+	<<link 'Slip away'>>
+		<<set $wanted.splice($wantedId, 1)>>
+		<<set $player.reputation_bounty_hunter = Math.max(0, $player.reputation_bounty_hunter - 5)>>
+		<<unset $wantedBHFought>>
+		<<goto 'Underground city'>>
+	<</link>>
+<</if>>
+
+

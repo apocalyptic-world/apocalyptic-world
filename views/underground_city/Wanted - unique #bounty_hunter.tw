@@ -1,0 +1,34 @@
+:: Wanted - unique #bounty_hunter {"position":"3650,1896","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+<br /><br />
+The trail leads you to a gutted mechanic shop on the edge of the district. 
+Rusted car husks line the walls, and the smell of oil and blood hangs thick in the air. 
+You've heard the name <<=$wanted[$wantedId].name>> in hushed tones at the bar — a bounty hunter who started collecting payments on people who'd done nothing wrong.
+<br /><br />
+<center>
+	<<image 'places/underground/wanted_bh1.jpg'>>
+</center>
+<br /><br />
+You peer through a cracked window. Inside, <<=$wanted[$wantedId].name>> is cleaning a weapon at the workbench, back turned to the door. 
+A <strong>shotgun</strong> rests on the table beside them.
+<br /><br />
+<center>
+	<<image 'places/underground/wanted_bh2.jpg'>>
+</center>
+<br /><br />
+<<if $player.int > 42>>
+	<<link 'Slip inside and grab the shotgun before he notice you'>>
+		<<set $wantedBHFought = false>>
+		<<goto 'Wanted - unique #bounty_hunter end'>>
+	<</link>>
+<</if>>
+<<link 'Kick the door open and fight'>>
+	<<set $wantedBHFought = true>>
+	<<set $enemies = []>>
+	<<set $wanted[$wantedId].strength = randomInteger(40, 70)>>
+	<<run $enemies.push($wanted[$wantedId])>>
+	<<fight $enemies 'Wanted - unique #bounty_hunter end' 'Wanted - unique #bounty_hunter lost'>>
+	<<set $fight.canCapture = false>>
+<</link>>
+
+
