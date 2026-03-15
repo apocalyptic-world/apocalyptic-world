@@ -45,12 +45,19 @@
 								<<goto $args[2]>>
 							<</if>>
 						<</link>>
-						<<set _shop = $args[0]>>
-						<<linkdesc>>
-							<<set _maxcount = Math.floor(($shopMerchants[_shop]?.money ?? 0)/_shopItem.price)>>
-							<<set  _maxcount = Math.min( _maxcount, $backpack.count(_shopItem.name))>>
-							(max <<=_maxcount>>)
-						<</linkdesc>>
+
+						<<set _sellMax = Math.min($backpack.count(_shopItem.name), Math.floor(($shopMerchants[$args[0]]?.money ?? 0) / _shopItem.price))>>
+						<<if _sellMax > 0>>
+							<<set _linkName = "Sell max (" + _sellMax + ")">>
+							<<link _linkName>>
+								<<set $player.money += _shopItem.price * _sellMax>>
+								<<drop $backpack _shopItem.name _sellMax>>
+								<<set $shopMerchants??={}>>
+								<<set $shopMerchants[$args[0]]??={ money: 0 }>>
+								<<set $shopMerchants[$args[0]].money -= _shopItem.price * _sellMax>>
+								<<goto $args[2]>>
+							<</link>>
+						<</if>>
 					<<elseif (_shopItem.sell ?? true)>>
 						<div class="link-internal" style="background: #ccc">
 							Sell
