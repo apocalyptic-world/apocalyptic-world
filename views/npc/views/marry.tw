@@ -48,6 +48,8 @@ The square feels quieter as you consider his request, the weight of his words bl
 
         <<set _npc2.family ??= {}>>
         <<set _npc2.family.husband = _npc1.id>>
+        <<run setup.npc.addHistory(_npc1, 'married', { with: _npc2.id })>>
+        <<run setup.npc.addHistory(_npc2, 'married', { with: _npc1.id })>>
 
         <<run $('#option_decline').hide()>>
         <<you>>

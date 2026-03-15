@@ -6,6 +6,7 @@
 <<set $player.family ??= {}>>
 <<set $player.family.wives ??= []>>
 <<set $player.family.wives.push($tmpGirl.id)>>
+<<run setup.npc.addHistory($tmpGirl, 'married', { with: 'mc' })>>
 
 <center>
     <<image 'places/kitchen/blair_propose.jpg' sfw>>
@@ -117,6 +118,7 @@ You dropped to one knee, holding out the makeshift ring.
                     <<if $tmpGirl.virgin>>
                         <<set $tmpGirl.virgin = false>>
                         <<set _virginityLost = true>>
+                        <<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
                     <</if>>
                     <center>
                         <<actionImage $tmpGirl 'pussy' 'no-text'>>

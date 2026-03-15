@@ -197,6 +197,14 @@
 					<<=$tmpGirl.notes>>
 				</div>
 			<</if>>
+			<<if ($tmpGirl.history ?? []).length > 0>>
+				<div id="npc-history">
+					<h4 style="display:block; margin-bottom: 0px;">History</h4>
+					<<for _histEntry range $tmpGirl.history>>
+						<div><<=setup.npc.historyLabel(_histEntry)>></div>
+					<</for>>
+				</div>
+			<</if>>
 			<div id="npc-notes">
 				<h4 style="display:block; margin-bottom: 0px;">&#x1F4AC;</h4>
 				<<=setup.pronounceWhat($tmpGirl, true)>> calls you '<<=setup.npc.mcName($tmpGirl)>>'. 

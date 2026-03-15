@@ -782,6 +782,40 @@ setup.npc = {
 		return unique[Math.floor(Math.random() * unique.length)]
 			.replace(/%mcNameUC%/g, setup.npc.mcName(npc, true))
     		.replace(/%mcName%/g, setup.npc.mcName(npc, false));
+	},
+
+	/* Find any NPC across all collections by their id */
+	findById: function(id) {
+		const v = variables();
+		for (const npc of (v.slaves ?? [])) { if (npc.id === id) return npc; }
+		for (const key in (v.guests ?? {}))      { if (v.guests[key].id === id)      return v.guests[key]; }
+		for (const key in (v.characters ?? {}))  { if (v.characters[key].id === id)  return v.characters[key]; }
+		return null;
+	},
+
+	/* Add a one-time life-event entry to npc.history */
+	addHistory: function(npc, event, extra) {
+		if (!npc) return;
+		npc.history = npc.history ?? [];
+		const oneTimeEvents = ['virgin_lost', 'married', 'first_sex_mc'];
+		if (oneTimeEvents.includes(event) && npc.history.some(h => h.event === event)) return;
+		const entry = { event, day: variables().game?.day ?? 0 };
+		if (extra) Object.assign(entry, extra);
+		npc.history.push(entry);
+	},
+
+	/* Human-readable label for a history entry */
+	historyLabel: function(entry) {
+		const day = 'Day ' + entry.day + ': ';
+		const withName = !entry.with ? ''
+			: entry.with === 'mc' ? (variables().playerName ?? 'you')
+			: (setup.npc.findById(entry.with)?.name ?? 'someone');
+		switch (entry.event) {
+			case 'virgin_lost':  return day + 'Lost virginity' + (withName ? ' to ' + withName : '');
+			case 'married':      return day + 'Married ' + (withName || 'someone');
+			case 'first_sex_mc': return day + 'First intimate moment with ' + (withName || 'you');
+			default:             return day + entry.event;
+		}
 	}
 }
 
