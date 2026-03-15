@@ -47,6 +47,57 @@
 			<<run setup.sleepMessages.addMain('You earned ' + _capsEarned + ' caps from taxes')>>
 		<</if>>
 	<</if>>
+
+    /* Weekly settlement reputation drift from taxes and buildings */
+    <<if $player.quests.first_settlers ?? false>>
+        <<set $player.baseManagement.settlementReputation ??= 50>>
+
+        /* Tax impact on reputation */
+        <<if _taxes > 30>>
+            <<set _repTaxDrain = (_taxes > 50 ? -15 : _taxes > 40 ? -10 : -5)>>
+            <<set $player.baseManagement.settlementReputation += _repTaxDrain>>
+            <<run setup.sleepMessages.addMain('High taxes are hurting your settlement\'s reputation. <strong>(Settlement reputation ' + _repTaxDrain + ')</strong>')>>
+        <<elseif _taxes < 10>>
+            <<set $player.baseManagement.settlementReputation += 2>>
+            <<run setup.sleepMessages.addMain('Low taxes are appreciated by your settlers. <strong>(Settlement reputation +2)</strong>')>>
+        <</if>>
+
+        /* Building bonuses */
+        <<if $game.location.church ?? false>>
+            <<set $player.baseManagement.settlementReputation += 2>>
+        <</if>>
+        <<if $game.location.hospital ?? false>>
+            <<set $player.baseManagement.settlementReputation += 1>>
+        <</if>>
+        <<if $game.location.school ?? false>>
+            <<set $player.baseManagement.settlementReputation += 1>>
+        <</if>>
+
+        <<set $player.baseManagement.settlementReputation = Math.max(0, Math.min(100, $player.baseManagement.settlementReputation))>>
+
+        /* Reputation-based new settler arrivals */
+        <<set _rep = $player.baseManagement.settlementReputation>>
+        <<set _arrivalChance = 0>>
+        <<set _arrivalMax = 0>>
+        <<if _rep >= 75>>
+            <<set _arrivalChance = 40>>
+            <<set _arrivalMax = 3>>
+        <<elseif _rep >= 50>>
+            <<set _arrivalChance = 20>>
+            <<set _arrivalMax = 2>>
+        <<elseif _rep >= 25>>
+            <<set _arrivalChance = 5>>
+            <<set _arrivalMax = 1>>
+        <</if>>
+
+        <<if _arrivalChance > 0 && setup.percentageChance(_arrivalChance) && setup.baseManagement.population.hasFreeHouse()>>
+            <<set _newSettlers = randomInteger(1, _arrivalMax)>>
+            <<set _newFemales = randomInteger(0, _newSettlers)>>
+            <<set $player.baseManagement.settlers += _newSettlers>>
+            <<set $player.baseManagement.settlersFemales += _newFemales>>
+            <<run setup.sleepMessages.addMain(_newSettlers + ' new settler' + (_newSettlers > 1 ? 's' : '') + ' arrived, drawn by your settlement\'s reputation. <strong>(Settlement reputation: ' + _rep + ')</strong>')>>
+        <</if>>
+    <</if>>
 <</if>>
 
 		

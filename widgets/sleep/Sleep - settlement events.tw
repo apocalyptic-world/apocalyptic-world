@@ -1,0 +1,47 @@
+:: sleepSettlementEvents [include]
+
+<<if !($player.quests.first_settlers ?? false)>>
+    /* No settlement yet */
+<<else>>
+    <<set $player.baseManagement ??= {}>>
+    <<set $player.baseManagement.settlementReputation ??= 50>>
+
+    /* Daily random settlement event (~12% chance) */
+    <<if setup.percentageChance(12) && ($player.baseManagement.settlers ?? 0) > 0>>
+        <<set _settEventRoll = randomInteger(1, 10)>>
+        <<if _settEventRoll <= 4>>
+            /* Positive events */
+            <<set _settEventType = randomInteger(1, 3)>>
+            <<if _settEventType === 1>>
+                <<set $player.baseManagement.settlementReputation += 3>>
+                <<run setup.sleepMessages.addMain('A settler helped an injured traveler passing through. Word spreads. <strong>(Settlement reputation +3)</strong>')>>
+            <<elseif _settEventType === 2>>
+                <<set $player.baseManagement.settlementReputation += 2>>
+                <<run setup.sleepMessages.addMain('Settlers organized a community meal together. Morale is up. <strong>(Settlement reputation +2)</strong>')>>
+            <<else>>
+                <<set $player.baseManagement.settlementReputation += 2>>
+                <<run setup.sleepMessages.addMain('A group of settlers repaired a stretch of road near the settlement. <strong>(Settlement reputation +2)</strong>')>>
+            <</if>>
+        <<elseif _settEventRoll <= 7>>
+            /* Negative events */
+            <<set _settEventType = randomInteger(1, 3)>>
+            <<if _settEventType === 1>>
+                <<set $player.baseManagement.settlementReputation -= 3>>
+                <<run setup.sleepMessages.addMain('A theft was reported inside the settlement. People are uneasy. <strong>(Settlement reputation -3)</strong>')>>
+            <<elseif _settEventType === 2>>
+                <<set $player.baseManagement.settlementReputation -= 2>>
+                <<run setup.sleepMessages.addMain('A fight broke out between two settlers. <strong>(Settlement reputation -2)</strong>')>>
+            <<else>>
+                <<if !($game.location.hospital ?? false)>>
+                    <<set $player.baseManagement.settlementReputation -= 4>>
+                    <<run setup.sleepMessages.addMain('Someone fell ill and there is no hospital to help them. Settlers are worried. <strong>(Settlement reputation -4)</strong>')>>
+                <<else>>
+                    <<set $player.baseManagement.settlementReputation -= 1>>
+                    <<run setup.sleepMessages.addMain('Someone fell ill but the hospital handled it. <strong>(Settlement reputation -1)</strong>')>>
+                <</if>>
+            <</if>>
+        <</if>>
+        /* Clamp reputation to 0-100 */
+        <<set $player.baseManagement.settlementReputation = Math.max(0, Math.min(100, $player.baseManagement.settlementReputation))>>
+    <</if>>
+<</if>>

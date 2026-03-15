@@ -256,6 +256,12 @@
 		</td>
 	</tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
+	<<if $player.quests.first_settlers ?? false>>
+		<<set _settRep = $player.baseManagement?.settlementReputation ?? 50>>
+		<<set _settRepLabel = _settRep >= 80 ? 'Excellent' : _settRep >= 60 ? 'Good' : _settRep >= 40 ? 'Neutral' : _settRep >= 20 ? 'Poor' : 'Terrible'>>
+		<tr><td>Settlement reputation:</td><td><<=_settRep>>/100</td><td><strong><<=_settRepLabel>></strong></td></tr>
+		<tr><td>&nbsp;</td><td> </td></tr>
+	<</if>>
 	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td>
 		<td>(
 			<<for _happyLevel, _count range _settlementStatsData.happylvl>>
