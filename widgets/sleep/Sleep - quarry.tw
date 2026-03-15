@@ -12,6 +12,9 @@
 <<if _npc.strength >= 50 && setup.percentageChance(50)>>
     <<set _itemCount++>>
 <</if>>
+<<if (_npc.stats['quarry'] ?? 0) >= 20 && setup.percentageChance(35)>>
+    <<set _itemCount++>>
+<</if>>
 
 <<set _totals[_randomItem] ??= 0>>
 <<set _totals[_randomItem] += _itemCount>>

@@ -9,11 +9,12 @@
     <</if>>
     <br /><br />
 <<else>>
-    <<set 
+    <<set
         _needWood = 200,
         _needGlass = 100,
         _needCloth = 100,
-        _needMetal = 100
+        _needMetal = 100,
+        _needStone = 50
     >>
     Need for renovation:
     <br />
@@ -24,13 +25,16 @@
     <strong class="iitem"><<=_needCloth>> cloth</strong>
     <br />
     <strong class="iitem"><<=_needMetal>> metal</strong>
+    <br />
+    <strong class="iitem"><<=_needStone>> stone</strong>
     <br /><br />
     <<if
-        !$characters.isabel.quests.strip_club_resources_day && 
-        $backpack.count('wood') >= _needWood && 
+        !$characters.isabel.quests.strip_club_resources_day &&
+        $backpack.count('wood') >= _needWood &&
         $backpack.count('glass') >= _needGlass &&
         $backpack.count('cloth') >= _needCloth &&
-        $backpack.count('metal') >= _needMetal
+        $backpack.count('metal') >= _needMetal &&
+        $backpack.count('stone') >= _needStone
     >>
         <<link 'Give resources for renovation'>>
             <<run $backpack.drop('wood', _needWood)>>
@@ -38,6 +42,7 @@
             <<drop $backpack 'glass' _needGlass>>
             <<drop $backpack 'cloth' _needCloth>>
             <<drop $backpack 'metal' _needMetal>>
+            <<drop $backpack 'stone' _needStone>>
             <<set $characters.isabel.quests.strip_club_resources_day = $game.day>>
             <<goto 'Strip club - renovate'>>
         <</link>>

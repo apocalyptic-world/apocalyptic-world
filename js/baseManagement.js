@@ -59,6 +59,7 @@ setup.baseManagement = {
         },
         list: {
             solar_panel: 1,
+            coal_furnace: 4,
             hospital: -5,
             house: -0.5,
             milk_barn: -5,
@@ -69,16 +70,26 @@ setup.baseManagement = {
         description: function()
         {
             const _woodWalls = (variables().player?.baseManagement?.buildings['wood_wall'] ?? 0);
+            const _stoneWalls = (variables().player?.baseManagement?.buildings['stone_wall'] ?? 0);
+            if (_stoneWalls >= 100) {
+                return 'Your settlement is fully enclosed by stone walls. Raiders will think twice before attacking.'
+            }
+            if (_stoneWalls >= 50) {
+                return 'More than half of your settlement is protected by stone walls. Still some gaps to fill.'
+            }
+            if (_stoneWalls > 10) {
+                return 'Parts of your settlement have stone walls. Combined with any wood walls, defense is improving.'
+            }
             if (_woodWalls >= 100) {
-                return 'Around your settlement is wood wall. It will protect from small intruders and thieves.'
+                return 'Around your settlement is a wood wall. It will protect from small intruders and thieves.'
             }
             if (_woodWalls >= 50) {
-                return 'More than half of your settlement is protected from intruders. They are still holes someone could get in.'
+                return 'More than half of your settlement is protected from intruders. There are still holes someone could get in.'
             }
             if (_woodWalls > 10) {
-                return 'Small part of your settlement is behind walls. They are still big threats of intruders or thieves.'
+                return 'A small part of your settlement is behind walls. There are still big threats of intruders or thieves.'
             }
-            
+
             return 'Almost no defense. No walls, only some gates in the middle of the road.'
         }
     },

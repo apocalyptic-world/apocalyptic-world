@@ -173,9 +173,47 @@
             $player.baseManagement.buildings.wood_wall++;
 		},
 		goto: "Settlement management",
-        currentCount: true,	
+        currentCount: true,
 		percentage: true,
 		currentTitle: 'Around settlement',
 		minutes: 60
    	},
+   stone_wall: {
+		show: ($player?.baseManagement?.buildings?.stone_wall ?? 0) < 100,
+		title: "Stone wall",
+		description: "Stronger than wood walls. Reduces the number of raiders in base attacks more significantly.",
+		required: {
+			stone: 20,
+			metal: 2,
+			rope: 1
+		},
+		energy: 15,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.stone_wall ??= 0;
+            $player.baseManagement.buildings.stone_wall++;
+		},
+		goto: "Settlement management",
+        currentCount: true,
+		percentage: true,
+		currentTitle: 'Around settlement',
+		minutes: 90
+   	},
+   coal_furnace: {
+		show: !($player?.baseManagement?.buildings?.coal_furnace ?? false),
+		title: "Coal furnace",
+		description: "Burns 1 coal per day to generate 4 electricity. Requires coal in storage to operate.",
+		required: {
+			metal: 15,
+			stone: 20
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.coal_furnace = 1;
+		},
+		goto: "Settlement management",
+   },
 }>>
