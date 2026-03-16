@@ -101,7 +101,12 @@
 			<</if>>
 
 			<<if _props.fuel ?? 0>>
+				<!-- driving with car -->
 				<<carFuel _props.fuel>>
+				<<if $weather?.sandStorm>>
+        			<<set _sandstormDamage = randomInteger(5, 15)>>
+        			<<set $player.car.health = Math.max($player.car.health - _sandstormDamage, 0)>>
+    			<</if>>
 			<</if>>
 			
 			<<if _randomTravelEvent>>
