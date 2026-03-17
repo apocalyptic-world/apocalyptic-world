@@ -39,7 +39,7 @@
     <<set _outDupNpcs = []>>
     <<set _outMinusNpcs = []>>
     <<set _bp_plus  = [], _bp_minus = []>>
-    <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
+
     <<for _npcI, _npc range _npcs>>
         <<if setup.getAge(_npc) < 18>>
             <<continue>>
@@ -74,12 +74,13 @@
         /* chastity_belt, can only remove, TODO later */
 
         <<for _itemI, _item range setup.inventoryNpc>>
+            <<if ['coat_wolf'].includes(_item)>><<continue>><</if>>
             <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
 
             /* duplicates go to backpack or storage */
             <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) || 
                     (_ruleHunter &&  ['bow', 'axe'].includes(_item)) || 
-                    (_ruleJob &&  !['condom', 'kettlebell', 'kettlebell', 'dumbestbell'].includes(_item)) >>
+                    (_ruleJob &&  !['condom', 'dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) >>
                 <<if _itemcount > 1>>
                     <<run _itemcount-->>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
