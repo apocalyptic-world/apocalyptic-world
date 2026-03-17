@@ -19,9 +19,31 @@
 	<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
 	<br /><br />
 <</if>>
-<<if randomInteger(0, 3) === 0>>
+<<if $tmpGirl.traits.includes('sensitive_tits')>>
+	<<set _milkbottlechance = 50>>
+	<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
+	<<if $tmpGirl.horny < 80>>
+		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 80) >>
+		<strong><<=$tmpGirl.name>> likes how the pump feels on her nipples and gets turned on by it.</strong>
+		<br /><br />
+	<<else>>
+		<strong><<=$tmpGirl.name>> likes how the pump feels on her nipples.</strong>
+		<br /><br />
+	<</if>>
+<<else>>
+	<<set _milkbottlechance = 25>>
+	<<if $tmpGirl.horny < 70>>
+		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 3, 70) >>
+		<strong><<=$tmpGirl.name>> can't help getting a little turned on feeling the pump on her nipples.</strong>
+		<br /><br />
+	<</if>>
+<</if>>
+<<if setup.percentageChance(_milkbottlechance)>>
 	<<pickup $backpack 'milk' 1>>
 	<strong>You managed to get one bottle of milk.</strong>
+	<br /><br />
+	<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+	<strong><<=$tmpGirl.name>> relaxes as she feels the pressure release in her breasts and feels a little happier.</strong>
 	<br /><br />
 <</if>>
 <<link 'Back'>>
