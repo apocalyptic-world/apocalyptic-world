@@ -23,6 +23,11 @@
     <</if>>
 	<<set _showSex = true>>
 
+    /* Call once so both top and bottom button renders see the same _askedToCumInside value */
+    <<if $player.horny >= 100 && !$tmpGirl.gender>>
+        <<include 'asks to cum inside'>>
+    <</if>>
+
     /* History: first intimate moment with player (one-time, deduped in helper) */
     <<run setup.npc.addHistory($tmpGirl, 'first_sex_mc', { with: 'mc' })>>
 
