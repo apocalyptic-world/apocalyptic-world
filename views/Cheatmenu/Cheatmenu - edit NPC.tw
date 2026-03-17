@@ -93,6 +93,19 @@
                 <label><<radiobutton "_breasts" "big" autocheck>> Big</label>
             </td>
         </tr>
+        <tr>
+            <td>
+                Pregnant:
+            </td>
+            <td>
+                <<set _isPregnant = typeof $tmpGirl.pregnancy !== 'undefined'>>
+                <<set _pregnancyDays = $tmpGirl.pregnancy ?? 0>>
+                <<set _pregnantChecked = _isPregnant ? 'checked' : null>>
+                <<checkbox "_isPregnant" false true _pregnantChecked>> pregnant &nbsp;
+                days: <<numberbox "_pregnancyDays" _pregnancyDays>>
+                <span style="opacity:0.6">(0 = just started, ~270 = near birth)</span>
+            </td>
+        </tr>
     <</if>>
     <tr>
         <td>
@@ -245,6 +258,11 @@
     <<set $tmpGirl.birthDate = setup.formatDateToObject(_birthDate)>>
     <<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
         <<set $tmpGirl.breasts = _breasts>>
+        <<if _isPregnant>>
+            <<set $tmpGirl.pregnancy = Math.max(0, Math.floor(_pregnancyDays))>>
+        <<else>>
+            <<run delete $tmpGirl.pregnancy>>
+        <</if>>
     <</if>>
     <<set $tmpGirl.race = _race>>
     <<if setup.getAge($tmpGirl) >= 18>>
