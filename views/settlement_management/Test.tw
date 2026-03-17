@@ -12,6 +12,11 @@
 <<set _shown = { mc: true}>>
 <<set _shownPreg = {}>>
 <<set _shownSib = []>>
+<<set _wifeCount = 0>>
+<<set _motherCount = 0>>
+<<set _childCount = 0>>
+<<set _pregCount = 0>>
+
 <table class="mc-stats-table">
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
@@ -20,9 +25,10 @@
 		<<if _wifeText>>
 			<<set _wivesTexts.push(_wifeText)>>
 		<</if>>
+		<<set _wifeCount++>>
 	<</for>>
 	<<if _wivesTexts.length>>
-		<tr><td colspan ="2"><strong>Wives you married</strong></td></tr>
+		<tr><td colspan ="2"><strong>Wives you married (<<= _wifeCount>>)</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_wivesTexts.sort().join('<br/>')>></td>
@@ -37,9 +43,10 @@
 		<<if _childmotherText>>
 			<<set _childmothersTexts.push(_childmotherText)>>
 		<</if>>
+		<<set _motherCount++>>
 	<</for>>
 	<<if _childmothersTexts.length>>
-		<tr><td colspan ="2"><strong>Mothers to your children</strong></td></tr>
+		<tr><td colspan ="2"><strong>Mothers to your children (<<= _motherCount>>)</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_childmothersTexts.sort().join('<br/>')>></td>
@@ -54,9 +61,10 @@
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
 		<</if>>
+		<<set _childCount++>>
 	<</for>>
 	<<if _kidsTexts.length>>
-		<tr><td colspan ="2"><strong>Children you fathered</strong></td></tr>
+		<tr><td colspan ="2"><strong>Children you fathered (<<= _childCount>>)</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_kidsTexts.sort().join('<br/>')>></td>
@@ -82,6 +90,7 @@
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
 				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false)) + (_number.get(_npc.id) ?? '')>>
+				<<set _pregCount++>>
 			<</if>>
 		<</if>>
 	<</for>>
@@ -94,11 +103,12 @@
 			<<if _fatherId === 'mc'>>
 				<<set _shown[_npc.id] = true>>
 				<<set _pregTexts.push(setup.player.npcRelationText(_npc.id, false)) + (_number.get(_npc.id) ?? '')>>
+				<<set _pregCount++>>
 			<</if>>
 		<</if>>
 	<</for>>
 	<<if _pregTexts.length>>
-		<tr><td colspan ="2"><strong>Pregnant carrying your child</strong></td></tr>
+		<tr><td colspan ="2"><strong>Pregnant carrying your child (<<= _pregCount>>)</strong></td></tr>
 		<tr>
 			<td></td>
 			<td><<=_pregTexts.sort().join('<br/>')>></td>
