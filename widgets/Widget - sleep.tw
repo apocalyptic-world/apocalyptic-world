@@ -56,9 +56,7 @@
   <<horny 5>>
   <<set $game.day += 1>>
   
-  <<for _locationEventI, _locationEvent range ($locationEvents ?? {})>>
-  	<<set $locationEvents[_locationEventI] = false>>
-  <</for>>
+  <<run for (const k in $locationEvents) $locationEvents[k] = false;>>
   
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 
@@ -104,31 +102,21 @@
 <</if>>
 
 <<set _randomScavengingItems = clone(setup.items.scavenging)>>
-<<for _scavengingItemKey, _scaveningItemChance range setup.items.scavenging_chance>>
-	<<if setup.percentageChance(_scaveningItemChance)>>
-		<<run _randomScavengingItems.push(_scavengingItemKey)>>
-	<</if>>
-<</for>>
-<<for _scavengingItemKey, _scavengingItem range _randomScavengingItems>>
-	<<if typeof setup.items.scavenging_max[_scavengingItem] !== 'undefined' && setup.items.scavenging_max[_scavengingItem] < setup.cabinInventory.count(_scavengingItem)>>
-		<<run _randomScavengingItems.splice(_scavengingItemKey, 1)>>
-	<</if>>
-<</for>>
+<<run
+	for (const [key, chance] of Object.entries(setup.items.scavenging_chance)) {
+		if (setup.percentageChance(chance)) _randomScavengingItems.push(key);
+	}
+	_randomScavengingItems = _randomScavengingItems.filter(k =>
+		typeof setup.items.scavenging_max[k] === 'undefined' ||
+		setup.items.scavenging_max[k] >= setup.cabinInventory.count(k)
+	);
+>>
 
 <<for _i to 0; _i lt $slaves.length; _i++>>
-	<<capture _i>>
 		<<set _npc = $slaves[_i]>>
-		<<set $slaves[_i].talked to false>>
-		<<set $slaves[_i].milked to false>>
-		<<set $slaves[_i].groped to false>>
-		<<set $slaves[_i].washed = false>>
-		<<set $slaves[_i].workout to false>>
-		<<set $slaves[_i].gift = false>>
-		<<set $slaves[_i].cosmetics = false>>
-		<<set $slaves[_i].offerSlave = false>>
-		<<set $slaves[_i].drunk = 0>>
-		<<if $slaves[_i].horny < 80>>
-			<<set $slaves[_i].horny++>>
+		<<run Object.assign(_npc, {talked:false, milked:false, groped:false, washed:false, workout:false, gift:false, cosmetics:false, offerSlave:false, drunk:0})>>
+		<<if _npc.horny < 80>>
+			<<set _npc.horny++>>
 		<</if>>
 		
 		<<if typeof $slaves[_i].stats  === 'undefined'>>
@@ -141,7 +129,7 @@
 		<</if>>
 
 		// dumbbell
-		<<include 'sleepDumbbell'>>
+		<<run setup.sleep.processDumbbell(_npc, _isHeatWave)>>
 /*
 		<<if setup.npcInventoryHas($slaves[_i], 'dumbbell') && $slaves[_i].strength < 30>>
 			<<set $slaves[_i].strength++>>
@@ -440,28 +428,17 @@
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your slave <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
-	<</capture>>
 <</for>>
 
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
 <<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
-	<<capture _guestI>>
 		<<set _npc = $guests[_guestI]>>
 		<<if _isOvercrowded>>
 			<<setNpcStats 'guest' _guestI 'happy' -5>>
 		<</if>>
-		<<set $guests[_guestI].talked to false>>
-		<<set $guests[_guestI].milked to false>>
-		<<set $guests[_guestI].groped to false>>
-		<<set $guests[_guestI].workout to false>>
-		<<set $guests[_guestI].washed = false>>
-		<<set $guests[_guestI].gift = false>>
-		<<set $guests[_guestI].cosmetics = false>>
-		<<set _npc.sleeping = false>>
-		<<set $guests[_guestI].washedBathhouse = false>>
-		<<set $guests[_guestI].drunk = 0>>
+		<<run Object.assign(_npc, {talked:false, milked:false, groped:false, workout:false, washed:false, gift:false, cosmetics:false, sleeping:false, washedBathhouse:false, drunk:0})>>
 		<<if $guests[_guestI].horny <= 90>>
 			<<set $guests[_guestI].horny += window.randomInteger(1, 9)>>
 		<<else>>
@@ -477,7 +454,7 @@
 		<</if>>
 
 		// dumbbell
-		<<include 'sleepDumbbell'>>
+		<<run setup.sleep.processDumbbell(_npc, _isHeatWave)>>
 /*
 		<<if setup.npcInventoryHas($guests[_guestI], 'dumbbell') && $guests[_guestI].strength < 30>>
 			<<set $guests[_guestI].strength++>>
@@ -868,11 +845,9 @@
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your guest <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
-	<</capture>>
 <</for>>
 
 <<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
-	<<capture _nurseryI>>
 		<<set _npc = $nursery[_nurseryI]>>
 		<<set _npc.sleeping = false>>
 		// Starvation
@@ -916,7 +891,6 @@
 			<</if>>
 			<<run setup.sleepMessages.add('Kid <strong><span class="'+_genderClass+'">' + _npc.name + '</span></strong>, child of  ' + (_motherNpc ? _motherNpc.name : "????") + ', has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! ', 'birthdays')>>
 		<</if>>
-	<</capture>>
 <</for>>
 
 <<for _charI, _char range $characters>>
