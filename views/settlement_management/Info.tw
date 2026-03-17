@@ -77,8 +77,8 @@
 	<<if typeof _statsNpc.pregnancy !== 'undefined'>>
 		<<set _preglist += _statsNpc.name + ', ' >>		
 	<</if>>
-	<<set _settlementStatsData['virgin'] += ((_statsNpc.virgin ??= false) && setup.getAge(_statsNpc) >= 18 ) ? 1 : 0>>
-	<<if (_statsNpc.virgin ??= false) && setup.getAge(_statsNpc) >= 18>>
+	<<set _settlementStatsData['virgin'] += ((_statsNpc.virgin ?? false) && setup.getAge(_statsNpc) >= 18 ) ? 1 : 0>>
+	<<if (_statsNpc.virgin ?? false) && setup.getAge(_statsNpc) >= 18>>
 		<<set _virglist += _statsNpc.name + ', '>>		
 	<</if>>
 
@@ -150,10 +150,13 @@
 	<</if>>
 <</for>>
 
+<<set _preglist = _preglist.replace(/,\s*$/, '')>>
+<<set _virglist = _virglist.replace(/,\s*$/, '')>>
+
 <<set _happiness = {
-	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
+	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers)
 }>>
-<<set _age =  Math.round(_settlementStatsData.age / _settlementStatsData.people.adult, 0)>>
+<<set _age = Math.round(_settlementStatsData.age / Math.max(_settlementStatsData.people.adult, 1))>>
 
 <<set _basementLimit = (($basementLimit ?? 3) - ($slaves ?? []).length)>>
 <<set _basementBuild = (35 - ($basementLimit ?? 3))>>
