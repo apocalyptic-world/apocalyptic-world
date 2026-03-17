@@ -26,6 +26,13 @@
 	happylvl: {
 		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
 	},
+	age: 0,
+	agelvl: {
+		'late teens': 0, 'early 20s': 0, 'late 20s':0, 'early 30s': 0, 'late 30s': 0, 'early 40s': 0, 'late 40s': 0, 'early 50s': 0, 'late 50s': 0, 'early 60s': 0, 'late 60s': 0
+	},
+	beautylvl: {
+		'repulsive looking': 0, 'hideous': 0, 'ugly':0, 'unattractive': 0, 'plain looking': 0, 'average looking': 0, 'attractive': 0, 'beautiful': 0, 'gorgeous': 0, 'stunning': 0
+	},
 	people: {adult: 0, student: 0},
 	food: {produce: 0, consume: 0, none: 0},
 	hunt: {food: 0, wolf: 0},
@@ -36,8 +43,13 @@
 	strip_club: 0,
 	wood: 0,
 	birthday: [],
-	pregnant: 0
+	pregnant: 0,
+	virgin: 0
 }>>
+
+<<set _preglist = ''>>
+<<set _virglist = ''>>
+
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
 		<<set _job = _statsNpc.assignedTo>>
@@ -55,7 +67,21 @@
 	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
 	<<set _settlementStatsData['settlers']++>>
 	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
+	<<if  setup.getAge(_statsNpc) >= 18>>
+		<<set _settlementStatsData['age'] += setup.getAge(_statsNpc)>>
+		<<set _settlementStatsData.agelvl[setup.agePeriod(setup.getAge(_statsNpc))] ??= 0>>
+		<<set _settlementStatsData.agelvl[setup.agePeriod(setup.getAge(_statsNpc))]++>>
+		<<set _settlementStatsData.beautylvl[setup.beautyDescription(_statsNpc.beauty)]++>>
+	<</if>>
 	<<set _settlementStatsData['pregnant'] += (typeof _statsNpc.pregnancy !== 'undefined') ? 1 : 0>>
+	<<if typeof _statsNpc.pregnancy !== 'undefined'>>
+		<<set _preglist += _statsNpc.name + ', ' >>		
+	<</if>>
+	<<set _settlementStatsData['virgin'] += ((_statsNpc.virgin ??= false) && setup.getAge(_statsNpc) >= 18 ) ? 1 : 0>>
+	<<if (_statsNpc.virgin ??= false) && setup.getAge(_statsNpc) >= 18>>
+		<<set _virglist += _statsNpc.name + ', '>>		
+	<</if>>
+
 	<<if _job === 'garden'>>
 		<<set _settlementStatsData.food.produce += _giveFood  + ((_statsNpc.skills ?? []).includes('gardener') ? 2 : 0)>>
 	<<elseif _job === 'forest'>>
@@ -127,6 +153,7 @@
 <<set _happiness = {
 	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
 }>>
+<<set _age =  Math.round(_settlementStatsData.age / _settlementStatsData.people.adult, 0)>>
 
 <<set _basementLimit = (($basementLimit ?? 3) - ($slaves ?? []).length)>>
 <<set _basementBuild = (35 - ($basementLimit ?? 3))>>
@@ -237,7 +264,11 @@
 	<tr><td>... babies, pre-school:</td><td><<=_settlementStatsData.food.none ?? 0>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<tr><th colspan="3">Interesting?</th></tr>
-	<tr><td># pregnant women</td><td><<=_settlementStatsData.pregnant ?? 0>></td>
+	<tr><td># pregnant women (NPCs)</td><td>
+		<span class="glyph" data-balloon-length="medium" @aria-label="_preglist" data-balloon-pos="right">
+				<<=_settlementStatsData.pregnant ?? 0>>
+			</span>
+		</td>
 		<td>
 			<<if _settlementStatsData.pregnant>>
 				<<set _towelsHave = setup.cabinInventory.count('towel')>>
@@ -255,6 +286,11 @@
 			<</if>>
 		</td>
 	</tr>
+	<tr><td># virgins (18+)</td><td>
+		<span class="glyph" data-balloon-length="medium" @aria-label="_virglist" data-balloon-pos="right">
+			<<=_settlementStatsData.virgin ?? 0>>
+		</span>
+	</td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
 	<<if $player.quests.first_settlers ?? false>>
 		<<set _settRep = $player.baseManagement?.settlementReputation ?? 50>>
@@ -266,6 +302,24 @@
 		<td>(
 			<<for _happyLevel, _count range _settlementStatsData.happylvl>>
 				<<happyIcon _happyLevel>> <<=_count>>, 
+			<</for>>
+		)
+		</td>
+	</tr>
+	<tr><td>Average adult age:</td><td><<= _age>></td>
+		<td>(
+			<<for _ageLevel, _count range _settlementStatsData.agelvl>>
+				<<if _count > 0>>
+					<<= _ageLevel>>: <<=_count>>, 
+				<</if>>
+			<</for>>
+		)
+		</td>
+	</tr>
+	<tr><td>Beauty distribution:</td>
+		<td colspan=2>(
+			<<for _beautyLevel, _count range _settlementStatsData.beautylvl>>
+				<<= _beautyLevel>>: <<=_count>>, 
 			<</for>>
 		)
 		</td>
