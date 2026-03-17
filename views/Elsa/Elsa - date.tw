@@ -1,0 +1,19 @@
+:: Elsa - date
+<h1 class="ptitle">ELSA</h1>
+<br /><br />
+<<elsa>>
+	What you have on your mind?
+<</elsa>>
+<br /><br />
+<<if recall($suppCode)>>
+    <<link 'Massage'>>
+        <<set $player.companionsHome = $player.companions>>
+        <<set $player.companions = {}>>
+        <<goto 'Elsa - date [massage]'>>
+    <</link>>
+<<else>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Massage
+        <<notPatreonIcon>>
+    </div>
+<</if>>
