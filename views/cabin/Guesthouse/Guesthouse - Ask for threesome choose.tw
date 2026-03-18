@@ -54,6 +54,39 @@
 		<</capture>>
 	<</for>>
 	
+	<<for _charI range _charactersInLocation['guesthouse']>>
+		<<capture _charI>>
+			<<set
+				_char = $characters[_charI],
+				_genderClass = 'gender-' + setup.genderClass(_char),
+				_charYes = (setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty))),
+				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty))),
+				_mcYes = setup.percentageChance(setup.sexChance(_char)) || _char.gender === 1
+			>>
+			<<if setup.getAge(_char) < 18 || ![0, 1, 2].includes(_char.gender)>>
+				<<continue>>
+			<</if>>
+
+			<div>
+				<span @class="''+_genderClass+''">
+					<<if (_charYes && _mainYes && _mcYes && (!_char.gender || !$tmpGirl.gender))>>
+						<<set _prospects++>>
+						<<link _char.name>>
+							<<set $locationEvents.guesthouse = true>>
+							<<dialogclose>>
+
+							<<set $guestId2 = _charI>>
+							<<set $tmpGirl2 = $characters[_charI]>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+							<<threesome $tmpGirl $tmpGirl2>>
+						<</link>>
+					<</if>>
+				</span>
+			</div>
+		<</capture>>
+	<</for>>
+	
 	<<if _prospects == 0>>
 		I didn't match with anyone, maybe some othertime.
 	<</if>>
