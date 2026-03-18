@@ -135,20 +135,25 @@
      <<if $tmpGirl.gender === $tmpGirl2.gender || ($tmpGirl.gender === 0 && $tmpGirl2.gender === 2) || ($tmpGirl.gender === 2 && $tmpGirl2.gender === 0) >>
         <<set _linkName = 'Focus on ' + $tmpGirl2.name>>
         <<link `_linkName`>>
-            <<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
-                <<set $guests[$guestId] = $tmpGirl>>
+            /* save both back before swap */
+            <<if typeof $slaveId !== 'undefined'>><<set $slaves[$slaveId] = $tmpGirl>>
+            <<elseif typeof $guestId !== 'undefined'>><<set $guests[$guestId] = $tmpGirl>>
+            <<elseif typeof $charId !== 'undefined'>><<set $characters[$charId] = $tmpGirl>>
             <</if>>
-            <<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
-                <<set $guests[$guestId2] = $tmpGirl2>>
+            <<if typeof $slaveId2 !== 'undefined'>><<set $slaves[$slaveId2] = $tmpGirl2>>
+            <<elseif typeof $guestId2 !== 'undefined'>><<set $guests[$guestId2] = $tmpGirl2>>
+            <<elseif typeof $charId2 !== 'undefined'>><<set $characters[$charId2] = $tmpGirl2>>
             <</if>>
 
-            <<set _guestId0 = $guestId,
-            $guestId = $guestId2,
-            $guestId2 = _guestId0,
-            _tmpGirl0 = $tmpGirl,
-            $tmpGirl = $tmpGirl2,
-            $tmpGirl2 = _tmpGirl0
-            >>
+            /* remember which type/id each slot is, then swap */
+            <<set _type1 = typeof $slaveId !== 'undefined' ? 'slave' : typeof $charId !== 'undefined' ? 'char' : 'guest'>>
+            <<set _id1   = $slaveId ?? $charId ?? $guestId>>
+            <<set _type2 = typeof $slaveId2 !== 'undefined' ? 'slave' : typeof $charId2 !== 'undefined' ? 'char' : 'guest'>>
+            <<set _id2   = $slaveId2 ?? $charId2 ?? $guestId2>>
+            <<unset $slaveId, $guestId, $charId, $slaveId2, $guestId2, $charId2>>
+            <<if _type2 === 'slave'>><<set $slaveId = _id2>><<elseif _type2 === 'char'>><<set $charId = _id2>><<else>><<set $guestId = _id2>><</if>>
+            <<if _type1 === 'slave'>><<set $slaveId2 = _id1>><<elseif _type1 === 'char'>><<set $charId2 = _id1>><<else>><<set $guestId2 = _id1>><</if>>
+            <<set _tmpGirl0 = $tmpGirl, $tmpGirl = $tmpGirl2, $tmpGirl2 = _tmpGirl0>>
 
             <<unset $sexAction>>
             <<goto `passage()`>>
@@ -157,10 +162,13 @@
 
     <<link 'End'>>
 	    <<unset $sexAction>>
-        <<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
-            <<set $guests[$guestId2] = $tmpGirl2>>
+        <<if typeof $tmpGirl2 !== 'undefined'>>
+            <<if typeof $slaveId2 !== 'undefined'>><<set $slaves[$slaveId2] = $tmpGirl2>>
+            <<elseif typeof $guestId2 !== 'undefined'>><<set $guests[$guestId2] = $tmpGirl2>>
+            <<elseif typeof $charId2 !== 'undefined'>><<set $characters[$charId2] = $tmpGirl2>>
+            <</if>>
         <</if>>
-        <<unset $guestId2, $tmpGirl2>>
+        <<unset $slaveId2, $guestId2, $charId2, $tmpGirl2>>
         <<if $oldTmpGirlLocation>>
             <<set $tmpGirl.location = $oldTmpGirlLocation>>
             <<unset $oldTmpGirlLocation>>

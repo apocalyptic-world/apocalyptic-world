@@ -8,10 +8,16 @@
 
  <<link 'Back'>>
 	<<unset $tiredNoTime>>>
-	<<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
-		<<set $guests[$guestId2] = $tmpGirl2>>
+	<<if typeof $tmpGirl2 !== 'undefined'>>
+		<<if typeof $slaveId2 !== 'undefined'>>
+			<<set $slaves[$slaveId2] = $tmpGirl2>>
+		<<elseif typeof $guestId2 !== 'undefined'>>
+			<<set $guests[$guestId2] = $tmpGirl2>>
+		<<elseif typeof $charId2 !== 'undefined'>>
+			<<set $characters[$charId2] = $tmpGirl2>>
+		<</if>>
 	<</if>>
-	<<unset $guestId2, $tmpGirl2>>
+	<<unset $slaveId2, $guestId2, $charId2, $tmpGirl2>>
 
 	<<unset $sexAction, $sexForced>>
 	<<if typeof $slaveId !== 'undefined'>>

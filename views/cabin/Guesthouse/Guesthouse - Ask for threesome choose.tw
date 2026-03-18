@@ -54,7 +54,8 @@
 		<</capture>>
 	<</for>>
 	
-	<<for _charI range _charactersInLocation['guesthouse']>>
+	<<set _charPool = (_charactersInLocation['guesthouse'] ?? []).concat(_charactersInLocation['kitchen'] ?? [])>>
+	<<for _charI range _charPool>>
 		<<capture _charI>>
 			<<set
 				_char = $characters[_charI],
@@ -75,7 +76,7 @@
 							<<set $locationEvents.guesthouse = true>>
 							<<dialogclose>>
 
-							<<set $guestId2 = _charI>>
+							<<set $charId2 = _charI>>
 							<<set $tmpGirl2 = $characters[_charI]>>
 							<<set $tmpGirlViewBack = 'NPC view - guest'>>
 							<<unset $charId, $slaveId>>
