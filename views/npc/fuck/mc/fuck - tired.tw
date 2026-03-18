@@ -8,7 +8,9 @@
 
  <<link 'Back'>>
 	<<unset $tiredNoTime>>>
-	<<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
+	<<if typeof $guestId2 !== 'number' && typeof $tmpGirl2 !== 'undefined' && typeof $characters[$guestId2] !== 'undefined'>>
+		<<set $characters[$guestId2] = $tmpGirl2>>
+	<<elseif typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
 		<<set $guests[$guestId2] = $tmpGirl2>>
 	<</if>>
 	<<unset $guestId2, $tmpGirl2>>
@@ -17,7 +19,11 @@
 	<<if typeof $slaveId !== 'undefined'>>
 		<<set $slaves[$slaveId] = $tmpGirl>>
 	<<elseif typeof $guestId !== 'undefined'>>
-		<<set $guests[$guestId] = $tmpGirl>>
+		<<if typeof $guestId !== 'number' && typeof $characters[$guestId] !== 'undefined'>>
+			<<set $characters[$guestId] = $tmpGirl>>
+		<<else>>
+			<<set $guests[$guestId] = $tmpGirl>>
+		<</if>>
 	<<elseif typeof $charId !== 'undefined'>>
 		<<set $characters[$charId] = $tmpGirl>>
 	<</if>>
