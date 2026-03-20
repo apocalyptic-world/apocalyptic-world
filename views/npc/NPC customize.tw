@@ -1,16 +1,28 @@
 :: NPC customize [girlview sex no-redirect] {"position":"3566,105","size":"100,100"}
-<<if !$charId>>
-	<<link 'Change name'>>
-		<<dialog 'Change name'>>	
+<<link 'Names customization'>>
+	<<dialog 'Names customization'>>
+		<<if !$charId>>
+			<strong>Change NPC name</strong><br />	
 			What you will call your guest? <<textbox "_tmpGirlName" $tmpGirl.name>>
-			<<link 'OK'>>
+			<br /><br />
+		<</if>>
+		<strong>Change name for MC</strong><br />	
+		<<=$tmpGirl.name>> currently calls you '<<=setup.npc.mcName($tmpGirl)>>'.  Enter new name for <<=setup.pronounceWho($tmpGirl)>> to call you:<br /><<textbox "_myMcName" `$tmpGirl.myMcName ?? ''`>>
+		<br /><br />
+		<strong>Change nickname for NPC</strong><br />	
+		<<=$tmpGirl.name>> is currently called '<<= ($tmpGirl.nickName ?? '') !== '' ? $tmpGirl.nickName : $tmpGirl.name>>' in descriptions and and dialog.  Enter new name for you and other NPCs to call <<=setup.pronounceWho($tmpGirl)>>:<br /><<textbox "_nickName" `$tmpGirl.nickName ?? ''`>>
+		<br />
+		<<link 'OK'>>
+			<<if typeof _tmpGirlName !== 'undefined' && _tmpGirlName !== ''>>
 				<<set $tmpGirl.name = _tmpGirlName>>
-				<<dialogclose>>	
-				<<goto 'NPC customize'>>
-			<</link>>
-		<</dialog>>	
-	<</link>>
-<</if>>
+			<</if>>
+			<<set $tmpGirl.myMcName = _myMcName>>
+			<<set $tmpGirl.nickName = _nickName>>
+			<<dialogclose>>	
+			<<goto 'NPC customize'>>
+		<</link>>
+	<</dialog>>	
+<</link>>
 <<if setup.getAge($tmpGirl) >= 18>>
 	<<if !$tmpGirl.piercedBoobs && $backpack.has('piercing')>>
 		<<link 'Pierce nipples'>>
@@ -116,16 +128,6 @@
 		Notes:<<textbox "_notes" `$tmpGirl.notes ?? ''`>>
 		<<link 'OK'>>
 			<<set $tmpGirl.notes = _notes>>
-			<<dialogclose>>	
-			<<goto 'NPC customize'>>
-		<</link>>
-	<</dialog>>	
-<</link>>
-<<link 'Change name for MC'>>
-	<<dialog 'Change name for MC'>>	
-		<<=$tmpGirl.name>> currently calls you '<<=setup.npc.mcName($tmpGirl)>>'.  Enter new name for <<=setup.pronounceWho($tmpGirl)>> to call you:<br /><<textbox "_myMcName" `$tmpGirl.myMcName ?? ''`>>
-		<<link 'OK'>>
-			<<set $tmpGirl.myMcName = _myMcName>>
 			<<dialogclose>>	
 			<<goto 'NPC customize'>>
 		<</link>>
