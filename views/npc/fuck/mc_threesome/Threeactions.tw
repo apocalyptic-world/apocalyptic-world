@@ -4,6 +4,8 @@
 	<<set _partnerName = 'mom'>>
 <<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === $tmpGirl2.id>>
 	<<set _partnerName = 'dad'>>
+<<elseif ($tmpGirl2.nickName ?? '' ) !== ''>>
+	<<set _partnerName = $tmpGirl2.nickName>>
 <<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('kids') && $tmpGirl.family?.kids.includes($tmpGirl2.id)>>
 	<<set _partnerName = 'sweetie'>>
 <<else>>
@@ -28,6 +30,9 @@
             "I'm cumming, " + setup.npc.mcName($tmpGirl) + "!",
             "YES! YES! YES, " + setup.npc.mcName($tmpGirl) + "!",
             "Mmm, gods yes, " + setup.npc.mcName($tmpGirl) + ", I'm cumming!",
+            setup.npc.mcName($tmpGirl, 1) + "! MMMhhh, " + _partnerName + ", that's it! I'm-I'm cumming!!",
+            "Ahhh, " + _partnerName + "!! " + setup.npc.mcName($tmpGirl, 1) + " feels so fucking good!!!",
+            "*back arching* Nnghh, " + _partnerName + ", he's making me cum so hard!!",
             "*shaking* Ahh, mmmmhh, Yes " + setup.npc.mcName($tmpGirl) + "!"
         ])>>
     <</sayNpc>>
