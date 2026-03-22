@@ -92,9 +92,15 @@
                 <td>
                     <<set _teachVar = "$nursery[" + _nurseryI.toString() + "].teach">>
                     <<for _teachOption range _teachOptions>>
-                        <label>
-                            <<radiobutton _teachVar _teachOption autocheck>> <<= _teachOption >>
-                        </label>
+	            	    <<if (_nursery.skills ?? []).includes(_teachOption)>>
+	                        <label style="color: cyan">
+		                        <<radiobutton _teachVar _teachOption autocheck>> <<= _teachOption >>
+                	        </label>
+				        <<else>>
+                        	<label>
+	        	                <<radiobutton _teachVar _teachOption autocheck>> <<= _teachOption >>
+        	                </label>
+			        	<</if>>
                     <</for>>
 
                     <<set $nursery[_nurseryI].teach = _localTeach>>
