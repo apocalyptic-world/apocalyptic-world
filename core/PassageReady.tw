@@ -92,7 +92,10 @@
 	<<if !$characters.dom?.dead>>
 		<<run _charactersInLocation['underground_office'].push('dom')>>
 	<</if>>
-	<<if timeBetween('18:00', '02:00') && $game.location.strip_club>>
+	<<set _weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]>>
+	<<if typeof $characters.isabel.visitDay !== 'undefined' && (($characters.isabel.visitDay === _weekday[$gameDate.getDay()] && timeBetween('18:00', '02:00')) || ($characters.isabel.visitDay === _weekday[$gameDate.getDay() == 0 ? 6 : $gameDate.getDay() - 1] && timeBetween('08:00', '12:00'))) && ($game.location.strip_club ?? false)>>
+		<<run _charactersInLocation['guesthouse'].push('isabel')>>
+	<<elseif timeBetween('18:00', '02:00') && $game.location.strip_club>>
 		<<run _charactersInLocation['strip_club'].push('isabel')>>
 	<<else>>
 		<<run _charactersInLocation['underground_office'].push('isabel')>>
