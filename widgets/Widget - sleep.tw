@@ -115,7 +115,7 @@
 <<for _i to 0; _i lt $slaves.length; _i++>>
 		<<set _npc = $slaves[_i]>>
 		<<run Object.assign(_npc, {talked:false, milked:false, groped:false, washed:false, workout:false, gift:false, cosmetics:false, offerSlave:false, drunk:0})>>
-		<<if _npc.horny < 80>>
+		<<if _npc.horny < 90>>
 			<<set _npc.horny++>>
 		<</if>>
 		
@@ -902,8 +902,10 @@
 		<<set $characters[_charI].workout to false>>
 		<<set $characters[_charI].gift = false>>
 		<<set $characters[_charI].cosmetics = false>>
-		<<if $characters[_charI].horny < 80>>
-			<<set $characters[_charI].horny++>>
+		<<if $characters[_charI].horny <= 90>>
+			<<set $characters[_charI].horny += window.randomInteger(1, 9)>>
+		<<else>>
+			<<set $characters[_charI].horny = 0>>
 		<</if>>
 
 		// Pregnancy
