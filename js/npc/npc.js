@@ -511,7 +511,8 @@ setup.npc = {
 			return this.mcNameUC(variables().mcNameOff ?? 'dad')
 		}
 
-		if (variables().slaveId && variables().slaves[variables().slaveId].id ==  npc.id) {
+		const slaves = variables().slaves ?? [];
+		if (slaves.some(s => s.id === npc.id)) {
 	        return this.mcNameUC(variables().mcNameSlave ?? 'master');
 		}
 
