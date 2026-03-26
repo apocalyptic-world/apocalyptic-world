@@ -19,6 +19,36 @@
     <<set $dateBack = 'Isabel office'>>
     <<goto 'Isabel - date'>>
 <</link>>
+<<if (($game.location.strip_club ?? false))>>
+	<<link 'Invite to visit the settlement'>>
+		<<dialog 'Invitation'>>
+			<center>
+	    		<<image 'people/isabel/at_table.jpg'>>
+			</center>
+			<<if !($characters.isabel.visitDay ?? false)>>
+				Isabel smiles at the suggestion, "I would love to spend more time together and see how far you've come with your settlement, <<= setup.npc.mcName($characters.isabel)>>." <br />"Running the strip club, the city, and rebuilding Dom's empire demand much of my time, but I would love to reserve an evening each week for us.  Name the day, and I shall see you at your home.  We can relive the time when you sheltered me from Dom.  The way you took care of me...  I look forward to it."
+			<<elseif $characters.isabel.visitDay === 'none'>>
+				Isabel is reviewing reports from the criminal network formerly run by Dom, "Good evening, <<= setup.npc.mcName($characters.isabel)>>.  Would you like me to visit your settlement each week?  Let me know what day you'd like."
+			<<else>>
+				Isabel looks up at you from some official city paperwork, "It's good to see you, <<= setup.npc.mcName($characters.isabel)>>.  Would you like to adjust when I visit your settlement?"
+			<</if>>
+			<br /><br />
+			<strong>Travel day</strong><br />
+			Select the day of the week for Isabel to visit the settlement.  She will arrive at 6pm, and leave the following day at noon.
+			<br /><br />
+			<<set _weekDays = ['none','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']>>
+                    	<<set _visitDayVar = "$characters.isabel.visitDay">>
+                    	<<for _dayOfWeek range _weekDays>>
+	                        <label>
+                            	<<radiobutton _visitDayVar _dayOfWeek autocheck>> <<= _dayOfWeek >>
+                        	</label>
+                    	<</for>>
+			<<link 'OK'>>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
+	<</link>>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Underground city office'>>
 <</link>>
