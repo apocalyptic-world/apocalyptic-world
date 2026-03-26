@@ -42,7 +42,7 @@
         <h3>Population</h3>
         <table>
             <tr>
-                <td><<=setup.baseManagement.population.description()>></td>
+                <td colspan=2><<=setup.baseManagement.population.description()>></td>
             </tr>
             <tr>
                 <td>Living houses:</td>
@@ -53,6 +53,80 @@
             </tr>
         </table>
     </div>
+    <div class="base-management-item">
+        <h3>Materials</h3>
+        <table>
+            <tr>
+                <td>Metal:</td>
+                <td><strong><<=setup.cabinInventory.count('metal')>></strong></td>
+            </tr>
+            <tr>
+                <td>Wood:</td>
+                <td><strong><<=setup.cabinInventory.count('wood')>></strong></td>
+            </tr>
+            <tr>
+                <td>Plastic:</td>
+                <td><strong><<=setup.cabinInventory.count('plastic')>></strong></td>
+            </tr>
+            <tr>
+                <td>Glass:</td>
+                <td><strong><<=setup.cabinInventory.count('glass')>></strong></td>
+            </tr>
+            <tr>
+                <td>Rope:</td>
+                <td><strong><<=setup.cabinInventory.count('rope')>></strong></td>
+            </tr>
+            <tr>
+                <td>Solar Panel (not installed):</td>
+                <td><strong><<=setup.cabinInventory.count('solar_panel')>></strong></td>
+            </tr>
+            <tr>
+                <td>Stone:</td>
+                <td><strong><<=setup.cabinInventory.count('stone')>></strong></td>
+            </tr>
+            <tr>
+                <td>Coal:</td>
+                <td><strong><<=setup.cabinInventory.count('coal')>></strong></td>
+            </tr>
+        </table>
+    </div>
+    <<set _hospitalCount = $player?.baseManagement?.buildings?.hospital ?? 0>>
+    <<set _milkBarnCount = $player?.baseManagement?.buildings?.milk_barn ?? 0>>
+    <<set _freezerCount  = $player?.baseManagement?.buildings?.freezer  ?? 0>>
+    <<if _hospitalCount > 0 || _milkBarnCount > 0 || _freezerCount > 0>>
+    <div class="base-management-item">
+        <h3>Non-Residences Consuming Energy</h3>
+        <table>
+            <<if _hospitalCount > 0>>
+            <tr>
+                <td class="base-building-img" style="width:25%">
+					[img[setup.ImagePath+'base_management/hospital.jpg']]
+				  </td>
+                <td>Hospital (<<=_hospitalCount>>):</td>
+                <td class="red"><<=_hospitalCount * 5>></td>
+            </tr>
+            <</if>>
+            <<if _milkBarnCount > 0>>
+            <tr>
+                <td class="base-building-img" style="width:25%">
+					[img[setup.ImagePath+'base_management/milk_barn.jpg']]
+				  </td>
+                <td>Milk Barn (<<=_milkBarnCount>>):</td>
+                <td class="red"><<=_milkBarnCount * 5>></td>
+            </tr>
+            <</if>>
+            <<if _freezerCount > 0>>
+            <tr>
+                <td class="base-building-img" style="width:25%">
+					[img[setup.ImagePath+'base_management/freezer.jpg']]
+				  </td>
+                <td>Freezer (<<=_freezerCount>>):</td>
+                <td class="red"><<=_freezerCount * 3>></td>
+            </tr>
+            <</if>>
+        </table>
+    </div>
+    <</if>>
 </div>
 <h2>Buildings</h2>
 <<include 'Settlement management buildings'>>
@@ -140,15 +214,21 @@
 
 <style>
     #base-management {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+        margin-bottom: 10px;
     }
 
     #base-management > div {
         background-color: #5b5b5b;
-        margin: 10px;
         box-shadow: 5px 5px 5px #000;
         padding: 10px;
         max-width: 200px;
+    }
+
+    #base-management table {
+        width: 100%;
     }
 
     #base-management .green {
