@@ -6,6 +6,7 @@
 <<set $editTraits = $editTraitsLocked = $editSkills>>
 <<set $tmpGirl.strength = $tmpGirl.strength ?? 0>>
 <<set $tmpGirl.anal = $tmpGirl.anal ?? 0>>
+<<set $tmpGirl.horny = $tmpGirl.horny ?? 0>>
 
 <table id="edit_npc">
 <tr>
@@ -49,6 +50,14 @@
             </td>
             <td>
                 <<numberbox "_sub" $tmpGirl.sub>>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Horny:
+            </td>
+            <td>
+                <<numberbox "_horny" $tmpGirl.horny>>
             </td>
         </tr>
     <</if>>
@@ -227,6 +236,7 @@
     <<if setup.getAge($tmpGirl) >= 18>>
         <<set $tmpGirl.anal = _anal>>
         <<set $tmpGirl.sub = _sub>>
+        <<set $tmpGirl.horny = Math.min(100, Math.max(0, _horny))>>
          <<set $tmpGirl.traits = []>>
         <<for _traitKey, _enabled range _traits>>
             <<if _enabled>>
