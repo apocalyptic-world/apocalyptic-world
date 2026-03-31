@@ -66,11 +66,12 @@
 
 <<else>>
 	<<addmins 5>>
-	<<set 
+	<<set
 		_guestIds = $randEvent[0],
 		_sexActions = $randEvent[1],
 		_index = $randEvent[2]
 	>>
+	<<set _spontaneousCum = (_index + 1 == $randEvent[1].length) && !['cum_in_pussy','cum_in_ass','cum_throat'].includes($randEvent[1][$randEvent[1].length-1]) && setup.percentageChance(20)>>
 <</if>>
 
 <br /><br />
@@ -95,11 +96,20 @@
 	<</if>>
 	<<if _index + 1 == _sexActions.length>>
 		<<set _orgasm = true>>
+		<<if _spontaneousCum>>
+			<br />
+			<<=setup.displayName($guests[_guestIds[1]])>> finishes inside her — you weren't expecting that.
+			<br /><br />
+			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
+				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+				<<set $guests[_guestIds[0]].pregnancy = 0>>
+			<</if>>
+		<</if>>
 	<<else>>
 		<<set $randEvent[2] = _index + 1>>
 		<<if $player.horny < 100>>
 			[[Masturbate|passage()][$player.horny += 20]]
-		<</if>>		
+		<</if>>
 		[[Just watch|passage()]]
 	<</if>>
 	<<link 'Interrupt them'>>
