@@ -1,0 +1,34 @@
+:: Wanted - collect reward dead {"position":"3325,1570","size":"100,100"}
+<h1 class="ptitle">BAR</h1>
+
+<<set _wantedPron2 = ($wanted[$wantedId].gender ? 'him' : 'her')>>
+<br />
+<center>
+[img[setup.ImagePath+'places/bar/collect_reward.webp']]
+</center>
+<br /><br />
+You walk into the bar and drop <<=$wanted[$wantedId].name>>'s ID and effects on the counter. The reward clerk raises an eyebrow but doesn't ask questions — the poster said "Dead or Alive."
+<br /><br />
+Word spreads through the bar quickly. A few people glance your way and look back down at their drinks. You're not someone to cross lightly.
+<br /><br />
+
+<strong>Bounty hunter reputation increased by 2</strong><br />
+<strong>Fearsome reputation increased by 1</strong><br />
+<strong>Goodwill decreased by 2</strong><br />
+<strong>You collected <<=$wanted[$wantedId].wanted.value>> caps</strong>
+
+<<addmins 60>>
+<br /><br />
+<<link 'Leave'>>
+	<<set $player.reputation_bounty_hunter += 2>>
+	<<set $player.reputation++>>
+	<<set $player.goodwill -= 2>>
+	<<set $player.money += $wanted[$wantedId].wanted.value>>
+	<<set $wanted.splice($wantedId, 1)>>
+
+	<<if $player.reputation_bounty_hunter >= 50 && !$player?.quests?.wanted.u2>>
+		<<goto 'Bounty hunter - Unique request'>>
+	<<else>>
+		<<goto 'Bar'>>
+	<</if>>
+<</link>>

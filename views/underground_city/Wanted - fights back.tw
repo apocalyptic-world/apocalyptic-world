@@ -1,0 +1,23 @@
+:: Wanted - fights back {"position":"3215,1680","size":"100,100"}
+<h1 class="ptitle">STREETS</h1>
+
+<<set _wantedPron = setup.pronounceWhat($wanted[$wantedId])>>
+<<set _wantedPron2 = setup.pronounceWho($wanted[$wantedId])>>
+<<set _wantedProns = setup.pronounceWhos($wanted[$wantedId])>>
+
+<center>
+[img[setup.ImagePath+'places/bar/wanted_trap.webp']]
+</center>
+<br /><br />
+You move to make the grab — but <<=_wantedPron2>> is faster than you expected.
+<br /><br />
+<<sayNpc $wanted[$wantedId]>>
+	I'm not going back. Not alive.
+<</sayNpc>>
+<br />
+<<=setup.pronounceWhat($wanted[$wantedId], true)>> pulls a blade and lunges at you. The wanted poster said "Dead or Alive" — looks like <<=$wanted[$wantedId].name>> wants to make that choice for you.
+<br /><br />
+
+<<set $wanted[$wantedId].inventory = { knife: 1 }>>
+<<set $enemies = [$wanted[$wantedId]]>>
+<<fight $enemies 'Wanted - fights back won' 'Streets'>>
