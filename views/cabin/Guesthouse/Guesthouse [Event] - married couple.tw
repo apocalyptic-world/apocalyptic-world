@@ -1,0 +1,182 @@
+:: Guesthouse \[Event\] - married couple
+
+<h1 class="ptitle">GUEST HOUSE</h1>
+
+<<if typeof $randEvent === 'undefined'>>
+	<<set
+		_guestIds = [$tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]],
+		_minCorruption = Math.min($guests[_guestIds[0]].corruption, $guests[_guestIds[1]].corruption),
+		_isVirgin = $guests[_guestIds[0]].virgin,
+		_isAnalVirgin = ($guests[_guestIds[0]].anal < 20),
+		_isSquirter = ($guests[_guestIds[0]].traits ?? []).includes('squirter'),
+		_hasSmallTits = $guests[_guestIds[0]].breasts == 'small',
+		_isFemaleSadist = ($guests[_guestIds[0]].traits ?? []).includes('sadistic'),
+		_isMaleMasochist = ($guests[_guestIds[1]].traits ?? []).includes('masochist'),
+		_index = 0
+	>>
+
+	<<set _r = 1 + Math.floor(random(0, _minCorruption-1)/25)>>
+	<<if _r < 0>>
+		<<set _r = 0>>
+	<</if>>
+	<<set _sexActions = [
+		['kissing','kissing','handjob','footjob','footjob'][random(0, _r)],
+		['bj','bj','titjob','titjob','dp'][random(0, _r)],
+		['nipple_lick','nipple_lick','nipple_lick','pussy_lick','pussy_lick'][random(0, _r)],
+		['pussy_lick','pussy_fingering','pussy_fingering','anal_fingering','anal_fingering'][random(0, _r)],
+		['pussy','pussy','pussy','anal','anal'][random(0, _r)],
+		['cum_in_pussy','cum_in_pussy','cum_on_stomach','cum_on_tits','cum_in_mouth'][random(0, _r)]
+	]>>
+
+	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
+		<<set _sexActions[1] = 'dp'>>
+	<</if>>
+	<<if _sexActions[2] == 'pussy_lick' && _isSquirter>>
+		<<set _sexActions[3] = 'squirt_lick'>>
+	<</if>>
+	<<if _sexActions[3] == 'pussy_fingering' && _isVirgin>>
+		<<set _sexActions[3] = 'anal_fingering'>>
+	<</if>>
+	<<if _sexActions[4] == 'pussy' && _isVirgin>>
+		<<set
+			_sexActions[4] = 'anal',
+			_sexActions[5] = 'cum_in_ass'
+		>>
+	<</if>>
+	<<if _sexActions[4] == 'anal' && _isAnalVirgin>>
+		<<set
+			_sexActions[4] = 'dp',
+			_sexActions[5] = 'cum_throat'
+		>>
+	<</if>>
+	<<if _r > 2 && _isFemaleSadist && _isMaleMasochist>>
+		<<set
+			_sexActions[4] = 'anal_reverse',
+			_sexActions[5] = 'anal_reverse_cum'
+		>>
+	<</if>>
+
+	<<set $randEvent = [
+		_guestIds,
+		_sexActions,
+		_index
+	]>>
+
+	As you pass by their room you hear familiar sounds — soft voices, the creak of a bed.
+	You peer through the gap in the door and see <<=setup.displayName($guests[_guestIds[1]])>> and his wife <<=setup.displayName($guests[_guestIds[0]])>> together.
+	<br /><br />
+	Seems like some couples still make time for each other, even out here.
+	<br />
+
+<<else>>
+	<<addmins 5>>
+	<<set
+		_guestIds = $randEvent[0],
+		_sexActions = $randEvent[1],
+		_index = $randEvent[2]
+	>>
+<</if>>
+
+<br /><br />
+
+<<set _actionText = setup.actionText>>
+<div id="choice">
+	<<for _i = 0; _i < _guestIds.length; _i++>>
+		<<set $guests[_guestIds[_i]].horny = Math.min(100, $guests[_guestIds[_i]].horny + 20)>>
+	<</for>>
+
+	<<actionImage $guests[_guestIds[0]] _sexActions[_index] 'no-text'>>
+	<br />
+	<<print _actionText['male_on_female'][_sexActions[_index]][0].replace('%female%', $guests[_guestIds[0]].name).replace('%male%', $guests[_guestIds[1]].name)>>
+	<br /><br />
+	<<if $player.horny >= 100>>
+		<<linkreplace 'Cum'>>
+			<<horny_reset>>
+			<center>
+				<<image 'game/misc/cum.webp'>>
+			</center>
+		<</linkreplace>>
+	<</if>>
+	<<if _index + 1 == _sexActions.length>>
+		<<set _orgasm = true>>
+	<<else>>
+		<<set $randEvent[2] = _index + 1>>
+		<<if $player.horny < 100>>
+			[[Masturbate|passage()][$player.horny += 20]]
+		<</if>>
+		[[Just watch|passage()]]
+	<</if>>
+	<<link 'Interrupt them'>>
+		<<set _interrupted = true>>
+		<<replace "#choice">>
+			<<for _i = 0; _i < _guestIds.length; _i++>>
+				<<set
+					$guests[_guestIds[_i]].happy = Math.max(-100, $guests[_guestIds[_i]].happy - 5),
+					$guests[_guestIds[_i]].relationship = Math.max(-100, $guests[_guestIds[_i]].relationship - 5)
+				>>
+			<</for>>
+			<center>
+				<<actionImage $guests[_guestIds[0]] 'caught' 'no-text'>>
+			</center>
+			<br /><br />
+			You walk in on <<=setup.displayName($guests[_guestIds[1]])>> and <<=setup.displayName($guests[_guestIds[0]])>>.
+			They stop abruptly — <<=setup.displayName($guests[_guestIds[1]])>> steps protectively in front of his wife, clearly unhappy.
+			<br />
+			<<linkreplace 'Ask to join them'>>
+				<<set _yesGuestIds = []>>
+				<<for _i = 0; _i < _guestIds.length; _i++>>
+					<<if setup.percentageChance(setup.sexChance($guests[_guestIds[_i]]))>>
+						<<set _yesGuestIds.push(_guestIds[_i])>>
+					<</if>>
+				<</for>>
+
+				<<if _yesGuestIds.length == 0>>
+					They exchange a look and both refuse without a word.
+				<<elseif _yesGuestIds.length == 1>>
+					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while the other stays back.
+					<<linkreplace 'Continue'>>
+						<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
+							<<set $guests[$guestId] = $tmpGirl>>
+						<</if>>
+						<<set $guestId = _yesGuestIds[0],
+						$tmpGirl = $guests[_yesGuestIds[0]]>>
+						<<unset $randEvent, $tmpEvent>>
+						<<fuck $tmpGirl>>
+					<</linkreplace>>
+				<<else>>
+					After a long pause, they both agree — perhaps this is something they've wanted to try.
+					<<linkreplace 'Continue'>>
+						<<set $guestId = _yesGuestIds[0],
+						$tmpGirl = $guests[_yesGuestIds[0]],
+						$guestId2 = _yesGuestIds[1],
+						$tmpGirl2 = $guests[_yesGuestIds[1]]>>
+						<<unset $randEvent, $tmpEvent>>
+						<<set $tmpGirlViewBack = 'NPC view - guest'>>
+						<<unset $charId, $slaveId>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</linkreplace>>
+				<</if>>
+			<</linkreplace>>
+		<</replace>>
+	<</link>>
+</div>
+
+<<link 'Leave'>>
+	<<if _orgasm || !_interrupted>>
+		<<for _i = 0; _i < _guestIds.length; _i++>>
+			<<set
+				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
+				$guests[_guestIds[_i]].horny = 0
+			>>
+		<</for>>
+		/* Pregnancy from husband */
+		<<if _orgasm && _sexActions[_sexActions.length - 1] === 'cum_in_pussy'>>
+			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
+				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+				<<set $guests[_guestIds[0]].pregnancy = 0>>
+			<</if>>
+		<</if>>
+	<</if>>
+	<<unset $randEvent, $tmpEvent>>
+	<<goto 'Guest house'>>
+<</link>>
