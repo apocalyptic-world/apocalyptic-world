@@ -154,6 +154,9 @@
 	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && $weather?.weather !== 'storm' && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Forest - fallen tree'>>
+	<<elseif ($player.quests.first_settlers ?? false) && ($player.baseManagement.settlersFemales ?? 0) > 4 && ($player.baseManagement.taxes ?? 0) > 0 && $gameDate.getDay() === 1 && timeBetween('08:00', '15:00') && (!$game.settler_tax_day || ($game.settler_tax_day + 14) < $game.day) && setup.percentageChance(25)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto "Event: Settler can't pay tax">>
 	<</if>>
 <</if>>
 

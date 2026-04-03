@@ -1,0 +1,103 @@
+:: Event: Settler can't pay tax
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<<newgirl>>
+<<set $game.settler_tax_day = $game.day>>
+<<set _taxes = $player.baseManagement.taxes ?? 3>>
+
+<center>
+	<<image 'places/cabin/settler_open_door.jpg' sfw>>
+</center>
+<br /><br />
+A knock at your door. You open it to find one of your settler women standing there, looking worn and ashamed. 
+She wrings her hands, avoiding your eyes.
+<br /><br />
+<<sayNpc $tmpGirl>>
+	I'm sorry to bother you. I know it's collection day, but... I don't have it. The <<=_taxes>> caps. The harvest was poor this week, and the children need to eat. I can't make it work.
+<</sayNpc>>
+<br />
+She finally meets your gaze — desperate but not defeated.
+<br /><br />
+
+<div id="option_sex">
+	<<linkreplace 'There is another way to pay'>>
+		<<set _anotherWay = true>>
+		<<if setup.percentageChance(70)>>
+			She looks at your hard dick and slowly grabs it.
+			<br /><br />
+			<center>
+				<<image 'places/cabin/settler_grab_dick.webp'>>
+			</center>
+			<br />
+			<<sayNpc $tmpGirl>>
+				Just don't tell anyone...
+			<</sayNpc>>	
+			<br />
+			<<link 'Fuck her'>>
+				<<set $tmpGirl.rape = false>>
+				<<set $tmpGirlCapture = false>>
+				<<set $tmpGirlInvite = false>>
+				<<set $tmpGirl.location = 'cabin'>>
+				<<set $tmpGirl.horny = 50>>
+				<<set $tmpGirl.sub = 100>>
+				<<unset $slaveId, $guestId, $childId, $charId>>
+				<<set $tmpGirlViewBack = 'Wood cabin'>>
+				<<set $tmpGirlBack = 'Wood cabin'>>
+				<<fuck $tmpGirl>>
+			<</link>>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				What? No! I won't do that.
+			<</sayNpc>>		
+			<br />	
+		<</if>>
+	<</linkreplace>>
+</div>
+
+<div id="option_mercy">
+	<<linkreplace 'Waive it this week'>>
+		<<if !_anotherWay>>
+			<<run $('#option_sex').hide()>>
+		<</if>>
+		<<run $('#option_strict').hide()>>
+		You wave her off with a tired gesture.
+		<br /><br />
+		<<you>>
+			Don't worry about it. Just make sure it doesn't become a habit.
+		<</you>>
+		<br />
+		Her face floods with relief. She thanks you quietly and hurries back to her family.
+		<br /><br />
+		<<set $player.money -= _taxes>>
+		<<set $player.goodwill += 2>>
+		<<set $player.baseManagement.settlementReputation = Math.min(100, ($player.baseManagement.settlementReputation ?? 50) + 2)>>
+		<<link 'Close the door'>>
+			<<addmins 5>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+		<<linkdesc>>
+			-<<=_taxes>> caps | +2 goodwill | +2 settlement reputation
+		<</linkdesc>>
+	<</linkreplace>>
+</div>
+
+<div id="option_strict">
+	<<linkreplace 'Rules are rules. Pack your things.'>>
+		<<run $('#option_sex, #option_mercy').hide()>>
+		Her face falls. She nods slowly, pressing her lips together, and turns to leave without another word.
+		<br /><br />
+		By evening, she's gone — and word spreads through the settlement.
+		<br /><br />
+		<<set $player.baseManagement.settlers = Math.max(0, ($player.baseManagement.settlers ?? 0) - 1)>>
+		<<set $player.baseManagement.settlersFemales = Math.max(0, ($player.baseManagement.settlersFemales ?? 0) - 1)>>
+		<<set $player.goodwill -= 3>>
+		<<set $player.baseManagement.settlementReputation = Math.max(0, ($player.baseManagement.settlementReputation ?? 50) - 3)>>
+		<<link 'Close the door'>>
+			<<addmins 5>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+		<<linkdesc>>
+			-1 settler | -3 goodwill | -3 settlement reputation
+		<</linkdesc>>
+	<</linkreplace>>
+</div>
