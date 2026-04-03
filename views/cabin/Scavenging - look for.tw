@@ -21,8 +21,11 @@ You took your stuff and decided to walk in the direction you thought <<=setup.pr
 <<if [0, 2].includes(_npc.gender)>>
 	<<run _crossroadOptions.push('Scavenging - look for girl fight')>>
 	<<if setup.npcInventoryHas(_npc, 'knife') && _npc.strength >= 50 && setup.npcInventoryHas(_npc, 'body_armor')>>
-		<<run _crossroadOptions.push('Scavenging - look for girl fight #2')>>	
+		<<run _crossroadOptions.push('Scavenging - look for girl fight #2')>>
 	<</if>>
+<</if>>
+<<if _npc.assignedTo === 'forest'>>
+	<<run _crossroadOptions.push('Forest - look for - wolves')>>
 <</if>>
 <<set _crossroadOption = either(_crossroadOptions)>>
 <<addhours 3>>

@@ -20,12 +20,43 @@
 <<if _npc.strength >= 30>>
 	<<set _changeOfNotComingHome -=4>>
 <</if>>
-
 <<if setup.npcInventoryHas(_npc, 'knife')>>
 	<<set _chanceOfNotComingHome -=1>>
 <</if>>
-<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30) && _isGuest>>				
+
+/* Animal attack chance — higher if no knife, lower if strong */
+<<set _chanceAnimalAttack = 8>>
+<<if setup.npcInventoryHas(_npc, 'knife')>>
+	<<set _chanceAnimalAttack -= 4>>
+<</if>>
+<<if _npc.strength >= 30>>
+	<<set _chanceAnimalAttack -= 3>>
+<</if>>
+
+/* Falling tree injury chance — lower if woodcraft skilled */
+<<set _chanceTreeInjury = 4>>
+<<if (_npc.skills ?? []).includes('woodcraft')>>
+	<<set _chanceTreeInjury = 1>>
+<</if>>
+
+<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30) && _isGuest>>
 	<<set $scavengingDidntReturn = _guestI>>
+<<elseif typeof _npc.sick === 'undefined' && setup.percentageChance(_chanceAnimalAttack)>>
+	/* Worker returns but is injured from animal attack */
+	<<set _npc.sick = {
+		days: randomInteger(5, 12),
+		desc: 'Animal wounds',
+		id: 'animal_wounds'
+	}>>
+	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' was attacked by a wild animal in the forest and returned wounded. They will need ' + _npc.sick.days + ' days to recover.</span>', 'forest')>>
+<<elseif typeof _npc.sick === 'undefined' && setup.percentageChance(_chanceTreeInjury)>>
+	/* Worker returns but hurt from a falling tree */
+	<<set _npc.sick = {
+		days: randomInteger(7, 20),
+		desc: 'Crushed by falling tree',
+		id: 'broken_bones'
+	}>>
+	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' was struck by a falling tree in the forest. They made it back but are badly hurt and need ' + _npc.sick.days + ' days rest.</span>', 'forest')>>
 <<else>>
 	<<set _giveWood = (_npc.strength > 30 ? 2 : 1)>>
 	<<if (_npc.skills ?? []).includes('woodcraft')>>

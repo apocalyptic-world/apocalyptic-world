@@ -1,0 +1,71 @@
+:: Forest - look for - wolves
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+<center>
+	[img[setup.ImagePath+'places/forest/wolves.jpg' ]]
+</center>
+<br /><br />
+<<set _npc = $guests[$scavengingDidntReturn]>>
+You push deeper into the treeline, following broken branches and scattered tools — clear signs of a struggle. Then you hear it: low growling, and beneath it, a weak human voice.
+
+You break into a clearing and find <<=setup.displayName(_npc)>> backed against a fallen log, bleeding from the arm, with three wolves circling slowly. One lunges and <<=setup.pronounceWhat(_npc)>>'s barely keeping it off with a branch.
+<br /><br />
+
+<<linkreplace 'Fight the wolves'>>
+	<<set _fightChance = 35>>
+	<<set _fightChance += ($player.strength >= 30 ? 30 : 0)>>
+	<<set _fightChance += ($backpack.has('knife') ? 20 : 0)>>
+	<<if setup.percentageChance(_fightChance)>>
+		You charge in screaming, driving them back one by one. Two break and run — you drag the third off <<=setup.displayName(_npc)>> and land enough blows to send it limping into the trees.
+		<br /><br />
+		<<set _npc.sick = {
+			days: randomInteger(4, 10),
+			desc: 'Wolf bites',
+			id: 'animal_wounds'
+		}>>
+		<<=setup.displayName(_npc)>> is bleeding badly but alive. You pull <<=setup.pronounceWho(_npc)>> to <<=setup.pronounceWhos(_npc)>> feet.
+		<br /><br />
+		<<link 'Head home'>>
+			<<unset $scavengingDidntReturn>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<<else>>
+		You rush in but there are too many. One lunges at your arm, another goes for your leg. You take a bad bite before managing to back away, leaving <<=setup.displayName(_npc)>> behind.
+		<br /><br />
+		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(10, 25))>>
+		<<link 'Retreat'>>
+			<<guestRemove $scavengingDidntReturn>>
+			<<unset $scavengingDidntReturn>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</if>>
+<</linkreplace>>
+
+<<if ($backpack.has('revolver') && $backpack.has('bullet_revolver')) || ($backpack.has('shotgun') && $backpack.has('shotgun_shell'))>>
+	<<link 'Fire a warning shot'>>
+		<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+			<<drop $backpack 'bullet_revolver' 1>>
+		<<else>>
+			<<drop $backpack 'shotgun_shell' 1>>
+		<</if>>
+		<<set _npc.sick = {
+			days: randomInteger(4, 8),
+			desc: 'Wolf bites',
+			id: 'animal_wounds'
+		}>>
+		The gunshot cracks through the air and the wolves scatter instantly into the undergrowth.
+		<br /><br />
+		<<=setup.displayName(_npc)>> collapses to the ground in exhaustion. <<=setup.pronounceWhat(_npc, true)>>'s bleeding, but alive. You help <<=setup.pronounceWho(_npc)>> up and start the walk back.
+		<br /><br />
+		<<link 'Head home'>>
+			<<unset $scavengingDidntReturn>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</link>>
+<</if>>
+
+<<link 'Leave'>>
+	<<guestRemove $scavengingDidntReturn>>
+	<<unset $scavengingDidntReturn>>
+	<<goto 'Wood cabin'>>
+<</link>>
