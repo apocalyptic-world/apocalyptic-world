@@ -2,6 +2,7 @@
 
 <h1 class="ptitle">GUEST HOUSE</h1>
 
+<<run console.log('event', $tmpEvent)>>
 <<if typeof $randEvent === 'undefined'>>
 	<<set
 		_guestIds = [$tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]],
@@ -131,7 +132,7 @@
 			<br /><br />
 			You walk in on <<=setup.displayName($guests[_guestIds[1]])>> and <<=setup.displayName($guests[_guestIds[0]])>>.
 			They stop abruptly — <<=setup.displayName($guests[_guestIds[1]])>> steps protectively in front of his wife, clearly unhappy.
-			<br />
+			<br /><br />
 			<<linkreplace 'Ask to join them'>>
 				<<set _yesGuestIds = []>>
 				<<for _i = 0; _i < _guestIds.length; _i++>>
@@ -143,7 +144,8 @@
 				<<if _yesGuestIds.length == 0>>
 					They exchange a look and both refuse without a word.
 				<<elseif _yesGuestIds.length == 1>>
-					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while the other stays back.
+					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while <<=setup.displayName($guests[_guestIds[1]], true)>> stays back.
+					<br /><br />
 					<<linkreplace 'Continue'>>
 						<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
 							<<set $guests[$guestId] = $tmpGirl>>
@@ -155,6 +157,7 @@
 					<</linkreplace>>
 				<<else>>
 					After a long pause, they both agree — perhaps this is something they've wanted to try.
+					<br /><br />
 					<<linkreplace 'Continue'>>
 						<<set $guestId = _yesGuestIds[0],
 						$tmpGirl = $guests[_yesGuestIds[0]],
