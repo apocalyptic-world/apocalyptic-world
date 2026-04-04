@@ -48,7 +48,7 @@
 	<<set $characters.vincent.relationship++>>
 	<<link 'Talk' 'Farm - quest delivery done'>>
 	<</link>>
-<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
+<<elseif $characters.vincent.quests.new_settlement && !($game.location.settlement ?? false) && !$player?.quests?.settlement_burned && $characters.vincent.quests.new_settlement_day < $game.day && $backpack.count('wood') >= 100 && $backpack.count('solar_panel') >= 5>>
 	<<link 'Talk' 'Settlement - intro'>><</link>>
 <<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
 	<<link 'Talk about wanted poster' 'Farm - wanted poster'>>
