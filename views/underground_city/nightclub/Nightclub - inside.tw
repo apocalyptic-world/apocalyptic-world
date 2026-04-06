@@ -48,6 +48,9 @@
 <<elseif !($locationEvents.nightclub ?? false)>>
 	<<if $gameDate.getDay() === 5>>
 		<<goto 'Nightclub - rave party enter'>>
+	<<elseif setup.percentageChance(15)>>
+		<<set $locationEvents.nightclub = true>>
+		<<goto 'Nightclub - spiked drink'>>
 	<</if>>
 <</if>>
 

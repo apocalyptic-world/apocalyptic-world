@@ -1,0 +1,52 @@
+:: Nightclub - spiked drink won [bg-underground]
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br /><br />
+He goes down hard. A few people nearby finally notice — too late, as always. Someone at the bar mutters something, then looks away.
+<br /><br />
+You turn to the woman. She's slid down the wall, sitting on the floor, knees pulled up. Her eyes are open but glassy. She looks at you like she's trying to remember how to form words.
+<br /><br />
+<<sayNpc $tmpGirl>>
+	I... he put something in my... I didn't...
+<</sayNpc>>
+<br />
+She doesn't finish the sentence.
+<br /><br />
+
+<div id="option_help">
+	<<linkreplace 'Help her to safety'>>
+		<<run $('#option_take').hide()>>
+		You pull her to her feet and guide her to a booth away from the crowd. You flag down a bartender, get her some water, and stay until her eyes start to focus properly again.
+		<br /><br />
+		She grips your hand for a moment before you leave.
+		<br /><br />
+		<<sayNpc $tmpGirl>>
+			Thank you. I don't... I don't know what would have happened.
+		<</sayNpc>>
+		<br />
+		<<set $player.goodwill += 3>>
+		<<set $player.reputation += 2>>
+		<<addmins 30>>
+		<<link 'Leave'>>
+			<<goto 'Nightclub - inside'>>
+		<</link>>
+		<<linkdesc>>
+			+3 goodwill | +2 reputation
+		<</linkdesc>>
+	<</linkreplace>>
+</div>
+
+<div id="option_take">
+	<<link 'Take advantage'>>
+		<<run $('#option_help').hide()>>
+		<<set $tmpGirl.rape = true>>
+		<<set $tmpGirlCapture = false>>
+		<<set $tmpGirlInvite = false>>
+		<<set $tmpGirl.sub = 100>>
+		<<set $tmpGirl.horny = 0>>
+		<<unset $slaveId, $guestId, $childId, $charId>>
+		<<set $tmpGirlViewBack = 'Nightclub - inside'>>
+		<<set $tmpGirlBack = 'Nightclub - inside'>>
+		<<set $player.goodwill -= 5>>
+		<<fuck $tmpGirl>>
+	<</link>>
+</div>

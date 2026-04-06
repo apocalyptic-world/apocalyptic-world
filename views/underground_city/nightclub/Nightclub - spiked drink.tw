@@ -1,0 +1,44 @@
+:: Nightclub - spiked drink [bg-underground]
+<h1 class="ptitle">NIGHTCLUB</h1>
+<br /><br />
+<<newgirl>>
+<<set $tmpGirl.drunk = 100>>
+<<set $tmpGirl.location = 'nightclub'>>
+<center>
+	<<image 'places/nightclub/drink_together.jpg' sfw>>
+</center>
+<br /><br />
+You're scanning the crowd when something catches your eye near the far end of the bar. A woman — young, barely standing — is slumped against a man twice her size. He's got his arm tight around her waist, steering her toward the back exit. She's mumbling something, head lolling. He's smiling.
+<br /><br />
+Nobody else is looking. The music covers everything.
+<br /><br />
+
+<div id="option_intervene">
+	<<linkreplace 'Intervene'>>
+		<<run $('#option_ignore').hide()>>
+		You cut through the crowd and step directly in front of them, blocking the exit.
+		<br /><br />
+		<<you>>
+			Where are you taking her?
+		<</you>>
+		<br />
+		The man's smile drops. He's big — broader than you — and his hand moves to his jacket.
+		<br /><br />
+		<<newguy>>
+		<<sayNpc $tmpGuy>>
+			Back off. None of your business.
+		<</sayNpc>>
+		<br />
+		He shoves the woman aside and squares up. She slumps against the wall, barely conscious.
+		<br /><br />
+		<<generateEnemies 1 0 1>>
+		<<fight $enemies 'Nightclub - spiked drink won' 'Nightclub - inside'>>
+	<</linkreplace>>
+</div>
+
+<div id="option_ignore">
+	<<link 'Ignore it'>>
+		<<addmins 5>>
+		<<goto 'Nightclub - inside'>>
+	<</link>>
+</div>
