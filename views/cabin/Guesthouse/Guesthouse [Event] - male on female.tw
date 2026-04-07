@@ -218,6 +218,12 @@
 				$guests[_guestIds[_i]].horny = 0
 			>>
 		<</for>>
+		<<for _ri = 0; _ri < _guestIds.length; _ri++>>
+			<<for _rj = _ri + 1; _rj < _guestIds.length; _rj++>>
+				<<set $guests[_guestIds[_ri]].relationship = Math.min(100, ($guests[_guestIds[_ri]].relationship ?? 0) + 5)>>
+				<<set $guests[_guestIds[_rj]].relationship = Math.min(100, ($guests[_guestIds[_rj]].relationship ?? 0) + 5)>>
+			<</for>>
+		<</for>>
 	<</if>>
 	<<unset $randEvent, $tmpEvent>>
 	<<goto 'Guest house'>>
