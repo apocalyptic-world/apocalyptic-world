@@ -22,9 +22,10 @@
 		<</if>>
 		<<set _assignedToGreenhouse = true>>
         <<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
+		<<set _customColorStyle = (typeof $slaves[_i].color !== 'undefined') ? ' npc-color color-' + $slaves[_i].color : ''>>
 		<tr class="item">
 			<td style="min-width: 25%">
-           		 <span @class="''+_genderClass+''">
+           		 <span @class="''+_genderClass+_customColorStyle+''">
                       <<link $slaves[_i].name>>
                         <<set $tmpGirl to $slaves[_i]>>
                         <<set $tmpGirl.location = 'garden'>>
@@ -57,9 +58,10 @@
 			<<run _guestGirlsInGreenhouse.push(_gardenGuestI)>>
 		<</if>>
         <<set _genderClass = 'gender-' + setup.genderClass(_gardenGuest)>>
+		<<set _customColorStyle = (typeof _gardenGuest.color !== 'undefined') ? ' npc-color color-' + _gardenGuest.color : ''>>
 		<tr class="item">
 			<td style="min-width: 25%">
-            		<span @class="''+_genderClass+''">
+            		<span @class="''+_genderClass+_customColorStyle+''">
                           <<link _gardenGuest.name>>
                           <<set $tmpGirlViewBack = 'NPC view - guest'>>
                           <<set $tmpGirl to _gardenGuest>>
