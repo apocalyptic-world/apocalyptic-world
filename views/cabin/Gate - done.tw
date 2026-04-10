@@ -1,0 +1,113 @@
+:: Gate - done {"position":"1024,2280","size":"100,100"}
+<<if $characters.blair.quests?.gate>>
+    <<goto 'Blair - gate done'>>
+<<else>>
+<h1 class="ptitle">CABIN</h1>
+<br />
+<<addhours 10>>
+
+<center>
+    [img[setup.ImagePath+'places/cabin/gate_finished.jpg']]
+</center>
+<br /><br />
+The gate stands tall at the settlement entrance. It already feels more like a real home.
+<br /><br />
+What will you call this place?
+<br /><br />
+<<textbox "_gateName" 'Cabin'>>
+<br /><br />
+<<link 'Continue with flag'>>
+    <<set $game.cabinName = _gateName>>
+    <<set $player.quests.gateDoneDay = $game.date>>
+    <<goto 'Gate - done flag'>>
+<</link>>
+<</if>>
+
+
+:: Gate - done flag {"position":"1138,2280","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<div id="flag_choose" style="display: flex; justify-content: center">
+    <div class="flag_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/bg_red.png']]
+        <<link 'Choose'>>
+            <<set $game.flagBg = 'red'>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+    <div class="flag_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/bg_blue.png']]
+        <<link 'Choose'>>
+            <<set $game.flagBg = 'blue'>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+    <div class="flag_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/bg_green.png']]
+        <<link 'Choose'>>
+            <<set $game.flagBg = 'green'>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+</div>
+
+<div id="icon_choose" style="display: flex; justify-content: center">
+    <div class="flag_icon_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/icon_1.png']]
+        <<link 'Choose'>>
+            <<set $game.flagIcon = 1>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+    <div class="flag_icon_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/icon_2.png']]
+        <<link 'Choose'>>
+            <<set $game.flagIcon = 2>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+    <div class="flag_icon_choose_item">
+        [img[setup.ImagePath+'game/misc/flag/icon_3.png']]
+        <<link 'Choose'>>
+            <<set $game.flagIcon = 3>>
+            <<goto 'Gate - done flag'>>
+        <</link>>
+    </div>
+</div>
+
+<<if $game.flagIcon && $game.flagBg>>
+    <div style="display: flex; justify-content: center; text-align: center;">
+    <div>
+      Result
+      <br />
+      <<flag>>
+    </div>
+    </div>
+    <br /><br />
+    <<link 'Continue'>>
+        <<goto 'Gate - done finish'>>
+    <</link>>
+<</if>>
+
+<style>
+.flag_choose_item {
+    margin: 0px 30px;
+}
+.flag_icon_choose_item {
+    width: 102px;
+    margin: 0 53px;
+}
+</style>
+
+
+:: Gate - done finish {"position":"1249,2280","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<br />
+You look out at the gate and the settlement beyond it. People are going about their day, and for the first time it genuinely feels like a place worth defending.
+<br /><br />
+<<link 'Go to sleep'>>
+    <<set $game.showFlag = true>>
+    <<goto 'Sleep eval'>>
+<</link>>

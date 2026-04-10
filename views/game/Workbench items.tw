@@ -228,14 +228,14 @@
 			goto: "Workbench"
 		},
 		gate: {
-			show: isMetChar('blair') && $characters.blair.quests.gate && !$game.cabinName,
+			show: ($characters.blair.quests?.gate || $game.day >= 14) && !$game.cabinName,
 			title: "Settlement gate",
 			description: "Gates for the entrance to your village",
 			required: {
 				wood: 150,
 				rope: 10,
 			},
-			goto: "Blair - gate done",
+			goto: "Gate - done",
 			energy: 100,
 			after: function() {}
 		},
