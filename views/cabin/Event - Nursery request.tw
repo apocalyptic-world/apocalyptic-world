@@ -1,0 +1,32 @@
+:: Event: Nursery request {"position":"574,1324","size":"100,100"}
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+<<set _pregnantGuests = setup.filterNPCs($guests, {'pregnancy_gte': 1})[0] ?? []>>
+<<set _npc = $guests[_pregnantGuests[0]]>>
+You find <<=setup.displayName(_npc)>> sitting alone near the cabin, one hand resting on her belly. She looks up as you approach.
+<br /><br />
+<<sayNpc _npc>>
+    <<=$player.name>>, can I ask you something? I've been thinking about the baby. When it comes... where will it go? We don't really have a place for children here.
+<</sayNpc>>
+<br /><br />
+She glances around the settlement with a worried look.
+<br /><br />
+<<sayNpc _npc>>
+    Other settlements have a nursery. A place where the little ones can sleep safely, be looked after. I know it's asking a lot, but... would you consider building something like that?
+<</sayNpc>>
+<br /><br />
+<<link "I'll get it built">>
+    <<sayNpc _npc>>
+        Thank you. Really.
+    <</sayNpc>>
+    <<notify 6s>>
+        Nursery available in workbench!
+    <</notify>>
+    <<goto 'Wood cabin'>>
+<</link>>
+<<link "Not right now">>
+    <<notify 6s>>
+        Nursery available in workbench!
+    <</notify>>
+    <<goto 'Wood cabin'>>
+<</link>>

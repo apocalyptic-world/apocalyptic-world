@@ -240,7 +240,7 @@
 			after: function() {}
 		},
 		nursery: {
-			show: isMetChar('blair') && $characters.blair.quests.nursery && !($game.location.nursery ?? false),
+			show: ((isMetChar('blair') && $characters.blair.quests.nursery) || ($player.quests?.nursery_request ?? false)) && !($game.location.nursery ?? false),
 			title: "Nursery",
 			description: "Shelter were all babies/kids will live.",
 			required: {
@@ -253,7 +253,7 @@
 			after: function() {}
 		},
 		shop: {
-			show: isMetChar('vincent') && $characters.vincent.quests.shop_talk && (!$game.location.shop ?? false),
+			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && (!$game.location.shop ?? false),
 			title: "Shop",
 			description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
 			required: {
@@ -268,7 +268,7 @@
 			}
 		},
 		bathhouse: {
-			show: !($game.location.bathhouse ?? false) && $player.quests.bathhouse_talk,
+			show: !($game.location.bathhouse ?? false) && ($player.quests.bathhouse_talk || $backpack.has('blueprint_bathhouse')),
 			title: 'Bathhouse',
 			description: "Your guests will have place where to wash them self and mistress will be able to wash slaves too.",
 			required: {

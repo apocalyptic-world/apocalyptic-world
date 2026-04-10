@@ -84,6 +84,9 @@
 		<<else>>
 			<<goto 'Event: A lone survivor: gift'>>
 		<</if>> 
+	<<elseif !($game.location.nursery ?? false) && !($player.quests?.nursery_request ?? false) && !($characters.blair.quests?.nursery ?? false) && setup.filterNPCs($guests, {'pregnancy_gte': 1})[0]?.length && setup.percentageChance(40)>>
+		<<set $player.quests.nursery_request = true>>
+		<<goto 'Event: Nursery request'>>
 	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 4 && setup.percentageChance(30) && !$player.quests.bathhouse_talk && $game.day > 80>>
 		<<set $player.quests.bathhouse_talk = true>>
 		<<goto 'Event: Bathhouse talk'>>
