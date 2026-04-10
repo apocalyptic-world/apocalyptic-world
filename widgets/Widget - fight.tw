@@ -186,6 +186,9 @@
 			<<if ($fight.allies[_i].skills ?? []).includes('fighter') && !_allyHasCrossbow>>
          		<<set _allyStrength += (_allyStrength / 2)>>
         	<</if>>
+			<<if ($fight.allies[_i].traits ?? []).includes('crippled')>>
+				<<set _allyStrength = Math.max(1, Math.round(_allyStrength / 2, 0))>>
+			<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
 			<</if>>

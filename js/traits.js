@@ -55,6 +55,10 @@ setup.traits = {
     pacifist: {
         title: "Pacifist",
         description: "Does not engage in fights"
+    },
+    crippled: {
+        title: "Crippled",
+        description: "Injury or disability makes them less effective in combat. Deals half damage when fighting."
     }
 };
 
