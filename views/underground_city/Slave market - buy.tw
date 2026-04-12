@@ -1,72 +1,94 @@
 :: Slave market - buy [bg-underground] {"position":"2179,1690","size":"100,100"}
 <h1 class="ptitle">SLAVE MARKET</h1>
-<br /><br />
-
+<br />
 <<unset $slaveId, $guestId, $charId, $childId>>
 
-<<set _genders = [
-	'female',
-	'male'
-]>>
-<<if settings.transEnabled>>
-	<<run _genders.push('transfemale')>>
-<</if>>
-<<set _npcGender = setup.getRandomElement(_genders)>>
-<<if _npcGender === 'female'>>
-	<<newgirl>>
-	<<set _npc = $tmpGirl>>
-<<elseif _npcGender === 'male'>>
-	<<newguy>>
-	<<set _npc = $tmpGuy>>
-<<else>>
-	<<newtransgirl>>
-	<<set _npc = $tmpGirl>>
-<</if>>
-<<set _npc.sub += randomInteger(10, 20)>>
-<<if ($player.quests.slave_market_vip ?? false)>>
-	<<set _npc.sub += randomInteger(10, 20)>>
-	<<set _npc.beauty = Math.min(_npc.beauty + randomInteger(10, 15), 100)>>
-	<<set _npc.birthDate = setup.getBirthDate(randomInteger(18, 30))>>
-	<<if setup.getAge(_npc) < 18>>
-		<<run _npc.birthDate.setFullYear(_npc.birthDate.getFullYear() - 1)>>
-	<</if>>
-	<<if setup.percentageChance(50)>>
-		<<set _npc.traits = setup.getRandomTraits(_npc, 2)>>
-	<</if>>
-<</if>>
-<<slaveValue _npc 2>>
-<<set _isSlaveMarket = true>>
-<<set $tmpGirl = _npc>>
-<<include 'NPC info'>>
-<<if _npc.virgin>>
-	<div>
-		<strong><<=setup.pronounceWhat(_npc)>>'s a virgin!</strong>
-	</div>
-<</if>>
-Slave cost <strong><<=_npc.value>></strong> caps.
-<br /><br />
+<<set _mSlaves = []>>
+<<for _msi to 0; _msi lt 4; _msi++>>
+    <<set _mgenders = ['female', 'male']>>
+    <<if settings.transEnabled>><<set _mgenders = _mgenders.concat(['transfemale'])>><</if>>
+    <<set _mnpcGender = setup.getRandomElement(_mgenders)>>
+    <<if _mnpcGender === 'female'>>
+        <<newgirl>>
+        <<set _mnpc = $tmpGirl>>
+    <<elseif _mnpcGender === 'male'>>
+        <<newguy>>
+        <<set _mnpc = $tmpGuy>>
+    <<else>>
+        <<newtransgirl>>
+        <<set _mnpc = $tmpGirl>>
+    <</if>>
+    <<set _mnpc.sub += randomInteger(10, 20)>>
+    <<if ($player.quests.slave_market_vip ?? false)>>
+        <<set _mnpc.sub += randomInteger(10, 20)>>
+        <<set _mnpc.beauty = Math.min(_mnpc.beauty + randomInteger(10, 15), 100)>>
+        <<set _mnpc.birthDate = setup.getBirthDate(randomInteger(18, 30))>>
+        <<if setup.getAge(_mnpc) < 18>>
+            <<run _mnpc.birthDate.setFullYear(_mnpc.birthDate.getFullYear() - 1)>>
+        <</if>>
+        <<if setup.percentageChance(50)>>
+            <<set _mnpc.traits = setup.getRandomTraits(_mnpc, 2)>>
+        <</if>>
+    <</if>>
+    <<slaveValue _mnpc 2>>
+    <<set _mSlaves[_msi] = _mnpc>>
+<</for>>
 
 <<if timeBetween('14:00', '19:00')>>
-  <<if $slaves.length < $basementLimit && $player.money >= _npc.value>>
-	  <br /><br />
-	<<link 'Buy'>>
-		<<set _npc.capture = false>>
-		<<set $slaves.push(_npc)>>
-		<<set $player.money -= _npc.value>>
-		<<goto 'Slave market - buy'>>
-	<</link>>
-  <<else>>
-	  <<if $slaves.length >= $basementLimit>>
-		  <strong>You don't have free room in the basement!</strong>
-	  <</if>>
-	  <br /><br />
-  <</if>>
-  <<if timeBetween('14:00', '18:40')>>
-  	[[Watch another slave|Slave market - buy]]
-  <</if>>
+<div class="slave-market-grid">
+<<for _msi to 0; _msi lt _mSlaves.length; _msi++>>
+    <<capture _msi, _mSlaves>>
+    <<set _card = _mSlaves[_msi]>>
+    <<set $tmpGirl = _card>>
+    <<set _isSlaveMarket = true>>
+    <div class="slave-market-card">
+        <<include 'NPC info'>>
+        <div class="slave-market-card-price"><<= _card.value>> caps</div>
+        <<linkreplace 'Buy'>>
+            <<if $slaves.length < $basementLimit && $player.money >= _mSlaves[_msi].value>>
+                <<run $slaves.push(_mSlaves[_msi])>>
+                <<set $player.money -= _mSlaves[_msi].value>>
+                <em>Purchased.</em>
+            <<elseif $slaves.length >= $basementLimit>>
+                <span class="slave-market-unavail">No room in basement.</span>
+            <<else>>
+                <span class="slave-market-unavail">Not enough caps.</span>
+            <</if>>
+        <</linkreplace>>
+    </div>
+    <</capture>>
+<</for>>
+</div>
+<br />
+[[Browse more|Slave market - buy]]
+<<else>>
+Market is closed (14:00–19:00).
+<br /><br />
 <</if>>
-[[Leave|Slave market]]
 
+[[Leave|Slave market]]
 <<addmins 20>>
 
-
+<style>
+.slave-market-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.slave-market-card {
+    width: calc(50% - 8px);
+    box-sizing: border-box;
+    border: 1px solid #664;
+    border-radius: 6px;
+    padding: 10px;
+    background: rgba(255,255,255,0.04);
+}
+.slave-market-card-price {
+    font-weight: bold;
+    margin: 6px 0;
+}
+.slave-market-unavail {
+    color: #888;
+    font-size: 0.85em;
+}
+</style>
