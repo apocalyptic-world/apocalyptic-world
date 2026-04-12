@@ -1,9 +1,8 @@
 :: Sleep - hospital [widget]
 
 <<widget sleepHospital>>
-    <<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
-    <<set _doctor = $guests[_girlGuest[0]]>>
-
+    <<set _hasDoctor = setup.getDoctors().length > 0>>
+    <<set _hasWorkingHospital = setup.hasWorkingHospital()>>
     <<for _pregnancyHappening range $pregnancysHappeningHospital>>
         <<if _pregnancyHappening.type === 'slave'>>
 	        <<set _mother = $slaves[_pregnancyHappening.id]>>
@@ -13,11 +12,17 @@
 	        <<set _mother = $guests[_pregnancyHappening.id]>>
         <</if>>
 
-        /* without hospital max chance of success = 95% so hospital should also reach that, see childbirth.tw */
         <<set _chanceOfFail = 10>>
         <<if (_mother.traits ?? []).includes('breeder')>>
             <<set _chanceOfFail -= 5>>
         <</if>>
+        <<if _hasDoctor>>
+            <<set _chanceOfFail -= 2>>
+        <</if>>
+        <<if _hasWorkingHospital>>
+            <<set _chanceOfFail -= 2>>
+        <</if>>
+        <<set _chanceOfFail = Math.max(1, _chanceOfFail)>>
         <<if setup.percentageChance(_chanceOfFail)>>
             <<run delete _mother.pregnancy>>
             <<set _mother.happy -= 80>>
