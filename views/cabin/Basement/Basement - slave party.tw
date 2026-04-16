@@ -56,7 +56,7 @@ Slaves who had once been strangers found themselves sharing stories and laughter
     <</if>>
     <<video 'basement/slave_party1'>>
     <br /><br />
-    <<set _girlSlaves = setup.getRandomPersonIdsGirls($slaves, 2)>>
+    <<set _girlSlaves = setup.getRandomPersonIdsGirls($slaves.filter(s => !s.chastityBelt), 2)>>
     <<set _npc1 = $slaves[_girlSlaves[0]]>>
     <<set _npc2 = $slaves[_girlSlaves[1]]>>
     <<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
@@ -97,7 +97,7 @@ Slaves who had once been strangers found themselves sharing stories and laughter
 <<linkreplace 'Bring slave to your bedroom'>>
     <table id="slaves">
 		<<for _slaveI, _slave range $slaves>>
-			<<if setup.getAge(_slave) < 18>>
+			<<if setup.getAge(_slave) < 18 || _slave.chastityBelt>>
 				<<continue>>
 			<</if>>
 			<<capture _slaveI, _slave>>

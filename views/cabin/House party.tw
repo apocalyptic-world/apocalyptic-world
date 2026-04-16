@@ -54,7 +54,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=setup.displayName(_guest)>> 
+					 	  <<=setup.displayName(_guest)>>
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
@@ -67,24 +67,26 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  </td>
 				  <td>
 						<<set _guest = setup.drink(_guest, 1)>>
-				  		<<link 'Invite to the bedroom'>>
-							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
-								<<set $tmpGirl to _guest>>
-								<<set $guestId = _guestI>>
-								<<set $characters.blair.quests.house_party_finished = true>>
-								<<goto 'House party - threesome'>>
-							<<else>>
-								<<set $tmpGirl to _guest>>
-								<<set $tmpGirl.location = 'bedroom'>>
-								<<set $tmpGirlViewBack = 'Sleep eval'>>
-								<<set $tmpGirlCapture to false>>
-								<<set $tmpGirlInvite to false>>
-								<<set $tmpGirl.rape to false>>
-								<<set $guestId = _guestI>>
-								<<run delete $slaveId>>
-								<<fuck $tmpGirl>>
-							<</if>>
-						<</link>>
+						<<if !_guest.chastityBelt>>
+				  			<<link 'Invite to the bedroom'>>
+								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
+									<<set $tmpGirl to _guest>>
+									<<set $guestId = _guestI>>
+									<<set $characters.blair.quests.house_party_finished = true>>
+									<<goto 'House party - threesome'>>
+								<<else>>
+									<<set $tmpGirl to _guest>>
+									<<set $tmpGirl.location = 'bedroom'>>
+									<<set $tmpGirlViewBack = 'Sleep eval'>>
+									<<set $tmpGirlCapture to false>>
+									<<set $tmpGirlInvite to false>>
+									<<set $tmpGirl.rape to false>>
+									<<set $guestId = _guestI>>
+									<<run delete $slaveId>>
+									<<fuck $tmpGirl>>
+								<</if>>
+							<</link>>
+						<</if>>
 				  </td>
 				</tr>
 			<</capture>>
@@ -203,7 +205,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=setup.displayName(_guest)>> 
+					 	  <<=setup.displayName(_guest)>>
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
@@ -216,24 +218,26 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  </td>
 				  <td>
   						<<set _guest = setup.drink(_guest, 1)>>
-				  		<<link 'Invite to the bedroom'>>
-							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
-								<<set $tmpGirl to _guest>>
-								<<set $guestId = _guestI>>
-								<<set $characters.blair.quests.house_party_finished = true>>
-								<<goto 'House party - threesome'>>
-							<<else>>
-								<<set $tmpGirl to _guest>>
-								<<set $tmpGirl.location = 'bedroom'>>
-								<<set $tmpGirlViewBack = 'Sleep eval'>>
-								<<set $tmpGirlCapture to false>>
-								<<set $tmpGirlInvite to false>>
-								<<set $tmpGirl.rape to false>>
-								<<set $guestId = _guestI>>
-								<<unset $slaveId, $charId>>
-								<<fuck $tmpGirl>>
-							<</if>>
-						<</link>>
+						<<if !_guest.chastityBelt>>
+				  			<<link 'Invite to the bedroom'>>
+								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
+									<<set $tmpGirl to _guest>>
+									<<set $guestId = _guestI>>
+									<<set $characters.blair.quests.house_party_finished = true>>
+									<<goto 'House party - threesome'>>
+								<<else>>
+									<<set $tmpGirl to _guest>>
+									<<set $tmpGirl.location = 'bedroom'>>
+									<<set $tmpGirlViewBack = 'Sleep eval'>>
+									<<set $tmpGirlCapture to false>>
+									<<set $tmpGirlInvite to false>>
+									<<set $tmpGirl.rape to false>>
+									<<set $guestId = _guestI>>
+									<<unset $slaveId, $charId>>
+									<<fuck $tmpGirl>>
+								<</if>>
+							<</link>>
+						<</if>>
 				  </td>
 				</tr>
 			<</capture>>
