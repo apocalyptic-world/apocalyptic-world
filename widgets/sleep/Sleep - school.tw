@@ -13,7 +13,8 @@
     <<set _hasTeacher = (setup.getPersonsForLocation($guests, 'school') ?? []).length>>
     <<if _hasTeacher>>
 
-    	<<set _teachers = setup.filterNPCs($guests,  { assignedTo: 'school'})[0]>>
+    	<<set _teacherFiltered = setup.filterNPCs($guests, { assignedTo: 'school'})>>
+	    <<set _teachers = Object.values(_teacherFiltered).flat()>>
 	    <<set _teacher = $guests[_teachers[0]] ?? null>>
 
         <<for _nurseryI, _nursery range $nursery>>
