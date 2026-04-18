@@ -357,8 +357,6 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			id: setup.getRandomElement(_npcsWithDildos[0])
 		}>>
 		<<goto 'Guesthouse [Event] - Sextoy alone time'>>
-	<<elseif !$player?.baseManagement?.noSex || setup.percentageChance(4)>>
-		<<include 'Guesthouse - guests sex'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
 		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && !setup.family.isBloodToMC($guests[_npcId])>>
@@ -373,6 +371,8 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - male on female forced'>>
+	<<elseif !$player?.baseManagement?.noSex || setup.percentageChance(4)>>
+		<<include 'Guesthouse - guests sex'>>
 	<</if>>
 <</if>>
 

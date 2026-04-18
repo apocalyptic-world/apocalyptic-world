@@ -66,7 +66,7 @@
 				<<set _excluded = _child.traits.concat(_child.traitsLocked ?? [])>>
 				<<set _fatherTrait = setup.getRandomTraits({
 					gender: _child.gender
-				}, 1, _excluded.filter(t => !_father.traits.includes(t)))>>
+				}, 1, _excluded.concat(Object.keys(setup.traits).filter(t => !_father.traits.includes(t))))>>
 				<<if _fatherTrait && _fatherTrait.length>>
 					<<set _child.traits.push(_fatherTrait[0])>>
 				<</if>>
