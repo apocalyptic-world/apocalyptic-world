@@ -171,13 +171,17 @@
 			<<if $args[0].virgin && typeof _actionText[$args[1]] !== 'undefined' && typeof _actionText[$args[1]]['v'] !== 'undefined'>>
 				<<print _actionText[$args[1]]['v'].replace('%name%', (($args[0].nickName ?? '') !== '') ? $args[0].nickName : $args[0].name)>>
 			<<else>>
-				<<if $args[0].gender || $args[1].includes('threesome')>>
+				<<if $args[0].gender || $args[1].includes('threesome') || $args[1].includes('foursome')>>
 					<<if typeof _actionText[setup.genderPath($args[0])][$args[1]] !== 'undefined'>>
 						<<set _name2 = ''>>
 						<<if typeof $tmpGirl2 !== 'undefined'>>
 							<<set _name2 = (($tmpGirl2.nickName ?? '') !== '') ? $tmpGirl2.nickName : $tmpGirl2.name>>
 						<</if>>
-						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/%name%/g, (($args[0].nickName ?? '') !== '') ? $args[0].nickName : $args[0].name).replace('%name2%', _name2)>>
+						<<set _name3 = ''>>
+						<<if typeof $tmpGirl3 !== 'undefined'>>
+							<<set _name3 = (($tmpGirl3.nickName ?? '') !== '') ? $tmpGirl3.nickName : $tmpGirl3.name>>
+						<</if>>
+						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/%name%/g, (($args[0].nickName ?? '') !== '') ? $args[0].nickName : $args[0].name).replace(/%name2%/g, _name2).replace(/%name3%/g, _name3)>>
 					<</if>>
 				<<else>>
 					<<if _actionText[$args[1]] !== undefined>>

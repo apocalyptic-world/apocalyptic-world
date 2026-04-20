@@ -1,0 +1,200 @@
+:: Mc foursome fuck [sex]
+
+<<include 'Mc foursome actions'>>
+
+<div id="action-scene">
+<<if typeof $sexAction !== 'undefined'>>
+    <<set $tmpGirl.quests ??= {}>>
+    <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+    <<addmins 5>>
+    <<energy -5>>
+    <<if setup.perkHas('drunk')>>
+        <<energy -5>>
+    <</if>>
+
+    <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
+    <<if !_canFuck>>
+        <<set _hornyGained = 0>>
+    <</if>>
+    <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? null)>>
+    <<if (_maxMcHorny === null || $player.horny < _maxMcHorny)>>
+        <<horny _hornyGained>>
+    <</if>>
+    <<set _showSex = true>>
+
+    <<if ['anal','anal_b_bj'].includes($sexAction)>>
+        <<include 'Mc fuck anal'>>
+    <</if>>
+    <<if !_canFuck && ['bj','handjob','bj_three'].includes($sexAction)>>
+        <<include 'MC fuck flaccid'>>
+    <</if>>
+    <<if $sexAction === 'cum_in_pussy' && ($tmpGirl.traits ?? []).includes('breeder') && (_sexActions[$sexAction]?.positive ?? false)>>
+        <<set $tmpGirl.horny += 30>>
+    <</if>>
+
+    <<if _showSex>>
+        <<if settings.buttons_on_top>>
+            <<include 'Mc foursome buttons'>>
+        <</if>>
+        <<set _sexActionLong = _prefix + $sexAction>>
+        <<actionImage $tmpGirl _sexActionLong>>
+
+        /* virginity checks */
+        <<if $tmpGirl.virgin && (_sexActions[$sexAction]?.stats === 'pussy' || (Array.isArray(_sexActions[$sexAction]?.stats) && _sexActions[$sexAction].stats.includes('pussy')))>>
+            <<set $tmpGirl.virgin = false>>
+            <<=setup.displayName($tmpGirl, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
+            <br />
+        <</if>>
+        <<if $tmpGirl2.virgin && _sexActions[$sexAction]?.stats2 === 'pussy'>>
+            <<set $tmpGirl2.virgin = false>>
+            <<=setup.displayName($tmpGirl2, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
+            <br />
+        <</if>>
+        <<if $tmpGirl3.virgin && _sexActions[$sexAction]?.stats3 === 'pussy'>>
+            <<set $tmpGirl3.virgin = false>>
+            <<=setup.displayName($tmpGirl3, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
+            <br />
+        <</if>>
+        <br />
+
+        /* horny gains */
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + (_sexActions[$sexAction].hornyGive ?? 20), 100)>>
+        <</if>>
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
+            <<set $tmpGirl2.horny = Math.min($tmpGirl2.horny + (_sexActions[$sexAction].hornyGive2 ?? 20), 100)>>
+        <</if>>
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive3>>
+            <<set $tmpGirl3.horny = Math.min($tmpGirl3.horny + (_sexActions[$sexAction].hornyGive3 ?? 20), 100)>>
+        <</if>>
+
+        <<set _npcHorny = clone($tmpGirl.horny)>>
+        <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
+        <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
+        <br />
+
+        /* relationship + happy for all 3 */
+        <<set
+            $tmpGirl.relationship  = Math.min($tmpGirl.relationship  + 1, 100),
+            $tmpGirl2.relationship = Math.min($tmpGirl2.relationship + 1, 100),
+            $tmpGirl3.relationship = Math.min($tmpGirl3.relationship + 1, 100),
+            $tmpGirl.happy  = Math.min($tmpGirl.happy  + 1, 100),
+            $tmpGirl2.happy = Math.min($tmpGirl2.happy + 1, 100),
+            $tmpGirl3.happy = Math.min($tmpGirl3.happy + 1, 100)
+        >>
+        <<=setup.displayName($tmpGirl, true)>>, <<=setup.displayName($tmpGirl2, true)>> and <<=setup.displayName($tmpGirl3, true)>> are enjoying themselves. <strong>(Happy / Relationship +1)</strong>
+        <br />
+
+        /* corruption for all 3 */
+        <<if (_sexActions[$sexAction] ?? false)>>
+            <<set _mc = _sexActions[$sexAction].maxCorruption>>
+            <<if $tmpGirl.corruption  < _mc>><<set $tmpGirl.corruption  = Math.min($tmpGirl.corruption  + 1, 100)>><</if>>
+            <<if $tmpGirl2.corruption < _mc>><<set $tmpGirl2.corruption = Math.min($tmpGirl2.corruption + 1, 100)>><</if>>
+            <<if $tmpGirl3.corruption < _mc>><<set $tmpGirl3.corruption = Math.min($tmpGirl3.corruption + 1, 100)>><</if>>
+        <</if>>
+
+        /* horny feedback + orgasms */
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<if $tmpGirl.horny >= 100>>
+                <<include 'Mc fuck orgasm'>>
+                <<=setup.displayName($tmpGirl, true)>> has an orgasm! <strong>(Happy / Relationship +5)</strong>
+                <br />
+                <<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100)>>
+                <<set $tmpGirl.happy        = Math.min($tmpGirl.happy        + 5, 100)>>
+                <<set $tmpGirl.orgasms ??= 0>>
+                <<set $tmpGirl.orgasms++>>
+            <<else>>
+                <<=setup.displayName($tmpGirl, true)>>'s body reacts positively. <strong>(Horny +<<=_sexActions[$sexAction].hornyGive ?? 20>>)</strong>
+                <br />
+            <</if>>
+        <</if>>
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
+            <<if $tmpGirl2.horny >= 100>>
+                <<set $tmpGirl2.horny -= 20>>
+                <<=setup.displayName($tmpGirl2, true)>> is getting impatient. <strong>(Horny -20)</strong>
+            <<else>>
+                <<=setup.displayName($tmpGirl2, true)>> is getting hornier. <strong>(Horny +<<=_sexActions[$sexAction].hornyGive2 ?? 20>>)</strong>
+            <</if>>
+            <br />
+        <</if>>
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive3>>
+            <<if $tmpGirl3.horny >= 100>>
+                <<set $tmpGirl3.horny -= 20>>
+                <<=setup.displayName($tmpGirl3, true)>> is getting impatient. <strong>(Horny -20)</strong>
+            <<else>>
+                <<=setup.displayName($tmpGirl3, true)>> is getting hornier. <strong>(Horny +<<=_sexActions[$sexAction].hornyGive3 ?? 20>>)</strong>
+            <</if>>
+            <br />
+        <</if>>
+
+        /* stats for girl 1 */
+        <<if _sexActions[$sexAction]?.stats>>
+            <<if Array.isArray(_sexActions[$sexAction].stats)>>
+                <<set _sexStats = _sexActions[$sexAction].stats>>
+            <<else>>
+                <<set _sexStats = [_sexActions[$sexAction].stats]>>
+            <</if>>
+            <<for _sexStat range _sexStats>>
+                <<set $tmpGirl[_sexStat]++>>
+                <<if typeof $sexStats[_sexStat] === 'undefined'>>
+                    <<set
+                        $tmpGirl.statsSex ??= {},
+                        $tmpGirl.statsSex[_sexStat] ??= 0,
+                        $tmpGirl.statsSex[_sexStat]++,
+                        $sexStats[_sexStat] = true
+                    >>
+                <</if>>
+            <</for>>
+        <</if>>
+
+        /* stats for girl 2 */
+        <<if _sexActions[$sexAction]?.stats2>>
+            <<set _stat2 = _sexActions[$sexAction].stats2>>
+            <<set $tmpGirl2[_stat2]++>>
+            <<if typeof $sexStats[_stat2 + '2'] === 'undefined'>>
+                <<set
+                    $tmpGirl2.statsSex ??= {},
+                    $tmpGirl2.statsSex[_stat2] ??= 0,
+                    $tmpGirl2.statsSex[_stat2]++,
+                    $sexStats[_stat2 + '2'] = true
+                >>
+            <</if>>
+        <</if>>
+
+        /* stats for girl 3 */
+        <<if _sexActions[$sexAction]?.stats3>>
+            <<set _stat3 = _sexActions[$sexAction].stats3>>
+            <<set $tmpGirl3[_stat3]++>>
+            <<if typeof $sexStats[_stat3 + '3'] === 'undefined'>>
+                <<set
+                    $tmpGirl3.statsSex ??= {},
+                    $tmpGirl3.statsSex[_stat3] ??= 0,
+                    $tmpGirl3.statsSex[_stat3]++,
+                    $sexStats[_stat3 + '3'] = true
+                >>
+            <</if>>
+        <</if>>
+
+        <<if (SugarCube?.settings?.sexReactions ?? true) && !$sexForced && $tmpGirl.relationship >= 40 && setup.percentageChance(25)>>
+            <br />
+            <<include 'Fouractions'>>
+            <br />
+        <</if>>
+
+        <<include 'Mc fuck traits'>>
+        <<if $sexAction === 'cum_in_pussy'>>
+            <<include 'Mc fuck cum in pussy'>>
+        <</if>>
+
+        <<if $tmpGirl.horny >= 100>>
+            <<script>>
+            setTimeout(function () {
+                variables().tmpGirl.horny = 0;
+            }, 400);
+            <</script>>
+        <</if>>
+    <</if>>
+<</if>>
+<br />
+<<include 'Mc foursome buttons'>>
+</div>
