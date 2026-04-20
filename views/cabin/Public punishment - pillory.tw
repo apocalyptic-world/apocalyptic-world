@@ -23,6 +23,12 @@ She would remain there until sunset—a full day—exposed, not to shame her, bu
 
 	<<=$guests[_guestI].name>> submission increased by <<=_randomSubInc>>
     <br />
+	<<if (_guest.traits ?? []).includes('sadistic')>>
+		<<set _hornyInc = randomInteger(15, 30)>>
+		<<set $guests[_guestI].horny = Math.min(100, ($guests[_guestI].horny ?? 0) + _hornyInc)>>
+		<<=$guests[_guestI].name>> is visibly aroused by the spectacle.
+		<br />
+	<</if>>
 	<<if typeof $guests[_guestI].quests === 'undefined'>>
 		<<set $guests[_guestI].quests = {}>>
 	<</if>>
