@@ -1,23 +1,25 @@
-:: Quarry
-<h1 class="ptitle">QUARRY</h1>
+:: Quarry [Place]
+<h1 class="ptitle">
+	<<backButton 'Outside'>>
+	QUARRY
+</h1>
 <br />
-The mine and quarry could become a cornerstone for your settlement’s growth, providing raw materials for construction, crafting, and trade.
-<br />
-An NPC with a pickaxe should be able to collect stone and coal.  In time, these will be used to reinforce the walls for the settlement (in progress).
+The mine and quarry could become a cornerstone for your settlement's growth, providing raw materials for construction, crafting, and trade.
 <br /><br />
 <table id="slaves" class="npc-list">
 <<for _guestI, _guest range $guests>>
 	<<capture _guestI, _guest>>
 		<<if _guest.assignedTo !== 'quarry' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
 			<<continue>>
-		<</if>>		
+		<</if>>
 		<tr class="item">
 			<td style="width: 300px">
 				<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
+				<<set _customColorStyle = (typeof _guest.color !== 'undefined') ? ' npc-color color-' + _guest.color : ''>>
 				<<if setup.getAge(_guest) < 17>>
 					<span class="name-no-click"><<=_guest.name>></span>
 				<<else>>
-					<span @class="''+_genderClass+''">
+					<span @class="''+_genderClass+_customColorStyle+''">
 					<<link _guest.name>>
 					  <<set $tmpGirl to _guest>>
 					  <<set $tmpGirl.location = 'quarry'>>
@@ -26,8 +28,8 @@ An NPC with a pickaxe should be able to collect stone and coal.  In time, these 
 					  <<set $tmpGirlCapture to false>>
 					  <<set $tmpGirlInvite to false>>
 					  <<set $guestId = _guestI>>
-					  <<run delete $slaveId, $charId, $childId>>						  
-					  <<set $tmpGirlViewBack = 'NPC view - guest' >>
+					  <<run delete $slaveId, $charId, $childId>>
+					  <<set $tmpGirlViewBack = 'NPC view - guest'>>
 					  <<goto 'NPC view - guest'>>
 				  	<</link>>
 					</span>
@@ -41,7 +43,17 @@ An NPC with a pickaxe should be able to collect stone and coal.  In time, these 
 	<</capture>>
 <</for>>
 </table>
-<br />
-<<link 'Leave'>>
-    <<goto 'Outside'>>
-<</link>>
+<br /><br />
+<center>
+<<if $player.energy >= 40 && hasTime(2) && $backpack.has('pickaxe')>>
+	<<link 'Mine stone and coal'>>
+		<<goto 'Quarry - mine'>>
+	<</link>>
+<<elseif !$backpack.has('pickaxe')>>
+	Mine stone and coal [Need pickaxe]
+<<else>>
+	Mine stone and coal [Need 40 energy and 2 hours]
+<</if>>
+<br /><br />
+[[Back|Outside]]
+</center>
