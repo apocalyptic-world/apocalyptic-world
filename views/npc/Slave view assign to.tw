@@ -2,6 +2,9 @@
 Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <br /><br />
 
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+	<i>This person is feral and cannot be assigned to any task.</i>
+<<else>>
 <<if $tmpGirl.relationship >= 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>
@@ -76,4 +79,5 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 			<<goto `$tmpGirlViewBack`>>
 		<</link>>
 	</div>
+<</if>>
 <</if>>

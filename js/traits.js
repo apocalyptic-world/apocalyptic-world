@@ -59,6 +59,10 @@ setup.traits = {
     crippled: {
         title: "Crippled",
         description: "Injury or disability makes them less effective in combat. Deals half damage when fighting."
+    },
+    feral: {
+        title: "Feral",
+        description: "Wild and untamed. Cannot speak and cannot be assigned to any task."
     }
 };
 
