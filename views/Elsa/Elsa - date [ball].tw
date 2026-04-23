@@ -95,6 +95,7 @@ For a while it's just that — the two of you kicking, throwing, chasing the bal
 		<<video 'elsa/ball7'>>
 		<br /><br />
 		<<linkreplace 'Cum'>>
+			<<run $('#option_leave').hide()>>
 			<<horny_reset>>
 			<<if setup.pregnancyChance($characters.elsa)>>
 				<<set $characters.elsa.pregnancy_father = 'mc'>>
@@ -119,9 +120,11 @@ For a while it's just that — the two of you kicking, throwing, chasing the bal
 	<</linkreplace>>
 <</linkreplace>>
 
-<<link 'Leave'>>
-	<<if _fuck>>
-		<<addhours 1>>
-	<</if>>
-	<<goto 'Elsa room'>>
-<</link>>
+<div id="option_leave">
+	<<link 'Leave'>>
+		<<if _fuck>>
+			<<addhours 1>>
+		<</if>>
+		<<goto 'Elsa room'>>
+	<</link>>
+</div>
