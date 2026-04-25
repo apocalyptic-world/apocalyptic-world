@@ -17,7 +17,11 @@
 <</if>>
 <br />
 <<sayNpc $tmpGirl>>
-	<<=setup.npc.getSayDialog($tmpGirl)>>
+	<<if $charId>>
+		<<=setup.npc.getCharDialog($tmpGirl, $charId)>>
+	<<else>>
+		<<=setup.npc.getSayDialog($tmpGirl)>>
+	<</if>>
 <</sayNpc>>
 <<if $guestId && setup.percentageChance(30)>>
 	<<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 10))>>

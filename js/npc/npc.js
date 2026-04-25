@@ -458,6 +458,22 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
+		if (npc.married) {
+			const spouseIds = [];
+			if (npc?.family?.husband && npc.family.husband !== 'mc') {
+				spouseIds.push(npc.family.husband);
+			}
+			for (const wifeId of (npc?.family?.wives ?? [])) {
+				spouseIds.push(wifeId);
+			}
+			if (spouseIds.length > 0) {
+				const names = spouseIds.map(id => {
+					const s = setup.getNpcById(id);
+					return s ? s.name : 'someone';
+				}).join(', ').replace(/"/g, '&quot;');
+				output += '<span class="glyph" data-balloon-length="medium" aria-label="Married to ' + names + '" data-balloon-pos="up-right">&#x1F48D;</span>';
+			}
+		}
 		if (isSick && !npc.sleeping) {
 			output += '<span class="sick-info">(sick)</span>';
 		} else if (isRest && !npc.sleeping) {
@@ -672,7 +688,7 @@ setup.npc = {
 			],
 			sex_experienced: [
 				"I've done more than I care to admit... but it kept me alive.",
-				"Sex isn't new to me — it's just part of the game now."
+				"Sex isn't new to me, it's just part of the game now."
 			],
 			sex_lewd: [
 				"Use me %mcName%. Ruin me. I live for that.",
@@ -701,7 +717,7 @@ setup.npc = {
 
 				"I learned to fight because I had to. Not because I wanted to.",
 				"Softness gets you killed. You taught me that, remember?",
-				"I don't have time to be a kid anymore — we both know that.",
+				"I don't have time to be a kid anymore, we both know that.",
 
 				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
 				"Things have changed between us... and not always for the better.",
@@ -783,6 +799,218 @@ setup.npc = {
 		return unique[Math.floor(Math.random() * unique.length)]
 			.replace(/%mcNameUC%/g, setup.npc.mcName(npc, true))
     		.replace(/%mcName%/g, setup.npc.mcName(npc, false));
+	},
+
+	getCharDialog: function(npc, charKey) {
+		const db = {
+			blair: [
+				"You keep finding excuses to talk to me. I'm not complaining.",
+				"Don't give me that look unless you mean it. Actually... go ahead, give me that look.",
+				"I made dinner. You should eat, then maybe I'll let you work off the calories.",
+				"This place wouldn't survive a week without me and you know it.",
+				"I catch you staring more than you think. It's cute.",
+				"Careful. Spend enough time around me and you might start to enjoy it.",
+				"I've been stuck inside all day. Someone should make it worth my while.",
+				"You're predictable in the best way. I always know exactly what you want.",
+				"Go on, say something charming. I'll pretend to be surprised.",
+				"I stopped by dad's farm yesterday. The fields are looking better than they have in years. I think those new seeds are actually working.",
+				"Dad asked about you when I was at the farm. I told him you were keeping busy. He seemed satisfied with that.",
+				"There's something grounding about going back to the farm. All that open land. Then I come back here and remember what we've built.",
+				"Dad's still stubborn about doing everything himself, but the harvest this season gave him something to smile about.",
+				"How much have we built in this season alone? The settlement is starting to feel like an actual community.",
+				"I'm proud of what this place has become. Not many people get to say they were part of something that is actually working."
+			],
+			elsa: [
+				"I tried fixing that latch on the shed door. I think I made it worse.",
+				"I still wake up reaching for a weapon sometimes. Old habits.",
+				"The generator was making a noise earlier. I wasn't sure if I should touch it.",
+				"Thank you for letting me stay. I know I haven't earned it yet.",
+				"Some days the quiet feels safe. Other days it just feels like something's about to break it.",
+				"I keep meaning to ask if there's anything more useful I could be doing around here.",
+				"I don't remember the last time I felt this settled. Is that strange?",
+				"I was never good with people, but the machines here make sense to me.",
+				"Before everything fell apart, I thought survival would feel different. More dramatic, maybe.",
+				"I miss the cabin sometimes. The stillness of it. But stillness and safety aren't the same thing, and I know that now.",
+				"I had a whole system back there, where everything lived, how I moved through the day. Starting over is harder than I expected.",
+				"The woods were mine in a way this place isn't yet. But I think it could be, eventually.",
+				"I keep almost mentioning the cabin like it's somewhere I can still go back to. Then I remember.",
+				"There's more noise here than I'm used to. More people. I think I might actually be getting used to it."
+			],
+			eve_always: [
+				"There's a passage about the body being a temple. I think I finally understand it, just not the way I was meant to.",
+				"I was taught that wanting was a kind of weakness. I'm less convinced of that now.",
+				"The settlement protects us. I try not to think too hard about the cost.",
+				"Survival means compromise. I learned that before the world ended."
+			],
+			eve_rodger_alive: [
+				"Rodger prays for all of us. Sometimes I wonder who prays for Rodger.",
+				"I choose my words carefully here. Not because I'm afraid, because it matters.",
+				"There are things I want that I've stopped letting myself name.",
+				"I'm fine. That's what I say, and eventually it becomes true.",
+				"Don't look at me like you know something. That kind of thing gets people hurt.",
+				"I've built a life here. It's just not entirely the one I'd have chosen.",
+				"Faith is useful. It keeps people calm. I understand why Rodger values it."
+			],
+			eve_rodger_dead: [
+				"I spent years praying to feel less. I'm starting to think that was the wrong prayer.",
+				"I still believe in something. I'm just no longer certain it asks me to be ashamed.",
+				"I used to plan every word before I spoke it. With you, I forget to.",
+				"I woke up this morning and realized I hadn't braced myself for the day. That's new.",
+				"I was careful for so long that I forgot what it felt like to want something without a plan.",
+				"He gave me safety. You give me something I don't have a name for yet. I think I prefer the nameless thing.",
+				"I'm not the same person who made all those careful choices. I'm not sorry about that.",
+				"I keep waiting to feel guilty. Mostly I just feel awake.",
+				"There are things I would have called sin that feel like the most honest parts of me now.",
+				"I didn't expect to find myself at the pulpit. But the flock needed someone, and I was there.",
+				"Some mornings I stand in that church and feel the weight of everyone who comes through the door. It's a heavier kind of faith than what I was taught.",
+				"They come to me with grief and hunger and fear, and I give them what I can. I'm not sure it's ever enough.",
+				"The church is mine now in ways it never was before. I'm still learning what that means.",
+				"I lead the prayers, but I'm still working through my own. Maybe that's what makes it honest."
+			],
+			isabel_always: [
+				"I used to collect things I found beautiful. I've had to be more selective lately.",
+				"There's a difference between being kept and being caged. I've lived in both.",
+				"I'm more than what's been done to me. I just have to keep reminding myself of that.",
+				"Even here, even like this, there's still beauty worth looking for."
+			],
+			isabel_dom_alive: [
+				"Dom thinks owning me is the same as knowing me. He's wrong on both counts.",
+				"Every day is a negotiation. I've gotten good at knowing what to offer.",
+				"I think about what I'd do with real freedom sometimes. It's a dangerous habit.",
+				"You look at me differently than he does. I notice everything."
+			],
+			isabel_dom_dead: [
+				"I know what it looks like when someone holds power through fear. I'm choosing a different way.",
+				"I've been thinking about how to run this city, not the way he did, but the way it deserves.",
+				"For the first time, I'm making decisions for people instead of having them made for me.",
+				"I used to survive by understanding what people in power wanted. Now I'm learning what people without it need.",
+				"Everything he built here, I'm rebuilding. Not the same, better.",
+				"The city is mine now, in a way that doesn't make my skin crawl. That still surprises me."
+			],
+			laura: [
+				"The last experiment went better than expected. Mostly.",
+				"Pain is just information. The patient always forgets that in the moment.",
+				"I've been perfecting a compound that should accelerate tissue repair. The side effects are negotiable.",
+				"Most people flinch. I take that as a professional compliment.",
+				"The body is just a machine, a beautiful, poorly designed machine.",
+				"Come back when you have a medical question. Or a willing volunteer.",
+				"I've been awake for thirty-six hours. Everything is going fine.",
+				"Proper surgical tools would be ideal. But you work with what you have.",
+				"People call it unethical. I call it progress without bureaucracy.",
+				"So much of what I've accomplished here wouldn't exist without your resources. I don't forget that.",
+				"My work here has opened lines of research I'd completely written off. I'm glad we found each other.",
+				"In the city I'd be pulling teeth with a pair of pliers and calling it medicine. What we have here is different. You made that possible.",
+				"I've had breakthroughs in the last few months that I spent years chasing before. I couldn't have done that if you hadn't provided all of this."
+			],
+			vincent: [
+				"Checked the perimeter this morning. Nothing new, that's either good news or it means they're being careful.",
+				"I've survived worse odds. Doesn't mean I recommend them.",
+				"Brought back some intel from the road. Buy me a drink first.",
+				"I don't trust easy. But I trust what I can verify.",
+				"You need eyes out there. I can be that, just keep the supplies coming.",
+				"Most of the fights I've been in started because someone forgot to scout ahead.",
+				"Sleep light. That's kept me alive longer than any weapon.",
+				"I've seen settlements fall for smaller reasons than the ones you're worried about.",
+				"There's a route out east that hasn't been picked over yet. We should move on it soon."
+			],
+			rodger: [
+				"God does not abandon those who believe. Even here. Especially here.",
+				"Our walls stand because He wills it. Our harvests feed us because He wills it.",
+				"I have seen miracles, friend. This settlement is one of them.",
+				"Doubt is the enemy's voice. I pray you recognize it for what it is.",
+				"Every day of suffering is a day of character. We must be grateful.",
+				"I have spoken to the Lord. He has plans for this place, for all of us.",
+				"Faith is not weakness. It is the only armor that never rusts.",
+				"We endure because we are meant to endure. That is not hope. That is certainty."
+			],
+			dom: [
+				"I don't explain myself. I don't need to.",
+				"Debts have a way of coming due. I'm patient.",
+				"What I own, I keep. What I'm owed, I collect.",
+				"You've been making decisions that affect my interests. I'd think carefully about that.",
+				"This world runs on power. Everything else is just a story people tell themselves.",
+				"I'm not angry. Anger's for people who aren't in control.",
+				"You should be more careful about who's watching you.",
+				"I always get what I came for. Always."
+			],
+			octavia: [
+				"My people survived three winters without walls. We know how to endure.",
+				"I read the tracks before I step where they lead. That's not caution, that's sense.",
+				"The Blackthorn moves without sound. Worth remembering.",
+				"I've seen what happens to those who underestimate the land. It's not fast.",
+				"Trust must be earned on both sides of the door.",
+				"I don't speak unless I have something worth saying. You'd do well to listen.",
+				"Out here, silence is a skill. Most people from settlements never learn it.",
+				"Every scar on this land tells a story. I've been reading them for years.",
+				"Within these walls is the last of my tribe. I say that plainly, because softening it doesn't change what it means.",
+				"My tribe's songs die with me unless I teach them to someone. Some nights that weighs more than I can carry.",
+				"I have thought about what it would mean to begin again, a new generation carrying the old blood. With you, that does not feel entirely impossible.",
+				"My people were not just a family. They were a way of seeing the world. Perhaps you and I could build something that carries it forward."
+			],
+			harper: [
+				"Nothing's free and everything's for sale. You'd know that if you'd been outside these walls.",
+				"Don't let that smile fool you into thinking we're friends.",
+				"I want a fair price. Not a good deal for you, a fair price for me.",
+				"I've been doing this long enough to spot when someone's wasting my time.",
+				"There's no shortage of things people need and no surplus of people willing to provide them.",
+				"Come back when you've got something worth trading.",
+				"Sentiment doesn't keep the lights on. Goods do.",
+				"I've heard that pitch before. Everybody's got a story about why they deserve better."
+			],
+			negan: [
+				"You don't want to find out what happens when I stop being in a good mood.",
+				"I run things around here. That's not an opinion.",
+				"I like you. Don't make me change my mind.",
+				"The rules here are simple. You follow them, or you don't. One of those ends better.",
+				"Lucille gets restless when I leave her alone too long.",
+				"I've built something here. And I protect what I've built.",
+				"Every mistake gets made once. I make sure of that."
+			],
+			ashley: [
+				"I still think about what could have happened if you hadn't been there.",
+				"Every time I see something good happen here, I remember it doesn't have to be this hard.",
+				"I'm still figuring out where I fit in, but I'm glad I'm here.",
+				"You've been kind to me. That means something. It really does.",
+				"I keep waiting for the other shoe to drop. Maybe that's just habit now.",
+				"I never thought I'd feel safe somewhere again. This is close.",
+				"Whatever you need, I'm not forgetting what you did for me."
+			],
+			rose: [
+				"There's more worth saving in this world than people give it credit for.",
+				"I've been through enough to know what matters and what doesn't.",
+				"Some days I just try to get through it. That's enough.",
+				"You learn to appreciate the small things out here. You have to.",
+				"I don't look back much. Doesn't help."
+			],
+			boris: [
+				"Not much to say. The work gets done.",
+				"Keep your head down and your powder dry. That's all.",
+				"I've seen enough to know when to stay quiet.",
+				"Doesn't matter what it was before. Matters what you do with it now.",
+				"I'm not one for talk. Ask me when there's something that needs doing."
+			]
+		};
+
+		let lines;
+		if (charKey === 'isabel') {
+			const domDead = variables().characters?.dom?.dead;
+			lines = [
+				...db.isabel_always,
+				...(domDead ? db.isabel_dom_dead : db.isabel_dom_alive)
+			];
+		} else if (charKey === 'eve') {
+			const rodgerDead = variables().characters?.rodger?.quests?.dead;
+			lines = [
+				...db.eve_always,
+				...(rodgerDead ? db.eve_rodger_dead : db.eve_rodger_alive)
+			];
+		} else {
+			lines = db[charKey];
+		}
+		if (!lines || lines.length === 0) {
+			return npc.name ? "Hello, I'm " + npc.name + "." : "...";
+		}
+		return lines[Math.floor(Math.random() * lines.length)];
 	},
 
 	/* Find any NPC across all collections by their id */
