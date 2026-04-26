@@ -72,6 +72,57 @@ setup.family = {
         const distD = setup.family.getIncestDistance(who, other);
         return ((dist == -1 && distD > 0)|| dist >= distD);
     },
+
+    // Returns a label for the relationship of npc2 from npc1's perspective (e.g. "daughter", "sister").
+    // npc2 is assumed to be female. Falls back to "family member" for distant/unresolved relations.
+    getRelationshipLabel: function(npc1, npc2) {
+        const f1 = npc1.family ?? {};
+        const f2 = npc2.family ?? {};
+
+        // Direct descendant: daughter
+        if ((f1.kids ?? []).includes(npc2.id)) return 'daughter';
+
+        // Direct ancestor: mother
+        if (f1.mother && f1.mother === npc2.id) return 'mother';
+
+        // Sibling: shared father or shared mother
+        if ((f1.father && f2.father && f1.father === f2.father) ||
+            (f1.mother && f2.mother && f1.mother === f2.mother)) return 'sister';
+
+        // Granddaughter: npc2 is a child of one of npc1's children
+        for (const kidId of (f1.kids ?? [])) {
+            const kid = setup.getNpcById(kidId);
+            if (kid && (kid.family?.kids ?? []).includes(npc2.id)) return 'granddaughter';
+        }
+
+        // Grandmother: npc1's parent's mother is npc2
+        const mom = f1.mother ? setup.getNpcById(f1.mother) : null;
+        const dad = f1.father ? setup.getNpcById(f1.father) : null;
+        if (mom?.family?.mother === npc2.id) return 'grandmother';
+        if (dad?.family?.mother === npc2.id) return 'grandmother';
+
+        // Aunt: npc2 shares a parent with npc1's parent (is a sibling of npc1's parent)
+        const isSiblingOf = (parent, candidate) => {
+            const pf = parent?.family ?? {};
+            const cf = candidate.family ?? {};
+            return (pf.father && cf.father && pf.father === cf.father) ||
+                   (pf.mother && cf.mother && pf.mother === cf.mother);
+        };
+        if ((mom && isSiblingOf(mom, npc2)) || (dad && isSiblingOf(dad, npc2))) return 'aunt';
+
+        // Niece: npc2's parent is a sibling of npc1
+        const isNpc1Sibling = (otherId) => {
+            const other = setup.getNpcById(otherId);
+            if (!other?.family) return false;
+            const of_ = other.family;
+            return (f1.father && of_.father && f1.father === of_.father) ||
+                   (f1.mother && of_.mother && f1.mother === of_.mother);
+        };
+        if (f2.father && isNpc1Sibling(f2.father)) return 'niece';
+        if (f2.mother && isNpc1Sibling(f2.mother)) return 'niece';
+
+        return 'family member';
+    },
 };
 
 

@@ -1,6 +1,64 @@
 :: Reactions
 
-	<<if $tmpGirl.horny  >= 80 && $tmpGirl.horny  < 100 && setup.percentageChance(50) && !$tmpGirl.rape>>
+	<<if ($tmpGirl.traits ?? []).includes('feral')>>
+
+		<<set _girlVisual = $tmpGirl>>
+		<<set _feralReaction = either(
+			$tmpGirl.horny >= 100 ? [
+				"lets out a raw, wild cry and shudders violently",
+				"arches up with a wail of ecstasy, " + setup.pronounceWhos($tmpGirl) + " whole body convulsing",
+				"claws at your back as waves of pleasure wrack " + setup.pronounceWhos($tmpGirl) + " body",
+				"bucks and trembles uncontrollably, a broken cry tearing from " + setup.pronounceWhos($tmpGirl) + " throat",
+				"collapses against you, panting and shivering, a low satisfied growl rumbling in " + setup.pronounceWhos($tmpGirl) + " chest",
+				"throws " + setup.pronounceWhos($tmpGirl) + " head back with a keening wail, limbs going slack as " + setup.pronounceWhos($tmpGirl) + " body quakes"
+			] : $tmpGirl.horny >= 80 ? [
+				"writhes beneath you, breathing ragged, fingers digging in desperately",
+				"clutches at you with trembling hands, a high urgent whine escaping " + setup.pronounceWhos($tmpGirl) + " lips",
+				"shudders hard, clawed fingers gripping you tightly as " + setup.pronounceWhos($tmpGirl) + " body tenses",
+				"arches against you, gasping in sharp, shallow bursts",
+				"keens sharply, whole body coiling tight like a bowstring",
+				"presses into you with frantic need, trembling on the edge"
+			] : $tmpGirl.horny >= 25 ? [
+				"moans softly in pleasure, pressing closer as " + setup.pronounceWhos($tmpGirl) + " body writhes in growing ecstasy",
+				"squirms against you with a breathless whimper, pleasure building with each moment",
+				"presses into you with a low, needful moan, no words needed to show " + setup.pronounceWhos($tmpGirl) + " pleasure",
+				"gasps and arches " + setup.pronounceWhos($tmpGirl) + " back, eyes half-lidded in mounting ecstasy",
+				"growls low in " + setup.pronounceWhos($tmpGirl) + " throat, hips rolling instinctively",
+				"tenses and buries " + setup.pronounceWhos($tmpGirl) + " face, a desperate muffled sound escaping " + setup.pronounceWho($tmpGirl),
+				"wraps around you tighter, letting out a shivering sigh as " + setup.pronounceWhos($tmpGirl) + " body grows hot with desire"
+			] : [
+				"purrs contentedly against you",
+				"rubs against you sensually, eyes half-closed",
+				"nuzzles into you with a soft, pleased trill",
+				"nudges you affectionately, a low rumble in " + setup.pronounceWhos($tmpGirl) + " throat",
+				"licks your neck softly, then settles close",
+				"kneads at you gently, a quiet purr vibrating in " + setup.pronounceWhos($tmpGirl) + " chest",
+				"curls into your warmth with a satisfied murmur"
+			]
+		)>>
+		<div class="say npcsay">
+			<div class="npc-say-visual" @data-id="$tmpGirl.id">
+				<div class="girl_info_picture">
+					<<if _girlVisual.portrait>>
+						<div class="say_custom_portrait">
+							<<include 'NPC visual'>>
+						</div>
+					<<else>>
+						<<include 'NPC visual'>>
+					<</if>>
+				</div>
+			</div>
+			<div class="npc-say-container">
+				<div class="npc-say-name">
+					<strong><<=setup.displayName($tmpGirl)>></strong>
+				</div>
+				<div class="npc-say-text">
+					<em>*<<= _feralReaction >>*</em>
+				</div>
+			</div>
+		</div>
+
+	<<elseif $tmpGirl.horny  >= 80 && $tmpGirl.horny  < 100 && setup.percentageChance(50) && !$tmpGirl.rape>>
 
     <<sayNpc $tmpGirl>>
         <<=either([

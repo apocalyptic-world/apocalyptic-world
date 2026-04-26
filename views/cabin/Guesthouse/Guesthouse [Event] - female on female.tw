@@ -4,7 +4,7 @@
 <<if typeof $randEvent === 'undefined'>>
 
 	<<set
-		_guestIds = setup.getRandomPersons($tmpEvent, Math.min($tmpEvent.length, 3)),
+		_guestIds = setup.getRandomPersons($tmpEvent, ($tmpEvent.length >= 3 && setup.percentageChance(33)) ? 3 : 2),
 		_minCorruption = 100,
 		_nbVirgins = 0,
 		_nbAnalVirgins = 0,

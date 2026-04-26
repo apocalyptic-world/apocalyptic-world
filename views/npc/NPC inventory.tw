@@ -62,11 +62,33 @@
                             <</link>>
                         </div>
                         <<set _icon = _inventoryNpcMcItem.indexOf("blueprint") !== -1 ? 'blueprint' :
-                                    _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :  
+                                    _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :
                                     _inventoryNpcMcItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _inventoryNpcMcItem>>
 
                         <div class="npc-inventory-transfer-name">
                             (<<=setup.npcInventoryCount($tmpGirl, _inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
+                        </div>
+                        <div class="npc-inventory-transfer-icon">
+                            [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
+                        </div>
+                    </div>
+                <</capture>>
+            <</for>>
+        </fieldset>
+        <fieldset>
+            <legend>Gifts</legend>
+            <<for _giftKey, _giftItem range setup.npcInventoryList($tmpGirl)>>
+                <<capture _giftItem>>
+                    <<if setup.inventoryNpc.includes(_giftItem)>>
+                        <<continue>>
+                    <</if>>
+                    <<set _icon = _giftItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+                                  _giftItem.indexOf("note")     !== -1 ? 'note' :
+                                  _giftItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _giftItem>>
+                    <div class="npc-inventory-transfer-container">
+                        <div class="npc-inventory-transfer-link"></div>
+                        <div class="npc-inventory-transfer-name">
+                            (<<=setup.npcInventoryCount($tmpGirl, _giftItem)>>x) <<=Item.get(_giftItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-icon">
                             [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]

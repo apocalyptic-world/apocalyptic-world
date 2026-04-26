@@ -1,6 +1,62 @@
 :: badReactions
 
-	<<if $tmpGirl.horny  >= 100 && setup.percentageChance(50)  >>
+	<<if ($tmpGirl.traits ?? []).includes('feral')>>
+
+		<<set _girlVisual = $tmpGirl>>
+		<<set _feralReaction = either(
+			$tmpGirl.horny >= 100 ? [
+				"shudders violently, a raw cry torn from " + setup.pronounceWhos($tmpGirl) + " throat despite " + setup.pronounceWho($tmpGirl) + "self",
+				"convulses with a strangled wail, claws raking your back as " + setup.pronounceWhos($tmpGirl) + " body gives in",
+				"bucks and spasms, a furious helpless sound escaping " + setup.pronounceWho($tmpGirl) + " as " + setup.pronounceWhat($tmpGirl) + " peaks",
+				"throws " + setup.pronounceWhos($tmpGirl) + " head back with an involuntary cry, trembling with rage and release",
+				"collapses panting, a low frustrated growl vibrating in " + setup.pronounceWhos($tmpGirl) + " chest",
+				"climaxes with a sharp unwilling scream, nails drawing blood"
+			] : $tmpGirl.horny >= 80 ? [
+				"claws at you weakly, whole body shaking with reluctant need",
+				"lets out a frustrated whimper, hips rolling instinctively against you",
+				"snarls through clenched teeth, teetering on the edge despite " + setup.pronounceWho($tmpGirl) + "self",
+				"grips you hard — half fighting, half pulling closer — trembling and tense",
+				"arches against you with a desperate sound, fury and ecstasy warring on " + setup.pronounceWhos($tmpGirl) + " face",
+				"keens sharply, nails digging in, " + setup.pronounceWhos($tmpGirl) + " body tightening around you against " + setup.pronounceWhos($tmpGirl) + " will"
+			] : $tmpGirl.horny >= 25 ? [
+				"growls in frustration, body betraying " + setup.pronounceWho($tmpGirl) + " with an unwilling shiver",
+				"hisses and pulls away, though " + setup.pronounceWhos($tmpGirl) + " hips jerk forward against " + setup.pronounceWhos($tmpGirl) + " will",
+				"snarls, digging " + setup.pronounceWhos($tmpGirl) + " claws in, even as a low moan escapes " + setup.pronounceWhos($tmpGirl) + " throat",
+				"struggles against you, teeth clenched, a reluctant tremor running through " + setup.pronounceWho($tmpGirl),
+				"snaps at you irritably, flushed and tense, arousal warring with resistance",
+				"struggles with a sharp whine, " + setup.pronounceWhos($tmpGirl) + " breath coming faster despite " + setup.pronounceWho($tmpGirl) + "self"
+			] : [
+				"snarls and snaps at you, clawing at you in futility",
+				"hisses sharply, thrashing pointlessly to pull free",
+				"lunges with teeth bared, powerless to do more than threaten",
+				"growls low and dangerous, body rigid with resistance",
+				"twists violently, powerless to escape your grasp",
+				"lets out a sharp hostile hiss and writhes like a trapped animal"
+			]
+		)>>
+		<div class="say npcsay">
+			<div class="npc-say-visual" @data-id="$tmpGirl.id">
+				<div class="girl_info_picture">
+					<<if _girlVisual.portrait>>
+						<div class="say_custom_portrait">
+							<<include 'NPC visual'>>
+						</div>
+					<<else>>
+						<<include 'NPC visual'>>
+					<</if>>
+				</div>
+			</div>
+			<div class="npc-say-container">
+				<div class="npc-say-name">
+					<strong><<=setup.displayName($tmpGirl)>></strong>
+				</div>
+				<div class="npc-say-text">
+					<em>*<<= _feralReaction >>*</em>
+				</div>
+			</div>
+		</div>
+
+	<<elseif $tmpGirl.horny  >= 100 && setup.percentageChance(50)  >>
 
     <<sayNpc $tmpGirl>>
         <<=either([

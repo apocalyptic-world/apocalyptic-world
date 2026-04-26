@@ -1,0 +1,721 @@
+:: NPC arrange marry [bg-guesthouse]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<<set _npc1 = setup.getNpcById($tmpEventWedding.id1)>>
+<<set _npc2 = setup.getNpcById($tmpEventWedding.id2)>>
+<<set _npc1.location = 'wedding'>>
+<<set _npc2.location = 'wedding'>>
+<<set _relBetween = (_npc1.relationshipBetween?.stats?.[ _npc2.id ] ?? 0)>>
+You send word for <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> to meet you in the main square. When they arrive, they exchange a glance, uncertain, perhaps sensing that this is more than a routine summons.
+<br /><br />
+<center>
+    <<actionImage _npc1 approach>>
+</center>
+<br />
+You face them both. The settlement needs stability. Bonds between people are what keep communities alive. You've watched these two long enough to believe they could be good for each other, and good for the people counting on all of you.
+<br /><br />
+<<if _relBetween > 50 || setup.percentageChance(30)>>
+    <<you>>
+        I've been watching the two of you for a while now. I've seen how well you get along, how you look at each other when you think no one is watching. I've made a decision. For the good of this settlement, and for both of you, I want you to marry and start a family.
+    <</you>>
+    <br />
+    The words hang in the air. <<=setup.displayName(_npc1)>> blinks with nervous apprehension. <<=setup.displayName(_npc2)>> reflexively reaches for his hand, holding it as she looks between you and him.
+<<else>>
+    <<you>>
+        I've brought you both here because I've made a decision. For the good of this settlement, I want the two of you to marry and start a family.
+    <</you>>
+    <br />
+    The words hang in the air. <<=setup.displayName(_npc1)>> blinks, caught off guard by the request. <<=setup.displayName(_npc2)>> looks between you and him, her expression unreadable.
+<</if>>
+<br /><br />
+<<linkreplace 'Wait for their answer'>>
+    <<set _weddingProceed = false>>
+    <<set _groomAttracted = (_npc2.gender === 0 && _npc1.likesGirls) || (_npc2.gender === 2 && _npc1.likesTGirls)>>
+    <<set _brideAttracted = (_npc1.gender === 1 && _npc2.likesGuys) || (_npc1.gender === 3 && _npc2.likesTGuys)>>
+    <<set _relReduction = Math.max(_relBetween, 0) / 4>>
+    <<set _maleProtestChance = 50 - _relReduction>>
+    <<if _npc2.beauty > 80>><<set _maleProtestChance = _maleProtestChance / 2>><</if>>
+    <<if _npc2.beauty < 50>><<set _maleProtestChance = _maleProtestChance + 25>><</if>>
+    <<set _maleProtestChance = Math.max(0, Math.min(100, _maleProtestChance))>>
+    <<set _singleProtestChance = 25 - _relReduction>>
+    <<if _npc2.beauty > 80>><<set _singleProtestChance = _singleProtestChance / 2>><</if>>
+    <<if _npc2.beauty < 50>><<set _singleProtestChance = _singleProtestChance + 25>><</if>>
+    <<set _singleProtestChance = Math.max(0, Math.min(100, _singleProtestChance))>>
+    <<set _femaleProtestChance = 30 - _relReduction>>
+    <<if _npc1.beauty > 80>><<set _femaleProtestChance = _femaleProtestChance / 2>><</if>>
+    <<if _npc1.beauty < 50>><<set _femaleProtestChance = _femaleProtestChance + 25>><</if>>
+    <<set _femaleProtestChance = _femaleProtestChance - _npc2.sub>>
+    <<set _femaleProtestChance = Math.max(0, Math.min(100, _femaleProtestChance))>>
+    <<set _npc2IsNympho = (_npc2.traits ?? []).includes('nymphomaniac')>>
+    <<set _npc2IsBreeder = (_npc2.traits ?? []).includes('breeder')>>
+    <<set _npc2IsInfertile = (_npc2.traits ?? []).includes('infertile')>>
+    <<set _npc2IsPregnant = (_npc2.pregnancy ?? 0) > 0>>
+    <<set _npc1IsFather = _npc2IsPregnant && _npc2.pregnancy_father === _npc1.id>>
+    <<set _sadoMaso = (_npc1.traits ?? []).includes('sadistic') && (_npc2.traits ?? []).includes('masochist')>>
+    <<set _masoSado = (_npc2.traits ?? []).includes('sadistic') && (_npc1.traits ?? []).includes('masochist')>>
+    <<set _npc2KidCount = (_npc2.family?.kids ?? []).length>>
+    <<set _sharedKidCount = (_npc2.family?.kids ?? []).filter(id => setup.getNpcById(id)?.family?.father === _npc1.id).length>>
+    <<set _npc1FatherToKids = _npc2KidCount > 0 && _sharedKidCount > 0>>
+    <<set _npc1NotFatherToKids = _npc2KidCount > 0 && _sharedKidCount === 0>>
+    <<if setup.family.isIncest(_npc1, _npc2)>>
+        <<set _incestRoll = random(1, 100)>>
+        <<if _incestRoll <= _maleProtestChance>>
+            <<=setup.displayName(_npc1)>> goes rigid the moment your words land. He looks between you and <<=setup.displayName(_npc2)>>, something between disbelief and distress crossing his face.
+            <br /><br />
+            <<set _relation = setup.family.getRelationshipLabel(_npc1, _npc2)>>
+            <<sayNpc _npc1>>
+                You can't be serious, <<=setup.npc.mcName(_npc1, false)>>. She's my <<=_relation>>. That's not something I'm willing to just—
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> has gone pale, eyes fixed on the ground.<<if _npc1IsFather && _npc2IsPregnant>> Her hand moves to her belly, her expression anxious and troubled.<</if>>
+            <<if _npc2IsNympho>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                Well... for what it's worth, I'd be down for it.
+            <</sayNpc>>
+            <</if>>
+            <br /><br />
+            <div id="option_insist">
+                <<linkreplace 'These are desperate times. The old rules no longer apply.'>>
+                    <<run $('#option_decline_incest').hide()>>
+                    <<set _npc1.happy -= 30>>
+                    <<set _npc2.happy -= 30>>
+                    <<you>>
+                        The world that made those rules is gone. What matters now is the survival and growth of this settlement. I've made my decision.
+                    <</you>>
+                    <br />
+                    Neither of them speaks for a long moment. Then, with heavy resignation, they both nod.
+                    <br /><br />
+                    <<sayNpc _npc1>>
+                        ...Alright, <<=setup.npc.mcName(_npc1, false)>>. I just never thought it could change this much.
+                    <</sayNpc>>
+                    <br />
+                    <<=setup.displayName(_npc2)>> lets out a slow breath, her expression begrudging.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        If this is what it takes, <<=setup.npc.mcName(_npc2, false)>>.  I'll learn to be with him in this new way.
+                    <</sayNpc>>
+                    <br /><br />
+                    <<include 'NPC arrange marry - ceremony'>>
+                <</linkreplace>>
+            </div>
+            <div id="option_decline_incest">
+                <<linkreplace 'I understand. Forget I said anything.'>>
+                    <<run $('#option_insist').hide()>>
+                    <<you>>
+                        You're right. Forget I said anything.
+                    <</you>>
+                    <br />
+                    They go their separate ways without another word, the tension lingering in the air long after they've gone.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <<else>>
+            <<=setup.displayName(_npc1)>> is quiet for a long moment, his eyes moving between you and <<=setup.displayName(_npc2)>>. There's uncertainty there, but no revulsion.
+            <br /><br />
+            <<set _relation = setup.family.getRelationshipLabel(_npc1, _npc2)>>
+            <<sayNpc _npc1>>
+                I... suppose the world we grew up in is gone. If this is the way things are done here now, then alright, <<=setup.npc.mcName(_npc1, false)>>. I can accept that, and marry my <<=_relation>>.<<if _npc2.beauty > 90>> Doesn't hurt that she's hot, always has been.<</if>><<if (_npc2.skills ?? []).includes('cook')>> And she's the best cook in the family. That doesn't hurt.<</if>>
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> swallows hard, then gives a slow, tentative nod.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I guess family has a different meaning around here, <<=setup.npc.mcName(_npc2, false)>>.  I can love him in this new way.
+            <</sayNpc>>
+            <br />
+            A faint, nervous smile crosses her lips. Despite the unusual circumstances, neither of them seems entirely opposed to the idea.
+            <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>>If I'm being honest, it's kind of a turn on. <</if>><<if _npc2IsInfertile>>There isn't really a risk anyway, since I can't have children. <<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>>If it's what this world needs, I am ready. Our family, our legacy, will continue.<</if>><<if _npc2.virgin>> I've never been with anyone before. I never could hav expected you being my first.<</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>>You've already put a baby in me, that's the part that matters.  This just makes us a family.<<else>>To accept me and take responsibility for another man's child... I won't forget that kindness.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>We've already borne a child, that is the part that matters.  Now we can be together as a family.<<else>>It's not like we don't already have children.  They should have their father in their lives.<</if>><<else>><<if _npc2KidCount === 1>>My child will be so happy to have a father in their life.<<else>>My children will be so happy to have a father in their lives.<</if>><</if>><</if>>
+            <</sayNpc>>
+            <</if>>
+            <<if _sadoMaso>>
+            <br />
+            <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, something quietly assured in the way he takes her in.
+            <br /><br />
+            <<sayNpc _npc1>>
+                Back home she always took well to a firm hand. I expect that to continue under this arrangement.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I've always been whatever my family needs me to be.  That won't change.
+            <</sayNpc>>
+            <<elseif _masoSado>>
+            <br />
+            <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, something playful and unguarded about the way he looks at her.
+            <br /><br />
+            <<sayNpc _npc1>>
+                Back at home she was very good at keeping me in line. I wouldn't mind more of that.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+            <br /><br />
+            <<sayNpc _npc2>>
+                As long as you remember to be a good boy for me.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> rests her hand on her pregnant belly, smiling and hopeful.
+            <br />
+            <</if>>
+            <br /><br />
+            <<set _weddingProceed = true>>
+        <</if>>
+    <<elseif !_groomAttracted>>
+        <<=setup.displayName(_npc1)>> looks from you to <<=setup.displayName(_npc2)>>, then back again. He shifts uncomfortably, jaw working before he finds the words.
+        <br /><br />
+        <<sayNpc _npc1>>
+            I respect what you're trying to do, <<=setup.npc.mcName(_npc1, false)>>, but... she's not someone I'm attracted to. It wouldn't be right for either of us.
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc2)>> says nothing, though something flickers across her face.<<if _npc1IsFather && _npc2IsPregnant>> Her hand moves to her belly, expression anxious and troubled.<</if>>
+        <br /><br />
+        <div id="option_insist_groom">
+            <<linkreplace 'The settlement demands it. Make it work.'>>
+                <<run $('#option_respect_groom').hide()>>
+                <<set _npc1.happy -= 50>>
+                <<set _npc2.happy -= 50>>
+                <<you>>
+                    Personal preference is a luxury we cannot afford. The settlement comes first. Both of you.
+                <</you>>
+                <br />
+                <<=setup.displayName(_npc1)>> exhales sharply, staring at the ground. <<=setup.displayName(_npc2)>> wraps her arms around herself. Neither argues. Neither has the standing to.
+                <br /><br />
+                <<include 'NPC arrange marry - ceremony'>>
+            <</linkreplace>>
+        </div>
+        <div id="option_respect_groom">
+            <<linkreplace 'I understand. I will not force this.'>>
+                <<run $('#option_insist_groom').hide()>>
+                <<you>>
+                    Fair enough. It was not the right call.
+                <</you>>
+                <br />
+                <<=setup.displayName(_npc1)>> gives a tight nod of relief. <<=setup.displayName(_npc2)>> glances at him once, then quietly slips away. He follows a moment later, leaving you alone in the square.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<unset $tmpEventWedding>>
+                    <<goto 'Wood cabin'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <<elseif !_brideAttracted>>
+        <<=setup.displayName(_npc1)>> says nothing at first, watching <<=setup.displayName(_npc2)>> for a reaction. She is the one who speaks.
+        <br /><br />
+        <<sayNpc _npc2>>
+            I... I'm sorry, <<=setup.npc.mcName(_npc2, false)>>. I want to do right by this place, I do. But he is not, I cannot make myself feel something that isn't there.
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc1)>> looks away, clearly uncomfortable with the position he has been put in.
+        <br /><br />
+        <div id="option_insist_bride">
+            <<linkreplace 'I have made my decision. This is not optional.'>>
+                <<run $('#option_respect_bride').hide()>>
+                <<set _npc2.happy -= 80>>
+                <<set _npc1.happy -= 30>>
+                <<you>>
+                    The settlement does not have the luxury of waiting for feelings to align. You will both do your part.
+                <</you>>
+                <br />
+                <<=setup.displayName(_npc2)>>'s expression goes flat. She gives a single, stiff nod. <<=setup.displayName(_npc1)>> says nothing, though the set of his shoulders betrays his discomfort at what is being asked of her.
+                <br /><br />
+                <<include 'NPC arrange marry - ceremony'>>
+            <</linkreplace>>
+        </div>
+        <div id="option_respect_bride">
+            <<linkreplace 'I understand. You are both free to go.'>>
+                <<run $('#option_insist_bride').hide()>>
+                <<you>>
+                    I hear you. Go.
+                <</you>>
+                <br />
+                The relief on <<=setup.displayName(_npc2)>>'s face is immediate and unguarded. <<=setup.displayName(_npc1)>> gives you a brief, grateful look before they both go their separate ways.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<unset $tmpEventWedding>>
+                    <<goto 'Wood cabin'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <<elseif ['streets', 'nightclub', 'strip_club'].includes(_npc2.assignedTo)>>
+        <<set _effectiveWorkProtestChance = _npc2.assignedTo === 'strip_club' ? Math.round(_maleProtestChance / 2) : _maleProtestChance>>
+        <<set _workRoll = random(1, 100)>>
+        <<if _workRoll <= _effectiveWorkProtestChance>>
+            <<=setup.displayName(_npc1)>> hesitates. His eyes move briefly to <<=setup.displayName(_npc2)>>, and there's a discomfort there that goes beyond simple nerves.
+            <br /><br />
+            <<sayNpc _npc1>>
+                With respect, <<=setup.npc.mcName(_npc1, false)>>... a woman in her line of work, is that really someone to build a family with?
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> stiffens, jaw tightening. She says nothing.<<if _npc1IsFather && _npc2IsPregnant>> Her hand moves to her belly, her expression anxious and troubled.<</if>>
+            <br /><br />
+            <div id="option_insist_work">
+                <<linkreplace 'The work she does serves this settlement. Family is no different.'>>
+                    <<run $('#option_respect_work').hide()>>
+                    <<set _npc1.happy -= 20>>
+                    <<set _npc2.happy -= 50>>
+                    <<you>>
+                        No matter what role you hold in this settlement, family and the future are what matter most. We need both. I've made my decision.
+                    <</you>>
+                    <br />
+                    <<=setup.displayName(_npc1)>> exhales slowly. <<=setup.displayName(_npc2)>> dips her head in a stiff nod, her expression flat.
+                    <br /><br />
+                    <<sayNpc _npc1>>
+                        ...Alright, <<=setup.npc.mcName(_npc1, false)>>. I'll try to make it work.
+                    <</sayNpc>>
+                    <br />
+                    <<=setup.displayName(_npc2)>> lets out a slow breath, her expression apprehensive but accepting.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        I work for you, so I go where you send me, <<=setup.npc.mcName(_npc2, false)>>.  I hope my husband can try not to look down on me.
+                    <</sayNpc>>
+                    <br /><br />
+                    <<include 'NPC arrange marry - ceremony'>>
+                <</linkreplace>>
+            </div>
+            <div id="option_respect_work">
+                <<linkreplace 'I understand. I will find another arrangement.'>>
+                    <<run $('#option_insist_work').hide()>>
+                    <<you>>
+                        Fair enough. I'll look elsewhere.
+                    <</you>>
+                    <br />
+                    <<=setup.displayName(_npc1)>> gives a short nod and steps back. <<=setup.displayName(_npc2)>> watches him a moment, then looks at you with a cold calm.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        And next time you're feeling lonely, <<=_npc1.name>>, you can go fuck yourself.
+                    <</sayNpc>>
+                    <br />
+                    She turns and walks away without another word. The square feels very empty.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <<else>>
+            <<=setup.displayName(_npc1)>> looks between you and <<=setup.displayName(_npc2)>>, something measured in his expression. After a moment, he gives a slow nod.
+            <br /><br />
+            <<sayNpc _npc1>>
+                It's not the life I imagined for a wife, <<=setup.npc.mcName(_npc1, false)>>. But we're all here to contribute what the settlement needs. If she's willing to build something more, a family, a real one, I can work with that.<<if _npc2.beauty > 90>> And she's beautiful. That doesn't hurt.<</if>><<if (_npc2.skills ?? []).includes('cook')>> I hear she can cook, too. That counts for something.<</if>>
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> lets out a slow breath, her expression somewhere between relief and determination.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Thank you for giving me this chance, <<=setup.npc.mcName(_npc2, false)>>.  No matter what I do for work, what I give this marriage will be special, just for him.
+            <</sayNpc>>
+            <br />
+            A faint, nervous smile crosses her lips. Despite the unusual circumstances, neither of them seems entirely opposed to the idea.
+            <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>>I look forward to showing you some things tonight... <</if>><<if _npc2IsInfertile>>I can't have children, which has kept me safe until now. Whatever this is, it has to be about more than that for us.<<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>>With you I feel ready for a family, to give you the offspring you deserve.<</if>><<if _npc2.virgin>> Despite everything, I haven't shared that part of myself with anyone before. I want that part to be special. <</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>> Our future child will benefit from having a father in their life. Thank you for giving them that.<<else>>Most men wouldn't. The fact that you're willing to provide for me and my unborn child... I'm more grateful than I can say.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>I've sometimes worried about what kind of life I could give our child. You've just answered that worry.<<else>>I've worried about what kind of life I could give our children. You've just answered that worry.<</if>><<else>><<if _npc2KidCount === 1>>I've sometimes worried about what kind of life I could give my child. You've just answered that worry.<<else>>I've worried about what kind of life I could give my children. You've just answered that worry.<</if>><</if>><</if>>
+            <</sayNpc>>
+            <</if>>
+            <<if _sadoMaso>>
+            <br />
+            <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, something quietly assured in the way he takes her in.
+            <br /><br />
+            <<sayNpc _npc1>>
+                She knows how to follow a man's lead. That'll serve us both well.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Tell me what you want. That part I know how to do.
+            <</sayNpc>>
+            <<elseif _masoSado>>
+            <br />
+            <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, something playful and unguarded about the way he looks at her.
+            <br /><br />
+            <<sayNpc _npc1>>
+                She's used to being in charge of her situation. I don't think I mind that at all.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Don't worry. I'll be gentle.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> rests her hand on the life in her belly, smiling and hopeful.
+            <br />
+            <</if>>
+            <br /><br />
+            <<set _weddingProceed = true>>
+        <</if>>
+    <<elseif _npc1.married && (_npc1.family.wives ?? []).length > 1>>
+        <<set _wifeNames = (_npc1.family.wives ?? []).map(id => (setup.getNpcById(id)?.name ?? 'someone'))>>
+        <<set _wifeList = _wifeNames.length > 1 ? _wifeNames.slice(0, -1).join(', ') + (_wifeNames.length > 2 ? ', and ' : ' and ') + _wifeNames[_wifeNames.length - 1] : (_wifeNames[0] ?? 'someone')>>
+        <<=setup.displayName(_npc1)>> doesn't hesitate. A broad grin spreads across his face as he looks <<=setup.displayName(_npc2)>> over warmly.
+        <br /><br />
+        <<sayNpc _npc1>>
+            Another bride? I'd be honored, <<=setup.npc.mcName(_npc1, false)>>. The more family we build, the stronger we all are. I know <<=_wifeList>> will be overjoyed to welcome her into the family.<<if _npc2.beauty > 90>> She is lovely, too. I can see why you chose her.<</if>><<if (_npc2.skills ?? []).includes('cook')>> I hear she can cook as well. Always a welcome addition.<</if>>
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc2)>> glances between you and him, still processing, but his easy confidence seems to put her slightly at ease.
+        <br /><br />
+        <<sayNpc _npc2>>
+            You have created a unique way of life here, <<=setup.npc.mcName(_npc2, false)>>.  I will become a part of this family, and make our community stronger.
+        <</sayNpc>>
+        <br />
+        A faint, nervous smile crosses her lips. Despite the unusual circumstances, neither of them seems entirely opposed to the idea.
+        <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+        <br /><br />
+        <<sayNpc _npc2>>
+            <<if _npc2IsNympho>>I won't pretend I'm not a little eager to try out the harem life. <</if>><<if _npc2IsInfertile>>I should be honest, I can't have children. But I am happy to contribute to this family in every other way that matters.<<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>>I look forward to adding my vessel to grow your family even more.<</if>><<if _npc2.virgin>> I've never been with anyone before. I hope you won't mind that I'm not as experienced as the others.<</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>>Our unborn child will benefit greatly from having a family to grow within.<<else>>I'm grateful, truly. For me, and for the child I'm carrying. Having a family will make all the difference.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>You have a full house already. The fact that there's still a place in it for me and our child - I won't forget that.<<else>>You have a full house already. The fact that there's still a place in it for me and our children - I won't forget that.<</if>><<else>><<if _npc2KidCount === 1>>You have a full house already. The fact that there's still a place in it for me and my child - I won't forget that.<<else>>You have a full house already. The fact that there's still a place in it for me and my children - I won't forget that.<</if>><</if>><</if>>
+        <</sayNpc>>
+        <</if>>
+        <<if _sadoMaso>>
+        <br />
+        <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, something quietly assured in the way he takes her in.
+        <br /><br />
+        <<sayNpc _npc1>>
+            My household has certain... expectations. She looks like she'll be good at taking direction.
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+        <br /><br />
+        <<sayNpc _npc2>>
+            Just show me what's expected of me. I'm very... accommodating.
+        <</sayNpc>>
+        <<elseif _masoSado>>
+        <br />
+        <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, something playful and unguarded about the way he looks at her.
+        <br /><br />
+        <<sayNpc _npc1>>
+            My other wives run the house. Something tells me she's going to run me.
+        <</sayNpc>>
+        <br />
+        <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+        <br /><br />
+        <<sayNpc _npc2>>
+            Don't worry. I'll make sure you enjoy it.
+        <</sayNpc>>
+        <</if>>
+        <<if _npc1IsFather && _npc2IsPregnant>>
+        <br />
+        <<=setup.displayName(_npc2)>> rests her hand on her belly, smiling and hopeful.
+        <br />
+        <</if>>
+        <br /><br />
+        <<set _weddingProceed = true>>
+    <<elseif _npc1.married && (_npc1.family.wives ?? []).length === 1>>
+        <<set _protestRoll = random(1, 100)>>
+        <<if _protestRoll <= _maleProtestChance>>
+            <<set _existingWife = setup.getNpcById((_npc1.family.wives ?? [])[0])>>
+            <<=setup.displayName(_npc1)>> straightens, visibly startled. He shifts on his feet and shakes his head slowly.
+            <br /><br />
+            <<sayNpc _npc1>>
+                I... I already have a wife, <<=_existingWife ? _existingWife.name : 'someone'>>. With respect, <<=setup.npc.mcName(_npc1, false)>>, what you're asking isn't right.
+            <</sayNpc>>
+            <<if _npc2IsNympho>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                Well... for what it's worth, I'd be down for a three-way.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> cradles her belly quietly, her expression anxious and troubled.
+            <</if>>
+            <br />
+            <div id="option_insist_mono">
+                <<linkreplace 'The settlement cannot afford monogamy.'>>
+                    <<run $('#option_respect_mono').hide()>>
+                    <<set _npc1.happy -= 10>>
+                    <<set _npc2.happy -= 10>>
+                    <<you>>
+                        The world before this one had the luxury of sentiment. We don't. Some men will have to carry a heavier burden, build larger families, if this settlement is going to survive and grow. This is one of those times.
+                    <</you>>
+                    <br />
+                    <<=setup.displayName(_npc1)>> looks away, jaw tight. The argument sits uncomfortably with him, but he knows you're not wrong about the numbers.
+                    <br /><br />
+                    <<sayNpc _npc1>>
+                        ...Alright, <<=setup.npc.mcName(_npc1, false)>>. If that's what's needed.
+                    <</sayNpc>>
+                    <br />
+                    <<=setup.displayName(_npc2)>> lets out a slow breath, her expression apprehensive but accepting.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        I want to be part of this community, <<=setup.npc.mcName(_npc2, false)>>.  I'll do what I must.
+                    <</sayNpc>>
+                    <br />
+                    <<include 'NPC arrange marry - ceremony'>>
+                <</linkreplace>>
+            </div>
+            <div id="option_respect_mono">
+                <<linkreplace 'I respect that. I will not force this.'>>
+                    <<run $('#option_insist_mono').hide()>>
+                    <<you>>
+                        You're right. Forget I said anything.
+                    <</you>>
+                    <br />
+                    <<=setup.displayName(_npc1)>> gives a relieved nod. <<=setup.displayName(_npc2)>> quietly slips away, and he follows a moment later, leaving you alone in the square.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <<else>>
+            <<set _existingWife = setup.getNpcById((_npc1.family.wives ?? [])[0])>>
+            <<=setup.displayName(_npc1)>>'s eyes light up. He glances at <<=setup.displayName(_npc2)>> with a warm, unguarded smile.
+            <br /><br />
+            <<sayNpc _npc1>>
+                A second bride? I won't pretend I haven't thought about it, <<=setup.npc.mcName(_npc1, false)>>. A bigger family, more hands, more life in this place. I'd welcome that, and I'm confident <<=_existingWife ? _existingWife.name : 'she'>> will too.<<if _npc2.beauty > 90>> I won't mind having more beauty around the place, I'll admit.<</if>><<if (_npc2.skills ?? []).includes('cook')>> I hear she can cook, too. That's always welcome.<</if>>
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> blinks, caught off guard by his enthusiasm. A small, uncertain smile tugs at the corner of her mouth.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I guess monogamy didn't survive into our world, <<=setup.npc.mcName(_npc2, false)>>.  I can share, for the good of the settlement.
+            <</sayNpc>>
+            <br />
+            A faint, nervous smile crosses her lips. Despite the unusual circumstances, neither of them seems entirely opposed to the idea.
+            <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>>I won't pretend I'm not a little eager for tonight.  I hear three's company... <</if>><<if _npc2IsInfertile>>I may not be able to add to your legacy, but I will be everything else for you. <<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>>I look forward to giving you another opportunity to grow your legacy.<</if>><<if _npc2.virgin>> I've never been with anyone before. I won't know as much as her, yet... <</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>>Our unborn child is going to need a father. That is worth any compromise.<<else>>It will be worth it to have a family for my future little one. In this world, that means everything.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>I've wondered what kind of life our child would have.  It's not what I expected, but I have hope.<<else>>I've wondered what kind of life our children would have.  It's not what I expected, but I have hope.<</if>><<else>><<if _npc2KidCount === 1>>A second wife wasn't something you needed. But my child will grow up with a family because of it. I'm grateful for that.<<else>>A second wife wasn't something you needed. But my children will grow up with a family because of it. I'm grateful for that.<</if>><</if>><</if>>
+            <</sayNpc>>
+            <</if>>
+            <<if _sadoMaso>>
+            <br />
+            <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, something quietly assured in the way he takes her in.
+            <br /><br />
+            <<sayNpc _npc1>>
+                I have particular tastes. Something tells me this one knows how to be accommodating.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Just show me what's expected of me. I take discipline well.
+            <</sayNpc>>
+            <<elseif _masoSado>>
+            <br />
+            <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, something playful and unguarded about the way he looks at her.
+            <br /><br />
+            <<sayNpc _npc1>>
+                Something tells me the balance in my house is about to shift.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I think we'll all get along just fine, as long as you're a good boy.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> rests her hand on her belly, smiling and hopeful.
+            <br />
+            <</if>>
+            <br /><br />
+            <<set _weddingProceed = true>>
+        <</if>>
+    <<elseif setup.percentageChance(_femaleProtestChance)>>
+        <<=setup.displayName(_npc2)>> is the first to react, drawing herself up slightly before <<=setup.displayName(_npc1)>> has the chance to speak.
+        <br /><br />
+        <<sayNpc _npc2>>
+            With respect, <<=setup.npc.mcName(_npc2, false)>>... I'm not something to be parceled out. I'd like some say in who I end up with.
+        <</sayNpc>>
+        <br />
+        <<if _npc2IsNympho>>
+            <<=setup.displayName(_npc1)>> looks her over with a faint, amused smile.
+            <br /><br />
+            <<sayNpc _npc1>>
+                 I don't have a problem, <<=setup.npc.mcName(_npc1, false)>>.  For what it's worth, I don't mind a woman who speaks her mind.
+            <</sayNpc>>
+        <<else>>
+            <<=setup.displayName(_npc1)>> looks at her, then at you, his expression measured.
+            <br /><br />
+            <<sayNpc _npc1>>
+                I'd be lying if I said I didn't share her hesitation, <<=setup.npc.mcName(_npc1, false)>>. A marriage forced on both of us isn't what either of us needs.
+            <</sayNpc>>
+        <</if>>
+        <<if _npc1IsFather && _npc2IsPregnant>>
+        <br />
+            <<=setup.displayName(_npc2)>> cradles her belly quietly, her expression anxious and troubled.  The baby was one thing, but this would change everything...
+        <</if>>
+        <br /><br />
+        <div id="option_insist_female">
+            <<linkreplace "The settlement's needs outweigh personal preferences.">>
+                <<run $('#option_respect_female').hide()>>
+                <<set _npc1.happy -= 10>>
+                <<set _npc2.happy -= 50>>
+                <<you>>
+                    I understand your feelings. But the settlement cannot wait for hearts to align. You will both do your part.
+                <</you>>
+                <br />
+                <<=setup.displayName(_npc2)>>'s jaw tightens. She swallows the argument, her expression going quiet and flat. <<=setup.displayName(_npc1)>> says nothing, though he glances at her once before looking away.
+                <br /><br />
+                <<include 'NPC arrange marry - ceremony'>>
+            <</linkreplace>>
+        </div>
+        <div id="option_respect_female">
+            <<linkreplace "You're right. This should be your choice.">>
+                <<run $('#option_insist_female').hide()>>
+                <<you>>
+                    Fair enough. I won't force this.
+                <</you>>
+                <br />
+                <<=setup.displayName(_npc2)>> lets out a slow breath, the tension leaving her shoulders. <<=setup.displayName(_npc1)>> gives you a quiet nod. They both go their separate ways, and the square falls silent around you.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<unset $tmpEventWedding>>
+                    <<goto 'Wood cabin'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <<else>>
+        <<set _singleRoll = random(1, 100)>>
+        <<if _singleRoll > _singleProtestChance>>
+            <<=setup.displayName(_npc1)>> is the first to speak, clearing his throat. He glances at <<=setup.displayName(_npc2)>>, and something in the look they share softens.
+            <br /><br />
+            <<sayNpc _npc1>>
+                I... yeah. Alright, <<=setup.npc.mcName(_npc1, false)>>. If you think it's what's best for us here, I'm willing.<<if _npc2.beauty > 90>> She's beautiful. I'll say that much.<</if>><<if (_npc2.skills ?? []).includes('cook')>> And I hear she's a good cook. I won't complain about that.<</if>>
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> lets out a quiet breath, then nods.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I suppose there are worse reasons to say yes, <<=setup.npc.mcName(_npc2, false)>>.
+            <</sayNpc>>
+            <br />
+            A faint, nervous smile crosses her lips. Despite the unusual circumstances, neither of them seems entirely opposed to the idea.
+            <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>> I won't pretend I'm not a little eager for tonight, either.<</if>><<if _npc2IsInfertile>> I should be honest, though, I can't have children. Whatever you're both hoping for here, it has to be about more than that for us.<<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>> I want this. A family, children, I'm more than ready to start building something here.<</if>><<if _npc2.virgin>> I've never been with anyone before. I find myself... looking forward to him being my first.<</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>>Our child to come is going to need their father. Whatever else this is, that matters.<<else>>I'm grateful he's willing to take me in, and my child too. That's not nothing, in a world like this.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>Our child will be so happy to have their father in their life.<<else>>Our children will be so happy to have their father in their lives.<</if>><<else>><<if _npc2KidCount === 1>>My child will be so happy to have a father in their life.<<else>>My children will be so happy to have a father in their lives.<</if>><</if>><</if>>
+            <</sayNpc>>
+            <</if>>
+            <<if _sadoMaso>>
+            <br />
+            <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, something quietly assured in the way he takes her in.
+            <br /><br />
+            <<sayNpc _npc1>>
+                I have a feeling she'll take well to a firm hand. I look forward to the arrangement.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+            <br /><br />
+            <<sayNpc _npc2>>
+                I'll be whatever you need me to be.
+            <</sayNpc>>
+            <<elseif _masoSado>>
+            <br />
+            <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, something playful and unguarded about the way he looks at her.
+            <br /><br />
+            <<sayNpc _npc1>>
+                Something about her makes me think she's going to keep me very much in line. I find that... appealing.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+            <br /><br />
+            <<sayNpc _npc2>>
+                We'll get along just fine. Trust me.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> rests her hand on her belly, smiling and hopeful.
+            <br />
+            <</if>>
+            <br /><br />
+            <<set _weddingProceed = true>>
+        <<else>>
+            <<=setup.displayName(_npc1)>> stiffens. <<=setup.displayName(_npc2)>> looks away.
+            <br /><br />
+            <<sayNpc _npc1>>
+                With all due respect, <<=setup.npc.mcName(_npc1, false)>>... this isn't something I can just be ordered into.
+            <</sayNpc>>
+            <br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>>Well... I'm not going to pretend I object, <<=setup.npc.mcName(_npc2, false)>>. For what it's worth, I'd be down for it.<<else>>I appreciate what you're trying to do for the settlement, <<=setup.npc.mcName(_npc2, false)>>, but... a marriage has to be a choice. We can't just—<</if>>
+            <</sayNpc>>
+            <br />
+            She trails off, glancing uncomfortably at <<=setup.displayName(_npc1)>>. The silence between you all stretches thin.
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> cradles her belly, her expression anxious and troubled.
+            <</if>>
+            <br /><br />
+            <div id="option_force">
+                <<linkreplace 'Make it an order'>>
+                    <<run $('#option_respect').hide()>>
+                    <<set _npc1.happy -= 50>>
+                    <<set _npc2.happy -= 50>>
+                    <<you>>
+                        In this settlement, I don't ask. I decide. You two will marry. Today.
+                    <</you>>
+                    <br />
+                    Neither of them speaks. <<=setup.displayName(_npc1)>> clenches his jaw and stares at the ground. <<=setup.displayName(_npc2)>> swallows hard, her eyes going flat and distant. They comply, because they have to.
+                    <br /><br />
+                    <center>
+                        <<actionImage _npc1 wedding>>
+                    </center>
+                    <br />
+                    <<set _npc1.married = true>>
+                    <<set _npc2.married = true>>
+                    <<set _npc1.family ??= {}>>
+                    <<set _npc1.family.wives ??= []>>
+                    <<set _npc1.family.wives.push(_npc2.id)>>
+                    <<set _npc2.family ??= {}>>
+                    <<set _npc2.family.husband = _npc1.id>>
+                    <<run setup.npc.addHistory(_npc1, 'married', { with: _npc2.id })>>
+                    <<run setup.npc.addHistory(_npc2, 'married', { with: _npc1.id })>>
+                    The ceremony that follows is short and joyless. A few settlers watch from a distance, sensing the tension and keeping to themselves. There are no songs, no laughter. <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> exchange their vows in silence, their voices hollow. When it's done, they walk away together without a word, without a look back.
+                    <br /><br />
+                    The settlement has a new family. Whether it will ever feel like one is another matter.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+            <div id="option_respect">
+                <<linkreplace 'Respect their decision'>>
+                    <<run $('#option_force').hide()>>
+                    <<you>>
+                        Alright. I won't force this. It was just a thought.
+                    <</you>>
+                    <br />
+                    The relief on their faces is immediate, though <<=setup.displayName(_npc2)>> dips her head in quiet gratitude.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        Thank you, <<=setup.npc.mcName(_npc2, false)>>. That... means a lot.
+                    <</sayNpc>>
+                    <br />
+                    They go their separate ways, and you're left alone in the square, weighing the limits of what leadership can truly demand of people.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <</if>>
+    <</if>>
+    <<if _weddingProceed>>
+        <<include 'NPC arrange marry - ceremony'>>
+    <</if>>
+<</linkreplace>>
+
+
