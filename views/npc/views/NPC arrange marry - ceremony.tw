@@ -1,0 +1,183 @@
+:: NPC arrange marry - ceremony
+<<set _npc1.married = true>>
+<<set _npc2.married = true>>
+<<set _npc1.family ??= {}>>
+<<set _npc1.family.wives ??= []>>
+<<set _npc1.family.wives.push(_npc2.id)>>
+<<set _npc2.family ??= {}>>
+<<set _npc2.family.husband = _npc1.id>>
+<<run setup.npc.addHistory(_npc1, 'married', { with: _npc2.id })>>
+<<run setup.npc.addHistory(_npc2, 'married', { with: _npc1.id })>>
+<<set _priorWives = (_npc1.family.wives ?? []).filter(id => id !== _npc2.id).map(id => setup.getNpcById(id)).filter(w => w != null)>>
+
+In a blur of motion, word spreads across the settlement like wildfire, and within minutes, a small crowd gathers around a makeshift altar set up under an old tattered awning in the square. A few of the townsfolk bring scavenged candles and an assortment of wildflowers, doing their best to give the moment a touch of beauty amidst the rugged surroundings. Someone hands you a glass bottle of homemade spirits, and you lift it, taking a sip as you watch <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> stand side by side, faces glowing with a rare light in these dark times.
+<<if _priorWives.length === 1>>
+    <<set _pw1 = _priorWives[0]>>
+    <<set _pw1KidCount = (_pw1.family?.kids ?? []).length>>
+    <br /><br />
+    Among those who gather, <<=setup.displayName(_pw1)>> stands close to the front<<if _pw1KidCount > 0>>, her <<if _pw1KidCount === 1>>child<<else>>children<</if>> by her side<</if>>, watching with quiet warmth as her husband takes a new bride.
+<<elseif _priorWives.length >= 2>>
+    <<set _pwParts = []>>
+    <<for _pwI = 0; _pwI < _priorWives.length; _pwI++>>
+        <<set _pw = _priorWives[_pwI]>>
+        <<set _pwKidCount = (_pw.family?.kids ?? []).length>>
+        <<set _pwPart = setup.displayName(_pw)>>
+        <<if _pwKidCount > 0>><<set _pwPart += ', her ' + (_pwKidCount === 1 ? 'child' : 'children') + ' close by'>><</if>>
+        <<run _pwParts.push(_pwPart)>>
+    <</for>>
+    <<if _priorWives.length === 2>>
+        <<set _pwList = _pwParts[0] + ' and ' + _pwParts[1]>>
+    <<else>>
+        <<set _pwList = _pwParts.slice(0, -1).join(', ') + ', and ' + _pwParts[_pwParts.length - 1]>>
+    <</if>>
+    <br /><br />
+    <<=_pwList>> stand together among the gathered crowd, watching with quiet warmth as their husband takes another bride.
+<</if>>
+<br /><br />
+<center>
+    <<actionImage _npc1 wedding>>
+</center>
+The ceremony is simple but heartfelt.
+A few people murmur blessings for the new couple, and someone strums a melody on an old guitar.
+As <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> exchange their vows, the crowd lets out quiet cheers and claps, honoring a rare moment of love and unity in a world that has otherwise forgotten such warmth. They share a kiss, and the gathered settlers break out into applause, some whooping and whistling.
+<br /><br />
+After the ceremony, the square transforms into an impromptu celebration. People pass around bits of bread and a precious few sips of wine, some sharing old songs and tales of happier days. A couple of settlers start a lively dance, pulling others in and laughing together under the dim glow of lanterns. It's a night of rare joy, a momentary escape from the constant grind of survival.
+<<if _priorWives.length > 0>>
+    <<set _sw1 = _priorWives[0]>>
+    <<set _sw2 = _priorWives.length >= 2 ? _priorWives[random(1, _priorWives.length - 1)] : null>>
+    <br /><br />
+    At some point during the celebration, <<if _sw2 === null>><<=setup.displayName(_sw1)>> finds a quiet moment to take <<=setup.displayName(_npc2)>> aside<<else>><<=setup.displayName(_sw1)>> and <<=setup.displayName(_sw2)>> find a quiet moment to take <<=setup.displayName(_npc2)>> aside<</if>>.
+    <br /><br />
+    <<sayNpc _sw1>>
+        Welcome to the family. Truly.
+    <</sayNpc>>
+    <<if _sw2 !== null>>
+    <br />
+    <<sayNpc _sw2>>
+        We look after our own here. You're one of us now.
+    <</sayNpc>>
+    <</if>>
+<</if>>
+<br /><br />
+As the crowd starts to thin, you catch sight of <<=setup.displayName(_npc1)>> and <<=setup.displayName(_npc2)>> slipping away, hand in hand, disappearing behind one of the doors leading to a small room they had decorated with whatever scraps they could find.
+<br /><br />
+<<linkreplace 'Knock on the door'>>
+    <center>
+        <<actionImage _npc1 room>>
+    </center>
+    There's a brief shuffling sound from inside, and then <<=setup.displayName(_npc1)>> opens the door, looking a little flustered.
+    His shirt is already halfway unbuttoned, and traces of <<=setup.displayName(_npc2)>>'s lipstick are smeared across the fabric.
+    He glances at you, a bit embarrassed but beaming.
+    <br /><br />
+    <<sayNpc _npc1>>
+        Can I, uh… help you with something?
+    <</sayNpc>>
+    <br />
+    <<linkreplace 'Enter room'>>
+        <center>
+            <<actionImage _npc2 room_waiting>>
+        </center>
+        <<sayNpc _npc2>>
+            Is… everything alright?
+        <</sayNpc>>
+        <br />
+        <<linkreplace 'In this settlement, the leader goes first'>>
+            <<sayNpc _npc1>>
+                Please… this night… it's supposed to be ours. You arranged this.
+            <</sayNpc>>
+            <br />
+            You pause, letting the weight of your words settle uncomfortably. Finally, a small smile breaks the tension, and you shake your head, softening your gaze.
+            <br /><br />
+            <<set _linkName = 'Turn ' + _npc2.name + ' around'>>
+            <<linkreplace _linkName>>
+                <<video 'cabin/npc_wedding1'>>
+                <br /><br />
+                You slowly turn <<=setup.displayName(_npc2)>> around and grab her ass squeezing it while <<=setup.displayName(_npc1)>> sits down on the chair next to you two.
+                <br />
+                <<sayNpc _npc1>>
+                    Please don't!
+                <</sayNpc>>
+                <<set _npc1.happy -= 20>>
+                <<set _npc2.happy -= 10>>
+                <br />
+                <<linkreplace 'Lift her dress'>>
+                    <<video 'cabin/npc_wedding2'>>
+                    <br /><br />
+                    You slowly pull up her dress, revealing her white panties. Soon enough you grab them and pull them down revealing her clean shaved pussy.
+                    <br /><br />
+                    <<sayNpc _npc1>>
+                        Please!
+                    <</sayNpc>>
+                    <br />
+                    <<sayNpc _npc2>>
+                        It will be okay! It's fine.
+                    <</sayNpc>>
+                    <br />
+                    <<linkreplace 'Fuck her'>>
+                        <<set _npc1.happy -= 20>>
+                        <<set _npc2.happy -= 10>>
+                        <<video 'cabin/npc_wedding3'>>
+                        <br /><br />
+                        As she bends over the couch, you pull out your hard dick and place it on her ass. As you rub it between her asscheeks, she grabs <<=setup.displayName(_npc1)>>'s hand and holds it.
+                        <br /><br />
+                        You slowly place your dick against her pussy and grab her ass ready to adjust her position.
+                        <br /><br />
+                        <<video 'cabin/npc_wedding4'>>
+                        <br /><br />
+                        You slowly slide your dick into <<=setup.displayName(_npc2)>>'s pussy. She clearly holds and tries to resist not to let out a moan as she clinches into her new husband's hand.
+                        <br /><br />
+                        <<sayNpc _npc1>>
+                            I can't...
+                        <</sayNpc>>
+                        <br />
+                        <<linkreplace 'Fuck her harder'>>
+                            <<video 'cabin/npc_wedding5'>>
+                            <br /><br />
+                            With each thrust you increase the speed and you manage to force her to let out a moan as she looks over her shoulder right into your eyes.
+                            <br /><br />
+                            As you kept pounding her pussy her moans started to get louder and louder when in the end she let out a loud moan that filled the quiet room.
+                            <br /><br />
+                            <<video 'cabin/npc_wedding6'>>
+                            <br /><br />
+                            <<=setup.displayName(_npc2)>> grabbed <<=setup.displayName(_npc1)>>'s shoulder and held him down firmly as by the look she enjoyed the moment more and more.
+                            <br />
+                            Meanwhile <<=setup.displayName(_npc1)>> couldn't look at you two at all.
+                            <br /><br />
+                            <<=setup.displayName(_npc2)>> locked her eyes with yours once again.
+                            <br /><br />
+                            <<video 'cabin/npc_wedding7'>>
+                            <br /><br />
+                            Her pussy was so wet that your dick almost slipped out as you slowed down a bit. In that moment you overhear <<=setup.displayName(_npc1)>> whisper to himself something.
+                            <br /><br />
+                            <<sayNpc _npc1>>
+                                Bastard...
+                            <</sayNpc>>
+                            <br />
+                            <<linkreplace 'Cum inside her'>>
+                                <<set _npc1.happy -= 40>>
+                                <center>
+                                    <<actionImage _npc2 room_cum_pussy>>
+                                </center>
+                                <br />
+                                With a last final thrust you shove your dick deep into her and cum.
+                                <br />
+                                You fill up her pussy and some of your sperm drips out on the ground right next to <<=setup.displayName(_npc1)>>'s shoe.
+                                <br /><br />
+                                <<sayNpc _npc1>>
+                                    What was that?! Was it necessary?
+                                <</sayNpc>>
+                                <br />
+                                <<=setup.displayName(_npc2)>> meanwhile is already off you, laying in the bed as she tries to push out as much cum as she can while you slowly look toward the doors.
+                                <br /><br />
+                            <</linkreplace>>
+                        <</linkreplace>>
+                    <</linkreplace>>
+                <</linkreplace>>
+            <</linkreplace>>
+        <</linkreplace>>
+    <</linkreplace>>
+<</linkreplace>>
+<<link 'Leave'>>
+    <<unset $tmpEventWedding>>
+    <<goto 'Wood cabin'>>
+<</link>>

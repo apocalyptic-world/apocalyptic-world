@@ -3,21 +3,26 @@
 /* Find a married couple (no horny threshold required) */
 <<set _eligibleWomen = setup.commonValues([_guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
 <<set _eligibleMen = setup.commonValues([_guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
-<<set _marriedFemaleIdx = null, _marriedMaleIdx = null>>
-<<for _mci = 0; _mci < _eligibleWomen.length && _marriedFemaleIdx === null; _mci++>>
+<<set _marriedPairs = []>>
+<<for _mci = 0; _mci < _eligibleWomen.length; _mci++>>
 	<<set _mcWomanIdx = _eligibleWomen[_mci]>>
 	<<set _mcWoman = $guests[_mcWomanIdx]>>
 	<<if (_mcWoman.family?.husband ?? false) && _mcWoman.likesGuys>>
-		<<for _mcj = 0; _mcj < _eligibleMen.length && _marriedFemaleIdx === null; _mcj++>>
+		<<for _mcj = 0; _mcj < _eligibleMen.length; _mcj++>>
 			<<set _mcManIdx = _eligibleMen[_mcj]>>
 			<<if $guests[_mcManIdx].id === _mcWoman.family.husband && $guests[_mcManIdx].likesGirls>>
-				<<set _marriedFemaleIdx = _mcWomanIdx, _marriedMaleIdx = _mcManIdx>>
+				<<run _marriedPairs.push([_mcWomanIdx, _mcManIdx])>>
 			<</if>>
 		<</for>>
 	<</if>>
 <</for>>
+<<set _marriedFemaleIdx = null, _marriedMaleIdx = null>>
+<<if _marriedPairs.length > 0>>
+	<<set _chosenPair = _marriedPairs[random(0, _marriedPairs.length - 1)]>>
+	<<set _marriedFemaleIdx = _chosenPair[0], _marriedMaleIdx = _chosenPair[1]>>
+<</if>>
 
-<<if _marriedFemaleIdx !== null && setup.percentageChance(35)>>
+<<if _marriedFemaleIdx !== null && setup.percentageChance(25)>>
 	<<set $tmpEvent = {femaleGuestIds: [_marriedFemaleIdx], maleGuestIds: [_marriedMaleIdx]}>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
@@ -59,7 +64,7 @@
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - male on female and transfemale'>>
-<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 1 && setup.percentageChance(4)>>
+<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 1 && setup.percentageChance(20)>>
 	<<set $tmpEvent = setup.commonValues([_guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission])>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
