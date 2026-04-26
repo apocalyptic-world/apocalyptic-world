@@ -1,0 +1,52 @@
+:: sleepNpcInventory [include]
+
+<<if setup.npcInventoryHas(_npc, 'xanax') && _npc.happy < 50 && (_npc.onXanax ?? 0) === 0>>
+	<<set _xanaxChance = 0>>
+	<<set _xanaxMood = ''>>
+	<<if _npc.happy < -50>>
+		<<set _xanaxChance = 90>>
+		<<set _xanaxMood = 'hopeless'>>
+	<<elseif _npc.happy < 0>>
+		<<set _xanaxChance = 75>>
+		<<set _xanaxMood = 'depressed'>>
+	<<elseif _npc.happy < 20>>
+		<<set _xanaxChance = 50>>
+		<<set _xanaxMood = 'down'>>
+	<<elseif _npc.happy < 50>>
+		<<set _xanaxChance = 10>>
+		<<set _xanaxMood = 'kinda down'>>
+	<</if>>
+	<<if setup.percentageChance(_xanaxChance)>>
+		<<set _npc.onXanax = 8>>
+		<<run setup.npcInventoryRemove(_npc, 'xanax', 1)>>
+		<<set _xanaxMsg = _npc.name + ' is feeling ' + _xanaxMood + ' and has started taking xanax. Over the next 8 days, her happiness should improve.'>>
+		<<if !setup.npcInventoryHas(_npc, 'xanax')>>
+			<<set _xanaxMsg += ' This is ' + setup.pronounceWhos(_npc) + ' last pack.'>>
+		<</if>>
+		<<run setup.sleepMessages.addMain(_xanaxMsg)>>
+	<</if>>
+<<elseif (_npc.onXanax ?? 0) > 0>>
+	<<set _npc.onXanax-->>
+	<<set _npc.happy += randomInteger(6, 9)>>
+	<<set _xanaxDaysDone = 8 - _npc.onXanax>>
+	<<if _npc.onXanax === 0>>
+		<<set _xanaxCurrentMood = ''>>
+		<<if _npc.happy < -50>>
+			<<set _xanaxCurrentMood = 'hopeless'>>
+		<<elseif _npc.happy < 0>>
+			<<set _xanaxCurrentMood = 'depressed'>>
+		<<elseif _npc.happy < 20>>
+			<<set _xanaxCurrentMood = 'down'>>
+		<<elseif _npc.happy < 50>>
+			<<set _xanaxCurrentMood = 'kinda down'>>
+		<</if>>
+		<<set _xanaxMsg = _npc.name + ' has finished the pack and is feeling better'>>
+		<<if _xanaxCurrentMood>>
+			<<set _xanaxMsg += ', though still ' + _xanaxCurrentMood>>
+		<</if>>
+		<<set _xanaxMsg += '.'>>
+	<<else>>
+		<<set _xanaxMsg = _npc.name + ' is feeling a little better after ' + _xanaxDaysDone + '/8 days on xanax.'>>
+	<</if>>
+	<<run setup.sleepMessages.addMain(_xanaxMsg)>>
+<</if>>
