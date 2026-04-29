@@ -1,0 +1,109 @@
+:: Octavia - Send Warrior [bg-guesthouse]
+<h1 class="ptitle">OCTAVIA</h1>
+<br />
+<<set $characters.octavia.quests.warriors = $characters.octavia.quests.warriors ?? []>>
+<<set _warriors = $characters.octavia.quests.warriors>>
+<<set _count = _warriors.length>>
+
+<<set _eligible = []>>
+<<for _gId, _g range $guests>>
+    <<if _g.gender === 0 && (_g.strength ?? 0) >= 70 && !_warriors.includes(_gId)>>
+        <<run _eligible.push({id: _gId, girl: _g})>>
+    <</if>>
+<</for>>
+
+She's bent over the map when you walk in. She looks up when she hears you.
+<br /><br />
+<<octavia>>
+    <<print _count>>/5. Every one counts.
+<</octavia>>
+<br />
+
+<<if _eligible.length > 0>>
+
+<<octavia>>
+    You have someone in mind?
+<</octavia>>
+<br />
+You run through the names — the ones with the right build, the right eyes.
+<br /><br />
+
+<table id="slaves" class="npc-list">
+<<for _i = 0; _i < _eligible.length; _i++>>
+    <<set _entry = _eligible[_i]>>
+    <<capture _entry>>
+        <<set _guestRealId = $guests.findIndex(function(g) { return g.id === _entry.girl.id; })>>
+        <<set _genderClass = 'gender-' + setup.genderClass(_entry.girl)>>
+        <tr class="item">
+            <td style="min-width: 25%">
+                <span @class="_genderClass">
+                    <div class="tooltip">
+                        <<set _girlVisual = _entry.girl>>
+                        <span class="tooltiptext" style="left: -130px; background-color: transparent; opacity: 1;">
+                            <<for _skill range (_entry.girl.skills ?? [])>>
+                                <<if typeof setup.skills[_skill] !== 'undefined'>>
+                                    <div class="trait tooltip">
+                                        <<=setup.skills[_skill].title>>
+                                    </div>
+                                <</if>>
+                                <br />
+                            <</for>>
+                            <div class="say npcsay npc-say-visual">
+                                <div class="girl_info_picture">
+                                    <<if _girlVisual.portrait>>
+                                        <div class="say_custom_portrait">
+                                            <<include 'NPC visual'>>
+                                        </div>
+                                    <<else>>
+                                        <<include 'NPC visual'>>
+                                    <</if>>
+                                </div>
+                            </div>
+                            <<for _trait range (_entry.girl.traits ?? [])>>
+                                <div class="trait tooltip">
+                                    <<=setup.traits[_trait].title>>
+                                </div>
+                                <br />
+                            <</for>>
+                        </span>
+                        <<=_entry.girl.name>>
+                    </div>
+                    <<=setup.npcListInfo(_entry.girl)>>
+                </span>
+            </td>
+            <td>
+                <<npcListView _entry.girl _guestRealId 'guest'>>
+            </td>
+            <td>
+                <<link 'Send'>>
+                    <<set _isNewDay = ($characters.octavia.quests.last_warrior_day ?? -1) !== $game.day>>
+                    <<run $characters.octavia.quests.warriors.push(_entry.id)>>
+                    <<set $characters.octavia.quests.last_warrior_day = $game.day>>
+                    <<if _isNewDay>>
+                        <<goto 'Octavia - Warrior Thank You'>>
+                    <<elseif $characters.octavia.quests.warriors.length >= 5>>
+                        <<goto 'Octavia [Event] - Emberclaw Ready'>>
+                    <<else>>
+                        <<goto 'Octavia - Send Warrior'>>
+                    <</if>>
+                <</link>>
+            </td>
+        </tr>
+    <</capture>>
+<</for>>
+</table>
+
+<<else>>
+
+None of your guests right now have what she's looking for — strong enough, tested enough.
+<br /><br />
+<<octavia>>
+    Bring someone when you have them. I'll be here.
+<</octavia>>
+<br />
+
+<</if>>
+
+<<link 'Not now'>>
+    <<goto 'Octavia room'>>
+<</link>>
