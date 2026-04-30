@@ -1,9 +1,8 @@
 :: Guest view assign to {"position":"2149,98","size":"100,100"}
 Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <br /><br />
-<<if ($tmpGirl.traits ?? []).includes('feral')>>
-	<i>This person is feral and cannot be assigned to any task.</i>
-<<else>>
+<<set _isFeral = ($tmpGirl.traits ?? []).includes('feral')>>
+
 <<if $tmpGirl.relationship >= 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>
@@ -25,7 +24,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if ($tmpGirl.skills ?? []).includes('teacher') && !setup.getPersonsForLocation($guests, 'school').length && $game.location.school>>
+<<if !_isFeral && ($tmpGirl.skills ?? []).includes('teacher') && !setup.getPersonsForLocation($guests, 'school').length && $game.location.school>>
 	<div>
 	  <<link 'Assign to school'>>
 		  <<assignedTo $tmpGirl 'school'>>
@@ -53,9 +52,9 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Decreases people sickness days and automatically heals MC if bleeding)
 	</div>
-<</if>> 
+<</if>>
 
-<<if !setup.getPersonsForLocation($guests, 'shop').length && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
+<<if !_isFeral && !setup.getPersonsForLocation($guests, 'shop').length && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
 	<div>
 	  <<link 'Assign to shop'>>
 		  <<assignedTo $tmpGirl 'shop'>>
@@ -77,7 +76,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	<</if>>
 </div>
 
-<<if [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && ($tmpGirl.traits ?? []).includes('sadistic')>>
+<<if !_isFeral && [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && ($tmpGirl.traits ?? []).includes('sadistic')>>
 	<div>
 	  <<link 'Assign as mistress'>>
 		  <<assignedTo $tmpGirl 'mistress'>>
@@ -98,16 +97,17 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<set $automatization ??= {}>>
 <<set _itemcount = setup.automatization.job_tools.mc.includes('bow') ? 2 : 1>> /* save one for the MC */
 <<set _autoHunterOk = ($automatization.hunter ?? false) && setup.cabinInventory.has('bow', _itemcount)>>
-<<if ($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk) && setup.assignedToCount('hunter') < ($workersLimitHunter ?? 8)>>
+<<set _hunterEligible = _isFeral || (($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk))>>
+<<if _hunterEligible && setup.assignedToCount('hunter') < ($workersLimitHunter ?? 8)>>
 	<<link 'Assign as hunter'>>
-		<<if !setup.npcInventoryHas($tmpGirl, 'bow')>>
+		<<if !_isFeral && !setup.npcInventoryHas($tmpGirl, 'bow')>>
 			<<run setup.cabinInventory.to_npc($tmpGirl, 'bow', 1)>>
 		<</if>>
 		<<assignedTo $tmpGirl 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
   	<</link>> (Provides you with food or wolf pelts)
-<<else>>
+<<elseif !_isFeral>>
 	Assign as hunter [Need woodcraft skill and bow] (Provides you with food or wolf pelts)
 <</if>>
 
@@ -149,6 +149,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
   <</link>> (Provides you with plastic, glass, rope, etc)
 </div>
 
+<<if !_isFeral>>
 <div>
 <<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender)>>
 	<<link 'Assign to streets'>>
@@ -176,6 +177,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 		<</link>> (Earns you money with gloryholes)
 	</div>
 <</if>>
+<</if>>
 
 <<if $tmpGirl.strength >= 30>>
 	<div>
@@ -186,6 +188,4 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	  <</link>> (Decreases the chance of someone breaking in and stealing, and sometimes might catch intruders)
 	</div>
 <</if>>
-<</if>>
-
 

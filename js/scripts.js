@@ -797,7 +797,7 @@ setup.sexChance = function (person, gender = 1, beauty) {
     } else if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
 	} else if (!person[likesList[gender]]) {
-		return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
+		return Math.floor(Math.max(person.sub, person.drunk ?? 0, person.horny ?? 0) / 2);
 	} else {
 		return Math.max(appeal, person.horny, person.sub, person.drunk ?? 0);
 	}
