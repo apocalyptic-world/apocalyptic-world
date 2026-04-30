@@ -8,6 +8,8 @@
 	<</if>>
   	<<if setup.percentageChance(_ambushChance)>>
 		<<goto 'Nightclub - outside ask'>>
+	<<elseif recall($suppCode) && setup.percentageChance(20)>>
+		<<goto 'Nightclub - behind the nightclub'>>
 	<<else>>
 	  <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 		<<unset $guestId, $slaveId, $charId>>
