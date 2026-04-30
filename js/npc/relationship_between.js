@@ -170,7 +170,7 @@ setup.relationshipBetween = {
                 }
 
                 // Only male and female for now
-                if (npc1.gender !== 1 || npc2.gender !== 0) {
+                if (npc1.gender + npc2.gender !== 1) {
                     continue;
                 }
 

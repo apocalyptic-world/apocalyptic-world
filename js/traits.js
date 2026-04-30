@@ -62,7 +62,7 @@ setup.traits = {
     },
     feral: {
         title: "Feral",
-        description: "Wild and untamed. Cannot speak and cannot be assigned to any task."
+        description: "Wild and untamed. Cannot speak. Can be assigned to instinct-based tasks: guard, hunting, scavenging."
     }
 };
 

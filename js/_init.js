@@ -3,6 +3,7 @@ setup.range = function (start, end) {
       .map((element, index) => index + start);
 };
 
+console.log('init');
 window.timeBetween = function (from, to) {
     const current = new Date(variables().gameDate);
 

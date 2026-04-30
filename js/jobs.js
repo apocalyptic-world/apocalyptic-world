@@ -21,14 +21,10 @@ setup.jobs = {
             _moneyEarnedTax = 40;
         } 
 
-        _moneyEarned += Math.round(npc.sub / 25, 0);
-        _moneyEarned += Math.round(npc.beauty / 25, 0);
-
-        if (typeof npc.pussy !== 'undefined') {
-            _moneyEarned += Math.round(npc.pussy / 25, 0);
-        }
-
-        _moneyEarned += Math.round(npc.anal / 25, 0);
+        _moneyEarned += Math.round((npc.sub ?? 0) / 25);
+        _moneyEarned += Math.round((npc.beauty ?? 0) / 25);
+        _moneyEarned += Math.round((npc.pussy ?? 0) / 25);
+        _moneyEarned += Math.round((npc.anal ?? 0) / 25);
 
         if (npc.chastityBelt) {
             _moneyEarned = Math.max(1, _moneyEarned / 3);

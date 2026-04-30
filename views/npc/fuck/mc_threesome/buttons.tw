@@ -146,10 +146,10 @@
             <</if>>
 
             /* remember which type/id each slot is, then swap */
-            <<set _type1 = typeof $slaveId !== 'undefined' ? 'slave' : typeof $charId !== 'undefined' ? 'char' : 'guest'>>
-            <<set _id1   = $slaveId ?? $charId ?? $guestId>>
-            <<set _type2 = typeof $slaveId2 !== 'undefined' ? 'slave' : typeof $charId2 !== 'undefined' ? 'char' : 'guest'>>
-            <<set _id2   = $slaveId2 ?? $charId2 ?? $guestId2>>
+            <<set _type1 = typeof $slaveId !== 'undefined' ? 'slave' : typeof $guestId !== 'undefined' ? 'guest' : 'char'>>
+            <<set _id1   = $slaveId ?? $guestId ?? $charId>>
+            <<set _type2 = typeof $slaveId2 !== 'undefined' ? 'slave' : typeof $guestId2 !== 'undefined' ? 'guest' : 'char'>>
+            <<set _id2   = $slaveId2 ?? $guestId2 ?? $charId2>>
             <<unset $slaveId, $guestId, $charId, $slaveId2, $guestId2, $charId2>>
             <<if _type2 === 'slave'>><<set $slaveId = _id2>><<elseif _type2 === 'char'>><<set $charId = _id2>><<else>><<set $guestId = _id2>><</if>>
             <<if _type1 === 'slave'>><<set $slaveId2 = _id1>><<elseif _type1 === 'char'>><<set $charId2 = _id1>><<else>><<set $guestId2 = _id1>><</if>>
