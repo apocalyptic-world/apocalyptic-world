@@ -508,9 +508,6 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.nursery[saveNurseryI].skills.push('scavenger');
                 save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
                 saveNurseryTraitI--;
-            } else {
-                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.splice(saveNurseryTraitI, 1);
-                saveNurseryTraitI--;
             }
         }
 

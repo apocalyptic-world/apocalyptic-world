@@ -16,7 +16,11 @@ A sharp scream cuts through the trees — one of your workers. You grab whatever
 You find <<=setup.displayName(_victim)>> on the ground, wolves circling. One has <<=_pronWhos>> arm in its teeth.
 <br /><br />
 
+<div id="wolf-fight">
 <<linkreplace 'Fight the wolves'>>
+	<<run $('.wolf-exit').hide()>>
+	<<run $('#wolf-shot').hide()>>
+	<<run $('#wolf-rocks').hide()>>
 	<<set _fightChance = 40>>
 	<<set _fightChance += ($player.strength >= 30 ? 30 : 0)>>
 	<<set _fightChance += ($backpack.has('knife') ? 20 : 0)>>
@@ -30,44 +34,54 @@ You find <<=setup.displayName(_victim)>> on the ground, wolves circling. One has
 		}>>
 		<<=setup.displayName(_victim)>> is bitten but alive. You help <<=_pronWho>> back to the settlement.
 		<br /><br />
-		<<link 'Head back'>>
+		<span class="wolf-exit"><<link 'Head back'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>
-		<</link>>
+		<</link>></span>
 	<<else>>
 		You rush in but the wolves turn on you. You take a bad bite to the arm before backing off. <<=setup.displayName(_victim)>> is dragged off screaming.
 		<br /><br />
 		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(10, 25))>>
 		<<guestRemove _victimIdx>>
-		<<link 'Retreat'>>
+		<span class="wolf-exit"><<link 'Retreat'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>
-		<</link>>
+		<</link>></span>
 	<</if>>
 <</linkreplace>>
+</div>
 
 <<if ($backpack.has('revolver') && $backpack.has('bullet_revolver')) || ($backpack.has('shotgun') && $backpack.has('shotgun_shell'))>>
-	<<link 'Fire a warning shot'>>
-		<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
-			<<drop $backpack 'bullet_revolver' 1>>
-		<<else>>
-			<<drop $backpack 'shotgun_shell' 1>>
-		<</if>>
-		<<set _victim.sick = {
-			days: randomInteger(3, 7),
-			desc: 'Wolf bites',
-			id: 'animal_wounds'
-		}>>
-		The gunshot scatters the pack. <<=setup.displayName(_victim)>> is bitten but alive. You carry <<=_pronWho>> back to the settlement to recover.
-		<br /><br />
-		<<link 'Head back'>>
-			<<addmins 30>>
-			<<goto 'Wood cabin'>>
-		<</link>>
-	<</link>>
+<div id="wolf-shot">
+<<linkreplace 'Fire a warning shot'>>
+	<<run $('.wolf-exit').hide()>>
+	<<run $('#wolf-fight').hide()>>
+	<<run $('#wolf-rocks').hide()>>
+	<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+		<<drop $backpack 'bullet_revolver' 1>>
+	<<else>>
+		<<drop $backpack 'shotgun_shell' 1>>
+	<</if>>
+	<<set _victim.sick = {
+		days: randomInteger(3, 7),
+		desc: 'Wolf bites',
+		id: 'animal_wounds'
+	}>>
+	The gunshot scatters the pack. <<=setup.displayName(_victim)>> is bitten but alive. You carry <<=_pronWho>> back to the settlement to recover.
+	<br /><br />
+	<span class="wolf-exit"><<link 'Head back'>>
+		<<addmins 30>>
+		<<goto 'Wood cabin'>>
+	<</link>></span>
+<</linkreplace>>
+</div>
 <</if>>
 
+<div id="wolf-rocks">
 <<linkreplace 'Shout and throw rocks'>>
+	<<run $('.wolf-exit').hide()>>
+	<<run $('#wolf-fight').hide()>>
+	<<run $('#wolf-shot').hide()>>
 	<<if setup.percentageChance(40)>>
 		<<set _victim.sick = {
 			days: randomInteger(5, 12),
@@ -76,18 +90,19 @@ You find <<=setup.displayName(_victim)>> on the ground, wolves circling. One has
 		}>>
 		The wolves scatter. <<=setup.displayName(_victim)>> is badly bitten but breathing. You help <<=_pronWho>> back.
 		<br /><br />
-		<<link 'Head back'>>
+		<span class="wolf-exit"><<link 'Head back'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>
-		<</link>>
+		<</link>></span>
 	<<else>>
 		The wolves barely react. One lunges at your arm — you manage to beat it off but take a bad bite in the process. <<=setup.displayName(_victim)>> is dragged off screaming.
 		<br /><br />
 		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(15, 30))>>
 		<<guestRemove _victimIdx>>
-		<<link 'Retreat'>>
+		<span class="wolf-exit"><<link 'Retreat'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>
-		<</link>>
+		<</link>></span>
 	<</if>>
 <</linkreplace>>
+</div>
