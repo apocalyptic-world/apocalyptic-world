@@ -804,15 +804,15 @@ setup.npc = {
 	getCharDialog: function(npc, charKey) {
 		const db = {
 			blair: [
-				"You keep finding excuses to talk to me. I'm not complaining.",
+				"You keep finding excuses to talk to me, %mcName%. I'm not complaining.",
 				"Don't give me that look unless you mean it. Actually... go ahead, give me that look.",
-				"I made dinner. You should eat, then maybe I'll let you work off the calories.",
+				"I made dinner, %mcName%. You should eat, then maybe I'll let you work off the calories.",
 				"This place wouldn't survive a week without me and you know it.",
 				"I catch you staring more than you think. It's cute.",
-				"Careful. Spend enough time around me and you might start to enjoy it.",
-				"I've been stuck inside all day. Someone should make it worth my while.",
-				"You're predictable in the best way. I always know exactly what you want.",
-				"Go on, say something charming. I'll pretend to be surprised.",
+				"Careful, %mcName%. Spend enough time around me and you might start to enjoy it.",
+				"%mcName%, I've been stuck inside all day. Someone should make it worth my while.",
+				"You're predictable in the best way, %mcName%. I always know exactly what you want.",
+				"Go on, %mcName%, say something charming. I'll pretend to be surprised.",
 				"I stopped by dad's farm yesterday. The fields are looking better than they have in years. I think those new seeds are actually working.",
 				"Dad asked about you when I was at the farm. I told him you were keeping busy. He seemed satisfied with that.",
 				"There's something grounding about going back to the farm. All that open land. Then I come back here and remember what we've built.",
@@ -823,11 +823,11 @@ setup.npc = {
 			elsa: [
 				"I tried fixing that latch on the shed door. I think I made it worse.",
 				"I still wake up reaching for a weapon sometimes. Old habits.",
-				"The generator was making a noise earlier. I wasn't sure if I should touch it.",
-				"Thank you for letting me stay. I know I haven't earned it yet.",
+				"%mcName%, the generator was making a noise earlier. I wasn't sure if I should touch it.",
+				"Thank you for letting me stay, %mcName%. I know I haven't earned it yet.",
 				"Some days the quiet feels safe. Other days it just feels like something's about to break it.",
-				"I keep meaning to ask if there's anything more useful I could be doing around here.",
-				"I don't remember the last time I felt this settled. Is that strange?",
+				"%mcName%, I keep meaning to ask if there's anything more useful I could be doing around here.",
+				"I don't remember the last time I felt this settled, %mcName%. Is that strange?",
 				"I was never good with people, but the machines here make sense to me.",
 				"Before everything fell apart, I thought survival would feel different. More dramatic, maybe.",
 				"I miss the cabin sometimes. The stillness of it. But stillness and safety aren't the same thing, and I know that now.",
@@ -838,66 +838,66 @@ setup.npc = {
 			],
 			eve_always: [
 				"There's a passage about the body being a temple. I think I finally understand it, just not the way I was meant to.",
-				"I was taught that wanting was a kind of weakness. I'm less convinced of that now.",
+				"I was taught that wanting was a kind of weakness. I'm less convinced of that now, %mcName%.",
 				"The settlement protects us. I try not to think too hard about the cost.",
-				"Survival means compromise. I learned that before the world ended."
+				"Survival means compromise, %mcName%. I learned that before the world ended."
 			],
 			eve_rodger_alive: [
 				"Rodger prays for all of us. Sometimes I wonder who prays for Rodger.",
-				"I choose my words carefully here. Not because I'm afraid, because it matters.",
+				"I choose my words carefully here, %mcName%. Not because I'm afraid, because it matters.",
 				"There are things I want that I've stopped letting myself name.",
 				"I'm fine. That's what I say, and eventually it becomes true.",
-				"Don't look at me like you know something. That kind of thing gets people hurt.",
+				"Don't look at me like that, %mcName%. That kind of thing gets people hurt.",
 				"I've built a life here. It's just not entirely the one I'd have chosen.",
 				"Faith is useful. It keeps people calm. I understand why Rodger values it."
 			],
 			eve_rodger_dead: [
 				"I spent years praying to feel less. I'm starting to think that was the wrong prayer.",
-				"I still believe in something. I'm just no longer certain it asks me to be ashamed.",
-				"I used to plan every word before I spoke it. With you, I forget to.",
+				"I still believe in something, %mcName%. I'm just no longer certain it asks me to be ashamed.",
+				"I used to plan every word before I spoke it. With you %mcName%, I forget to.",
 				"I woke up this morning and realized I hadn't braced myself for the day. That's new.",
 				"I was careful for so long that I forgot what it felt like to want something without a plan.",
 				"He gave me safety. You give me something I don't have a name for yet. I think I prefer the nameless thing.",
-				"I'm not the same person who made all those careful choices. I'm not sorry about that.",
-				"I keep waiting to feel guilty. Mostly I just feel awake.",
+				"I'm not the same person who made all those careful choices. I'm not sorry about that, %mcName%.",
+				"I keep waiting to feel guilty, %mcName%. Mostly I just feel awake.",
 				"There are things I would have called sin that feel like the most honest parts of me now.",
 				"I didn't expect to find myself at the pulpit. But the flock needed someone, and I was there.",
 				"Some mornings I stand in that church and feel the weight of everyone who comes through the door. It's a heavier kind of faith than what I was taught.",
 				"They come to me with grief and hunger and fear, and I give them what I can. I'm not sure it's ever enough.",
 				"The church is mine now in ways it never was before. I'm still learning what that means.",
-				"I lead the prayers, but I'm still working through my own. Maybe that's what makes it honest."
+				"I lead the prayers, but I'm still working through my own. Maybe that's what makes it honest, %mcName%."
 			],
 			isabel_always: [
 				"I used to collect things I found beautiful. I've had to be more selective lately.",
-				"There's a difference between being kept and being caged. I've lived in both.",
-				"I'm more than what's been done to me. I just have to keep reminding myself of that.",
+				"There's a difference between being kept and being caged, %mcName%. I've lived in both.",
+				"I'm more than what's been done to me, %mcName%. I just have to keep reminding myself of that.",
 				"Even here, even like this, there's still beauty worth looking for."
 			],
 			isabel_dom_alive: [
 				"Dom thinks owning me is the same as knowing me. He's wrong on both counts.",
-				"Every day is a negotiation. I've gotten good at knowing what to offer.",
-				"I think about what I'd do with real freedom sometimes. It's a dangerous habit.",
-				"You look at me differently than he does. I notice everything."
+				"Every day is a negotiation, %mcName%. I've gotten good at knowing what to offer.",
+				"I think about what I'd do with real freedom sometimes, %mcName%. It's a dangerous habit.",
+				"You look at me differently than he does, %mcName%. I notice everything."
 			],
 			isabel_dom_dead: [
-				"I know what it looks like when someone holds power through fear. I'm choosing a different way.",
+				"%mcName%, I know what it looks like when someone holds power through fear. I'm choosing a different way.",
 				"I've been thinking about how to run this city, not the way he did, but the way it deserves.",
 				"For the first time, I'm making decisions for people instead of having them made for me.",
 				"I used to survive by understanding what people in power wanted. Now I'm learning what people without it need.",
-				"Everything he built here, I'm rebuilding. Not the same, better.",
-				"The city is mine now, in a way that doesn't make my skin crawl. That still surprises me."
+				"Everything he built here, I'm rebuilding. Not the same, %mcName%, better.",
+				"The city is mine now, %mcName%, in a way that doesn't make my skin crawl. That still surprises me."
 			],
 			laura: [
 				"The last experiment went better than expected. Mostly.",
 				"Pain is just information. The patient always forgets that in the moment.",
-				"I've been perfecting a compound that should accelerate tissue repair. The side effects are negotiable.",
+				"I've been perfecting a compound that should accelerate tissue repair. The side effects are negotiable, %mcName%.",
 				"Most people flinch. I take that as a professional compliment.",
 				"The body is just a machine, a beautiful, poorly designed machine.",
-				"Come back when you have a medical question. Or a willing volunteer.",
-				"I've been awake for thirty-six hours. Everything is going fine.",
+				"Come back when you have a medical question, %mcName%. Or a willing volunteer.",
+				"%mcName%, I've been awake for thirty-six hours. Everything is going fine.",
 				"Proper surgical tools would be ideal. But you work with what you have.",
 				"People call it unethical. I call it progress without bureaucracy.",
-				"So much of what I've accomplished here wouldn't exist without your resources. I don't forget that.",
+				"So much of what I've accomplished here wouldn't exist without your resources, %mcName%. I don't forget that.",
 				"My work here has opened lines of research I'd completely written off. I'm glad we found each other.",
 				"In the city I'd be pulling teeth with a pair of pliers and calling it medicine. What we have here is different. You made that possible.",
 				"I've had breakthroughs in the last few months that I spent years chasing before. I couldn't have done that if you hadn't provided all of this."
@@ -936,12 +936,12 @@ setup.npc = {
 			octavia: [
 				"My people survived three winters without walls. We know how to endure.",
 				"I read the tracks before I step where they lead. That's not caution, that's sense.",
-				"The Blackthorn moves without sound. Worth remembering.",
-				"I've seen what happens to those who underestimate the land. It's not fast.",
+				"The Blackthorn moves without sound. Worth remembering, %mcName%.",
+				"I've seen what happens to those who underestimate the land, %mcName%. It's not fast.",
 				"Trust must be earned on both sides of the door.",
-				"I don't speak unless I have something worth saying. You'd do well to listen.",
+				"%mcName%, I don't speak unless I have something worth saying. You'd do well to listen.",
 				"Out here, silence is a skill. Most people from settlements never learn it.",
-				"Every scar on this land tells a story. I've been reading them for years.",
+				"Every scar on this land tells a story, %mcName%. I've been reading them for years.",
 				"Within these walls is the last of my tribe. I say that plainly, because softening it doesn't change what it means.",
 				"My tribe's songs die with me unless I teach them to someone. Some nights that weighs more than I can carry.",
 				"I have thought about what it would mean to begin again, a new generation carrying the old blood. With you, that does not feel entirely impossible.",
@@ -1010,7 +1010,8 @@ setup.npc = {
 		if (!lines || lines.length === 0) {
 			return npc.name ? "Hello, I'm " + npc.name + "." : "...";
 		}
-		return lines[Math.floor(Math.random() * lines.length)];
+		return lines[Math.floor(Math.random() * lines.length)]
+			.replace(/%mcName%/g, setup.npc.mcName(npc, false));
 	},
 
 	/* Find any NPC across all collections by their id */

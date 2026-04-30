@@ -13,6 +13,14 @@
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set _assignedToStreets = true>>
+		<<if (setup.npcInventoryHas($guests[_streetGuestI], 'alcohol') && !($guests[_streetGuestI].pregnancy >= 7)  && $guests[_streetGuestI].drunk <= ($guests[_streetGuestI].happy >= 50 ? 55 : ($guests[_streetGuestI].happy >= 0 ? 60 : 70)) && setup.percentageChance($guests[_streetGuestI].happy >= 50 ? 5 : ($guests[_streetGuestI].happy >= 0 ? 15 : 45)))>>
+			<<set $guests[_streetGuestI].drunk =  Math.min(99, $guests[_streetGuestI].drunk + randomInteger(20, 55))>>
+			<<set $guests[_streetGuestI].happy =  Math.min(100, $guests[_streetGuestI].happy + ($guests[_streetGuestI].drunk <= 50 ? 1 : ($guests[_streetGuestI].drunk <= 75 ? 2 : ($guests[_streetGuestI].drunk < 95 ? 0 : -5))))>>
+
+			<<if setup.percentageChance(25)>>
+		    	<<run setup.npcInventoryRemove($guests[_streetGuestI], 'alcohol')>>
+			<</if>>
+		<</if>>
 		<tr class="item">
 			<td style="width: 25%">
 				<span @class="''+_genderClass+''">
