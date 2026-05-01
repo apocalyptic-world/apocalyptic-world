@@ -11,30 +11,170 @@ By the looks of it, the filthy girl is either eating something or searching for 
 	<br /><br />
 	You get closer and she suddenly turns her head towards you...
 	<br />
-	<strong>WHAT THE FUCK?!</strong><br /> 
+	<strong>WHAT THE FUCK?!</strong><br />
 	Then you see her face. She looks human, but only in her lower body. Her face has been deformed, lacking any eyes and with half of her nose missing. She reminds you of the feral woman on Vincent's farm, only in a far, far worse state.
 	<br /><br />
-	
+
+	<div id="nf10_look_wrap">
 	<<linkreplace 'Take a closer look at her face'>>
+		<<run $('#nf10_mercy_wrap').hide()>>
 		<center>
   			[img[setup.ImagePath+'places/explore/no_face_2.webp']]
 	  	</center>
 		<br /><br />
-		Against your better judgement you decide to take a closer look. As you do she pounces on you,  like she can smell where your dick is.  She successfully opens your pants and sucks your dick inside her mouth.
+		Against your better judgement you decide to take a closer look. As you do she pounces on you, like she can smell where your dick is. She successfully opens your pants and sucks your dick inside her mouth.
 		<br /><br />
-		
+
+		<div id="nf10_fuck_wrap">
 		<<linkreplace 'Fuck her'>>
 			<center>
 				[img[setup.ImagePath+'places/explore/no_face_3.webp']]
 			</center>
 			<br /><br />
-			You throw her down on her back holding her as you shove your dick inside her dirty pussy.
+			You throw her down on her back and something primal takes over. You grip her hips and drive into her hard, and she responds with everything she has — writhing beneath you, back arching off the ground, her cries raw and animal and unmistakable. She can't form words, but her body says everything. She claws at the ground, wraps her legs around you, and cries out again and again as you fuck her, pleasure wracking her without language or pretense.
+			<br /><br />
+
+			<<newgirl>>
+			<<set
+				$tmpGirl.traits = [...new Set(($tmpGirl.traits ?? []).concat(['feral', 'crippled']))],
+				$tmpGirl.beauty = random(10, 41),
+				$tmpGirl.baseBeauty = $tmpGirl.beauty,
+				$tmpGirl.washDays = 0,
+				$tmpGirl.washBeauty = 0,
+				$tmpGirl.skills = ($tmpGirl.skills ?? []).filter(s => ['woodcraft', 'scavenger', 'fighter'].includes(s)),
+				$tmpGirl.corruption = Math.min(Math.max($tmpGirl.corruption + 10, 41), 100),
+				$tmpGirl.horny = Math.min(Math.max($tmpGirl.horny + 10, 41), 100),
+				$tmpGirl.likesGuys = true,
+				$tmpGirl.virgin = false,
+				$tmpGirl.portrait = 'https://apocalyptic-world.com/images/places/explore/no_face_1.webp',
+				$tmpGirl.location = 'forest'
+			>>
+
+			<br />
+            <<include 'NPC info'>>
+
+			When it's over, you pull back. She doesn't run. She sits up slowly, tilting what's left of her face in your direction, and something in her posture has changed — quieter, less wound-up. Her breathing settles. She watches you with a stillness that wasn't there before. You get the sense that if you start walking, she might just follow.
+			<br /><br />
+
+			<div id="nf10_opts">
+				<div id="nf10_opt_sex">
+					<<link 'Fuck her outside again'>>
+						<<run $('#nf10_opts').hide()>>
+						<<set $tmpGirlViewBack = 'Random event - no face #10 afterSex'>>
+						<<set $noFacePreSub = $tmpGirl.sub>>
+						<<fuck>>
+					<</link>>
+				</div>
+				<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20>>
+				<div id="nf10_opt_lead">
+					<<linkreplace 'Lead her back home (-1 food)'>>
+						<<run $('#nf10_opt_sex, #nf10_opt_cap, #nf10_opt_leave').hide()>>
+						<<drop $backpack 'food' 1>>
+						<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 20, 100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+						<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 10, 100)>>
+						You pull out the food and hold it toward her, moving slow and deliberate. She sniffs at it, then takes it from your hand and eats. When she's done, you turn and walk. She hesitates — then falls in behind you.
+						<br /><br />
+						<<run $guests.push($tmpGirl)>>
+						<strong>She moves in as a guest.</strong>
+						<br /><br />
+						<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+					<</linkreplace>>
+				</div>
+				<</if>>
+				<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $backpack.has('rope') && $player.strength > 20>>
+				<div id="nf10_opt_cap">
+					<<linkreplace 'Capture her as a pet (-1 rope)'>>
+						<<run $('#nf10_opt_sex, #nf10_opt_lead, #nf10_opt_leave').hide()>>
+						<<drop $backpack 'rope' 1>>
+						<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
+						<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 10, -100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
+						<<statsAdd 'people_captured'>>
+						She doesn't understand what's happening until the rope loops around her wrists. Then she fights — clawing, twisting — but you muscle her down, cinch the binding tight, and haul her to her feet. The remaining length serves as a lead. She pulls against it twice before settling into a dull trudge behind you.
+						<br /><br />
+						<<run $slaves.push($tmpGirl)>>
+						<strong>She's been captured as a slave.</strong>
+						<br /><br />
+						<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+					<</linkreplace>>
+				</div>
+				<</if>>
+			</div>
+		<</linkreplace>>
+		</div>
+
+	<</linkreplace>>
+	</div>
+
+	<<if $backpack.has('revolver') && $backpack.has('bullet_revolver')>>
+	<div id="nf10_mercy_wrap">
+		<<linkreplace 'Put her out of her misery'>>
+			<<run $('#nf10_look_wrap').hide()>>
+			<<drop $backpack 'bullet_revolver' 1>>
+			<<statsAdd 'people_killed'>>
+			<br />
+			You stand over the deformed creature for a moment with a look bordering on pity. The wasteland doesn't ask how you feel about this — it just asks what you're going to do next. You draw your revolver, aim between the eyes, and pull the trigger. One shot. Clean. She doesn't suffer.
+			<br /><br />
+			You holster the weapon and keep walking.
 			<br /><br />
 		<</linkreplace>>
-	<</linkreplace>>
+	</div>
+	<</if>>
+
 <</linkreplace>>
+<div id="nf10_opt_leave">
 <<link 'Leave'>>
 	<<goto 'Outside'>>
 <</link>>
+</div>
 
 
+:: Random event - no face #10 afterSex
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+<<if $tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub)>>
+She's pulled away from you, crouching low, her body coiled tight. A low hiss escapes her — not quite a warning, not quite fear, somewhere between the two. She's watching you from a distance now, weight forward, like she's deciding whether to bolt.
+<<else>>
+She comes down slowly, breathing ragged. You give her a moment. When you look back at her, the same strange calm has returned — head tilted toward you, body loose, waiting. It looks like she's still thinking about following you.
+<</if>>
+<br /><br />
+
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
+<div id="nf10as_opt_lead">
+	<<linkreplace 'Lead her back home (-1 food)'>>
+		<<run $('#nf10as_opt_cap, #nf10as_opt_leave').hide()>>
+		<<drop $backpack 'food' 1>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 20, 100)>>
+		<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 10, 100)>>
+		You pull out the food and hold it toward her, moving slow and deliberate. She sniffs at it, then takes it from your hand and eats. When she's done, you turn and walk. She hesitates — then falls in behind you.
+		<br /><br />
+		<<run $guests.push($tmpGirl)>>
+		<strong>She moves in as a guest.</strong>
+		<br /><br />
+		<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+<</if>>
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $backpack.has('rope') && $player.strength > 20>>
+<div id="nf10as_opt_cap">
+	<<linkreplace 'Capture her as a pet (-1 rope)'>>
+		<<run $('#nf10as_opt_lead, #nf10as_opt_leave').hide()>>
+		<<drop $backpack 'rope' 1>>
+		<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
+		<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 10, -100)>>
+		<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
+		<<statsAdd 'people_captured'>>
+		She doesn't understand what's happening until the rope loops around her wrists. Then she fights — clawing, twisting — but you muscle her down, cinch the binding tight, and haul her to her feet. The remaining length serves as a lead. She pulls against it twice before settling into a dull trudge behind you.
+		<br /><br />
+		<<run $slaves.push($tmpGirl)>>
+		<strong>She's been captured as a slave.</strong>
+		<br /><br />
+		<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+<</if>>
+<div id="nf10as_opt_leave">
+	<<link 'Leave'>><<goto 'Outside'>><</link>>
+</div>
