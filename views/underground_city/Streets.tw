@@ -20,14 +20,7 @@ You see some hookers standing against the wall..
 		<</if>>
 		<<set _assignedToStreets = true>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
-		<<if (setup.npcInventoryHas($slaves[_i], 'alcohol') && !($slaves[_i].pregnancy >= 7)  && $slaves[_i].drunk <= ($slaves[_i].happy >= 50 ? 55 : ($slaves[_i].happy >= 0 ? 60 : 70)) && setup.percentageChance($slaves[_i].happy >= 50 ? 5 : ($slaves[_i].happy >= 0 ? 15 : 45)))>>
-			<<set $slaves[_i].drunk =  Math.min(99, $slaves[_i].drunk + randomInteger(20, 55))>>
-			<<set $slaves[_i].happy =  Math.min(100, $slaves[_i].happy + ($slaves[_i].drunk <= 50 ? 1 : ($slaves[_i].drunk <= 75 ? 2 : ($slaves[_i].drunk < 95 ? 0 : -5))))>>
-
-			<<if setup.percentageChance(50)>>
-			    <<run setup.npcInventoryRemove($slaves[_i], 'alcohol')>>
-			<</if>>
-		<</if>>
+		<<run setup.npcDrink($slaves[_i], 50)>>
 		<tr class="item">
 			<td style="min-width: 25%">
 				<span @class="''+_genderClass+''">
@@ -63,14 +56,7 @@ You see some hookers standing against the wall..
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>
 		<<set _assignedToStreets = true>>
-		<<if (setup.npcInventoryHas($guests[_streetGuestI], 'alcohol') && !($guests[_streetGuestI].pregnancy >= 7)  && $guests[_streetGuestI].drunk <= ($guests[_streetGuestI].happy >= 50 ? 55 : ($guests[_streetGuestI].happy >= 0 ? 60 : 70)) && setup.percentageChance($guests[_streetGuestI].happy >= 50 ? 5 : ($guests[_streetGuestI].happy >= 0 ? 15 : 45)))>>
-			<<set $guests[_streetGuestI].drunk =  Math.min(99, $guests[_streetGuestI].drunk + randomInteger(20, 55))>>
-			<<set $guests[_streetGuestI].happy =  Math.min(100, $guests[_streetGuestI].happy + ($guests[_streetGuestI].drunk <= 50 ? 1 : ($guests[_streetGuestI].drunk <= 75 ? 2 : ($guests[_streetGuestI].drunk < 95 ? 0 : -5))))>>
-
-			<<if setup.percentageChance(50)>>
-		    	<<run setup.npcInventoryRemove($guests[_streetGuestI], 'alcohol')>>
-			<</if>>
-		<</if>>
+		<<run setup.npcDrink($guests[_streetGuestI], 50)>>
 		<tr class="item">
 			<td style="width: 300px">
 				<span @class="''+_genderClass+''">

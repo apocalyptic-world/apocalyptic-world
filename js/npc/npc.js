@@ -854,7 +854,7 @@ setup.npc = {
 			eve_rodger_dead: [
 				"I spent years praying to feel less. I'm starting to think that was the wrong prayer.",
 				"I still believe in something, %mcName%. I'm just no longer certain it asks me to be ashamed.",
-				"I used to plan every word before I spoke it. With you %mcName%, I forget to.",
+				"I used to plan every word before I spoke it. With you, %mcName%, I forget to.",
 				"I woke up this morning and realized I hadn't braced myself for the day. That's new.",
 				"I was careful for so long that I forgot what it felt like to want something without a plan.",
 				"He gave me safety. You give me something I don't have a name for yet. I think I prefer the nameless thing.",
