@@ -79,10 +79,11 @@ You run through the names — the ones with the right build, the right eyes.
                     <<set _isNewDay = ($characters.octavia.quests.last_warrior_day ?? -1) !== $game.day>>
                     <<run $characters.octavia.quests.warriors.push(_entry.id)>>
                     <<set $characters.octavia.quests.last_warrior_day = $game.day>>
+                    <<if $characters.octavia.quests.warriors.length >= 5 && !$characters.octavia.quests.warriors_done_day>>
+                        <<set $characters.octavia.quests.warriors_done_day = $game.day>>
+                    <</if>>
                     <<if _isNewDay>>
                         <<goto 'Octavia - Warrior Thank You'>>
-                    <<elseif $characters.octavia.quests.warriors.length >= 5>>
-                        <<goto 'Octavia [Event] - Emberclaw Ready'>>
                     <<else>>
                         <<goto 'Octavia - Send Warrior'>>
                     <</if>>
