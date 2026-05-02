@@ -46,9 +46,16 @@ By the looks of it, the filthy girl is either eating something or searching for 
 				$tmpGirl.horny = Math.min(Math.max($tmpGirl.horny + 10, 41), 100),
 				$tmpGirl.likesGuys = true,
 				$tmpGirl.virgin = false,
-				$tmpGirl.portrait = 'https://apocalyptic-world.com/images/places/explore/no_face_1.webp',
+				$tmpGirl.portrait = setup.ImagePath+'places/explore/no_face_1.webp',
 				$tmpGirl.location = 'forest'
 			>>
+
+			<<if setup.pregnancyChance($tmpGirl)>>
+				<<set $tmpGirl.pregnancy_father = 'mc'>>
+				<<set $tmpGirl.pregnancy = 0>>
+				<<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+				<<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+			<</if>>
 
 			<br />
             <<include 'NPC info'>>
@@ -133,14 +140,14 @@ By the looks of it, the filthy girl is either eating something or searching for 
 :: Random event - no face #10 afterSex
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
-<<if $tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub)>>
+<<if $tmpGirl.sub < ($noFacePreSub ?? $tmpGirl.sub)>>
 She's pulled away from you, crouching low, her body coiled tight. A low hiss escapes her — not quite a warning, not quite fear, somewhere between the two. She's watching you from a distance now, weight forward, like she's deciding whether to bolt.
 <<else>>
 She comes down slowly, breathing ragged. You give her a moment. When you look back at her, the same strange calm has returned — head tilted toward you, body loose, waiting. It looks like she's still thinking about following you.
 <</if>>
 <br /><br />
 
-<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub < ($noFacePreSub ?? $tmpGirl.sub))>>
 <div id="nf10as_opt_lead">
 	<<linkreplace 'Lead her back home (-1 food)'>>
 		<<run $('#nf10as_opt_cap, #nf10as_opt_leave').hide()>>

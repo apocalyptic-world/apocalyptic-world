@@ -30,3 +30,17 @@ setup.npcInventoryList = function (npc) {
 
     return items;
 };
+
+setup.npcDrink = function (npc, consumeChance = 50) {
+    if (!setup.npcInventoryHas(npc, 'alcohol')) return;
+    if (npc.pregnancy >= 7) return;
+    const drunkCap = npc.happy >= 50 ? 55 : npc.happy >= 0 ? 60 : 70;
+    if (npc.drunk > drunkCap) return;
+    const drinkChance = npc.happy >= 50 ? 5 : npc.happy >= 0 ? 15 : 45;
+    if (!setup.percentageChance(drinkChance)) return;
+    npc.drunk = Math.min(99, npc.drunk + Math.floor(Math.random() * 36) + 20);
+    npc.happy = Math.min(100, npc.happy + (npc.drunk <= 50 ? 1 : npc.drunk <= 75 ? 2 : npc.drunk < 95 ? 0 : -5));
+    if (setup.percentageChance(consumeChance)) {
+        setup.npcInventoryRemove(npc, 'alcohol');
+    }
+};
