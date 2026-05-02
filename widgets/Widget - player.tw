@@ -470,6 +470,19 @@
 			<<goto 'Pregnancy street client'>>
 		<<elseif $scavengingDidntReturn !== null>>
 			<<goto 'Scavenging - didnt came home'>>
+		<<elseif (setup.getPersonsForLocation($guests, 'kitchen').length || setup.getPersonsForLocation($slaves, 'kitchen').length) && setup.percentageChance(20)>>
+			<<set _kitchenPersons = setup.getPersonsForLocation($guests, 'kitchen')>>
+			<<set _kitchenSlaves = setup.getPersonsForLocation($slaves, 'kitchen')>>
+			<<if _kitchenPersons.length>>
+				<<set $tmpEvent = {id: _kitchenPersons[0], isSlave: false}>>
+				<<set _kitchenNpc = $guests[_kitchenPersons[0]]>>
+			<<else>>
+				<<set $tmpEvent = {id: _kitchenSlaves[0], isSlave: true}>>
+				<<set _kitchenNpc = $slaves[_kitchenSlaves[0]]>>
+			<</if>>
+			<<if (_kitchenNpc.likesGuys ?? true) && (_kitchenNpc.horny ?? 0) >= 30>>
+				<<goto 'Bedroom - breakfast in bed'>>
+			<</if>>
 		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
 			<<goto 'Blair - morning surprise'>>
 		<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
