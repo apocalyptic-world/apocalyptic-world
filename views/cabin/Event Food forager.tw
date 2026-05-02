@@ -1,34 +1,33 @@
 :: Event: Food forager {"position":"679,1083","size":"100,100"}
 <h1 class="ptitle"><<cabinName>></h1>
 <br /><br />
+<<set _kidNpc = {gender: either(0, 1)}>>
+<<set _mister = _kidNpc.gender === 0 ? 'miss' : 'mister'>>
 <center>
-	[img[setup.ImagePath+'places/cabin/kid_stealing_food.jpg']]
+	<<image 'places/cabin/kid_stealing_food.jpg'>>
 </center>
 <br /><br />
-You hear noise coming from a place where you've stored some food, and decide to cautiously investigate its source. The door to the room is ajar and the sounds keep getting louder and louder as you approach - something's definitely here. To your surprise, as you carefully take a peak in between the door's gap, you see a small child in front of you. He immediately spots you peering through the doorway, a fearful look in his eyes.
+You hear noise coming from a place where you've stored some food, and decide to cautiously investigate its source. The door to the room is ajar and the sounds keep getting louder and louder as you approach - something's definitely here. To your surprise, as you carefully take a peak in between the door's gap, you see a small child in front of you. <<=setup.pronounceWhat(_kidNpc, true)>> immediately spots you peering through the doorway, a fearful look in <<=setup.pronounceWhos(_kidNpc)>> eyes.
 Abandoning stealth and swinging open the door, you see that they're holding a few pieces of food in their gaunt hands.
 <br /><br />
 
-<<set _foodOptions = [$storage.count('food'), $backpack.count('food'), 5]>>
-<<set _foodGive = Math.min.apply(null, _foodOptions.filter(Boolean))>>
-<<if _foodGive && ($storage.count('food') || $backpack.count('food'))>>
+<<set _foodGive = Math.min(setup.cabinInventory.count('food'), 5)>>
+<<set _linkTell = 'Tell ' + setup.pronounceWho(_kidNpc) + ' to take as much as ' + setup.pronounceWhat(_kidNpc) + ' likes'>>
+<<set _linkThrow = 'Throw ' + setup.pronounceWho(_kidNpc) + ' out.'>>
+<<if _foodGive>>
 	<div id="option_food">
-		<<linkreplace 'Tell him to take as much as he likes.'>>
+		<<linkreplace _linkTell>>
 			<<run $('#option1_desc, #option2, #option_invite').hide()>>
-			<<if $storage.count('food') >= _foodGive>>
-				<<drop $storage 'food' _foodGive>>
-			<<else>>
-				<<drop $backpack 'food' _foodGive>>
-			<</if>>
+			<<run setup.cabinInventory.drop('food', _foodGive)>>
 			<strong>You've lost <<=_foodGive>> food.</strong>
 			<br /><br />
-			A wide smile bursts onto the child's face as he exclaims, <strong>"Thank you so much mister!"</strong> He takes some more food, before quickly darting out of the building and disappearing into the nearby forest.
+			A wide smile bursts onto the child's face as <<=setup.pronounceWhat(_kidNpc)>> exclaims, <strong>"Thank you so much <<=_mister>>!"</strong> <<=setup.pronounceWhat(_kidNpc, true)>> takes some more food, before quickly darting out of the building and disappearing into the nearby forest.
 			<br /><br />
 			<<link 'Leave'>>
 				<<set $player.goodwill++>>
 				<<goto 'Wood cabin'>>
 			<</link>>
-			
+
 		<</linkreplace>>
 		<div id="option1_desc">
 			<<linkdesc>>
@@ -41,11 +40,15 @@ Abandoning stealth and swinging open the door, you see that they're holding a fe
 	<div id="option_invite">
 		<<linkreplace 'Invite to live in your settlement'>>
 			<<run $('#option2, #option_food').hide()>>
-			<<newguy>>
+			<<if _kidNpc.gender === 0>>
+				<<newgirl>>
+			<<else>>
+				<<newguy>>
+			<</if>>
 			<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(7, 13))>>
 			<<set $tmpGuy.relationship = randomInteger(40, 70)>>
 			<<run $nursery.push($tmpGuy)>>
-			A wide smile bursts onto the child's face as he exclaims, <strong>"Thank you so much mister! I would like that!"</strong>. He puts down the food he was trying to steal, and you show him a place where he can sleep.
+			A wide smile bursts onto the child's face as <<=setup.pronounceWhat(_kidNpc)>> exclaims, <strong>"Thank you so much <<=_mister>>! I would like that!"</strong>. <<=setup.pronounceWhat(_kidNpc, true)>> puts down the food <<=setup.pronounceWhat(_kidNpc)>> was trying to steal, and you show <<=setup.pronounceWho(_kidNpc)>> a place where <<=setup.pronounceWhat(_kidNpc)>> can sleep.
 			<br /><br />
 			<<link 'Leave'>>
 				<<set $player.goodwill += 2>>
@@ -56,10 +59,9 @@ Abandoning stealth and swinging open the door, you see that they're holding a fe
 	</div>
 <</if>>
 <div id="option2">
-	<<link 'Throw him out.'>>
+	<<link _linkThrow>>
 		<<set $player.goodwill -= 5>>
 		<<goto 'Wood cabin'>>
 	<</link>>
 </div>
-
 
