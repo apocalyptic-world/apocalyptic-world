@@ -59,7 +59,7 @@
 			<br /><br />
 			<<=setup.displayName($slaves[$slaveOfferId])>> pushes away from <<=setup.displayName($tmpGirl)>> and lets him cum on the ground right outside his cell. 
 			<br /><br />
-			<<if !($slaves[$slaveOfferId].traits ?? []).includes('nymphomaniac')>>
+			<<if !($slaves[$slaveOfferId].traits ?? []).includes('nymphomaniac') && $slaves[$slaveOfferId].assignedTo !== 'streets'>>
 				<<setNpcStats 'slave' $slaveOfferId 'relationship' `-_slaveRelationshipDecrease`>>
 				<<setNpcStats 'slave' $slaveOfferId 'happy' `-_slaveRelationshipDecrease`>>
 				<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
@@ -85,7 +85,7 @@
 				<<set $slaves[$slaveOfferId].pregnancy_father = $tmpGirl.id>>
 				<<set $slaves[$slaveOfferId].pregnancy = 0>>
 			<</if>>
-			<<if !($slaves[$slaveOfferId].traits ?? []).includes('nymphomaniac')>>
+			<<if !($slaves[$slaveOfferId].traits ?? []).includes('nymphomaniac') && $slaves[$slaveOfferId].assignedTo !== 'streets'>>
 				<<setNpcStats 'slave' $slaveOfferId 'relationship' `-_slaveRelationshipDecrease`>>
 				<<setNpcStats 'slave' $slaveOfferId 'happy' `-_slaveRelationshipDecrease`>>
 				<<= setup.displayName($slaves[$slaveOfferId])>> relationship decreased by <<=_slaveRelationshipDecrease>>
