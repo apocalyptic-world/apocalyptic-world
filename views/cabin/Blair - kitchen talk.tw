@@ -15,7 +15,9 @@
 	<</if>>
 <<elseif $game.cabinName && !$characters.blair.quests.nursery>>
 	<<set $characters.blair.quests.nursery = true>>
-	<<goto 'Blair - nursery'>>
+	<<if !($game.location.nursery ?? false)>>
+		<<goto 'Blair - nursery'>>
+	<</if>>
 <</if>>
 <h1 class="ptitle">KITCHEN</h1>
 <<addmins 30>>
