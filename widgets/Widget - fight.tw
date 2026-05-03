@@ -7,6 +7,7 @@
 		defeatedEnemies: [],
 		defeatedAllies: [],
 		defeatedEnemies: [],
+		retreatedAllies: [],
 		hp: 100,
 		messages: [],
 		reward: false,
@@ -112,6 +113,16 @@
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('crossbow')>>
 		<<set $fight.messages.push('You shot ' + $fight.enemies[$args[0]].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + Math.round($player.strength / 1.5, 0) + ')')>>
+	<<elseif $args[1] === 'bandage'>>
+		<<drop $backpack 'bandage' 1>>
+		<<set $fight.allies[$args[0]].hp = Math.min(($fight.allies[$args[0]].hp ?? 0) + 30, 100)>>
+		<<set $fight.messages.push('You used a bandage on ' + $fight.allies[$args[0]].name + ' (+30 HP)')>>
+		<<set _allyActionTurn = true>>
+	<<elseif $args[1] === 'retreat'>>
+		<<set $fight.messages.push($fight.allies[$args[0]].name + ' retreated from the fight')>>
+		<<run $fight.retreatedAllies.push($fight.allies[$args[0]])>>
+		<<run $fight.allies.splice($args[0], 1)>>
+		<<set _allyActionTurn = true>>
 	<<elseif $args[1] === 'shotgun'>>
 		<<drop $backpack 'shotgun_shell' 1>>
 		<<set _shotgunDamage = Math.round($player.strength / 1.3, 0)>>
@@ -145,7 +156,7 @@
 		<</if>>
 	<</if>>
 
-	<<if $fight.enemies[$args[0]] && $fight.enemies[$args[0]].hp <= 0>>
+	<<if !_allyActionTurn && $fight.enemies[$args[0]] && $fight.enemies[$args[0]].hp <= 0>>
 		<<if (typeof $args[1] === 'undefined')>>
 			<<set $fight.messages.push($fight.enemies[$args[0]].name + ' falls to the ground and is knocked out')>>
 		<</if>>

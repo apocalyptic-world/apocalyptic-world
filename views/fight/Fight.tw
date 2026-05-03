@@ -97,6 +97,16 @@
 						</div>
 					<</if>>
 				</div>
+				<div class="enemy-actions">
+					<<if $backpack.has('bandage') && $fight.allies[_i].hp < 100>>
+						<<link 'Bandage'>>
+							<<fightAction _i 'bandage'>>
+						<</link>>
+					<</if>>
+					<<link 'Retreat'>>
+						<<fightAction _i 'retreat'>>
+					<</link>>
+				</div>
 			</div>
 		<</capture>>
 	<</for>>
