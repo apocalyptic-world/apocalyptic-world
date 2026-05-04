@@ -839,7 +839,7 @@ setup.suicideChance = function (person) {
     var age = setup.getAge(person);
     var breeder = (person.traits ?? []).includes('breeder');
 
-    if(typeof person.pregnancy !== 'undefined' || person.gender) {
+    if(typeof person.pregnancy !== 'undefined' || person.gender || person.virgin) {
         return 0;
     }
 

@@ -293,6 +293,8 @@ setup.setToVirgin = function(person) {
 	if (person.gender == 0 || person.gender == 3) {
 		person.virgin = true;
 		person.pussy = 0;
+		delete person.pregnancy;
+		delete person.pregnancy_father;
 	}
 
 	return person;
