@@ -22,7 +22,9 @@
 	hottub: [],
 	bathhouse: [],
 	youth_district: [],
-	strip_club: []
+	strip_club: [],
+	octavia: [],
+	outside: []
 }>>
 <<set 
 	$game.avatars = {},
@@ -83,6 +85,9 @@
 	<<else>>
   		<<run _charactersInLocation['guesthouse'].push('octavia')>>
 	<</if>>
+<<elseif isMetChar('octavia') && $characters.octavia.quests.emberclaw_ready_day>>
+	<<run _charactersInLocation['octavia'].push('octavia')>>
+	<<run _charactersInLocation['outside'].push('octavia')>>
 <</if>>
 
 <!-- Isabel -->
