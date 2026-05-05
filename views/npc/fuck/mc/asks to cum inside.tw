@@ -1,14 +1,28 @@
 :: asks to cum inside
 
-<<if !$sexForced && $sexAction === 'pussy' && typeof $tmpGirl.pregnancy === 'undefined' && $tmpGirl.relationship >= 70 && setup.percentageChance(30)>>
-    <br />
-    <<sayNpc $tmpGirl>>
-        <<=either([
-            'Oh yes! Cum inside me!',
-            "Don't pull out! I want you inside me!",
-            "Fill me up! I want your baby!"
-        ])>>
-    <</sayNpc>>
-    <br />
-    <<set _askedToCumInside = true>>
+<<if !$sexForced && $sexAction === 'pussy' && typeof $tmpGirl.pregnancy === 'undefined'>>
+    <<if ($tmpGirl.traits ?? []).includes('breeder')>>
+        <br />
+        <<sayNpc $tmpGirl>>
+            <<=either([
+                "Please, cum inside me. I need it.",
+                "Don't you dare pull out — fill me up!",
+                "I want your baby. Cum inside me.",
+                "Please, I'm begging you — cum inside me."
+            ])>>
+        <</sayNpc>>
+        <br />
+        <<set _askedToCumInside = true>>
+    <<elseif $tmpGirl.relationship >= 70 && setup.percentageChance(30)>>
+        <br />
+        <<sayNpc $tmpGirl>>
+            <<=either([
+                'Oh yes! Cum inside me!',
+                "Don't pull out! I want you inside me!",
+                "Fill me up! I want your baby!"
+            ])>>
+        <</sayNpc>>
+        <br />
+        <<set _askedToCumInside = true>>
+    <</if>>
 <</if>>
