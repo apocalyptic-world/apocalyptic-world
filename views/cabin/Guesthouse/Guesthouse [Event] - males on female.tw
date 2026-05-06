@@ -64,6 +64,9 @@
 	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
 		<<set _sexActions[1] = 'bj'>>
 	<</if>>
+	<<if !_isVirgin && (_maleGuestIds.some(_id => ($guests[_id].traits ?? []).includes('breeder')))>>
+		<<set _sexActions[_sexActions.length - 1] = 'cum_in_pussy'>>
+	<</if>>
 
 	<<set $randEvent = [
 		_guestIds,
@@ -137,7 +140,7 @@
 							<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text'>>
 						</center>
 						<br />
-						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she loses her virginity.
 						<br /><br />
 						<<set $guests[_guestIds[0]].virgin = false>>
 					<</if>>
@@ -180,6 +183,7 @@
 						<<if setup.pregnancyChance($guests[_guestIds[0]])>>
 							<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
 							<<set $guests[_guestIds[0]].pregnancy = 0>>
+							<<set $guests[_guestIds[0]].virgin = false>>
 						<</if>>
 					<</linkreplace>>
 				<<else>>
@@ -247,6 +251,7 @@
 		<<if setup.pregnancyChance($guests[_guestIds[0]])>>
 			<<set $guests[_guestIds[0]].pregnancy = 0>>
 			<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+			<<set $guests[_guestIds[0]].virgin = false>>
 		<</if>>
 	<</if>>
 	<<unset $randEvent, $tmpEvent>>

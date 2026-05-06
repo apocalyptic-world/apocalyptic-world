@@ -1,0 +1,35 @@
+:: Octavia - Camp [bg-settlement]
+<h1 class="ptitle">OCTAVIA'S CAMP</h1>
+<div id="place-head">
+	<<image 'places/settlement/octavia.jpg' 'sfw'>>
+</div>
+<br /><br />
+
+<<set $tmpGirlBack = 'Octavia - Camp'>>
+
+<<octavia>>
+	<<print either([
+		"Good to see you out here.",
+		"You made the trip. Good.",
+		"The camp is coming together. What brings you out?"
+	])>>
+<</octavia>>
+<br /><br />
+
+<<link 'Approach her'>>
+	<<set $charId = 'octavia'>>
+	<<unset $slaveId, $guestId, $childId>>
+	<<set $tmpGirl = $characters.octavia>>
+	<<set $tmpGirl.location = 'bedroom'>>
+	<<set $tmpGirlViewBack = 'NPC view - character'>>
+	<<goto 'NPC view - character'>>
+<</link>>
+<<if $characters.octavia.quests.canDate>>
+	<<link 'Date'>>
+		<<goto 'Octavia - date'>>
+	<</link>>
+<</if>>
+<<link 'Leave'>>
+	<<addmins 30>>
+	<<goto 'Outside'>>
+<</link>>

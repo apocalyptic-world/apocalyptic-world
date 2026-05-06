@@ -492,6 +492,7 @@ Save.onLoad.add(function (save) {
         if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].id === 'undefined') {
             save.state.history[save.state.index].variables.nursery[saveNurseryI].id = setup.generateUniqueKey(save.state.history[save.state.index].variables.nursery[saveNurseryI]);
         }
+        checkAndFixTraits(save.state.history[save.state.index].variables.nursery[saveNurseryI]);
 
         for (var saveNurseryTraitI = 0; saveNurseryTraitI < (save.state.history[save.state.index].variables.nursery[saveNurseryI].traits ?? []).length; saveNurseryTraitI++) {
             if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.nursery[saveNurseryI].traits[saveNurseryTraitI])) {

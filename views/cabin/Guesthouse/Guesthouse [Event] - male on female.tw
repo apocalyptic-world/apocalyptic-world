@@ -54,6 +54,9 @@
 			_sexActions[5] = 'anal_reverse_cum'
 		>>
 	<</if>>
+	<<if !_isVirgin && ($guests[_guestIds[1]].traits ?? []).includes('breeder')>>
+		<<set _sexActions[_sexActions.length - 1] = 'cum_in_pussy'>>
+	<</if>>
 
 	<<set $randEvent = [
 		_guestIds,
@@ -103,6 +106,7 @@
 			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
 				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
+				<<set $guests[_guestIds[0]].virgin = false>>
 			<</if>>
 		<</if>>
 	<<else>>
@@ -134,7 +138,7 @@
 							<<actionImage $guests[_guestIds[0]] 'pussy' 'no-text'>>
 						</center>
 						<br />
-						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she looses her virginity.
+						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she loses her virginity.
 						<br /><br />
 						<<set $guests[_guestIds[0]].virgin = false>>
 					<</if>>

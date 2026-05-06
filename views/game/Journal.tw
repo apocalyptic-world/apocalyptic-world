@@ -103,7 +103,7 @@
 			Talk with Blair in the kitchen
 		<<elseif !$game.cabinName>>
 			Build gate for your settlement
-		<<elseif !$characters.blair.quests.nursery>>
+		<<elseif !$characters.blair.quests.nursery && !($game.location.nursery ?? false)>>
 			Talk with Blair in the kitchen
 		<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement>>
 			<<if $characters.blair.relationship >= 80>>
@@ -318,9 +318,13 @@
 			Talk with her in her room next day
 		<<elseif !$characters.octavia.quests.rebuild_tribe_day>>
 			Visit Octavia in her room after a few days
-		<<elseif !$characters.octavia.quests.emberclaw_ready_day>>
+		<<elseif !$characters.octavia.quests.warriors_done_day>>
 			<<set _wCount = ($characters.octavia.quests.warriors ?? []).length>>
 			Bring warriors to Octavia (<<print _wCount>>/5)
+		<<elseif ($characters.octavia.quests.warriors_done_day + 3) >= $game.day && !$characters.octavia.quests.emberclaw_ready_day>>
+			Wait a few days — Octavia is getting ready to leave
+		<<elseif !$characters.octavia.quests.emberclaw_ready_day>>
+			Visit Octavia in her room — she's ready to leave
 		<<else>>
 			That's all for now
 		<</if>>

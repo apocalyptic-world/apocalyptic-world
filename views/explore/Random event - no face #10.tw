@@ -6,7 +6,7 @@ By the looks of it, the filthy girl is either eating something or searching for 
 
 <<linkreplace 'Get closer'>>
 	<center>
-		[img[setup.ImagePath+'places/explore/no_face_1.webp']]
+		<<image 'places/explore/no_face_1.webp'>>
 	</center>
 	<br /><br />
 	You get closer and she suddenly turns her head towards you...
@@ -19,8 +19,7 @@ By the looks of it, the filthy girl is either eating something or searching for 
 	<<linkreplace 'Take a closer look at her face'>>
 		<<run $('#nf10_mercy_wrap').hide()>>
 		<center>
-  			[img[setup.ImagePath+'places/explore/no_face_2.webp']]
-	  	</center>
+			<<image 'places/explore/no_face_2.webp'>>
 		<br /><br />
 		Against your better judgement you decide to take a closer look. As you do she pounces on you, like she can smell where your dick is. She successfully opens your pants and sucks your dick inside her mouth.
 		<br /><br />
@@ -28,7 +27,7 @@ By the looks of it, the filthy girl is either eating something or searching for 
 		<div id="nf10_fuck_wrap">
 		<<linkreplace 'Fuck her'>>
 			<center>
-				[img[setup.ImagePath+'places/explore/no_face_3.webp']]
+				<<image 'places/explore/no_face_3.webp'>>
 			</center>
 			<br /><br />
 			You throw her down on her back and something primal takes over. You grip her hips and drive into her hard, and she responds with everything she has — writhing beneath you, back arching off the ground, her cries raw and animal and unmistakable. She can't form words, but her body says everything. She claws at the ground, wraps her legs around you, and cries out again and again as you fuck her, pleasure wracking her without language or pretense.
@@ -46,7 +45,6 @@ By the looks of it, the filthy girl is either eating something or searching for 
 				$tmpGirl.horny = Math.min(Math.max($tmpGirl.horny + 10, 41), 100),
 				$tmpGirl.likesGuys = true,
 				$tmpGirl.virgin = false,
-				$tmpGirl.portrait = setup.ImagePath+'places/explore/no_face_1.webp',
 				$tmpGirl.location = 'forest'
 			>>
 
@@ -70,7 +68,7 @@ By the looks of it, the filthy girl is either eating something or searching for 
 						<<run $('#nf10_opts').hide()>>
 						<<set $tmpGirlViewBack = 'Random event - no face #10 afterSex'>>
 						<<set $noFacePreSub = $tmpGirl.sub>>
-						<<fuck>>
+						<<fuck $tmpGirl>>
 					<</link>>
 				</div>
 				<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20>>
@@ -141,14 +139,14 @@ By the looks of it, the filthy girl is either eating something or searching for 
 :: Random event - no face #10 afterSex
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
-<<if $tmpGirl.sub < ($noFacePreSub ?? $tmpGirl.sub)>>
+<<if $tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub)>>
 She's pulled away from you, crouching low, her body coiled tight. A low hiss escapes her — not quite a warning, not quite fear, somewhere between the two. She's watching you from a distance now, weight forward, like she's deciding whether to bolt.
 <<else>>
 She comes down slowly, breathing ragged. You give her a moment. When you look back at her, the same strange calm has returned — head tilted toward you, body loose, waiting. It looks like she's still thinking about following you.
 <</if>>
 <br /><br />
 
-<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub < ($noFacePreSub ?? $tmpGirl.sub))>>
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
 <div id="nf10as_opt_lead">
 	<<linkreplace 'Lead her back home (-1 food)'>>
 		<<run $('#nf10as_opt_cap, #nf10as_opt_leave').hide()>>

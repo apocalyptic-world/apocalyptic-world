@@ -211,6 +211,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'school' && timeBetween('09:00', '15:00')>>
 				<<continue>>
 			<</if>>
+			<<if _guest.assignedTo === 'church' && timeBetween('08:00', '18:00') && !_isSick>>
+				<<continue>>
+			<</if>>
 			<<if _guest.assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_guest, 'coat_wolf'))>>
 				<<continue>>
 			<</if>>
@@ -366,7 +369,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			}>>
 			<<goto 'Guesthouse [Event] - take virginity'>>
 		<</if>>
-	<<elseif setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).length > 0 && setup.percentageChance(5)>>
+	<<elseif setup.commonValues([_guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).length > 0 && setup.percentageChance(5)>>
 		<<set $tmpEvent = [setup.commonValues([_guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen])]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>

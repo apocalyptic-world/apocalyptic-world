@@ -55,11 +55,14 @@ The encounter serves as a reminder that even in the darkest of times, moments of
 <br /><br />
 <<link 'Leave'>>
     <<horny 20>>
-    <<set $slaves[$tmpEvent.slaveId].happy -= randomInteger(20, 30)>>
-    <<set $slaves[$tmpEvent.slaveId].relationship -= randomInteger(20, 30)>>
+    <<if $slaves[$tmpEvent.slaveId].assignedTo !== 'streets'>>
+        <<set $slaves[$tmpEvent.slaveId].happy -= randomInteger(20, 30)>>
+        <<set $slaves[$tmpEvent.slaveId].relationship -= randomInteger(20, 30)>>
+    <</if>>
     <<set $slaves[$tmpEvent.slaveId].horny = 0>>
     <<set $guests[$tmpEvent.guestId].horny = 0>>
-    <<set $guests[$tmpEvent.guestId].happy += randomInteger(20, 30)>>
+    <<set $guests[$tmpEvent.guestId].happy = Math.min(($guests[$tmpEvent.guestId].happy ?? 0) + randomInteger(20, 30), 100)>>
+    <<set $guests[$tmpEvent.guestId].relationship = Math.min(($guests[$tmpEvent.guestId].relationship ?? 0) + randomInteger(5, 10), 100)>>
     <<unset $tmpEvent, $tmpGirl>>
     <<goto 'Basement'>>
 <</link>>

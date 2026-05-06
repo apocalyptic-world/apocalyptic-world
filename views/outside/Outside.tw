@@ -25,6 +25,9 @@
   <<if $characters?.rodger?.quests?.dead && !$characters.octavia.quests.next_move>>
 		<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
 		<<grid settlement octavia 'Settlement - Octavia' 'Octavia' 0 _isDisabled>>
+  <<elseif $characters.octavia.quests.emberclaw_ready_day>>
+		<<set _isDisabled = (!timeBetween('08:00', '16:00') ? 30 : 1)>>
+		<<grid settlement octavia 'Octavia - Camp' "Octavia's Camp" 0 _isDisabled>>
   <</if>>
   <<if ($game.location.sanctuary ?? false)>>
   	<<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 4)>>

@@ -2,6 +2,10 @@
 <h1 class="ptitle">OCTAVIA</h1>
 <br /><br />
 
+<<if $characters.octavia.quests.warriors_done_day && ($characters.octavia.quests.warriors_done_day + 3) < $game.day && !$characters.octavia.quests.emberclaw_ready_day>>
+    <<goto 'Octavia \[Event\] - Emberclaw Ready'>>
+<<else>>
+
 <<octavia>>
     Hey! How it's going?
 <</octavia>>
@@ -36,6 +40,7 @@
     <<set $tmpGirlViewBack = 'NPC view - character'>>
 	<<goto 'NPC view - character'>>
 <</link>>
+<<set $tmpGirlBack = 'Octavia room'>>
 <<if $characters.octavia.quests.canDate>>
     <<link 'Date'>>
         <<goto 'Octavia - date'>>
@@ -44,3 +49,4 @@
 <<link 'Leave'>>
     <<goto 'Guest house'>>
 <</link>>
+<</if>>
