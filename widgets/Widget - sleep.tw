@@ -546,6 +546,19 @@
 		<</if>>
 		
 		
+		<<if $guests[_guestI].assignedTo === 'church' && !_isSick>>
+			<<if typeof $guests[_guestI].stats['church'] === 'undefined'>>
+				<<set $guests[_guestI].stats['church'] = 0>>
+			<</if>>
+			<<set $guests[_guestI].stats['church']++>>
+			<<for _ci = 0; _ci < $guests.length; _ci++>>
+				<<if _ci !== _guestI>>
+					<<set $guests[_ci].happy = Math.min(100, ($guests[_ci].happy ?? 0) + 1)>>
+				<</if>>
+			<</for>>
+			<<run setup.sleepMessages.addJob($guests[_guestI].name + ' spent the day at the church, lifting the spirits of those around <strong>+1 happy to all guests</strong>.', 'church')>>
+		<</if>>
+
 		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<set _girlChanceToDie = 5>>
 			<<if ($guests[_guestI].strength ?? 0) > 20>>

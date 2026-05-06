@@ -211,6 +211,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<<if _guest.assignedTo === 'school' && timeBetween('09:00', '15:00')>>
 				<<continue>>
 			<</if>>
+			<<if _guest.assignedTo === 'church' && timeBetween('08:00', '18:00') && !_isSick>>
+				<<continue>>
+			<</if>>
 			<<if _guest.assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_guest, 'coat_wolf'))>>
 				<<continue>>
 			<</if>>
