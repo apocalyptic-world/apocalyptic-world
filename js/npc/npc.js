@@ -812,7 +812,7 @@ setup.npc = {
 				"This place wouldn't survive a week without me and you know it.",
 				"I catch you staring more than you think. It's cute.",
 				"Careful, %mcName%. Spend enough time around me and you might start to enjoy it.",
-				"%mcName%, I've been stuck inside all day. Someone should make it worth my while.",
+				"%mcNameUC%, I've been stuck inside all day. Someone should make it worth my while.",
 				"You're predictable in the best way, %mcName%. I always know exactly what you want.",
 				"Go on, %mcName%, say something charming. I'll pretend to be surprised.",
 				"I stopped by dad's farm yesterday. The fields are looking better than they have in years. I think those new seeds are actually working.",
@@ -825,10 +825,10 @@ setup.npc = {
 			elsa: [
 				"I tried fixing that latch on the shed door. I think I made it worse.",
 				"I still wake up reaching for a weapon sometimes. Old habits.",
-				"%mcName%, the generator was making a noise earlier. I wasn't sure if I should touch it.",
+				"%mcNameUC%, the generator was making a noise earlier. I wasn't sure if I should touch it.",
 				"Thank you for letting me stay, %mcName%. I know I haven't earned it yet.",
 				"Some days the quiet feels safe. Other days it just feels like something's about to break it.",
-				"%mcName%, I keep meaning to ask if there's anything more useful I could be doing around here.",
+				"%mcNameUC%, I keep meaning to ask if there's anything more useful I could be doing around here.",
 				"I don't remember the last time I felt this settled, %mcName%. Is that strange?",
 				"I was never good with people, but the machines here make sense to me.",
 				"Before everything fell apart, I thought survival would feel different. More dramatic, maybe.",
@@ -882,7 +882,7 @@ setup.npc = {
 				"You look at me differently than he does, %mcName%. I notice everything."
 			],
 			isabel_dom_dead: [
-				"%mcName%, I know what it looks like when someone holds power through fear. I'm choosing a different way.",
+				"%mcNameUC%, I know what it looks like when someone holds power through fear. I'm choosing a different way.",
 				"I've been thinking about how to run this city, not the way he did, but the way it deserves.",
 				"For the first time, I'm making decisions for people instead of having them made for me.",
 				"I used to survive by understanding what people in power wanted. Now I'm learning what people without it need.",
@@ -896,7 +896,7 @@ setup.npc = {
 				"Most people flinch. I take that as a professional compliment.",
 				"The body is just a machine, a beautiful, poorly designed machine.",
 				"Come back when you have a medical question, %mcName%. Or a willing volunteer.",
-				"%mcName%, I've been awake for thirty-six hours. Everything is going fine.",
+				"%mcNameUC%, I've been awake for thirty-six hours. Everything is going fine.",
 				"Proper surgical tools would be ideal. But you work with what you have.",
 				"People call it unethical. I call it progress without bureaucracy.",
 				"So much of what I've accomplished here wouldn't exist without your resources, %mcName%. I don't forget that.",
@@ -941,7 +941,7 @@ setup.npc = {
 				"The Blackthorn moves without sound. Worth remembering, %mcName%.",
 				"I've seen what happens to those who underestimate the land, %mcName%. It's not fast.",
 				"Trust must be earned on both sides of the door.",
-				"%mcName%, I don't speak unless I have something worth saying. You'd do well to listen.",
+				"%mcNameUC%, I don't speak unless I have something worth saying. You'd do well to listen.",
 				"Out here, silence is a skill. Most people from settlements never learn it.",
 				"Every scar on this land tells a story, %mcName%. I've been reading them for years.",
 				"Within these walls is the last of my tribe. I say that plainly, because softening it doesn't change what it means.",
@@ -1013,7 +1013,8 @@ setup.npc = {
 			return npc.name ? "Hello, I'm " + npc.name + "." : "...";
 		}
 		return lines[Math.floor(Math.random() * lines.length)]
-			.replace(/%mcName%/g, setup.npc.mcName(npc, false));
+			.replace(/%mcName%/g, setup.npc.mcName(npc, false))
+			.replace(/%mcNameUC%/g, setup.npc.mcName(npc, true));
 	},
 
 	/* Find any NPC across all collections by their id */
