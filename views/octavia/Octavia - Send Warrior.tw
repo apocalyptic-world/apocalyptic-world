@@ -19,7 +19,7 @@ She's bent over the map when you walk in. She looks up when she hears you.
 <</octavia>>
 <br />
 
-<<if _eligible.length > 0>>
+<<if _eligible.length > 0 && _count < 5>>
 
 <<octavia>>
     You have someone in mind?
@@ -77,7 +77,7 @@ You run through the names — the ones with the right build, the right eyes.
             <td>
                 <<link 'Send'>>
                     <<set _isNewDay = ($characters.octavia.quests.last_warrior_day ?? -1) !== $game.day>>
-                    <<run $characters.octavia.quests.warriors.push(_entry.id)>>
+                    <<run $characters.octavia.quests.warriors.push(_entry.girl)>>
                     <<set $characters.octavia.quests.last_warrior_day = $game.day>>
                     <<run $guests.splice(_guestRealId, 1)>>
                     <<if $characters.octavia.quests.warriors.length >= 5 && !$characters.octavia.quests.warriors_done_day>>
