@@ -25,7 +25,7 @@
 <<elseif $characters.octavia.quests.new_plan3 && !$characters.octavia.quests.rebuild_tribe_day && ($characters.octavia.quests.new_plan3_day + 3) < $game.day>>
     <<goto 'Octavia [Event] - Rebuild the Emberclaw'>>
 <</if>>
-<<if $characters.octavia.quests.rebuild_tribe_day && !$characters.octavia.quests.emberclaw_ready_day>>
+<<if $characters.octavia.quests.rebuild_tribe_day && !$characters.octavia.quests.emberclaw_ready_day && ($characters.octavia.quests.warriors ?? []).length < 5>>
     <<set _wLink = 'Send a warrior (' + ($characters.octavia.quests.warriors ?? []).length + '/5)'>>
     <<link `_wLink`>>
         <<goto 'Octavia - Send Warrior'>>
