@@ -5,6 +5,63 @@
 </div>
 <br /><br />
 
+<<if ($characters.octavia.quests.warriors ?? []).length > 0>>
+<h3>Emberclaw Warriors</h3>
+<div style="display: flex; flex-direction: column; align-items: center;">
+<table id="slaves" class="npc-list">
+	<<for _warriorI, _warrior range $characters.octavia.quests.warriors>>
+		<<capture _warrior>>
+			<<set _genderClass = 'gender-' + setup.genderClass(_warrior)>>
+			<tr class="item">
+				<td style="min-width: 25%">
+					<span @class="_genderClass">
+						<div class="tooltip">
+							<<set _girlVisual = _warrior>>
+							<span class="tooltiptext" style="left: -130px; background-color: transparent; opacity: 1;">
+								<<for _skill range (_warrior.skills ?? [])>>
+									<<if typeof setup.skills[_skill] !== 'undefined'>>
+										<div class="trait tooltip">
+											<<=setup.skills[_skill].title>>
+										</div>
+									<</if>>
+									<br />
+								<</for>>
+								<div class="say npcsay npc-say-visual">
+									<div class="girl_info_picture">
+										<<if _girlVisual.portrait>>
+											<div class="say_custom_portrait">
+												<<include 'NPC visual'>>
+											</div>
+										<<else>>
+											<<include 'NPC visual'>>
+										<</if>>
+									</div>
+								</div>
+								<<for _trait range (_warrior.traits ?? [])>>
+									<div class="trait tooltip">
+										<<=setup.traits[_trait].title>>
+									</div>
+									<br />
+								<</for>>
+							</span>
+							<<=_warrior.name>>
+						</div>
+						<<=setup.npcListInfo(_warrior)>>
+					</span>
+				</td>
+				<td>
+					<<set _warriorDisplay = clone(_warrior)>>
+					<<set _warriorDisplay.assignedTo = null>>
+					<<npcListView _warriorDisplay -1 'warrior'>>
+				</td>
+			</tr>
+		<</capture>>
+	<</for>>
+</table>
+</div>
+<br />
+<</if>>
+
 <<set $tmpGirlBack = 'Octavia - Camp'>>
 
 <<octavia>>
