@@ -115,6 +115,7 @@ Save.onLoad.add(function (save) {
 
         save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
         save.state.history[save.state.index].variables.characters.isabel.family ??= { husband: 'dom'};
+        save.state.history[save.state.index].variables.characters.isabel.married ??= true;
         if (typeof save.state.history[save.state.index].variables.characters.isabel.submission !== 'undefined') {
             save.state.history[save.state.index].variables.characters.isabel.sub = 60;
             delete save.state.history[save.state.index].variables.characters.isabel.submission;
@@ -274,9 +275,11 @@ Save.onLoad.add(function (save) {
             variables.characters.eve.id   = 'eve';
         }
         save.state.history[save.state.index].variables.characters.eve.family ??= { husband: 'rodger'};
+        save.state.history[save.state.index].variables.characters.eve.married ??= true;
         save.state.history[save.state.index].variables.characters.rodger.name ??= 'Rodger';
         save.state.history[save.state.index].variables.characters.rodger.id ??= 'rodger';
         save.state.history[save.state.index].variables.characters.rodger.family ??= { wives: ['eve'] };
+        save.state.history[save.state.index].variables.characters.rodger.married ??= true;
 
     }
 

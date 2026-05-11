@@ -5,13 +5,6 @@
 <<set _warriors = $characters.octavia.quests.warriors>>
 <<set _count = _warriors.length>>
 
-<<set _eligible = []>>
-<<for _gId, _g range $guests>>
-    <<if _g.gender === 0 && (_g.strength ?? 0) >= 70 && !_warriors.includes(_gId)>>
-        <<run _eligible.push({id: _gId, girl: _g})>>
-    <</if>>
-<</for>>
-
 She's bent over the map when you walk in. She looks up when she hears you.
 <br /><br />
 <<octavia>>
@@ -19,7 +12,9 @@ She's bent over the map when you walk in. She looks up when she hears you.
 <</octavia>>
 <br />
 
-<<if _eligible.length > 0 && _count < 5>>
+<<set _hasEligible = _count < 5 && $guests.some(function(g) { return g.gender === 0 && (g.strength ?? 0) >= 70 && !_warriors.some(function(w) { return w.id === g.id; }); })>>
+
+<<if _hasEligible>>
 
 <<octavia>>
     You have someone in mind?
@@ -29,18 +24,19 @@ You run through the names — the ones with the right build, the right eyes.
 <br /><br />
 
 <table id="slaves" class="npc-list">
-    <<for _i = 0; _i < _eligible.length; _i++>>
-        <<set _entry = _eligible[_i]>>
-        <<capture _entry>>
-            <<set _guestRealId = $guests.findIndex(function(g) { return g.id === _entry.girl.id; })>>
-            <<set _genderClass = 'gender-' + setup.genderClass(_entry.girl)>>
+    <<for _gId, _g range $guests>>
+        <<if _g.gender !== 0 || (_g.strength ?? 0) < 70 || _warriors.some(function(w) { return w.id === _g.id; })>>
+            <<continue>>
+        <</if>>
+        <<capture _gId, _g>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_g)>>
             <tr class="item">
                 <td style="min-width: 25%">
                     <span @class="_genderClass">
                         <div class="tooltip">
-                            <<set _girlVisual = _entry.girl>>
+                            <<set _girlVisual = _g>>
                             <span class="tooltiptext" style="left: -130px; background-color: transparent; opacity: 1;">
-                                <<for _skill range (_entry.girl.skills ?? [])>>
+                                <<for _skill range (_g.skills ?? [])>>
                                     <<if typeof setup.skills[_skill] !== 'undefined'>>
                                         <div class="trait tooltip">
                                             <<=setup.skills[_skill].title>>
@@ -50,7 +46,7 @@ You run through the names — the ones with the right build, the right eyes.
                                 <</for>>
                                 <div class="say npcsay npc-say-visual">
                                     <div class="girl_info_picture">
-                                        <<if _girlVisual.portrait>>
+                                        <<if _g.portrait>>
                                             <div class="say_custom_portrait">
                                                 <<include 'NPC visual'>>
                                             </div>
@@ -59,27 +55,27 @@ You run through the names — the ones with the right build, the right eyes.
                                         <</if>>
                                     </div>
                                 </div>
-                                <<for _trait range (_entry.girl.traits ?? [])>>
+                                <<for _trait range (_g.traits ?? [])>>
                                     <div class="trait tooltip">
                                         <<=setup.traits[_trait].title>>
                                     </div>
                                     <br />
                                 <</for>>
                             </span>
-                            <<=_entry.girl.name>>
+                            <<=_g.name>>
                         </div>
-                        <<=setup.npcListInfo(_entry.girl)>>
+                        <<=setup.npcListInfo(_g)>>
                     </span>
                 </td>
                 <td>
-                    <<npcListView _entry.girl _guestRealId 'guest'>>
+                    <<npcListView _g _gId 'guest'>>
                 </td>
                 <td>
                     <<link 'Send'>>
                         <<set _isNewDay = ($characters.octavia.quests.last_warrior_day ?? -1) !== $game.day>>
-                        <<run $characters.octavia.quests.warriors.push(_entry.girl)>>
+                        <<run $characters.octavia.quests.warriors.push(_g)>>
                         <<set $characters.octavia.quests.last_warrior_day = $game.day>>
-                        <<guestRemove _guestRealId>>
+                        <<guestRemove _gId>>
                         <<if $characters.octavia.quests.warriors.length >= 5 && !$characters.octavia.quests.warriors_done_day>>
                             <<set $characters.octavia.quests.warriors_done_day = $game.day>>
                         <</if>>

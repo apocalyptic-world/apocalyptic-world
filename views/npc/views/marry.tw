@@ -44,7 +44,7 @@ The square feels quieter as you consider his request, the weight of his words bl
         <<set _npc2.married = true>>
         <<set _npc1.family ??= {}>>
         <<set _npc1.family.wives ??= []>>
-        <<set _npc1.family.wives.push(_npc2.id)>>
+        <<if !(_npc1.family.wives.includes(_npc2.id))>><<set _npc1.family.wives.push(_npc2.id)>><</if>>
 
         <<set _npc2.family ??= {}>>
         <<set _npc2.family.husband = _npc1.id>>

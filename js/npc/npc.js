@@ -460,7 +460,7 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
-		if (npc.married) {
+		if (npc.married || setup.npc.isMarried(npc)) {
 			const spouseIds = [];
 			if (npc?.family?.husband && npc.family.husband !== 'mc') {
 				spouseIds.push(npc.family.husband);

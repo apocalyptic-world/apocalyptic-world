@@ -4,7 +4,7 @@
 <<for _i to 0; _i lt $guests.length; _i++>>
 	<<capture _i>>
 		<<set _bride = $guests[_i]>>
-		<<if [0, 2].includes(_bride.gender) && !_bride.married && _bride.id !== $tmpGirl.id && setup.getAge(_bride) >= 18 && (!($player?.baseManagement?.noIncest) || !setup.family.isIncest($tmpGirl, _bride))>>
+		<<if [0, 2].includes(_bride.gender) && !setup.npc.isMarried(_bride) && _bride.id !== $tmpGirl.id && setup.getAge(_bride) >= 18 && (!($player?.baseManagement?.noIncest) || !setup.family.isIncest($tmpGirl, _bride))>>
 			<<set _prospects++>>
 			<div>
 				<span class="gender-girl">
