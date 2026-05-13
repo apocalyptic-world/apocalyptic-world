@@ -5,49 +5,11 @@
 </div>
 <table>
     <<set $packs ??= {}>>
-    <<for _packKey, _pack range setup.packs>>
-        <<capture _packKey, _pack>>
-            <<set $packs[_packKey] ??= false>>
-            <tr>
-                <td>
-                    <<checkbox '$packs[_packKey]' false true autocheck>>
-                </td>
-                <td>
-                    <<= _pack.name>> 
-                </td>
-                <td>
-                    <div>
-                        <<= _pack.download>>
-                    </div>
-                    <div class="pack-description">
-                        <<= _pack.description>>
-                    </div>
-                </td>
-            </tr>
-            <<if _pack.portrait>>
-                <tr>
-                    <td colspan="2">
-                        <<set _image = 'packs/' + _packKey + '/' + _pack.portrait>>
-                        <img @src="_image" referrerpolicy="no-referrer">
-                    </td>
-                    <td valign="top" style="font-size: 10pt">
-                        <<if _pack.race>>
-                            <div>
-                                Race: <<=_pack.race>>
-                            </div>
-                        <</if>>
-                        <<if _pack.hair>>
-                            <div>
-                                Hair color: <<=_pack.hair>>
-                            </div>
-                        <</if>>
-                    </td>
-                </tr>
-            <</if>>
-        <</capture>>
-    <</for>>
-    <<for _packKey, _pack range setup.packsCustom>>
-        <<capture _packKey, _pack>>
+    <<set _allPacks = Object.entries(Object.assign({}, setup.packs, setup.packsCustom)).sort((a, b) => a[1].name.localeCompare(b[1].name))>>
+    <<for _entry range _allPacks>>
+        <<capture _entry>>
+            <<set _packKey = _entry[0]>>
+            <<set _pack = _entry[1]>>
             <<set $packs[_packKey] ??= false>>
             <tr>
                 <td>
