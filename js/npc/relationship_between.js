@@ -169,12 +169,14 @@ setup.relationshipBetween = {
                     continue;
                 }
 
-                // Only male and female for now
+                // Only male and female for now; id1 must be the male (proposer)
                 if (npc1.gender + npc2.gender !== 1) {
                     continue;
                 }
 
-                _matchesBetween.push([_npc1Id, _npc2Id]);
+                const maleId   = npc1.gender === 1 ? _npc1Id : _npc2Id;
+                const femaleId = npc1.gender === 1 ? _npc2Id : _npc1Id;
+                _matchesBetween.push([maleId, femaleId]);
             }
         }
 

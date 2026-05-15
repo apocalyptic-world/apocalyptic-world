@@ -253,7 +253,7 @@
 			after: function() {}
 		},
 		shop: {
-			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && (!$game.location.shop ?? false),
+			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && !($game.location.shop ?? false),
 			title: "Shop",
 			description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
 			required: {
@@ -265,6 +265,8 @@
 			energy: 100,
 			after: function() {
 				variables().game.location.shop = true;
+				variables().characters.vincent.quests ??= {};
+				variables().characters.vincent.quests.shop_talk ??= true;
 			}
 		},
 		bathhouse: {

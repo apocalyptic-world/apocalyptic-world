@@ -161,6 +161,10 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
         save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
         save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
+        if (save.state.history[save.state.index].variables.game?.location?.shop) {
+            save.state.history[save.state.index].variables.characters.vincent.quests ??= {};
+            save.state.history[save.state.index].variables.characters.vincent.quests.shop_talk ??= true;
+        }
     }
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
