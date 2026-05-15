@@ -155,6 +155,10 @@ Save.onLoad.add(function (save) {
 
     if (typeof save.state.history[save.state.index].variables.characters.octavia !== 'undefined') {
         checkAndFixTraits(save.state.history[save.state.index].variables.characters.octavia);
+        const _warriors = save.state.history[save.state.index].variables.characters.octavia?.quests?.warriors;
+        if (_warriors !== undefined && Array.isArray(_warriors)) {
+            save.state.history[save.state.index].variables.characters.octavia.quests.warriors = _warriors.filter(w => typeof w === 'object' && w !== null);
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
