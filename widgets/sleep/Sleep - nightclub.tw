@@ -5,9 +5,22 @@
 <<else>>
     <<setNpcStats 'slave' _i 'happy' -5>>
 <</if>>
+
+<<if !_npc.chastityBelt>>
+    <<if setup.percentageChance(50)>>
+        <<run setup.jobs.applyJobAct(_npc, 'pussy', 'nightclub')>>
+    <</if>>
+<</if>>
+<<if setup.percentageChance(50)>>
+    <<run setup.jobs.applyJobAct(_npc, 'bj', 'nightclub')>>
+<</if>>
+<<if setup.percentageChance(20)>>
+    <<run setup.jobs.applyJobAct(_npc, 'anal', 'nightclub')>>
+<</if>>
+
 <<if _npc.gender == 0>>
 	<<set _moneyEarned = randomInteger(5, 9)>>
-<<elseif _npc.gender == 2>>			
+<<elseif _npc.gender == 2>>
 	<<set _moneyEarned = randomInteger(3, 7)>>
 <<else>>
 	<<set _moneyEarned = randomInteger(1, 5)>>
@@ -20,6 +33,11 @@
 <</if>>
 <<set _moneyEarnedTax = 50>>
 <<set _moneyEarned += Math.round(_npc.sub / 25, 0)>>
+<<set _ncPussyBonus = Math.round((_npc.pussy ?? 0) / 25)>>
+<<if !_npc.chastityBelt && (_npc.traits ?? []).includes('tight_vagina')>>
+    <<set _ncPussyBonus = _ncPussyBonus * 2>>
+<</if>>
+<<set _moneyEarned += _ncPussyBonus>>
 <<set _moneyEarned = parseInt(_moneyEarned)>>
 <<set _moneyEarned = _moneyEarned - Math.round((_moneyEarnedTax / 100) * _moneyEarned, 0)>>
 <<set $player.money += _moneyEarned>>
