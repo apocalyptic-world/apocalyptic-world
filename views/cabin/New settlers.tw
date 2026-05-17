@@ -23,6 +23,12 @@ Dust hangs in the air, disturbed as they step inside, and though the place is ba
 <<link 'Leave'>>
     <<set $player.baseManagement ??= {}>>
     <<set $player.baseManagement.settlers += $settlers.length>>
+    <<set $player.baseManagement.settlersFemales ??= 0>>
+    <<for _s range $settlers>>
+        <<if !_s.gender>>
+            <<set $player.baseManagement.settlersFemales += 1>>
+        <</if>>
+    <</for>>
     <<unset $settlers>>
     <<addhours 1>>
     <<goto 'Wood cabin'>>
