@@ -62,6 +62,10 @@ setup.traits = {
     feral: {
         title: "Feral",
         description: "Wild and untamed. Cannot speak. Can be assigned to instinct-based tasks: guard, hunting, scavenging."
+    },
+    hoarder: {
+        title: "Hoarder",
+        description: "Keeps supplies for themselves. Never starves, but produces half the garden yield and brings back half the loot when scavenging."
     }
 };
 
