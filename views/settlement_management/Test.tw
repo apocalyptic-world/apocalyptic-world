@@ -115,6 +115,23 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
+
+	<<set _siblingTexts = []>>
+	<<for _siblingId range $player.family?.siblings ?? []>>
+		<<set _shown[_siblingId] = true>>
+		<<set _siblingText = setup.player.npcRelationText(_siblingId, false, false)>>
+		<<if _siblingText>>
+			<<set _siblingTexts.push(_siblingText)>>
+		<</if>>
+	<</for>>
+	<<if _siblingTexts.length>>
+		<tr><td colspan ="2"><strong>Your siblings (<<= _siblingTexts.length>>)</strong></td></tr>
+		<tr>
+			<td></td>
+			<td colspan ="2"><<=_siblingTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
 </table>
 
 <h2>Other's family trees</h2>
@@ -300,12 +317,14 @@
 			<</for>>
 		<<elseif _reltype === 'siblings'>>
 			<<if !(_shownSib[_npc.id] ?? false)>>
-				<<set _siblings = _data>>
-				<<set _rels.siblings[_npc.id] ??= {}>>
-				<<for _siblingID range _siblings>>
-					<<set _rels.siblings[_npc.id][_siblingID] = true>>
-					<<set _shownSib[_siblingID] = true>> 
-				<</for>>
+				<<set _siblings = _data.filter(id => id !== 'mc')>>
+				<<if _siblings.length>>
+					<<set _rels.siblings[_npc.id] ??= {}>>
+					<<for _siblingID range _siblings>>
+						<<set _rels.siblings[_npc.id][_siblingID] = true>>
+						<<set _shownSib[_siblingID] = true>>
+					<</for>>
+				<</if>>
 			<</if>>
 		<<else>>
 			DBG Strange relation: <<=_reltype>><br/><br/>

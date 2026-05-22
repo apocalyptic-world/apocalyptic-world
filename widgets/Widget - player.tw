@@ -366,10 +366,14 @@
 			<</if>>
 			<<for _familyTreeChildI, _familyTreeChild range $args[0].siblings>>
 				<div>
-				<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-					<<if _familyMember && $tmpGirl.id != _familyTreeChild>>
+				<<if _familyTreeChild === 'mc'>>
+					You
+				<<else>>
+					<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+					<<if _familyMember && ($tmpGirl?.id ?? '') !== _familyTreeChild>>
 						<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
 					<</if>>
+				<</if>>
 				</div>
 			<</for>>
 		<</if>>

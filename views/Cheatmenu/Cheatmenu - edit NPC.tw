@@ -118,6 +118,19 @@
     <</if>>
     <tr>
         <td>
+            Link Family:
+        </td>
+        <td>
+            <<if ($tmpGirl.family?.father ?? '') === 'mc' || ($tmpGirl.family?.mother ?? '') === 'mc'>>
+                <span style="opacity:0.5"><input type="checkbox" disabled> Sibling <em>(already your offspring)</em></span>
+            <<else>>
+                <<set _isSiblingChecked = ($player.family?.siblings ?? []).includes($tmpGirl.id) ? 'checked' : null>>
+                <<checkbox "_isSibling" false true _isSiblingChecked>> Sibling
+            <</if>>
+        </td>
+    </tr>
+    <tr>
+        <td>
             Race:
         </td>
         <td>
@@ -275,6 +288,25 @@
         <</if>>
     <</if>>
     <<set $tmpGirl.race = _race>>
+    <<if !(($tmpGirl.family?.father ?? '') === 'mc' || ($tmpGirl.family?.mother ?? '') === 'mc')>>
+        <<set $player.family ??= {}>>
+        <<set $player.family.siblings ??= []>>
+        <<if _isSibling>>
+            <<if !$player.family.siblings.includes($tmpGirl.id)>>
+                <<run $player.family.siblings.push($tmpGirl.id)>>
+            <</if>>
+            <<set $tmpGirl.family ??= {}>>
+            <<set $tmpGirl.family.siblings ??= []>>
+            <<if !$tmpGirl.family.siblings.includes('mc')>>
+                <<run $tmpGirl.family.siblings.push('mc')>>
+            <</if>>
+        <<else>>
+            <<set $player.family.siblings = $player.family.siblings.filter(id => id !== $tmpGirl.id)>>
+            <<if $tmpGirl.family?.siblings>>
+                <<set $tmpGirl.family.siblings = $tmpGirl.family.siblings.filter(id => id !== 'mc')>>
+            <</if>>
+        <</if>>
+    <</if>>
     <<if setup.getAge($tmpGirl) >= 18>>
         <<set $tmpGirl.likesGirls = _likes.likesGirls>>
         <<set $tmpGirl.likesGuys = _likes.likesGuys>>

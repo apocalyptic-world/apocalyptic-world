@@ -23,7 +23,7 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif $tmpGirl.family?.husband === 'mc' && setup.percentageChance(30)>>
+	<<elseif ($tmpGirl.family?.husband === 'mc' && setup.percentageChance(30)) || ($tmpGirl.location === 'wedding' && setup.percentageChance(80))>>
 
 		<<sayNpc $tmpGirl>>
 			<<=either([
@@ -90,6 +90,20 @@
 				"Haahhh, fuck, YES, " + setup.npc.mcName($tmpGirl) + "!  Mmmhh, you can interrupt me at work any time...",
 				"*crying out* The bedroom was spotless before this, now I don't care, I'm CUMMING, " + setup.npc.mcName($tmpGirl) + "!",
 				"Ahhh, " + setup.npc.mcName($tmpGirl) + ", I'm cumming so hard!  I love working for you!"
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'church' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*crying out* OH, " + setup.npc.mcName($tmpGirl) + "!  THIS is the divine gift — I'm cumming — AMEN!",
+				"*gasping* The other sisters call this sinful.  I call it consecrated.  YES, " + setup.npc.mcName($tmpGirl) + "!",
+				"Ahhhh, " + setup.npc.mcName($tmpGirl) + "!  Blessed are those who receive with an open heart — I am RECEIVING — I'm CUMMING!",
+				"*shaking* My whole body sings right now, " + setup.npc.mcName($tmpGirl) + "...  I'm cumming in His house and I have no regrets!",
+				"YES — oh god — " + setup.npc.mcName($tmpGirl) + " — this is why the flesh is sacred — YES!",
+				"*whispering* Our scripture says the body is holy...  *crying out* I BELIEVE — I'm CUMMING!",
+				"*shuddering* Every nerve, every pulse — this is prayer, " + setup.npc.mcName($tmpGirl) + " — oh god — YES!"
 			])>>
 		<</sayNpc>>
 
@@ -181,6 +195,46 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'mistress' && setup.percentageChance(35)>>
+
+		<<if ($tmpGirl.sub ?? 0) < 20>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"YES!  Good...  *gasping*  ...very good, " + setup.npc.mcName($tmpGirl) + "...  you've earned this from your Mistress...",
+					"*crying out* That's it...  you serve your Mistress so well, " + setup.npc.mcName($tmpGirl) + "!  YES!  I'm CUMMING!",
+					"*shaking* Even as I cum, I give the orders here...  *gasping*  ...and I order you not to stop!  YES, " + setup.npc.mcName($tmpGirl) + "!",
+					"Ahhh!  My obedient one...  feel what you've done to your Mistress...  I'm CUMMING, " + setup.npc.mcName($tmpGirl) + "!",
+					"*clutching you* You please your Mistress so well...  *crying out*  YES!  YES!  Don't stop!"
+				])>>
+			<</sayNpc>>
+
+		<<elseif ($tmpGirl.sub ?? 0) <= 50>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*gasping* My whip is right there on the wall and I can't even think about it — you're making me CUM, " + setup.npc.mcName($tmpGirl) + "!",
+					"Ahhhh, " + setup.npc.mcName($tmpGirl) + "!  I spend all day making others lose control...  now look at me...",
+					"*shuddering* The dungeon mistress is CUMMING, " + setup.npc.mcName($tmpGirl) + "...  nobody downstairs will ever know this side of me!",
+					"*gripping you* I don't yield to anyone in this dungeon...  *crying out*  ...except you, " + setup.npc.mcName($tmpGirl) + "!  I'm CUMMING!",
+					"YES!  " + setup.npc.mcName($tmpGirl) + "!  I put men on their knees for a living and here you are making me come completely undone!"
+				])>>
+			<</sayNpc>>
+
+		<<else>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*shuddering* I am yours, " + setup.npc.mcName($tmpGirl) + "...  all of the power I hold in this dungeon...  it belongs to you...  YES!",
+					"Ahhhh, " + setup.npc.mcName($tmpGirl) + "!  You are the true master here...  and I cum for you gladly...  completely!",
+					"*trembling* Every chain down there, every prisoner, every role I play...  means nothing next to this, " + setup.npc.mcName($tmpGirl) + "...  I'm CUMMING!",
+					"*crying out* Take it, " + setup.npc.mcName($tmpGirl) + "!  Take everything — my power, my control, my orgasm — it's all yours!",
+					"YES, " + setup.npc.mcName($tmpGirl) + "!  I submit to you completely...  my title, my authority...  none of it matters in this moment!"
+				])>>
+			<</sayNpc>>
+
+		<</if>>
+
 	<<elseif $tmpGirl.location === 'streets' && setup.percentageChance(35)>>
 
 		<<sayNpc $tmpGirl>>
@@ -200,6 +254,18 @@
 				"YES!  " + setup.npc.mcName($tmpGirl, 1) + ", I'm cumming!  I've bent the rules before but you make it perfect...",
 				"Ohhh, " + setup.npc.mcName($tmpGirl) + ", I'm cumming!  Mmmmh, you're the best VIP I could ask for...",
 				"*moaning* " + setup.npc.mcName($tmpGirl, 1) + "...  Private show of a lifetime...  I'm really cumming for you!"
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'nightclub' && setup.percentageChance(70)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"YES!  " + setup.npc.mcName($tmpGirl) + "!  I didn't even know your name an hour ago and I'm CUMMING in a nightclub bathroom — what a night!",
+				"*shaking* Oh god, " + setup.npc.mcName($tmpGirl) + "!  I can hear the bass through the walls and I'm CUMMING — I can't believe this!",
+				"Ahhhh, " + setup.npc.mcName($tmpGirl) + "!  We snuck in here for ten minutes and now I'm cumming so hard I can barely stand up!",
+				"*crying out* Everyone out there is dancing and in here I'm cumming for a stranger — yes, " + setup.npc.mcName($tmpGirl) + "!  YES!",
+				"*shuddering* I came here to dance...  *gasping*  ...this is so much better...  I'm cumming, " + setup.npc.mcName($tmpGirl) + "!"
 			])>>
 		<</sayNpc>>
 
@@ -248,7 +314,7 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif $tmpGirl.family?.husband === 'mc' && setup.percentageChance(30)>>
+	<<elseif ($tmpGirl.family?.husband === 'mc' && setup.percentageChance(30)) || ($tmpGirl.location === 'wedding' && setup.percentageChance(80))>>
 
 		<<sayNpc $tmpGirl>>
 			<<=either([
@@ -308,6 +374,20 @@
 				"*tensing* " + setup.npc.mcName($tmpGirl, 1) + "...  I still have three rooms to clean but I'm almost cumming, so don't stop...",
 				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  This is the best job in the house, please don't stop!",
 				"Ahh, don't stop, " + setup.npc.mcName($tmpGirl) + ", I'm nearly there!  I'll finish dusting after.."
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'church' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*tensing* The Lord provides, " + setup.npc.mcName($tmpGirl) + "...  and right now He is providing very generously — don't stop...",
+				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  Body and soul, offered up...  I'm almost there — please don't stop...",
+				"*breathless* This is devotion.  This is worship.  " + setup.npc.mcName($tmpGirl) + "...  don't stop...",
+				"*gripping you* Almost there, " + setup.npc.mcName($tmpGirl) + "...  every part of me given to this moment — don't stop...",
+				"Ahh...  the scripture says give your whole self...  I'm giving it, " + setup.npc.mcName($tmpGirl) + "...  I'm so close...",
+				"*quietly intense* My sisters pray on their knees.  So do I.  Don't stop, " + setup.npc.mcName($tmpGirl) + "...",
+				"*whispering* Close...  so close...  a little longer, " + setup.npc.mcName($tmpGirl) + "...  let me feel the grace of this..."
 			])>>
 		<</sayNpc>>
 
@@ -391,6 +471,46 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'mistress' && setup.percentageChance(35)>>
+
+		<<if ($tmpGirl.sub ?? 0) < 20>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*breathless* Good...  keep going...  your Mistress is almost...  *gritting her teeth*  ...almost there, " + setup.npc.mcName($tmpGirl) + "...",
+					"Mmmhh...  You serve me well, " + setup.npc.mcName($tmpGirl) + "...  and I intend to reward you...  but not before I get mine...  don't stop...",
+					"*commanding* Don't you dare stop, " + setup.npc.mcName($tmpGirl) + "...  your Mistress is almost there...  you finish when I say...",
+					"Ahh...  You think I'd let just anyone do this to me...  *tensing*  ...you're privileged, " + setup.npc.mcName($tmpGirl) + "...  don't stop...",
+					"*quietly* That's it...  right there...  your Mistress commands you not to stop, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<<elseif ($tmpGirl.sub ?? 0) <= 50>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*gritting her teeth* I command everyone down there...  and I can't command myself right now, " + setup.npc.mcName($tmpGirl) + "...  don't stop...",
+					"Mmmhh, I hate how good this feels, " + setup.npc.mcName($tmpGirl) + "...  I'm almost there...  don't you dare stop...",
+					"*quietly* The dungeon mistress doesn't beg...  *barely a whisper*  ...but I'm asking you not to stop, " + setup.npc.mcName($tmpGirl) + "...",
+					"*breathless* They call me Mistress down there...  up here I'm almost cumming for you, " + setup.npc.mcName($tmpGirl) + "...  don't stop...",
+					"Ahh...  I let nobody get this close...  *gasping*  ...you're different, " + setup.npc.mcName($tmpGirl) + "...  I'm almost there, don't stop..."
+				])>>
+			<</sayNpc>>
+
+		<<else>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*breathless* I am yours, " + setup.npc.mcName($tmpGirl) + "...  completely yours...  please don't stop, I'm almost there...",
+					"Mmmhh...  The dungeon is yours, the power is yours...  and I'm almost cumming for you, " + setup.npc.mcName($tmpGirl) + "...  please don't stop...",
+					"*quietly* I give you everything willingly, " + setup.npc.mcName($tmpGirl) + "...  my authority, my pride...  don't stop...  I'm so close...",
+					"Ahh...  My Master...  *barely a whisper*  ...I'm almost there...  please don't stop...",
+					"*trembling* Everything I am is at your pleasure, " + setup.npc.mcName($tmpGirl) + "...  and right now it pleases you to bring me close...  don't stop..."
+				])>>
+			<</sayNpc>>
+
+		<</if>>
+
 	<<elseif $tmpGirl.location === 'streets' && setup.percentageChance(35)>>
 
 		<<sayNpc $tmpGirl>>
@@ -408,6 +528,18 @@
 				"*grinding* Breaking the rules with you is the best, " + setup.npc.mcName($tmpGirl) + "... I'm almost there, please don't stop!",
 				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  This was supposed to be a dance, and I'm almost cumming!",
 				"Ahh, " + setup.npc.mcName($tmpGirl) + "!  This private show turned very private in the best way, I'm so close!"
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'nightclub' && setup.percentageChance(70)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*gripping the wall* The bass is shaking right through the tiles...  and I'm almost cumming...  don't stop, " + setup.npc.mcName($tmpGirl) + "...",
+				"Mmmhh...  I don't even know your last name, " + setup.npc.mcName($tmpGirl) + "...  and I'm almost cumming in a nightclub bathroom — don't stop...",
+				"*whispering* Someone could walk in any second...  *gasping*  I don't care...  I'm so close, " + setup.npc.mcName($tmpGirl) + "...",
+				"Ahh...  I wasn't expecting any of this tonight...  but I'm almost there...  please don't stop, " + setup.npc.mcName($tmpGirl) + "...",
+				"*breathless* Just a little more...  the crowd out there has no idea...  don't stop, " + setup.npc.mcName($tmpGirl) + ", I'm almost there..."
 			])>>
 		<</sayNpc>>
 
