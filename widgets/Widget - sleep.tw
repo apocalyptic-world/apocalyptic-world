@@ -415,6 +415,10 @@
 				<<run delete $slaves[_i].sick>>
 			<</if>>
 		<</if>>
+		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
+			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
+			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
+		<</if>>
 		// Resting
 		<<if  _isRest>>
 			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
@@ -442,6 +446,11 @@
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
 <<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
+<<if $guests.length >= $guesthouseLimit>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + $guests.length + '/' + $guesthouseLimit + '). No new guests can arrive.</span>')>>
+<<elseif _isOvercrowded>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + $guests.length + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
+<</if>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 		<<set _npc = $guests[_guestI]>>
 		<<if _isOvercrowded>>
@@ -863,6 +872,10 @@
 			<<if $guests[_guestI].sick.days <= 0>>
 				<<run delete $guests[_guestI].sick>>
 			<</if>>
+		<</if>>
+		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
+			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
+			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
 		<</if>>
 		// Resting
 		<<if _isRest>>
