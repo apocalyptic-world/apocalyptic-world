@@ -866,6 +866,14 @@ setup.suicideChance = function (person) {
     return setup.percentageChance(chance);
 };
 
+// Returns trimester label and progress percentage (out of ~260 days to birth).
+setup.pregnancyStage = function(days) {
+    const pct = Math.min(Math.round(days / 260 * 100), 99);
+    if (days < 90)  return { label: '1st trimester', pct };
+    if (days < 180) return { label: '2nd trimester', pct };
+    return               { label: '3rd trimester',  pct };
+};
+
 setup.canGetPregnant = function(person) {
     if ((person.traits ?? []).includes('infertile') || person.sexChanged) return false;
     if (typeof person.pregnancy !== 'undefined' || person.gender) return false;
