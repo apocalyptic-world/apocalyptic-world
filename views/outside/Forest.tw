@@ -7,7 +7,7 @@
 	<table id="slaves" class="npc-list">
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
-			<<if _guest.assignedTo !== 'forest' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
+			<<if _guest.assignedTo !== 'forest' || !setup.isAtWork(_guest, $weather)>>
 				<<continue>>
 			<</if>>		
 			<tr class="item">
@@ -42,7 +42,7 @@
 	<</for>>
 	<<for _slaveI, _slave range $slaves>>
 		<<capture _slaveI, _slave>>
-			<<if _slave.assignedTo !== 'forest' || !timeBetween('08:00', '18:00') || typeof _slave.sick !== 'undefined'>>
+			<<if _slave.assignedTo !== 'forest' || !setup.isAtWork(_slave, $weather)>>
 				<<continue>>
 			<</if>>		
 			<tr class="item">

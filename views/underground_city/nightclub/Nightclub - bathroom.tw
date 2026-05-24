@@ -8,7 +8,7 @@
 		<<set _isSick = (typeof $guests[_streetGuestI].sick !== 'undefined')>>
 		<<set _isRest = (typeof $guests[_streetGuestI].rest !== 'undefined')>>
 		<<set _dayOff = _isSick || _isRest>>
-		<<if _streetGuest.assignedTo != 'nightclub' || !timeBetween('20:00', '04:00') || _dayOff>>
+		<<if _streetGuest.assignedTo !== 'nightclub' || !setup.isAtWork(_streetGuest, $weather)>>
 			<<continue>>
 		<</if>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_streetGuest)>>

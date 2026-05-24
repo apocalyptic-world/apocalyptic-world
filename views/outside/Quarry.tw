@@ -9,7 +9,7 @@ The mine and quarry could become a cornerstone for your settlement's growth, pro
 <table id="slaves" class="npc-list">
 <<for _guestI, _guest range $guests>>
 	<<capture _guestI, _guest>>
-		<<if _guest.assignedTo !== 'quarry' || !timeBetween('08:00', '18:00') || typeof _guest.sick !== 'undefined'>>
+		<<if _guest.assignedTo !== 'quarry' || !setup.isAtWork(_guest, $weather)>>
 			<<continue>>
 		<</if>>
 		<tr class="item">

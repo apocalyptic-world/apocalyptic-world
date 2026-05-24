@@ -10,8 +10,7 @@
 
 <<for _i to 0; _i lt $slaves.length; _i++>>
 	<<set _s = $slaves[_i]>>
-	<<set _workHours = setup.outsideWorkHours[_s.assignedTo]>>
-	<<if _workHours && timeBetween(_workHours.from, _workHours.to)>>
+	<<if setup.isAtWork(_s, $weather)>>
 		<<continue>>
 	<</if>>
 	<<run setup.wash(_s, { beautyMultiplier: 7, washDays: 7, happyBonus: 10, markWashed: true })>>

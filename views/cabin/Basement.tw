@@ -27,24 +27,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 	<<set _dayOff = _isSick || _isRest>>
 
-	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
-		<<set _workingInGarden++>>
-		<<continue>>
-	<</if>>
-	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
-		<<set _workingOnStreets++>>
-		<<continue>>
-	<</if>>
-	<<if $slaves[_i].assignedTo === 'milk_barn' and timeBetween('12:00', '18:00') && !_dayOff>>
-		<<continue>>
-	<</if>>
-	<<if $slaves[_i].assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
-		<<continue>>
-	<</if>>
-	<<if $slaves[_i].assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
-		<<continue>>
-	<</if>>
-	<<if $slaves[_i].assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_dayOff && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
+	<<if setup.isAtWork($slaves[_i], $weather)>>
+		<<if $slaves[_i].assignedTo === 'garden'>><<set _workingInGarden++>><</if>>
+		<<if $slaves[_i].assignedTo === 'streets'>><<set _workingOnStreets++>><</if>>
 		<<continue>>
 	<</if>>
 	<<set _showSlavesCount++>>
@@ -216,24 +201,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<if typeof $slaves[_i].color !== 'undefined' >>
 			<<set _customColorStyle = ' npc-color color-' + $slaves[_i].color >>
 		<</if>>
-		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
-			<<set _workingInGarden++>>
-			<<continue>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm>>
-			<<set _workingOnStreets++>>
-			<<continue>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'milk_barn' and timeBetween('12:00', '18:00') && !_dayOff>>
-			<<continue>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
-			<<continue>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
-			<<continue>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_dayOff && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
+		<<if setup.isAtWork($slaves[_i], $weather)>>
 			<<continue>>
 		<</if>>
 

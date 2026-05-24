@@ -15,7 +15,7 @@
 			<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
 			<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 			<<set _dayOff = _isSick || _isRest>>
-			<<if $slaves[_i].assignedTo != 'milk_barn' || !timeBetween('12:00', '18:00') || _dayOff>>
+			<<if $slaves[_i].assignedTo !== 'milk_barn' || !setup.isAtWork($slaves[_i], $weather)>>
 				<<continue>>
 			<</if>>
 			<<set _hasCow = true>>
