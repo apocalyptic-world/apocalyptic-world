@@ -35,6 +35,18 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _workingOnStreets++>>
 		<<continue>>
 	<</if>>
+	<<if $slaves[_i].assignedTo === 'milk_barn' and timeBetween('12:00', '18:00') && !_dayOff>>
+		<<continue>>
+	<</if>>
+	<<if $slaves[_i].assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
+		<<continue>>
+	<</if>>
+	<<if $slaves[_i].assignedTo === 'strip_club' && timeBetween('18:00', '04:00') && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
+		<<continue>>
+	<</if>>
+	<<if $slaves[_i].assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_dayOff && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas($slaves[_i], 'coat_wolf'))>>
+		<<continue>>
+	<</if>>
 	<<set _showSlavesCount++>>
 	<<set _isSlaveInBasement = true>>
 <</for>>
@@ -99,6 +111,13 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 				Time between 19:00 - 20:30. Energy 40
 			<</linkdesc>>
 		<</if>>
+	<</if>>
+
+	<<if ($game.location.bathhouse ?? false) && _isSlaveInBasement>>
+		<<link 'Mass shower'>>
+			<<set $massShowerMistressId = _mistressId>>
+			<<goto 'Basement - mass shower'>>
+		<</link>>
 	<</if>>
 
 	<<set _slaveSorter to clone($slaves)>>

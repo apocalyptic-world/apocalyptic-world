@@ -11,22 +11,13 @@
  <br /><br />
  
  <<addmins 15>>
- <<set $tmpGirl.washed = true>>
- <<if !($tmpGirl.washDays ?? false)>>
- 	<<set _beautyInc = randomInteger(1, 2)>>
-	<<set $tmpGirl.washBeauty = _beautyInc>>
-	<strong><<=$tmpGirl.name>></strong> beauty temporary increased by <<=_beautyInc * 7>><br />
-	<strong><<=$tmpGirl.name>></strong> releationship increased by 5
-	<<set $tmpGirl.baseBeauty = $tmpGirl.beauty>>
-	<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100)>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + (_beautyInc * 7), 100)>>
+ <<set _wasFirstWash = !($tmpGirl.washDays ?? false)>>
+ <<run setup.wash($tmpGirl, { beautyMultiplier: 7, washDays: 7, relationshipBonus: 5, happyBonus: 10, markWashed: true })>>
+ <<if _wasFirstWash>>
+	<strong><<=$tmpGirl.name>></strong> beauty temporary increased by <<=($tmpGirl.washBeauty * 7)>><br />
+	<strong><<=$tmpGirl.name>></strong> relationship increased by 5
 	<br /><br />
-<<else>>
-	<<set $tmpGirl.beauty -= $tmpGirl.washBeauty * $tmpGirl.washDays>>
-	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + ($tmpGirl.washBeauty * 7), 100)>>
 <</if>>
-<<set $tmpGirl.washDays = 7>>
-<<set $tmpGirl.happy += 10>>
 
 <<linkreplace 'Help wash'>>
 	<center>
