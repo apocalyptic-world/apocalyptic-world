@@ -271,19 +271,53 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(40)>>
+	<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc')) && setup.percentageChance(45)>>
 
-		<<sayNpc $tmpGirl>>
-			<<=either([
-				"I know it's wrong, " + setup.npc.mcName($tmpGirl) + "... but it feels so right...",
-				"Mmmh, " + setup.npc.mcName($tmpGirl) + "... doesn't family feel just perfect...",
-				"The fact that it's you, " + setup.npc.mcName($tmpGirl) + ", makes it feel even better...",
-				"I know we shouldn't, " + setup.npc.mcName($tmpGirl) + "... but that's what makes it so exciting...",
-				"Mmmm, I bet mine feels much better than mom's does...",
-				"Ahhh, yes, " + setup.npc.mcName($tmpGirl) + ", forbidden fruit really is the best...",
-				"I was made for you, " + setup.npc.mcName($tmpGirl) + "..."
-			])>>
-		<</sayNpc>>
+		<<if $tmpGirl.family?.father === 'mc'>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"I know it's wrong, " + setup.npc.mcName($tmpGirl) + "... but it feels so right...",
+					"Mmmh, " + setup.npc.mcName($tmpGirl) + "... doesn't family feel just perfect...",
+					"The fact that it's you, " + setup.npc.mcName($tmpGirl) + ", makes it feel even better...",
+					"I know we shouldn't, " + setup.npc.mcName($tmpGirl) + "... but that's what makes it so exciting...",
+					"Mmmm, I bet mine feels much better than mom's does...",
+					"Ahhh, yes, " + setup.npc.mcName($tmpGirl) + ", forbidden fruit really is the best...",
+					"I was made for you, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc')>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"We grew up together, " + setup.npc.mcName($tmpGirl) + ", but who could have predicted we would be this close...",
+					"I know we shouldn't, " + setup.npc.mcName($tmpGirl) + "...  but you feel better than anyone I've ever been with...",
+					"My own brother, inside me...  *breathless*  ...the best secret we've ever kept...",
+					"You feel so perfect inside me, " + setup.npc.mcName($tmpGirl) + "... like we were made for each other...",
+					"Mmm, " + setup.npc.mcName($tmpGirl) + "...  family really does fit best, doesn't it...",
+					"Nobody will believe what we get up to when nobody's watching, " + setup.npc.mcName($tmpGirl) + "...",
+					"I always knew we were close...  *softly*  ...I didn't know it would feel like this...",
+					"Forbidden fruit...  *gasping*  ...and you're the most forbidden of all, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<<else>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"My own son, inside me...  *breathless*  ...I always knew you'd grow up to be something special...",
+					"Mmm, " + setup.npc.mcName($tmpGirl) + "...  I made you, and now you're claiming me...  the circle of it all...",
+					"I gave you life...  *gasping*  ...and you're giving me the time of my life...  I call that a fair trade...",
+					"You fit so perfectly inside me, " + setup.npc.mcName($tmpGirl) + "... like you were made to fill me...",
+					"You know your mother better than anyone, " + setup.npc.mcName($tmpGirl) + "...  and right now you know me completely...",
+					"Forbidden fruit...  and I gave birth to it...  *quietly*  ...I'm not the least bit sorry...",
+					"You came from me, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...and now you come back to me like this...",
+					"I raised you so well...  *gasping*  ...so well, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<</if>>
 
 	<<else>>
 
@@ -563,19 +597,51 @@
 				])>>
 			<</sayNpc>>
 
-		<<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(40)>>
+		<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc')) && setup.percentageChance(45)>>
 
-			<<sayNpc $tmpGirl>>
-				<<=either([
-					"It's so naughty " + setup.npc.mcName($tmpGirl) + ".. but it feels so right....",
-					"Mmmm, " + setup.npc.mcName($tmpGirl) + ".. doesn't forbidden ass feel the best...?",
-					"Yes, " + setup.npc.mcName($tmpGirl) + ", let me feel that special cock deep inside me..",
-					"You know this ass was made just for you, " + setup.npc.mcName($tmpGirl) + "...",
-					"I bet mom doesn't let you do this, does she?",
-					"All of my holes belong to you, " + setup.npc.mcName($tmpGirl) + ".  You know why...",
-					"I was made for you, daddy..."
-				])>>
-			<</sayNpc>>
+			<<if $tmpGirl.family?.father === 'mc'>>
+
+				<<sayNpc $tmpGirl>>
+					<<=either([
+						"It's so naughty " + setup.npc.mcName($tmpGirl) + ".. but it feels so right....",
+						"Mmmm, " + setup.npc.mcName($tmpGirl) + ".. doesn't forbidden ass feel the best...?",
+						"Yes, " + setup.npc.mcName($tmpGirl) + ", let me feel that special cock deep inside me..",
+						"You know this ass was made just for you, " + setup.npc.mcName($tmpGirl) + "...",
+						"I bet mom doesn't let you do this, does she?",
+						"All of my holes belong to you, " + setup.npc.mcName($tmpGirl) + ".  You know why...",
+						"I was made for you, daddy..."
+					])>>
+				<</sayNpc>>
+
+			<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc')>>
+
+				<<sayNpc $tmpGirl>>
+					<<=either([
+						"We share so many things, " + setup.npc.mcName($tmpGirl) + "...  *gasping*  ...but this has to be the most forbidden one...",
+						"Mmmm, " + setup.npc.mcName($tmpGirl) + "...  siblings who share everything...  I mean everything...",
+						"I let nobody else back here...  *breathless*  ...but you're not just anyone, " + setup.npc.mcName($tmpGirl) + "...",
+						"It's wrong...  *gasping*  ...which is exactly why it feels this good...",
+						"My own brother...  *whispering*  ...all the way in...  I'm not complaining, " + setup.npc.mcName($tmpGirl) + "...",
+						"You know, growing up sharing the same roof...  *breathless*  ...I always wondered if we'd end up here...",
+						"Forbidden fruit hits different when it's your own blood, " + setup.npc.mcName($tmpGirl) + "..."
+					])>>
+				<</sayNpc>>
+
+			<<else>>
+
+				<<sayNpc $tmpGirl>>
+					<<=either([
+						"My own son, taking me here...  *breathless*  ...you've grown into quite the man, " + setup.npc.mcName($tmpGirl) + "...",
+						"I gave you everything when you were little...  *gasping*  ...and I'm still giving everything, " + setup.npc.mcName($tmpGirl) + "...",
+						"You belong to me more than anyone...  *quietly*  ...so I suppose I belong to you too...",
+						"My body made yours, " + setup.npc.mcName($tmpGirl) + "...  *breathless*  ...and now yours claims mine...  the poetry of it...",
+						"Forbidden?  Perhaps...  *gasping*  ...but I raised a man who takes what he wants, and I admire that...",
+						"Mmm, " + setup.npc.mcName($tmpGirl) + "...  you certainly know how to handle your mother...",
+						"Every part of me was always yours to have, " + setup.npc.mcName($tmpGirl) + "..."
+					])>>
+				<</sayNpc>>
+
+			<</if>>
 
 		<<elseif ($tmpGirl.virgin ?? false) && setup.percentageChance(40)>>
 
@@ -703,19 +769,51 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif !$player?.baseManagement?.noIncest && $tmpGirl.family?.hasOwnProperty('father') && $tmpGirl.family?.father === 'mc' && setup.percentageChance(45)>>
+	<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc')) && setup.percentageChance(45)>>
 
-		<<sayNpc $tmpGirl>>
-			<<=either([
-				"*gasps* You came inside me, daddy!  You're so naughty..",
-				"Daddy!  You're gonna make me a mommy if you keep doin' that...",
-				"Oh, " + setup.npc.mcName($tmpGirl) + ", I can feel how much you love your forbidden fruit...",
-				"Ahhh, " + setup.npc.mcName($tmpGirl) + ", yes.. put that seed where it really belongs...",
-				"So naughty, " + setup.npc.mcName($tmpGirl) + ".  What will our family tree look like?",
-				"Mmmh, " + setup.npc.mcName($tmpGirl) + ", I love when you fill me with what made me...",
-				"Ohhh, " + setup.npc.mcName($tmpGirl) + ", I was made for your seed..."
-			])>>
-		<</sayNpc>>
+		<<if $tmpGirl.family?.father === 'mc'>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*gasps* You came inside me, daddy!  You're so naughty..",
+					"Daddy!  You're gonna make me a mommy if you keep doin' that...",
+					"Oh, " + setup.npc.mcName($tmpGirl) + ", I can feel how much you love your forbidden fruit...",
+					"Ahhh, " + setup.npc.mcName($tmpGirl) + ", yes.. put that seed where it really belongs...",
+					"So naughty, " + setup.npc.mcName($tmpGirl) + ".  What will our family tree look like?",
+					"Mmmh, " + setup.npc.mcName($tmpGirl) + ", I love when you fill me with what made me...",
+					"Ohhh, " + setup.npc.mcName($tmpGirl) + ", I was made for your seed..."
+				])>>
+			<</sayNpc>>
+
+		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc')>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*shivering* You came inside me, " + setup.npc.mcName($tmpGirl) + "...  your own sister...  we are absolutely terrible...",
+					"Mmmh...  siblings who share everything...  *gasping*  ...and I mean everything...",
+					"What would people say...  *softly*  ...I honestly don't care right now, " + setup.npc.mcName($tmpGirl) + "...",
+					"Your seed, inside your sister...  *breathless*  ...forbidden fruit at its finest...",
+					"You know this makes us even closer, " + setup.npc.mcName($tmpGirl) + "...  *quietly*  ...if that was even possible...",
+					"I always knew this would happen eventually...  *sighing*  ...and it was worth every second of the wait, " + setup.npc.mcName($tmpGirl) + "...",
+					"So wrong...  *exhaling*  ...so, so right..."
+				])>>
+			<</sayNpc>>
+
+		<<else>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*gasping* You came inside your own mother, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...and I'm not the least bit sorry...",
+					"You came from me once...  *exhaling*  ...and now you come back inside me...  full circle, " + setup.npc.mcName($tmpGirl) + "...",
+					"Mmmh...  I gave you life...  *quietly*  ...and right now I'd give you anything, " + setup.npc.mcName($tmpGirl) + "...",
+					"So naughty, my son...  *breathless*  ...so very naughty...  and I'll take some credit for that...",
+					"Your seed where it all began...  *softly*  ...I can't think of a better place for it, " + setup.npc.mcName($tmpGirl) + "...",
+					"What will the family tree look like...  *quietly*  ...I suppose we'll find out...",
+					"Your mother receives you completely, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...as she always has..."
+				])>>
+			<</sayNpc>>
+
+		<</if>>
 
 	<<elseif $tmpGirl.location === 'gloryhole' && setup.percentageChance(35)>>
 
@@ -1242,6 +1340,46 @@
 				"Mmm...  *whispering*  This is completely reckless...  I'm kissing a stranger in a nightclub bathroom...  *smiling*  worth it."
 			])>>
 		<</sayNpc>>
+
+	<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc')) && setup.percentageChance(45)>>
+
+		<<if $tmpGirl.family?.father === 'mc'>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*softly* Only you kiss me like this, " + setup.npc.mcName($tmpGirl) + "...  *against your lips*  ...the best goodnight kisses ever...",
+					"Mmmm...  You feel like home, " + setup.npc.mcName($tmpGirl) + "...  *pulling you closer*  ...the only place I ever want to be...",
+					"*breathing softly* You shouldn't make me feel like this, daddy...  *kissing you again*  ...I keep coming back anyway, " + setup.npc.mcName($tmpGirl) + "...",
+					"There's love in this kiss...  *whispering*  ...the kind I'm not supposed to have for you...  *softly*  ...and I always want more of it...",
+					"*against your lips* My own father...  *sigh*  ...and nobody else will ever make me feel the way you do, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc')>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*quietly* Nobody knows me the way you do, " + setup.npc.mcName($tmpGirl) + "...  *against your lips*  ...and nobody kisses me the way you do either...",
+					"Mmmm...  It's still love, " + setup.npc.mcName($tmpGirl) + "...  *kissing you slowly*  ...just more than it used to be...",
+					"*softly* We share everything...  *whispering*  ...and I mean everything, " + setup.npc.mcName($tmpGirl) + "...",
+					"*breathless* We always come back to this...  *kissing you again*  ...and I never want to stop...",
+					"*pulling back slightly* We shouldn't...  *leaning back in*  ...we always do anyway, " + setup.npc.mcName($tmpGirl) + "..."
+				])>>
+			<</sayNpc>>
+
+		<<else>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*softly* My son...  *against your lips*  ...the only one who kisses me like I matter completely...",
+					"Mmmm...  I gave you everything from the start, " + setup.npc.mcName($tmpGirl) + "...  *kissing you slowly*  ...and I keep finding more to give...",
+					"*breathing softly* I raised you with so much love, " + setup.npc.mcName($tmpGirl) + "...  *against your lips*  ...and it turns out some of it lives here...",
+					"*trembling* My boy, grown into a man who knows exactly how to hold me...  *softly*  ...I'm not sorry, " + setup.npc.mcName($tmpGirl) + "...",
+					"*pulling you close* This love was always ours, " + setup.npc.mcName($tmpGirl) + "...  *quietly*  ...it just found a new shape..."
+				])>>
+			<</sayNpc>>
+
+		<</if>>
 
 	<<else>>
 
