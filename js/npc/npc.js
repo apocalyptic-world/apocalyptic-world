@@ -1068,22 +1068,36 @@ setup.npcGetPackPortrait =  function(npc) {
 	return null;
 }
 
-setup.handleBathing = function (guest, newBonus = 0) {
-	const maxBeauty = 100;
+setup.wash = function (npc, options = {}) {
+    const {
+        beautyMultiplier = 2,
+        washDays = 2,
+        relationshipBonus = 0,
+        happyBonus = 0,
+        newBonus = null,
+        markWashed = false,
+    } = options;
 
-	if (!guest.washDays) {
-		guest.baseBeauty = guest.beauty;
-		guest.washBeauty = Math.min(newBonus, 5); // clamp initial bonus
-		guest.beauty = Math.min(guest.beauty + (guest.washBeauty * 2), maxBeauty);
-	} else {
-		const decay = guest.washBeauty * guest.washDays;
-		guest.beauty = Math.max(guest.beauty - decay, 0);
+    const bonus = newBonus !== null ? Math.min(newBonus, 5) : randomInteger(1, 2);
 
-		// Reapply bonus, safely
-		const adjustedBonus = Math.min(guest.washBeauty, 5);
-		guest.beauty = Math.min(guest.beauty + (adjustedBonus * 2), maxBeauty);
-	}
+    if (!npc.washDays) {
+        npc.baseBeauty = npc.beauty;
+        npc.washBeauty = bonus;
+        npc.beauty = Math.min(npc.beauty + (bonus * beautyMultiplier), 100);
+        if (relationshipBonus) {
+            npc.relationship = Math.min((npc.relationship ?? 0) + relationshipBonus, 100);
+        }
+    } else {
+        npc.beauty = Math.max(npc.beauty - npc.washBeauty * npc.washDays, 0);
+        npc.beauty = Math.min(npc.beauty + (npc.washBeauty * beautyMultiplier), 100);
+    }
 
-	guest.washBeauty = Math.min(guest.washBeauty ?? newBonus, 5); // clamp stored bonus too
-	guest.washDays = 2;
+    npc.washDays = washDays;
+
+    if (happyBonus) {
+        npc.happy = Math.min((npc.happy ?? 0) + happyBonus, 100);
+    }
+    if (markWashed) {
+        npc.washed = true;
+    }
 };

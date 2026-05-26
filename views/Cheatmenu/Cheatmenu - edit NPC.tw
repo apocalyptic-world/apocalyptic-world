@@ -118,45 +118,6 @@
     <</if>>
     <tr>
         <td>
-            Long Lost Family:
-        </td>
-        <td>
-            <<set _isOffspring = ($tmpGirl.family?.father ?? '') === 'mc' || ($tmpGirl.family?.mother ?? '') === 'mc'>>
-            <<set _siblingRole = ($tmpGirl.gender === 1) ? 'brother' : 'sister'>>
-            <<set _parentRole = ($tmpGirl.gender === 1) ? 'father' : 'mother'>>
-            <<set _existingParentId = ($tmpGirl.gender === 1) ? ($player.family?.father ?? '') : ($player.family?.mother ?? '')>>
-            <<if _isOffspring>>
-                <span style="opacity:0.5">
-                    <input type="checkbox" disabled> Sibling (<<=_siblingRole>>)<br>
-                    <input type="checkbox" disabled> Parent (<<=_parentRole>>)<br>
-                    <em>(already your offspring)</em>
-                </span>
-            <<else>>
-                <<set _isSiblingChecked = ($player.family?.siblings ?? []).includes($tmpGirl.id) ? 'checked' : null>>
-                <<set _isParentChecked = _existingParentId === $tmpGirl.id ? 'checked' : null>>
-                <<if $player.baseManagement?.noIncest>>
-                    <div style="opacity:0.5; font-size: 0.85em; margin-bottom: 4px;">Options cannot both be selected, as it implies a forbidden relationship in the MC's bloodline</div>
-                <</if>>
-                <div><<checkbox "_isSibling" false true _isSiblingChecked>> Sibling (<<=_siblingRole>>)</div>
-                <div>
-                    <<if $tmpGirl.virgin>>
-                        <span style="opacity:0.5">
-                            <input type="checkbox" disabled> Parent (<<=_parentRole>>)
-                        </span>
-                        <em style="font-size:0.85em;">(A virgin cannot be your parent... or were you immaculately conceived?)</em>
-                    <<else>>
-                        <<checkbox "_isParent" false true _isParentChecked>> Parent (<<=_parentRole>>)
-                        <<if _existingParentId && _existingParentId !== $tmpGirl.id>>
-                            <<set _replacedParentNpc = setup.getNpcById(_existingParentId)>>
-                            <span style="color: #c66; font-size: 0.85em;">Will replace <<=_replacedParentNpc?.name ?? _existingParentId>> as the <<=_parentRole>> if selected.</span><br>
-                        <</if>>
-                    <</if>>
-                </div>
-            <</if>>
-        </td>
-    </tr>
-    <tr>
-        <td>
             Race:
         </td>
         <td>
@@ -314,56 +275,6 @@
         <</if>>
     <</if>>
     <<set $tmpGirl.race = _race>>
-    <<if !(($tmpGirl.family?.father ?? '') === 'mc' || ($tmpGirl.family?.mother ?? '') === 'mc')>>
-        <<set $player.family ??= {}>>
-        <<set _parentRoleSave = ($tmpGirl.gender === 1) ? 'father' : 'mother'>>
-        <<set $player.family.siblings ??= []>>
-        <<if _isSibling>>
-            <<if !$player.family.siblings.includes($tmpGirl.id)>>
-                <<run $player.family.siblings.push($tmpGirl.id)>>
-            <</if>>
-            <<set $tmpGirl.family ??= {}>>
-            <<set $tmpGirl.family.siblings ??= []>>
-            <<if !$tmpGirl.family.siblings.includes('mc')>>
-                <<run $tmpGirl.family.siblings.push('mc')>>
-            <</if>>
-        <<else>>
-            <<set $player.family.siblings = $player.family.siblings.filter(id => id !== $tmpGirl.id)>>
-            <<if $tmpGirl.family?.siblings>>
-                <<set $tmpGirl.family.siblings = $tmpGirl.family.siblings.filter(id => id !== 'mc')>>
-            <</if>>
-        <</if>>
-        <<set _priorParentId = (_parentRoleSave === 'father') ? ($player.family?.father ?? '') : ($player.family?.mother ?? '')>>
-        <<if _isParent>>
-            <<if _priorParentId && _priorParentId !== $tmpGirl.id>>
-                <<set _oldParentNpc = setup.getNpcById(_priorParentId)>>
-                <<if _oldParentNpc?.family?.kids>>
-                    <<set _oldParentNpc.family.kids = _oldParentNpc.family.kids.filter(id => id !== 'mc')>>
-                <</if>>
-            <</if>>
-            <<if _parentRoleSave === 'father'>>
-                <<set $player.family.father = $tmpGirl.id>>
-            <<else>>
-                <<set $player.family.mother = $tmpGirl.id>>
-            <</if>>
-            <<set $tmpGirl.family ??= {}>>
-            <<set $tmpGirl.family.kids ??= []>>
-            <<if !$tmpGirl.family.kids.includes('mc')>>
-                <<run $tmpGirl.family.kids.push('mc')>>
-            <</if>>
-        <<else>>
-            <<if _priorParentId === $tmpGirl.id>>
-                <<if _parentRoleSave === 'father'>>
-                    <<run delete $player.family.father>>
-                <<else>>
-                    <<run delete $player.family.mother>>
-                <</if>>
-                <<if $tmpGirl.family?.kids>>
-                    <<set $tmpGirl.family.kids = $tmpGirl.family.kids.filter(id => id !== 'mc')>>
-                <</if>>
-            <</if>>
-        <</if>>
-    <</if>>
     <<if setup.getAge($tmpGirl) >= 18>>
         <<set $tmpGirl.likesGirls = _likes.likesGirls>>
         <<set $tmpGirl.likesGuys = _likes.likesGuys>>

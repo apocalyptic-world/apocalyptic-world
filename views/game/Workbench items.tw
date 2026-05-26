@@ -84,7 +84,7 @@
 			after: function() {}
 		},
 		basement_cell: {
-			show: $basementLimit < 35,
+			show: $basementLimit < 40,
 			title: 'Basement cell',
 			description: 'Build an additional cell in the basement.',
 			required: {
@@ -93,7 +93,7 @@
 			},
 			energy: 60,
 			after: function() {
-				variables().basementLimit = variables().basementLimit +=1;
+				variables().basementLimit = variables().basementLimit += 1;
 			},
 			goto: 'Workbench'
 		},
@@ -170,7 +170,7 @@
 			goto: "Workbench"
 		},
 		guesthouse_cell: {
-			show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 30,
+			show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 35,
 			title: 'Guest house bed',
 			description: 'Build additional bed in guest house',
 			required: {
@@ -182,7 +182,7 @@
 				if (!Number.isInteger(variables().guesthouseLimit)) {
 					variables().guesthouseLimit = 3;
 				}
-				variables().guesthouseLimit = variables().guesthouseLimit +=1;
+				variables().guesthouseLimit = variables().guesthouseLimit += 1;
 			},
 			goto: "Workbench"
 		},
@@ -253,7 +253,7 @@
 			after: function() {}
 		},
 		shop: {
-			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && (!$game.location.shop ?? false),
+			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && !($game.location.shop ?? false),
 			title: "Shop",
 			description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
 			required: {
@@ -265,6 +265,8 @@
 			energy: 100,
 			after: function() {
 				variables().game.location.shop = true;
+				variables().characters.vincent.quests ??= {};
+				variables().characters.vincent.quests.shop_talk ??= true;
 			}
 		},
 		bathhouse: {

@@ -44,8 +44,16 @@
 
 							<<set $guestId2 = _j>>
 							<<set $tmpGirl2 = $guests[_j]>>
-							<<set $tmpGirlViewBack = 'NPC view - guest'>>
-							<<unset $charId, $slaveId>>
+							<<if typeof $charId !== 'undefined'>>
+								<<set $tmpGirlViewBack = 'NPC view - character'>>
+								<<unset $slaveId>>
+							<<elseif typeof $slaveId !== 'undefined'>>
+								<<set $tmpGirlViewBack = 'NPC view'>>
+								<<unset $charId>>
+							<<else>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<unset $charId, $slaveId>>
+							<</if>>
 							<<threesome $tmpGirl $tmpGirl2>>
 						<</link>>
 					<</if>>
@@ -78,8 +86,16 @@
 
 							<<set $charId2 = _charI>>
 							<<set $tmpGirl2 = $characters[_charI]>>
-							<<set $tmpGirlViewBack = 'NPC view - guest'>>
-							<<unset $charId, $slaveId>>
+							<<if typeof $guestId !== 'undefined'>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<unset $charId, $slaveId>>
+							<<elseif typeof $slaveId !== 'undefined'>>
+								<<set $tmpGirlViewBack = 'NPC view'>>
+								<<unset $charId>>
+							<<else>>
+								<<set $tmpGirlViewBack = 'NPC view - character'>>
+								<<unset $slaveId>>
+							<</if>>
 							<<threesome $tmpGirl $tmpGirl2>>
 						<</link>>
 					<</if>>

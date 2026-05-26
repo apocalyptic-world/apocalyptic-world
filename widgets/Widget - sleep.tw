@@ -189,6 +189,9 @@
 			<</if>>
 			<<if $slaves[_i].gardenDay == 3>>
 				<<set $slaves[_i].gardenDay = 0>>
+				<<if ($slaves[_i].traits ?? []).includes('hoarder')>>
+					<<set _foodGive = Math.max(1, Math.floor(_foodGive / 2))>>
+				<</if>>
 				<<set _totals.food += _foodGive>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' _foodGive>>
@@ -251,29 +254,28 @@
 				<<set _i-->>
 				<<continue>>
 			<<else>>
+				<<if setup.percentageChance(10)>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' had a close call in the streets last night but made it back.', 'streets')>>
+				<</if>>
 				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
 					<<setNpcStats 'slave' _i 'happy' -5>>
 				<</if>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set $slaves[_i].statsSex ??= {}>>
 					<<if !_npc.chastityBelt>>
 						<<set $slaves[_i].virgin = false>>
 						<<if setup.percentageChance(50)>>
-							<<set $slaves[_i].statsSex['pussy'] ??= 0>>
-							<<set $slaves[_i].statsSex['pussy']++>>
+							<<run setup.jobs.applyJobAct(_npc, 'pussy')>>
 						<</if>>
 					<</if>>
 
 					<<if setup.percentageChance(50)>>
-						<<set $slaves[_i].statsSex['bj'] ??= 0>>
-						<<set $slaves[_i].statsSex['bj']++>>
+						<<run setup.jobs.applyJobAct(_npc, 'bj')>>
 					<</if>>
 
 					<<if setup.percentageChance(20)>>
-						<<set $slaves[_i].statsSex['anal'] ??= 0>>
-						<<set $slaves[_i].statsSex['anal']++>>
+						<<run setup.jobs.applyJobAct(_npc, 'anal')>>
 					<</if>>
-					
+
 					<<set _randomAction = [];>>
 
 					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
@@ -327,30 +329,32 @@
 		<<if _isLowFood>>
 			<<set $slaves[_i].happy -=2>>
 		<</if>>
-		<<if $slaves[_i].food <= 10>>
-			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
-			<<if $storage.has('food')>>
-				<<drop $storage 'food' 1>> 
-				<<set $slaves[_i].food to 100>>
-				<<set $slaves[_i].happy++>>
-			<<elseif $backpack.has('food')>>
-				<<drop $backpack 'food' 1>> 
-				<<set $slaves[_i].food to 100>>
-				<<set $slaves[_i].happy++>>
-			<</if>>
+		<<if !($slaves[_i].traits ?? []).includes('hoarder')>>
+			<<if $slaves[_i].food <= 10>>
+				<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
+				<<if $storage.has('food')>>
+					<<drop $storage 'food' 1>>
+					<<set $slaves[_i].food to 100>>
+					<<set $slaves[_i].happy++>>
+				<<elseif $backpack.has('food')>>
+					<<drop $backpack 'food' 1>>
+					<<set $slaves[_i].food to 100>>
+					<<set $slaves[_i].happy++>>
+				<</if>>
 
-			<<if $slaves[_i].food <= -20>>
-				<<set _totals['slave'] = (_totals['slave'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addMain('<span class="dead">' + _npc.name + ' died of hunger. You dont have enough food!</span>')>>
-				<<set $slaves.splice(_i, 1)>>
-				<<set _i-->>
-				<<continue>>
-			<<elseif $slaves[_i].food <= 10>>
-				<<run setup.sleepMessages.addMain('<span class="starving">' + _npc.name + ' is starving</span>')>>
-			<</if>>	
-		<</if>>
-		<<if setup.getAge($slaves[_i]) >= 5>>
-			<<set $slaves[_i].food -= 30>>
+				<<if $slaves[_i].food <= -20>>
+					<<set _totals['slave'] = (_totals['slave'] ?? 0) - 1>>
+					<<run setup.sleepMessages.addMain('<span class="dead">' + _npc.name + ' died of hunger. You dont have enough food!</span>')>>
+					<<set $slaves.splice(_i, 1)>>
+					<<set _i-->>
+					<<continue>>
+				<<elseif $slaves[_i].food <= 10>>
+					<<run setup.sleepMessages.addMain('<span class="starving">' + _npc.name + ' is starving</span>')>>
+				<</if>>
+			<</if>>
+			<<if setup.getAge($slaves[_i]) >= 5>>
+				<<set $slaves[_i].food -= 30>>
+			<</if>>
 		<</if>>
 
 		// Pregnancy
@@ -411,6 +415,10 @@
 				<<run delete $slaves[_i].sick>>
 			<</if>>
 		<</if>>
+		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
+			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
+			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
+		<</if>>
 		// Resting
 		<<if  _isRest>>
 			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
@@ -425,6 +433,10 @@
 			<</if>>
 		<</if>>
 
+		<<if (_npc?.quests?.lastInteractionDay + 14) < $game.day && !$player?.quests?.subDecayDisabled>>
+			<<set _npc.relationship = Math.max(-100, (_npc.relationship ?? 0) - 1)>>
+		<</if>>
+
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your slave <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
@@ -434,6 +446,11 @@
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
 <<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
+<<if $guests.length >= $guesthouseLimit>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + $guests.length + '/' + $guesthouseLimit + '). No new guests can arrive.</span>')>>
+<<elseif _isOvercrowded>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + $guests.length + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
+<</if>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 		<<set _npc = $guests[_guestI]>>
 		<<if _isOvercrowded>>
@@ -477,6 +494,9 @@
 
 		<<if (_npc?.quests?.lastInteractionDay + 7) < $game.day && setup.percentageChance && !$player?.quests?.subDecayDisabled>>
 			<<set _npc.sub = Math.max(0, (_npc.sub - 1))>>
+		<</if>>
+		<<if (_npc?.quests?.lastInteractionDay + 14) < $game.day && !$player?.quests?.subDecayDisabled>>
+			<<set _npc.relationship = Math.max(-100, (_npc.relationship ?? 0) - 1)>>
 		<</if>>
 		
 		// Leave
@@ -526,6 +546,9 @@
 			<</if>>
 			<<if $guests[_guestI].gardenDay == 3>>
 				<<set $guests[_guestI].gardenDay = 0>>
+				<<if ($guests[_guestI].traits ?? []).includes('hoarder')>>
+					<<set _foodGive = Math.max(1, Math.floor(_foodGive / 2))>>
+				<</if>>
 				<<set _totals.food += _foodGive>>
 				<<if _isStorageAvailable>>
 					<<pickup $storage 'food' _foodGive>>
@@ -577,30 +600,29 @@
 				<<set _totals['streetworker'] = (_totals['streetworker'] ?? 0) - 1>>
 				<<run setup.sleepMessages.addJob(_npc.name + ' <strong class="iitem">was found dead</strong> in the streets!', 'streets')>>
 				<<guestLeft _guestI >>
-				<<set _guestI-->> 
+				<<set _guestI-->>
 				<<continue>>
 			<<else>>
+				<<if setup.percentageChance(20)>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' had a close call in the streets last night but made it back.', 'streets')>>
+				<</if>>
 				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
 					<<setNpcStats 'guest' _guestI 'happy' -5>>
 				<</if>>
 				<<if randomInteger(0, 1) === 0>>
-					<<set _npc.statsSex ??= {}>>
 					<<if !_npc.chastityBelt>>
 						<<set _npc.virgin = false>>
 						<<if setup.percentageChance(50)>>
-							<<set _npc.statsSex['pussy'] ??= 0>>
-							<<set _npc.statsSex['pussy']++>>
+							<<run setup.jobs.applyJobAct(_npc, 'pussy')>>
 						<</if>>
 					<</if>>
 
 					<<if setup.percentageChance(50)>>
-						<<set _npc.statsSex['bj'] ??= 0>>
-						<<set _npc.statsSex['bj']++>>
+						<<run setup.jobs.applyJobAct(_npc, 'bj')>>
 					<</if>>
 
 					<<if setup.percentageChance(20)>>
-						<<set _npc.statsSex['anal'] ??= 0>>
-						<<set _npc.statsSex['anal']++>>
+						<<run setup.jobs.applyJobAct(_npc, 'anal')>>
 					<</if>>
 					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
 					<<set $player.money += _moneyEarned>>
@@ -669,13 +691,20 @@
 			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
 				<<set _giveCount++>>
 			  <</if>>
-			  <<set _totals[_randomItem] = (_totals[_randomItem] ?? 0) + _giveCount>>
-			  <<if _isStorageAvailable>>
-			  	<<pickup $storage _randomItem _giveCount>>
-			  <<else>>
-			  	<<pickup $backpack _randomItem _giveCount>>
+			  <<if ($guests[_guestI].traits ?? []).includes('hoarder')>>
+				<<set _giveCount = Math.max(0, Math.floor(_giveCount / 2))>>
 			  <</if>>
-			  <<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging.', 'scavenging')>>
+			  <<if _giveCount > 0>>
+				<<set _totals[_randomItem] = (_totals[_randomItem] ?? 0) + _giveCount>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage _randomItem _giveCount>>
+				<<else>>
+					<<pickup $backpack _randomItem _giveCount>>
+				<</if>>
+				<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging.', 'scavenging')>>
+			  <<else>>
+				<<run setup.sleepMessages.addJob(_npc.name + ' went scavenging but kept everything they found.', 'scavenging')>>
+			  <</if>>
 			<</if>>
 			<<if setup.percentageChance(10) || (setup.isNewMoon() && setup.percentageChance(20))>>
 				<<set _totals['glowing_mushroom'] = (_totals['glowing_mushroom'] ?? 0) + 1 >>
@@ -806,30 +835,32 @@
 		<<if _isLowFood>>
 			<<set $guests[_guestI].happy -=2>>
 		<</if>>
-		<<if $guests[_guestI].food <= 10>>
-  			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
-			<<if $storage.has('food')>>
-				<<drop $storage 'food' 1>> 
-				<<set $guests[_guestI].food to 100>>
-				<<set $guests[_guestI].happy++>>
-			<<elseif $backpack.has('food')>>
-				<<drop $backpack 'food' 1>> 
-				<<set $guests[_guestI].food to 100>>
-				<<set $guests[_guestI].happy++>>
-			<</if>>
+		<<if !($guests[_guestI].traits ?? []).includes('hoarder')>>
+			<<if $guests[_guestI].food <= 10>>
+				<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
+				<<if $storage.has('food')>>
+					<<drop $storage 'food' 1>>
+					<<set $guests[_guestI].food to 100>>
+					<<set $guests[_guestI].happy++>>
+				<<elseif $backpack.has('food')>>
+					<<drop $backpack 'food' 1>>
+					<<set $guests[_guestI].food to 100>>
+					<<set $guests[_guestI].happy++>>
+				<</if>>
 
-			<<if $guests[_guestI].food <= -20>>
-				<<run setup.sleepMessages.addMain('<span class="left">' + _npc.name + ' left because you don\'t not enough food!</span>')>>
-				<<guestLeft _guestI>>
-				<<set _guestI-->>
-				<<continue>>
-			<<elseif $guests[_guestI].food <= 10>>
-				<<set $guests[_guestI].happy -= 50>>
-				<<run setup.sleepMessages.addMain('<span class="starving">' + _npc.name + ' is starving!</span>')>>
+				<<if $guests[_guestI].food <= -20>>
+					<<run setup.sleepMessages.addMain('<span class="left">' + _npc.name + ' left because you don\'t not enough food!</span>')>>
+					<<guestLeft _guestI>>
+					<<set _guestI-->>
+					<<continue>>
+				<<elseif $guests[_guestI].food <= 10>>
+					<<set $guests[_guestI].happy -= 50>>
+					<<run setup.sleepMessages.addMain('<span class="starving">' + _npc.name + ' is starving!</span>')>>
+				<</if>>
 			<</if>>
-		<</if>>
-		<<if setup.getAge($guests[_guestI]) >= 5>>
-			<<set $guests[_guestI].food -= 30>>
+			<<if setup.getAge($guests[_guestI]) >= 5>>
+				<<set $guests[_guestI].food -= 30>>
+			<</if>>
 		<</if>>
 		
 		// Sick
@@ -841,6 +872,10 @@
 			<<if $guests[_guestI].sick.days <= 0>>
 				<<run delete $guests[_guestI].sick>>
 			<</if>>
+		<</if>>
+		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
+			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
+			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
 		<</if>>
 		// Resting
 		<<if _isRest>>

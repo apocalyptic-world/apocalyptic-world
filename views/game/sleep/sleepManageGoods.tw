@@ -3,8 +3,11 @@
 <<set _shopKeeperId = setup.getPersonsForLocation($guests, 'shop')>>
     <<if _shopKeeperId.length>>
         <<set _shopKeeper = $guests[_shopKeeperId[0]]>>
+        <<set _settlerCount = $player.baseManagement?.settlers ?? 0>>
+        <<set _settlementRep = $player.baseManagement?.settlementReputation ?? 50>>
+        <<set _settlerEconomyBonus = Math.floor(_settlerCount * (_settlementRep / 100))>>
         <<for _manageGoodsName, _manageGoods range ($player.manageGoods ?? {})>>
-            <<set _chance = setup.inventoryManageable[_manageGoodsName].chance>>
+            <<set _chance = setup.inventoryManageable[_manageGoodsName].chance + _settlerEconomyBonus>>
             <<set _count  = $storage.count(_manageGoodsName)>>
             <<set _price  = setup.inventoryManageable[_manageGoodsName].price>>
             <<if _manageGoods.min && _count < _manageGoods.min>>

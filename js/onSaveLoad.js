@@ -155,12 +155,20 @@ Save.onLoad.add(function (save) {
 
     if (typeof save.state.history[save.state.index].variables.characters.octavia !== 'undefined') {
         checkAndFixTraits(save.state.history[save.state.index].variables.characters.octavia);
+        const _warriors = save.state.history[save.state.index].variables.characters.octavia?.quests?.warriors;
+        if (_warriors !== undefined && Array.isArray(_warriors)) {
+            save.state.history[save.state.index].variables.characters.octavia.quests.warriors = _warriors.filter(w => typeof w === 'object' && w !== null);
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
         save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
         save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
         save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
+        if (save.state.history[save.state.index].variables.game?.location?.shop) {
+            save.state.history[save.state.index].variables.characters.vincent.quests ??= {};
+            save.state.history[save.state.index].variables.characters.vincent.quests.shop_talk ??= true;
+        }
     }
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {

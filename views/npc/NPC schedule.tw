@@ -12,8 +12,7 @@
 			(typeof _bathSchedule[_scheduleGuest.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleGuest.assignedTo].from, _bathSchedule[_scheduleGuest.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleGuest.assignedTo].p))))
 			)>>
 				<<set _scheduleGuest.washedBathhouse = true>>
-				<<set _beautyInc = randomInteger(1, 2)>>
-				<<run setup.handleBathing(_scheduleGuest, _beautyInc)>>
+				<<run setup.wash(_scheduleGuest)>>
 				<<set _scheduleGuest.location = 'bathhouse'>>
 				<<setNpcStats 'guest' _scheduleGuestI 'happy' 3>>
 		<</if>>
@@ -30,18 +29,8 @@
 			(typeof _bathSchedule[_scheduleSlave.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleSlave.assignedTo].from, _bathSchedule[_scheduleSlave.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleSlave.assignedTo].p))))
 			)>>
 				<<set _scheduleSlave.washedBathhouse = true>>
-				<<set _beautyInc = randomInteger(1, 2)>>
-				<<if !(_scheduleSlave.washDays ?? false)>>
-					<<set _scheduleSlave.baseBeauty = _scheduleSlave.beauty>>
-					<<set _scheduleSlave.washBeauty = _beautyInc>>
-					<<set _scheduleSlave.beauty = Math.min(_scheduleSlave.beauty + (_beautyInc * 2), 100)>>
-				<<else>>
-					<<set _scheduleSlave.beauty -= _scheduleSlave.washBeauty * _scheduleSlave.washDays>>
-					<<set _scheduleSlave.beauty = Math.min(_scheduleSlave.beauty + (_scheduleSlave.washBeauty * 2), 100)>>
-				<</if>>
-				<<set _scheduleSlave.washDays = 2>>
+				<<run setup.wash(_scheduleSlave)>>
 				<<set _scheduleSlave.location = 'bathhouse'>>
-
 				<<setNpcStats 'slave' _scheduleSlaveI 'happy' 3>>
 		<</if>>
 <</for>>
