@@ -50,3 +50,84 @@
 	<</if>>
 	<<run setup.sleepMessages.addMain(_xanaxMsg)>>
 <</if>>
+
+// Slumber party
+<<set _slumberWorkJobs = ['strip_club', 'nightclub', 'streets']>>
+<<if setup.npcInventoryHas(_npc, 'cosmetics') && _npc.happy >= 25 && typeof _npc.sick === 'undefined' && (_npc.gender === 0 || _npc.gender === 2) && !_slumberWorkJobs.includes(_npc.assignedTo)>>
+	<<run
+		const pool = [];
+		if (_isGuest) {
+			const stats = (_npc.relationshipBetween ?? {}).stats ?? {};
+			const workJobs = _slumberWorkJobs;
+			for (const gId in stats) {
+				const g = $guests.find(gg => String(gg.id) === String(gId));
+				if (g && g.id !== _npc.id && (g.gender === 0 || g.gender === 2) && !workJobs.includes(g.assignedTo)) {
+					pool.push(g);
+				}
+			}
+		} else {
+			const workJobs = _slumberWorkJobs;
+			for (const s of $slaves) {
+				if (s.id !== _npc.id && (s.gender === 0 || s.gender === 2) && !workJobs.includes(s.assignedTo)) {
+					pool.push(s);
+				}
+			}
+		}
+
+		const partyAlreadyTonight = _slumberPartyTonight ?? false;
+		const cooldownOk = typeof _npc.slumberPartyDay === 'undefined' || $game.day >= _npc.slumberPartyDay + 5;
+
+		if (pool.length && !partyAlreadyTonight && cooldownOk && setup.percentageChance(20)) {
+			const count = _isGuest ? randomInteger(1, Math.min(4, pool.length)) : 1;
+			const party = _isGuest
+				? pool.sort(() => 0.5 - Math.random()).slice(0, count)
+				: [setup.getRandomElement(pool)];
+
+			let msg = _isGuest
+				? _npc.name + ' got together with ' + (party.length > 1 ? 'some friends' : 'a friend') + ' for a slumber party, and they gave each other makeovers!\n'
+				: _npc.name + ' and her neighbor ' + party[0].name + ' gave each other makeovers through the bars.\n';
+
+			for (const partyNpc of [_npc].concat(party)) {
+				if (partyNpc.beauty >= 91) {
+					msg += setup.displayName(partyNpc) + ' was already Stunning, you cannot improve a masterpiece.\n';
+				} else {
+					const beforeCat = Math.floor((partyNpc.beauty - 1) / 10);
+					partyNpc.beauty += randomInteger(1, 2);
+					if (Math.floor((partyNpc.beauty - 1) / 10) > beforeCat) {
+						msg += setup.displayName(partyNpc) + ' found the perfect shade to bring forth her potential. She now looks ' + setup.beautyDescription(partyNpc.beauty) + '\n';
+					} else {
+						msg += setup.displayName(partyNpc) + ' improved her beauty, and looks ' + setup.beautyDescription(partyNpc.beauty) + '\n';
+					}
+				}
+			}
+
+			const allParty = [_npc].concat(party);
+			for (const partyNpc of allParty) {
+				partyNpc.happy = Math.min(100, partyNpc.happy + randomInteger(1, 5));
+			}
+			if (_isGuest) {
+				for (const npcA of allParty) {
+					if (!npcA.relationshipBetween) {
+						npcA.relationshipBetween = { stats: {}, likes: null, dislikes: [] };
+					}
+					for (const npcB of allParty) {
+						if (npcA.id === npcB.id) continue;
+						if (typeof npcA.relationshipBetween.stats[npcB.id] !== 'undefined') {
+							npcA.relationshipBetween.stats[npcB.id] = Math.min(100,
+								npcA.relationshipBetween.stats[npcB.id] + randomInteger(1, 5)
+							);
+						} else {
+							npcA.relationshipBetween.stats[npcB.id] = 10;
+						}
+					}
+				}
+			}
+
+			setup.npcInventoryRemove(_npc, 'cosmetics', 1);
+			_npc.slumberPartyDay = $game.day;
+			_slumberPartyTonight = true;
+
+			setup.sleepMessages.addJob(msg, 'slumber_party');
+		}
+	>>
+<</if>>

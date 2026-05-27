@@ -791,8 +791,13 @@ setup.includesAll = function(have, want) {
 setup.sexChance = function (person, gender = 1, beauty) {
     var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
     var appeal = (beauty ?? person.relationship);
+    var spouseId = person.family?.husband;
+    var spouseDead = spouseId && (
+        (variables().characters[spouseId]?.dead ?? false) ||
+        variables().characters[spouseId]?.quests?.dead
+    );
 
-    if (person.married && (!person.family || person.family.husband !== 'mc')) {
+    if (person.married && (!person.family || person.family.husband !== 'mc') && !spouseDead) {
         return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
     } else if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;

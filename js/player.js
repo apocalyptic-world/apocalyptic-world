@@ -112,9 +112,9 @@ setup.player = {
      * @param {*} showMC 
      * @returns         string
      */
-    npcRelationText: function(npcID, pregCheck = true, showMC = false, hideRel = '') {
+    npcRelationText: function(npcID, pregCheck = true, showMC = false, hideRel = '', context = '') {
         if(((npcID ?? 'unknown') === 'unknown') || (!showMC && npcID === 'mc'))
-        {            
+        {
             return '';
         }
         const npc = setup.getNpcById(npcID);
@@ -124,7 +124,7 @@ setup.player = {
         if(npcID === 'mc') {
             npc.id = npcID;
         }
-        return this.npcRelationText2(npc, pregCheck, showMC, hideRel);
+        return this.npcRelationText2(npc, pregCheck, showMC, hideRel, context);
     },
 
     /**
@@ -134,7 +134,7 @@ setup.player = {
      * @param {*} showMC 
      * @returns 
      */
-    npcRelationText2: function(npc, pregCheck = true, showMC = false, hideRel = '') {
+    npcRelationText2: function(npc, pregCheck = true, showMC = false, hideRel = '', context = '') {
         const npcID =npc.id;
 
 	let family_container = 'display:flex;width:100;padding-inline:5px;align-items:flex-start;';
@@ -156,49 +156,60 @@ setup.player = {
             if (['wives','kids'].includes(relation)) {
                 const out = [];
                 for(const id of (family[relation] ?? [])) {
- /*                  if(((npcID ?? 'unknown') !== 'unknown') || (showMC && npcID === 'mc')) */
-
+                    if(id === 'mc' && (context === 'parent' || context === 'sibling')) continue;
                     if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
                         const rel = setup.getNpcById(id);
                         if(rel) {
 				if (relation == 'kids') {
+					let fullKidLabel;
 					if (rel.family['father'] == 'mc') {
-						out.push('Your |' + setup.player.npcNameColor(rel));
+						if (context === 'parent') fullKidLabel = '\u200BYour kids/siblings';
+						else if (context === 'sibling') fullKidLabel = '\u200BYour kids/niblings';
+						else if (npc.family['father'] == 'mc') fullKidLabel = '\u200BYour kids/grandkids';
+						else fullKidLabel = 'Your kids';
 					} else if ((rel.family['father'] ?? false) && (setup.getNpcById(rel.family['father']) ?? false)) {
 						let kidDad = setup.getNpcById(rel.family['father']);
-		                            	out.push(setup.player.npcNameColor(kidDad) + "'s |" + setup.player.npcNameColor(rel));
+						fullKidLabel = setup.player.npcNameColor(kidDad) + "'s kids";
 					} else {
-						if (hideRel == 'husband') {
-			                            	out.push("Your step-|" + setup.player.npcNameColor(rel));
-						} else {
-			                            	out.push("Other |" + setup.player.npcNameColor(rel));
-						}
+						if (hideRel == 'husband') fullKidLabel = 'Your step-kids';
+						else if (context === 'parent') fullKidLabel = 'Your siblings';
+						else if (context === 'sibling') fullKidLabel = 'Your niblings';
+						else fullKidLabel = 'Other kids';
 					}
+					out.push(fullKidLabel + '|' + setup.player.npcNameColor(rel));
 					for (const kidID of (rel.family['kids'] ?? [])) {
-			            const gkid = setup.getNpcById(kidID);
-		                out.push("\u200BGrand-|" + setup.player.npcNameColor(gkid) + " (" + rel.name + ")");
+						const gkid = setup.getNpcById(kidID);
+						if (!gkid || id === 'mc') continue;
+						out.push("\u200B​Grand-kids|" + setup.player.npcNameColor(gkid) + " (" + rel.name + ")");
 					}
 				} else {
                             		out.push(setup.player.npcNameColor(rel));
 				}
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if(out.length) {
 			if (relation !== 'kids') {
                     		npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + out.sort().join(', ') + '</span></div> ';
 			} else {
+				const labelCounts = new Map();
+				for (const kidWithDad of out) {
+					const lbl = kidWithDad.split('|')[0];
+					labelCounts.set(lbl, (labelCounts.get(lbl) ?? 0) + 1);
+				}
 				let lastDad = '';
 				for (const kidWithDad of out.sort()) {
 					let parts = kidWithDad.split('|');
 					let myKid = parts[1];
 					let myDad = parts[0];
+					const myCount = labelCounts.get(myDad) ?? 1;
+					const myLabel = myDad + ' (' + myCount + ')';
 
 					if (lastDad == '') {
-						npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + myDad + relation + ': </span><span style="' + relation_names + '">';
+						npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + myLabel + ': </span><span style="' + relation_names + '">';
 						lastDad = myDad;
 					} else if (myDad !== lastDad) {
-						npcText += '</span></div> <div style="' + relation_group + '"><span style="' + relation_label + '">' + myDad + relation + ': </span><span style="' + relation_names + '">';
+						npcText += '</span></div> <div style="' + relation_group + '"><span style="' + relation_label + '">' + myLabel + ': </span><span style="' + relation_names + '">';
 						lastDad = myDad;
 					} else {
 						npcText += ' - ';
@@ -228,7 +239,7 @@ setup.player = {
             if(fatherId === 'mc') {
                 npcText += '<div style="' + relation_group + '">Pregnant with your child</div>';
             } else if (father) {
-                npcText += '<div style="' + relation_group + '">Pregnant with child of ' + setup.player.npcNameColor(father) + '</div>';
+                npcText += '<div style="' + relation_group + '">Pregnant with child of  ' + setup.player.npcNameColor(father) + '</div>';
             } else {
                 npcText += '<div style="' + relation_group + '">Pregnant with another guys child</div>';
             }

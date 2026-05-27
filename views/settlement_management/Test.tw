@@ -116,16 +116,42 @@
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
+	<<set _parentTexts = []>>
+	<<if $player.family?.mother>>
+		<<set _parentNpc = setup.getNpcById($player.family.mother)>>
+		<<if _parentNpc>>
+			<<set _shown[$player.family.mother] = true>>
+			<<set _parentText = setup.player.npcRelationText($player.family.mother, false, false, '', 'parent')>>
+			<<if _parentText>><<set _parentTexts.push(_parentText)>><</if>>
+		<</if>>
+	<</if>>
+	<<if $player.family?.father>>
+		<<set _parentNpc = setup.getNpcById($player.family.father)>>
+		<<if _parentNpc>>
+			<<set _shown[$player.family.father] = true>>
+			<<set _parentText = setup.player.npcRelationText($player.family.father, false, false, '', 'parent')>>
+			<<if _parentText>><<set _parentTexts.push(_parentText)>><</if>>
+		<</if>>
+	<</if>>
+	<<if _parentTexts.length>>
+		<tr><td colspan ="2"><strong>Long lost <<if _parentTexts.length > 1>>parents<<else>>parent<</if>> (<<=_parentTexts.length>>)</strong></td></tr>
+		<tr>
+			<td></td>
+			<td colspan ="2"><<=_parentTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+
 	<<set _siblingTexts = []>>
 	<<for _siblingId range $player.family?.siblings ?? []>>
 		<<set _shown[_siblingId] = true>>
-		<<set _siblingText = setup.player.npcRelationText(_siblingId, false, false)>>
+		<<set _siblingText = setup.player.npcRelationText(_siblingId, false, false, '', 'sibling')>>
 		<<if _siblingText>>
 			<<set _siblingTexts.push(_siblingText)>>
 		<</if>>
 	<</for>>
 	<<if _siblingTexts.length>>
-		<tr><td colspan ="2"><strong>Your siblings (<<= _siblingTexts.length>>)</strong></td></tr>
+		<tr><td colspan ="2"><strong>Long lost <<if _siblingTexts.length > 1>>siblings<<else>>sibling<</if>> (<<= _siblingTexts.length>>)</strong></td></tr>
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_siblingTexts.sort().join('<br/>')>></td>
