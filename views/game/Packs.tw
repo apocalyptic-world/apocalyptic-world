@@ -7,9 +7,9 @@
     <<set $packs ??= {}>>
     <<set _allPacks = Object.entries(Object.assign({}, setup.packs, setup.packsCustom)).sort((a, b) => a[1].name.localeCompare(b[1].name))>>
     <<for _entry range _allPacks>>
-        <<capture _entry>>
-            <<set _packKey = _entry[0]>>
-            <<set _pack = _entry[1]>>
+        <<set _packKey = _entry[0]>>
+        <<set _pack = _entry[1]>>
+        <<capture _packKey, _pack>>
             <<set $packs[_packKey] ??= false>>
             <tr>
                 <td>
