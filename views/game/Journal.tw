@@ -367,6 +367,14 @@
 			Wait few days and visit his office
 		<<elseif $characters.negan.quests.quest4 && !$characters.negan.quests.quest5>>
 			Wait few days and visit his office
+		<<elseif $characters.negan.quests.quest5 && !$characters.negan.quests.story_told>>
+			<<if !($characters?.vincent?.car_get_day ?? false)>>
+				Progress Vincent story
+			<<elseif $game.day <= ($characters?.negan?.quests.quest5_day + 7)>>
+				Wait few days and visit his office
+			<<else>>
+				Visit Negan's office
+			<</if>>
 		<<else>>
 			That's all for now
 		<</if>>
