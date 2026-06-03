@@ -30,8 +30,10 @@
     <<goto 'Negan - The Poisoned Gift'>>
 <<elseif $characters?.negan?.quests.quest4 && !$characters?.negan?.quests.quest5 && $game.day > ($characters?.negan?.quests.quest4_day + 7)>>
     <<goto 'Negan - Lower deck purge'>>
-<<elseif $characters?.negan?.quests.quest5 && ($characters?.vincent?.car_get_day ?? false) && $game.day > ($characters?.negan?.quests.quest5_day + 7) && !$characters?.negan?.quests.story_told>>
+<<elseif $characters?.negan?.quests.quest5 && ($characters?.vincent?.car_get_day ?? false) && $game.day > ($characters?.negan?.quests.quest5_day + 7) && !$characters?.negan?.quests.story_told_day>>
     <<goto 'Negan - The Story'>>
+<<elseif $characters?.negan?.quests.story_told_day && !$characters?.negan?.quests.new_one_day && $game.day > ($characters?.negan?.quests.story_told_day + 10)>>
+    <<goto 'Negan - The New One'>>
 <</if>>
 <<link 'Leave'>>
     <<goto 'Sanctuary'>>
