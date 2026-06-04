@@ -351,10 +351,14 @@
 				<<set _siblingLabel = 1>>
 				<<for _familyTreeChildI, _familyTreeChild range _motherNpc.family.kids>>
 					<div>
-					<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-						<<if _familyMember && $tmpGirl.id != _familyTreeChild>>
+					<<if _familyTreeChild === 'mc'>>
+						You
+					<<elseif _familyTreeChild !== $tmpGirl.id>>
+						<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+						<<if _familyMember>>
 							<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
 						<</if>>
+					<</if>>
 					</div>
 				<</for>>
 			<</if>>
