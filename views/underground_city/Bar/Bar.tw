@@ -53,6 +53,10 @@
 	<<goto 'Bar [Event] closing time'>>
 <</if>>
 
+<<if timeBetween('18:00', '22:00') && ($characters.negan.quests.new_one_day ?? 0) && !($characters.negan.quests.drunk_companion_day ?? 0) && $player?.car && $game.day >= ($characters.negan.quests.new_one_day + 5) && (setup.getAvailablePersons18yo($guests)[0] ?? []).length && setup.percentageChance(40)>>
+	<<goto 'Negan - Drunk Companion'>>
+<</if>>
+
 <<link 'Leave'>>
 	<<goto 'Underground city'>>
 <</link>>
