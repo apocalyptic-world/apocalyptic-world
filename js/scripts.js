@@ -792,9 +792,11 @@ setup.sexChance = function (person, gender = 1, beauty) {
     var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
     var appeal = (beauty ?? person.relationship);
     var spouseId = person.family?.husband;
+    var spouseChar = spouseId && variables().characters[spouseId];
     var spouseDead = spouseId && (
-        (variables().characters[spouseId]?.dead ?? false) ||
-        variables().characters[spouseId]?.quests?.dead
+        spouseChar
+            ? ((spouseChar.dead ?? false) || (spouseChar.quests?.dead ?? false))
+            : !setup.getNpcById(spouseId)
     );
 
     if (person.married && (!person.family || person.family.husband !== 'mc') && !spouseDead) {
