@@ -1,0 +1,135 @@
+:: Negan - Drunk Companion [bg-underground]
+<h1 class="ptitle">BAR</h1>
+<<set $characters.negan.quests.drunk_companion_day = $game.day>>
+<<set _npcKey = setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])>>
+<<set _npc = $guests[_npcKey]>>
+<<set _what = setup.pronounceWhat(_npc, true)>>
+<<set _who = setup.pronounceWho(_npc)>>
+<<set _companionImg = 'people/negan/negan_drunk_companion1_' + (_npc.gender == 1 ? 'm' : 'f') + '.jpg'>>
+<br />
+You spotted <<=setup.displayName(_npc)>> before <<= _who>> spotted you. <<= _what>> was at a corner table with two men you didn't recognise — broad shoulders, worn jackets, the kind of faces that don't invite questions. All three had drinks. <<= _what>> had clearly had several more than they had.
+<br /><br />
+<center>
+    <<image _companionImg sfw>>
+</center>
+<br />
+You moved closer. <<= _what>> was talking with the loose enthusiasm of someone who'd stopped filtering a while ago.
+<br /><br />
+<<sayNpc _npc>>
+    — yeah, we actually got one running. Working engine, everything. Not many people can say that.
+<</sayNpc>>
+<br />
+One of the men leaned back in his chair, arms folded, watching with an expression that wasn't quite surprise.
+<br /><br />
+<<linkreplace 'Step in'>>
+    You crossed the floor and put a hand on <<=setup.displayName(_npc)>>'s shoulder before <<= _who>> could say anything else.
+    <br /><br />
+    <<you>>
+        There you are. I've been looking for you.
+    <</you>>
+    <br />
+    <<= _what>> looked up, blinking slowly. The two men glanced at you. Neither said a word.
+    <br /><br />
+    <<you>>
+        We're heading out.
+    <</you>>
+    <br />
+        <center>
+        <<image 'people/negan/negan_drunk_companion2.jpg' sfw>>
+    </center>
+    <br />
+    One of them raised his drink slightly — not a toast, just a gesture. The other said nothing at all. You steered <<=setup.displayName(_npc)>> away from the table before anything else came out.
+    <br /><br />
+    <<linkreplace 'Get outside'>>
+        The cold of the corridor outside the bar hit like a reminder. <<= _what>> leaned against the wall, still smiling vaguely, not quite registering your expression yet.
+        <br /><br />
+        <div id="opt_angry">
+            <<linkreplace 'What the hell were you thinking?'>>
+                <<run $('#opt_ask').hide()>>
+                <<run $('#opt_calm').hide()>>
+                <<set _npc.relationship = Math.max((_npc.relationship ?? 0) - 5, 0)>>
+                <<you>>
+                    What the hell were you thinking? Telling strangers we have a working car?
+                <</you>>
+                <br />
+                <<= _what>> blinked. The smile faded.
+                <br /><br />
+                <<sayNpc _npc>>
+                    They were just — I was just talking. They seemed alright.
+                <</sayNpc>>
+                <br />
+                <<you>>
+                    You don't know who those men are. You don't tell people what we have. Ever.
+                <</you>>
+                <br />
+                <<= _what>> looked at the floor. Sobering up fast now.
+                <br /><br />
+                <<sayNpc _npc>>
+                    You're right. I'm sorry.
+                <</sayNpc>>
+                <br />
+                You didn't say anything else. There wasn't much point. The damage, whatever it was, was done.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<addmins 20>>
+                    <<goto 'Underground city'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+        <div id="opt_ask">
+            <<linkreplace 'Who were those guys?'>>
+                <<run $('#opt_angry').hide()>>
+                <<run $('#opt_calm').hide()>>
+                <<you>>
+                    Who were those men?
+                <</you>>
+                <br />
+                <<= _what>> shrugged, leaning heavier against the wall.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Don't know. Met them at the bar. They bought a round, we got talking. They seemed fine.
+                <</sayNpc>>
+                <br />
+                <<you>>
+                    What did you tell them, exactly?
+                <</you>>
+                <br />
+                <<= _what>> thought, which clearly required effort right now.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Just... that we have a car. That it runs. Nothing else, I swear. I didn't say where we are or anything like that.
+                <</sayNpc>>
+                <br />
+                You looked back at the bar door. The two men hadn't followed. That was something, at least.
+                <br /><br />
+                <<you>>
+                    Don't talk about the settlement with people you don't know. Not here. Not anywhere.
+                <</you>>
+                <br />
+                <<= _what>> nodded, looking genuinely ashamed now.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<addmins 20>>
+                    <<goto 'Underground city'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+        <div id="opt_calm">
+            <<linkreplace "Let's get you home.">>
+                <<run $('#opt_angry').hide()>>
+                <<run $('#opt_ask').hide()>>
+                <<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 3, 100)>>
+                <<you>>
+                    Come on. Let's get you out of here.
+                <</you>>
+                <br />
+                <<= _what>> didn't argue. You walked <<= _who>> out without another word. Whatever had been said was already said — getting into it now wouldn't change anything. You'd deal with it when you were both sober.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<addmins 20>>
+                    <<goto 'Underground city'>>
+                <</link>>
+            <</linkreplace>>
+        </div>
+    <</linkreplace>>
+<</linkreplace>>

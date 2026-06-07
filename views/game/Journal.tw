@@ -367,6 +367,28 @@
 			Wait few days and visit his office
 		<<elseif $characters.negan.quests.quest4 && !$characters.negan.quests.quest5>>
 			Wait few days and visit his office
+		<<elseif $characters.negan.quests.quest5 && !$characters.negan.quests.story_told_day>>
+			<<if !($characters?.vincent?.car_get_day ?? false)>>
+				Progress Vincent story
+			<<elseif $game.day <= ($characters?.negan?.quests.quest5_day + 7)>>
+				Wait few days and visit his office
+			<<else>>
+				Visit Negan's office
+			<</if>>
+		<<elseif $characters.negan.quests.story_told_day && !$characters.negan.quests.new_one_day>>
+			<<if $game.day <= ($characters?.negan?.quests.story_told_day + 10)>>
+				Wait few days and visit his office
+			<<else>>
+				Visit Negan's office
+			<</if>>
+		<<elseif $characters.negan.quests.new_one_day && !$characters.negan.quests.drunk_companion_day>>
+			<<if $game.day < ($characters.negan.quests.new_one_day + 5)>>
+				Wait a few days
+			<<else>>
+				Visit the underground city bar in the evening.
+			<</if>>
+		<<elseif $characters.negan.quests.drunk_companion_day>>
+			Someone may have talked to the wrong people. Keep an eye on things — visit the Sanctuary when ready.
 		<<else>>
 			That's all for now
 		<</if>>

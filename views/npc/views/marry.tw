@@ -3,6 +3,11 @@
 <br />
 <<set _npc1 = setup.getNpcById($tmpEventWedding.id1)>>
 <<set _npc2 = setup.getNpcById($tmpEventWedding.id2)>>
+<<if _npc1.gender !== 1>>
+    <<set _tmpSwap = _npc1>>
+    <<set _npc1 = _npc2>>
+    <<set _npc2 = _tmpSwap>>
+<</if>>
 <<set _npc1.location = 'wedding'>>
 <<set _npc2.location = 'wedding'>>
 As you step into the main square of the settlement, the sun dips low on the horizon, casting long shadows across the familiar faces going about their business. 
@@ -196,7 +201,6 @@ The square feels quieter as you consider his request, the weight of his words bl
 <div id="option_decline">
     <<linkreplace 'Deny his request'>>
         <<set _npc1.happy -= 90>>
-        <<set _npc2.happy -= 90>>
         <<run $('#option_accept').hide()>>
 
         You look at <<=setup.displayName(_npc1)>>, his hopeful expression slowly fading as he senses the weight of your hesitation. 

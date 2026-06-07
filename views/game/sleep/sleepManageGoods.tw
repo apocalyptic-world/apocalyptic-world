@@ -16,7 +16,7 @@
                     <<set _price *= 2>>
                 <</if>>
                 <<if setup.percentageChance(_chance)>>
-                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), Math.floor($player.money/_price))>>
+                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), Math.floor($player.money/_price), _manageGoods.min - _count)>>
                     <<set _totalPrice = _price * _amount>>
                     <<if $player.money >= _totalPrice>>
                         <<pickup $storage _manageGoodsName _amount>>
@@ -27,7 +27,7 @@
             <</if>>
             <<if _manageGoods.max && _count > _manageGoods.max>>
                 <<if setup.percentageChance(_chance)>>
-                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), _count)>>
+                    <<set _amount = Math.min(randomInteger(setup.inventoryManageable[_manageGoodsName].range[0], setup.inventoryManageable[_manageGoodsName].range[1]), _count - _manageGoods.max)>>
                     <<set _totalPrice = _price * _amount>>
                     <<drop $storage _manageGoodsName _amount>>
                     <<set $player.money += _totalPrice>>
