@@ -1,0 +1,144 @@
+:: Negan - The Barter [bg-sanctuary]
+<h1 class="ptitle">NEGAN'S OFFICE</h1>
+<<set $characters.negan.quests.barter_day = $game.day>>
+<br />
+The guard outside waved you in before you knocked. Negan was at the window, hands behind his back, looking out at the deck below. He didn't turn around when you came in.
+<br /><br />
+He let the silence sit for a moment. Then:
+<br /><br />
+<center>
+    <<image 'people/negan/barter_window.jpg' sfw>>
+</center>
+<br />
+<<negan>>
+    I'm expanding.
+<</negan>>
+<br />
+He turned. Crossed to the desk and sat down.
+<br /><br />
+<<negan>>
+    You know how things work around here. Resources come in, things run smooth. Everybody benefits.
+<</negan>>
+<br />
+He folded his hands on the desk. Looked at you with the easy patience of a man used to waiting people out.
+<br /><br />
+<<negan>>
+    I need a woman. Young. Healthy. Not someone who's going to be a problem.
+<</negan>>
+<br />
+He leaned back.
+<br /><br />
+<<negan>>
+    Word is you've been building something out there. I'd be surprised if you didn't have someone who fits that picture. Think of it as an investment. You do this for me—
+<</negan>>
+<br />
+He left it there.
+<br /><br />
+<center>
+    <<image 'people/negan/barter_desk.jpg' sfw>>
+</center>
+<br />
+<<set _labelGive = 'You might know someone.'>>
+<<set _labelRefuse = "I'm not doing that.">>
+<<set _labelNeg = "There's got to be something else you want.">>
+<div id="opt_give">
+    <<linkreplace _labelGive>>
+        <<run $('#opt_refuse').hide()>>
+        <<run $('#opt_neg').hide()>>
+        <<set _femaleIdx = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+        <<if _femaleIdx.length>>
+            <<negan>>
+                I'm listening.
+            <</negan>>
+            <br />
+            Who are you offering?
+            <br /><br />
+            <<for _i, _idx range _femaleIdx>>
+                <<capture _idx>>
+                    <<link setup.displayName($guests[_idx])>>
+                        <<set $characters.negan.quests.barter_npc = clone($guests[_idx])>>
+                        <<set $characters.negan.quests.barter_reply = 'gave'>>
+                        <<run $guests.splice(_idx, 1)>>
+                        <<goto 'Negan - The Barter Gave'>>
+                    <</link>><br />
+                <</capture>>
+            <</for>>
+        <<else>>
+            You don't actually have anyone right now.
+            <br /><br />
+            <<link 'Leave'>>
+                <<addmins 30>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="opt_refuse">
+    <<linkreplace _labelRefuse>>
+        <<set $characters.negan.quests.barter_reply = 'refused'>>
+        <<set $characters.negan.relationship = Math.max(($characters.negan.relationship ?? 0) - 5, 0)>>
+        <<run $('#opt_give').hide()>>
+        <<run $('#opt_neg').hide()>>
+        The smile didn't move. But something behind it did.
+        <br /><br />
+        <<negan>>
+            No.
+        <</negan>>
+        <br />
+        He said it like he was testing the word out.
+        <br /><br />
+        <<negan>>
+            That's fine. People say no. The smart ones usually reconsider.
+        <</negan>>
+        <br />
+        He picked up a pen and looked down at the desk. A dismissal.
+        <br /><br />
+        <<link 'Leave'>>
+            <<addmins 30>>
+            <<goto 'Sanctuary'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_neg">
+    <<linkreplace _labelNeg>>
+        <<run $('#opt_give').hide()>>
+        <<run $('#opt_refuse').hide()>>
+        Negan looked at you. Tilted his head slightly.
+        <br /><br />
+        <<negan>>
+            Like what?
+        <</negan>>
+        <br />
+        <<if $player.money >= 200>>
+            <<set _labelCaps = 'Offer 200 caps.'>>
+            <<linkreplace _labelCaps>>
+                <<set $characters.negan.quests.barter_reply = 'negotiated'>>
+                <<set $player.money -= 200>>
+                <<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 2, 100)>>
+                He looked at the caps for a long moment. Then he nodded — slow, like a man making a concession he didn't entirely enjoy.
+                <br /><br />
+                <<negan>>
+                    Alright. We'll call it even. For now.
+                <</negan>>
+                <br />
+                The "for now" sat in the room after you'd left.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<addmins 30>>
+                    <<goto 'Sanctuary'>>
+                <</link>>
+            <</linkreplace>>
+        <<else>>
+            You don't have enough caps to make it worth his time.
+            <br /><br />
+            <<negan>>
+                Thought so. Come back when you've got something worth trading.
+            <</negan>>
+            <br />
+            <<link 'Leave'>>
+                <<addmins 30>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        <</if>>
+    <</linkreplace>>
+</div>
