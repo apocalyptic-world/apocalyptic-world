@@ -14,6 +14,17 @@
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<goto 'NPC talk'>>
 	<</link>>
+<<elseif !$tmpGirl.talked && ($tmpGirl.traits ?? []).includes('feral')>>
+	<<link 'Play'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'NPC feral play'>>
+	<</link>>
 <</if>>
 
 <<if !$tmpGirl.gender && timeBetween('22:00', '03:00')>>

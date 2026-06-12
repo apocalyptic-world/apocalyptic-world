@@ -1,0 +1,144 @@
+:: NPC feral play [sex no-redirect] {"position":"2773,92","size":"100,100"}
+<center>
+		[img[images\actions\female\default\feralplay\14208832.gif]]
+
+<<set _girlVisual = $tmpGirl>>
+<<if $slaveId>>
+
+	<<set _interaction = either([
+		"You spend time coaxing " + setup.pronounceWho($tmpGirl) + " through small games, holding little rewards just out of reach until " + setup.pronounceWhat($tmpGirl) + " comes close enough to take them from your fingers.",
+		"You play a little game of keep-away, letting " + setup.pronounceWho($tmpGirl) + " circle you until you give " + setup.pronounceWhat($tmpGirl) + " a reward.",
+		"You run your hands gently through " + setup.pronounceWhos($tmpGirl) + " hair with slow, easy strokes.",
+		"You draw " + setup.pronounceWho($tmpGirl) + " a little closer with each small reward until " + setup.pronounceWhat($tmpGirl) + " is reliably eating from your hand, comfortable right where you want " + setup.pronounceWho($tmpGirl) + ".",
+		"You practice stillness with " + setup.pronounceWho($tmpGirl) + " — hands resting on " + setup.pronounceWhos($tmpGirl) + " sides, close and unmoving, letting " + setup.pronounceWho($tmpGirl) + " get used to your presence.",
+		"You run your hands over " + setup.pronounceWhos($tmpGirl) + " body, slowly and deliberately, touching where you choose, training " + setup.pronounceWho($tmpGirl) + " to get used to your contact.",
+		"You work on eye contact — holding " + setup.pronounceWhos($tmpGirl) + " face gently but firmly, establishing your authority as the Alpha.",
+		"You take " + setup.pronounceWho($tmpGirl) + " for a walk around the basement, guiding " + setup.pronounceWho($tmpGirl) + " to follow you, training " + setup.pronounceWho($tmpGirl) + " to stay right at your heels where " + setup.pronounceWhat($tmpGirl) + " belongs."
+	])>>
+
+	<<if $tmpGirl.sub < 20>>
+	<<set _feralResponse = either([
+		"endures your handling with tense stillness, eyes tracking your every movement",
+		"shrinks slightly at your approach but holds " + setup.pronounceWhos($tmpGirl) + " ground — neither fleeing nor engaging",
+		"accepts a treat warily, keeping " + setup.pronounceWhos($tmpGirl) + " distance even after taking it",
+		"sits where directed, muscles coiled, watching you with guarded eyes",
+		"tolerates your touch with a low, restrained sound — not quite a warning, not quite acceptance",
+		"does not resist, but the wariness in " + setup.pronounceWhos($tmpGirl) + " eyes makes clear this is compliance, not comfort",
+		"stays close only because " + setup.pronounceWhat($tmpGirl) + " has learned there is little point in doing otherwise"
+	])>>
+	<<else>>
+	<<set _feralResponse = either([
+		"responds to your cues with practiced ease, settling where directed without hesitation",
+		"sits attentive at your feet, waiting for the next prompt",
+		"accepts a reward calmly and stays close, having learned that proximity to you means safety",
+		"moves through the session with quiet, conditioned compliance — the tension of early days largely gone",
+		"holds eye contact longer now, reading you for cues rather than threats",
+		"responds to your approach without pulling back, " + setup.pronounceWhos($tmpGirl) + " posture open and yielding",
+		"takes a treat from your hand without flinching, then settles obediently"
+	])>>
+	<</if>>
+
+<<else>>
+
+	<<set _interaction = either([
+		"You spend a while grooming " + setup.pronounceWho($tmpGirl) + " — working through " + setup.pronounceWhos($tmpGirl) + " hair with slow, careful fingers until " + setup.pronounceWhat($tmpGirl) + " settles.",
+		"You sit with " + setup.pronounceWho($tmpGirl) + " for a stretch, scratching behind " + setup.pronounceWhos($tmpGirl) + " ears and along " + setup.pronounceWhos($tmpGirl) + " neck, taking your time.",
+		"You spend some time playing with " + setup.pronounceWho($tmpGirl) + ", tossing an improvised toy of cloth and plastic for " + setup.pronounceWho($tmpGirl) + " to chase and play with, until " + setup.pronounceWhat($tmpGirl) + " tires of it.",
+		"You ease down beside " + setup.pronounceWho($tmpGirl) + " and stay there quietly, letting " + setup.pronounceWho($tmpGirl) + " get comfortable with your presence for a little while.",
+		"You work through a slow session of petting, running your hands along " + setup.pronounceWhos($tmpGirl) + " back and sides until the tension in " + setup.pronounceWhos($tmpGirl) + " body fully eases.",
+		"You coax " + setup.pronounceWho($tmpGirl) + " through a series of small exercises and games, rewarding " + setup.pronounceWho($tmpGirl) + " patiently each time " + setup.pronounceWhat($tmpGirl) + " engages.",
+		"You spend a relaxed stretch just being near " + setup.pronounceWho($tmpGirl) + " — reading, resting — letting " + setup.pronounceWho($tmpGirl) + " come and go as " + setup.pronounceWhat($tmpGirl) + " pleases."
+	])>>
+	<<if $tmpGirl.relationship < 20>>
+	<<set _feralResponse = either([
+		"keeps " + setup.pronounceWhos($tmpGirl) + " distance, watching you with flat, unreadable eyes",
+		"allows your approach but doesn't lean in — every muscle coiled, ready to bolt",
+		"gives a low warning sound when you reach too far, pulling back just out of reach",
+		"endures your touch with rigid stillness, eyes never leaving your face",
+		"circles back to a safe distance the moment you pause, keeping space between you",
+		"sniffs at your offered hand and recoils sharply, not yet satisfied",
+		"tolerates the session without warmth, watching you with the patience of something that hasn't decided yet"
+	])>>
+	<<elseif $tmpGirl.relationship < 50>>
+	<<set _feralResponse = either([
+		"leans into your touch with a slow, contented blink",
+		"lets out a deep, rumbling purr and presses " + setup.pronounceWhos($tmpGirl) + " head against your hand",
+		"nuzzles close, eyes half-closed and serene",
+		"looks up at you with wide, calm eyes — a quiet, settled familiarity",
+		"curls against your side and settles there with a soft sigh",
+		"bumps " + setup.pronounceWhos($tmpGirl) + " head gently against your legs",
+		"makes a soft, pleased trill and stays near",
+		"trots alongside you for a stretch, clearly at ease in your company",
+		"drops something at your feet and waits, clearly expecting a response",
+		"leans a shoulder into your side and simply stays"
+	])>>
+	<<else>>
+	<<set _feralResponse = either([
+		"leans into your touch with a slow, contented blink",
+		"lets out a deep, rumbling purr and presses " + setup.pronounceWhos($tmpGirl) + " head against your hand",
+		"nuzzles close, eyes half-closed and serene",
+		"curls against your side and settles there with a soft sigh",
+		"bumps " + setup.pronounceWhos($tmpGirl) + " head gently against your legs",
+		"trots alongside you for a stretch, clearly at ease in your company",
+		"leans a shoulder into your side and simply stays",
+		"climbs into your lap without invitation and settles there, warm and heavy and content",
+		"rolls onto " + setup.pronounceWhos($tmpGirl) + " back near your feet — an unmistakable sign of trust",
+		"presses the full length of " + setup.pronounceWhos($tmpGirl) + " body against yours and stays, unhurried",
+		"mouths at your hand gently, not biting, just holding, the way a very trusting animal does",
+		"wraps around you from behind and rests " + setup.pronounceWhos($tmpGirl) + " chin on your shoulder, simply staying close",
+		"brings you something small, a stone, a shiny bit of scrap — and places it carefully in your palm",
+		"buries " + setup.pronounceWhos($tmpGirl) + " face in your neck and breathes there slowly, utterly at ease",
+		"sprawls across your lap, eyes half-closed, utterly unbothered",
+		"tugs at your sleeve and leads you a short way before circling back, playful and sure of you"
+	])>>
+	<</if>>
+
+<</if>>
+
+<br />
+<p><<=_interaction>></p>
+</center>
+<br />
+<div class="say npcsay">
+	<div class="npc-say-visual" @data-id="$tmpGirl.id">
+		<div class="girl_info_picture">
+			<<if _girlVisual.portrait>>
+				<div class="say_custom_portrait">
+					<<include 'NPC visual'>>
+				</div>
+			<<else>>
+				<<include 'NPC visual'>>
+			<</if>>
+		</div>
+	</div>
+	<div class="npc-say-container">
+		<div class="npc-say-name">
+			<strong><<=setup.displayName($tmpGirl)>></strong>
+		</div>
+		<div class="npc-say-text">
+			<em>*<<= _feralResponse >>*</em>
+		</div>
+	</div>
+</div>
+<<if $guestId && setup.percentageChance(30)>>
+	<<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 10))>>
+<</if>>
+<<if $slaveId && setup.percentageChance(30)>>
+	<<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 5))>>
+	<<set $tmpGirl.sub = Math.min(100, $tmpGirl.sub + randomInteger(1, 2))>>
+<</if>>
+<br /><br />
+
+<<set $tmpGirl.quests ??= {}>>
+<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+
+<<if $charId && $tmpGirl.corruption > 50 && !$tmpGirl.canPunish>>
+	<<set $tmpGirl.canPunish = true>>
+<</if>>
+<<link 'Back'>>
+  	<<if $tmpGirlViewBack>>
+		<<goto $tmpGirlViewBack>>
+	<<else>>
+		<<goto [[NPC view]]>>
+	<</if>>
+<</link>>

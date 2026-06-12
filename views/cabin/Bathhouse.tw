@@ -1,11 +1,21 @@
 :: Bathhouse [Place bg-bathhouse]
 <h1 class="ptitle">BATHHOUSE</h1>
 <br />
+<div id="bath-sched-btn" style="float: right;">
+	<<link 'Bath Schedule'>>
+		<<script>>
+			Dialog.setup('Bathhouse Schedule', 'bathhouse-schedule');
+			Dialog.wiki(Story.get('Bathhouse Schedule').processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+</div>
 <<if $game.location.hottub ?? false>>
-	<div class="menu-grid">   
+	<div class="menu-grid">
 	<<grid bathhouse hottub 'Hottub' 'Hottub'>>
 	</div>
 <</if>>
+
 <div id="characters-in-location">
 	<<if (_charactersInLocation['bathhouse'] ?? []).includes('eve')>>
 		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
@@ -163,4 +173,106 @@
 	<<goto 'Wood cabin'>>
 <</link>>
 
+<style>
+#bath-sched-btn a {
+	background: #4A2511 !important;
+	color: #f0e8e0 !important;
+	border: 1px solid #6b3a20 !important;
+	box-shadow: none !important;
+	padding: 3px 10px !important;
+	border-radius: 3px !important;
+	letter-spacing: 0.5px;
+	font-size: 0.85em;
+	min-height: auto !important;
+	width: auto !important;
+	display: inline-block !important;
+}
+#bath-sched-btn a:hover {
+	background: #6b3a20 !important;
+	color: #fff !important;
+}
+</style>
+
+:: Bathhouse Schedule
+<h2>Bathhouse Schedule</h2>
+<p>A hand fashioned wooden framed in scrap plastic hangs beside the entrance to the bathhouse.  On the sign, a hand-ruled grid has been drawn, listing out when guests from each assignment are scheduled to use the bath.</p>
+<table class="mc-stats-table" style="width: 100%">
+	<thead>
+		<tr>
+			<th style="width: 40%">Assignment</th>
+			<th>Bath Hours</th>
+		</tr>
+	</thead>
+	<tbody>
+	<<for _bsJob, _bsData range setup.bathSchedule>>
+		<<set _bsActive = timeBetween(_bsData.from, _bsData.to)>>
+		<tr @style="_bsActive ? 'background: rgba(255, 215, 0, 0.12); font-weight: bold;' : ''">
+			<td><<= _bsJob.charAt(0).toUpperCase() + _bsJob.slice(1).replace(/_/g, ' ')>><<if _bsActive>> ✓<</if>></td>
+			<td><<= _bsData.from>> – <<= _bsData.to>></td>
+		</tr>
+	<</for>>
+	</tbody>
+</table>
+<p>Unassigned or un-listed assignments may visit the bathhouse at any time during the day, most likely in the morning.</p>
+<p><em>✓ marks assignments currently within their bath window. </em></p>
+
+<table class="mc-stats-table" style="width: 100%">
+	<thead>
+		<tr>
+			<th colspan="2">Special Invited Residents</th>
+		</tr>
+	</thead>
+	<tbody>
+	<<set _bsResidentCount = 0>>
+	<<if isMetChar('eve') && $characters.eve.quests.cabinType > 0>>
+		<<set _bsResidentCount++>>
+		<<set _bsEveActive = timeBetween('08:00', '09:00')>>
+		<tr @style="_bsEveActive ? 'background: rgba(255, 215, 0, 0.12); font-weight: bold;' : ''">
+			<td>Eve<<if _bsEveActive>> ✓<</if>></td>
+			<td>08:00 – 09:00</td>
+		</tr>
+	<</if>>
+	<<if isMetChar('octavia') && $characters.octavia.quests.next_move && !$characters.octavia.quests.emberclaw_ready_day>>
+		<<set _bsResidentCount++>>
+		<<set _bsOctaviaActive = timeBetween('09:00', '09:30')>>
+		<tr @style="_bsOctaviaActive ? 'background: rgba(255, 215, 0, 0.12); font-weight: bold;' : ''">
+			<td>Octavia<<if _bsOctaviaActive>> ✓<</if>></td>
+			<td>09:00 – 09:30</td>
+		</tr>
+	<</if>>
+	<<if isMetChar('laura') && $characters.laura.quests.living>>
+		<<set _bsResidentCount++>>
+		<<set _bsLauraActive = timeBetween('11:00', '11:30')>>
+		<tr @style="_bsLauraActive ? 'background: rgba(255, 215, 0, 0.12); font-weight: bold;' : ''">
+			<td>Laura<<if _bsLauraActive>> ✓<</if>></td>
+			<td>11:00 – 11:30</td>
+		</tr>
+	<</if>>
+	<<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
+		<<set _bsResidentCount++>>
+		<<set _bsBlairActive = timeBetween('22:00', '23:30') && [4, 7].includes(($gameDate.getDay() || 7)) && ($game.location?.hottub ?? false)>>
+		<tr @style="_bsBlairActive ? 'background: rgba(255, 215, 0, 0.12); font-weight: bold;' : ''">
+			<td>Blair<<if _bsBlairActive>> ✓<</if>></td>
+			<td>22:00 – 23:30, Thu & Sun (hot tub)</td>
+		</tr>
+	<</if>>
+	<<if isMetChar('elsa') && $characters.elsa.quests.new_home>>
+		<<set _bsResidentCount++>>
+		<tr>
+			<td>Elsa</td>
+			<td><em>No fixed schedule</em></td>
+		</tr>
+	<</if>>
+	<<if isMetChar('isabel') && $characters.isabel.quests.saved>>
+		<<set _bsResidentCount++>>
+		<tr>
+			<td>Isabel</td>
+			<td><em>No fixed schedule</em></td>
+		</tr>
+	<</if>>
+	<<if _bsResidentCount === 0>>
+		<tr><td colspan="2"><em>No special residents invited yet.</em></td></tr>
+	<</if>>
+	</tbody>
+</table>
 

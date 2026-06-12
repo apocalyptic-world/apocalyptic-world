@@ -28,7 +28,7 @@ setup.outsideWorkHours = {
     scavenging:{ from: '12:00', to: '20:00', blockedBy: ['sick', 'sandStorm'] },
     hospital:  { from: '08:00', to: '22:00', blockedBy: [] },
     church:    { from: '08:00', to: '18:00', blockedBy: ['sick'] },
-    quarry:    { from: '08:00', to: '18:00', blockedBy: ['sick'] },
+    quarry:    { from: '08:00', to: '18:00', blockedBy: ['dayoff', 'sick', 'sandstorm'] },
     maid:      { from: '10:00', to: '15:00', blockedBy: [] },
     garage:    { from: '10:00', to: '18:00', blockedBy: [] },
     school:    { from: '09:00', to: '15:00', blockedBy: [] },

@@ -14,6 +14,17 @@
 		<<set $tmpGirlViewBack = 'NPC view - character'>>
 		<<goto 'NPC talk'>>
 	<</link>>
+<<elseif !$tmpGirl.talked && ($tmpGirl.traits ?? []).includes('feral')>>
+	<<link 'Play'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view - character'>>
+		<<goto 'NPC feral play'>>
+	<</link>>
 <</if>>
 
 <<if $tmpGirl.canFuck && $player.energy > 30 && $tmpGirl.location !== 'garden'>>
