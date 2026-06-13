@@ -145,6 +145,7 @@ The man hesitates for a moment, then speaks again, voice strained.
             <<if setup.pregnancyChance($tmpGirl)>>
                 <<set $tmpGirl.pregnancy_father = 'mc'>>
                 <<set $tmpGirl.pregnancy = 0>>
+                <<if $tmpGirl.virgin>><<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>><</if>>
                 <<set $tmpGirl.virgin = false>>
                 <<statsAdd 'girls_impregnated'>>
             <</if>>

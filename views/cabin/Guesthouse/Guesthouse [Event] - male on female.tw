@@ -106,6 +106,7 @@
 			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
 				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
+				<<if $guests[_guestIds[0]].virgin>><<run setup.npc.addHistory($guests[_guestIds[0]], 'virgin_lost', { with: $guests[_guestIds[1]].id })>><</if>>
 				<<set $guests[_guestIds[0]].virgin = false>>
 			<</if>>
 		<</if>>
@@ -140,6 +141,7 @@
 						<br />
 						<<=setup.displayName($guests[_guestIds[0]])>> seems a bit in pain at first as she loses her virginity.
 						<br /><br />
+						<<run setup.npc.addHistory($guests[_guestIds[0]], 'virgin_lost', { with: 'mc' })>>
 						<<set $guests[_guestIds[0]].virgin = false>>
 					<</if>>
 					<center>
