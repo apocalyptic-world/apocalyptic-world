@@ -26,6 +26,16 @@
 		            "I bruised my knuckles on that last fighter's face..",
 		            "Mortal Kombat!!!",
 		            "I came here to kick ass and chew bubble gum.  Now where's my bubble gum?",
+		            `Did you see that, ${setup.npc.mcName(_npc)}? I barely broke a sweat!`,
+		            `That one's for you, ${setup.npc.mcName(_npc)}!`,
+		            `${setup.npc.mcName(_npc, true)}, they're going to need a bigger cage to contain this beast.`,
+		            `Next time, bet more on me, ${setup.npc.mcName(_npc)}. I'm just getting started.`,
+		            `${setup.npc.mcName(_npc, true)}, I could fight three more right now. Just say the word.`,
+		            `Don't look so tense, ${setup.npc.mcName(_npc)}. I had this the whole time.`,
+		            `${setup.npc.mcName(_npc, true)}, I think I was born for this place.`,
+		            `Send in another one, ${setup.npc.mcName(_npc)}. I'm not done yet!`,
+		            `You picked the right fighter, ${setup.npc.mcName(_npc)}.`,
+		            `Was that it? ${setup.npc.mcName(_npc)}, please tell me that wasn't the best they could do.`,
 		        ])>>
 		<</sayNpc>>
 		<br />
@@ -37,6 +47,30 @@
             <br /><br />
         <</if>>
     <</for>>
+    <<if $fightClubPrize === 'caps'>>
+        <<for _fighterI, _fighter range $fightCage.fighters>>
+            <<set _splitKey = _fighter.key.split(',')>>
+            <<if _splitKey[0] === 'guest'>>
+                <<set _npc = $guests[_splitKey[1]]>>
+            <<else>>
+                <<set _npc = $slaves[_splitKey[1]]>>
+            <</if>>
+            <<if (_npc?.beauty ?? 0) >= 80 && setup.percentageChance(_npc.beauty / 4)>>
+                <<set _charmBonus = random(Math.floor(_npc.beauty / 20), Math.floor(_npc.beauty / 5))>>
+                <<set $player.money += _charmBonus>>
+                <<= either([
+                    `${setup.displayName(_npc)} flexes ${setup.pronounceWhos(_npc)} athletic physique, flashing a radiant smile at the roaring crowd—and they go wild, tossing caps into the ring!`,
+                    `${setup.displayName(_npc)} strides around the cage and works the crowd, signing scraps of cloth and busted helmets—returning with a fistful of caps the fans pressed into ${setup.pronounceWhos(_npc)} hands!`,
+                    `${setup.displayName(_npc)} plants a boot on the fallen opponent and raises both fists high—the crowd erupts, raining caps down from the stands!`,
+                    `${setup.displayName(_npc)} gives the crowd a sexy victory dance, and half the crowd loses their minds, flinging caps at ${setup.pronounceWhos(_npc)} feet!`,
+                    `${setup.displayName(_npc)} snatches the announcer's battered megaphone and hypes up the crowd! They scream back louder, pelting the ring with caps!`,
+                ])>>
+                <br />
+                <strong><<=setup.displayName(_npc)>> charmed the crowd, earning you an extra <<=_charmBonus>> caps!</strong>
+                <br /><br />
+            <</if>>
+        <</for>>
+    <</if>>
 <</if>>
 
 <<if $fightCage.fightersLost ?? false>>
@@ -44,6 +78,12 @@
 	Your fallen <<=_plural ? 'fighters limp' : 'fighter limps'>> back from <<=_plural ? 'their matches' : 'the match'>>, nursing a few wounds.  <<=_plural ? 'They return' : 'The fighter returns'>> to you dejected as the crowds behind them cheer for the victors. 
 	<br /><br />
         <<for _fighterI, _fighter range $fightCage.fightersLost>>
+		<<set _splitKey = _fighter.key.split(',')>>
+		<<if _splitKey[0] === 'guest'>>
+		    <<set _npc = $guests[_splitKey[1]]>>
+		<<else>>
+		    <<set _npc = $slaves[_splitKey[1]]>>
+		<</if>>
 		<<sayNpc _fighter>>
 		        <<=either([
 		            'I should have trained harder!',
@@ -57,6 +97,16 @@
 		            "We can't win them all...",
 		            "I know I'm better than this...",
 		            "I will not fail again, sir.",
+		            `${setup.npc.mcName(_npc, true)}, I'm sorry. I really am.`,
+		            `I won't let you down again, ${setup.npc.mcName(_npc)}. I swear it.`,
+		            `That thing hits like a truck, ${setup.npc.mcName(_npc)}...`,
+		            `Just... give me a minute, ${setup.npc.mcName(_npc)}.`,
+		            `I thought I had them, ${setup.npc.mcName(_npc)}. I really did.`,
+		            `${setup.npc.mcName(_npc, true)}, please don't be disappointed in me.`,
+		            `Put me back in there, ${setup.npc.mcName(_npc)}. Let me finish this.`,
+		            `${setup.npc.mcName(_npc, true)}, everything hurts. Like, everything.`,
+		            `Don't be mad at me, ${setup.npc.mcName(_npc)}...`,
+		            `I'll remember every one of these bruises, ${setup.npc.mcName(_npc)}.`,
 		        ])>>
 		<</sayNpc>>
 		<br />

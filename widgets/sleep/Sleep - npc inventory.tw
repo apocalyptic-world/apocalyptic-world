@@ -53,7 +53,7 @@
 
 // Slumber party
 <<set _slumberWorkJobs = ['strip_club', 'nightclub', 'streets']>>
-<<if setup.npcInventoryHas(_npc, 'cosmetics') && _npc.happy >= 25 && typeof _npc.sick === 'undefined' && (_npc.gender === 0 || _npc.gender === 2) && !_slumberWorkJobs.includes(_npc.assignedTo)>>
+<<if setup.npcInventoryHas(_npc, 'cosmetics') && _npc.happy >= 25 && typeof _npc.sick === 'undefined' && (_npc.gender === 0 || _npc.gender === 2) && !_slumberWorkJobs.includes(_npc.assignedTo) && !(_npc.traits ?? []).includes('feral')>>
 	<<run
 		const pool = [];
 		if (_isGuest) {
@@ -77,7 +77,7 @@
 		const partyAlreadyTonight = _slumberPartyTonight ?? false;
 		const cooldownOk = typeof _npc.slumberPartyDay === 'undefined' || $game.day >= _npc.slumberPartyDay + 5;
 
-		if (pool.length && !partyAlreadyTonight && cooldownOk && setup.percentageChance(20)) {
+		if (pool.length && !partyAlreadyTonight && cooldownOk && setup.percentageChance(15)) {
 			const count = _isGuest ? randomInteger(1, Math.min(4, pool.length)) : 1;
 			const party = _isGuest
 				? pool.sort(() => 0.5 - Math.random()).slice(0, count)
