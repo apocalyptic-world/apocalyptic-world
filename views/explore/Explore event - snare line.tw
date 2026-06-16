@@ -1,0 +1,134 @@
+:: Explore event - snare line
+<h1 class="ptitle">FOREST</h1>
+<br /><br />
+A line of wire snares had been set between the trees with practiced care — evenly spaced, well-concealed, the work of someone who knew what they were doing.  Two of them held fresh kills.
+<br /><br />
+<center>
+	<<image 'places/explore/snare_line.jpg'>>
+</center>
+<br />
+Whoever set these would be back for them soon.
+<br /><br />
+<div id="sl_wait">
+<<set _labelWait = 'Wait nearby'>>
+<<linkreplace _labelWait>>
+    <<run $('#sl_leave').hide()>>
+    <<addmins 20>>
+    <<newgirl>>
+    You settled into the brush.  About twenty minutes later a young woman came through the trees with a canvas bag over her shoulder.  She stopped when she saw you, hand dropping to a knife at her belt.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        Those are my traps.
+    <</sayNpc>>
+    <br />
+    <div id="sl_trade">
+    <<if $backpack.count('food') >= 5>>
+        <<set _labelTrade = 'Offer food in trade'>>
+        <<linkreplace _labelTrade>>
+            <<run $('#sl_rob').hide()>>
+            <<run $('#sl_invite').hide()>>
+            <<run $('#sl_capture').hide()>>
+            <<addmins 15>>
+            You held up both hands and set the food down slowly.  She studied you for a long moment before the knife hand relaxed.  She pulled the kills from the two closest snares and handed them over, then added a bundle of dried herbs from her bag.
+            <br /><br />
+            <<drop $backpack 'food' 5>>
+            <<pickup $backpack 'food' 3>>
+            <<pickup $backpack 'bandage' 1>>
+            <<set $player.goodwill++>>
+            <strong>Traded 5 food for 3 food and 1 bandage.</strong>
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <</linkreplace>>
+    <<else>>
+        <div class="link-internal disabled">Offer food in trade <em>(need 5 food)</em></div>
+    <</if>>
+    </div>
+    <div id="sl_invite">
+    <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+        <<set _labelInvite = 'Tell her about your settlement'>>
+        <<linkreplace _labelInvite>>
+            <<run $('#sl_trade').hide()>>
+            <<run $('#sl_rob').hide()>>
+            <<run $('#sl_capture').hide()>>
+            <<addmins 30>>
+            You described the cabin, the guesthouse, the people you had there.  She listened without moving, eyes moving between you and the tree line.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                You're telling me there's a real bed involved.
+            <</sayNpc>>
+            <br />
+            <<you>>
+                Real bed.
+            <</you>>
+            <br />
+            She was quiet for a moment.  Then she started pulling her remaining snares from the ground one by one.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                I've been out here alone long enough.  Let me get my things.
+            <</sayNpc>>
+            <br />
+            <<set $tmpGirl.relationship = 35>>
+            <<set $player.goodwill++>>
+            <<run $guests.push($tmpGirl)>>
+            <<include 'NPC info'>>
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <</linkreplace>>
+    <</if>>
+    </div>
+    <div id="sl_rob">
+    <<set _labelRob = 'Rob her'>>
+    <<linkreplace _labelRob>>
+        <<run $('#sl_trade').hide()>>
+        <<run $('#sl_invite').hide()>>
+        <<run $('#sl_capture').hide()>>
+        <<addmins 10>>
+        Before she could clear the knife you grabbed her wrist and twisted it free.  She stumbled back.  You stripped the kills from the snares and went through her bag quickly.
+        <br /><br />
+        <<pickup $backpack 'food' 4>>
+        <<set $player.goodwill -= 3>>
+        You left her in the trees without looking back.  <strong>+4 food.</strong>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+    </div>
+    <div id="sl_capture">
+    <<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $player.energy >= 30>>
+        <<set _labelCapture = 'Overpower her'>>
+        <<linkreplace _labelCapture>>
+            <<run $('#sl_trade').hide()>>
+            <<run $('#sl_invite').hide()>>
+            <<run $('#sl_rob').hide()>>
+            <<energy -30>>
+            <<set $player.goodwill -= 2>>
+            <<if $player.strength > $tmpGirl.strength>>
+                You lunged before she had the knife fully clear.  The struggle was brief.
+                <br /><br />
+                <<set $tmpGirl.capture = false>>
+                <<run $slaves.push($tmpGirl)>>
+                <<addhours 2>>
+                <<statsAdd 'people_captured'>>
+                <<goto 'Basement'>>
+            <<else>>
+                She was faster than she looked.  The knife came up and you took a cut across the forearm before you stumbled back — and she was gone into the trees before you could recover.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<goto 'Outside'>>
+                <</link>>
+            <</if>>
+        <</linkreplace>>
+    <</if>>
+    </div>
+<</linkreplace>>
+</div>
+<div id="sl_leave">
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>
+</div>
