@@ -6,16 +6,41 @@ setup.family = {
      * Is the npc a blood relative to the mc? That is child of, grandchild of, ...
      */
     isBloodToMC: function (npc) {
+        const player = variables().player;
+        if (npc.id) {
+            if (player.family?.mother === npc.id || player.family?.father === npc.id) return true;
+            if ((player.family?.siblings ?? []).includes(npc.id)) return true;
+        }
         if (!npc.hasOwnProperty('family')) {
             return false;
         }
-
         // child of mc?
         if (npc.family.hasOwnProperty('father') && npc.family.father === 'mc') {
             return true;
         }
         // grandchild of mc? mc son's daughter or daughter's daughter
-        return (npc.family?.hasOwnProperty('mother') && setup.getNpcById(npc.family.mother) && setup.family.isBloodToMC(setup.getNpcById(npc.family.mother))) || (npc.family?.hasOwnProperty('father') && setup.getNpcById(npc.family.father) && setup.family.isBloodToMC(setup.getNpcById(npc.family.father))) ;
+        return (npc.family?.hasOwnProperty('mother') && setup.getNpcById(npc.family.mother) && setup.family.isBloodToMC(setup.getNpcById(npc.family.mother))) || (npc.family?.hasOwnProperty('father') && setup.getNpcById(npc.family.father) && setup.family.isBloodToMC(setup.getNpcById(npc.family.father)));
+    },
+
+    getRelationToMC: function(npc) {
+        const player = variables().player;
+        const isFemale = npc.gender === 0 || npc.gender === 2;
+
+        if (npc.id) {
+            if (player.family?.mother === npc.id) return 'mother';
+            if (player.family?.father === npc.id) return 'father';
+            if ((player.family?.siblings ?? []).includes(npc.id)) return isFemale ? 'sister' : 'brother';
+        }
+        if (!npc.hasOwnProperty('family')) return null;
+
+        if (npc.family.father === 'mc') return isFemale ? 'daughter' : 'son';
+
+        const motherNpc = npc.family.mother ? setup.getNpcById(npc.family.mother) : null;
+        const fatherNpc = npc.family.father ? setup.getNpcById(npc.family.father) : null;
+        if ((motherNpc && setup.family.isBloodToMC(motherNpc)) || (fatherNpc && setup.family.isBloodToMC(fatherNpc))) {
+            return isFemale ? 'granddaughter' : 'grandson';
+        }
+        return null;
     },
 
     isBlood: function (npc, npc2) {

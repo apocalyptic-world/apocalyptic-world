@@ -482,8 +482,9 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 			output += '<span class="sick-info">(resting)</span>';
 		}
 	}
-	if (setup.family.isBloodToMC(npc)) {
-		output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative" data-balloon-pos="up-right"></span>';
+	const _relToMC = setup.family.getRelationToMC(npc);
+	if (_relToMC) {
+		output += '<span class="relative-info" data-balloon-length="medium" aria-label="Relative: ' + _relToMC + '" data-balloon-pos="up-right"></span>';
 	}
 	if (npc.sleeping) {
 		output += '<span class="sleeping-info" data-balloon-length="medium" aria-label="Sleeping" data-balloon-pos="up-right"></span>';
@@ -1049,6 +1050,37 @@ setup.npc = {
 			case 'first_sex_mc': return day + 'First intimate moment with ' + (withName || 'you');
 			default:             return day + entry.event;
 		}
+	},
+
+	/* Convert a game-day number to an in-game Date */
+	dayToDate: function(day) {
+		const gameDate = variables().gameDate;
+		if (!gameDate) return null;
+		const d = new Date(gameDate);
+		d.setDate(d.getDate() + (day - (variables().game?.day ?? 0)));
+		return d;
+	},
+
+	/* The Date an NPC was married, or null */
+	weddingDate: function(npc) {
+		const entry = (npc.history ?? []).find(h => h.event === 'married');
+		return entry ? setup.npc.dayToDate(entry.day) : null;
+	},
+
+	/* True if today is the NPC's wedding anniversary (a year after the marriage, same month+day) */
+	isAnniversary: function(npc) {
+		const wd = setup.npc.weddingDate(npc);
+		if (!wd) return false;
+		const today = variables().gameDate;
+		return wd.getMonth() === today.getMonth() &&
+		       wd.getDate()  === today.getDate()  &&
+		       today.getFullYear() > wd.getFullYear();
+	},
+
+	/* Number of full in-game years married (meaningful on anniversary day) */
+	yearsMarried: function(npc) {
+		const wd = setup.npc.weddingDate(npc);
+		return wd ? variables().gameDate.getFullYear() - wd.getFullYear() : 0;
 	}
 }
 

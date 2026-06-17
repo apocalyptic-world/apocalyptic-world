@@ -201,7 +201,8 @@
 				<div id="npc-history">
 					<h4 style="display:block; margin-bottom: 0px;">History</h4>
 					<<for _histEntry range $tmpGirl.history>>
-						<div><<=setup.npc.historyLabel(_histEntry)>></div>
+						<<set _histDate = setup.npc.dayToDate(_histEntry.day)>>
+						<div><span data-balloon-length="small" @aria-label="_histDate ? setup.formatDate(_histDate) : ''" data-balloon-pos="up"><<=setup.npc.historyLabel(_histEntry)>></span></div>
 					<</for>>
 				</div>
 			<</if>>

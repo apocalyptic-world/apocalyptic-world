@@ -21,8 +21,10 @@
 	        </span>
         </div>
     <</if>>
+    <<set _isAnniversary = setup.npc.isAnniversary(_npc)>>
+    <<set _yearsMarried = _isAnniversary ? setup.npc.yearsMarried(_npc) : 0>>
     <div class="item-age">
-	    <span data-balloon-length="medium" @aria-label="'Bday: ' + (_npc ? _npc.birthDate.toDateString() : '????') + ((_npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()) ?  '. &#x1F381; Happy Birthday! &#x1F382; ' : '')" data-balloon-pos="up-left">
+	    <span data-balloon-length="medium" @aria-label="'Bday: ' + (_npc ? _npc.birthDate.toDateString() : '????') + ((_npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()) ? ' &#x1F381; Happy Birthday! &#x1F382;' : '') + (_isAnniversary ? ' &#x1F492; Happy ' + _yearsMarried + '-year Anniversary! &#x1F492;' : '')" data-balloon-pos="up-left">
             &#128197; <<=setup.getAge(_npc)>>
 	    </span>
     </div>
