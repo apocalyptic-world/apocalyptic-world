@@ -174,9 +174,24 @@
 				<div>
 					Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
 				</div>
-				<<if !$tmpGirl.gender && $tmpGirl.pregnancy >= 8>>
-					<div>
-						Pregnancy: <<=$tmpGirl.pregnancy>> days
+				<<if !$tmpGirl.gender && ($tmpGirl.pregnancy ?? -1) >= 7>>
+					<<set _pregStage = setup.pregnancyStage($tmpGirl.pregnancy)>>
+					<div class="pregnancy-stage">
+						Pregnant — <strong><<=_pregStage.label>></strong> (day <<=($tmpGirl.pregnancy)>> / ~260)
+						<br />
+						<progress value="<<=_pregStage.pct>>" max="100" style="width:150px"></progress>
+						<br /><br />
+						<<if $backpack.has('pregnancy_speed_potion')>>
+							<<link 'Give pregnancy speed potion'>>
+								<<set $pregnancyPotionBackLink = passage()>>
+								<<goto 'Girl - pregnancy speed potion'>>
+							<</link>>
+						<</if>>
+						<<if $backpack.has('pregnancy_potion')>>
+							<<link 'Give termination potion'>>
+								<<goto 'Girl - pregnancy potion'>>
+							<</link>>
+						<</if>>
 					</div>
 				<</if>>
 				<<if !_unknown && $player.int >= 50>>
