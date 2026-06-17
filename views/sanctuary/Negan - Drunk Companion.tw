@@ -1,10 +1,10 @@
 :: Negan - Drunk Companion [bg-underground]
 <h1 class="ptitle">BAR</h1>
 <<set $characters.negan.quests.drunk_companion_day = $game.day>>
-<<set _npcKey = setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])>>
+<<set _npcKey = setup.getRandomElement([].concat(...Object.values(setup.getAvailablePersons18yo($guests))))>>
 <<set _npc = $guests[_npcKey]>>
 <<set _what = setup.pronounceWhat(_npc, true)>>
-<<set _who = setup.pronounceWho(_npc)>>
+<<set _who = setup.pronounceWhat(_npc)>>
 <<set _companionImg = 'people/negan/negan_drunk_companion1_' + (_npc.gender == 1 ? 'm' : 'f') + '.jpg'>>
 <br />
 You spotted <<=setup.displayName(_npc)>> before <<= _who>> spotted you. <<= _what>> was at a corner table with two men you didn't recognise — broad shoulders, worn jackets, the kind of faces that don't invite questions. All three had drinks. <<= _what>> had clearly had several more than they had.

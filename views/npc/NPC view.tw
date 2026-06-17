@@ -1,4 +1,4 @@
-:: NPC view [sex no-redirect girlview] {"position":"5012,30","size":"100,100"}
+﻿:: NPC view [sex no-redirect girlview] {"position":"5012,30","size":"100,100"}
 <<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
 <<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
@@ -14,9 +14,6 @@
 <<elseif !$tmpGirl.talked && ($tmpGirl.traits ?? []).includes('feral')>>
 	<<link 'Train'>>
 		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
-		<<if $tmpGirl.relationship > 100>>
-  			<<set $tmpGirl.relationship = 100>>
- 		<</if>>
 		<<set $tmpGirl.talked = true>>
 		<<addmins 15>>
 		<<set $tmpGirlViewBack = 'NPC view'>>

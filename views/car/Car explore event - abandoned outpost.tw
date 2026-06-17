@@ -1,0 +1,123 @@
+:: Car explore event - abandoned outpost [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+A squat cinderblock building sits back from the road, half-swallowed by weeds — a checkpoint nobody ever checked out of. The barrier arm is still down across the lane. Camo netting sags from rusted poles. A faded laminated sign reads STOP — DOCUMENTS REQUIRED. No one's required anything here in a long time.
+<br /><br />
+<center>
+    <<image 'places/explore_car/outpost1.jpg' sfw>>
+</center>
+<br />
+You cut the engine and listen. Wind. Crows somewhere distant. Nothing else. But there's something off — the tire tracks in the dirt near the barrier. Not yours. Recent enough that the edges haven't crumbled.
+<br /><br />
+Someone else with a vehicle came through here. Not long ago.
+<br /><br />
+A tin cup on the window sill, not yet rusted through. The door is ajar.
+<br /><br />
+<div id="opt_inside">
+    <<linkreplace 'Search inside'>>
+        <<run $('#opt_perimeter').hide()>>
+        <<run $('#opt_wait').hide()>>
+        <<addmins 15>>
+        <<if setup.percentageChance(60)>>
+            <center>
+                <<image 'places/explore_car/outpost2.jpg' sfw>>
+            </center>
+            <br />
+            Overturned chairs. A filing cabinet gutted onto the floor. Old duty rosters, names you don't recognize. But behind a false panel in the back wall — still sealed — a crate of field rations and a first aid kit, vacuum-packed and dry.
+            <br /><br />
+            On top of the crate, a handwritten note: <em>"For whoever finds this. You're probably doing better than we did. — R."</em>
+            <br /><br />
+            <<set _food = randomInteger(3, 5)>>
+            You found <strong class="iitem"><<=_food>> food</strong> and <strong class="iitem">1 bandage</strong>.
+            <<pickup $backpack 'food' _food>>
+            <<pickup $backpack 'bandage' 1>>
+        <<else>>
+            <center>
+                <<image 'places/explore_car/outpost2.jpg' sfw>>
+            </center>
+            <br />
+            Stripped clean — probably months ago. Nothing left that matters. The duty log on the desk goes up to a date, then stops mid-sentence: <em>0600 — vehicle approaching from north, unable to identify — </em>
+            <br /><br />
+            The entry below it is someone else's handwriting. Just two words: <em>don't stop.</em>
+            <br /><br />
+            You stand there a moment with that, then turn to leave. Your boot catches something low and taut — a wire, shin-height, stretched across the doorway. The tension releases. A rusted shelf bracket swings down from above and connects hard with your shoulder before you can get clear.
+            <br /><br />
+            Rigged. Whoever stripped this place didn't want anyone else getting comfortable here.
+            <<perkAdd 'beaten'>>
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_perimeter">
+    <<linkreplace 'Check the perimeter'>>
+        <<run $('#opt_inside').hide()>>
+        <<run $('#opt_wait').hide()>>
+        <<addmins 10>>
+        <<if setup.percentageChance(55)>>
+            The tire tracks lead around the back. Whoever it was pulled in off the road and parked out of sight — smart habit. They left in a hurry though: a sealed jerry can sits forgotten against the back wall, wedged behind a generator that stopped working years ago.
+            <br /><br />
+                        <center>
+                <<image 'places/explore_car/outpost3.jpg' sfw>>
+            </center>
+            <br />
+            Still sloshing. You don't ask questions about abandoned fuel.
+            <br /><br />
+            You got <strong class="iitem">fuel (+20)</strong>.
+            <<set $player.car.fuel = Math.min($player.car.fuel + 20, 100)>>
+        <<else>>
+            Three shallow mounds behind the building, no markers. The kind of graves people dig fast and don't come back to. A rusted rifle jammed barrel-down into the earth next to the largest one — whether that's a grave marker or a warning is hard to say.
+            <br /><br />
+            The tire tracks circle around and head back north. You're following them with your eyes when movement in the brush behind the fence line resolves into a person — lean, hood up, already running. They'd been watching the whole time. They shove you hard as they bolt past, enough to put you in the dirt, and by the time you're up they're gone. Your car is fine. Your pride less so.
+            <<perkAdd 'beaten'>>
+            <br /><br />
+            Nothing useful. You get back in the car.
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_wait">
+    <<linkreplace 'Cut the engine and wait'>>
+        <<run $('#opt_inside').hide()>>
+        <<run $('#opt_perimeter').hide()>>
+        <<addmins 25>>
+        <<if setup.percentageChance(40)>>
+            Fifteen minutes of silence. Then — distant, but getting closer — an engine. Not yours.
+            <br /><br />
+                        <center>
+                <<image 'places/explore_car/outpost4.jpg' sfw>>
+            </center>
+            <br />
+            A motorcycle pulls up. The rider kills the engine and sits on it for a long moment, staring at your car the way people stare at things that shouldn't exist. Then, slowly, they pull off their helmet.
+            <br /><br />
+            <<if setup.percentageChance(50)>><<newgirl>><<set _roadNpc = $tmpGirl>><<else>><<newguy>><<set _roadNpc = $tmpGuy>><</if>>
+            They're young. Tired. They look at your car, then at you, then back at the car.
+            <br /><br />
+            <<sayNpc _roadNpc>>
+                <<= either("Where did you get that?", "That thing actually runs?", "I haven't seen a working car in two years.")>>
+            <</sayNpc>>
+            <br />
+            The conversation that follows is brief. They trade information — a safe route north, a water source two days east — for the chance to just sit next to a running engine for a minute. They press their palm flat against the hood while it's still warm.
+            <br /><br />
+            <<set _food = randomInteger(1, 2)>>
+            They left <strong class="iitem"><<=_food>> food</strong> and a piece of useful information.
+            <<pickup $backpack 'food' _food>>
+        <<else>>
+            Nobody comes. The tracks are old enough after all — or whoever made them has no reason to return. You sit in the quiet with the engine off for twenty minutes before deciding the wait isn't worth it.
+            <br /><br />
+            The silence out here is its own kind of answer.
+        <</if>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<link 'Drive on'>>
+    <<goto 'Garage'>>
+<</link>>

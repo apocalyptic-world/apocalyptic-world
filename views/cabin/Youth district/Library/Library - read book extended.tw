@@ -2,6 +2,7 @@
 <h1 class="ptitle">LIBRARY</h1>
 <br />
 <<set _npc = $guests[$tmpEvent.id]>>
+<<if $guests[$tmpEvent.id].virgin>><<run setup.npc.addHistory($guests[$tmpEvent.id], 'virgin_lost', { with: 'mc' })>><</if>>
 <<set $guests[$tmpEvent.id].virgin = false>>
 <<sayNpc _npc>>
     Oh I like what you're thinking...

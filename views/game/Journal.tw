@@ -387,8 +387,20 @@
 			<<else>>
 				Visit the underground city bar in the evening.
 			<</if>>
-		<<elseif $characters.negan.quests.drunk_companion_day>>
-			Someone may have talked to the wrong people. Keep an eye on things — visit the Sanctuary when ready.
+		<<elseif $characters.negan.quests.drunk_companion_day && !$characters.negan.quests.informant_day>>
+			<<if $game.day < ($characters.negan.quests.drunk_companion_day + 3)>>
+				Wait a few days
+			<<else>>
+				Visit the Sanctuary. Something may have reached Negan's ears.
+			<</if>>
+		<<elseif $characters.negan.quests.informant_day && !$characters.negan.quests.barter_day>>
+			<<if $game.day < ($characters.negan.quests.informant_day + 5)>>
+				Wait a few days
+			<<else>>
+				Visit the Sanctuary. Negan had something on his mind last time — he may have a proposition.
+			<</if>>
+		<<elseif $characters.negan.quests.barter_day>>
+			That's all for now
 		<<else>>
 			That's all for now
 		<</if>>

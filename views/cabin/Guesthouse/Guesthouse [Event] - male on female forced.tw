@@ -30,6 +30,7 @@ The sheets from the cot bind her wrists, torn and knotted tight.
 <div id="option_watch">
     <<linkreplace 'Continue to watch'>>
         <<set _watched = true>>
+        <<if _girl.virgin>><<run setup.npc.addHistory(_girl, 'virgin_lost', { with: _guy.id })>><</if>>
         <<set _girl.virgin = false>>
         <center>
             <<actionImage _girl 'pussy_back'>>

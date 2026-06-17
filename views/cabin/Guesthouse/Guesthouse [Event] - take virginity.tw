@@ -36,6 +36,7 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
     <div id="option_yes">
         <<linkreplace 'Alright'>>
             <<run $('#option_no').hide()>>
+            <<if $guests[$tmpEvent.id].virgin>><<run setup.npc.addHistory($guests[$tmpEvent.id], 'virgin_lost', { with: 'mc' })>><</if>>
             <<set $guests[$tmpEvent.id].virgin = false>>
             <<set $guests[$tmpEvent.id].likesGuys = true>>
             <<set $guests[$tmpEvent.id].relationship += 50>>

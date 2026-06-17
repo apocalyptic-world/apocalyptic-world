@@ -1,0 +1,140 @@
+:: Explore event - ambush bait
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+A wooden crate sat in the middle of the street — supplies, from the look of it.  Untouched.  In the middle of an otherwise completely stripped block.
+<br /><br />
+<center>
+	<<image 'places/explore/ambush_bait.jpg'>>
+</center>
+<br />
+It was too obvious.
+<br /><br />
+<div id="ab_inspect">
+<<set _labelInspect = 'Approach the crate'>>
+<<linkreplace _labelInspect>>
+    <<run $('#ab_circle').hide()>>
+    Three men stepped out from cover the moment you reached it.
+    <br /><br />
+    <<newguy>>
+    <<sayNpc $tmpGuy>>
+        Smart enough to find it.  Not smart enough to smell us.
+    <</sayNpc>>
+    <br />
+    <<link 'Fight them'>>
+        <<generateEnemies 2>>
+        <<fight $enemies 'Explore event - ambush bait won' 'Outside'>>
+    <</link>>
+    <<set _labelRun = 'Run'>>
+    <<linkreplace _labelRun>>
+        <<energy -10>>
+        You turned and sprinted before they closed the distance, ducking into a side alley and losing them in the ruins.  You made it out without a scratch — and without the crate.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+<</linkreplace>>
+</div>
+<div id="ab_circle">
+<<set _labelCircle = 'Circle around first'>>
+<<linkreplace _labelCircle>>
+    <<run $('#ab_inspect').hide()>>
+    <<addmins 20>>
+    <<if $player.int >= 50>>
+        You gave the crate a wide berth and worked around the block, moving low and quiet.  Three men crouched behind a collapsed wall watching the bait — all of them facing the wrong direction.
+        <br /><br />
+        You got behind them before they knew you were there.
+        <br /><br />
+        <<link 'Attack from behind'>>
+            <<generateEnemies 2>>
+            <<fight $enemies 'Explore event - ambush bait won' 'Outside'>>
+        <</link>>
+    <<else>>
+        You circled wide but couldn't find where the trap was set from.  When you came back around, two men were already dragging the crate away.  You let them go.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</if>>
+<</linkreplace>>
+</div>
+
+
+:: Explore event - ambush bait won
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+The last one dropped and the street went quiet.  You caught your breath and turned back to the crate.
+<br /><br />
+Inside: canned food, a box of rounds, and a fuel can.
+<br /><br />
+<<pickup $backpack 'food' 5>>
+<<pickup $backpack 'bullet_revolver' 10>>
+<<pickup $backpack 'fuel' 1>>
+<strong>You collected 5 food, 10 rounds, 1 fuel.</strong>
+<br /><br />
+<<set _labelCheck = 'Check the building they came from'>>
+<<linkreplace _labelCheck>>
+    The building had one back room they had been using as a base — bedrolls, scraps of food, a crate of stolen goods.  Tied to a support beam in the corner was a young woman, rope burns on her wrists.
+    <br /><br />
+    <<newgirl>>
+    <<sayNpc $tmpGirl>>
+        Are they dead?
+    <</sayNpc>>
+    <br />
+    <<you>>
+        All three.
+    <</you>>
+    <br />
+    <<sayNpc $tmpGirl>>
+        Then get me out of these ropes.
+    <</sayNpc>>
+    <br />
+    <div id="abw_free">
+    <<set _labelFree = 'Cut her loose'>>
+    <<linkreplace _labelFree>>
+        <<run $('#abw_capture').hide()>>
+        You cut the ropes.  She rubbed her wrists and looked around the room, then at you.
+        <br /><br />
+        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+            <<sayNpc $tmpGirl>>
+                I don't have anywhere to go from here.  Is there room where you're based?
+            <</sayNpc>>
+            <br />
+            <<set $tmpGirl.relationship = 50>>
+            <<set $player.goodwill += 2>>
+            <<run $guests.push($tmpGirl)>>
+            <<include 'NPC info'>>
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <<else>>
+            She slipped out the door without another word.
+            <br /><br />
+            <<set $player.goodwill += 2>>
+            <<link 'Leave'>>
+                <<goto 'Outside'>>
+            <</link>>
+        <</if>>
+    <</linkreplace>>
+    </div>
+    <div id="abw_capture">
+    <<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $player.energy >= 30>>
+        <<set _labelCapture = 'Keep her bound'>>
+        <<linkreplace _labelCapture>>
+            <<run $('#abw_free').hide()>>
+            You tightened the knots instead of cutting them and pulled her to her feet.
+            <br /><br />
+            <<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 20, 100)>>
+            <<set $player.goodwill -= 2>>
+            <<run $slaves.push($tmpGirl)>>
+            <<statsAdd 'people_captured'>>
+            <<goto 'Basement'>>
+        <</linkreplace>>
+    <</if>>
+    </div>
+<</linkreplace>>
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Outside'>>
+<</link>>

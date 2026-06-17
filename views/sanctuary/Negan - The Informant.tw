@@ -1,0 +1,157 @@
+:: Negan - The Informant [bg-sanctuary]
+<h1 class="ptitle">NEGAN'S OFFICE</h1>
+<<set $characters.negan.quests.informant_day = $game.day>>
+<br />
+The guard waved you through without you asking. That was new.
+<br /><br />
+Negan was at his desk when you came in, jacket off, sleeves rolled. He didn't look up right away. He was reading something — or pretending to. He set it down when he was ready.
+<br /><br />
+<center>
+    <<image 'people/negan/informant_office.jpg' sfw>>
+</center>
+<br />
+<<negan>>
+    Sit down.
+<</negan>>
+<br />
+Not a question. You sat.
+<br /><br />
+He poured two glasses from the bottle on the desk. Slid one toward you without asking if you wanted it.
+<br /><br />
+<center>
+    <<image 'people/negan/informant_drinks.jpg' sfw>>
+</center>
+<br />
+<<negan>>
+    You hear things in this business. People talk. You can't stop people from talking — you know how it is.
+<</negan>>
+<br />
+He picked up his own glass. Looked at it.
+<br /><br />
+<<negan>>
+    Word got back to me that someone down in the underground city was running their mouth the other night. Bar. Late. Telling a couple of my guys all about a working car. Said it was sitting in some settlement not far from here.
+<</negan>>
+<br />
+He set the glass down. Looked at you for the first time since you sat down.
+<br /><br />
+<center>
+    <<image 'people/negan/informant_stare.jpg' sfw>>
+</center>
+<br />
+<<negan>>
+    You know anything about that?
+<</negan>>
+<br />
+<div id="opt_deny">
+    <<linkreplace "I don't know what you're talking about.">>
+        <<set $characters.negan.quests.informant_reply = 'denied'>>
+        <<run $('#opt_dumb').hide()>>
+        <<run $('#opt_honest').hide()>>
+        Negan nodded slowly. The way you nod when someone gives you an answer you already expected.
+        <br /><br />
+        <<negan>>
+            Sure. Sure you don't.
+        <</negan>>
+        <br />
+        He picked up his glass again. Let the silence sit there a moment.
+        <br /><br />
+        <<negan>>
+            Thing about rumors is they have a way of getting louder before they go away. I'd hate for something like that to bring unwanted attention to — whoever does have that car.
+        <</negan>>
+        <br />
+        He smiled. Unhurried. There was nothing behind it except the understanding that he already had what he needed.
+        <br /><br />
+        <<negan>>
+            Drink your drink.
+        <</negan>>
+        <br />
+        <<linkreplace 'Drink and leave'>>
+            You drank. You left.
+            <br /><br />
+            He didn't say anything else. He didn't need to.
+            <br /><br />
+            <<link 'Leave'>>
+                <<addmins 30>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>
+<div id="opt_dumb">
+    <<linkreplace 'Play dumb — could be anyone.'>>
+        <<set $characters.negan.quests.informant_reply = 'played_dumb'>>
+        <<run $('#opt_deny').hide()>>
+        <<run $('#opt_honest').hide()>>
+        <<negan>>
+            Could be.
+        <</negan>>
+        <br />
+        He said it like he found it mildly entertaining.
+        <br /><br />
+        <<negan>>
+            Lot of settlements out there. Lot of people with loose mouths. Could be anyone.
+        <</negan>>
+        <br />
+        He leaned back in his chair, arms folded, watching you with the same unhurried expression he'd had since you walked in.
+        <br /><br />
+        <<negan>>
+            The thing I keep coming back to, though, is that my guys said this person mentioned the car like it was theirs. Personal. Proud of it, even. That narrows it down some.
+        <</negan>>
+        <br />
+        He picked up his drink and tilted it toward you slightly.
+        <br /><br />
+        <<negan>>
+            Just something to think about. You seem like a smart person. I like smart people around me.
+        <</negan>>
+        <br />
+        <<linkreplace 'Leave it there'>>
+            You didn't push it further. Neither did he. The meeting was over when he decided it was over, and right now he seemed content to let it end there.
+            <br /><br />
+            <<link 'Leave'>>
+                <<addmins 30>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>
+<<set _labelHonest = "One of my people drank too much. It won't happen again.">>
+<div id="opt_honest">
+    <<linkreplace _labelHonest>>
+        <<set $characters.negan.quests.informant_reply = 'honest'>>
+        <<run $('#opt_deny').hide()>>
+        <<run $('#opt_dumb').hide()>>
+        Something shifted in Negan's expression — small, quick, like he hadn't expected that answer. Then the smile came back, slower than before.
+        <br /><br />
+        <<negan>>
+            Huh.
+        <</negan>>
+        <br />
+        He leaned forward, both forearms on the desk.
+        <br /><br />
+        <<negan>>
+            I respect that. I do. Most people in your position would've sat there and fed me a line, and I'd have had to sit here and pretend I believed it, and the whole thing would've been a waste of both our time.
+        <</negan>>
+        <br />
+        He nodded, once, like something had been settled.
+        <br /><br />
+        <<negan>>
+            So. You have a car. That's good for you. I'm not going to take it — I got plenty. But I am going to remember that you were straight with me just now. That matters around here.
+        <</negan>>
+        <br />
+        He slid the other glass closer to you.
+        <br /><br />
+        <<negan>>
+            Drink. We're done.
+        <</negan>>
+        <br />
+        <<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 5, 100)>>
+        <<linkreplace 'Drink and leave'>>
+            You drank. For the first time since you walked in, the room felt a degree less dangerous.
+            <br /><br />
+            <<link 'Leave'>>
+                <<addmins 30>>
+                <<goto 'Sanctuary'>>
+            <</link>>
+        <</linkreplace>>
+    <</linkreplace>>
+</div>

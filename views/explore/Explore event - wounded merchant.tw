@@ -1,0 +1,96 @@
+:: Explore event - wounded merchant
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+A man sat slumped against the wall of a collapsed storefront, goods scattered across the pavement around him — cans, tools, cloth, bottlecaps.  An overturned cart nearby still had one wheel spinning slowly.
+<br /><br />
+<center>
+	<<image 'places/explore/wounded_merchant.jpg'>>
+</center>
+<br />
+He was alive.  Just.
+<br /><br />
+<div id="wm_help">
+<<set _labelHelp = 'Help him'>>
+<<linkreplace _labelHelp>>
+    <<run $('#wm_loot').hide()>>
+    <<addmins 30>>
+    <<newguy>>
+    He tensed when he heard you coming, reaching for something at his side.  His hand dropped when he got a look at you.
+    <br /><br />
+    <<sayNpc $tmpGuy>>
+        Not looking for trouble.  Just need a minute to breathe.
+    <</sayNpc>>
+    <br />
+    You got him into a better position and used cloth from his own pack to bind the gash on his leg.  When it was done he let out a long, slow breath.
+    <br /><br />
+    <<sayNpc $tmpGuy>>
+        You didn't have to do that.  Take something — whatever you can carry.  I owe you that much.
+    <</sayNpc>>
+    <br />
+    He nodded at the scattered goods.
+    <br /><br />
+    <div id="wm_food">
+    <<set _labelFood = 'Take the food and caps'>>
+    <<linkreplace _labelFood>>
+        <<run $('#wm_ammo').hide()>>
+        <<run $('#wm_med').hide()>>
+        <<pickup $backpack 'food' 5>>
+        <<set $player.money += 25>>
+        <<set $player.goodwill += 2>>
+        <strong>+5 food, +25 caps.</strong>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+    </div>
+    <div id="wm_ammo">
+    <<set _labelAmmo = 'Take the ammo and fuel'>>
+    <<linkreplace _labelAmmo>>
+        <<run $('#wm_food').hide()>>
+        <<run $('#wm_med').hide()>>
+        <<pickup $backpack 'bullet_revolver' 12>>
+        <<pickup $backpack 'fuel' 1>>
+        <<set $player.goodwill += 2>>
+        <strong>+12 rounds, +1 fuel.</strong>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+    </div>
+    <div id="wm_med">
+    <<set _labelMed = 'Take the medicine'>>
+    <<linkreplace _labelMed>>
+        <<run $('#wm_food').hide()>>
+        <<run $('#wm_ammo').hide()>>
+        <<pickup $backpack 'antibiotics' 2>>
+        <<pickup $backpack 'bandage' 2>>
+        <<set $player.goodwill += 2>>
+        <strong>+2 antibiotics, +2 bandages.</strong>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Outside'>>
+        <</link>>
+    <</linkreplace>>
+    </div>
+<</linkreplace>>
+</div>
+<div id="wm_loot">
+<<set _labelLoot = 'Loot his goods'>>
+<<linkreplace _labelLoot>>
+    <<run $('#wm_help').hide()>>
+    <<addmins 10>>
+    He tried to grab your arm as you went through his things.  You shook him off without effort.
+    <br /><br />
+    <<pickup $backpack 'food' 6>>
+    <<pickup $backpack 'bullet_revolver' 8>>
+    <<set $player.money += 20>>
+    <<set $player.goodwill -= 3>>
+    You left him on the pavement.  <strong>+6 food, +8 rounds, +20 caps.</strong>
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Outside'>>
+    <</link>>
+<</linkreplace>>
+</div>

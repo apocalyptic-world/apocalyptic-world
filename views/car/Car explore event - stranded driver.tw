@@ -1,0 +1,216 @@
+:: Car explore event - stranded driver [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<<newgirl>>
+<<set $tmpGirl.relationship = 0>>
+<br />
+You come around a long bend and find her before she finds you — crouched over a dead engine on the shoulder, screwdriver in hand, working by feel in the afternoon heat. Then your engine sound reaches her.
+<br /><br />
+She goes completely still.
+<br /><br />
+By the time you slow to a stop she's standing, watching your car the way someone watches something they stopped believing existed. Her mouth moves once without making a sound. Then she catches herself and her expression locks back into something careful and neutral — but she can't stop her eyes going back to the car. The engine. The tires.
+<br /><br />
+<center>
+    <<image 'places/explore_car/stranded1.jpg' sfw>>
+</center>
+<br />
+<<sayNpc $tmpGirl>>
+    That's... running. That's actually running.
+<</sayNpc>>
+<br />
+She says it more to herself than to you. Then she straightens and folds her arms and makes an effort to look less impressed.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I haven't heard an engine in — I don't even know how long.
+<</sayNpc>>
+<br />
+She glances at her own car. Dead for longer than yours has been alive, by the look of it. Then back at you.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I'm not asking for anything.
+<</sayNpc>>
+<br />
+<div id="opt_fix">
+    <<linkreplace 'Help fix her car'>>
+        <<run $('#opt_look').hide()>>
+        <<run $('#opt_ride').hide()>>
+        <<run $('#opt_water').hide()>>
+        <<addmins 30>>
+        <<set $tmpGirl.relationship += 25>>
+        <center>
+            <<image 'places/explore_car/stranded2.jpg' sfw>>
+        </center>
+        <br />
+        You get under the hood together. She knows what she's doing — more than most. Calls out what she needs before you can ask, catches a detail you'd have missed. Radiator hose split clean through. The right tape, a half hour, and the engine catches on the second try.
+        <br /><br />
+        She stands back and listens to it idle with the same expression you probably had the first time yours started.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            You didn't have to do that.
+        <</sayNpc>>
+        <br />
+        <<you>>
+            I know.
+        <</you>>
+        <br />
+        She digs a small roll of caps from her jacket. She holds it out like she's expecting you to refuse it, and her jaw sets when she sees you consider it.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Take it. I don't do debts.
+        <</sayNpc>>
+        <br />
+        <<if setup.percentageChance(20)>>
+            Somewhere in there you catch your hand on a sharp bracket — the kind of cut that doesn't hurt until you see it. Not serious. Annoying.
+            <<perkAdd 'bleeding'>>
+            <br /><br />
+        <</if>>
+        <<set _reward = randomInteger(40, 80)>>
+        You received <strong class="iitem"><<=_reward>> caps</strong>.
+        <<set $player.money += _reward>>
+        <br /><br />
+        Before you go, she looks at your car one more time.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Take care of it. There's nothing else like it out here.
+        <</sayNpc>>
+        <br />
+        <br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_look">
+    <<linkreplace 'Let her take a look at your engine'>>
+        <<run $('#opt_fix').hide()>>
+        <<run $('#opt_ride').hide()>>
+        <<run $('#opt_water').hide()>>
+        <<addmins 20>>
+        Something in her changes when you say it. She's around the front of your car before you've finished the sentence, hood up, head bent over the engine with the focused quiet of someone who spent years doing exactly this.
+        <br /><br />
+                <center>
+            <<image 'places/explore_car/stranded3.jpg' sfw>>
+        </center>
+        <br />
+        <<sayNpc $tmpGirl>>
+            Your coolant intake's running loose. And this belt's going to go in the next hundred miles if you don't replace it. Everything else — honestly better shape than I'd expect.
+        <</sayNpc>>
+        <br />
+        She tightens what she can with what she has and steps back.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            That's worth something. Better than caps.
+        <</sayNpc>>
+        <br />
+        <<set $player.car.health = Math.min($player.car.health + 8, 100)>>
+        Your car health improved. <strong>(+8)</strong>
+        <br /><br />
+        She's still watching the engine when you prepare to leave. Like she's memorizing it.
+        <br /><br />
+        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+            <<set _labelInvite = "You could come with me, if you want.">>
+            <<linkreplace _labelInvite>>
+                <<set $tmpGirl.relationship += 40>>
+                <<set $tmpGirl.happy += 50>>
+                <<set $tmpGirl.capture = false>>
+                <<run $guests.push($tmpGirl)>>
+                She looks at you. At the car. At her own dead vehicle on the shoulder. The calculation doesn't take long.
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    You'd actually need someone who can keep that thing running.
+                <</sayNpc>>
+                <br />
+                She grabs her bag from the backseat without another word.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<goto 'Garage'>>
+                <</link>>
+            <</linkreplace>>
+            <br />
+        <</if>>
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_ride">
+    <<linkreplace 'Offer her a ride'>>
+        <<run $('#opt_fix').hide()>>
+        <<run $('#opt_look').hide()>>
+        <<run $('#opt_water').hide()>>
+        She goes still again. Then she looks at the car — really looks at it this time, the way you look at something when you're trying to find the catch.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            In that?
+        <</sayNpc>>
+        <br />
+        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+            You tell her where you're headed. She asks a few short questions — practical ones, the kind that tell you she's done this before, evaluating risk. Then she looks at her own car one last time.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                Been stuck here two days. Car's not coming back. Alright.
+            <</sayNpc>>
+            <br />
+            She grabs her bag without another word. The door closes. You pull out onto the road.
+            <br /><br />
+            After a few miles she stops checking the mirrors and lets herself sink into the seat. You can see it — years working on engines, never getting to ride in a running one. She's not letting herself enjoy it out loud, but she's not fighting it either.
+            <br /><br />
+            <<if ($tmpGirl.likesGuys ?? true)>>
+                <<set _labelMove = 'Make a move'>>
+                <<linkreplace _labelMove>>
+                    <<set $tmpGirl.location = 'car'>>
+                    <<set $tmpGirlViewBack = 'Stranded driver - after sex'>>
+                    <<fuck $tmpGirl>>
+                <</linkreplace>>
+            <</if>>
+            <<link 'Keep driving and drop her off'>>
+                <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 30, 100)>>
+                <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 60, 100)>>
+                <<set $tmpGirl.capture = false>>
+                <<run $guests.push($tmpGirl)>>
+                <<goto 'Garage'>>
+            <</link>>
+        <<else>>
+            <<sayNpc $tmpGirl>>
+                I appreciate it. But I've got somewhere to be.
+            <</sayNpc>>
+            <br />
+            She says it like she's not sure she believes it herself. But she doesn't move toward the car.
+            <br /><br />
+            <<link 'Leave'>>
+                <<goto 'Garage'>>
+            <</link>>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="opt_water">
+    <<linkreplace 'Leave some supplies and go'>>
+        <<run $('#opt_fix').hide()>>
+        <<run $('#opt_look').hide()>>
+        <<run $('#opt_ride').hide()>>
+        You set a can and a bandage on the hood of her car without making a production of it. She watches you do it.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Hey.
+        <</sayNpc>>
+        <br />
+        You pause.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Nice car.
+        <</sayNpc>>
+        <br />
+        <<if $backpack.has('food')>>
+            <<drop $backpack 'food' 1>>
+        <</if>>
+        <<if $backpack.has('bandage')>>
+            <<drop $backpack 'bandage' 1>>
+        <</if>>
+        <br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<<link 'Drive past'>>
+    <<goto 'Garage'>>
+<</link>>

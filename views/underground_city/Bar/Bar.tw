@@ -49,12 +49,10 @@
   <</link>>
 <</if>>
 
-<<if timeBetween('23:59', '03:00') && recall($suppCode) && setup.percentageChance(10) && $player.reputation > 50>>
-	<<goto 'Bar [Event] closing time'>>
-<</if>>
-
-<<if timeBetween('18:00', '22:00') && ($characters.negan.quests.new_one_day ?? 0) && !($characters.negan.quests.drunk_companion_day ?? 0) && $player?.car && $game.day >= ($characters.negan.quests.new_one_day + 5) && (setup.getAvailablePersons18yo($guests)[0] ?? []).length && setup.percentageChance(40)>>
+<<if timeBetween('20:00', '02:59') && ($characters?.negan?.quests?.new_one_day ?? 0) && !$characters?.negan?.quests?.drunk_companion_day && $player?.car && $game.day >= ($characters.negan.quests.new_one_day + 5) && Object.values(setup.getAvailablePersons18yo($guests)).some(arr => arr.length)>>
 	<<goto 'Negan - Drunk Companion'>>
+<<elseif timeBetween('23:59', '03:00') && recall($suppCode) && setup.percentageChance(10) && $player.reputation > 50>>
+	<<goto 'Bar [Event] closing time'>>
 <</if>>
 
 <<link 'Leave'>>

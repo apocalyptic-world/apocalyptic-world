@@ -1,0 +1,92 @@
+:: Car explore event - hidden cache [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+Something catches your eye off the road — a glint, low in the scrub. Not glass. Not water. Too deliberate. You pull over and kill the engine.
+<br /><br />
+<center>
+    <<image 'places/explore_car/cache1.jpg' sfw>>
+</center>
+<br />
+Thirty meters from the shoulder, half-buried under dirt and dead brush, is a metal box — military-spec, welded reinforced, with a rusted combination lock. A short length of rebar juts from the earth next to it like a marker. Someone planned this. They wanted it found, but not easily.
+<br /><br />
+Scratched into the top of the box with something sharp, barely legible: <em>FOR THE ROAD.</em>
+<br /><br />
+Whoever left this had somewhere to go, and a vehicle to get there.
+<br /><br />
+<div id="opt_dig">
+    <<linkreplace 'Dig it out and force it open'>>
+        <<run $('#opt_grab').hide()>>
+        <<run $('#opt_leave').hide()>>
+        <<addmins 25>>
+        The lock goes with leverage and patience — rebar as a pry bar, the lip of a rock as a fulcrum. When it gives, the seal breaks with a sound like a breath held too long.
+        <<if setup.percentageChance(15)>>
+            The lid snaps back harder than expected — a spring-loaded mechanism, probably meant to alert the owner. The edge catches your forearm clean. Not deep, but enough to bleed.
+            <<perkAdd 'bleeding'>>
+            <br /><br />
+        <</if>>
+        <br /><br />
+        <center>
+            <<image 'places/explore_car/cache2.jpg' sfw>>
+        </center>
+        <br />
+        Inside, carefully packed: vacuum-sealed rations, a first aid kit still in the original wrap, a hand-drawn map on oilcloth, and a folded note.
+        <br /><br />
+        The note reads: <em>"If you found this, you're on the road. That means you have something worth protecting. The three circles on the map — fuel, food, people. In that order of reliability. Good luck."</em>
+        <br /><br />
+        The map marks routes between locations — old highway connectors, fuel caches, rest stops. The kind of knowledge that's only useful if you can actually cover ground. Which you can.
+        <br /><br />
+        <<set _food = randomInteger(3, 6)>>
+        You found <strong class="iitem"><<=_food>> food</strong>, <strong class="iitem">2 bandages</strong>, and <strong class="iitem">fuel (+15)</strong>.
+        <<pickup $backpack 'food' _food>>
+        <<pickup $backpack 'bandage' 2>>
+        <<set $player.car.fuel = Math.min($player.car.fuel + 15, 100)>>
+        <br /><br />
+        <<set _labelMap = 'Follow one of the marked locations on the map.'>>
+        <<linkreplace _labelMap>>
+            <<addmins 40>>
+            <<if setup.percentageChance(65)>>
+                                <center>
+                    <<image 'places/explore_car/cache3.jpg' sfw>>
+                </center>
+                <br />
+                The first marked location is a collapsed overpass, two fuel drums tucked under the concrete where they'd be invisible from the road. Whoever left the map knew their routes. The drums are half-full.
+                <br /><br />
+                <<set _extraFuel = randomInteger(10, 25)>>
+                You got <strong class="iitem">extra fuel (+<<=_extraFuel>>)</strong>.
+                <<set $player.car.fuel = Math.min($player.car.fuel + _extraFuel, 100)>>
+            <<else>>
+                The location is picked clean — and the people who picked it are still there. Two of them, sitting on what used to be the cache. They see the car first and their expressions go from curious to aggressive fast. You get back to the car but not before one of them puts a boot through your side mirror and a fist into your ribs.
+                <br /><br />
+                You drive away. They don't follow — the car is enough of a deterrent once it's moving. But the ribs will remind you about this for a few days.
+                <<perkAdd 'beaten'>>
+                <<set $player.car.health = Math.max($player.car.health - 5, 0)>>
+            <</if>>
+            <br /><br />
+        <</linkreplace>>
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_grab">
+    <<linkreplace 'Take what\'s visible without digging'>>
+        <<run $('#opt_dig').hide()>>
+        <<run $('#opt_leave').hide()>>
+        The rebar has a small tin wired to the top — a runner cache, separate from the box. Inside: two cans, a strip of painkillers, and a handwritten note folded twice.
+        <br /><br />
+        The note reads: <em>"The box takes work. That's on purpose. If you're in a hurry, hope the cans help. If you have time — dig."</em>
+        <br /><br />
+        <<set _food = randomInteger(1, 2)>>
+        You found <strong class="iitem"><<=_food>> food</strong>.
+        <<pickup $backpack 'food' _food>>
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Garage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="opt_leave">
+    <<link 'Leave it'>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>

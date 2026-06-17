@@ -1,0 +1,71 @@
+:: Stranded driver - after sex [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+The engine hums. Neither of you says anything for a while. She pulls her jacket straight and watches the road with the focus of someone who's decided what version of this they want to remember.
+<br /><br />
+<center>
+    <<image 'places/explore_car/stranded_aftersex.jpg' sfw>>
+</center>
+<br />
+<<sayNpc $tmpGirl>>
+    Not what I expected when I saw the car.
+<</sayNpc>>
+<br />
+You're not sure if that's a compliment.
+<br /><br />
+<<set _canCapture = $player.energy >= 30 && $slaves.length < $basementLimit>>
+<<set _canInvite = ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<div id="sd_capture">
+    <<if _canCapture>>
+        <<linkreplace 'Bring her back with you'>>
+            <<run $('#sd_invite').hide()>>
+            <<run $('#sd_leave').hide()>>
+            <<if $player.strength >= $tmpGirl.strength>>
+                She doesn't get much say in it. You take a different route and she understands what's happening before you need to explain. By then the car's already moving and she's not stronger than you.
+                <br /><br />
+                <<set $tmpGirl.capture = false>>
+                <<run $slaves.push($tmpGirl)>>
+                <<addhours 2>>
+                <<energy -30>>
+                <<statsAdd 'people_captured'>>
+                <br /><br />
+                <<link 'Continue'>>
+                    <<goto 'Basement'>>
+                <</link>>
+            <<else>>
+                When you try it, she moves faster than expected. Gets the door open at a slow bend and hits the ground running. You could follow on foot but the car makes that impossible — too visible, too slow to turn around in the brush. By the time you're back on the road she's already gone.
+                <br /><br />
+                <<link 'Drive away'>>
+                    <<goto 'Garage'>>
+                <</link>>
+            <</if>>
+        <</linkreplace>>
+    <</if>>
+</div>
+<div id="sd_invite">
+    <<if _canInvite>>
+        <<linkreplace 'Ask her to come stay with you'>>
+            <<run $('#sd_capture').hide()>>
+            <<run $('#sd_leave').hide()>>
+            She's quiet for a moment. Then she nods once — the same way she agreed to the ride. Like she's already run the numbers.
+            <br /><br />
+            <<sayNpc $tmpGirl>>
+                You've got the car. I know engines. That's a fair trade.
+            <</sayNpc>>
+            <br />
+            <<set $tmpGirl.capture = false>>
+            <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 40, 100)>>
+            <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 50, 100)>>
+            <<run $guests.push($tmpGirl)>>
+            <br /><br />
+            <<link 'Continue'>>
+                <<goto 'Guest house'>>
+            <</link>>
+        <</linkreplace>>
+    <</if>>
+</div>
+<div id="sd_leave">
+    <<link 'Drop her off at the next crossroads'>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>

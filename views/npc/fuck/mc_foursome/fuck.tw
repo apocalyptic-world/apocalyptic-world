@@ -41,16 +41,19 @@
 
         /* virginity checks */
         <<if $tmpGirl.virgin && (_sexActions[$sexAction]?.stats === 'pussy' || (Array.isArray(_sexActions[$sexAction]?.stats) && _sexActions[$sexAction].stats.includes('pussy')))>>
+            <<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
             <<set $tmpGirl.virgin = false>>
             <<=setup.displayName($tmpGirl, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
             <br />
         <</if>>
         <<if $tmpGirl2.virgin && _sexActions[$sexAction]?.stats2 === 'pussy'>>
+            <<run setup.npc.addHistory($tmpGirl2, 'virgin_lost', { with: 'mc' })>>
             <<set $tmpGirl2.virgin = false>>
             <<=setup.displayName($tmpGirl2, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
             <br />
         <</if>>
         <<if $tmpGirl3.virgin && _sexActions[$sexAction]?.stats3 === 'pussy'>>
+            <<run setup.npc.addHistory($tmpGirl3, 'virgin_lost', { with: 'mc' })>>
             <<set $tmpGirl3.virgin = false>>
             <<=setup.displayName($tmpGirl3, true)>> seems tense, a bit of <strong>blood</strong> trickles from her newly <strong>deflowered</strong> pussy.
             <br />

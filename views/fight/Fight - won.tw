@@ -175,6 +175,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 						<<if setup.getAge($fight.defeatedEnemies[_i]) >= 18>>
 							<<link 'Fuck'>>
 								<<set $tmpGirl = $fight.defeatedEnemies[_i]>>
+								<<if $fight.defeatedEnemies[_i].virgin>><<run setup.npc.addHistory($fight.defeatedEnemies[_i], 'virgin_lost', { with: 'mc' })>><</if>>
 								<<set $fight.defeatedEnemies[_i].virgin = false>>
 								<<unset $charId, $guestId, $slaveId, $childId>>
 								<<set $tmpGirl.location = 'forest'>>
