@@ -113,42 +113,42 @@
 <br /><br />
 <<set $prevPunish = $punishType>>
 <<if !_dead>>
-<<if $player.energy >= 10 && hasTime(1)>>
-	<<if $tmpGirl.gender == 1>>
-		<<link 'Hit him'>>
-			<<set $punishType = 'beat'>>
-			<<goto `passage()`>>
-		<</link>>
-	<</if>>
-	<<if settings.gaysEnabled || !$tmpGirl.gender>>
-		<<link 'Punish (slap)'>>
-				<<set $punishType = 'slap'>>
-				<<goto `passage()`>>
-		<</link>>
-		<<if $backpack.has('paddle')>>
-			<<link 'Punish (paddle)'>>
-				<<set $punishType = 'paddle'>>
+	<<if $player.energy >= 10 && timeBetween('08:00', '04:00')>>
+		<<if $tmpGirl.gender == 1>>
+			<<link 'Hit him'>>
+				<<set $punishType = 'beat'>>
 				<<goto `passage()`>>
 			<</link>>
 		<</if>>
-  	<</if>>
-	<<link 'Punish (whip)'>>
-		<<set $punishType = 'whip'>>
-		<<goto `passage()`>>
-	<</link>>
-  	<<set _linkName = 'Piss on ' + _himOrHer>>
-  	<<link _linkName>>
-		<<set $punishType = 'piss'>>
-		<<goto `passage()`>>
-	<</link>>
-	<<if [0, 2].includes($tmpGirl.gender)>>
-		<<set _linkName = 'Choke ' + _himOrHer>>
-		<<link _linkName>>
-			<<set $punishType = 'choke'>>
+		<<if settings.gaysEnabled || !$tmpGirl.gender>>
+			<<link 'Punish (slap)'>>
+					<<set $punishType = 'slap'>>
+					<<goto `passage()`>>
+			<</link>>
+			<<if $backpack.has('paddle')>>
+				<<link 'Punish (paddle)'>>
+					<<set $punishType = 'paddle'>>
+					<<goto `passage()`>>
+				<</link>>
+			<</if>>
+		<</if>>
+		<<link 'Punish (whip)'>>
+			<<set $punishType = 'whip'>>
 			<<goto `passage()`>>
 		<</link>>
+		<<set _linkName = 'Piss on ' + _himOrHer>>
+		<<link _linkName>>
+			<<set $punishType = 'piss'>>
+			<<goto `passage()`>>
+		<</link>>
+		<<if [0, 2].includes($tmpGirl.gender)>>
+			<<set _linkName = 'Choke ' + _himOrHer>>
+			<<link _linkName>>
+				<<set $punishType = 'choke'>>
+				<<goto `passage()`>>
+			<</link>>
+		<</if>>
 	<</if>>
-<</if>>
 <<else>>
 	<<slaveRemove $slaveId>>
 <</if>>
