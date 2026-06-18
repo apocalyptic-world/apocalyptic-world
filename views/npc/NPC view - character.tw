@@ -42,6 +42,20 @@
 	<</link>>
 <</if>>
 
+<<if !$tmpGirl.gender && ($tmpGirl.pregnancy ?? -1) >= 7>>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<set $pregnancyPotionBackLink = 'NPC view - character'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give termination potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
+<</if>>
+
 <<if $tmpGirl.canMarry && !$tmpGirl.gender && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
