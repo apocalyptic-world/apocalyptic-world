@@ -64,7 +64,7 @@
 	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
 		<<set _sexActions[1] = 'bj'>>
 	<</if>>
-	<<if !_isVirgin && (_maleGuestIds.some(_id => ($guests[_id].traits ?? []).includes('breeder')))>>
+	<<if !_isVirgin && (_maleGuestIds.some(function(_id) { return ($guests[_id].traits ?? []).includes('breeder'); }))>>
 		<<set _sexActions[_sexActions.length - 1] = 'cum_in_pussy'>>
 	<</if>>
 
