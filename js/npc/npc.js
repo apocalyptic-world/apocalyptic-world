@@ -1054,6 +1054,7 @@ setup.npc = {
 
 	/* Convert a game-day number to an in-game Date */
 	dayToDate: function(day) {
+		if (day == null) return null;
 		const gameDate = variables().gameDate;
 		if (!gameDate) return null;
 		const d = new Date(gameDate);
