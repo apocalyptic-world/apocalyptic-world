@@ -41,12 +41,14 @@ Abandoning stealth and swinging open the door, you see that they're holding a fe
 			<<run $('#option2, #option_food').hide()>>
 			<<if _kidNpc.gender === 0>>
 				<<newgirl>>
+				<<set _kid = $tmpGirl>>
 			<<else>>
 				<<newguy>>
+				<<set _kid = $tmpGuy>>
 			<</if>>
-			<<set $tmpGuy.birthDate = setup.getBirthDate(randomInteger(7, 13))>>
-			<<set $tmpGuy.relationship = randomInteger(40, 70)>>
-			<<run $nursery.push($tmpGuy)>>
+			<<set _kid.birthDate = setup.getBirthDate(randomInteger(7, 13))>>
+			<<set _kid.relationship = randomInteger(40, 70)>>
+			<<run $nursery.push(_kid)>>
 			A wide smile bursts onto the child's face as <<=setup.pronounceWhat(_kidNpc)>> exclaims, <strong>"Thank you so much mister! I would like that!"</strong>. <<=setup.pronounceWhat(_kidNpc, true)>> puts down the food <<=setup.pronounceWhat(_kidNpc)>> was trying to steal, and you show <<=setup.pronounceWho(_kidNpc)>> a place where <<=setup.pronounceWhat(_kidNpc)>> can sleep.
 			<br /><br />
 			<<link 'Leave'>>
