@@ -441,6 +441,22 @@
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your slave <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
+		// Anniversary
+		<<set _annivEntry = (_npc.history ?? []).find(h => h.event === 'married')>>
+		<<if _annivEntry && setup.npc.isAnniversary(_npc)>>
+			<<set _seenAnnivPairs = _seenAnnivPairs ?? new Set()>>
+			<<set _annivYears = setup.npc.yearsMarried(_npc)>>
+			<<if _annivEntry.with === 'mc'>>
+				<<run setup.sleepMessages.add('Today is the <strong>' + _annivYears + '-year</strong> wedding anniversary between <strong>you</strong> and <strong>' + _npc.name + '</strong>! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+			<<else>>
+				<<set _annivKey = [_npc.id, _annivEntry.with].sort().join('|')>>
+				<<if !_seenAnnivPairs.has(_annivKey)>>
+					<<run _seenAnnivPairs.add(_annivKey)>>
+					<<set _spouseNpc = setup.getNpcById(_annivEntry.with)>>
+					<<run setup.sleepMessages.add('Today is the <strong>' + _annivYears + '-year</strong> wedding anniversary between <strong>' + _npc.name + '</strong> and <strong>' + (_spouseNpc?.name ?? 'someone') + '</strong>! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+				<</if>>
+			<</if>>
+		<</if>>
 <</for>>
 
 <<run $slaves.filter(n=>n)>>
@@ -894,6 +910,22 @@
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your guest <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
+		// Anniversary
+		<<set _annivEntry = (_npc.history ?? []).find(h => h.event === 'married')>>
+		<<if _annivEntry && setup.npc.isAnniversary(_npc)>>
+			<<set _seenAnnivPairs = _seenAnnivPairs ?? new Set()>>
+			<<set _annivYears = setup.npc.yearsMarried(_npc)>>
+			<<if _annivEntry.with === 'mc'>>
+				<<run setup.sleepMessages.add('Today is the <strong>' + _annivYears + '-year</strong> wedding anniversary between <strong>you</strong> and <strong>' + _npc.name + '</strong>! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+			<<else>>
+				<<set _annivKey = [_npc.id, _annivEntry.with].sort().join('|')>>
+				<<if !_seenAnnivPairs.has(_annivKey)>>
+					<<run _seenAnnivPairs.add(_annivKey)>>
+					<<set _spouseNpc = setup.getNpcById(_annivEntry.with)>>
+					<<run setup.sleepMessages.add('Today is the <strong>' + _annivYears + '-year</strong> wedding anniversary between <strong>' + _npc.name + '</strong> and <strong>' + (_spouseNpc?.name ?? 'someone') + '</strong>! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+				<</if>>
+			<</if>>
 		<</if>>
 <</for>>
 
