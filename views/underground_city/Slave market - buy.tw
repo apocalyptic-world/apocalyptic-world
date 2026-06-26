@@ -46,6 +46,7 @@
         <div class="slave-market-card-price"><<= _card.value>> caps</div>
         <<linkreplace 'Buy'>>
             <<if $slaves.length < $basementLimit && $player.money >= _mSlaves[_msi].value>>
+                <<run setup.npc.addHistory(_mSlaves[_msi], 'bought')>>
                 <<run $slaves.push(_mSlaves[_msi])>>
                 <<set $player.money -= _mSlaves[_msi].value>>
                 <em>Purchased.</em>

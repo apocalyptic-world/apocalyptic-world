@@ -1045,10 +1045,17 @@ setup.npc = {
 			: entry.with === 'mc' ? (variables().playerName ?? 'you')
 			: (setup.npc.findById(entry.with)?.name ?? 'someone');
 		switch (entry.event) {
-			case 'virgin_lost':  return day + 'Lost virginity' + (withName ? ' to ' + withName : '');
-			case 'married':      return day + 'Married ' + (withName || 'someone');
-			case 'first_sex_mc': return day + 'First intimate moment with ' + (withName || 'you');
-			default:             return day + entry.event;
+			case 'virgin_lost':      return day + 'Lost virginity' + (withName ? ' to ' + withName : '');
+			case 'married':          return day + 'Married ' + (withName || 'someone');
+			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
+			case 'captured':         return day + 'Captured';
+			case 'invited':          return day + 'Invited to settlement';
+			case 'bought':           return day + 'Bought at slave market';
+			case 'moved_to_guest':   return day + 'Moved to guest house';
+			case 'moved_to_slave':   return day + 'Moved to basement';
+			case 'grown_up':         return day + 'Grew up and joined settlement';
+			case 'released':         return day + 'Released';
+			default:                 return day + entry.event;
 		}
 	},
 

@@ -27,6 +27,7 @@
 	<</if>>
 
 	<<companionRearange _companionKey>>
+	<<run setup.npc.addHistory(_args[0], 'moved_to_guest')>>
 	<<run $slaves.splice(_args[1], 1)>>
 	<<run $guests.push(_args[0])>>
 <</widget>>
@@ -45,6 +46,7 @@
 	<</if>>
 
 	<<companionRearange _companionKey>>
+	<<run setup.npc.addHistory(_args[0], 'moved_to_slave')>>
 	<<run $guests.splice(_args[1], 1)>>
 	<<run $slaves.push(_args[0])>>
 <</widget>>

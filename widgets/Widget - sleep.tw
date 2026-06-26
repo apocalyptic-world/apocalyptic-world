@@ -953,6 +953,7 @@
 		<</if>>
 		
 		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
+			<<run setup.npc.addHistory($nursery[_nurseryI], 'grown_up')>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
 			<<if (setup.percentageChance(75))>>
 				<<set _orientation = 'straight'>>
