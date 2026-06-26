@@ -200,6 +200,14 @@
 			<<if ($fight.allies[_i].traits ?? []).includes('crippled')>>
 				<<set _allyStrength = Math.max(1, Math.round(_allyStrength / 2, 0))>>
 			<</if>>
+			<<if ($fight.allies[_i].drunk ?? 0) > 0>>
+				<<if setup.percentageChance(Math.min($fight.allies[_i].drunk, 60))>>
+					<<set $fight.messages.push($fight.allies[_i].name + ' stumbles drunkenly and misses')>>
+					<<set _allyStrength = 0>>
+				<<else>>
+					<<set _allyStrength = Math.max(1, Math.round(_allyStrength * 0.7, 0))>>
+				<</if>>
+			<</if>>
 			<<if $fight.enemies[_randomEnemyKey].hp === null>>
 				<<set $fight.enemies[_randomEnemyKey].hp = 0>>
 			<</if>>
