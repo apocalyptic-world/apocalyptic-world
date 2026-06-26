@@ -492,7 +492,7 @@
 				<<set $tmpEvent = {id: _kitchenSlaves[0], isSlave: true}>>
 				<<set _kitchenNpc = $slaves[_kitchenSlaves[0]]>>
 			<</if>>
-			<<if (_kitchenNpc.likesGuys ?? true) && (_kitchenNpc.horny ?? 0) >= 30>>
+			<<if !_kitchenNpc.gender && (_kitchenNpc.likesGuys ?? true) && (_kitchenNpc.horny ?? 0) >= 30>>
 				<<goto 'Bedroom - breakfast in bed'>>
 			<</if>>
 		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
