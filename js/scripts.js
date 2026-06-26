@@ -889,8 +889,11 @@ setup.canGetPregnant = function(person) {
 
 setup.drink = function (person, glass = 1, alcohol = 25) {
     alcohol = Math.max(alcohol + window.randomInteger(0, 5) - window.randomInteger(0, 5), 0);
-    var resistance = 1 + (person.endurance ?? 0) / 200;
+    var likesAlcohol = (person.likes ?? []).includes('alcohol') ? 0.5 : 0;
+    var tolerance = Math.min((person.drinkCount ?? 0) / 30, 1.0);
+    var resistance = 1 + likesAlcohol + tolerance;
     person.drunk = (person.drunk ?? 0) + Math.round(glass * alcohol / resistance);
+    person.drinkCount = (person.drinkCount ?? 0) + glass;
 
 	return person;
 };
