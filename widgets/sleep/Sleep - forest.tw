@@ -17,12 +17,21 @@
 	<<run setup.sleepMessages.addJob('<span class="skill">' + _npc.name + ' learned the woodcraft skill</span>', 'forest')>>
 <</if>>
 <<set _chanceOfNotComingHome = 6>>
-<<if _npc.strength >= 30>>
-	<<set _changeOfNotComingHome -=4>>
+<<if _npc.strength >= 60>>
+	<<set _chanceOfNotComingHome -= 4>>
+<<elseif _npc.strength >= 30>>
+	<<set _chanceOfNotComingHome -= 2>>
+<</if>>
+<<if (_npc.skills ?? []).includes('woodcraft')>>
+	<<set _chanceOfNotComingHome -= 1>>
 <</if>>
 <<if setup.npcInventoryHas(_npc, 'knife')>>
-	<<set _chanceOfNotComingHome -=1>>
+	<<set _chanceOfNotComingHome -= 1>>
 <</if>>
+<<if setup.npcInventoryHas(_npc, 'crossbow') || setup.npcInventoryHas(_npc, 'bow')>>
+	<<set _chanceOfNotComingHome -= 1>>
+<</if>>
+<<set _chanceOfNotComingHome = Math.max(1, _chanceOfNotComingHome)>>
 
 /* Animal attack chance — higher if no knife, lower if strong */
 <<set _chanceAnimalAttack = 8>>
