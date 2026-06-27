@@ -79,6 +79,14 @@
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('hit')>>
 		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (-' + Math.round($player.strength / 3, 0) + ')')>>
+	<<elseif $args[1] === 'sword'>>
+		<<set _swordDmg = Math.round($player.strength / 1.5, 0)>>
+		<<set $fight.enemies[$args[0]].hp -= _swordDmg>>
+		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
+			<<set $fight.enemies[$args[0]].attacks = []>>
+		<</if>>
+		<<set $fight.enemies[$args[0]].attacks.push('sword')>>
+		<<set $fight.messages.push('You slashed ' + $fight.enemies[$args[0]].name + ' with your sword (-' + _swordDmg + ')')>>
 	<<elseif $args[1] === 'knife'>>
 		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 2, 0)>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
@@ -170,6 +178,7 @@
 				<<continue>>
 			<</if>>
 			<<set _allyHasKnife = setup.npcInventoryHas($fight.allies[_i], 'knife')>>
+			<<set _allyHasSword = setup.npcInventoryHas($fight.allies[_i], 'sword')>>
 			<<set _allyHasCrossbow = setup.npcInventoryHas($fight.allies[_i], 'crossbow') && setup.npcInventoryHas($fight.allies[_i], 'arrow')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
 			<<set _allyStrength = Math.round(($fight.allies[_i].strength ?? 5) / 3, 0)>>
@@ -191,6 +200,8 @@
 			
 			<<if _allyHasCrossbow && !_usePunch && !_useKnife>>
 				<<set _allyStrength += randomInteger(20, 30)>>
+			<<elseif _allyHasSword && !_usePunch>>
+				<<set _allyStrength += randomInteger(8, 15)>>
 			<<elseif _allyHasKnife && !_usePunch>>
 				<<set _allyStrength += randomInteger(2, 5)>>
 			<</if>>
@@ -224,10 +235,16 @@
 
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('crossbow')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' shot ' + $fight.enemies[_randomEnemyKey].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + _allyStrength + ')')>>				
+			<<elseif _allyHasSword && !_usePunch>>
+				<<set $fight.enemies[_randomEnemyKey].attacks.push('sword')>>
+				<<set $fight.messages.push($fight.allies[_i].name + ' slashed ' + $fight.enemies[_randomEnemyKey].name + ' with a sword (-' + _allyStrength + ')')>>
+				<<if setup.percentageChance(3)>>
+					<<run setup.npcInventoryRemove($fight.allies[_i], 'sword')>>
+					<<run $fight.messages.push($fight.allies[_i].name + "'s sword broke")>>
+				<</if>>
 			<<elseif _allyHasKnife && !_usePunch>>
 				<<set $fight.enemies[_randomEnemyKey].attacks.push('knife')>>
 				<<set $fight.messages.push($fight.allies[_i].name + ' stabbed ' + $fight.enemies[_randomEnemyKey].name + ' in the chest (-' + _allyStrength + ')')>>
-				
 				<<if setup.percentageChance(10)>>
 					<<set _knifeBroke = true>>
 					<<run setup.npcInventoryRemove($fight.allies[_i], 'knife')>>
@@ -253,6 +270,7 @@
 		<<set _targetName = (_isPlayerTarget ? 'you' : $fight.allies[_randomEnemyTarget].name)>>
 
 		<<set _enemyHasCrossbow = setup.npcInventoryHas($fight.enemies[_i], 'crossbow')>>
+		<<set _enemyHasSword = setup.npcInventoryHas($fight.enemies[_i], 'sword')>>
 		<<set _enemyHasKnife = setup.npcInventoryHas($fight.enemies[_i], 'knife')>>
 		<<set _enemyStrength = $fight.enemies[_i].strength ?? 0>>
 		<<if ($fight.enemies[_i].skills ?? []).includes('fighter')>>
@@ -280,6 +298,32 @@
 				<<set $fight.allies[_randomEnemyTarget].attacks.push('crowssbow')>>
 			<</if>>
 			<<run $fight.messages.push($fight.enemies[_i].name + ' shoot a crossbow arrow at ' + _targetName + ' (-' + _enemyStrength + ')')>>
+		<<elseif _enemyHasSword>>
+			<<set _enemyStrength += 25>>
+			<<if _isPlayerTarget>>
+				<<if $player.endurance > 0>>
+					<<set _enemyStrength = Math.max(_enemyStrength - (Math.round($player.endurance / 10, 0)), 1)>>
+				<</if>>
+				<<set _bleedingChance = 80>>
+				<<if $backpack.has('body_armor')>>
+					<<set _bleedingChance -= 50>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
+				<</if>>
+				<<if setup.percentageChance(_bleedingChance)>>
+					<<perkAdd 'bleeding'>>
+				<</if>>
+			<<else>>
+				<<if setup.npcInventoryHas($fight.allies[_randomEnemyTarget], 'body_armor')>>
+					<<set _enemyStrength = Math.round(_enemyStrength / 2, 0)>>
+				<</if>>
+				<<set $fight.allies[_randomEnemyTarget].attacks ??= []>>
+				<<set $fight.allies[_randomEnemyTarget].attacks.push('sword')>>
+			<</if>>
+			<<run $fight.messages.push($fight.enemies[_i].name + ' slashed ' + _targetName + ' with a sword (-' + _enemyStrength + ')')>>
+			<<if setup.percentageChance(3)>>
+				<<run setup.npcInventoryRemove($fight.enemies[_i], 'sword')>>
+				<<run $fight.messages.push($fight.enemies[_i].name + "'s sword broke")>>
+			<</if>>
 		<<elseif _enemyHasKnife>>
 			<<set _enemyStrength += 20>>
 			<<if _isPlayerTarget>>
@@ -408,6 +452,7 @@
 	<<set _randomItemsList = ['condom', 'food', 'lube', 'candy', 'metal', 'cloth', 'piercing']>>
 
 	<<set _knivesLeft = $args[2] ?? 0>>
+	<<set _swordsLeft = 0>>
 	<<set _crossbowLeft = 0>>
 	<<if setup.percentageChance(20)>>
 		<<set _knivesLeft++>>
@@ -421,6 +466,9 @@
 	<<if $player.reputation > 100 && setup.percentageChance(70)>>
 		<<set _knivesLeft++>>
 	<</if>>
+	<<if $player.reputation > 100 && setup.percentageChance(15)>>
+		<<set _swordsLeft++>>
+	<</if>>
 	<<for _i = 0; _i < $args[0]; _i++>>
 		<<newguy>>
 		<<if $tmpGuy.traits.includes("pacifist")>>
@@ -431,6 +479,11 @@
 				crossbow: 1
 			}>>
 			<<set _crossbowLeft-->>
+		<<elseif _swordsLeft>>
+			<<set $tmpGuy.inventory = {
+				sword: 1
+			}>>
+			<<set _swordsLeft-->>
 		<<elseif _knivesLeft>>
 			<<set $tmpGuy.inventory = {
 				knife: 1
@@ -455,12 +508,16 @@
 				crossbow: 1
 			}>>
 			<<set _crossbowLeft-->>
+		<<elseif _swordsLeft>>
+			<<set $tmpGirl.inventory = {
+				sword: 1
+			}>>
+			<<set _swordsLeft-->>
 		<<elseif _knivesLeft>>
 			<<set $tmpGirl.inventory = {
 				knife: 1
 			}>>
 			<<set _knivesLeft-->>
-
 		<</if>>
 		<<if setup.percentageChance(5)>>
 			<<set _randomItem = setup.getRandomElement(_randomItemsList)>>
