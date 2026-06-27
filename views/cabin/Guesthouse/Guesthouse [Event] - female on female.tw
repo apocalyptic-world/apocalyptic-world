@@ -64,7 +64,6 @@
 	<<if _nbSquirters == 0>>
 		<<set _sexActions[5] = 'orgasm'>>
 	<</if>>
-	
 	<<set $randEvent = [
 		_guestIds,
 		_girlNames,
@@ -88,7 +87,6 @@
 		_index = $randEvent[3]
 	>>
 <</if>>
-
 <br /><br />
 
 <<set _actionText = setup.actionText>>
@@ -146,9 +144,7 @@
 				<<if _yesGuestIds.length == 0>>
 					They refuse and leave the room at once!
 				<<else>>
-					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
-						<<set $guests[$guestId] = $tmpGirl>>
-					<</if>>
+					<<unset $guestId, $charId, $slaveId>>
 					<<if _yesGuestIds.length == 1>>
 						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
 						<<linkreplace 'Continue'>>
