@@ -41,28 +41,100 @@ Whoever left this had somewhere to go, and a vehicle to get there.
         <<pickup $backpack 'bandage' 2>>
         <<set $player.car.fuel = Math.min($player.car.fuel + 15, 100)>>
         <br /><br />
-        <<set _labelMap = 'Follow one of the marked locations on the map.'>>
-        <<linkreplace _labelMap>>
+        <<set _labelFuel = 'Follow the fuel cache mark'>>
+        <<set _labelFood = 'Follow the food supply mark'>>
+        <<set _labelPeople = 'Follow the people mark'>>
+        <div id="cache_fuel">
+        <<linkreplace _labelFuel>>
+            <<run $('#cache_food').hide()>>
+            <<run $('#cache_people').hide()>>
             <<addmins 40>>
             <<if setup.percentageChance(65)>>
-                                <center>
-                    <<image 'places/explore_car/cache3.jpg' sfw>>
+                <center>
+                    <<image 'places/explore_car/cache3.jpg' 'sfw'>>
                 </center>
                 <br />
-                The first marked location is a collapsed overpass, two fuel drums tucked under the concrete where they'd be invisible from the road. Whoever left the map knew their routes. The drums are half-full.
+                The marked location was a collapsed overpass, two fuel drums tucked under the concrete where they'd be invisible from the road.  Whoever left the map knew their routes.  The drums were half-full.
                 <br /><br />
                 <<set _extraFuel = randomInteger(10, 25)>>
                 You got <strong class="iitem">extra fuel (+<<=_extraFuel>>)</strong>.
                 <<set $player.car.fuel = Math.min($player.car.fuel + _extraFuel, 100)>>
             <<else>>
-                The location is picked clean — and the people who picked it are still there. Two of them, sitting on what used to be the cache. They see the car first and their expressions go from curious to aggressive fast. You get back to the car but not before one of them puts a boot through your side mirror and a fist into your ribs.
+                The location was picked clean — and the people who picked it were still there.  Two of them, sitting on what used to be the cache.  They saw the car first and their expressions went from curious to aggressive fast.  You got back to the car but not before one of them put a boot through your side mirror and a fist into your ribs.
                 <br /><br />
-                You drive away. They don't follow — the car is enough of a deterrent once it's moving. But the ribs will remind you about this for a few days.
+                You drove away.  They didn't follow — the car was enough of a deterrent once it was moving.  But the ribs would remind you about this for a few days.
                 <<perkAdd 'beaten'>>
                 <<set $player.car.health = Math.max($player.car.health - 5, 0)>>
             <</if>>
             <br /><br />
         <</linkreplace>>
+        </div>
+        <div id="cache_food">
+        <<linkreplace _labelFood>>
+            <<run $('#cache_fuel').hide()>>
+            <<run $('#cache_people').hide()>>
+            <<addmins 40>>
+            <<if setup.percentageChance(60)>>
+                The second circle led to a boarded-up rest stop off a highway connector.  Behind the counter, stacked neatly in plastic crates: canned goods, dried meat, sealed water bottles.  Someone had been stockpiling here — methodically, for a long time.  The dust on the shelves said they hadn't been back in months.
+                <br /><br />
+                <<set _extraFood = randomInteger(8, 15)>>
+                You loaded what you could carry.  <strong class="iitem">+<<=_extraFood>> food</strong>.
+                <<pickup $backpack 'food' _extraFood>>
+            <<else>>
+                The rest stop was gutted.  Shelves stripped, crates smashed, a fire pit in the middle of the floor still warm.  Someone beat you to it — recently.  Nothing left but wrappers and the smell of smoke.
+            <</if>>
+            <br /><br />
+        <</linkreplace>>
+        </div>
+        <div id="cache_people">
+        <<linkreplace _labelPeople>>
+            <<run $('#cache_fuel').hide()>>
+            <<run $('#cache_food').hide()>>
+            <<addmins 40>>
+            <<newgirl>>
+            <<if setup.percentageChance(55)>>
+                The third circle marked a farmhouse set back from a dirt road.  Smoke came from the chimney.  You approached carefully.
+                <br /><br />
+                A woman opened the door before you knocked — she'd heard the car.  She looked tired but not afraid.  When you showed her the map, she nodded slowly.
+                <br /><br />
+                <<sayNpc $tmpGirl>>
+                    You found one of his caches.  He said someone would come eventually.
+                <</sayNpc>>
+                <br />
+                She traded you supplies for news of the roads, and offered directions to two more stashes she knew about.
+                <br /><br />
+                <<set _extraFood = randomInteger(3, 6)>>
+                <<pickup $backpack 'food' _extraFood>>
+                <<pickup $backpack 'fuel' 1>>
+                <<set $player.goodwill += 2>>
+                <strong class="iitem">+<<=_extraFood>> food, +1 fuel, +2 goodwill</strong>.
+                <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+                    <br /><br />
+                    <<set _labelInvite = 'Invite her to your settlement'>>
+                    <<linkreplace _labelInvite>>
+                        <<set $tmpGirl.relationship = 40>>
+                        <<set $player.goodwill++>>
+                        <<run setup.npc.addHistory($tmpGirl, 'invited')>>
+                        <<run $guests.push($tmpGirl)>>
+                        <<include 'NPC info'>>
+                        <br /><br />
+                        <<link 'Leave'>>
+                            <<goto 'Garage'>>
+                        <</link>>
+                    <</linkreplace>>
+                <</if>>
+            <<else>>
+                The farmhouse was burned out — walls standing, roof gone.  In the yard, a shallow grave with a marker made from a car door.  Whoever the map was pointing to didn't make it.
+                <br /><br />
+                You searched what was left.  Found a few things in the cellar they missed.
+                <br /><br />
+                <<pickup $backpack 'bandage' 1>>
+                <<pickup $backpack 'food' 2>>
+                <strong class="iitem">+2 food, +1 bandage</strong>.
+            <</if>>
+            <br /><br />
+        <</linkreplace>>
+        </div>
         <<link 'Leave'>>
             <<goto 'Garage'>>
         <</link>>
