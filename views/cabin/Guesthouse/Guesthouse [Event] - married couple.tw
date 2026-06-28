@@ -59,7 +59,6 @@
 	<<if !_isVirgin && ($guests[_guestIds[1]].traits ?? []).includes('breeder')>>
 		<<set _sexActions[_sexActions.length - 1] = 'cum_in_pussy'>>
 	<</if>>
-
 	<<set $randEvent = [
 		_guestIds,
 		_sexActions,
@@ -81,7 +80,6 @@
 	>>
 	<<set _spontaneousCum = (_index + 1 == $randEvent[1].length) && !['cum_in_pussy','cum_in_ass','cum_throat'].includes($randEvent[1][$randEvent[1].length-1]) && setup.percentageChance(25)>>
 <</if>>
-
 <br /><br />
 
 <<set _actionText = setup.actionText>>
@@ -152,9 +150,7 @@
 					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while <<=setup.displayName($guests[_guestIds[1]], true)>> stays back.
 					<br /><br />
 					<<linkreplace 'Continue'>>
-						<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
-							<<set $guests[$guestId] = $tmpGirl>>
-						<</if>>
+						<<unset $guestId, $charId, $slaveId>>
 						<<set $guestId = _yesGuestIds[0],
 						$tmpGirl = $guests[_yesGuestIds[0]]>>
 						<<unset $randEvent, $tmpEvent>>

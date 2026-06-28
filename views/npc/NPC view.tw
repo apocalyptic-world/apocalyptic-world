@@ -47,6 +47,7 @@
 	<<link _linkName>>
 		<<if $player.strength > $tmpGirl.strength>>
 			<<set $tmpGirl.capture = false>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 			<<set $slaves.push($tmpGirl)>>
 			<<addhours 2>>
 			<<energy -30>>

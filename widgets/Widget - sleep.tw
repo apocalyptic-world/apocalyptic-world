@@ -690,15 +690,23 @@
 			<</if>>
 
 			<<set _chanceOfNotComingHome = 10>>
-			<<if $guests[_guestI].strength >= 40>>
-				<<set _changeOfNotComingHome -=4>>
+			<<if $guests[_guestI].strength >= 60>>
+				<<set _chanceOfNotComingHome -= 5>>
+			<<elseif $guests[_guestI].strength >= 40>>
+				<<set _chanceOfNotComingHome -= 3>>
+			<<elseif $guests[_guestI].strength >= 20>>
+				<<set _chanceOfNotComingHome -= 1>>
 			<</if>>
 			<<if ($guests[_guestI].skills ?? []).includes('scavenger')>>
-				<<set _chanceOfNotComingHome -=4>>
+				<<set _chanceOfNotComingHome -= 3>>
 			<</if>>
 			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
-				<<set _chanceOfNotComingHome -=1>>
+				<<set _chanceOfNotComingHome -= 1>>
 			<</if>>
+			<<if setup.npcInventoryHas($guests[_guestI], 'crossbow') || setup.npcInventoryHas($guests[_guestI], 'bow')>>
+				<<set _chanceOfNotComingHome -= 1>>
+			<</if>>
+			<<set _chanceOfNotComingHome = Math.max(1, _chanceOfNotComingHome)>>
 			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
@@ -953,6 +961,7 @@
 		<</if>>
 		
 		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
+			<<run setup.npc.addHistory($nursery[_nurseryI], 'grown_up')>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
 			<<if (setup.percentageChance(75))>>
 				<<set _orientation = 'straight'>>

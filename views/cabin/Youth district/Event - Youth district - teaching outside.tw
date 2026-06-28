@@ -5,22 +5,33 @@
 <<set _npc = $guests[_teachers[0]]>>
 <<set $locationEvents.youth_district = true>>
 <<addmins 5>>
+<<set _isSunny = ($weather?.weather ?? 'sun') === 'sun'>>
 You wandered toward the Youth District.
 <br />
-You weren’t heading there for any real reason — just walking, thinking, watching how your people moved now.
+You weren't heading there for any real reason — just walking, thinking, watching how your people moved now.
 <br /><br />
-That’s when you spotted <<=setup.displayName(_npc)>>
+That's when you spotted <<=setup.displayName(_npc)>>
 <br /><br />
-She stood in the middle of the open plaza, a worn book in her hand, speaking to a small group of people. 
-Her voice, calm but firm, carried above the low buzz of the district — something about circuits and stored energy, using a broken-down radio as a teaching prop.
-<br /><br />
-<center>
-    <<image 'places/school/teaching_outside.jpg' sfw>>
-</center>
-<br /><br />
-She wasn’t dressed like a fighter today. Just a faded sundress, patched and faded, her <<=_npc.hair>> hair tied back. 
-You watched for a moment, leaning against a post as the people asked questions. 
-She explained patiently, her tone never condescending, always pulling them in. Some of the younger poeple looked like they were really listening — which said a lot.
+<<if _isSunny>>
+	She stood in the middle of the open plaza, a worn book in her hand, speaking to a small group of people.
+	Her voice, calm but firm, carried above the low buzz of the district — something about circuits and stored energy, using a broken-down radio as a teaching prop.
+	<br /><br />
+	<center>
+		<<image 'places/school/teaching_outside.jpg' 'sfw'>>
+	</center>
+	<br /><br />
+	She wasn't dressed like a fighter today. Just a faded sundress, patched and faded, her <<=_npc.hair>> hair tied back.
+<<else>>
+	She had gathered a small group under the overhang of one of the buildings, sheltered from the rain.  A worn book in her hand, she was explaining something about circuits and stored energy, using a broken-down radio as a teaching prop.
+	<br /><br />
+	<center>
+		<<image 'places/school/teaching_outside_rain.jpg' 'sfw'>>
+	</center>
+	<br /><br />
+	Her jacket was damp at the shoulders, her <<=_npc.hair>> hair clinging to her face in the wet air.
+<</if>>
+You watched for a moment, leaning against a post as the people asked questions.
+She explained patiently, her tone never condescending, always pulling them in. Some of the younger people looked like they were really listening — which said a lot.
 <br /><br />
 When the impromptu class ended and the group started to scatter, you made you continued with your way.
 <br /><br />
@@ -29,7 +40,7 @@ When the impromptu class ended and the group started to scatter, you made you co
     <<=setup.displayName(_npc)>> saw you and smirked.
     <br /><br />
     <<sayNpc _npc>>
-        Didn’t expect to see you out here. Hope you don't mind.
+        Didn't expect to see you out here. Hope you don't mind.
     <</sayNpc>>
     She tapped the book against her palm.
     <br /><br />
@@ -38,7 +49,7 @@ When the impromptu class ended and the group started to scatter, you made you co
     <</sayNpc>>
     <br />
     <<sayNpc _npc>>
-        Not just this — not just me talking in the heat. A real space. Please.
+        Not just this — not just me talking <<if _isSunny>>in the heat<<else>>in the rain<</if>>. A real space. Please.
     <</sayNpc>>
     <br />
     You looked at her. Not like a dreamer. Like someone making plans.

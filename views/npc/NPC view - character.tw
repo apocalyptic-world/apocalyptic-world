@@ -43,30 +43,20 @@
 <</if>>
 
 <<if !$tmpGirl.gender && ($tmpGirl.pregnancy ?? -1) >= 7>>
-	<<set _pregStage = setup.pregnancyStage($tmpGirl.pregnancy)>>
-	<div class="pregnancy-stage">
-		Pregnant — <strong><<=_pregStage.label>></strong> (day <<=($tmpGirl.pregnancy)>> / ~260)
-		<br />
-		<progress value="<<=_pregStage.pct>>" max="100" style="width:150px"></progress>
-		<br /><br />
-		<<if $backpack.has('pregnancy_speed_potion')>>
-			<<link 'Give pregnancy speed potion'>>
-				<<set $pregnancyPotionBackLink = 'NPC view - character'>>
-				<<goto 'Girl - pregnancy speed potion'>>
-			<</link>>
-			(<<=($backpack.count('pregnancy_speed_potion'))>> in bag)
-			<br />
-		<</if>>
-		<<if $backpack.has('pregnancy_potion')>>
-			<<link 'Give termination potion'>>
-				<<goto 'Girl - pregnancy potion'>>
-			<</link>>
-			<br />
-		<</if>>
-	</div>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<set $pregnancyPotionBackLink = 'NPC view - character'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give termination potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
 <</if>>
 
-<<if $tmpGirl.canMarry && !$tmpGirl.gender && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
+<<if $tmpGirl.canMarry && !$tmpGirl.gender && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<goto 'NPC marry'>>

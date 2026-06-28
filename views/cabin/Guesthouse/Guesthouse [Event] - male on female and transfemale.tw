@@ -19,7 +19,6 @@
 	<<if _r < 0>>
 		<<set _r = 0>>
 	<</if>>
-
 	<<if _isVirgin && _isAnalVirgin>>
 		<<set _sexActions = [
 		['kissing','kissing','kissing','handjob','handjob'][random(0, _r)],
@@ -60,7 +59,6 @@
 		['cum_on_stomach','cum_on_tits','handjob_cum','cum_in_mouth','cum_on_face'][random(0, _r)]
 		]>>
 	<</if>>
-
 	<<set $randEvent = [
 		_guestIds,
 		_sexActions,
@@ -78,7 +76,6 @@
 		_index = $randEvent[2]
 	>>
 <</if>>
-
 <br /><br />
 
 <div id="choice">
@@ -138,7 +135,6 @@
 						<<run setup.npc.addHistory($guests[_guestIds[0]], 'virgin_lost', { with: 'mc' })>>
 						<<set $guests[_guestIds[0]].virgin = false>>
 					<</if>>
-
 					<center>
 						<<actionImage $guests[_guestIds[0]] 'threesome_t_pussy' 'no-text'>>
 					</center>
@@ -179,9 +175,7 @@
 				<<if _yesGuestIds.length == 0>>
 					They refuse and leave the room at once!
 				<<else>>
-					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
-						<<set $guests[$guestId] = $tmpGirl>>
-					<</if>>
+					<<unset $guestId, $charId, $slaveId>>
 					<<if _yesGuestIds.length == 1>>
 						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
 						<<linkreplace 'Continue'>>

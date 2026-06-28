@@ -50,6 +50,8 @@
 			Talk with Vincent in the farm
 		<<elseif $characters.vincent.quests.sanctuary_car_talk && !($game.location.garage ?? false)>>
 			Go with your companions to Vincent farm (Need 4 guests with strength 40+)
+		<<elseif ($game.location.garage ?? false) && !$characters.vincent.quests.car_fixed>>
+			Repair and fuel the car in the garage (100% health, 100% fuel)
 		<<elseif ($game.location.garage ?? false) && !$characters.vincent.quests.military_base>>
 			Wait few days
 		<<else>>
@@ -320,7 +322,7 @@
 			Visit Octavia in her room after a few days
 		<<elseif !$characters.octavia.quests.warriors_done_day>>
 			<<set _wCount = ($characters.octavia.quests.warriors ?? []).length>>
-			Bring warriors to Octavia (<<print _wCount>>/5)
+			Bring female warriors to Octavia (<<print _wCount>>/5). She needs <strong>women with 70+ strength</strong>. Visit her in her room to send them.
 		<<elseif ($characters.octavia.quests.warriors_done_day + 3) >= $game.day && !$characters.octavia.quests.emberclaw_ready_day>>
 			Wait a few days — Octavia is getting ready to leave
 		<<elseif !$characters.octavia.quests.emberclaw_ready_day>>

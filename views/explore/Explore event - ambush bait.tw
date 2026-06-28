@@ -13,7 +13,7 @@ It was too obvious.
 <<set _labelInspect = 'Approach the crate'>>
 <<linkreplace _labelInspect>>
     <<run $('#ab_circle').hide()>>
-    Three men stepped out from cover the moment you reached it.
+    Two men stepped out from cover the moment you reached it.
     <br /><br />
     <<newguy>>
     <<sayNpc $tmpGuy>>
@@ -41,7 +41,7 @@ It was too obvious.
     <<run $('#ab_inspect').hide()>>
     <<addmins 20>>
     <<if $player.int >= 50>>
-        You gave the crate a wide berth and worked around the block, moving low and quiet.  Three men crouched behind a collapsed wall watching the bait — all of them facing the wrong direction.
+        You gave the crate a wide berth and worked around the block, moving low and quiet.  Two men crouched behind a collapsed wall watching the bait — both facing the wrong direction.
         <br /><br />
         You got behind them before they knew you were there.
         <br /><br />
@@ -74,6 +74,7 @@ Inside: canned food, a box of rounds, and a fuel can.
 <br /><br />
 <<set _labelCheck = 'Check the building they came from'>>
 <<linkreplace _labelCheck>>
+    <<run $('#abw_leave').hide()>>
     The building had one back room they had been using as a base — bedrolls, scraps of food, a crate of stolen goods.  Tied to a support beam in the corner was a young woman, rope burns on her wrists.
     <br /><br />
     <<newgirl>>
@@ -82,7 +83,7 @@ Inside: canned food, a box of rounds, and a fuel can.
     <</sayNpc>>
     <br />
     <<you>>
-        All three.
+        Both of them.
     <</you>>
     <br />
     <<sayNpc $tmpGirl>>
@@ -93,29 +94,33 @@ Inside: canned food, a box of rounds, and a fuel can.
     <<set _labelFree = 'Cut her loose'>>
     <<linkreplace _labelFree>>
         <<run $('#abw_capture').hide()>>
+        <<set $player.goodwill += 2>>
         You cut the ropes.  She rubbed her wrists and looked around the room, then at you.
         <br /><br />
+        <<sayNpc $tmpGirl>>
+            I don't have anywhere to go from here.  Is there room where you're based?
+        <</sayNpc>>
+        <br />
+        <div id="abw_invite">
         <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
-            <<sayNpc $tmpGirl>>
-                I don't have anywhere to go from here.  Is there room where you're based?
-            <</sayNpc>>
-            <br />
-            <<set $tmpGirl.relationship = 50>>
-            <<set $player.goodwill += 2>>
-            <<run $guests.push($tmpGirl)>>
-            <<include 'NPC info'>>
-            <br /><br />
-            <<link 'Leave'>>
-                <<goto 'Outside'>>
-            <</link>>
-        <<else>>
-            She slipped out the door without another word.
-            <br /><br />
-            <<set $player.goodwill += 2>>
-            <<link 'Leave'>>
-                <<goto 'Outside'>>
-            <</link>>
+            <<set _labelInvite = 'Take her with you'>>
+            <<linkreplace _labelInvite>>
+                <<run $('#abw_letgo').hide()>>
+                <<set $tmpGirl.relationship = 50>>
+                <<run $guests.push($tmpGirl)>>
+                <<include 'NPC info'>>
+                <br /><br />
+                <<link 'Leave'>>
+                    <<goto 'Outside'>>
+                <</link>>
+            <</linkreplace>>
         <</if>>
+        </div>
+        <div id="abw_letgo">
+            <<link 'Let her go'>>
+                <<goto 'Outside'>>
+            <</link>>
+        </div>
     <</linkreplace>>
     </div>
     <div id="abw_capture">
@@ -127,14 +132,18 @@ Inside: canned food, a box of rounds, and a fuel can.
             <br /><br />
             <<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 20, 100)>>
             <<set $player.goodwill -= 2>>
+            <<energy -30>>
+            <<addhours 2>>
             <<run $slaves.push($tmpGirl)>>
             <<statsAdd 'people_captured'>>
             <<goto 'Basement'>>
         <</linkreplace>>
     <</if>>
     </div>
+    <br /><br />
 <</linkreplace>>
-<br /><br />
+<div id="abw_leave">
 <<link 'Leave'>>
     <<goto 'Outside'>>
 <</link>>
+</div>

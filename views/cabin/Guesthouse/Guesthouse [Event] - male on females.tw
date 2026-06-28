@@ -58,7 +58,6 @@
 	<<if _r < 0>>
 		<<set _r = 0>>
 	<</if>>
-
 	<<if _nbFemaleSadists > 0 && _nbMaleMasochists > 0>>
 		<<set _sexActions = [
 			['kissing','kissing','nipple_lick','nipple_lick','nipple_lick'][random(0, _r)],
@@ -91,7 +90,6 @@
 		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
 			<<set _sexActions[2] = 'squirt'>>
 		<</if>>
-
 	<<elseif $guests[_guestIds[0]].virgin>>
 		<<set _sexActions = [
 			['kissing','nipple_lick','handjob','titjob','footjob'][random(0, _r)],
@@ -107,7 +105,6 @@
 		<<if ($guests[_guestIds[0]].traits ?? []).includes('squirter')>>
 			<<set _sexActions[3] = 'squirt'>>
 		<</if>>
-
 	<<elseif $guests[_guestIds[0]].anal < 20>>
 		<<set _sexActions = [
 			['kissing','nipple_lick','handjob','titjob','footjob'][random(0, _r)],
@@ -184,7 +181,6 @@
 		_index = $randEvent[7]
 	>>
 <</if>>
-
 <br /><br />
 
 <div id="choice">
@@ -254,9 +250,7 @@
 				<<if _yesGuestIds.length == 0>>
 					They refuse and leave the room at once!
 				<<else>>
-					<<if typeof $guestId !== 'undefined' && typeof $tmpGirl !== 'undefined'>>
-						<<set $guests[$guestId] = $tmpGirl>>
-					<</if>>
+					<<unset $guestId, $charId, $slaveId>>
 					<<if _yesGuestIds.length == 1>>
 						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> agrees to sex with you!
 						<<linkreplace 'Continue'>>

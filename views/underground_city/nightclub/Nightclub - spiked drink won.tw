@@ -1,23 +1,27 @@
 :: Nightclub - spiked drink won [bg-underground]
 <h1 class="ptitle">NIGHTCLUB</h1>
 <br /><br />
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _heOrSheU = setup.pronounceWhat($tmpGirl, true)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
 He goes down hard. A few people nearby finally notice — too late, as always. Someone at the bar mutters something, then looks away.
 <br /><br />
-You turn to the woman. She's slid down the wall, sitting on the floor, knees pulled up. Her eyes are open but glassy. She looks at you like she's trying to remember how to form words.
+You turn to <<=_heOrShe>>. <<=_heOrSheU>>'s slid down the wall, sitting on the floor, knees pulled up. <<=_hisOrHer>> eyes are open but glassy. <<=_heOrSheU>> looks at you like <<=_heOrShe>>'s trying to remember how to form words.
 <br /><br />
 <<sayNpc $tmpGirl>>
 	I... he put something in my... I didn't...
 <</sayNpc>>
 <br />
-She doesn't finish the sentence.
+<<=_heOrSheU>> doesn't finish the sentence.
 <br /><br />
 
 <div id="option_help">
-	<<linkreplace 'Help her to safety'>>
+	<<set _labelHelp = 'Help ' + _heOrShe + ' to safety'>>
+	<<linkreplace _labelHelp>>
 		<<run $('#option_take').hide()>>
-		You pull her to her feet and guide her to a booth away from the crowd. You flag down a bartender, get her some water, and stay until her eyes start to focus properly again.
+		You pull <<=_heOrShe>> to <<=_hisOrHer>> feet and guide <<=_heOrShe>> to a booth away from the crowd. You flag down a bartender, get some water, and stay until <<=_hisOrHer>> eyes start to focus properly again.
 		<br /><br />
-		She grips your hand for a moment before you leave.
+		<<=_heOrSheU>> grips your hand for a moment before you leave.
 		<br /><br />
 		<<sayNpc $tmpGirl>>
 			Thank you. I don't... I don't know what would have happened.

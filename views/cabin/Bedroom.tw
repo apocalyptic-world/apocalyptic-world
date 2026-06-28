@@ -104,6 +104,7 @@
 		<<set _hornyGuests = setup.filterNPCs($guests, {gender: 0, horny_gt: 50, likesGuys: true, relationship_gte: 70, chastityBelt:false})[0] ?? []>>
 		<<if _hornyGuests.length>>
 			<<set $guestId = _hornyGuests[Math.floor(Math.random()*_hornyGuests.length)]>>
+			<<unset $charId, $slaveId>>
 			<<set $locationEvents.bedroom = true>>
 			<<goto 'Bedroom: horny guest'>>
 		<</if>>

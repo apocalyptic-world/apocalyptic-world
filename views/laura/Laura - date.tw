@@ -1,0 +1,24 @@
+:: Laura - date
+<h1 class="ptitle">LAURA</h1>
+<br /><br />
+<<laura>>
+    A date? Hm... What did you have in mind?
+<</laura>>
+<br />
+<<if ($game.location.school ?? false)>>
+    <<if recall($suppCode)>>
+        <<link 'Walk around the settlement'>>
+            <<set $player.companionsHome = $player.companions>>
+            <<set $player.companions = {}>>
+            <<goto 'Laura - date \[settlement walk\]'>>
+        <</link>>
+    <<else>>
+        <div class="link-internal disabled" style="background: #ccc">
+            Walk around the settlement
+            <<notPatreonIcon>>
+        </div>
+    <</if>>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Laura - lab talk'>>
+<</link>>
