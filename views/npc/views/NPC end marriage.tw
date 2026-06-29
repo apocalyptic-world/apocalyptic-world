@@ -1,0 +1,400 @@
+:: NPC end marriage [bg-guesthouse]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<<set _isOwnMarriage = ($tmpGirl?.family?.husband === 'mc')>>
+<<set _isLostHusband = $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.npc.isSpouseLost($tmpGirl.family.husband)>>
+
+<<if _isOwnMarriage>>
+	<<set _relationship = $tmpGirl.relationship>>
+	<<set _happyAtStart = $tmpGirl.happy>>
+	<<set _sub = $tmpGirl.sub ?? 0>>
+	<<set _isHappy = _happyAtStart > 0>>
+	<<set _isPregnantByMc = ($tmpGirl.pregnancy ?? 0) > 0 && $tmpGirl.pregnancy_father === 'mc'>>
+	<<set _kidsWithMcCount = ($tmpGirl.family?.kids ?? []).filter(id => setup.getNpcById(id)?.family?.father === 'mc').length>>
+	<<set _hasMcKidsOrPregnant = _isPregnantByMc || _kidsWithMcCount > 0>>
+	<<set _mcKidsPhrase = ''>>
+	<<if _kidsWithMcCount > 0 && _isPregnantByMc>>
+		<<set _mcKidsPhrase = (_kidsWithMcCount > 1 ? 'our children' : 'our child') + ' and the baby on the way'>>
+	<<elseif _kidsWithMcCount > 0>>
+		<<set _mcKidsPhrase = _kidsWithMcCount > 1 ? 'our children' : 'our child'>>
+	<<elseif _isPregnantByMc>>
+		<<set _mcKidsPhrase = 'our unborn child'>>
+	<</if>>
+	You ask <<=setup.displayName($tmpGirl)>> to meet you somewhere quiet, away from the rest of the household. She comes without question, though there's a flicker of unease in her eyes by the time she arrives.
+	<br /><br />
+	<center>
+		<<actionImage $tmpGirl approach>>
+	</center>
+	<br />
+	<<if _relationship < 20>>
+		<<you>>
+			This isn't working. I think we both know that. I want to end the marriage.
+		<</you>>
+		<br />
+		<<if _isHappy>>
+			<<=setup.displayName($tmpGirl)>> takes it in stride, even managing a small, easy smile, like she's relieved someone finally said it out loud.
+			<br /><br />
+			<<sayNpc $tmpGirl>>
+				Honestly? I think we're better off as friends, <<=setup.npc.mcName($tmpGirl, false)>>. No reason this has to be ugly between us. I'll still pull my weight around here, for everyone's sake.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					I'll be raising <<=_mcKidsPhrase>> on my own from here. I'm not scared of that. We'll be just fine.
+				<</sayNpc>>
+			<</if>>
+		<<else>>
+			<<=setup.displayName($tmpGirl)>> barely reacts at all, like the news barely registers, her expression distant.
+			<br /><br />
+			<<sayNpc $tmpGirl>>
+				...Okay. I don't think I ever really knew you anyway, <<=setup.npc.mcName($tmpGirl, false)>>. Doesn't matter much either way. I'll keep my distance, for the settlement's sake.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					I suppose it'll just be me and <<=_mcKidsPhrase>> from here. Wouldn't be the first hard thing this world's asked of me.
+				<</sayNpc>>
+			<</if>>
+		<</if>>
+		<br /><br />
+		<<include 'NPC end marriage - finalize'>>
+		<<link 'Leave'>>
+			<<goto $tmpGirlViewBack>>
+		<</link>>
+	<<elseif _relationship < 50>>
+		<<you>>
+			I've been thinking about this for a while. This marriage isn't what I hoped it would be. I want to end it.
+		<</you>>
+		<br />
+		<<=setup.displayName($tmpGirl)>> goes still, searching your face for some sign that you don't mean it.
+		<br /><br />
+		<<set _protestChance = (_relationship + (100 - _sub)) / 2>>
+		<<if setup.percentageChance(_protestChance)>>
+			<<if _isHappy>>
+				<<sayNpc $tmpGirl>>
+					Wait... we're really on our way towards something good here, aren't we? We shouldn't just give up on that.
+				<</sayNpc>>
+				<<if _hasMcKidsOrPregnant>>
+					<br />
+					<<sayNpc $tmpGirl>>
+						And what about <<=_mcKidsPhrase>>? Don't they deserve a father who's actually here?
+					<</sayNpc>>
+				<</if>>
+			<<else>>
+				<<sayNpc $tmpGirl>>
+					This world has already hurt me enough, <<=setup.npc.mcName($tmpGirl, false)>>. I don't want to take another loss. Please, not this too.
+				<</sayNpc>>
+				<<if _hasMcKidsOrPregnant>>
+					<br />
+					<<sayNpc $tmpGirl>>
+						You'd really leave <<=_mcKidsPhrase>> without a father? After everything?
+					<</sayNpc>>
+				<</if>>
+			<</if>>
+			<br /><br />
+			<div id="option_accept_mid">
+				<<linkreplace 'Give her another chance'>>
+					<<run $('#option_insist_mid').hide()>>
+					<<you>>
+						...Alright. One more chance.
+					<</you>>
+					<br />
+					Relief floods her face. Whatever happens next is still unwritten, for both of you.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div id="option_insist_mid">
+				<<linkreplace 'Insist on the divorce'>>
+					<<run $('#option_accept_mid').hide()>>
+					<<set $tmpGirl.happy -= 20>>
+					<<set $tmpGirl.relationship -= 20>>
+					<<you>>
+						No. My mind is made up.
+					<</you>>
+					<br />
+					<<=setup.displayName($tmpGirl)>>'s face falls. She doesn't argue further, but the hurt is plain.
+					<br /><br />
+					<<include 'NPC end marriage - finalize'>>
+					<<set _leaveChance = Math.max(50 - $tmpGirl.happy, 10)>>
+					<<if setup.percentageChance(_leaveChance)>>
+						<<sayNpc $tmpGirl>>
+							If you won't have me as your wife, I'm not staying here to be reminded of it every day. I'm leaving.
+						<</sayNpc>>
+						<br /><br />
+						<div id="option_letgo_mid">
+							<<linkreplace 'Let her leave'>>
+								<<run $('#option_slave_mid').hide()>>
+								<<you>>
+									That's your choice to make.
+								<</you>>
+								<br />
+								She gathers her things without another word, and within the hour she's gone from the settlement for good.
+								<br /><br />
+								<<link 'Continue'>>
+									<<assignedTo $tmpGirl 'none'>>
+									<<guestLeft $guestId>>
+									<<unset $guestId>>
+									<<goto 'Guest house'>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="option_slave_mid">
+							<<linkreplace 'Refuse. She belongs to you now.'>>
+								<<run $('#option_letgo_mid').hide()>>
+								<<set $tmpGirl.happy -= 30>>
+								<<set $tmpGirl.relationship -= 30>>
+								<<set $tmpGirl.sub += 10>>
+								<<you>>
+									You don't get to walk away from me. If you're not my wife anymore, you're something else.
+								<</you>>
+								<br />
+								<<=setup.displayName($tmpGirl)>> pales as the meaning sinks in. She starts to back away, but there's nowhere for her to go.
+								<br /><br />
+								<<link 'Continue'>>
+									<<moveGuestToSlave $tmpGirl $guestId>>
+									<<unset $guestId>>
+									<<goto 'Basement'>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+					<<else>>
+						She wipes her eyes and nods, accepting the end of it, even if it clearly still hurts.
+						<br /><br />
+						<<link 'Leave'>>
+							<<goto $tmpGirlViewBack>>
+						<</link>>
+					<</if>>
+				<</linkreplace>>
+			</div>
+		<<else>>
+			<<if _isHappy>>
+				<<sayNpc $tmpGirl>>
+					I thought we were on our way towards something good, <<=setup.npc.mcName($tmpGirl, false)>>. I guess I was wrong about that.
+				<</sayNpc>>
+				<<if _hasMcKidsOrPregnant>>
+					<br />
+					<<sayNpc $tmpGirl>>
+						I'll manage, for <<=_mcKidsPhrase>>, if nothing else. We'll get by.
+					<</sayNpc>>
+				<</if>>
+			<<else>>
+				<<sayNpc $tmpGirl>>
+					I thought there might be a chance for us, once. But the wounds this world leaves behind make it hard to let anyone get close. ...Okay, <<=setup.npc.mcName($tmpGirl, false)>>.
+				<</sayNpc>>
+				<<if _hasMcKidsOrPregnant>>
+					<br />
+					<<sayNpc $tmpGirl>>
+						I suppose it'll just be me and <<=_mcKidsPhrase>> from here. Nothing new, in this world.
+					<</sayNpc>>
+				<</if>>
+			<</if>>
+			<br />
+			She takes the news quietly, more resigned than hurt.
+			<br /><br />
+			<<set $tmpGirl.happy -= 10>>
+			<<set $tmpGirl.relationship -= 10>>
+			<<include 'NPC end marriage - finalize'>>
+			<<link 'Leave'>>
+				<<goto $tmpGirlViewBack>>
+			<</link>>
+		<</if>>
+	<<else>>
+		<<you>>
+			I've been thinking about this for a while. This marriage isn't what I hoped it would be. I want to end it.
+		<</you>>
+		<br />
+		<<=setup.displayName($tmpGirl)>> looks at you like you've struck her. For a moment she can't seem to find words at all.
+		<br /><br />
+		<<if _isHappy && _sub < 30>>
+			<<sayNpc $tmpGirl>>
+				No — no, listen to me. What we have is real, I know it is. I believe in what we've built together, in what we share. I'm not giving that up without a fight.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					And what about <<=_mcKidsPhrase>>? You'd really throw away what we've built, what we're building, for nothing?
+				<</sayNpc>>
+			<</if>>
+		<<elseif _isHappy>>
+			<<sayNpc $tmpGirl>>
+				Please... I'll do anything, I mean it, anything. I need you. Please, don't do this to me.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					Please, think of <<=_mcKidsPhrase>>, if you won't think of me. I'm begging you.
+				<</sayNpc>>
+			<</if>>
+		<<elseif _sub < 30>>
+			<<sayNpc $tmpGirl>>
+				No. After everything I've put up with in this house, you owe me better than this. I'm not walking away from the little I have for nothing.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					You owe <<=_mcKidsPhrase>> better than this too. Or does that responsibility just disappear the moment it's inconvenient for you?
+				<</sayNpc>>
+			<</if>>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				I... I've never had any say in what happens to me. Please, just let me try harder. I can serve you better, I swear it.
+			<</sayNpc>>
+			<<if _hasMcKidsOrPregnant>>
+				<br />
+				<<sayNpc $tmpGirl>>
+					What happens to <<=_mcKidsPhrase>> if you send me away? Please, I'm not asking for myself anymore.
+				<</sayNpc>>
+			<</if>>
+		<</if>>
+		<br /><br />
+		<div id="option_accept_high">
+			<<linkreplace 'Give her another chance'>>
+				<<run $('#option_insist_high').hide()>>
+				<<you>>
+					...Alright. One more chance.
+				<</you>>
+				<br />
+				She lets out a shaking breath, relief and lingering fear both written across her face.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_insist_high">
+			<<linkreplace 'Insist on the divorce'>>
+				<<run $('#option_accept_high').hide()>>
+				<<set $tmpGirl.happy -= 40>>
+				<<set $tmpGirl.relationship -= 40>>
+				<<you>>
+					No. My mind is made up.
+				<</you>>
+				<br />
+				Something in her breaks at those words. She doesn't fight you on it, but she looks hollowed out, like you've taken something from her that she can't get back.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<set _leaveChance = Math.max(100 - $tmpGirl.happy, 20)>>
+				<<if setup.percentageChance(_leaveChance)>>
+					<<sayNpc $tmpGirl>>
+						I gave you everything. If you won't have me as your wife, I can't stay here and watch you move on like none of it mattered. I'm leaving.
+					<</sayNpc>>
+					<br /><br />
+					<div id="option_letgo_high">
+						<<linkreplace 'Let her leave'>>
+							<<run $('#option_slave_high').hide()>>
+							<<you>>
+								That's your choice to make.
+							<</you>>
+							<br />
+							She packs what little she has, and by nightfall she's gone, leaving the settlement behind for good.
+							<br /><br />
+							<<link 'Continue'>>
+								<<assignedTo $tmpGirl 'none'>>
+								<<guestLeft $guestId>>
+								<<unset $guestId>>
+								<<goto 'Guest house'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_slave_high">
+						<<linkreplace 'Refuse. She belongs to you now.'>>
+							<<run $('#option_letgo_high').hide()>>
+							<<set $tmpGirl.happy -= 50>>
+							<<set $tmpGirl.relationship -= 50>>
+							<<set $tmpGirl.sub += 10>>
+							<<you>>
+								You don't get to walk away from me. If you're not my wife anymore, you're something else.
+							<</you>>
+							<br />
+							Whatever was left of the woman who once said yes to your proposal seems to drain out of her right then. She doesn't resist as you lead her away.
+							<br /><br />
+							<<link 'Continue'>>
+								<<moveGuestToSlave $tmpGirl $guestId>>
+								<<unset $guestId>>
+								<<goto 'Basement'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					She says nothing more, retreating into a silence that says everything words couldn't.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+<<elseif _isLostHusband>>
+	You ask <<=setup.displayName($tmpGirl)>> to sit with you for a while. She does, quiet, perhaps already sensing you didn't call her over for anything good.
+	<br /><br />
+	<center>
+		<<actionImage $tmpGirl approach>>
+	</center>
+	<br />
+	<<you>>
+		I know this isn't easy to hear. But it's time. He isn't coming back, as hard as that is to accept. You need to free yourself from the past, for your own sake, and for the good of this settlement.
+	<</you>>
+	<br /><br />
+	<<if setup.percentageChance($tmpGirl.relationship)>>
+		<<=setup.displayName($tmpGirl)>> is quiet for a long moment, turning the ring over in her fingers before finally looking up at you.
+		<br /><br />
+		<<sayNpc $tmpGirl>>
+			...You're right. I can't keep holding onto this. This settlement is my life now. It's time I started living it.
+		<</sayNpc>>
+		<br />
+		She slips the ring from her finger and presses it into your hand, her eyes wet but her resolve steady.
+		<br /><br />
+		<<include 'NPC end marriage - finalize'>>
+		<<link 'Leave'>>
+			<<goto $tmpGirlViewBack>>
+		<</link>>
+	<<else>>
+		<<=setup.displayName($tmpGirl)>>'s hand goes to the ring on her finger, gripping it like it might be taken from her right now.
+		<br /><br />
+		<<sayNpc $tmpGirl>>
+			Please... I don't want anyone else. I'm not asking you to find me someone new. I just want to keep what we had. The memories. That's all I have left of him.
+		<</sayNpc>>
+		<br /><br />
+		<div id="option_keep_lost">
+			<<linkreplace 'Let her keep it'>>
+				<<run $('#option_force_lost').hide()>>
+				<<you>>
+					...Alright. I won't take that from you.
+				<</you>>
+				<br />
+				<<=setup.displayName($tmpGirl)>> closes her hand around the ring, relief and grief both written across her face.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_force_lost">
+			<<linkreplace 'Insist she let go'>>
+				<<run $('#option_keep_lost').hide()>>
+				<<you>>
+					No. You can't keep living in the past. It's time.
+				<</you>>
+				<br />
+				<<set $tmpGirl.happy -= 20>>
+				<<set $tmpGirl.relationship -= 20>>
+				<<=setup.displayName($tmpGirl)>> flinches, but doesn't argue further. With trembling hands, she slips the ring off and presses it into your palm, bitterness plain on her face.
+				<br /><br />
+				<<sayNpc $tmpGirl>>
+					...Fine. It's yours, then. Just like everything else around here.
+				<</sayNpc>>
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+<<else>>
+	<<goto 'NPC end marriage - couple'>>
+<</if>>

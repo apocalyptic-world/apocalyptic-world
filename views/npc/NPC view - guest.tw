@@ -43,7 +43,9 @@
 	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
-		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+		<<if setup.npc.isExOfMc($tmpGirl)>>
+			<<goto 'Mc fuck - ex'>>
+		<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
 		<<else>>
 			<<goto 'Mc fuck - no'>>
@@ -73,7 +75,9 @@
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<set $oldTmpGirlLocation = $tmpGirl.location>>
 		<<set $tmpGirl.location = 'basement'>>
-		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+		<<if setup.npc.isExOfMc($tmpGirl)>>
+			<<goto 'Mc fuck - ex'>>
+		<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
 		<<else>>
 			<<goto 'Mc fuck - no'>>
@@ -181,6 +185,44 @@
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<set $oldTmpGirlLocation = $tmpGirl.location>>
 		<<goto 'NPC marry'>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.married && $tmpGirl?.family?.husband === 'mc' && setup.NpcInHome($tmpGirl)>>
+	<<link 'End marriage'>>
+		<<dialog 'End marriage'>>
+			Are you sure you want to end your marriage with <<=setup.displayName($tmpGirl)>>?
+			<br />
+			<<link 'Yes' 'NPC end marriage'>>
+				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
+	<</link>>
+<<elseif $tmpGirl.married && $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.npc.isSpouseLost($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
+	<<link 'End marriage with lost husband'>>
+		<<dialog 'End marriage'>>
+			Are you sure you want to end <<=setup.displayName($tmpGirl)>>'s marriage to her lost husband?
+			<br />
+			<<link 'Yes' 'NPC end marriage'>>
+				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
+	<</link>>
+<<elseif $tmpGirl.married && $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.getNpcById($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
+	<<set _divorceHusband = setup.getNpcById($tmpGirl.family.husband)>>
+	<<set _linkName = 'End marriage to ' + _divorceHusband.name>>
+	<<link `_linkName`>>
+		<<set _divorceHusbandName = setup.getNpcById($tmpGirl.family.husband)?.name ?? 'him'>>
+		<<dialog 'End marriage'>>
+			Are you sure you want to end the marriage between <<=setup.displayName($tmpGirl)>> and <<=_divorceHusbandName>>?
+			<br />
+			<<link 'Yes' 'NPC end marriage'>>
+				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
 	<</link>>
 <</if>>
 

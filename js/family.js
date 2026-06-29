@@ -47,6 +47,12 @@ setup.family = {
         return this.isBloodToMC(npc) && this.isBloodToMC(npc2);
     },
 
+    // Builds a map of npc's blood relatives (id -> [npcObject, depth]).
+    // Walks true blood lines: ancestors, descendants, descendants of ancestors
+    // (siblings/cousins/aunts/nieces, etc), and direct sibling links (family.siblings,
+    // used for paired NPCs spawned without a parent record, or to mark an NPC as a
+    // "lost and found" relative of the MC). Deliberately never follows a descendant's
+    // other parent - sharing a child with someone doesn't make you related to them.
     getFamily: function(npc) {
         function getNPCList() {
             const npcs = (variables().slaves ?? []).concat((variables().guests ?? []), (variables().nursery ?? []), Object.values(variables().characters ?? {}));
@@ -56,36 +62,58 @@ setup.family = {
             }
             return list;
         };
-    
-        function createFamilyList(who, NPCList=getNPCList(), familyList=new Map(), depth=1) {
-            if (!who) { return familyList; }
-            if (!who.hasOwnProperty('family')) { return familyList; }
-            if (who.family.hasOwnProperty('father')) {
-                if ((!familyList.has(who.family.father) || familyList.get(who.family.father)[1] > depth) && NPCList.has(who.family.father) && !who.id != npc.id) {
-                    familyList.set(who.family.father, [NPCList.get(who.family.father), depth])
-                    createFamilyList(NPCList.get(who.family.father), NPCList, familyList, depth + 1);
+
+        const NPCList = getNPCList();
+        const familyList = new Map();
+
+        function addDescendantsOf(person, depth) {
+            if (!person || !person.hasOwnProperty('family') || !person.family.hasOwnProperty('kids')) { return; }
+            for (const kidId of person.family.kids) {
+                if (!NPCList.has(kidId)) { continue; }
+                if (!familyList.has(kidId) || familyList.get(kidId)[1] > depth) {
+                    familyList.set(kidId, [NPCList.get(kidId), depth]);
+                    addDescendantsOf(NPCList.get(kidId), depth + 1);
                 }
             }
-            if (who.family.hasOwnProperty('mother')) {
-                if ((!familyList.has(who.family.mother) || familyList.get(who.family.mother)[1] > depth) && NPCList.has(who.family.mother) && !who.id != npc.id) {
-                    familyList.set(who.family.mother, [NPCList.get(who.family.mother), depth]);
-                    createFamilyList(NPCList.get(who.family.mother), NPCList, familyList, depth + 1);
+        }
+
+        function addSiblingLinksOf(person, depth) {
+            if (!person || !person.hasOwnProperty('family') || !person.family.hasOwnProperty('siblings')) { return; }
+            for (const siblingId of person.family.siblings) {
+                if (!NPCList.has(siblingId)) { continue; }
+                const sibling = NPCList.get(siblingId);
+                // siblings is a mutual link (each side lists the other), so only
+                // recurse when this actually improves on what we've already found -
+                // otherwise the two sides keep re-discovering each other forever.
+                if (!familyList.has(siblingId) || familyList.get(siblingId)[1] > depth) {
+                    familyList.set(siblingId, [sibling, depth]);
+                    addDescendantsOf(sibling, depth + 1);
+                    addSiblingLinksOf(sibling, depth + 1);
                 }
             }
-    
-            if (who.family.hasOwnProperty('kids')) {
-                who.family.kids.forEach(kid);
-                function kid(item) {
-                    if ((!familyList.has(item) || familyList.get(item)[1] > depth) && NPCList.has(item) && !who.id != npc.id) {
-                        familyList.set(item, [NPCList.get(item), depth]);
-                        createFamilyList(NPCList.get(item), NPCList, familyList, depth + 1);
-                    }
+        }
+
+        function addAncestorsOf(person, depth) {
+            if (!person || !person.hasOwnProperty('family')) { return; }
+            for (const parentKey of ['father', 'mother']) {
+                if (!person.family.hasOwnProperty(parentKey)) { continue; }
+                const parentId = person.family[parentKey];
+                if (!NPCList.has(parentId)) { continue; }
+                const parent = NPCList.get(parentId);
+                if (!familyList.has(parentId) || familyList.get(parentId)[1] > depth) {
+                    familyList.set(parentId, [parent, depth]);
+                    addDescendantsOf(parent, depth + 1);
+                    addSiblingLinksOf(parent, depth + 1);
+                    addAncestorsOf(parent, depth + 1);
                 }
             }
-            return familyList;
-        };
-    
-        return createFamilyList(npc, getNPCList());
+        }
+
+        addDescendantsOf(npc, 1);
+        addSiblingLinksOf(npc, 1);
+        addAncestorsOf(npc, 1);
+
+        return familyList;
     },
 
     getIncestDistance: function(who, other) {
@@ -110,9 +138,12 @@ setup.family = {
         // Direct ancestor: mother
         if (f1.mother && f1.mother === npc2.id) return 'mother';
 
-        // Sibling: shared father or shared mother
+        // Sibling: shared father or shared mother, or a direct sibling link (paired
+        // spawn without parent records, or an NPC marked as a "lost and found" relative)
         if ((f1.father && f2.father && f1.father === f2.father) ||
-            (f1.mother && f2.mother && f1.mother === f2.mother)) return 'sister';
+            (f1.mother && f2.mother && f1.mother === f2.mother) ||
+            (f1.siblings ?? []).includes(npc2.id) ||
+            (f2.siblings ?? []).includes(npc1.id)) return 'sister';
 
         // Granddaughter: npc2 is a child of one of npc1's children
         for (const kidId of (f1.kids ?? [])) {

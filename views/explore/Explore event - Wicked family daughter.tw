@@ -164,6 +164,27 @@ Old man notices you and rushes towards you.
 							The old man and woman practically fall over each other diving to salvage the food from the floor!  In the commotion, you easily lift <<=setup.displayName(_daughter)>> into your arms, carrying her out of the room and away from the house.
 						    <br /><br />
 							For a few minutes, you brace yourself for a possible fight, expecting to see the old couple running out of the door after you, but there is nothing but the sound of the forest.  The young woman seems to notice as well, looking sad for a moment, but not surprised.  She looks up at you, and a glimmer of hope appears in her eyes.  She nestles in your arms, trusting you to take her to a better place.
+						    <br /><br /><br />
+                            <<if $game.location.hospital ?? false>>
+                                <<set _hospitalDoctors = setup.getNpcsForLocation($guests, 'hospital')>>
+                                By the time you get <<=setup.displayName(_daughter)>> back to the household, she is exhausted from years of neglect and mistreatment, so you carry her directly to the hospital instead of the guest house.
+                                <br /><br />
+                                <<if _hospitalDoctors.length>>
+                                    <<set _doctor = either(_hospitalDoctors)>>
+                                    <<=setup.displayName(_doctor)>> helps admit her, looking her over before turning to you<<if typeof _daughter.pregnancy !== 'undefined'>> with a knowing glance<</if>>.
+                                    <br /><br />
+                                    <<sayNpc _doctor>>
+                                        She'll need <<=_daughter.sick.days>> day<<=(_daughter.sick.days > 1 ? 's' : '')>> of rest before she's ready to join the other guests.
+                                        <<if typeof _daughter.pregnancy !== 'undefined'>>
+                                            Seems like you've been busy.  I expect I'll see her again in a few months time...
+                                        <</if>>
+                                    <</sayNpc>>
+                                <<else>>
+                                    She will need several days of rest before she is ready to join the other guests.
+                                <</if>>
+                            <<else>>
+                                By the time you get <<=setup.displayName(_daughter)>> back to the household, she is exhausted from years of neglect and mistreatment.
+                            <</if>>
 						    <br /><br />
 
 							<<set _daughter.relationship = 70>>
@@ -235,6 +256,27 @@ Old man notices you and rushes towards you.
 							The old man and woman cackle with glee as they count the money, forgetting you as quickly as they noticed you.  Turning to the young woman, you easily lift her up over your shoulder, carrying her out of the room and away from the house.
 						    <br /><br />
 							Adjusting her weight on your shoulder for the hike back home, you give her ripe ass a smack, grinning as you look forward to enjoying your prize.  The young woman looks back as her old home recedes back into the forest, resignation filling her as she hopes that whatever her fate holds, it can be better than the hell she leaves behind...
+						    <br /><br /><br />
+                            <<if $game.location.hospital ?? false>>
+                                <<set _hospitalDoctors = setup.getNpcsForLocation($guests, 'hospital')>>
+                                By the time you get <<=setup.displayName(_daughter)>> back to the household, she is exhausted from years of neglect and mistreatment, so you carry her directly to the hospital instead of the basement.
+                                <br /><br />
+                                <<if _hospitalDoctors.length>>
+                                    <<set _doctor = either(_hospitalDoctors)>>
+                                    <<=setup.displayName(_doctor)>> helps admit her, looking her over before turning to you<<if typeof _daughter.pregnancy !== 'undefined'>> with a knowing glance<</if>>.
+                                    <br /><br />
+                                    <<sayNpc _doctor>>
+                                        She'll need <<=_daughter.sick.days>> day<<=(_daughter.sick.days > 1 ? 's' : '')>> of rest before she's ready to join the other slaves.
+                                        <<if typeof _daughter.pregnancy !== 'undefined'>>
+                                            Seems like you've been busy.  I expect I'll see her again in a few months time...
+                                        <</if>>
+                                    <</sayNpc>>
+                                <<else>>
+                                    She will need several days of rest before she is ready to join the other slaves.
+                                <</if>>
+                            <<else>>
+                                By the time you get <<=setup.displayName(_daughter)>> back to the household, she is exhausted from years of neglect and mistreatment.
+                            <</if>>
 						    <br /><br />
 
 							<<set _daughter.relationship = 20>>

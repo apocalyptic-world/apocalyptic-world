@@ -1,0 +1,670 @@
+:: NPC end marriage - couple [bg-guesthouse]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+<<set _wife = $tmpGirl>>
+<<set _husband = setup.getNpcById($tmpGirl.family.husband)>>
+<<set _husbandToWife = _husband.relationshipBetween?.stats?.[_wife.id] ?? 0>>
+<<set _wifeToHusband = _wife.relationshipBetween?.stats?.[_husband.id] ?? 0>>
+<<set _relBetween = (_husbandToWife + _wifeToHusband) / 2>>
+<<set _husbandHappy = _husband.happy > 0>>
+<<set _wifeHappy = _wife.happy > 0>>
+<<set _wifeIsPregnant = (_wife.pregnancy ?? 0) > 0 && _wife.pregnancy_father === _husband.id>>
+<<set _sharedKidsCount = (_wife.family?.kids ?? []).filter(id => setup.getNpcById(id)?.family?.father === _husband.id).length>>
+<<set _hasSharedKidsOrPregnant = _wifeIsPregnant || _sharedKidsCount > 0>>
+<<set _sharedKidsIsPlural = _sharedKidsCount > 1 || (_sharedKidsCount > 0 && _wifeIsPregnant)>>
+<<set _sharedKidsVerb = _sharedKidsIsPlural ? 'need' : 'needs'>>
+<<set _sharedKidsPhrase = ''>>
+<<if _sharedKidsCount > 0 && _wifeIsPregnant>>
+	<<set _sharedKidsPhrase = (_sharedKidsCount > 1 ? 'our children' : 'our child') + ' and the baby on the way'>>
+<<elseif _sharedKidsCount > 0>>
+	<<set _sharedKidsPhrase = _sharedKidsCount > 1 ? 'our children' : 'our child'>>
+<<elseif _wifeIsPregnant>>
+	<<set _sharedKidsPhrase = 'our unborn child'>>
+<</if>>
+
+You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>> to meet you. They arrive together, exchanging a glance that tells you they already suspect this isn't a routine summons.
+<br /><br />
+<center>
+	<<actionImage _wife approach>>
+</center>
+<br />
+<<if _relBetween <= 20>>
+	<<you>>
+		I've noticed things between you two have seemed... rocky, lately. I think it's best we end this marriage.
+	<</you>>
+<<elseif _relBetween <= 50>>
+	<<you>>
+		I expected the two of you to have grown closer by now. Since you haven't, I think it's best we end this marriage.
+	<</you>>
+<<else>>
+	<<you>>
+		I'm sorry. I know things are good between you, but this marriage doesn't fit with my plans for the settlement anymore. I need to end it.
+	<</you>>
+<</if>>
+<br /><br />
+
+<<if _relBetween <= 20>>
+	<<if !_husbandHappy && !_wifeHappy>>
+		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> trade a brief glance, and something like relief passes between them.
+		<br /><br />
+		<<sayNpc _husband>>
+			Honestly? I think that's for the best.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _wife>>
+			Couldn't agree more, <<=setup.npc.mcName(_wife, false)>>. We're both glad to be rid of each other, if I'm being honest.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _husband>>
+				We'll still figure out <<=_sharedKidsPhrase>> together, though. That much doesn't have to change.
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<<set _husband.happy = Math.min(100, _husband.happy + 20)>>
+		<<set _husband.relationship = Math.min(100, _husband.relationship + 10)>>
+		<<set _wife.happy = Math.min(100, _wife.happy + 20)>>
+		<<set _wife.relationship = Math.min(100, _wife.relationship + 10)>>
+		<<include 'NPC end marriage - finalize'>>
+		<<link 'Leave'>>
+			<<goto $tmpGirlViewBack>>
+		<</link>>
+	<<elseif _husbandHappy !== _wifeHappy>>
+		<<set _happyOne = _husbandHappy ? _husband : _wife>>
+		<<set _unhappyOne = _husbandHappy ? _wife : _husband>>
+		<<=setup.displayName(_happyOne)>> looks between you and <<=setup.displayName(_unhappyOne)>>, clearly caught off guard.
+		<br /><br />
+		<<sayNpc _happyOne>>
+			Wait, really? I thought things were fine between us. I'd like to keep trying, if that's alright.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _unhappyOne>>
+			...I think I'm ready to move on, honestly. But whatever you decide, <<=setup.npc.mcName(_unhappyOne, false)>>, I'll accept it.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _happyOne>>
+				<<=_sharedKidsPhrase>> still <<=_sharedKidsVerb>> you too, you know. I just don't want them losing a parent over this.
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<div id="option_keep_lowmix">
+			<<linkreplace 'Keep them married'>>
+				<<run $('#option_end_lowmix').hide()>>
+				<<you>>
+					Then stay married. I won't force this.
+				<</you>>
+				<br />
+				<<=setup.displayName(_unhappyOne)>> gives a small shrug, accepting your decision without complaint. <<=setup.displayName(_happyOne)>> looks relieved.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_end_lowmix">
+			<<linkreplace 'End their marriage'>>
+				<<run $('#option_keep_lowmix').hide()>>
+				<<you>>
+					No. I think it's best we end it here.
+				<</you>>
+				<br />
+				<<=setup.displayName(_happyOne)>> looks disappointed but doesn't argue. <<=setup.displayName(_unhappyOne)>> simply nods, accepting it without complaint.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<<else>>
+		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> exchange a look, equal parts confused and accepting.
+		<br /><br />
+		<<sayNpc _husband>>
+			If that's what you think is best, <<=setup.npc.mcName(_husband, false)>>... we won't fight you on it. We can still be friends.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _wife>>
+			We'll be alright. It's not like the world's giving anyone guarantees these days.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _husband>>
+				And we'll sort out <<=_sharedKidsPhrase>> between us. That's not in question.
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<<include 'NPC end marriage - finalize'>>
+		<<link 'Leave'>>
+			<<goto $tmpGirlViewBack>>
+		<</link>>
+	<</if>>
+<<elseif _relBetween <= 50>>
+	<<if !_husbandHappy && !_wifeHappy>>
+		<<set _protestChance = _relBetween>>
+		<<if setup.percentageChance(_protestChance)>>
+			<<sayNpc _husband>>
+				We... we'd like to try and make this work. If not for each other, then for the good of the settlement.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _wife>>
+				It hasn't been easy, but maybe it doesn't have to end here.
+			<</sayNpc>>
+			<<if _hasSharedKidsOrPregnant>>
+				<br />
+				<<sayNpc _husband>>
+					<<=_sharedKidsPhrase>> <<=_sharedKidsVerb>> both of us, <<=setup.npc.mcName(_husband, false)>>. Please, think about that.
+				<</sayNpc>>
+			<</if>>
+			<br /><br />
+			<div id="option_keep_medboth_un">
+				<<linkreplace 'Give them another chance'>>
+					<<run $('#option_end_medboth_un').hide()>>
+					<<you>>
+						...Alright. I won't force this.
+					<</you>>
+					<br />
+					Both of them look relieved, even if neither looks entirely convinced things will get easier.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div id="option_end_medboth_un">
+				<<linkreplace 'Insist on the divorce'>>
+					<<run $('#option_keep_medboth_un').hide()>>
+					<<you>>
+						No. My mind's made up.
+					<</you>>
+					<br />
+					<<set _husband.happy -= 5>>
+					<<set _husband.relationship -= 5>>
+					<<set _wife.happy -= 5>>
+					<<set _wife.relationship -= 5>>
+					<<adjustRelationshipBetween _husband _wife -10>>
+					Neither of them argues further. Whatever they had left to give each other, it clearly wasn't enough.
+					<br /><br />
+					<<include 'NPC end marriage - finalize'>>
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<<else>>
+			<<sayNpc _husband>>
+				We gave it what we could, <<=setup.npc.mcName(_husband, false)>>. This world doesn't make it easy to hold onto something like that.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _wife>>
+				He's right. Maybe in another life.
+			<</sayNpc>>
+			<<if _hasSharedKidsOrPregnant>>
+				<br />
+				<<sayNpc _husband>>
+					We'll figure out <<=_sharedKidsPhrase>> somehow. Don't really see another option, not in this world.
+				<</sayNpc>>
+			<</if>>
+			<br /><br />
+			<<include 'NPC end marriage - finalize'>>
+			<<link 'Leave'>>
+				<<goto $tmpGirlViewBack>>
+			<</link>>
+		<</if>>
+	<<elseif _husbandHappy !== _wifeHappy>>
+		<<set _happyOne = _husbandHappy ? _husband : _wife>>
+		<<set _unhappyOne = _husbandHappy ? _wife : _husband>>
+		<<sayNpc _happyOne>>
+			I think we can make this work, <<=setup.npc.mcName(_happyOne, false)>>. I'd like the chance to try.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _unhappyOne>>
+			I'm tired of putting in effort that doesn't seem to go anywhere. I think we both know how I feel.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _happyOne>>
+				<<=_sharedKidsPhrase>> <<=_sharedKidsVerb>> you in their life. Doesn't that count for anything?
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<div id="option_keep_medmix">
+			<<linkreplace 'Keep them married'>>
+				<<run $('#option_end_medmix').hide()>>
+				<<you>>
+					Then stay married.
+				<</you>>
+				<br />
+				<<set _happyOne.happy = Math.min(100, _happyOne.happy + 10)>>
+				<<set _happyOne.relationship = Math.min(100, _happyOne.relationship + 10)>>
+				<<set _unhappyOne.happy -= 10>>
+				<<set _unhappyOne.relationship -= 10>>
+				<<=setup.displayName(_happyOne)>> brightens at the decision. <<=setup.displayName(_unhappyOne)>> says nothing, but the disappointment is plain on their face.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_end_medmix">
+			<<linkreplace 'End their marriage'>>
+				<<run $('#option_keep_medmix').hide()>>
+				<<you>>
+					No. I think it's best we end it here.
+				<</you>>
+				<br />
+				<<set _unhappyOne.happy = Math.min(100, _unhappyOne.happy + 10)>>
+				<<set _unhappyOne.relationship = Math.min(100, _unhappyOne.relationship + 10)>>
+				<<set _happyOne.happy -= 10>>
+				<<set _happyOne.relationship -= 10>>
+				<<=setup.displayName(_unhappyOne)>> lets out a breath, something between relief and resignation. <<=setup.displayName(_happyOne)>> looks away, clearly stung by the decision.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<<else>>
+		<<set _protestChance = Math.min(100, _relBetween * 2)>>
+		<<if setup.percentageChance(_protestChance)>>
+			<<sayNpc _husband>>
+				I don't understand. Things are good between us, <<=setup.npc.mcName(_husband, false)>>. Why end it now?
+			<</sayNpc>>
+			<br />
+			<<sayNpc _wife>>
+				Please, reconsider. We're happy together.
+			<</sayNpc>>
+			<<if _hasSharedKidsOrPregnant>>
+				<br />
+				<<sayNpc _husband>>
+					<<=_sharedKidsPhrase>> <<=_sharedKidsVerb>> two parents in the house, <<=setup.npc.mcName(_husband, false)>>. That's not something you get to just decide away.
+				<</sayNpc>>
+			<</if>>
+			<br /><br />
+			<div id="option_keep_medboth_hap">
+				<<linkreplace 'Give them another chance'>>
+					<<run $('#option_end_medboth_hap').hide()>>
+					<<you>>
+						...Alright. I won't force this.
+					<</you>>
+					<br />
+					Relief washes over both of them in equal measure.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div id="option_end_medboth_hap">
+				<<linkreplace 'Insist on the divorce'>>
+					<<run $('#option_keep_medboth_hap').hide()>>
+					<<you>>
+						No. My mind's made up.
+					<</you>>
+					<br />
+					<<set _husband.happy -= 20>>
+					<<set _husband.relationship -= 20>>
+					<<set _wife.happy -= 20>>
+					<<set _wife.relationship -= 20>>
+					Neither of them argues further, though the confusion and hurt on their faces is plain to see.
+					<br /><br />
+					<<include 'NPC end marriage - finalize'>>
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<<else>>
+			<<sayNpc _husband>>
+				I don't really understand, <<=setup.npc.mcName(_husband, false)>>... but if that's what you've decided, we won't fight you on it. The settlement matters more than our objections.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _wife>>
+				We trust you know what's best, even if this doesn't make sense to us.
+			<</sayNpc>>
+			<<if _hasSharedKidsOrPregnant>>
+				<br />
+				<<sayNpc _husband>>
+					Whatever happens, we'll work out <<=_sharedKidsPhrase>> together. That's not up for debate.
+				<</sayNpc>>
+			<</if>>
+			<br /><br />
+			<<include 'NPC end marriage - finalize'>>
+			<<link 'Leave'>>
+				<<goto $tmpGirlViewBack>>
+			<</link>>
+		<</if>>
+	<</if>>
+<<else>>
+	<<if !_husbandHappy && !_wifeHappy>>
+		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> both go pale. For a long moment, neither of them seems to find the words.
+		<br /><br />
+		<<sayNpc _husband>>
+			Please... don't do this. What we have is the only good thing either of us has left in this world.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _wife>>
+			I'm begging you, <<=setup.npc.mcName(_wife, false)>>. Reconsider. Please.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _husband>>
+				<<=_sharedKidsPhrase>> <<=_sharedKidsVerb>> both their parents, not just whatever's left of us apart. Please, don't do this to them.
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<div id="option_keep_highboth_un">
+			<<linkreplace 'Reconsider'>>
+				<<run $('#option_end_highboth_un').hide()>>
+				<<you>>
+					...Alright. I won't take this from you.
+				<</you>>
+				<br />
+				The relief between them is immediate, palpable, a weight visibly lifted from both their shoulders.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_end_highboth_un">
+			<<linkreplace 'Insist on the divorce'>>
+				<<run $('#option_keep_highboth_un').hide()>>
+				<<you>>
+					No. My mind is made up.
+				<</you>>
+				<br />
+				<<set _husband.happy -= 50>>
+				<<set _husband.relationship = Math.round(_husband.relationship / 2)>>
+				<<set _wife.happy -= 50>>
+				<<set _wife.relationship = Math.round(_wife.relationship / 2)>>
+				<<adjustRelationshipBetween _husband _wife 20>>
+				Something breaks in both of them at once. Whatever distance the world had put between everyone else, the two of them had closed it together, and now you've torn it open again.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<set _leaveChance = Math.max(100 - _relBetween, 0)>>
+				<<if setup.percentageChance(_leaveChance)>>
+					<<sayNpc _husband>>
+						If we can't be married, we're not staying here to watch each other from a distance. We're leaving. Together.
+					<</sayNpc>>
+					<br /><br />
+					<div id="option_letgo_highboth_un">
+						<<linkreplace 'Let them leave'>>
+							<<run $('#option_slave_highboth_un').hide()>>
+							<<you>>
+								That's your choice to make. Both of you.
+							<</you>>
+							<br />
+							They gather what little they have between them, and by morning, they're gone from the settlement for good.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcLeaveSettlement _husband>>
+								<<npcLeaveSettlement _wife>>
+								<<goto 'Guest house'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_slave_highboth_un">
+						<<linkreplace 'Refuse. They belong to you now.'>>
+							<<run $('#option_letgo_highboth_un').hide()>>
+							<<you>>
+								Neither of you is going anywhere. You belong to me now, both of you.
+							<</you>>
+							<br />
+							They look at each other, and at you, with dawning dread. Neither one of them resists as you lead them both away.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcEnslave _husband>>
+								<<npcEnslave _wife>>
+								<<goto 'Basement'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					Neither of them says another word. There's nothing left to say.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+	<<elseif _husbandHappy !== _wifeHappy>>
+		<<set _happyOne = _husbandHappy ? _husband : _wife>>
+		<<set _unhappyOne = _husbandHappy ? _wife : _husband>>
+		<<sayNpc _happyOne>>
+			This is real, <<=setup.npc.mcName(_happyOne, false)>>. We belong together. Please don't do this to us.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _unhappyOne>>
+			...Honestly? I've just been going along with it, to keep the peace. I'd rather be free, if I'm being truthful.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _happyOne>>
+				So what, you're just going to walk away from <<=_sharedKidsPhrase>> too? Is that the kind of parent you want to be?
+			<</sayNpc>>
+		<</if>>
+		<br /><br />
+		<div id="option_keep_highmix">
+			<<linkreplace 'Keep them married'>>
+				<<run $('#option_end_highmix').hide()>>
+				<<you>>
+					Then stay married. That's my decision.
+				<</you>>
+				<br />
+				<<set _happyOne.happy = Math.min(100, _happyOne.happy + 20)>>
+				<<set _happyOne.relationship = Math.min(100, _happyOne.relationship + 20)>>
+				<<set _unhappyOne.happy -= 20>>
+				<<set _unhappyOne.relationship -= 20>>
+				<<=setup.displayName(_happyOne)>> sags with relief. <<=setup.displayName(_unhappyOne)>> says nothing, jaw tight, swallowing whatever protest they might have made.
+				<br /><br />
+				<<set _leaveChance = Math.max(100 - _unhappyOne.relationship, 0)>>
+				<<if setup.percentageChance(_leaveChance)>>
+					<br />
+					<<sayNpc _unhappyOne>>
+						I can't do this. I won't spend the rest of my life trapped in a marriage I don't want. I'm leaving, <<=setup.npc.mcName(_unhappyOne, false)>>, whether you allow it or not.
+					<</sayNpc>>
+					<br /><br />
+					<div id="option_letgo_highmix_stay">
+						<<linkreplace 'Let them leave'>>
+							<<run $('#option_slave_highmix_stay').hide()>>
+							<<you>>
+								That's your choice to make.
+							<</you>>
+							<br />
+							<<=setup.displayName(_unhappyOne)>> doesn't waste any time. By the next morning, they're gone from the settlement for good.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcLeaveSettlement _unhappyOne>>
+								<<goto 'Guest house'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_slave_highmix_stay">
+						<<linkreplace 'Refuse. They belong to you now.'>>
+							<<run $('#option_letgo_highmix_stay').hide()>>
+							<<you>>
+								You're not going anywhere. You belong to me now.
+							<</you>>
+							<br />
+							<<=setup.displayName(_unhappyOne)>> doesn't resist as you lead them away.
+							<br /><br />
+							<<sayNpc _happyOne>>
+								Thank you. At least this way, I still get to keep them close.
+							<</sayNpc>>
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcEnslave _unhappyOne>>
+								<<goto 'Basement'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					<br />
+					<<=setup.displayName(_unhappyOne)>> doesn't bring it up again, at least not where you can see it.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+		<div id="option_end_highmix">
+			<<linkreplace 'End their marriage'>>
+				<<run $('#option_keep_highmix').hide()>>
+				<<you>>
+					No. I think it's best we end it here.
+				<</you>>
+				<br />
+				<<set _unhappyOne.happy = Math.min(100, _unhappyOne.happy + 20)>>
+				<<set _unhappyOne.relationship = Math.min(100, _unhappyOne.relationship + 20)>>
+				<<set _happyOne.happy -= 20>>
+				<<set _happyOne.relationship -= 20>>
+				<<=setup.displayName(_unhappyOne)>> exhales, something like relief breaking across their face. <<=setup.displayName(_happyOne)>> looks gutted, blinking back something they don't want you to see.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<set _leaveChance = Math.max(100 - _happyOne.relationship, 0)>>
+				<<if setup.percentageChance(_leaveChance)>>
+					<br />
+					<<sayNpc _happyOne>>
+						I can't stay here, <<=setup.npc.mcName(_happyOne, false)>>. Not this close to them, not after this. Please, let me leave the settlement.
+					<</sayNpc>>
+					<br /><br />
+					<div id="option_letgo_highmix_end">
+						<<linkreplace 'Let them leave'>>
+							<<run $('#option_deny_highmix_end').hide()>>
+							<<you>>
+								Alright. Go, if that's what you need.
+							<</you>>
+							<br />
+							<<=setup.displayName(_happyOne)>> doesn't linger. Within a day, they're gone from the settlement for good.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcLeaveSettlement _happyOne>>
+								<<goto 'Guest house'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_deny_highmix_end">
+						<<linkreplace 'Deny their request'>>
+							<<run $('#option_letgo_highmix_end').hide()>>
+							<<you>>
+								No. I need you here. You'll stay.
+							<</you>>
+							<br />
+							<<=setup.displayName(_happyOne)>> doesn't argue, though the heartbreak on their face doesn't fade. They remain in the settlement, a guest still, just no longer a spouse.
+							<br /><br />
+							<<link 'Leave'>>
+								<<goto $tmpGirlViewBack>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					<br />
+					<<=setup.displayName(_happyOne)>> says nothing further, retreating into a quiet that lingers for days.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+	<<else>>
+		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> look at each other, then back at you, bewildered.
+		<br /><br />
+		<<sayNpc _husband>>
+			I don't understand. We belong together, <<=setup.npc.mcName(_husband, false)>>. Why would you try to tear us apart?
+		<</sayNpc>>
+		<br />
+		<<sayNpc _wife>>
+			We're committed to each other. Nothing you say is going to change that.
+		<</sayNpc>>
+		<<if _hasSharedKidsOrPregnant>>
+			<br />
+			<<sayNpc _husband>>
+				<<=_sharedKidsPhrase>> <<=_sharedKidsVerb>> us both, together, under one roof. That's not negotiable, <<=setup.npc.mcName(_husband, false)>>.
+			<</sayNpc>>
+		<</if>>
+		<br />
+		They stand close together, shoulders touching, making it plain they intend to weather this as one.
+		<br /><br />
+		<div id="option_keep_highboth_hap">
+			<<linkreplace 'Reconsider'>>
+				<<run $('#option_end_highboth_hap').hide()>>
+				<<you>>
+					...You're right. I won't take this from you.
+				<</you>>
+				<br />
+				Relief breaks across both their faces at once.
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto $tmpGirlViewBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="option_end_highboth_hap">
+			<<linkreplace 'Insist on the divorce'>>
+				<<run $('#option_keep_highboth_hap').hide()>>
+				<<you>>
+					No. My mind is made up.
+				<</you>>
+				<br />
+				<<set _husband.happy -= 50>>
+				<<set _husband.relationship = Math.round(_husband.relationship / 2)>>
+				<<set _wife.happy -= 50>>
+				<<set _wife.relationship = Math.round(_wife.relationship / 2)>>
+				<<adjustRelationshipBetween _husband _wife 40>>
+				Neither of them argues, but something passes between them, a silent, shared resolve that has nothing to do with you anymore.
+				<br /><br />
+				<<include 'NPC end marriage - finalize'>>
+				<<set _leaveChance = Math.max(100 - _relBetween, 0)>>
+				<<if setup.percentageChance(_leaveChance)>>
+					<<sayNpc _husband>>
+						We're not letting you keep us apart. We're leaving, together, and you can't stop us.
+					<</sayNpc>>
+					<br /><br />
+					<div id="option_letgo_highboth_hap">
+						<<linkreplace 'Let them leave'>>
+							<<run $('#option_slave_highboth_hap').hide()>>
+							<<you>>
+								Fine. Go, then. Both of you.
+							<</you>>
+							<br />
+							They don't wait around to see if you change your mind. By morning, they're gone from the settlement for good, together.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcLeaveSettlement _husband>>
+								<<npcLeaveSettlement _wife>>
+								<<goto 'Guest house'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="option_slave_highboth_hap">
+						<<linkreplace 'Refuse. They belong to you now.'>>
+							<<run $('#option_letgo_highboth_hap').hide()>>
+							<<you>>
+								You're not going anywhere. Either of you.
+							<</you>>
+							<br />
+							Whatever defiance they had a moment ago drains out of them fast. Neither one resists as you lead them both away.
+							<br /><br />
+							<<link 'Continue'>>
+								<<npcEnslave _husband>>
+								<<npcEnslave _wife>>
+								<<goto 'Basement'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					Neither of them says anything more. For now, at least, they stay.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto $tmpGirlViewBack>>
+					<</link>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+<</if>>

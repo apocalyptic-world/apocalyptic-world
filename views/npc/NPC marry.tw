@@ -1,12 +1,15 @@
 :: NPC marry
-<<drop $backpack 'wedding_ring' 1>>
-<<set $tmpGirl.married = true>>
-<<set $tmpGirl.family ??= {}>>
-<<set $tmpGirl.family.husband = 'mc'>>
-<<set $player.family ??= {}>>
-<<set $player.family.wives ??= []>>
-<<set $player.family.wives.push($tmpGirl.id)>>
-<<run setup.npc.addHistory($tmpGirl, 'married', { with: 'mc' })>>
+<<set _isExOfMc = ($tmpGirl.family?.exes ?? []).includes('mc')>>
+<<set _exAcceptRoll = _isExOfMc && setup.percentageChance($tmpGirl.relationship / 2)>>
+<<set _isIncest = setup.family.isIncest($player, $tmpGirl)>>
+<<set _incestAcceptChance = $tmpGirl.relationship>>
+<<if $player?.baseManagement?.noIncest>>
+    <<set _incestAcceptChance = _incestAcceptChance / 2>>
+<</if>>
+<<set _incestAcceptRoll = _isIncest && setup.percentageChance(_incestAcceptChance)>>
+<<set _herRelation = _isIncest ? setup.family.getRelationshipLabel($player, $tmpGirl) : ''>>
+<<set _maleRelationLabels = { daughter: 'father', mother: 'son', sister: 'brother', granddaughter: 'grandfather', grandmother: 'grandson', aunt: 'nephew', niece: 'uncle' }>>
+<<set _hisRelation = _maleRelationLabels[_herRelation] ?? 'family member'>>
 
 <center>
     <<image 'places/kitchen/blair_propose.jpg' sfw>>
@@ -18,7 +21,27 @@ You dropped to one knee, holding out the makeshift ring.
     <<=$tmpGirl.name>>, will you marry me?
 <</you>>
 <br />
-<<if $tmpGirl?.family?.husband && setup.percentageChance(40)>>
+<<if _isIncest && !_incestAcceptRoll>>
+    <<addmins 10>>
+    <<=setup.displayName($tmpGirl)>>'s expression softens, but she shakes her head slowly, her eyes glistening.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        I love you dearly, <<=setup.npc.mcName($tmpGirl)>>, as your <<=_herRelation>>. But marrying my own <<=_hisRelation>>... it doesn't feel right. It doesn't feel natural. I'm sorry.
+    <</sayNpc>>
+    <br />
+    <<link 'Leave'>>
+        <<goto $tmpGirlViewBack>>
+    <</link>>
+<<elseif _isExOfMc && !_exAcceptRoll>>
+    <<addmins 10>>
+    <<sayNpc $tmpGirl>>
+        ...No. We already tried this, <<=setup.npc.mcName($tmpGirl, false)>>. It didn't work out before. I don't think it would now, either.
+    <</sayNpc>>
+    <br />
+    <<link 'Leave'>>
+        <<goto $tmpGirlViewBack>>
+    <</link>>
+<<elseif !_isIncest && !_isExOfMc && ($tmpGirl?.family?.husband ?? false) && setup.percentageChance(40)>>
     <<addmins 10>>
     <<sayNpc $tmpGirl>>
         What? No. I am already married.
@@ -27,7 +50,7 @@ You dropped to one knee, holding out the makeshift ring.
     <<link 'Leave'>>
         <<goto $tmpGirlViewBack>>
     <</link>>
-<<elseif !$tmpGirl?.likesGuys>>
+<<elseif !_isIncest && !_isExOfMc && !$tmpGirl?.likesGuys>>
     <<addmins 10>>
     <<sayNpc $tmpGirl>>
         What? Where did you got that idea? No... I am not into guys
@@ -37,18 +60,54 @@ You dropped to one knee, holding out the makeshift ring.
         <<goto $tmpGirlViewBack>>
     <</link>>
 <<else>>
-    Tears welled up in <<=setup.displayName($tmpGirl)>>'s eyes as she looked down at you, overwhelmed with emotions.
-    <br /><br />
-    <<sayNpc $tmpGirl>>
-        Yes, <<=setup.npc.mcName($tmpGirl)>>, a thousand times yes!
-    <</sayNpc>>
-    <br />
-    You embraced tightly, the weight of your journey and this newfound commitment washing over you. After a moment, <<=setup.displayName($tmpGirl)>> pulled back, her eyes sparkling with determination.
-    <br /><br />
-    <<sayNpc $tmpGirl>>
-        Should we have a big celebration, <<=setup.npc.mcName($tmpGirl)>>? Or keep it simple, just the two of us?
-    <</sayNpc>>
-    <br />
+    <<drop $backpack 'wedding_ring' 1>>
+    <<set $tmpGirl.married = true>>
+    <<set $tmpGirl.family ??= {}>>
+    <<set $tmpGirl.family.husband = 'mc'>>
+    <<set $player.family ??= {}>>
+    <<set $player.family.wives ??= []>>
+    <<set $player.family.wives.push($tmpGirl.id)>>
+    <<run setup.npc.addHistory($tmpGirl, 'married', { with: 'mc' })>>
+    <<if _isIncest>>
+        <<=setup.displayName($tmpGirl)>> goes still for a moment, the weight of what you're asking plain on her face. Then, slowly, something like resolve settles over her.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            This world doesn't run on the old rules anymore, does it, <<=setup.npc.mcName($tmpGirl)>>? We've always been close, closer than most people ever get to be. Maybe it's time that meant something new. I never imagined I would be considering marrying my own <<=_hisRelation>>... but somehow it feels right.  Yes, I will marry you!
+        <</sayNpc>>
+        <br />
+        She reaches for your hand, her smile small but certain, like she's already decided this is a kind of family worth building.  She's been your <<=_herRelation>> by circumstance, but now she will be your bride by choice.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Should we have a big celebration, <<=setup.npc.mcName($tmpGirl)>>? Or... maybe it's best we keep this between us, just for now.
+        <</sayNpc>>
+        <br />
+    <<elseif _isExOfMc>>
+        <<=setup.displayName($tmpGirl)>> stares at the ring for a long moment, old memories plainly crossing behind her eyes, before she finally looks up at you.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            ...Okay. Let's give this another chance, <<=setup.npc.mcName($tmpGirl)>>. I want to see if we can actually make it work this time.
+        <</sayNpc>>
+        <br />
+        You embraced tightly, the weight of your shared history and this newfound second chance washing over you. After a moment, <<=setup.displayName($tmpGirl)>> pulled back, her eyes sparkling with cautious determination.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Should we have a big celebration, <<=setup.npc.mcName($tmpGirl)>>? Or keep it simple, just the two of us, like before?
+        <</sayNpc>>
+        <br />
+    <<else>>
+        Tears welled up in <<=setup.displayName($tmpGirl)>>'s eyes as she looked down at you, overwhelmed with emotions.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Yes, <<=setup.npc.mcName($tmpGirl)>>, a thousand times yes!
+        <</sayNpc>>
+        <br />
+        You embraced tightly, the weight of your journey and this newfound commitment washing over you. After a moment, <<=setup.displayName($tmpGirl)>> pulled back, her eyes sparkling with determination.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            Should we have a big celebration, <<=setup.npc.mcName($tmpGirl)>>? Or keep it simple, just the two of us?
+        <</sayNpc>>
+        <br />
+    <</if>>
 
     <div id="option_two">
         <<linkreplace 'Just the two of us'>>
@@ -65,7 +124,7 @@ You dropped to one knee, holding out the makeshift ring.
                 <<setNpcStats 'guest' _marryGuestI 'happy' -10>>
             <</for>>
             <br /><br />
-            You pull her closer to you and slowly slide the ring onto her finger. 
+            You pull her closer to you and slowly slide the ring onto her finger.
             There is a wide smile on her face. For a moment, she admires the ring and then tells you to go to your bedroom, running out of the room herself.
             <br />
             After a while, she comes to your bedroom with a borrowed wedding dress that the village girls share among themselves.
@@ -108,7 +167,7 @@ You dropped to one knee, holding out the makeshift ring.
                     You decide to reward your lovely wife by eating her pussy.
                     <br /><br />
                 <</linkreplace>>
-                
+
                 <<if $tmpGirl.virgin>>
                     <<set _linkName = 'Fuck her virgin pussy'>>
                 <<else>>

@@ -57,6 +57,7 @@ You face them both. The settlement needs stability. Bonds between people are wha
     <<set _sharedKidCount = (_npc2.family?.kids ?? []).filter(id => setup.getNpcById(id)?.family?.father === _npc1.id).length>>
     <<set _npc1FatherToKids = _npc2KidCount > 0 && _sharedKidCount > 0>>
     <<set _npc1NotFatherToKids = _npc2KidCount > 0 && _sharedKidCount === 0>>
+    <<set _wereMarried = (_npc1.family?.exes ?? []).includes(_npc2.id) || (_npc2.family?.exes ?? []).includes(_npc1.id)>>
     <<if setup.family.isIncest(_npc1, _npc2)>>
         <<set _incestRoll = random(1, 100)>>
         <<if _incestRoll <= _maleProtestChance>>
@@ -160,6 +161,117 @@ You face them both. The settlement needs stability. Bonds between people are wha
             <br /><br />
             <<sayNpc _npc2>>
                 As long as you remember to be a good boy for me.
+            <</sayNpc>>
+            <</if>>
+            <<if _npc1IsFather && _npc2IsPregnant>>
+            <br />
+            <<=setup.displayName(_npc2)>> rests her hand on her pregnant belly, smiling and hopeful.
+            <br />
+            <</if>>
+            <br /><br />
+            <<set _weddingProceed = true>>
+        <</if>>
+    <<elseif _wereMarried>>
+        <<set _remarryRoll = random(1, 100)>>
+        <<if _remarryRoll <= _maleProtestChance>>
+            <<=setup.displayName(_npc1)>> stiffens, the easy expression draining from his face the instant he understands what you're asking. He and <<=setup.displayName(_npc2)>> already know this road, and not fondly.
+            <br /><br />
+            <<sayNpc _npc1>>
+                We already tried this, <<=setup.npc.mcName(_npc1, false)>>. It didn't work then. What makes you think it'll work now?
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> wraps her arms around herself, eyes fixed somewhere past your shoulder, unwilling to meet his.<<if _npc1IsFather && _npc2IsPregnant>> Her hand moves to her belly, her expression anxious and troubled.<</if>>
+            <<if _npc2IsNympho>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                Well... for what it's worth, I'd be down for it.
+            <</sayNpc>>
+            <</if>>
+            <br /><br />
+            <div id="option_insist_remarry">
+                <<linkreplace 'This time will be different. I need this from both of you.'>>
+                    <<run $('#option_decline_remarry').hide()>>
+                    <<set _npc1.happy -= 30>>
+                    <<set _npc2.happy -= 30>>
+                    <<you>>
+                        I'm not asking either of you to forget what happened. I'm asking you to try again, for the good of this settlement. I've made my decision.
+                    <</you>>
+                    <br />
+                    Neither of them argues further, though neither looks at the other.
+                    <br /><br />
+                    <<sayNpc _npc1>>
+                        ...Fine. If that's what you want, <<=setup.npc.mcName(_npc1, false)>>. I'll try to do better this time.
+                    <</sayNpc>>
+                    <br />
+                    <<=setup.displayName(_npc2)>> lets out a slow breath, her expression guarded.
+                    <br /><br />
+                    <<sayNpc _npc2>>
+                        I'll give it another chance. For the settlement, if nothing else.
+                    <</sayNpc>>
+                    <br /><br />
+                    <<include 'NPC arrange marry - ceremony'>>
+                <</linkreplace>>
+            </div>
+            <div id="option_decline_remarry">
+                <<linkreplace 'I understand. Forget I said anything.'>>
+                    <<run $('#option_insist_remarry').hide()>>
+                    <<you>>
+                        You're right. Some bridges don't need rebuilding. Forget I said anything.
+                    <</you>>
+                    <br />
+                    They go their separate ways without another word, the old wound between them clearly still raw.
+                    <br /><br />
+                    <<link 'Leave'>>
+                        <<unset $tmpEventWedding>>
+                        <<goto 'Wood cabin'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+        <<else>>
+            <<=setup.displayName(_npc1)>> is quiet for a moment, looking at <<=setup.displayName(_npc2)>> like he's seeing her clearly for the first time in a while. Whatever ended things between them, there's no anger left in his face, only consideration.
+            <br /><br />
+            <<sayNpc _npc1>>
+                Maybe we just weren't ready, before. A lot's changed since then. If you think it's worth trying again, <<=setup.npc.mcName(_npc1, false)>>, I'm willing.<<if _npc2.beauty > 90>> Doesn't hurt that she's hot, always has been.<</if>><<if (_npc2.skills ?? []).includes('cook')>> And she's still the best cook I know. That doesn't hurt either.<</if>>
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> studies him for a long moment, then gives a slow, careful nod.
+            <br /><br />
+            <<sayNpc _npc2>>
+                We both know how it ends if we don't actually try this time, <<=setup.npc.mcName(_npc2, false)>>. I'm willing, if he is.
+            <</sayNpc>>
+            <br />
+            A faint, cautious smile crosses her lips. Whatever came between them before, neither one seems entirely opposed to trying again.
+            <<if _npc2IsNympho || (_npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0) || _npc2IsInfertile || _npc2.virgin || _npc2IsPregnant || _npc2KidCount > 0>>
+            <br /><br />
+            <<sayNpc _npc2>>
+                <<if _npc2IsNympho>>If I'm being honest, it's kind of a turn on, doing this all over again. <</if>><<if _npc2IsInfertile>>There isn't really a risk anyway, since I can't have children. <<elseif _npc2IsBreeder && !_npc2IsPregnant && _npc2KidCount === 0>>If it's what this world needs, I am ready. Our family, our legacy, will continue.<</if>><<if _npc2.virgin>> I've never been with anyone before. I never expected him to still be my first, after everything.<</if>><<if _npc2IsPregnant>> <<if _npc1IsFather>>You've already put a baby in me, that's the part that matters.  This just makes us a family again.<<else>>To take me back, and take responsibility for another man's child... I won't forget that kindness.<</if>><</if>><<if _npc2KidCount > 0>> <<if _npc1FatherToKids>><<if _sharedKidCount === 1>>We already have a child together. Maybe it's time our child had us both again.<<else>>We already have children together. They should have us both in their lives again.<</if>><<else>><<if _npc2KidCount === 1>>My child will be so happy to have a father in their life.<<else>>My children will be so happy to have a father in their lives.<</if>><</if>><</if>>
+            <</sayNpc>>
+            <</if>>
+            <<if _sadoMaso>>
+            <br />
+            <<=setup.displayName(_npc1)>> runs his gaze over <<=setup.displayName(_npc2)>>, slow and appraising, like he's remembering something fondly.
+            <br /><br />
+            <<sayNpc _npc1>>
+                She always took well to a firm hand. I doubt that's changed.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> drops her gaze, a faint flush on her cheeks.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Some things don't change. I'm still whatever he needs me to be.
+            <</sayNpc>>
+            <<elseif _masoSado>>
+            <br />
+            <<=setup.displayName(_npc1)>> glances over at <<=setup.displayName(_npc2)>> with a small, almost sheepish smile, the kind only old familiarity allows.
+            <br /><br />
+            <<sayNpc _npc1>>
+                She was always good at keeping me in line. I wouldn't mind that again.
+            <</sayNpc>>
+            <br />
+            <<=setup.displayName(_npc2)>> meets his gaze with cool, appraising eyes.
+            <br /><br />
+            <<sayNpc _npc2>>
+                Some habits are worth picking back up.
             <</sayNpc>>
             <</if>>
             <<if _npc1IsFather && _npc2IsPregnant>>

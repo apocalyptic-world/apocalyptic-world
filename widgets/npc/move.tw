@@ -50,3 +50,41 @@
 	<<run $guests.splice(_args[1], 1)>>
 	<<run $slaves.push(_args[0])>>
 <</widget>>
+
+<<widget npcLeaveSettlement>>
+	/* args[0] = npc object. Removes them from the settlement for good, whether they are
+	   currently a guest or a slave. */
+	<<set _npcLeaveTarget = _args[0]>>
+	<<assignedTo _npcLeaveTarget 'none'>>
+	<<set _npcLeaveIdx = $guests.findIndex(g => g.id === _npcLeaveTarget.id)>>
+	<<if _npcLeaveIdx > -1>>
+		<<guestLeft _npcLeaveIdx>>
+	<<else>>
+		<<set _npcLeaveIdx = $slaves.findIndex(s => s.id === _npcLeaveTarget.id)>>
+		<<if _npcLeaveIdx > -1>>
+			<<slaveRemove _npcLeaveIdx>>
+		<</if>>
+	<</if>>
+<</widget>>
+
+<<widget npcEnslave>>
+	/* args[0] = npc object. Moves them to the basement if currently a guest; no-op if
+	   they're already a slave. */
+	<<set _npcEnslaveTarget = _args[0]>>
+	<<set _npcEnslaveIdx = $guests.findIndex(g => g.id === _npcEnslaveTarget.id)>>
+	<<if _npcEnslaveIdx > -1>>
+		<<moveGuestToSlave _npcEnslaveTarget _npcEnslaveIdx>>
+	<</if>>
+<</widget>>
+
+<<widget adjustRelationshipBetween>>
+	/* args[0], args[1] = npc objects; args[2] = delta (may be negative). Updates both
+	   directions symmetrically. */
+	<<set _relBetweenA = _args[0]>>
+	<<set _relBetweenB = _args[1]>>
+	<<set _relBetweenDelta = _args[2]>>
+	<<set _relBetweenA.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] }>>
+	<<set _relBetweenB.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] }>>
+	<<set _relBetweenA.relationshipBetween.stats[_relBetweenB.id] = Math.max(-100, Math.min(100, (_relBetweenA.relationshipBetween.stats[_relBetweenB.id] ?? 0) + _relBetweenDelta))>>
+	<<set _relBetweenB.relationshipBetween.stats[_relBetweenA.id] = Math.max(-100, Math.min(100, (_relBetweenB.relationshipBetween.stats[_relBetweenA.id] ?? 0) + _relBetweenDelta))>>
+<</widget>>

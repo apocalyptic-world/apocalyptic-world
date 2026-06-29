@@ -153,7 +153,24 @@ setup.player = {
         let npcText = '<div style="' + family_container + '"><div style="' + npc_name + '"><span style="' + name_display + '">' + setup.player.npcNameColor(npc) + (charDead ? ' (deceased)' : '') + ': </span></div><div style="' + family_details + '">';
         const family = npc.family ?? {};
         for(const relation in family) {
-            if (['wives','kids'].includes(relation)) {
+            if (relation === 'exes') {
+                const out = [];
+                for(const id of (family.exes ?? [])) {
+                    if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
+                        const rel = setup.getNpcById(id);
+                        if(rel) {
+                            out.push(setup.player.npcNameColor(rel));
+                        }
+                    }
+                }
+                if(out.length) {
+                    const isWifeRole = [0, 2].includes(npc.gender);
+                    const label = isWifeRole
+                        ? ('Ex-Husband' + (out.length > 1 ? 's' : ''))
+                        : (out.length > 1 ? 'Ex-Wives' : 'Ex-Wife');
+                    npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + label + ': </span><span style="' + relation_names + '">' + out.sort().join(', ') + '</span></div> ';
+                }
+            } else if (['wives','kids'].includes(relation)) {
                 const out = [];
                 for(const id of (family[relation] ?? [])) {
                     if(id === 'mc' && (context === 'parent' || context === 'sibling')) continue;
