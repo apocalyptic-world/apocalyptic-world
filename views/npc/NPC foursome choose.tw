@@ -1,0 +1,88 @@
+:: NPC foursome choose [sex no-redirect girlview]
+
+<<set _eligible = []>>
+<<for _fci, _fcg range $guests>>
+	<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>>
+		<<continue>>
+	<</if>>
+	<<if !setup.percentageChance(setup.sexChance(_fcg))>>
+		<<continue>>
+	<</if>>
+	<<run _eligible.push(_fci)>>
+<</for>>
+
+<<if _eligible.length < 2>>
+	Not enough willing participants right now.
+	<br /><br />
+	<<link 'Back'>>
+		<<goto 'NPC fuck choose'>>
+	<</link>>
+<<else>>
+	<<if typeof $foursomePickedFirst === 'undefined'>>
+		Choose the first partner:
+		<br /><br />
+		<table id="slaves" class="npc-list">
+		<<for _fi range _eligible>>
+			<<capture _fi>>
+				<tr class="item">
+					<td>
+						<<=setup.displayName($guests[_fi])>> <<=setup.npcListInfo($guests[_fi])>>
+					</td>
+					<td>
+						<<link 'Choose'>>
+							<<set $foursomePickedFirst = _fi>>
+							<<goto 'NPC foursome choose'>>
+						<</link>>
+					</td>
+				</tr>
+			<</capture>>
+		<</for>>
+		</table>
+	<<else>>
+		<<set _remaining = _eligible.filter(function(id) { return id !== $foursomePickedFirst; })>>
+		<<if _remaining.length < 1>>
+			Not enough willing participants left.
+			<br /><br />
+			<<link 'Back'>>
+				<<unset $foursomePickedFirst>>
+				<<goto 'NPC fuck choose'>>
+			<</link>>
+		<<else>>
+			First partner: <strong><<=setup.displayName($guests[$foursomePickedFirst])>></strong>
+			<br />
+			Choose the second partner:
+			<br /><br />
+			<table id="slaves" class="npc-list">
+			<<for _ri range _remaining>>
+				<<capture _ri>>
+					<tr class="item">
+						<td>
+							<<=setup.displayName($guests[_ri])>> <<=setup.npcListInfo($guests[_ri])>>
+						</td>
+						<td>
+							<<link 'Choose'>>
+								<<set $guestId2 = $foursomePickedFirst>>
+								<<set $tmpGirl2 = $guests[$foursomePickedFirst]>>
+								<<set $guestId3 = _ri>>
+								<<set $tmpGirl3 = $guests[_ri]>>
+								<<unset $foursomePickedFirst, $charId, $slaveId>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
+							<</link>>
+						</td>
+					</tr>
+				<</capture>>
+			<</for>>
+			</table>
+			<<link 'Pick someone else'>>
+				<<unset $foursomePickedFirst>>
+				<<goto 'NPC foursome choose'>>
+			<</link>>
+		<</if>>
+	<</if>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<unset $foursomePickedFirst>>
+	<<goto 'NPC fuck choose'>>
+<</link>>

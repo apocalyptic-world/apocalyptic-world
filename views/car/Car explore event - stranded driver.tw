@@ -34,6 +34,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<run $('#opt_look').hide()>>
         <<run $('#opt_ride').hide()>>
         <<run $('#opt_water').hide()>>
+        <<run $('#opt_drive').hide()>>
         <<addmins 30>>
         <<set $tmpGirl.relationship += 25>>
         <center>
@@ -84,6 +85,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<run $('#opt_fix').hide()>>
         <<run $('#opt_ride').hide()>>
         <<run $('#opt_water').hide()>>
+        <<run $('#opt_drive').hide()>>
         <<addmins 20>>
         Something in her changes when you say it. She's around the front of your car before you've finished the sentence, hood up, head bent over the engine with the focused quiet of someone who spent years doing exactly this.
         <br /><br />
@@ -109,6 +111,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
             <<set _labelInvite = "You could come with me, if you want.">>
             <<linkreplace _labelInvite>>
+                <<run $('#opt_look_leave').hide()>>
                 <<set $tmpGirl.relationship += 40>>
                 <<set $tmpGirl.happy += 50>>
                 <<set $tmpGirl.capture = false>>
@@ -127,9 +130,11 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
             <</linkreplace>>
             <br />
         <</if>>
+        <div id="opt_look_leave">
         <<link 'Leave'>>
             <<goto 'Garage'>>
         <</link>>
+        </div>
     <</linkreplace>>
 </div>
 <div id="opt_ride">
@@ -137,6 +142,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<run $('#opt_fix').hide()>>
         <<run $('#opt_look').hide()>>
         <<run $('#opt_water').hide()>>
+        <<run $('#opt_drive').hide()>>
         She goes still again. Then she looks at the car — really looks at it this time, the way you look at something when you're trying to find the catch.
         <br /><br />
         <<sayNpc $tmpGirl>>
@@ -187,6 +193,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<run $('#opt_fix').hide()>>
         <<run $('#opt_look').hide()>>
         <<run $('#opt_ride').hide()>>
+        <<run $('#opt_drive').hide()>>
         You set a can and a bandage on the hood of her car without making a production of it. She watches you do it.
         <br /><br />
         <<sayNpc $tmpGirl>>
@@ -211,6 +218,8 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <</link>>
     <</linkreplace>>
 </div>
+<div id="opt_drive">
 <<link 'Drive past'>>
     <<goto 'Garage'>>
 <</link>>
+</div>
