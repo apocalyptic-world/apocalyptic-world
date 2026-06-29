@@ -418,9 +418,10 @@ setup.personalityTraits = function(count = 1) {
 
 
 setup.npcClothes = {
-	top: setup.range(1, 11),
+	top: setup.range(1, 12),
 	bot: setup.range(1, 3),
 	panties: setup.range(1, 4),
+	neck: setup.range(1, 1),
     accessories: setup.range(1,3),
     shoes: setup.range(1, 4)
 };
