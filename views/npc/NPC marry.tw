@@ -1,12 +1,8 @@
 :: NPC marry
 <<set _isExOfMc = ($tmpGirl.family?.exes ?? []).includes('mc')>>
 <<set _exAcceptRoll = _isExOfMc && setup.percentageChance($tmpGirl.relationship / 2)>>
-<<set _isIncest = setup.family.isIncest($player, $tmpGirl)>>
-<<set _incestAcceptChance = $tmpGirl.relationship>>
-<<if $player?.baseManagement?.noIncest>>
-    <<set _incestAcceptChance = _incestAcceptChance / 2>>
-<</if>>
-<<set _incestAcceptRoll = _isIncest && setup.percentageChance(_incestAcceptChance)>>
+<<set _isIncest = !($player?.baseManagement?.noIncest ?? false) && setup.family.isIncest($player, $tmpGirl)>>
+<<set _incestAcceptRoll = _isIncest && setup.percentageChance($tmpGirl.relationship)>>
 <<set _herRelation = _isIncest ? setup.family.getRelationshipLabel($player, $tmpGirl) : ''>>
 <<set _maleRelationLabels = { daughter: 'father', mother: 'son', sister: 'brother', granddaughter: 'grandfather', grandmother: 'grandson', aunt: 'nephew', niece: 'uncle' }>>
 <<set _hisRelation = _maleRelationLabels[_herRelation] ?? 'family member'>>
