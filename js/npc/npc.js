@@ -1028,17 +1028,16 @@ setup.npc = {
 		return null;
 	},
 
-	/* True if a spouse id refers to someone who's gone for good: a named character
-	   flagged dead, or anyone no longer trackable at all (thrown out, killed off, etc). */
+	/* True if a spouse id refers to someone who's gone for good.
+	   Guests/slaves are simply removed when gone, so absence = lost.
+	   Characters persist in $characters when dead — check the dead flag. */
 	isSpouseLost: function(spouseId) {
 		if (!spouseId || spouseId === 'mc') {
 			return false;
 		}
-		const spouseChar = variables().characters[spouseId];
-		if (spouseChar) {
-			return (spouseChar.dead ?? false) || (spouseChar.quests?.dead ?? false);
-		}
-		return !setup.getNpcById(spouseId);
+		const npc = setup.getNpcById(spouseId);
+		if (!npc) return true;
+		return (npc.dead ?? false) || (npc.quests?.dead ?? false);
 	},
 
 	/* True if npc is currently unmarried and has the MC in their exes */
