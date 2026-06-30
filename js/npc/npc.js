@@ -1028,6 +1028,24 @@ setup.npc = {
 		return null;
 	},
 
+	/* True if a spouse id refers to someone who's gone for good: a named character
+	   flagged dead, or anyone no longer trackable at all (thrown out, killed off, etc). */
+	isSpouseLost: function(spouseId) {
+		if (!spouseId || spouseId === 'mc') {
+			return false;
+		}
+		const spouseChar = variables().characters[spouseId];
+		if (spouseChar) {
+			return (spouseChar.dead ?? false) || (spouseChar.quests?.dead ?? false);
+		}
+		return !setup.getNpcById(spouseId);
+	},
+
+	/* True if npc is currently unmarried and has the MC in their exes */
+	isExOfMc: function(npc) {
+		return !npc.married && (npc.family?.exes ?? []).includes('mc');
+	},
+
 	/* Add a one-time life-event entry to npc.history */
 	addHistory: function(npc, event, extra) {
 		if (!npc) return;
@@ -1048,6 +1066,7 @@ setup.npc = {
 		switch (entry.event) {
 			case 'virgin_lost':      return day + 'Lost virginity' + (withName ? ' to ' + withName : '');
 			case 'married':          return day + 'Married ' + (withName || 'someone');
+			case 'divorced':         return day + 'Divorced ' + (withName || 'someone');
 			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
 			case 'captured':         return day + 'Captured';
 			case 'invited':          return day + 'Invited to settlement';

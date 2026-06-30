@@ -26,7 +26,9 @@
 	<<set $tmpGirl.location = 'bedroom'>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - character'>>
-		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+		<<if setup.npc.isExOfMc($tmpGirl)>>
+			<<goto 'Mc fuck - ex'>>
+		<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
 		<<else>>
 			<<goto 'Mc fuck - no'>>

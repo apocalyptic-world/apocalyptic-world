@@ -343,6 +343,27 @@
 			</div>
 		<</for>>
 	<</if>>
+	<<if $args[0].exes?.length>>
+		<<if [0, 2].includes($tmpGirl.gender)>>
+			Ex-Husband<<if $args[0].exes.length > 1>>s<</if>>: <br />
+		<<else>>
+			<<=$args[0].exes.length > 1 ? 'Ex-Wives' : 'Ex-Wife'>>: <br />
+		<</if>>
+		<<for _familyTreeExI, _familyTreeEx range $args[0].exes>>
+			<div>
+			<<if _familyTreeEx === 'mc'>>
+				You
+			<<elseif setup.npc.isSpouseLost(_familyTreeEx)>>
+				????
+			<<else>>
+				<<set _familyMember = setup.getNpcById(_familyTreeEx)>>
+				<<if _familyMember>>
+					<<=_familyMember.name>>
+				<</if>>
+			<</if>>
+			</div>
+		<</for>>
+	<</if>>
 	<<if $args[0].mother || $args[0].siblings?.length >>
 		<<if $args[0].mother >>
 			<<set _motherNpc = setup.getNpcById($args[0].mother)>>

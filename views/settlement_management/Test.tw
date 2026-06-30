@@ -13,6 +13,7 @@
 <<set _shownPreg = {}>>
 <<set _shownSib = []>>
 <<set _wifeCount = 0>>
+<<set _exWifeCount = 0>>
 <<set _motherCount = 0>>
 <<set _childCount = 0>>
 <<set _pregCount = 0>>
@@ -32,6 +33,26 @@
 		<tr>
 			<td></td>
 			<td colspan ="2"><<=_wivesTexts.sort().join('<br/>')>></td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	<</if>>
+
+	<<set _exWivesTexts = []>>
+	<<for _exWifeNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {}))>>
+		<<if (_exWifeNpc.family?.exes ?? []).includes('mc')>>
+			<<set _shown[_exWifeNpc.id] = true>>
+			<<set _exWifeText = setup.player.npcRelationText(_exWifeNpc.id, true, false, 'exes') + (_number.get(_exWifeNpc.id) ?? '')>>
+			<<if _exWifeText>>
+				<<set _exWivesTexts.push(_exWifeText)>>
+			<</if>>
+			<<set _exWifeCount++>>
+		<</if>>
+	<</for>>
+	<<if _exWivesTexts.length>>
+		<tr><td colspan ="2"><strong>Formerly your wives (<<= _exWifeCount>>)</strong></td></tr>
+		<tr>
+			<td></td>
+			<td colspan ="2"><<=_exWivesTexts.sort().join('<br/>')>></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
@@ -352,6 +373,8 @@
 					<</for>>
 				<</if>>
 			<</if>>
+		<<elseif _reltype === 'exes'>>
+			/* shown separately via the "Formerly your wives" breakout, not part of the current relationship graph */
 		<<else>>
 			DBG Strange relation: <<=_reltype>><br/><br/>
 		<</if>>

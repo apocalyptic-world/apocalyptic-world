@@ -1,0 +1,33 @@
+:: NPC end marriage - finalize
+<<set $tmpGirl.married = false>>
+<<set _oldHusbandId = $tmpGirl.family?.husband>>
+<<if $tmpGirl.family>>
+	<<set $tmpGirl.family.exes ??= []>>
+	<<if _oldHusbandId && !$tmpGirl.family.exes.includes(_oldHusbandId)>>
+		<<run $tmpGirl.family.exes.push(_oldHusbandId)>>
+	<</if>>
+	<<run delete $tmpGirl.family.husband>>
+<</if>>
+<<if _oldHusbandId === 'mc'>>
+	<<if $player.family && $player.family.wives>>
+		<<run $player.family.wives = $player.family.wives.filter(id => id !== $tmpGirl.id)>>
+	<</if>>
+<<elseif _oldHusbandId>>
+	<<set _oldHusband = setup.getNpcById(_oldHusbandId)>>
+	<<if _oldHusband>>
+		<<set _oldHusband.family ??= {}>>
+		<<set _remainingWives = (_oldHusband.family.wives ?? []).filter(id => id !== $tmpGirl.id)>>
+		<<set _oldHusband.married = _remainingWives.length > 0>>
+		<<if _remainingWives.length>>
+			<<set _oldHusband.family.wives = _remainingWives>>
+		<<else>>
+			<<run delete _oldHusband.family.wives>>
+		<</if>>
+		<<set _oldHusband.family.exes ??= []>>
+		<<if !_oldHusband.family.exes.includes($tmpGirl.id)>>
+			<<run _oldHusband.family.exes.push($tmpGirl.id)>>
+		<</if>>
+		<<run setup.npc.addHistory(_oldHusband, 'divorced', { with: $tmpGirl.id })>>
+	<</if>>
+<</if>>
+<<run setup.npc.addHistory($tmpGirl, 'divorced', { with: _oldHusbandId })>>
