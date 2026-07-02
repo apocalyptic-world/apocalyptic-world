@@ -47,19 +47,26 @@
         horny: 20,
         maxCorruption: 20
     },
+    footjob: {
+        title: 'Footjob',
+        minAction: 20,
+        horny: 20,
+        maxCorruption: 30
+    },
+    titjob: {
+        title: 'Titjob',
+        minAction: 25,
+        horny: 20,
+        maxCorruption: 40,
+        positive: ($tmpGirl.traits ?? []).includes('sensitive_tits'),
+        hornyGive: 10,
+        show: [0, 2].includes($tmpGirl.gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '')
+    },
     bj: {
         title: 'Blowjob',
         minAction: 30,
-        horny: 20,
-        maxCorruption: 50,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
-        stats: 'bj'
-    },
-    bj_three: {
-        title: 'Three-way BJ',
-        minAction: 30,
         horny: 25,
-        maxCorruption: 55,
+        maxCorruption: 50,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut') || ($tmpGirl2.traits ?? []).includes('cumslut') || ($tmpGirl3.traits ?? []).includes('cumslut'),
         stats: 'bj',
         stats2: 'bj',
@@ -74,6 +81,11 @@
         positive: ($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
         stats: 'dp'
+    },
+    cum_throat: {
+        title: 'Cum in throat',
+        show: false,
+        positive: ($tmpGirl.traits ?? []).includes('cumslut') || ($tmpGirl.traits ?? []).includes('deepthroat')
     },
     pussy_lick: {
         title: 'Lick pussy',
@@ -136,70 +148,6 @@
         hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5,
         orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
         stats: 'anal'
-    },
-    pussy_b_bj: {
-        title: 'Fuck pussy + two girls BJ',
-        minAction: 40,
-        horny: 25,
-        maxCorruption: 65,
-        show: _canFuck && !$tmpGirl.chastityBelt,
-        positive: !$tmpGirl.virgin,
-        hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 5 : 20,
-        positive2: true,
-        hornyGive2: 15,
-        positive3: true,
-        hornyGive3: 15,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut') || ($tmpGirl2.traits ?? []).includes('cumslut'),
-        stats: 'pussy',
-        stats2: 'bj',
-        stats3: 'bj'
-    },
-    pussy_a_pussy_lick: {
-        title: 'Fuck pussy + girl licks girl',
-        minAction: 40,
-        horny: 20,
-        maxCorruption: 60,
-        show: _canFuck,
-        positive: !$tmpGirl.virgin,
-        hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 5 : 20,
-        positive2: true,
-        hornyGive2: ($tmpGirl2.traits ?? []).includes('analslut') ? 5 : 20,
-        positive3: true,
-        hornyGive3: ($tmpGirl3.traits ?? []).includes('analslut') ? 5 : 20,
-        stats: 'pussy'
-    },
-    pussy_a_sn: {
-        title: 'Fuck pussy + girls sixty-nine',
-        minAction: 40,
-        horny: 20,
-        maxCorruption: 60,
-        show: _canFuck,
-        positive: !$tmpGirl.virgin,
-        hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 5 : 20,
-        positive2: true,
-        hornyGive2: ($tmpGirl2.traits ?? []).includes('analslut') ? 5 : 20,
-        positive3: true,
-        hornyGive3: ($tmpGirl3.traits ?? []).includes('analslut') ? 5 : 20,
-        stats: 'pussy',
-        stats2: 'bj',
-        stats3: 'bj'
-    },
-    anal_b_bj: {
-        title: 'Fuck ass + two girls BJ',
-        minAction: 70,
-        horny: 25,
-        maxCorruption: 100,
-        show: _canFuck && $tmpGirl.anal >= 20,
-        positive: $tmpGirl.anal >= 20,
-        hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 20 : 5,
-        positive2: true,
-        hornyGive2: 15,
-        positive3: true,
-        hornyGive3: 15,
-        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && (($tmpGirl2.traits ?? []).includes('cumslut') || ($tmpGirl3.traits ?? []).includes('cumslut')),
-        stats: 'anal',
-        stats2: 'bj',
-        stats3: 'bj'
     },
     /* cumshots */
     cum_on_face: {
