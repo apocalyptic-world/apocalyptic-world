@@ -18,9 +18,7 @@ Object.assign(setup.actionText.female, {
         "You finish with %name%, %name2% and %name3%'s hands gripped tightly around your throbbing cock."
     ],
     foursome_ff_bj: [
-        "%name% takes you in her mouth while %name2% and %name3% lick up and down your shaft."
-    ],
-    foursome_ff_bj_three: [
+        "%name% takes you in her mouth while %name2% and %name3% lick up and down your shaft.",
         "%name%, %name2% and %name3% take turns swallowing your cock with their warm mouths and eager tongues."
     ],
     foursome_ff_dp: [
@@ -43,18 +41,6 @@ Object.assign(setup.actionText.female, {
     ],
     foursome_ff_anal: [
         "You push into %name%'s ass as she moans. %name2% holds her hips steady while %name3% kisses her to muffle her cries."
-    ],
-    foursome_ff_pussy_b_bj: [
-        "You fuck %name% deep while she buries her face in %name2%'s lap. %name3% kneels beside her and takes turns sharing your cock."
-    ],
-    foursome_ff_pussy_a_pussy_lick: [
-        "You fuck %name% from behind while she buries her tongue in %name2%'s pussy. %name3% watches, one hand between her own legs."
-    ],
-    foursome_ff_pussy_a_sn: [
-        "You fuck %name% while %name2% and %name3% sixty-nine beside you, their moans mixing with hers."
-    ],
-    foursome_ff_anal_b_bj: [
-        "You fuck %name%'s ass while she takes turns swallowing %name2% and %name3%'s fingers and tongues."
     ],
     foursome_ff_cum_in_pussy: [
         "You drive deep into %name% and fill her with your seed. %name2% and %name3% watch in breathless silence."
