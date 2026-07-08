@@ -124,6 +124,8 @@
     <<if $sexAction === 'pussy' || $sexAction === 'pussy_fisting'>>
         <<if $tmpGirl.virgin>>
             <<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
+            <<set $tmpGirl.sub = Math.min(Math.max($tmpGirl.sub ?? 0, 40), 100)>>
+            <<set $tmpGirl.corruption = Math.min(($tmpGirl.corruption ?? 0) + 20, 100)>>
         <</if>>
         <<set $tmpGirl.virgin = false>>
     <</if>>

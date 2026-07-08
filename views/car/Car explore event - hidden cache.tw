@@ -112,6 +112,7 @@ Whoever left this had somewhere to go, and a vehicle to get there.
                     <br /><br />
                     <<set _labelInvite = 'Invite her to your settlement'>>
                     <<linkreplace _labelInvite>>
+                        <<run $('#cache_leave').hide()>>
                         <<set $tmpGirl.relationship = 40>>
                         <<set $player.goodwill++>>
                         <<run setup.npc.addHistory($tmpGirl, 'invited')>>
@@ -135,9 +136,11 @@ Whoever left this had somewhere to go, and a vehicle to get there.
             <br /><br />
         <</linkreplace>>
         </div>
-        <<link 'Leave'>>
-            <<goto 'Garage'>>
-        <</link>>
+        <div id="cache_leave">
+            <<link 'Leave'>>
+                <<goto 'Garage'>>
+            <</link>>
+        </div>
     <</linkreplace>>
 </div>
 <div id="opt_grab">
