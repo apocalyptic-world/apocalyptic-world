@@ -10,6 +10,7 @@
 		<<goto 'Mc fuck - ex'>>
 	<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
 		<<fuck $tmpGirl>>
+		<<set $sexForced = false>>
 	<<else>>
 		<<goto 'Mc fuck - no'>>
 	<</if>>
@@ -23,6 +24,7 @@
 		<<set $tmpGirl.location = 'wedding'>>
 		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
+			<<set $sexForced = false>>
 		<<else>>
 			<<goto 'Mc fuck - no'>>
 		<</if>>
@@ -39,6 +41,7 @@
 			<<goto 'Mc fuck - ex'>>
 		<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
 			<<fuck $tmpGirl>>
+			<<set $sexForced = false>>
 		<<else>>
 			<<goto 'Mc fuck - no'>>
 		<</if>>
@@ -58,8 +61,6 @@
 
 <<if [0, 2].includes($tmpGirl.gender) && setup.NpcInHome($tmpGirl)>>
 	<<set _eligibleForFoursome = setup.filterNPCs($guests, {gender: 0, horny_gte: 20, likesGuys: true})[0] ?? []>>
-		<<run console.log(_eligibleForFoursome)>>
-
 	<<set _eligibleForFoursome = _eligibleForFoursome.filter(function(id) { return $guests[id].id !== $tmpGirl.id && setup.getAge($guests[id]) >= 18; })>>
 	<<run console.log(_eligibleForFoursome)>>
 	<<if _eligibleForFoursome.length >= 2>>
