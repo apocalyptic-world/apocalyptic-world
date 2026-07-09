@@ -169,6 +169,10 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.characters.vincent.quests ??= {};
             save.state.history[save.state.index].variables.characters.vincent.quests.shop_talk ??= true;
         }
+        if (variables.player?.car?.explore && !(variables.characters.vincent?.quests?.car_fixed)) {
+            variables.characters.vincent.quests ??= {};
+            variables.characters.vincent.quests.car_fixed = true;
+        }
     }
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {

@@ -62,7 +62,14 @@
 	<<if _sexActions[1] == 'titjob' && _hasSmallTits>>
 		<<set _sexActions[1] = 'bj'>>
 	<</if>>
-	<<if !_isVirgin && (_maleGuestIds.some(function(_id) { return ($guests[_id].traits ?? []).includes('breeder'); }))>>
+	<<set _hasBreeders = false>>
+	<<for _bI = 0; _bI < _maleGuestIds.length; _bI++>>
+		<<set _guestTraits = ($guests[_maleGuestIds[_bI]].traits ?? [])>>
+		<<if _guestTraits.includes('breeder')>>
+			<<set _hasBreeders = true>>
+		<</if>>
+	<</for>>
+	<<if !_isVirgin && _hasBreeders>>
 		<<set _sexActions[_sexActions.length - 1] = 'cum_in_pussy'>>
 	<</if>>
 	<<set $randEvent = [
