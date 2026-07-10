@@ -29,14 +29,14 @@
 	<<goto 'Car explore event - dead convoy'>>
 <<elseif _randomNumber <= 70>>
 	<<goto 'Car explore event - abandoned outpost'>>
+<<elseif _randomNumber <= 74 && recall($suppCode)>>
+	<<goto 'Car explore event - gypsy family'>>
 <<elseif _randomNumber <= 74>>
 	<<goto 'Car explore event - stranded driver'>>
 <<elseif _randomNumber <= 78>>
 	<<goto 'Car explore event - hidden cache'>>
 <<elseif setup.percentageChance(100) && !($game.location.car_stadium ?? false)>>
 	<<goto 'Car - race stadium introduction'>>
-<<elseif _randomNumber > 70 && _randomNumber < 75 && recall($suppCode)>>
-	<<goto 'Car explore event - gypsy family'>>
 <<else>>
     <<include 'Car explore - nothing found'>>
 <</if>>

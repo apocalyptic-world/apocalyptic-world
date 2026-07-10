@@ -1,8 +1,8 @@
 :: Guesthouse - guests sex
 
 /* Find a married couple (no horny threshold required) */
-<<set _eligibleWomen = setup.commonValues([_guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
-<<set _eligibleMen = setup.commonValues([_guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
+<<set _eligibleWomen = setup.commonValues([_guests18yoWomen, _guestsNoChastityBelt])>>
+<<set _eligibleMen = setup.commonValues([_guests18yoMen, _guestsNoChastityBelt])>>
 <<set _marriedPairs = []>>
 <<for _mci = 0; _mci < _eligibleWomen.length; _mci++>>
 	<<set _mcWomanIdx = _eligibleWomen[_mci]>>
@@ -27,9 +27,9 @@
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - married couple'>>
-<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 1 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 0 && setup.percentageChance(10)>>
-	<<set _femalePool2 = setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
-	<<set _malePool2 = setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
+<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen, _guestsNoChastityBelt]).length > 1 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNoChastityBelt]).length > 0 && setup.percentageChance(10)>>
+	<<set _femalePool2 = setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen, _guestsNoChastityBelt])>>
+	<<set _malePool2 = setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNoChastityBelt])>>
 	<<set $tmpEvent = {
 		femaleGuestIds: setup.getRandomPersons(_femalePool2, 2),
 		maleGuestIds: setup.getRandomPersons(_malePool2, 1)
@@ -39,9 +39,9 @@
 	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && (!setup.family.isBlood($tmpEvent.femaleGuestIds[1], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest)>>
 		<<goto 'Guesthouse [Event] - male on females'>>
 	<</if>>
-<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt]).length > 1 && setup.percentageChance(10)>>
-	<<set _femalePool = setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
-	<<set _malePool = setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission, _guestsNoChastityBelt])>>
+<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNoChastityBelt]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNoChastityBelt]).length > 1 && setup.percentageChance(10)>>
+	<<set _femalePool = setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNoChastityBelt])>>
+	<<set _malePool = setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNoChastityBelt])>>
 	<<set $tmpEvent = {
 		femaleGuestIds: setup.getRandomPersons(_femalePool, 1),
 		maleGuestIds: setup.getRandomPersons(_malePool, 2)
@@ -51,24 +51,24 @@
 	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) && (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[1]) || !$player?.baseManagement?.noIncest)>>
 		<<goto 'Guesthouse [Event] - males on female'>>
 	<</if>>
-<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesTGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGirls, _guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
+<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesTGirls, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoTransWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guestsLikesTGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
 	<<set $tmpEvent = [
-		setup.commonValues([_guestsLikesGuys, _guestsLikesTGirls, _guests18yoWomen, _guestsNotMaxSubmission]),
-		setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoTransWomen, _guestsNotMaxSubmission]),
-		setup.commonValues([_guestsLikesGirls, _guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission])
+		setup.commonValues([_guestsLikesGuys, _guestsLikesTGirls, _guests18yoWomen]),
+		setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoTransWomen]),
+		setup.commonValues([_guestsLikesGirls, _guestsLikesTGirls, _guests18yoMen])
 	]>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - male on female and transfemale'>>
-<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 1 && setup.percentageChance(20)>>
-	<<set $tmpEvent = setup.commonValues([_guestsLikesGirls, _guests18yoWomen, _guestsNotMaxSubmission])>>
+<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGirls, _guests18yoWomen]).length > 1 && setup.percentageChance(20)>>
+	<<set $tmpEvent = setup.commonValues([_guestsLikesGirls, _guests18yoWomen])>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - female on female'>>
-<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
+<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
 	<<set $tmpEvent = [
-		setup.commonValues([_guestsLikesGuys, _guests18yoWomen, _guestsNotMaxSubmission]),
-		setup.commonValues([_guestsLikesGirls, _guests18yoMen, _guestsNotMaxSubmission])
+		setup.commonValues([_guestsLikesGuys, _guests18yoWomen]),
+		setup.commonValues([_guestsLikesGirls, _guests18yoMen])
 	]>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
@@ -79,26 +79,26 @@
 	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0])>>
 		<<goto 'Guesthouse [Event] - male on female'>>
 	<</if>>
-<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
-	<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen, _guestsNotMaxSubmission]), setup.commonValues([_guestsLikesTGirls, _guests18yoMen, _guestsNotMaxSubmission])]>>
+<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+	<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]), setup.commonValues([_guestsLikesTGirls, _guests18yoMen])]>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - male on transfemale'>>
-<<elseif settings.gaysEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoMen, _guestsNotMaxSubmission]).length > 1 && setup.percentageChance(20)>>
-	<<set $tmpEvent = setup.commonValues([_guestsLikesGuys, _guests18yoMen, _guestsNotMaxSubmission])>>
+<<elseif settings.gaysEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoMen]).length > 1 && setup.percentageChance(20)>>
+	<<set $tmpEvent = setup.commonValues([_guestsLikesGuys, _guests18yoMen])>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - male on male'>>
-<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoWomen, _guestsNotMaxSubmission]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 0 && setup.percentageChance(10)>>
+<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen]).length > 0 && setup.percentageChance(10)>>
 	<<set $tmpEvent = [
-		setup.commonValues([_guestsLikesTGirls, _guests18yoWomen, _guestsNotMaxSubmission]),
-		setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen, _guestsNotMaxSubmission])
+		setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]),
+		setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen])
 	]>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - transfemale on female'>>
-<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen, _guestsNotMaxSubmission]).length > 1 && setup.percentageChance(10)>>
-	<<set $tmpEvent = setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen, _guestsNotMaxSubmission])>>
+<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen]).length > 1 && setup.percentageChance(10)>>
+	<<set $tmpEvent = setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen])>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - transfemale on transfemale'>>
