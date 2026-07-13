@@ -1,0 +1,164 @@
+:: Event - Raider prisoner [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<if !setup.percentageChance(40)>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
+<<set _rpFemale = randomInteger(0, 1) === 1>>
+<<if _rpFemale>>
+	<<newgirl>>
+	<<set _rpNpc = clone($tmpGirl)>>
+	<<set _rpNpc.name = either('Scar', 'Vex', 'Brin', 'Kass', 'Dara', 'Mace', 'Lex', 'Crow')>>
+	<<unset $tmpGirl>>
+<<else>>
+	<<newguy>>
+	<<set _rpNpc = clone($tmpGuy)>>
+	<<set _rpNpc.name = either('Grim', 'Bolt', 'Rook', 'Cutter', 'Ash', 'Dex', 'Scratch', 'Vest')>>
+	<<unset $tmpGuy>>
+<</if>>
+<<set _rpNpc.origin = 'Raider'>>
+<<set _rpHostiles = setup.settlements.getAll().filter(function(s) { return s.discovered && !s.destroyed && setup.settlements.isHostile(s); })>>
+<<set _rpS = _rpHostiles.length ? _rpHostiles[randomInteger(0, _rpHostiles.length - 1)] : null>>
+
+<center>
+	<<image 'places/cabin/raider_prisoner.jpg'>>
+</center>
+<br />
+
+When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <<= _rpFemale ? 'She' : 'He'>> hadn't run when the others did. Whether that was loyalty or just bad luck you couldn't tell. You zip-tied <<= _rpFemale ? 'her' : 'his'>> wrists and dragged <<= _rpFemale ? 'her' : 'him'>> inside.
+<br /><br />
+
+<<if _rpFemale>>
+	<<sayNpc _rpNpc>>
+		Go ahead. Do what you're going to do.
+	<</sayNpc>>
+<<else>>
+	<<sayNpc _rpNpc>>
+		You won. What do you want from me?
+	<</sayNpc>>
+<</if>>
+<br />
+
+<div id="rp_choices">
+
+<div id="rp_interrogate">
+<<set _rpInterLabel = 'Interrogate ' + _rpNpc.name>>
+<<linkreplace _rpInterLabel>>
+	<<run $('#rp_choices').hide()>>
+	<<if _rpS>>
+		<<run setup.settlements.modifyRelationship(_rpS, -5, 'Prisoner gave intel under interrogation')>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+	<</if>>
+	<<addmins 60>>
+	<<= _rpNpc.name >> didn't hold out long. Fear does that to people.
+	<br /><br />
+	<<if _rpS>>
+		<<sayNpc _rpNpc>>
+			We were sent from <<= _rpS.name >>. They've been watching your place for weeks. <<= setup.settlements.getDefenseStrength(_rpS) > 200 ? 'They\'ve got serious numbers. Walls, guards, the works.' : 'They\'re not as strong as they pretend.'>>
+		<</sayNpc>>
+		<br />
+		<span style="color: #e09855; font-size: 0.88em;">Intel: <<= _rpS.name >> — relationship <<= _rpS.relationship >>, defense strength <<= setup.settlements.getDefenseStrength(_rpS)>>.</span>
+	<<else>>
+		<<sayNpc _rpNpc>>
+			We work alone. No settlement. No boss. Just us.
+		<</sayNpc>>
+		<br />
+		<span style="color: #888; font-size: 0.88em;">No useful intel — they weren't connected to any known group.</span>
+	<</if>>
+	<br /><br />
+	<<if _rpFemale && (_rpNpc.likesGuys ?? true)>>
+		<div id="rp_sex">
+		<<set _rpSexLabel = 'Take it further'>>
+		<<linkreplace _rpSexLabel>>
+			<<run $('#rp_sex, #rp_after_interrogate').hide()>>
+			<<horny_reset>>
+			<<addmins 30>>
+			She read what you were thinking. Her jaw tightened but she didn't pull back — there wasn't anywhere to go.
+			<br /><br />
+			You grabbed her by the throat — not hard, just a reminder — and kissed her. She bit your lip. You pulled back, tasted blood, and smiled.
+			<br /><br />
+						<center>
+				<<image 'places/cabin/raider_prisoner_sex.jpg'>>
+			</center>
+			<br />
+			You bent her over a workbench and fucked her hard, her tied hands braced against the surface. She made noise — couldn't help it. When you finished inside her she swore at you in two languages.
+			<br /><br />
+			<<set _rpPreg = setup.pregnancyChance(_rpNpc)>>
+			<<if _rpPreg>>
+				<<set _rpNpc.pregnant = 1>>
+				<<set _rpNpc.pregnantDay = $game.day>>
+				<<set _rpNpc.pregnantBy = 'player'>>
+			<</if>>
+			<span style="color: #888;">She told you everything after that anyway.</span>
+			<br /><br />
+			<<link 'Decide what to do with her'>><<goto 'Wood cabin'>><</link>>
+		<</linkreplace>>
+		</div>
+	<</if>>
+	<div id="rp_after_interrogate">
+	<<link 'Decide what to do with her' 'Wood cabin'>><</link>>
+	</div>
+<</linkreplace>>
+</div>
+<br />
+
+<<if _rpS>>
+<div id="rp_ransom">
+<<set _rpRansomLabel = 'Send word to ' + _rpS.name + ' — ransom (150 caps)'>>
+<<linkreplace _rpRansomLabel>>
+	<<run $('#rp_choices').hide()>>
+	<<run setup.settlements.modifyRelationship(_rpS, 8, 'Returned prisoner instead of executing')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<set $player.money += 150>>
+	<<addmins 90>>
+	A runner came back by nightfall with a leather pouch. 150 caps. They didn't say thank you — but they didn't attack again that week either.
+	<br /><br />
+	<span style="color: #55cc88;">+150 caps. <<= _rpS.name >> relationship improved slightly.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+<</if>>
+
+<div id="rp_recruit">
+<<set _rpRecruitLabel = 'Offer ' + _rpNpc.name + ' a place here'>>
+<<linkreplace _rpRecruitLabel>>
+	<<run $('#rp_choices').hide()>>
+	<<addmins 30>>
+	<<if _rpFemale>>
+		<<set $tmpGirl = _rpNpc>>
+		<<run $guests.push($tmpGirl)>>
+		<<unset $tmpGirl>>
+	<<else>>
+		<<set $tmpGuy = _rpNpc>>
+		<<run $guests.push($tmpGuy)>>
+		<<unset $tmpGuy>>
+	<</if>>
+	You cut the zip ties. <<= _rpNpc.name >> rubbed <<= _rpFemale ? 'her' : 'his'>> wrists and looked around the compound for a long moment.
+	<br /><br />
+	<<sayNpc _rpNpc>>
+		Don't expect me to say I'm grateful.
+	<</sayNpc>>
+	<br />
+	<<= _rpNpc.name >> joined your people.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+
+<div id="rp_execute">
+<<set _rpExecLabel = 'Execute ' + _rpNpc.name>>
+<<linkreplace _rpExecLabel>>
+	<<run $('#rp_choices').hide()>>
+	<<addmins 15>>
+	Quick and without ceremony. You left <<= _rpFemale ? 'her' : 'him'>> outside the gate as a message.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+
+</div>

@@ -1,0 +1,43 @@
+:: Event - Guest rescue - Won [Place]
+<h1 class="ptitle">RESCUE</h1>
+<br />
+
+<<set _rsc = $game.capturedGuest>>
+<<set _rscS = _rsc ? setup.settlements.getById(_rsc.settlementId) : null>>
+
+<center>
+	<<image 'places/cabin/guest_rescue_won.jpg'>>
+</center>
+<br />
+
+You found her in a back room, hands tied, face hard. She didn't waste time on gratitude — just stood up, cut the rope on a nail, and followed you out.
+<br /><br />
+
+<<if _rsc>>
+	<<sayNpc _rsc.npc>>
+		Took you long enough.
+	<</sayNpc>>
+	<br />
+
+	The drive back was quiet. Whatever happened to her in there, she'd tell you on her own terms or not at all.
+	<br /><br />
+
+	<<if _rscS>>
+		<<run _rscS.captiveId   = null>>
+		<<run _rscS.captiveName = null>>
+		<<run setup.settlements.modifyRelationship(_rscS, -20, 'Rescue raid — people killed')>>
+		<<run setup.settlements.logEvent(_rscS, 'Player raided compound and freed captive.')>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+	<</if>>
+	<<run $guests.push(_rsc.npc)>>
+	<<unset $game.capturedGuest>>
+	<<addmins 120>>
+
+	<span style="color: #55cc88;"><<= _rsc.npc.name >> is back. <<= _rscS ? _rscS.name + ' will remember this.' : ''>></span>
+<<else>>
+	<<unset $game.capturedGuest>>
+	You found her. She's safe.
+<</if>>
+<br /><br />
+
+<<link 'Head home'>><<goto 'Wood cabin'>><</link>>

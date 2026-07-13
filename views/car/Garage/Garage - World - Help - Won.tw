@@ -1,0 +1,28 @@
+:: Garage - World - Help - Won [Place bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+
+<<set _hlpS = setup.settlements.getById($tmpSettlement)>>
+<<if _hlpS>>
+	<<set _hlpS.callForHelp = false>>
+	<<set _hlpS.callForHelpNotified = false>>
+	<<run setup.settlements.modifyRelationship(_hlpS, 20, 'Defended settlement from raiders')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+
+You drove them back. The settlement is bruised — a few dead, a section of wall damaged — but standing. Without you showing up when you did, this would have ended differently.
+<br /><br />
+
+<<if _hlpS>>
+	<<ensureLeader _hlpS>>
+	<<if _hlpS.leader>>
+		<<set _hlpDialogs = setup.settlements.leaderDialogs[_hlpS.type]>>
+		<<set _hlpLine = _hlpDialogs.greeting_ok[randomInteger(0, _hlpDialogs.greeting_ok.length - 1)]>>
+		<<sayNpc _hlpS.leader>><<= _hlpLine>><</sayNpc>>
+		<br />
+	<</if>>
+	<span style="color: #5599e0;">★ Relationship with <<= _hlpS.name>> improved significantly — now <<= setup.settlements.getRelationshipLabel(_hlpS)>></span>
+<</if>>
+<br /><br />
+
+<<link 'Leave'>><<goto 'Garage'>><</link>>

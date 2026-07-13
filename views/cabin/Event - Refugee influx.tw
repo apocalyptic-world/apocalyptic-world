@@ -1,0 +1,67 @@
+:: Event - Refugee influx [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<center>
+	<<image 'places/cabin/refugees.jpg' sfw>>
+</center>
+<br />
+
+<<set _refEv = $game.refugeeEvent>>
+<<set _refName = _refEv.name ?? 'a fallen settlement'>>
+<<set _refCount = _refEv.count ?? 1>>
+<<set _refOriginS = _refEv.id ? setup.settlements.getById(_refEv.id) : null>>
+<<unset $game.refugeeEvent>>
+
+They came at dawn. <<= _refCount>> survivor<<= _refCount > 1 ? 's' : ''>> from <<= _refName>>. Thin, dusty, with only what they could carry when it fell apart. They stood at your gate without speaking, waiting to see what kind of person you were.
+<br /><br />
+
+<<set _refRoomLeft = $guesthouseLimit - $guests.length>>
+
+<div id="ref_open">
+<<if _refRoomLeft >= 1>>
+	<<set _refOpenLabel = _refCount > 1 ? 'Open the gates' : 'Let them in'>>
+	<<linkreplace _refOpenLabel>>
+		<<run $('#ref_open, #ref_away').hide()>>
+		<<if randomInteger(0, 1) === 1>>
+			<<newguy>>
+			<<set $tmpGuy.name   = either('Tom', 'Mark', 'Jake', 'Ellis', 'Leon', 'Dan', 'Remy', 'Cole')>>
+			<<set $tmpGuy.origin = _refName>>
+			<<run $guests.push($tmpGuy)>>
+			<<unset $tmpGuy>>
+		<<else>>
+			<<newgirl>>
+			<<set $tmpGirl.name   = either('Anna', 'Maria', 'Rosa', 'Beth', 'Clara', 'Vera', 'Nadia', 'June')>>
+			<<set $tmpGirl.origin = _refName>>
+			<<run $guests.push($tmpGirl)>>
+			<<unset $tmpGirl>>
+		<</if>>
+		<<if _refOriginS>>
+			<<run setup.settlements.modifyRelationship(_refOriginS, 10, 'Accepted survivors from ' + _refName)>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+		<</if>>
+		You stepped aside and waved them in. They filed through without a word, looking at the ground — too tired even for relief.
+		<br /><br />
+		<<if _refCount > 1>>
+			Most found places to shelter nearby. One stayed.
+			<br /><br />
+		<</if>>
+		<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+<<else>>
+	<span style="color: #666; font-size: 0.9em;">Open the gates <em>(guesthouse is full)</em></span>
+<</if>>
+</div>
+
+<div id="ref_away">
+<<linkreplace 'Send them away'>>
+	<<run $('#ref_open, #ref_away').hide()>>
+	<<if _refOriginS>>
+		<<run setup.settlements.modifyRelationship(_refOriginS, -5, 'Turned away survivors from ' + _refName)>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+	<</if>>
+	You shook your head. They stared for a moment — no anger, just exhaustion — then turned and walked back into the wasteland. You watched them go until the dust swallowed them.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>

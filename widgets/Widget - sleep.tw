@@ -55,7 +55,75 @@
   <<set $player.metTransGirl = false>>
   <<horny 5>>
   <<set $game.day += 1>>
-  
+  <<set _settleDaily = setup.settlements.dailyUpdateAll()>>
+  <<for _sdi = 0; _sdi < (_settleDaily.destroyed ?? []).length; _sdi++>>
+    <<run setup.sleepMessages.addMain(_settleDaily.destroyed[_sdi] + ' has gone quiet. Word is, they didn\'t make it.')>>
+  <</for>>
+  <<for _shi = 0; _shi < (_settleDaily.needsHelp ?? []).length; _shi++>>
+    <<run setup.sleepMessages.addMain(_settleDaily.needsHelp[_shi].name + ' is under attack. They\'ve sent word asking for help.')>>
+  <</for>>
+  <<for _uai = 0; _uai < (_settleDaily.newUltimatums ?? []).length; _uai++>>
+    <<run setup.sleepMessages.addMain('A messenger from ' + _settleDaily.newUltimatums[_uai].name + ' delivered a warning: pay ' + _settleDaily.newUltimatums[_uai].amount + ' caps within 3 days, or face the consequences.')>>
+  <</for>>
+  <<if (_settleDaily.expiredUltimatums ?? []).length && !($game.pendingUltimatumRaid ?? false)>>
+    <<set $game.pendingUltimatumRaid = _settleDaily.expiredUltimatums[0].id>>
+    <<run setup.sleepMessages.addMain(_settleDaily.expiredUltimatums[0].name + ' has run out of patience. They\'re moving on your base.')>>
+  <</if>>
+  <<if (_settleDaily.refugees ?? []).length && !($game.refugeeEvent ?? false)>>
+    <<set $game.refugeeEvent = _settleDaily.refugees[0]>>
+    <<run setup.sleepMessages.addMain('Survivors from ' + _settleDaily.refugees[0].name + ' — ' + _settleDaily.refugees[0].count + ' ' + (_settleDaily.refugees[0].count === 1 ? 'person' : 'people') + ' — have arrived at your gate asking for shelter.')>>
+  <</if>>
+  <<for _fai = 0; _fai < (_settleDaily.starving ?? []).length; _fai++>>
+    <<run setup.sleepMessages.addMain('Word reached you from ' + _settleDaily.starving[_fai].name + ': their food supply is nearly gone. People are going hungry.')>>
+  <</for>>
+  <<if (_settleDaily.womanDemands ?? []).length && !($game.womanDemand ?? false)>>
+    <<set $game.womanDemand = _settleDaily.womanDemands[0]>>
+    <<run setup.sleepMessages.addMain('A message arrived from ' + _settleDaily.womanDemands[0].name + ': "Send us a woman within 3 days. Don\'t make us come and take one."')>>
+  <</if>>
+  <<for _ewdi = 0; _ewdi < (_settleDaily.expiredWomanDemands ?? []).length; _ewdi++>>
+    <<run setup.sleepMessages.addMain(_settleDaily.expiredWomanDemands[_ewdi].name + '\'s patience has run out. They\'re coming.')>>
+    <<if !($game.pendingUltimatumRaid ?? false)>>
+      <<set $game.pendingUltimatumRaid = _settleDaily.expiredWomanDemands[_ewdi].id>>
+    <</if>>
+  <</for>>
+  <<if (_settleDaily.newBlackmails ?? []).length && !($game.blackmailEvent ?? false)>>
+    <<set $game.blackmailEvent = _settleDaily.newBlackmails[0]>>
+    <<run setup.sleepMessages.addMain(_settleDaily.newBlackmails[0].name + ' knows things about your operation. They want 300 caps for their silence — or something else. You have 4 days.')>>
+  <</if>>
+  <<for _ebi = 0; _ebi < (_settleDaily.expiredBlackmails ?? []).length; _ebi++>>
+    <<run setup.sleepMessages.addMain(_settleDaily.expiredBlackmails[_ebi].name + ' sold what they knew. Hostile groups in the area are better informed about your base now.')>>
+    <<if $game.blackmailEvent && $game.blackmailEvent.id === _settleDaily.expiredBlackmails[_ebi].id>>
+      <<unset $game.blackmailEvent>>
+    <</if>>
+  <</for>>
+  <<if (_settleDaily.abductionCandidates ?? []).length && !($game.targetedAbduction ?? false)>>
+    <<set _abCand = _settleDaily.abductionCandidates[0]>>
+    <<set _femGuests = $guests.filter(function(g) { return g.gender === 0 && setup.getAge(g) >= 18; })>>
+    <<if _femGuests.length>>
+      <<set _abTarget = _femGuests[randomInteger(0, _femGuests.length - 1)]>>
+      <<set $game.targetedAbduction = { settlementId: _abCand.id, settlementName: _abCand.name, guestId: _abTarget.id, guestName: _abTarget.name }>>
+      <<run setup.sleepMessages.addMain(_abCand.name + ' has sent word: they\'ve taken notice of ' + _abTarget.name + '. They\'re coming to collect.')>>
+    <</if>>
+  <</if>>
+  <<if (_settleDaily.desperateDeals ?? []).length && !($game.desperateDeal ?? false)>>
+    <<set $game.desperateDeal = _settleDaily.desperateDeals[0]>>
+    <<run setup.sleepMessages.addMain('A messenger from ' + _settleDaily.desperateDeals[0].name + ' came to the gate. They\'re starving and have a proposition — they\'re willing to offer one of their own in exchange for aid.')>>
+  <</if>>
+  <<if (_settleDaily.tributeOffers ?? []).length && !($game.tributeGift ?? false)>>
+    <<set $game.tributeGift = _settleDaily.tributeOffers[0]>>
+    <<run setup.sleepMessages.addMain('A small delegation from ' + _settleDaily.tributeOffers[0].name + ' arrived at dawn with a woman in tow. A tribute, they said. A sign of respect.')>>
+  <</if>>
+  <<set _alliedFarms = setup.settlements.getAllied().filter(function(s) { return s.type === 'farming_community'; })>>
+  <<if _alliedFarms.length && $game.day % 7 === 0>>
+    <<run setup.cabinInventory.pickup('food', _alliedFarms.length * 2)>>
+    <<run setup.sleepMessages.addMain('A courier from ' + _alliedFarms[0].name + ' left food supplies at the gate.')>>
+  <</if>>
+  <<set _alliedMedics = setup.settlements.getAllied().filter(function(s) { return s.type === 'medical_colony'; })>>
+  <<if _alliedMedics.length && $game.day % 14 === 0>>
+    <<run setup.cabinInventory.pickup('bandage', _alliedMedics.length * 2)>>
+    <<run setup.sleepMessages.addMain('A supply package from ' + _alliedMedics[0].name + ' arrived — bandages and medical supplies.')>>
+  <</if>>
+
   <<run for (const k in $locationEvents) $locationEvents[k] = false;>>
   
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
@@ -707,7 +775,21 @@
 				<<set _chanceOfNotComingHome -= 1>>
 			<</if>>
 			<<set _chanceOfNotComingHome = Math.max(1, _chanceOfNotComingHome)>>
-			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>				
+			<<set _scavHostiles = setup.settlements.getAll().filter(function(s) { return s.discovered && !s.destroyed && setup.settlements.isHostile(s); })>>
+			<<if _scavHostiles.length && !($game.capturedGuest ?? false) && setup.percentageChance(2) && $guests[_guestI].gender === 0>>
+				<<set _scavCaptor = _scavHostiles[randomInteger(0, _scavHostiles.length - 1)]>>
+				<<set _scavCaptor.captiveId   = $guests[_guestI].id>>
+				<<set _scavCaptor.captiveName = $guests[_guestI].name>>
+				<<set $game.capturedGuest = { npc: clone($guests[_guestI]), settlementId: _scavCaptor.id, settlementName: _scavCaptor.name }>>
+				<<run setup.settlements.modifyRelationship(_scavCaptor, -5, 'Captured player\'s guest')>>
+				<<run setup.settlements.logEvent(_scavCaptor, 'Captured one of the player\'s people during scavenging.')>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<run setup.sleepMessages.addMain($guests[_guestI].name + ' didn\'t come home from scavenging. She was taken by ' + _scavCaptor.name + '.')>>
+				<<guestLeft _guestI>>
+				<<set _guestI-->>
+				<<continue>>
+			<</if>>
+			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>
 				<<set $scavengingDidntReturn = _guestI>>
 			<<else>>
 			  <<set _randomItem = either(_randomScavengingItems)>>

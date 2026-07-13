@@ -1,0 +1,96 @@
+:: Garage - World - Mission [Place bg-garage]
+<h1 class="ptitle">MISSIONS</h1>
+<br />
+
+<<set _ms = setup.settlements.getById($tmpSettlement)>>
+<<if !_ms>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _ms>>
+
+<<set _msRelLevel = setup.settlements.getRelationshipLevel(_ms)>>
+<<set _msRelColors = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999999', friendly: '#55cc88', allied: '#5599e0' }>>
+<<set _msRelColor = _msRelColors[_msRelLevel]>>
+
+<<if !setup.settlements.isFriendly(_ms) && !setup.settlements.isAllied(_ms)>>
+	<p style="color: #e05555;">They don't trust you enough to ask for your help.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+
+<<elseif _ms.activeMission && setup.settlements.isMissionExpired(_ms, $game.day)>>
+	<<set _ms.activeMission = null>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<p style="color: #888;">They found another solution while you were away. No open requests right now.</p>
+	<br />
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+
+<<elseif _ms.activeMission>>
+	<<set _mis = _ms.activeMission>>
+	<<set _misHave = $backpack.count(_mis.item)>>
+	<<set _misItemLabel = _mis.item.replace(/_/g, ' ')>>
+
+	You have an open delivery for <<= _ms.name>>.
+	<br /><br />
+
+	<div style="background: rgba(0,0,0,0.15); border-left: 3px solid #555; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9em;">
+		<strong style="color: #ddd;">Requested:</strong> <<= _mis.quantity>>× <<= _misItemLabel>>
+		<br />
+		<strong style="color: #ddd;">Reward:</strong> <span style="color: #e0c055;"><<= _mis.reward>> caps</span>
+		<br />
+		<span style="color: #666; font-size: 0.85em;">Expires in <<= Math.max(0, _mis.givenDay + 10 - $game.day)>> day<<= (_mis.givenDay + 10 - $game.day) !== 1 ? 's' : ''>></span>
+	</div>
+
+	<<if _ms.leader>>
+		<<set _msDial = setup.settlements.leaderDialogs[_ms.type]>>
+		<<set _msLine = _msDial.trade_ok[randomInteger(0, _msDial.trade_ok.length - 1)]>>
+		<<sayNpc _ms.leader>><<= _msLine>><</sayNpc>>
+		<br />
+	<</if>>
+
+	<<if _misHave >= _mis.quantity>>
+		<<set _delLabel = 'Deliver ' + _mis.quantity + '× ' + _misItemLabel>>
+		<div id="mission_deliver">
+		<<linkreplace _delLabel>>
+			<<run $('#mission_deliver').hide()>>
+			<<set _delHandle = setup.settlements.getById($tmpSettlement)>>
+			<<set _delResult = setup.settlements.completeMission(_delHandle)>>
+			<<if _delResult.success>>
+				<<addmins 30>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<drop $backpack _delResult.item _delResult.quantity>>
+				<<set $player.money += _delResult.reward>>
+				<span style="color: #55cc88;">Delivered. You collected <<= _delResult.reward>> caps.</span>
+				<br />
+				<span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_delHandle)>></span>
+			<<else>>
+				<span style="color: #e05555;"><<= _delResult.reason>></span>
+			<</if>>
+			<br /><br />
+			<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+		<</linkreplace>>
+		</div>
+	<<else>>
+		<span style="color: #888; font-size: 0.9em;">You have <<= _misHave>>/<<= _mis.quantity>> <<= _misItemLabel>>. Come back when you have enough.</span>
+		<br /><br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</if>>
+
+<<else>>
+	No active requests right now.
+	<br /><br />
+
+	<<if _ms.leader>>
+		<<set _msDial = setup.settlements.leaderDialogs[_ms.type]>>
+		<<set _msLine = _msDial.greeting_ok[randomInteger(0, _msDial.greeting_ok.length - 1)]>>
+		<<sayNpc _ms.leader>><<= _msLine>><</sayNpc>>
+		<br />
+	<</if>>
+
+	<<link 'Ask if they need anything'>>
+		<<set _askHandle = setup.settlements.getById($tmpSettlement)>>
+		<<set $tmpMission = setup.settlements.generateMission(_askHandle)>>
+		<<if $tmpMission>>
+			<<goto 'Garage - World - Mission - Offer'>>
+		<<else>>
+			<<goto 'Garage - World - Settlement'>>
+		<</if>>
+	<</link>>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<</if>>

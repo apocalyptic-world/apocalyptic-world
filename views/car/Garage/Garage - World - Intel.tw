@@ -1,0 +1,47 @@
+:: Garage - World - Intel [Place bg-garage]
+<h1 class="ptitle">INTELLIGENCE</h1>
+<br />
+
+<<set _inS = setup.settlements.getById($tmpSettlement)>>
+<<if !_inS>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _inS>>
+<<set _inLeader = _inS.leader>>
+<<set _inDialogs = setup.settlements.leaderDialogs[_inS.type]>>
+
+<<if !setup.settlements.isFriendly(_inS) && !setup.settlements.isAllied(_inS)>>
+	<p style="color: #e05555;">They don't trust you enough to share information.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<else>>
+	You ask what they've seen out there — troop movements, road threats, anything useful.
+	<br /><br />
+
+	<<if _inLeader>>
+		<<set _inLine = _inDialogs.intro[randomInteger(0, _inDialogs.intro.length - 1)]>>
+		<<sayNpc _inLeader>><<= _inLine>><</sayNpc>>
+		<br />
+	<</if>>
+
+	<div id="intel_ask">
+	<<linkreplace 'Ask for information'>>
+		<<run $('#intel_ask').hide()>>
+		<<addmins 30>>
+		<<set _inHandle = setup.settlements.getById($tmpSettlement)>>
+		<<set _inRes = setup.settlements.getIntelligence(_inHandle)>>
+		<<if _inRes.success>>
+			<<if _inHandle && _inHandle.leader>>
+				<<sayNpc _inHandle.leader>><<= _inRes.intel>><</sayNpc>>
+			<<else>>
+				<p style="color: #aaa;"><<= _inRes.intel>></p>
+			<</if>>
+			<<if _inRes.revealed>>
+				<p style="color: #55cc88; font-size: 0.9em;">★ New settlement added to world map: <strong><<= _inRes.revealed.name>></strong></p>
+			<</if>>
+		<<else>>
+			<p style="color: #e05555;"><<= _inRes.reason>></p>
+		<</if>>
+		<br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</linkreplace>>
+	</div>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<</if>>

@@ -1,0 +1,36 @@
+:: Event - Targeted abduction - Won [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _taData = $tmpTargetedAbduction>>
+<<set _taS = _taData ? setup.settlements.getById(_taData.settlementId) : null>>
+
+<center>
+	<<image 'places/cabin/targeted_abduction_won.jpg'>>
+</center>
+<br />
+
+The last one turned and ran. Those who couldn't run stayed on the ground.
+<br /><br />
+
+<<= _taData ? _taData.guestName : 'She'>> was still standing, breathing hard, back pressed against the inner wall. She looked at you like she was trying to decide something.
+<br /><br />
+
+<<if _taData && _taData.guestName>>
+	<<sayNpc { name: _taData.guestName, gender: 0 }>>
+		They knew my name. That's not something you forget.
+	<</sayNpc>>
+	<br />
+<</if>>
+
+<<if _taS>>
+	<<run setup.settlements.resolveAbduction(_taS, false)>>
+	<<run setup.settlements.modifyRelationship(_taS, -15, 'Abduction repelled')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<<unset $tmpTargetedAbduction>>
+
+<span style="color: #55cc88;">She's safe. <<= _taData ? _taData.settlementName : 'They'>> lost people today — they'll think twice before coming back.</span>
+<br /><br />
+
+<<link 'Go back inside'>><<goto 'Wood cabin'>><</link>>

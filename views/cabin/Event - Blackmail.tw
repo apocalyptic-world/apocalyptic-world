@@ -1,0 +1,184 @@
+:: Event - Blackmail [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _bmData = $game.blackmailEvent>>
+<<set _bmS = setup.settlements.getById(_bmData.id)>>
+<<if !_bmS>>
+	<<unset $game.blackmailEvent>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
+<<set _bmDaysLeft = Math.max(0, (_bmData.deadline ?? ($game.day + 4)) - $game.day)>>
+
+<center>
+	<<image 'places/cabin/blackmail.jpg'>>
+</center>
+<br />
+
+The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmData.name >> has been watching your base — counting your people, mapping your walls, noting your weaknesses. And now they want payment for their silence.
+<br /><br />
+
+<div style="background: rgba(0,0,0,0.25); border-left: 3px solid #e09855; padding: 12px 16px; margin-bottom: 16px; font-style: italic; color: #ccc;">
+	"300 caps. Four days. After that, every hostile faction in range gets a detailed report on your defenses, your headcount, and your supply routes. Your choice."
+	<br /><br />
+	<span style="font-style: normal; color: #888; font-size: 0.85em;">— <<= _bmData.name >></span>
+</div>
+
+<<if _bmDaysLeft > 0>>
+	<span style="color: #e09855; font-size: 0.88em;">⏳ <<= _bmDaysLeft>> day<<= _bmDaysLeft !== 1 ? 's' : ''>> to respond.</span>
+<<else>>
+	<span style="color: #e05555; font-size: 0.88em;">⚠ Deadline passed.</span>
+<</if>>
+<br /><br />
+
+<div id="bm_choices">
+
+<<if $player.money >= 300>>
+<div id="bm_pay">
+<<set _bmPayLabel = 'Pay the 300 caps'>>
+<<linkreplace _bmPayLabel>>
+	<<run $('#bm_choices').hide()>>
+	<<set $player.money -= 300>>
+	<<set _bmHandle = setup.settlements.getById(_bmData.id)>>
+	<<run setup.settlements.resolveBlackmail(_bmHandle, true)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $game.blackmailEvent>>
+	<<addmins 15>>
+	You sent the caps. No note, no threat in return — just payment. The kind of silence you buy.
+	<br /><br />
+	<span style="color: #888;"><<= _bmData.name >> got their money. For now, your intel stays yours.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<<else>>
+	<span style="color: #555; font-size: 0.88em;">Pay the 300 caps — not enough.</span><br />
+<</if>>
+<br />
+
+<<set _bmSendable = []>>
+<<for _bmi2 = 0; _bmi2 < $slaves.length; _bmi2++>>
+	<<if setup.getAge($slaves[_bmi2]) >= 18>>
+		<<run _bmSendable.push({ npc: $slaves[_bmi2], kind: 'slave' })>>
+	<</if>>
+<</for>>
+<<for _bmg2 = 0; _bmg2 < $guests.length; _bmg2++>>
+	<<if $guests[_bmg2].gender === 0 && setup.getAge($guests[_bmg2]) >= 18>>
+		<<run _bmSendable.push({ npc: $guests[_bmg2], kind: 'guest' })>>
+	<</if>>
+<</for>>
+<<if _bmSendable.length>>
+<div id="bm_person">
+<<set $game.bmSendId = $game.bmSendId ?? null>>
+<span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SEND SOMEONE INSTEAD</span>
+<br /><br />
+<table class="npc-list">
+<<for _bmi = 0; _bmi < _bmSendable.length; _bmi++>>
+	<<set _bmEntry = _bmSendable[_bmi]>>
+	<<capture _bmi _bmEntry>>
+		<tr class="item">
+			<td style="min-width: 25%">
+				<span class="gender-f">
+					<<= _bmEntry.npc.name >>
+					<span style="color: #888; font-size: 0.85em;"> (<<= _bmEntry.kind >>, age <<= setup.getAge(_bmEntry.npc) >>)</span>
+				</span>
+			</td>
+			<td>
+				<<npcListView _bmEntry.npc _bmi _bmEntry.kind>>
+			</td>
+			<td>
+				<<radiobutton "$game.bmSendId" _bmEntry.npc.id autocheck>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+<br />
+<<set _bmSendPersonLabel = 'Send selected'>>
+<<linkreplace _bmSendPersonLabel>>
+	<<if $game.bmSendId>>
+		<<set _bmSIdx2 = $slaves.findIndex(function(g) { return g.id === $game.bmSendId; })>>
+		<<set _bmGIdx2 = $guests.findIndex(function(g) { return g.id === $game.bmSendId; })>>
+		<<if _bmSIdx2 >= 0>>
+			<<set _bmSentNpc = clone($slaves[_bmSIdx2])>>
+			<<run $slaves.splice(_bmSIdx2, 1)>>
+		<<elseif _bmGIdx2 >= 0>>
+			<<set _bmSentNpc = clone($guests[_bmGIdx2])>>
+			<<guestLeft _bmGIdx2>>
+		<</if>>
+		<<if _bmSentNpc>>
+			<<set _bmSendHandle = setup.settlements.getById($game.blackmailEvent.id)>>
+			<<set _bmSendName = $game.blackmailEvent.name>>
+			<<run setup.settlements.resolveBlackmail(_bmSendHandle, true)>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<run $('#bm_choices').hide()>>
+			<<unset $game.blackmailEvent, $game.bmSendId>>
+			<<addmins 45>>
+			<<= _bmSentNpc.name >> was handed over in place of caps. They accepted without protest.
+			<br /><br />
+			<span style="color: #888;"><<= _bmSendName >> withdrew the threat.</span>
+			<br /><br />
+			<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+		<<else>>
+			<span style="color: #e05555;">Something went wrong finding that person.</span>
+		<</if>>
+	<<else>>
+		<span style="color: #888;">Select someone from the list first.</span>
+	<</if>>
+<</linkreplace>>
+</div>
+<br />
+<</if>>
+
+<<set _bmFriends = setup.settlements.getAll().filter(function(s) { return !s.destroyed && (setup.settlements.isFriendly(s) || setup.settlements.isAllied(s)); })>>
+<<if _bmFriends.length>>
+<div id="bm_intercept">
+<<set _bmIntLabel = 'Get a friend to intercept'>>
+<<linkreplace _bmIntLabel>>
+	<<run $('#bm_choices').hide()>>
+	<<set _bmFriendPick = _bmFriends.reduce(function(best, s) { return s.relationship > best.relationship ? s : best; }, _bmFriends[0])>>
+	<<set _bmHandle5 = setup.settlements.getById(_bmData.id)>>
+	<<run setup.settlements.modifyRelationship(_bmFriendPick, -8, 'Called in a favour against blackmailer')>>
+	<<run setup.settlements.resolveBlackmail(_bmHandle5, true)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $game.blackmailEvent>>
+	<<addmins 60>>
+	You sent word to <<= _bmFriendPick.name >>. They didn't ask questions — just made it known through the right channels that this line of conversation was over.
+	<br /><br />
+	<span style="color: #55cc88;">The threat was quietly buried. <<= _bmFriendPick.name >> did you a favour they'll remember.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+<</if>>
+<div id="bm_bluff">
+<<set _bmBluffLabel = 'Call the bluff — refuse to pay'>>
+<<linkreplace _bmBluffLabel>>
+	<<run $('#bm_choices').hide()>>
+	<<set _bmHandle4 = setup.settlements.getById(_bmData.id)>>
+	<<run setup.settlements.resolveBlackmail(_bmHandle4, false)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $game.blackmailEvent>>
+	You didn't send anything. If they want to talk, they can come to your gate.
+	<br /><br />
+	<span style="color: #e05555;"><<= _bmData.name >> made good on their word. Your base intel is in hostile hands now. Expect visitors.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+<div id="bm_attack">
+<<set _bmAttackLabel = 'Hit them before they can talk'>>
+<<linkreplace _bmAttackLabel>>
+	<<run $('#bm_choices').hide()>>
+	<<unset $game.blackmailEvent>>
+	<<set $tmpSettlement = _bmData.id>>
+	Best way to silence someone.
+	<br /><br />
+	<<link 'Drive to them'>><<goto 'Garage - World - Attack'>><</link>>
+<</linkreplace>>
+</div>
+
+</div>

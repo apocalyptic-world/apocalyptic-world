@@ -1,0 +1,138 @@
+:: Garage - World - Slave Trade [Place bg-garage]
+<h1 class="ptitle">SLAVE TRADE</h1>
+<br />
+
+<<set _st = setup.settlements.getById($tmpSettlement)>>
+<<if !_st>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _st>>
+
+<<set _stSlaves = setup.settlements.generateSlavesForSale(_st, $game.day)>>
+
+<center>
+	<<image 'places/world/slave_trade.jpg'>>
+</center>
+<br />
+
+The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't pretend this was anything other than what it was.
+<br /><br />
+
+<div id="st_buy_section">
+<span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">AVAILABLE FOR PURCHASE</span>
+<br /><br />
+
+<<if _stSlaves.length>>
+<<set $game.stBuyIdx = $game.stBuyIdx ?? null>>
+<table class="npc-list">
+<<for _sti = 0; _sti < _stSlaves.length; _sti++>>
+	<<set _stEntry = _stSlaves[_sti]>>
+	<<capture _sti _stEntry>>
+		<tr class="item">
+			<td>
+				<<radiobutton "$game.stBuyIdx" _sti autocheck>>
+			</td>
+			<td style="min-width: 30%">
+				<span style="color: #ccc;"><<= _stEntry.name >></span>
+				<span style="color: #888; font-size: 0.85em; margin-left: 8px;">Age <<= _stEntry.age >></span>
+			</td>
+			<td>
+				<span style="color: #e0a055; font-size: 0.9em;"><<= _stEntry.price >> caps</span>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+<br />
+<<set _stBuyLabel = 'Buy selected'>>
+<<linkreplace _stBuyLabel>>
+	<<if $game.stBuyIdx !== null && _stSlaves[$game.stBuyIdx]>>
+		<<set _stPick = _stSlaves[$game.stBuyIdx]>>
+		<<if $player.money >= _stPick.price>>
+			<<set $player.money -= _stPick.price>>
+			<<addmins 45>>
+			<<newgirl>>
+			<<set $tmpGirl.name = _stPick.name>>
+			<<set $tmpGirl.age = _stPick.age>>
+			<<set $tmpGirl.origin = 'Purchased from ' + _st.name>>
+			<<run $slaves.push($tmpGirl)>>
+			<<unset $tmpGirl>>
+			<<run setup.settlements.modifyRelationship(_st, 2, 'Slave purchase')>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<unset $game.stBuyIdx>>
+			<span style="color: #55cc88;">You paid <<= _stPick.price >> caps. <<= _stPick.name >> is yours now.</span>
+		<<else>>
+			<span style="color: #e05555;">Not enough caps — need <<= _stPick.price >>.</span>
+		<</if>>
+	<<else>>
+		<span style="color: #888;">Select someone from the list first.</span>
+	<</if>>
+<</linkreplace>>
+<<else>>
+	<span style="color: #555; font-size: 0.88em;">Nothing for sale right now. Check back in a few days.</span>
+<</if>>
+</div>
+<br />
+
+<div id="st_sell_section">
+<span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SELL ONE OF YOURS</span>
+<br /><br />
+
+<<if $slaves.length>>
+<<set $game.stSellId = $game.stSellId ?? null>>
+<<set $game.stSellPrices = {}>>
+<<for _sts = 0; _sts < $slaves.length; _sts++>>
+	<<set $game.stSellPrices[$slaves[_sts].id] = Math.floor(80 + Math.random() * 120)>>
+<</for>>
+<table class="npc-list">
+<<for _sts = 0; _sts < $slaves.length; _sts++>>
+	<<set _stSNpc = $slaves[_sts]>>
+	<<set _stSellPrice = $game.stSellPrices[_stSNpc.id]>>
+	<<set _capturedSellId = _stSNpc.id>>
+	<<capture _sts _stSNpc _stSellPrice _capturedSellId>>
+		<tr class="item">
+			<td>
+				<<radiobutton "$game.stSellId" _capturedSellId autocheck>>
+			</td>
+			<td style="min-width: 25%">
+				<span class="gender-f"><<= _stSNpc.name >></span>
+			</td>
+			<td>
+				<<npcListView _stSNpc _sts 'slave'>>
+			</td>
+			<td>
+				<span style="color: #e0a055; font-size: 0.9em;"><<= _stSellPrice >> caps</span>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+<br />
+<<set _stSellLabel = 'Sell selected'>>
+<<linkreplace _stSellLabel>>
+	<<if $game.stSellId>>
+		<<set _stSIdx = $slaves.findIndex(function(g) { return g.id === $game.stSellId; })>>
+		<<if _stSIdx >= 0>>
+			<<set _stSoldNpc = clone($slaves[_stSIdx])>>
+			<<set _stSoldPrice = $game.stSellPrices[$game.stSellId] ?? 80>>
+			<<run $slaves.splice(_stSIdx, 1)>>
+			<<set $player.money += _stSoldPrice>>
+			<<run setup.settlements.modifyRelationship(_st, 2, 'Slave sale')>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<unset $game.stSellId, $game.stSellPrices>>
+			<<addmins 30>>
+			<span style="color: #55cc88;">Sold <<= _stSoldNpc.name >> for <<= _stSoldPrice >> caps.</span>
+		<<else>>
+			<span style="color: #e05555;">Couldn't find that person.</span>
+		<</if>>
+	<<else>>
+		<span style="color: #888;">Select someone from the list first.</span>
+	<</if>>
+<</linkreplace>>
+<<else>>
+	<span style="color: #555; font-size: 0.88em;">You have no slaves to sell.</span>
+<</if>>
+</div>
+<br />
+
+<<link 'Back'>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>

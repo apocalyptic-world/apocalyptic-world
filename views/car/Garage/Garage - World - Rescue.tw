@@ -1,0 +1,29 @@
+:: Garage - World - Rescue [Place bg-garage]
+<<set _rscS = setup.settlements.getById($tmpSettlement)>>
+<<if !_rscS || !(_rscS.playerCaptives ?? []).length>>
+	<<goto 'Garage - World - Settlement'>>
+<</if>>
+
+<<set _rscGuards = setup.getPersonsForLocation($guests, 'guard')>>
+<<set _rscEnemyCount = Math.min(2, Math.max(1, Math.floor((_rscS.defense ?? 100) / 80)))>>
+<<generateEnemies _rscEnemyCount 0 _rscEnemyCount>>
+<<for _rscei = 0; _rscei < $enemies.length; _rscei++>>
+	<<set $enemies[_rscei].strength = Math.min(($enemies[_rscei].strength ?? 50) + 20, 100)>>
+	<<set $enemies[_rscei].endurance = Math.min(($enemies[_rscei].endurance ?? 50) + 20, 100)>>
+<</for>>
+
+<!-- #### places/world/rescue_raid.jpg | dark post-apocalyptic rescue mission, small group breaching compound walls at night, searchlights, tense cinematic --ar 4:2 --p -->
+
+<h1 class="ptitle">RESCUE</h1>
+<br />
+
+You drove out to <<= _rscS.name>> after dark. <<if _rscS.playerCaptives.length === 1>><<= _rscS.playerCaptives[0].npc.name>> was in there.<<else>><<= _rscS.playerCaptives.length>> of your people were in there.<</if>> Getting them out was going to be messy.
+<br /><br />
+
+Their sentries spotted you at the wire before you got close. It went loud fast.
+<br /><br />
+
+<<link 'Fight your way through'>>
+	<<fight $enemies 'Garage - World - Rescue - Won' 'Garage - World - Rescue - Lost' false _rscGuards>>
+	<<set $fight.skipEndingLost = true>>
+<</link>>

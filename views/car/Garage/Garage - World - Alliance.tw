@@ -1,0 +1,53 @@
+:: Garage - World - Alliance [Place bg-garage]
+<h1 class="ptitle">ALLIANCE</h1>
+<br />
+
+<<set _alS = setup.settlements.getById($tmpSettlement)>>
+<<if !_alS>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _alS>>
+<<set _alLeader = _alS.leader>>
+<<set _alDialogs = setup.settlements.leaderDialogs[_alS.type]>>
+
+<<if setup.settlements.isAllied(_alS)>>
+	<p style="color: #5599e0;">You are already allied with <<= _alS.name>>.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<elseif !setup.settlements.isFriendly(_alS)>>
+	<p style="color: #e05555;">They need to trust you more before any alliance is possible.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<else>>
+	You've built enough goodwill with <<= _alS.name>> that a formal arrangement might be possible. An alliance means mutual protection — help when you need it, and obligations in return.
+	<br /><br />
+
+	<<if _alLeader>>
+		<<set _alLine = _alDialogs.intro[randomInteger(0, _alDialogs.intro.length - 1)]>>
+		<<sayNpc _alLeader>><<= _alLine>><</sayNpc>>
+		<br />
+	<</if>>
+
+	<div id="alliance_propose">
+	<<linkreplace 'Propose a formal alliance'>>
+		<<run $('#alliance_propose').hide()>>
+		<<addmins 60>>
+		<<set _alHandle = setup.settlements.getById($tmpSettlement)>>
+		<<set _alRes = setup.settlements.requestAlliance(_alHandle)>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+		<<if _alHandle && _alHandle.leader>>
+			<<if _alRes.success>>
+				<<set _alReplyPool = _alDialogs.greeting_ok>>
+			<<else>>
+				<<set _alReplyPool = _alDialogs.greeting_fail>>
+			<</if>>
+			<<sayNpc _alHandle.leader>><<= _alReplyPool[randomInteger(0, _alReplyPool.length - 1)]>><</sayNpc>>
+			<br />
+		<</if>>
+		<<if _alRes.success>>
+			<span style="color: #5599e0;">★ Alliance formed with <<= _alHandle.name>>.</span>
+		<<else>>
+			<span style="color: #e05555;">They declined the offer. Build more trust and try again.</span>
+		<</if>>
+		<br /><br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</linkreplace>>
+	</div>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<</if>>

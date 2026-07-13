@@ -1,0 +1,91 @@
+:: Garage - World [Place bg-garage]
+<h1 class="ptitle">WORLD</h1>
+<br />
+
+<<set _discovered = setup.settlements.getAll().filter(function(s) { return s.discovered; })>>
+
+<<if _discovered.length === 0>>
+	You haven't discovered any settlements yet. Explore the roads to find them.
+	<br /><br />
+	<<link 'Back'>>
+		<<goto 'Garage'>>
+	<</link>>
+<<else>>
+	<p style="color: #888; font-size: 0.9em;">Settlements you've discovered during your travels.</p>
+
+	<<set _relColors = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999999', friendly: '#55cc88', allied: '#5599e0' }>>
+	<<set _typeNames = {
+		biker_gang: 'Biker Gang',
+		survivor_camp: 'Survivor Camp',
+		monastery: 'Monastery',
+		convent: 'Convent',
+		trading_post: 'Trading Post',
+		raider_camp: 'Raider Camp',
+		cult_compound: 'Cult Compound',
+		military_base: 'Military Base',
+		farming_community: 'Farming Community',
+		medical_colony: 'Medical Colony',
+		tribal_village: 'Tribal Village',
+		prison_colony: 'Prison Colony',
+		nomad_caravan: 'Nomad Caravan',
+		amazonian_tribe: 'Amazonian Tribe',
+		scavenger_den: 'Scavenger Den'
+	}>>
+
+	<<for _si = 0; _si < _discovered.length; _si++>>
+		<<set _s = _discovered[_si]>>
+		<<set _relLevel = setup.settlements.getRelationshipLevel(_s)>>
+		<<set _relColor = _relColors[_relLevel]>>
+		<<set _relLabel = setup.settlements.getRelationshipLabel(_s)>>
+		<<set _typeName = _typeNames[_s.type] ?? _s.type>>
+		<<set _popDesc = setup.settlements.getPopulationDescription(_s)>>
+		<<capture _s, _relColor, _relLabel, _typeName, _popDesc>>
+			<<if _s.destroyed>>
+				<div style="border-left: 3px solid #2a2a2a; padding: 8px 14px; margin-bottom: 10px; background: rgba(0,0,0,0.12); opacity: 0.5;">
+					<span style="color: #444;">☠ <<= _s.name>></span>
+					<span style="color: #333; font-size: 0.9em; margin-left: 8px;"><<= _typeName>></span>
+					<br />
+					<span style="color: #333; font-size: 0.82em;">Destroyed</span>
+				</div>
+			<<else>>
+				<div style="border-left: 3px solid <<= _relColor>>; padding: 8px 14px; margin-bottom: 10px; background: rgba(0,0,0,0.2);">
+					<<if $player.car.fuel >= 20>>
+						<<set _viewLabel = _s.name>>
+						<<link _viewLabel>>
+							<<addhours 4>>
+							<<carFuel 20>>
+							<<set $tmpSettlement = _s.id>>
+							<<goto 'Garage - World - Settlement'>>
+						<</link>>
+					<<else>>
+						<span style="color: #444; cursor: not-allowed;"><<= _s.name>></span>
+						<span style="color: #e05555; font-size: 0.78em; margin-left: 6px;">(need 20 fuel)</span>
+					<</if>>
+					<span style="color: #777; font-size: 0.9em; margin-left: 8px;"><<= _typeName>></span>
+					<br />
+					<span style="color: #aaa; font-size: 0.85em;"><<= _popDesc>></span>
+					<span style="color: <<= _relColor>>; font-size: 0.85em; margin-left: 10px;">◈ <<= _relLabel>></span>
+					<<if _s.callForHelp>>
+						<br />
+						<span style="color: #e05555; font-size: 0.82em; font-weight: bold;">⚠ UNDER ATTACK</span>
+						<<if $player.car.fuel >= 20>>
+							<span style="margin-left: 8px;">
+								<<link 'Respond'>>
+									<<addhours 4>>
+									<<carFuel 20>>
+									<<set $tmpSettlement = _s.id>>
+									<<goto 'Garage - World - Help'>>
+								<</link>>
+							</span>
+						<</if>>
+					<</if>>
+				</div>
+			<</if>>
+		<</capture>>
+	<</for>>
+
+	<br />
+	<<link 'Back'>>
+		<<goto 'Garage'>>
+	<</link>>
+<</if>>

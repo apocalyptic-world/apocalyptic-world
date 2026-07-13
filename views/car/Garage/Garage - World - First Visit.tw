@@ -1,0 +1,37 @@
+:: Garage - World - First Visit [Place bg-garage]
+<<set _fvS = setup.settlements.getById($tmpSettlement)>>
+<<if !_fvS>><<goto 'Garage'>><</if>>
+<<ensureLeader _fvS>>
+
+<<set _fvImgPath = 'places/world/' + _fvS.type + '.jpg'>>
+
+<h1 class="ptitle"><<= _fvS.name.toUpperCase()>></h1>
+<br />
+
+<center>
+	<<image _fvImgPath sfw>>
+</center>
+<br />
+
+<<= setup.settlements.getDescription(_fvS)>>
+<br /><br />
+
+<<= setup.settlements.getPopulationDescription(_fvS)[0].toUpperCase() + setup.settlements.getPopulationDescription(_fvS).slice(1)>> group, <<= setup.settlements.getGenderDescription(_fvS)>>. <<= setup.settlements.getDefenseDescription(_fvS)[0].toUpperCase() + setup.settlements.getDefenseDescription(_fvS).slice(1)>>.
+<br /><br />
+
+<<if _fvS.leader>>
+	<<set _fvDialogs = setup.settlements.leaderDialogs[_fvS.type]>>
+	<<set _fvLine = _fvDialogs.intro[randomInteger(0, _fvDialogs.intro.length - 1)]>>
+	<<sayNpc _fvS.leader>><<= _fvLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<<link 'Approach openly'>>
+	<<set _fvHandle = setup.settlements.getById($tmpSettlement)>>
+	<<run setup.settlements.modifyRelationship(_fvHandle, 5, 'Approached openly on first visit')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>
+<<link 'Stay cautious'>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>

@@ -5,6 +5,8 @@
 		<<if _girlVisual.portrait.includes('http') || _girlVisual.portrait.includes('packs/')>>
 			<<set _url = _girlVisual.portrait>>
 			<img @src="_url" referrerpolicy="no-referrer">
+		<<elseif _girlVisual.portrait.includes('/')>>
+			<<image _girlVisual.portrait sfw>>
 		<<else>>
 			[img[setup.ImagePath+'custom_portraits/' + _girlVisual.portrait]]
 		<</if>>

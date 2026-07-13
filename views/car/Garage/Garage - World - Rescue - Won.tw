@@ -1,0 +1,32 @@
+:: Garage - World - Rescue - Won [Place bg-garage]
+<<set _rscS = setup.settlements.getById($tmpSettlement)>>
+
+<!-- #### places/world/rescue_won.jpg | post-apocalyptic rescued companions walking out of compound at night, relief, gritty cinematic --ar 4:2 --p -->
+
+<h1 class="ptitle">RESCUE</h1>
+<br />
+
+<<if _rscS && (_rscS.playerCaptives ?? []).length>>
+	You found them in the back of the compound — roughed up but moving.
+	<br /><br />
+	<<for _rci = 0; _rci < _rscS.playerCaptives.length; _rci++>>
+		<<sayNpc _rscS.playerCaptives[_rci].npc>>
+			I knew you'd come.
+		<</sayNpc>>
+		<br />
+		<<run $guests.push(_rscS.playerCaptives[_rci].npc)>>
+	<</for>>
+	<<run setup.settlements.modifyRelationship(_rscS, -20, 'Rescue raid')>>
+	<<run setup.settlements.logEvent(_rscS, 'Player raided compound and freed captives.')>>
+	<<set _rscS.playerCaptives = []>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 120>>
+	<br />
+	<span style="color: #55cc88;">Everyone made it out. <<= _rscS.name>> won't forget this.</span>
+<<else>>
+	<<addmins 60>>
+	You fought through — but found nothing. They must have moved them already.
+<</if>>
+<br /><br />
+
+<<link 'Head back'>><<goto 'Garage - World'>><</link>>

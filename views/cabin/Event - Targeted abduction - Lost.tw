@@ -1,0 +1,35 @@
+:: Event - Targeted abduction - Lost [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _taData = $tmpTargetedAbduction>>
+<<set _taS = _taData ? setup.settlements.getById(_taData.settlementId) : null>>
+
+<center>
+	<<image 'places/cabin/targeted_abduction_lost.jpg'>>
+</center>
+<br />
+
+You fought. It wasn't enough.
+<br /><br />
+
+They took <<= _taData ? _taData.guestName : 'her'>> while you were down. By the time you got back to your feet they were already gone, and the gate was open and empty.
+<br /><br />
+
+<<if _taS && _taData>>
+	<<set _taGuestIdx2 = $guests.findIndex(function(g) { return g.id === _taData.guestId; })>>
+	<<set _taGuestFull = _taGuestIdx2 >= 0 ? clone($guests[_taGuestIdx2]) : { id: _taData.guestId, name: _taData.guestName, gender: 0 }>>
+	<<if _taGuestIdx2 >= 0>><<guestLeft _taGuestIdx2>><</if>>
+	<<set _taS.captiveId   = _taData.guestId>>
+	<<set _taS.captiveName = _taData.guestName>>
+	<<set $game.capturedGuest = { npc: _taGuestFull, settlementId: _taData.settlementId, settlementName: _taData.settlementName }>>
+	<<run setup.settlements.resolveAbduction(_taS, true)>>
+	<<run setup.settlements.modifyRelationship(_taS, -10, 'Abduction succeeded by force')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<<unset $tmpTargetedAbduction>>
+
+<span style="color: #e05555;"><<= _taData ? _taData.guestName : 'She'>> is being held at <<= _taData ? _taData.settlementName : 'their settlement'>>. You can attempt a rescue or pay ransom from the World map.</span>
+<br /><br />
+
+<<link 'Continue'>><<goto 'Wood cabin'>><</link>>

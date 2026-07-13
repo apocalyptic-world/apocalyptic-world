@@ -1,0 +1,94 @@
+:: Garage - World - Recruit [Place bg-garage]
+<h1 class="ptitle">RECRUIT</h1>
+<br />
+
+<<set _rS = setup.settlements.getById($tmpSettlement)>>
+<<if !_rS>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _rS>>
+
+<<set _rCount = setup.settlements.getRecruitableCount(_rS)>>
+<<set _rLeader = _rS.leader>>
+
+<<if _rLeader>>
+	<<set _rDialogs = setup.settlements.leaderDialogs[_rS.type]>>
+	<<set _rLine = _rDialogs.intro[randomInteger(0, _rDialogs.intro.length - 1)]>>
+	<<sayNpc _rLeader>><<= _rLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<<if _rCount <= 0>>
+	<p style="color: #888;">Nobody here is ready to leave <<= _rS.name>> right now.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<else>>
+	About <<= _rCount>> <<= _rCount === 1 ? 'person here seems' : 'people here seem'>> open to leaving. You can talk to them.
+	<br /><br />
+
+	<div id="recruit_approach">
+	<<linkreplace 'Talk to potential recruits'>>
+		<<run $('#recruit_approach').hide()>>
+		<<addmins 30>>
+		<<set _rHandle = setup.settlements.getById($tmpSettlement)>>
+		<<if !_rHandle>>
+			Something went wrong.
+		<<else>>
+			<<set _rResult = setup.settlements.recruit(_rHandle)>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<if _rResult.success>>
+				<<set _rNpc = _rResult.npc>>
+				<<if _rNpc.gender === 1>>
+					<<newguy>>
+					<<set $tmpGuy.name   = _rNpc.name>>
+					<<set $tmpGuy.skills = _rNpc.traits>>
+					<<set $tmpGuy.origin = _rNpc.origin>>
+					<<set $tmpRecruitNpc = $tmpGuy>>
+				<<else>>
+					<<newgirl>>
+					<<set $tmpGirl.name   = _rNpc.name>>
+					<<set $tmpGirl.skills = _rNpc.traits>>
+					<<set $tmpGirl.origin = _rNpc.origin>>
+					<<set $tmpRecruitNpc = $tmpGirl>>
+				<</if>>
+				<<set _rFull = $tmpRecruitNpc>>
+
+				<<sayNpc _rFull>>
+					<<if _rNpc.gender === 1>>
+						Been here long enough. If you've got room, I'm in.
+					<<else>>
+						This place has its problems. What are you offering?
+					<</if>>
+				<</sayNpc>>
+				<br />
+
+				<div style="background: rgba(0,0,0,0.15); border-left: 3px solid #444; padding: 8px 14px; margin-bottom: 14px; font-size: 0.9em;">
+					<strong style="color: #ccc;"><<= _rFull.name>></strong>
+					<span style="color: #888; margin-left: 8px;"><<= _rFull.gender === 1 ? 'Male' : 'Female'>></span>
+					<br />
+					<<if (_rFull.skills ?? []).length>>
+						<span style="color: #aaa;">Skills: <<= _rFull.skills.join(', ')>></span>
+					<<else>>
+						<span style="color: #666;">No particular skills.</span>
+					<</if>>
+					<<if _rFull.origin>>
+						<br /><span style="color: #555; font-size: 0.85em;">From <<= _rFull.origin>></span>
+					<</if>>
+				</div>
+
+				<<link 'Bring them back'>>
+					<<run $guests.push($tmpRecruitNpc)>>
+					<<unset $tmpRecruitNpc>>
+					<<goto 'Garage - World - Settlement'>>
+				<</link>>
+				<<link 'Not this time'>>
+					<<unset $tmpRecruitNpc>>
+					<<goto 'Garage - World - Settlement'>>
+				<</link>>
+			<<else>>
+				<span style="color: #e05555;"><<= _rResult.reason>></span>
+				<br /><br />
+				<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+			<</if>>
+		<</if>>
+	<</linkreplace>>
+	</div>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<</if>>

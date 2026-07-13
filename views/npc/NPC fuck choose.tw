@@ -62,7 +62,6 @@
 <<if [0, 2].includes($tmpGirl.gender) && setup.NpcInHome($tmpGirl)>>
 	<<set _eligibleForFoursome = setup.filterNPCs($guests, {gender: 0, horny_gte: 20, likesGuys: true})[0] ?? []>>
 	<<set _eligibleForFoursome = _eligibleForFoursome.filter(function(id) { return $guests[id].id !== $tmpGirl.id && setup.getAge($guests[id]) >= 18; })>>
-	<<run console.log(_eligibleForFoursome)>>
 	<<if _eligibleForFoursome.length >= 2>>
 		<<link 'Foursome'>>
 			<<set $tmpGirlViewBack = 'NPC view - guest'>>

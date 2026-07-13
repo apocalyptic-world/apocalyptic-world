@@ -54,7 +54,27 @@
 <</if>>
 
 <<if !($locationEvents.cabin ?? false)>>
-	<<if $characters?.elsa?.quests?.attack_day && !$characters?.elsa?.quests?.new_home>>
+	<<if $game.pendingUltimatumRaid && $game.cabinName>>
+		<<set $tmpSettlement = $game.pendingUltimatumRaid>>
+		<<unset $game.pendingUltimatumRaid>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Settlement raid'>>
+	<<elseif $game.tributeGift && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Tribute gift'>>
+	<<elseif $game.targetedAbduction && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Targeted abduction'>>
+	<<elseif $game.womanDemand && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Woman demand'>>
+	<<elseif $game.desperateDeal && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Desperate deal'>>
+	<<elseif $game.blackmailEvent && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Blackmail'>>
+	<<elseif $characters?.elsa?.quests?.attack_day && !$characters?.elsa?.quests?.new_home>>
 		<<goto 'Elsa - new home'>>
 	<<elseif $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
 	(!$characters.octavia.quests.kidnapped_found_day || ($characters.octavia.quests.kidnapped_found_day + 5) < $game.day) && 
@@ -112,6 +132,21 @@
 	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.virgin_merchant_day || ($game.virgin_merchant_day + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - virgin merchant'>>
+	<<elseif $game.refugeeEvent && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Refugee influx'>>
+	<<elseif $game.cabinName && setup.percentageChance(4) && setup.settlements.getRaidableByCandidates($game.day).length>>
+		<<set _srCands = setup.settlements.getRaidableByCandidates($game.day)>>
+		<<set _srPick = _srCands[randomInteger(0, _srCands.length - 1)]>>
+		<<set $tmpSettlement = _srPick.id>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Settlement raid'>>
+	<<elseif $game.cabinName && setup.percentageChance(6) && setup.settlements.getTraderCandidates($game.day).length>>
+		<<set _stCands = setup.settlements.getTraderCandidates($game.day)>>
+		<<set _stPick = _stCands[randomInteger(0, _stCands.length - 1)]>>
+		<<set $tmpSettlement = _stPick.id>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Settlement trader'>>
 	<<elseif $game.cabinName && setup.percentageChance(1) && (($player?.quests?.gateDoneDay ?? 0 + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Base attack'>>

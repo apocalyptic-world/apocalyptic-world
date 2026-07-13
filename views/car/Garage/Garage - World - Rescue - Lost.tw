@@ -1,0 +1,26 @@
+:: Garage - World - Rescue - Lost [Place bg-garage]
+<<set _rscS = setup.settlements.getById($tmpSettlement)>>
+
+<!-- #### places/world/rescue_lost.jpg | post-apocalyptic failed rescue, lone figure retreating from compound under floodlights at night, defeated, gritty --ar 4:2 --p -->
+
+<h1 class="ptitle">RESCUE</h1>
+<br />
+
+You didn't make it through. They drove you back at the wire — beaten, bleeding, lucky to be walking.
+<br /><br />
+
+<<if _rscS>>
+	<<run setup.settlements.modifyRelationship(_rscS, -10, 'Failed rescue attempt')>>
+	<<run setup.settlements.logEvent(_rscS, 'Player attempted a rescue raid and was repelled.')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<<addmins 120>>
+
+<<if _rscS && (_rscS.playerCaptives ?? []).length>>
+	<span style="color: #e05555;"><<= _rscS.playerCaptives.map(function(c) { return c.npc.name; }).join(', ')>> <<= _rscS.playerCaptives.length === 1 ? 'is' : 'are'>> still held at <<= _rscS.name>>.</span>
+<<else>>
+	<span style="color: #e05555;">They're still in there.</span>
+<</if>>
+<br /><br />
+
+<<link 'Drive back'>><<goto 'Garage - World'>><</link>>

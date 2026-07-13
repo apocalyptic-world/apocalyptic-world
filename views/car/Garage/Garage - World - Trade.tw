@@ -1,0 +1,96 @@
+:: Garage - World - Trade [Place bg-garage]
+<h1 class="ptitle">TRADE</h1>
+<br />
+
+<<set _trS = setup.settlements.getById($tmpSettlement)>>
+<<if !_trS>><<goto 'Garage - World'>><</if>>
+
+<<if !setup.settlements.canTrade(_trS)>>
+	<p style="color: #e05555;">They're not willing to trade with you right now.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<else>>
+
+<<set _trOffer = setup.settlements.getTradeOffer(_trS)>>
+<<set _trWants = setup.settlements.getWantsOffer(_trS)>>
+
+<span style="color: #aaa; font-size: 0.88em;">Your caps: <strong style="color: #e0c055;"><<=$player.money>></strong></span>
+<br /><br />
+
+<h3 style="color: #ccc; margin: 0 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #2a2a2a;">Buying from them</h3>
+
+<<if _trOffer && _trOffer.length>>
+	<<for _tBi = 0; _tBi < _trOffer.length; _tBi++>>
+		<<set _trBItem  = _trOffer[_tBi].item>>
+		<<set _trBQty   = _trOffer[_tBi].quantity>>
+		<<set _trBPrice = _trOffer[_tBi].priceEach>>
+		<<capture _tBi, _trBItem, _trBQty, _trBPrice>>
+			<div id="tr_b_<<= _tBi>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
+				<<set _trBLabel = _trBItem.replace(/_/g, ' ') + ' — ' + _trBPrice + ' caps'>>
+				<<linkreplace _trBLabel>>
+					<<run $('#tr_b_' + _tBi).hide()>>
+					<<set _trBHandle = setup.settlements.getById($tmpSettlement)>>
+					<<if _trBHandle && $player.money >= _trBPrice && (_trBHandle.resources[_trBItem] || 0) >= 1>>
+						<<set _trBOldLevel = setup.settlements.getRelationshipLevel(_trBHandle)>>
+						<<set $player.money -= _trBPrice>>
+						<<pickup $backpack _trBItem 1>>
+						<<run _trBHandle.resources[_trBItem] = Math.max(0, (_trBHandle.resources[_trBItem] || 0) - 1); setup.settlements.modifyRelationship(_trBHandle, 1, 'Trade'); setup.settlements.save(setup.settlements.getAll())>>
+						<<addmins 15>>
+						<span style="color: #55cc88;">Bought 1× <<= _trBItem.replace(/_/g, ' ')>>.</span>
+						<<if setup.settlements.getRelationshipLevel(_trBHandle) !== _trBOldLevel>>
+							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_trBHandle)>></span>
+						<</if>>
+					<<else>>
+						<span style="color: #e05555;">Not enough caps or out of stock.</span>
+					<</if>>
+				<</linkreplace>>
+				<span style="color: #555; font-size: 0.78em; margin-left: 8px;">(<<= _trBQty>> in stock)</span>
+			</div>
+		<</capture>>
+	<</for>>
+<<else>>
+	<span style="color: #888; font-size: 0.9em;">Nothing in stock right now.</span>
+<</if>>
+
+<br />
+<h3 style="color: #ccc; margin: 16px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #2a2a2a;">Selling to them</h3>
+<p style="color: #666; font-size: 0.82em; margin: 0 0 8px 0;">They pay above market rate for items they need.</p>
+
+<<set _tSHasAny = false>>
+<<for _tSi = 0; _tSi < _trWants.length; _tSi++>>
+	<<set _tSwItem  = _trWants[_tSi].item>>
+	<<set _tSwPrice = _trWants[_tSi].priceEach>>
+	<<set _tSwHave  = $backpack.count(_tSwItem)>>
+	<<if _tSwHave > 0>>
+		<<set _tSHasAny = true>>
+		<<capture _tSi, _tSwItem, _tSwPrice>>
+			<div id="tr_s_<<= _tSi>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
+				<<set _tSLabel = 'Sell ' + _tSwItem.replace(/_/g, ' ') + ' — ' + _tSwPrice + ' caps'>>
+				<<linkreplace _tSLabel>>
+					<<run $('#tr_s_' + _tSi).hide()>>
+					<<set _tSHandle = setup.settlements.getById($tmpSettlement)>>
+					<<if _tSHandle && $backpack.count(_tSwItem) >= 1>>
+						<<set _tSOldLevel = setup.settlements.getRelationshipLevel(_tSHandle)>>
+						<<drop $backpack _tSwItem 1>>
+						<<set $player.money += _tSwPrice>>
+						<<run _tSHandle.resources[_tSwItem] = (_tSHandle.resources[_tSwItem] || 0) + 1; setup.settlements.modifyRelationship(_tSHandle, 2, 'Sold wanted goods'); setup.settlements.save(setup.settlements.getAll())>>
+						<<addmins 15>>
+						<span style="color: #55cc88;">Sold 1× <<= _tSwItem.replace(/_/g, ' ')>> for <<= _tSwPrice>> caps.</span>
+						<<if setup.settlements.getRelationshipLevel(_tSHandle) !== _tSOldLevel>>
+							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_tSHandle)>></span>
+						<</if>>
+					<<else>>
+						<span style="color: #e05555;">None left.</span>
+					<</if>>
+				<</linkreplace>>
+				<span style="color: #aaa; font-size: 0.78em; margin-left: 8px;">(you have <<= _tSwHave>>)</span>
+			</div>
+		<</capture>>
+	<</if>>
+<</for>>
+<<if !_tSHasAny>>
+	<span style="color: #888; font-size: 0.9em;">You don't have anything they want right now.</span>
+<</if>>
+
+<br /><br />
+<<link 'Done'>><<goto 'Garage - World - Settlement'>><</link>>
+<</if>>

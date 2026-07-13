@@ -35,6 +35,10 @@
 	<<goto 'Car explore event - stranded driver'>>
 <<elseif _randomNumber <= 78>>
 	<<goto 'Car explore event - hidden cache'>>
+<<elseif !setup.settlements.getAll().length && ($characters.vincent?.quests?.car_fixed ?? false) && $game.day >= ($characters.vincent.quests.car_fixed_day ?? 0) + 20>>
+	<<goto 'Car explore event - settlement discovery'>>
+<<elseif setup.settlements.getAll().length > 0 && _randomNumber <= 80>>
+	<<goto 'Car explore event - settlement discovery'>>
 <<elseif setup.percentageChance(100) && !($game.location.car_stadium ?? false)>>
 	<<goto 'Car - race stadium introduction'>>
 <<else>>
