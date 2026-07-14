@@ -32,9 +32,52 @@
         </td>
     </tr>
 </table>
-	Your slaves currently call you '<<=($mcNameSlave ?? 'master')>>'.  Enter new name for your slaves to call you:<br /><<textbox "$mcNameSlave" `$mcNameSlave ?? 'master'`>>
 <br/>
-	Your submissive guests currently call you '<<=($mcNameSub ?? 'sir')>>'.  Enter new name for your submissive guests to call you:<br /><<textbox "$mcNameSub" `$mcNameSub ?? 'sir'`>>
-<br/>
-	Your offspring currently call you '<<=($mcNameOff ?? 'dad')>>'.  Enter new name for your offspring to call you:<br /><<textbox "$mcNameOff" `$mcNameOff ?? 'dad'`>>
-<br/><br/>
+<p>Set the default names used by family/guests/slaves when addressing you:</p>
+<table>
+    <tr><th colspan="2">Family</th></tr>
+    <tr>
+        <td style="padding-left: 1em">Offspring<div><small>(currently '<<=($mcNameOff ?? 'dad')>>')</small></div></td>
+        <td><<textbox "$mcNameOff" `$mcNameOff ?? 'dad'`>></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">Parents<div><small>(currently '<<=($mcNameParent ?? $player.name)>>')</small></div></td>
+        <td><<textbox "$mcNameParent" `$mcNameParent ?? $player.name`>></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">Siblings<div><small>(currently '<<=($mcNameSib ?? $player.name)>>')</small></div></td>
+        <td><<textbox "$mcNameSib" `$mcNameSib ?? $player.name`>></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">Wives<div><small>(currently '<<=($mcNameWife ?? $player.name)>>')</small></div></td>
+        <td><<textbox "$mcNameWife" `$mcNameWife ?? $player.name`>></td>
+    </tr>
+    <tr><th colspan="2">Slaves</th></tr>
+    <tr>
+        <td style="padding-left: 1em">Slaves<div><small>(currently '<<=($mcNameSlave ?? 'master')>>')</small></div></td>
+        <td><<textbox "$mcNameSlave" `$mcNameSlave ?? 'master'`>></td>
+    </tr>
+    <tr><th colspan="2">Guests</th></tr>
+    <tr>
+        <td style="padding-left: 1em">Submissive <small>(sub > 90)</small><div><small>(currently '<<=($mcNameSub ?? 'sir')>>')</small></div></td>
+        <td><<textbox "$mcNameSub" `$mcNameSub ?? 'sir'`>></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">Other<div><small>(currently '<<=($mcNameGuest ?? $player.name)>>')</small></div></td>
+        <td><<textbox "$mcNameGuest" `$mcNameGuest ?? $player.name`>></td>
+    </tr>
+</table>
+<<done>>
+    <<run
+        $(document).one(':passageinit', function () {
+            var V = variables();
+            if (V.mcNameOff    === '') delete V.mcNameOff;
+            if (V.mcNameWife   === '') delete V.mcNameWife;
+            if (V.mcNameParent === '') delete V.mcNameParent;
+            if (V.mcNameSib    === '') delete V.mcNameSib;
+            if (V.mcNameSlave  === '') delete V.mcNameSlave;
+            if (V.mcNameSub    === '') delete V.mcNameSub;
+            if (V.mcNameGuest  === '') delete V.mcNameGuest;
+        });
+    >>
+<</done>>

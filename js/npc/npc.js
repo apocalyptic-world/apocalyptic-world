@@ -527,8 +527,22 @@ setup.npc = {
 			return this.mcNameUC(npc.myMcName)
 		}
 
+		const player = variables().player;
+
 		if (npc?.family?.father === 'mc') {
 			return this.mcNameUC(variables().mcNameOff ?? 'dad')
+		}
+
+		if (player.family?.mother === npc.id || player.family?.father === npc.id) {
+			return this.mcNameUC(variables().mcNameParent ?? player.name)
+		}
+
+		if ((player.family?.siblings ?? []).includes(npc.id)) {
+			return this.mcNameUC(variables().mcNameSib ?? player.name)
+		}
+
+		if (npc?.family?.husband === 'mc') {
+			return this.mcNameUC(variables().mcNameWife ?? player.name)
 		}
 
 		const slaves = variables().slaves ?? [];
@@ -539,8 +553,13 @@ setup.npc = {
 		if (npc.sub > 90) {
 			return this.mcNameUC(variables().mcNameSub ?? 'sir');
 		}
-		
-		return variables().player.name;
+
+		const guests = variables().guests ?? [];
+		if (guests.some(g => g.id === npc.id)) {
+			return this.mcNameUC(variables().mcNameGuest ?? player.name)
+		}
+
+		return player.name;
 	},
 
 	isMarried: function (npc) {

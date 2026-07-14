@@ -43,6 +43,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 <</if>>
 <<run setup.cabinInventory.drop('champagne', 1)>>
 <<run setup.cabinInventory.drop('food', 20)>>
+<<set _guestsNotPregnant = setup.propertyMatchIndexes($guests, 'pregnancy', 7, '<')>>
 
 <div id="girls_top_table">
 	<h4>Guests attending the party</h4>
@@ -54,6 +55,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<<capture _guestI, _guest>>
 				<tr class="item">
 				  <td style="width: 300px">
+						  <<if !(_guest.pregnancy >= 7) && !(_guest.dislikes ?? []).includes('alcohol')>><<set _guest = setup.drink(_guest, 1)>><</if>>
 					 	  <<=setup.displayName(_guest)>> <<=setup.npcListInfo(_guest)>>
 				  </td>
 				  <td>
@@ -63,7 +65,6 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
-						<<set _guest = setup.drink(_guest, 1)>>
 						<<if !_guest.chastityBelt>>
 				  			<<link 'Invite to the bedroom'>>
 								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
@@ -140,8 +141,10 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<</for>>
 			<br /><br />
 			<<set  _randomPersons = setup.getAvailablePersons18yo($guests)>>
-			<<if recall($suppCode) && setup.percentageChance(50) && (_randomPersons[0] ?? []).length >= 3>>
-				<<set _randomGirls = setup.getRandomPersons(_randomPersons[0], 3)>>
+			<<set _randomPersonsGirls = setup.commonValues([(_randomPersons[0] ?? []), _guestsNotPregnant])>>
+			<<if _randomPersonsGirls.length < 3>><<set _randomPersonsGirls = (_randomPersons[0] ?? [])>><</if>>
+			<<if recall($suppCode) && setup.percentageChance(50) && _randomPersonsGirls.length >= 3>>
+				<<set _randomGirls = setup.getRandomPersons(_randomPersonsGirls, 3)>>
 				<<set _npc1 = $guests[_randomGirls[0]]>>
 				<<set _npc2 = $guests[_randomGirls[1]]>>
 				<<set _npc3 = $guests[_randomGirls[2]]>>
@@ -203,6 +206,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<<capture _guestI, _guest>>
 				<tr class="item">
 				  <td style="width: 300px">
+  						  <<if !(_guest.pregnancy >= 7) && !(_guest.dislikes ?? []).includes('alcohol')>><<set _guest = setup.drink(_guest, 1)>><</if>>
 					 	  <<=setup.displayName(_guest)>> <<=setup.npcListInfo(_guest)>>
 				  </td>
 				  <td>
@@ -212,7 +216,6 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
-  						<<set _guest = setup.drink(_guest, 1)>>
 						<<if !_guest.chastityBelt>>
 				  			<<link 'Invite to the bedroom'>>
 								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
@@ -243,7 +246,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<<set _guestsGirls = setup.propertyMatchIndexes($guests, 'gender', 0)>>
 	<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
 	<<set _guestsGay = setup.propertyMatchIndexes($guests, 'likesGuys', true, '!=')>>
-	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay])>>
+	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay, _guestsNotPregnant])>>
 	
 	<<if _guestsLikesGirls.length && setup.percentageChance(40)>>
 		<<set _randomLesbianId = setup.getRandomElement(_guestsLikesGirls)>>
