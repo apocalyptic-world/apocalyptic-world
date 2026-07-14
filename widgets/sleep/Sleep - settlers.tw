@@ -93,7 +93,7 @@
         <<if _arrivalChance > 0 && setup.percentageChance(_arrivalChance) && setup.baseManagement.population.hasFreeHouse()>>
             <<set _newSettlers = randomInteger(1, _arrivalMax)>>
             <<set _newFemales = randomInteger(0, _newSettlers)>>
-            <<set $player.baseManagement.settlers += _newSettlers>>
+            <<set $player.baseManagement.settlers = ($player.baseManagement.settlers ?? 0) + _newSettlers>>
             <<set $player.baseManagement.settlersFemales += _newFemales>>
             <<run setup.sleepMessages.addMain(_newSettlers + ' new settler' + (_newSettlers > 1 ? 's' : '') + ' arrived, drawn by your settlement\'s reputation. <strong>(Settlement reputation: ' + _rep + ')</strong>')>>
         <</if>>

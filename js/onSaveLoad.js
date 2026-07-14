@@ -168,6 +168,12 @@ Save.onLoad.add(function (save) {
         }
     }
 
+    if (variables.player?.baseManagement) {
+        const bm = variables.player.baseManagement;
+        if (isNaN(bm.settlers))        bm.settlers        = 0;
+        if (isNaN(bm.settlersFemales)) bm.settlersFemales = 0;
+    }
+
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
         save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
         save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';

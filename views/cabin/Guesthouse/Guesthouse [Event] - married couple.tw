@@ -106,7 +106,7 @@
 			<br />
 			<<=setup.displayName($guests[_guestIds[1]])>> finishes inside his wife — she lets out a soft moan.
 			<br /><br />
-			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
+			<<if setup.pregnancyChance($guests[_guestIds[0]], $guests[_guestIds[1]])>>
 				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
 				<<if $guests[_guestIds[0]].virgin>><<run setup.npc.addHistory($guests[_guestIds[0]], 'virgin_lost', { with: $guests[_guestIds[1]].id })>><</if>>
@@ -185,7 +185,7 @@
 		<</for>>
 		/* Pregnancy from husband */
 		<<if _orgasm && _sexActions[_sexActions.length - 1] === 'cum_in_pussy'>>
-			<<if setup.pregnancyChance($guests[_guestIds[0]])>>
+			<<if setup.pregnancyChance($guests[_guestIds[0]], $guests[_guestIds[1]])>>
 				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
 				<<if $guests[_guestIds[0]].virgin>><<run setup.npc.addHistory($guests[_guestIds[0]], 'virgin_lost', { with: $guests[_guestIds[1]].id })>><</if>>

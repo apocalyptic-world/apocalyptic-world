@@ -143,7 +143,7 @@ He hands you a small, intricately carved wedding ring.
             <<if ($game.location.nursery ?? false)>>
                 <<run $nursery.push(_children)>>
             <<else>>
-                <<set $player.baseManagement.settlers += 1>>
+                <<set $player.baseManagement.settlers = ($player.baseManagement.settlers ?? 0) + 1>>
             <</if>>
             <<set $tmpGirl = _mother>>
             <<goto 'New settlers'>>
