@@ -1,0 +1,125 @@
+:: Event - Tribute gift [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _tgData = $game.tributeGift>>
+<<set _tgS = setup.settlements.getById(_tgData.id)>>
+<<if !_tgS>>
+	<<unset $game.tributeGift>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<unset $game.tributeGift>>
+
+<<newgirl>>
+<<set _tgGirl = clone($tmpGirl)>>
+<<unset $tmpGirl>>
+
+<<if _tgData.type === 'amazonian_tribe'>>
+	<<set _tgGirl.name = either('Ayla', 'Reva', 'Kira', 'Sela', 'Thea', 'Voss', 'Bryn', 'Zara')>>
+	<<set _tgGirl.strength = Math.min((_tgGirl.strength ?? 50) + 25, 100)>>
+	<<set _tgGirl.origin = 'Amazonian warrior from ' + _tgData.name>>
+	<<set _tgOpener = 'Our strongest. She chose this.'>>
+	<<set _tgDesc = 'She was tall and composed — not nervous, not reluctant. She looked at your compound the way a soldier assesses a position.'>>
+<<elseif _tgData.type === 'cult_compound'>>
+	<<set _tgGirl.name = either('Grace', 'Faith', 'Dove', 'Mercy', 'Hope', 'Blythe', 'Seraph', 'Piety')>>
+	<<set _tgGirl.sub = Math.min((_tgGirl.sub ?? 0) + 30, 100)>>
+	<<set _tgGirl.origin = 'Offered by the Shepherd at ' + _tgData.name>>
+	<<set _tgOpener = 'The Shepherd sends her as a gift. She is prepared.'>>
+	<<set _tgDesc = 'She had that look cult members get — calm past the point where calm stops being normal. Whatever they had taught her, she had absorbed it completely.'>>
+<<else>>
+	<<set _tgGirl.name = either('Tala', 'Suri', 'Mina', 'Yara', 'Lani', 'Kess', 'Rue', 'Fae')>>
+	<<set _tgGirl.origin = 'Tribute from ' + _tgData.name>>
+	<<set _tgOpener = 'She goes with our blessing. We honour the bond between us.'>>
+	<<set _tgDesc = 'She was young and carried herself with the quiet dignity of someone who understood exactly what this was and had made peace with it.'>>
+<</if>>
+
+<center>
+	<<image 'places/cabin/tribute_gift.jpg'>>
+</center>
+<br />
+
+A small group from <<= _tgData.name >> arrived at the gate before sunrise. No weapons drawn — a show of trust. Their speaker stepped forward.
+<br /><br />
+
+<<sayNpc { name: 'Elder', gender: 1 }>>
+	<<= _tgOpener >>
+<</sayNpc>>
+<br />
+
+<<= _tgDesc >>
+<br /><br />
+
+<<sayNpc _tgGirl>>
+	I know why I'm here.
+<</sayNpc>>
+<br />
+
+<div id="tg_choices">
+
+<div id="tg_guest">
+<<set _tgGuestLabel = 'Accept her — she stays as a free member of the household'>>
+<<linkreplace _tgGuestLabel>>
+	<<run $('#tg_choices').hide()>>
+	<<run $guests.push(_tgGirl)>>
+	<<addmins 30>>
+	You nodded to the elder and stepped aside. <<= _tgGirl.name >> walked through the gate without being led.
+	<br /><br />
+	<span style="color: #55cc88;"><<= _tgGirl.name >> joined your household.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+
+<div id="tg_slave">
+<<set _tgSlaveLabel = 'Accept her — as a slave'>>
+<<linkreplace _tgSlaveLabel>>
+	<<run $('#tg_choices').hide()>>
+	<<set _tgGirl.sub = Math.min((_tgGirl.sub ?? 0) + 10, 100)>>
+	<<run $slaves.push(_tgGirl)>>
+	<<run setup.settlements.modifyRelationship(_tgS, -5, 'Tribute accepted as slave — slight disrespect to the gift')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 30>>
+	The elder's expression tightened almost imperceptibly when you explained the terms. They had offered a gift; you had assigned it a category. They accepted it without protest.
+	<br /><br />
+	<span style="color: #55cc88;"><<= _tgGirl.name >> added to your slaves.</span>
+	<span style="color: #888; font-size: 0.85em;"> <<= _tgData.name >> noted the distinction.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+
+<div id="tg_decline">
+<<set _tgDeclineLabel = 'Decline with respect — send her home'>>
+<<linkreplace _tgDeclineLabel>>
+	<<run $('#tg_choices').hide()>>
+	<<run setup.settlements.modifyRelationship(_tgS, -5, 'Tribute respectfully declined')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 20>>
+	You thanked the elder and told him <<= _tgGirl.name >> should go back to her people. He accepted it without visible offense, though you both understood what refusing a gift meant.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+
+<<if $player.money >= 50>>
+<div id="tg_gifts">
+<<set _tgGiftsLabel = 'Decline — but send them back with gifts (50 caps)'>>
+<<linkreplace _tgGiftsLabel>>
+	<<run $('#tg_choices').hide()>>
+	<<set $player.money -= 50>>
+	<<run setup.settlements.modifyRelationship(_tgS, 5, 'Tribute declined but returned with gifts')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 30>>
+	You sent <<= _tgGirl.name >> back with 50 caps tucked into a cloth bundle. The elder looked at it, then at you, and gave a small bow. That was understood.
+	<br /><br />
+	<span style="color: #55cc88;"><<= _tgData.name >> relationship improved (+5).</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<</if>>
+
+</div>

@@ -1,0 +1,29 @@
+:: Event - Guest rescue - Lost [Place]
+<h1 class="ptitle">RESCUE</h1>
+<br />
+
+<<set _rsc = $game.capturedGuest>>
+<<set _rscS = _rsc ? setup.settlements.getById(_rsc.settlementId) : null>>
+
+<center>
+	<<image 'places/cabin/guest_rescue_lost.jpg'>>
+</center>
+<br />
+
+You got through the outer wall. You didn't get through the rest.
+<br /><br />
+
+They beat you back to the perimeter and let you crawl to your car. A message without words: come back and it ends differently.
+<br /><br />
+
+<<if _rscS>>
+	<<run setup.settlements.modifyRelationship(_rscS, -10, 'Failed rescue attempt')>>
+	<<run setup.settlements.logEvent(_rscS, 'Player attempted rescue raid and was repelled.')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<<addmins 90>>
+
+<span style="color: #e05555;"><<= _rsc ? _rsc.npc.name : 'She'>> is still there. You can try again from the World map — ransom or another rescue.</span>
+<br /><br />
+
+<<link 'Drive back'>><<goto 'Wood cabin'>><</link>>

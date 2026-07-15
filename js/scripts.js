@@ -202,7 +202,8 @@ setup.inventoryNpc = [
     'bow',
     'gas_mask',
     'axe',
-    'dumbbell', 
+    'sword',
+    'dumbbell',
     'kettlebell', 'dumbestbell',
     'condom',
     'body_armor',
@@ -834,7 +835,8 @@ setup.suicideChance = function (person) {
     return new Date(year, month - 1, day); 
   }
 
-  setup.pregnancyChance = function (person) {
+  setup.pregnancyChance = function (person, father) {
+    if (father && (father.traits ?? []).includes('infertile')) return false;
     var chance = 0;
     var infertile = (person.traits ?? []).includes('infertile');
     if (infertile || person.sexChanged) {

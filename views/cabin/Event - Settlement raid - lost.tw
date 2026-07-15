@@ -1,0 +1,51 @@
+:: Event - Settlement raid - lost [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<center>
+	<<image 'places/cabin/settlement_raid_lost.jpg' sfw>>
+</center>
+<br />
+
+You held the line as long as you could. It wasn't enough. When the dust settled, they were still standing and you weren't.
+<br /><br />
+
+<<set _srlS = setup.settlements.getById($tmpSettlement)>>
+<<if _srlS>>
+	<<set _srlS.settlementRaidDay = $game.day>>
+	<<run setup.settlements.modifyRelationship(_srlS, -5, 'Successful raid on player base')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+
+<<if $tmpGuy>>
+	<<sayNpc $tmpGuy>>
+		Should've stayed out of our way.
+	<</sayNpc>>
+	<br />
+<</if>>
+
+<<set _srlFood = Math.min(80, setup.cabinInventory.count('food'))>>
+<<set _srlMoney = Math.min(250, $player.money)>>
+
+<<if _srlFood || _srlMoney>>
+	They moved through the base fast and took what they came for.
+	<br /><br />
+	<<if _srlFood>>
+		<<run setup.cabinInventory.drop('food', _srlFood)>>
+		<strong><<= _srlFood>> food taken.</strong>
+		<br />
+	<</if>>
+	<<if _srlMoney>>
+		<<set $player.money -= _srlMoney>>
+		<strong><<= _srlMoney>> caps taken.</strong>
+		<br />
+	<</if>>
+	<br />
+<<else>>
+	They found nothing worth taking and left you with only bruises.
+	<br /><br />
+<</if>>
+
+<<link 'Get up'>>
+	<<goto 'Wood cabin'>>
+<</link>>

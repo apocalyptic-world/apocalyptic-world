@@ -1,0 +1,64 @@
+:: Event - Targeted abduction [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _taData = $game.targetedAbduction>>
+<<set _taS = setup.settlements.getById(_taData.settlementId)>>
+<<set _taGuestIdx = $guests.findIndex(function(g) { return g.id === _taData.guestId; })>>
+<<set _taGuest = _taGuestIdx >= 0 ? $guests[_taGuestIdx] : null>>
+
+<<if !_taS || !_taGuest>>
+	<<unset $game.targetedAbduction>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
+<center>
+	<<image 'places/cabin/targeted_abduction.jpg'>>
+</center>
+<br />
+
+They showed up before sunrise. Six of them from <<= _taData.settlementName >>, armed and unhurried — the kind of people who don't come unless they know they'll get what they want. Their leader stood at the gate and asked for <<= _taGuest.name >> by name.
+<br /><br />
+
+<<sayNpc _taGuest>>
+	What do they want with me?
+<</sayNpc>>
+<br />
+
+You didn't have a good answer for that.
+<br /><br />
+
+<<set _taGuards = setup.getPersonsForLocation($guests, 'guard')>>
+<<set _taEnemyCount = Math.min(2, Math.max(1, Math.floor((_taS.defense ?? 100) / 120)))>>
+<<generateEnemies _taEnemyCount 0 _taEnemyCount>>
+<<for _taei = 0; _taei < $enemies.length; _taei++>>
+	<<set $enemies[_taei].strength = Math.min(($enemies[_taei].strength ?? 50) + 25, 100)>>
+	<<set $enemies[_taei].endurance = Math.min(($enemies[_taei].endurance ?? 50) + 15, 100)>>
+<</for>>
+
+<div id="ta_handover">
+<<set _taHandoverLabel = 'Hand her over'>>
+<<linkreplace _taHandoverLabel>>
+	<<run $('#ta_handover, #ta_fight').hide()>>
+	<<set _taGIdx2 = $guests.findIndex(function(g) { return g.id === _taData.guestId; })>>
+	<<if _taGIdx2 >= 0>><<guestLeft _taGIdx2>><</if>>
+	<<set _taH = setup.settlements.getById(_taData.settlementId)>>
+	<<run setup.settlements.resolveAbduction(_taH, true)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $game.targetedAbduction>>
+	<<addmins 30>>
+	You opened the gate. <<= _taData.guestName >> looked back at you once. You didn't meet her eyes. They left without another word.
+	<br /><br />
+	<span style="color: #888;">They got what they came for.</span>
+	<br /><br />
+	<<link 'Go back inside'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<div id="ta_fight">
+<<link 'Fight them off'>>
+	<<set $tmpTargetedAbduction = $game.targetedAbduction>>
+	<<unset $game.targetedAbduction>>
+	<<fight $enemies 'Event - Targeted abduction - Won' 'Event - Targeted abduction - Lost' false _taGuards>>
+	<<set $fight.skipEndingLost = true>>
+<</link>>
+</div>

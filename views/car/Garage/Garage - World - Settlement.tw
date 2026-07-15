@@ -1,0 +1,270 @@
+:: Garage - World - Settlement [Place bg-garage]
+<<set _s = setup.settlements.getDiscovered().find(s => s.id === $tmpSettlement)>>
+<<if !_s>>
+	<<goto 'Garage - World'>>
+<</if>>
+<<ensureLeader _s>>
+<<if !(_s.firstVisitDone ?? false)>>
+	<<set _s.firstVisitDone = true>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<goto 'Garage - World - First Visit'>>
+<</if>>
+
+<<set _relColors = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999999', friendly: '#55cc88', allied: '#5599e0' }>>
+<<set _typeNames = {
+	biker_gang: 'Biker Gang',
+	survivor_camp: 'Survivor Camp',
+	monastery: 'Monastery',
+	convent: 'Convent',
+	trading_post: 'Trading Post',
+	raider_camp: 'Raider Camp',
+	cult_compound: 'Cult Compound',
+	military_base: 'Military Base',
+	farming_community: 'Farming Community',
+	medical_colony: 'Medical Colony',
+	tribal_village: 'Tribal Village',
+	prison_colony: 'Prison Colony',
+	nomad_caravan: 'Nomad Caravan',
+	amazonian_tribe: 'Amazonian Tribe',
+	scavenger_den: 'Scavenger Den'
+}>>
+
+<<set _relLevel = setup.settlements.getRelationshipLevel(_s)>>
+<<set _relColor = _relColors[_relLevel]>>
+<<set _relLabel = setup.settlements.getRelationshipLabel(_s)>>
+<<set _typeName = _typeNames[_s.type] ?? _s.type>>
+<<set _settName = _s.name.toUpperCase()>>
+<<set _typeImg = 'places/world/' + _s.type + '.jpg'>>
+<<set _leader = _s.leader>>
+
+<h1 class="ptitle"><<= _settName>></h1>
+<br />
+
+<center>
+	<<image _typeImg sfw>>
+</center>
+<br />
+
+<div style="border-left: 3px solid <<= _relColor>>; padding: 10px 16px; margin-bottom: 16px; background: rgba(0,0,0,0.2);">
+	<span style="color: #aaa; font-size: 0.9em;"><<= _typeName>></span>
+	<span style="color: <<= _relColor>>; font-size: 0.9em; margin-left: 12px;">◈ <<= _relLabel>></span>
+	<br /><br />
+	<span style="color: #bbb; font-size: 0.9em;"><<= setup.settlements.getPopulationDescription(_s)>> · <<= setup.settlements.getGenderDescription(_s)>></span>
+	<br />
+	<span style="color: #bbb; font-size: 0.9em;"><<= setup.settlements.getDefenseDescription(_s)>></span>
+	<<if (_s.negotiatedCount ?? 0) > 0 || (_s.attackCount ?? 0) > 0>>
+		<br /><br />
+		<span style="color: #666; font-size: 0.82em;">
+			<<if (_s.negotiatedCount ?? 0) > 0>>Negotiated <<= _s.negotiatedCount>> time<<= _s.negotiatedCount > 1 ? 's' : ''>>.<</if>>
+			<<if (_s.attackCount ?? 0) > 0>>  Attacked <<= _s.attackCount>> time<<= _s.attackCount > 1 ? 's' : ''>> (<<= _s.attackVictories ?? 0>> won).<</if>>
+		</span>
+	<</if>>
+	<<if _s.activeMission && !setup.settlements.isMissionExpired(_s, $game.day)>>
+		<br /><br />
+		<span style="color: #e0a055; font-size: 0.82em;">📦 Active mission: <<= _s.activeMission.quantity>>× <<= _s.activeMission.item.replace(/_/g, ' ')>> · <<= _s.activeMission.reward>> caps</span>
+	<</if>>
+	<<if (_s.production.food ?? 0) > 0 && (_s.resources.food ?? 0) < 5>>
+		<br /><br />
+		<span style="color: #e05555; font-size: 0.85em;">⚠ Food supply critical — people are going hungry</span>
+		<<if !setup.settlements.isHostile(_s) && setup.cabinInventory.count('food') >= 10>>
+			<div id="famine_help">
+			<<set _famineLabel = 'Send emergency food (10)'>>
+			<<linkreplace _famineLabel>>
+				<<run $('#famine_help').hide()>>
+				<<run setup.cabinInventory.drop('food', 10)>>
+				<<run setup.settlements.sendEmergencyFood(_s, 10)>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<addmins 30>>
+				<span style="color: #55cc88;">You handed over 10 food. They received it without a word — the relief on their faces said enough.</span>
+			<</linkreplace>>
+			</div>
+		<</if>>
+	<</if>>
+</div>
+
+<<if (_s.recentEvents ?? []).length>>
+	<div style="background: rgba(0,0,0,0.12); border-left: 3px solid #252525; padding: 8px 14px; margin-bottom: 14px; font-size: 0.8em;">
+		<span style="color: #444; letter-spacing: 0.04em; font-size: 0.85em;">RECENT EVENTS</span>
+		<br />
+		<<for _rei = _s.recentEvents.length - 1; _rei >= 0; _rei-->>
+			<span style="color: #4a4a4a;">◦ <<= _s.recentEvents[_rei]>></span>
+			<br />
+		<</for>>
+	</div>
+<</if>>
+
+<<if _leader>>
+	<<set _introDialogs = setup.settlements.leaderDialogs[_s.type].intro>>
+	<<set _introLine = _introDialogs[randomInteger(0, _introDialogs.length - 1)]>>
+	<<sayNpc _leader>><<= _introLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<<if !setup.settlements.isHostile(_s)>>
+	<<link 'Trade'>>
+		<<goto 'Garage - World - Trade'>>
+	<</link>>
+<</if>>
+<<if !setup.settlements.isAllied(_s)>>
+	<<link 'Negotiate'>>
+		<<goto 'Garage - World - Negotiate'>>
+	<</link>>
+<</if>>
+<<if !setup.settlements.isHostile(_s)>>
+	<<link 'Donate'>>
+		<<goto 'Garage - World - Donate'>>
+	<</link>>
+<</if>>
+<<if setup.settlements.isFriendly(_s)>>
+	<<link 'Request Alliance'>>
+		<<goto 'Garage - World - Alliance'>>
+	<</link>>
+<</if>>
+<<if setup.settlements.isFriendly(_s) || setup.settlements.isAllied(_s)>>
+	<<link 'Recruit'>>
+		<<goto 'Garage - World - Recruit'>>
+	<</link>>
+	<<link 'Get Intel'>>
+		<<goto 'Garage - World - Intel'>>
+	<</link>>
+	<<link 'Missions'>>
+		<<goto 'Garage - World - Mission'>>
+	<</link>>
+	<<if $game.day >= ((_s.lastInvestDay ?? 0) + 14)>>
+		<div id="invest_block">
+		<<set _investLabel = 'Invest (200 caps)'>>
+		<<linkreplace _investLabel>>
+			<<run $('#invest_block').hide()>>
+			<<if $player.money >= 200>>
+				<<set _invResult = setup.settlements.investInSettlement(_s, 200)>>
+				<<if _invResult.success>>
+					<<set $player.money -= 200>>
+					<<addmins 60>>
+					<<run setup.settlements.save(setup.settlements.getAll())>>
+					<span style="color: #55cc88;">You put 200 caps into <<= _s.name>>. Population up by <<= _invResult.popGain>> and stockpiles boosted.</span>
+				<<else>>
+					<span style="color: #e05555;"><<= _invResult.reason>></span>
+				<</if>>
+			<<else>>
+				<span style="color: #e05555;">Not enough caps.</span>
+			<</if>>
+		<</linkreplace>>
+		</div>
+	<</if>>
+<</if>>
+<<if setup.settlements.typeConfig[_s.type].canSlaveTrade && !setup.settlements.isAllied(_s)>>
+	<<link 'Slave Trade'>>
+		<<goto 'Garage - World - Slave Trade'>>
+	<</link>>
+<</if>>
+<<if $game.capturedGuest && $game.capturedGuest.settlementId === _s.id>>
+	<div style="border-left: 3px solid #e09855; padding: 10px 14px; margin: 14px 0; background: rgba(224,152,85,0.07);">
+		<span style="color: #e09855; font-weight: bold;">⚠ HOLDING CAPTIVE: <<= $game.capturedGuest.npc.name>></span>
+		<br />
+		<span style="color: #888; font-size: 0.88em;">She was taken during scavenging.</span>
+		<br /><br />
+		<<if $player.money >= 500>>
+			<div id="ransom_block">
+			<<linkreplace 'Pay ransom (500 caps)'>>
+				<<run $('#ransom_block, #rescue_block').hide()>>
+				<<set $player.money -= 500>>
+				<<run setup.settlements.modifyRelationship(_s, 5, 'Ransom paid')>>
+				<<run _s.captiveId = null; _s.captiveName = null>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<run $guests.push($game.capturedGuest.npc)>>
+				<<unset $game.capturedGuest>>
+				<<addmins 60>>
+				<span style="color: #55cc88;">They handed her over at the gate. She looked rough but was breathing. 500 caps lighter.</span>
+			<</linkreplace>>
+			</div>
+		<<else>>
+			<span style="color: #666; font-size: 0.85em;">Ransom (500 caps) — you don't have enough.</span>
+			<br />
+		<</if>>
+		<div id="rescue_block">
+		<<link 'Mount a rescue'>>
+			<<set $tmpRescueSettlement = _s.id>>
+			<<goto 'Event - Guest rescue'>>
+		<</link>>
+		</div>
+		<br />
+		<<link 'Leave her'>>
+			<<set _s.captiveId   = null>>
+			<<set _s.captiveName = null>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<unset $game.capturedGuest>>
+			<<goto 'Garage - World - Settlement'>>
+		<</link>>
+	</div>
+<</if>>
+<<if (_s.playerCaptives ?? []).length > 0>>
+	<div style="border-left: 3px solid #e09855; padding: 10px 14px; margin: 14px 0; background: rgba(224,152,85,0.07);">
+		<span style="color: #e09855; font-weight: bold;">⚠ YOUR PEOPLE HELD HERE</span>
+		<br />
+		<<for _pci = 0; _pci < _s.playerCaptives.length; _pci++>>
+			<span style="color: #aaa; font-size: 0.88em;"><<= _s.playerCaptives[_pci].npc.name>></span>
+			<br />
+		<</for>>
+		<br />
+		<<set _ransomTotal = _s.playerCaptives.length * 200>>
+		<<if $player.money >= _ransomTotal>>
+			<div id="pc_ransom_block">
+			<<set _ransomLabel = 'Pay ransom (' + _ransomTotal + ' caps)'>>
+			<<linkreplace _ransomLabel>>
+				<<run $('#pc_ransom_block, #pc_rescue_block').hide()>>
+				<<set $player.money -= _ransomTotal>>
+				<<for _rci = 0; _rci < _s.playerCaptives.length; _rci++>>
+					<<run $guests.push(_s.playerCaptives[_rci].npc)>>
+				<</for>>
+				<<run setup.settlements.modifyRelationship(_s, 5, 'Ransom paid for captured raiders')>>
+				<<set _s.playerCaptives = []>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<addmins 60>>
+				<span style="color: #55cc88;">They brought them out to the gate. <<= _ransomTotal>> caps changed hands. Nobody looked happy about it.</span>
+			<</linkreplace>>
+			</div>
+		<<else>>
+			<span style="color: #666; font-size: 0.85em;">Ransom (<<= _ransomTotal>> caps) — not enough caps.</span>
+			<br />
+		<</if>>
+		<div id="pc_rescue_block">
+		<<link 'Mount a rescue'>>
+			<<goto 'Garage - World - Rescue'>>
+		<</link>>
+		</div>
+	</div>
+<</if>>
+<<link 'Attack'>>
+	<<goto 'Garage - World - Attack'>>
+<</link>>
+<<if _s.ultimatumActive && setup.settlements.isHostile(_s)>>
+	<div style="border-left: 3px solid #e05555; padding: 10px 14px; margin: 14px 0; background: rgba(224,85,85,0.06);">
+		<span style="color: #e05555; font-weight: bold;">⚠ ULTIMATUM</span>
+		<br />
+		<span style="color: #aaa; font-size: 0.88em;">They demand <<= _s.ultimatumAmount ?? 500>> caps. Deadline: day <<= (_s.ultimatumDay ?? 0) + 3>>.</span>
+		<br />
+		<<if $game.day > (_s.ultimatumDay ?? 0) + 3>>
+			<span style="color: #e05555; font-size: 0.85em;">The deadline has passed — they're preparing to move.</span>
+		<<else>>
+			<span style="color: #888; font-size: 0.85em;"><<= Math.max(0, (_s.ultimatumDay ?? 0) + 3 - $game.day)>> day(s) remaining.</span>
+		<</if>>
+		<<if $player.money >= (_s.ultimatumAmount ?? 500)>>
+			<div id="ultimatum_pay">
+			<<set _payLabel = 'Pay the demand (' + (_s.ultimatumAmount ?? 500) + ' caps)'>>
+			<<linkreplace _payLabel>>
+				<<run $('#ultimatum_pay').hide()>>
+				<<set _ultResult = setup.settlements.payUltimatum(_s)>>
+				<<set $player.money -= (_s.ultimatumAmount ?? 500)>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<addmins 15>>
+				<span style="color: #55cc88;">You paid their demand. The messenger nodded once and left without a word. The threat is off — for now.</span>
+			<</linkreplace>>
+			</div>
+		<<else>>
+			<br /><span style="color: #e05555; font-size: 0.85em;">You don't have enough caps.</span>
+		<</if>>
+	</div>
+<</if>>
+<<link 'Back'>>
+	<<goto 'Garage - World'>>
+<</link>>

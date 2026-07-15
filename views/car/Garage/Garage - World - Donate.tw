@@ -1,0 +1,59 @@
+:: Garage - World - Donate [Place bg-garage]
+<h1 class="ptitle">DONATE</h1>
+<br />
+
+<<set _dnS = setup.settlements.getById($tmpSettlement)>>
+<<if !_dnS>><<goto 'Garage - World'>><</if>>
+
+<<set _dnConfig = setup.settlements.typeConfig[_dnS.type]>>
+<<set _dnWants  = _dnConfig.wantsGoods ?? []>>
+<<set _dnRelColors = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999999', friendly: '#55cc88', allied: '#5599e0' }>>
+<<set _dnRelLevel  = setup.settlements.getRelationshipLevel(_dnS)>>
+<<set _dnRelColor  = _dnRelColors[_dnRelLevel]>>
+
+You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal, no strings — just goodwill.
+<br /><br />
+
+<span style="color: <<= _dnRelColor>>; font-size: 0.9em;">◈ Currently <<= setup.settlements.getRelationshipLabel(_dnS)>></span>
+<br /><br />
+
+<div style="background: rgba(0,0,0,0.12); border-left: 3px solid #444; padding: 8px 14px; margin-bottom: 14px; font-size: 0.82em; color: #666;">
+	Donating items they actually need gives a larger relationship boost.
+</div>
+
+<<set _dnHasAny = false>>
+<<for _dni = 0; _dni < _dnWants.length; _dni++>>
+	<<set _dnItem = _dnWants[_dni]>>
+	<<set _dnHave = $backpack.count(_dnItem)>>
+	<<if _dnHave > 0>>
+		<<set _dnHasAny = true>>
+		<<capture _dni, _dnItem>>
+			<div id="dn_item_<<= _dni>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
+				<<set _dnLabel = 'Give ' + _dnItem.replace(/_/g, ' ') + ' (you have ' + $backpack.count(_dnItem) + ')'>>
+				<<linkreplace _dnLabel>>
+					<<run $('#dn_item_' + _dni).hide()>>
+					<<set _dnHandle = setup.settlements.getById($tmpSettlement)>>
+					<<if _dnHandle && $backpack.count(_dnItem) >= 1>>
+						<<set _dnOldLevel = setup.settlements.getRelationshipLevel(_dnHandle)>>
+						<<drop $backpack _dnItem 1>>
+						<<run _dnHandle.resources[_dnItem] = (_dnHandle.resources[_dnItem] || 0) + 1; setup.settlements.modifyRelationship(_dnHandle, 8, 'Donated needed supplies'); setup.settlements.save(setup.settlements.getAll())>>
+						<<addmins 30>>
+						<span style="color: #55cc88;">Donated 1× <<= _dnItem.replace(/_/g, ' ')>>. They appreciated it.</span>
+						<<if setup.settlements.getRelationshipLevel(_dnHandle) !== _dnOldLevel>>
+							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_dnHandle)>></span>
+						<</if>>
+					<<else>>
+						<span style="color: #e05555;">None left to give.</span>
+					<</if>>
+				<</linkreplace>>
+			</div>
+		<</capture>>
+	<</if>>
+<</for>>
+
+<<if !_dnHasAny>>
+	<p style="color: #888; font-size: 0.9em;">You don't have anything they need right now.</p>
+<</if>>
+
+<br />
+<<link 'Leave'>><<goto 'Garage - World - Settlement'>><</link>>

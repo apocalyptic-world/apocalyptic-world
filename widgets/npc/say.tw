@@ -1,3 +1,33 @@
+:: Widget ensureLeader [widget]
+
+<<widget ensureLeader>>
+<<if $args[0] && !$args[0].leader>>
+	<<set _elType     = $args[0].type>>
+	<<set _elGcomp    = setup.settlements.typeConfig[_elType].genderComp>>
+	<<set _elRoll     = randomInteger(1, 100)>>
+	<<set _elSavedGuy  = $tmpGuy>>
+	<<set _elSavedGirl = $tmpGirl>>
+	<<if settings.transEnabled && _elGcomp === 'mixed' && _elRoll > 90>>
+		<<newtransgirl>>
+		<<set _elNpc = $tmpGirl>>
+	<<elseif _elGcomp === 'all_male' || _elGcomp === 'mostly_male' || (_elGcomp === 'mixed' && _elRoll <= 50)>>
+		<<newguy>>
+		<<set _elNpc = $tmpGuy>>
+	<<else>>
+		<<newgirl>>
+		<<set _elNpc = $tmpGirl>>
+	<</if>>
+	<<set _elTitles    = setup.settlements.leaderTitles[_elType]>>
+	<<set _elTitlePool = _elNpc.gender === 1 ? _elTitles.male : _elTitles.female>>
+	<<set _elNpc.title = _elTitlePool[randomInteger(0, _elTitlePool.length - 1)]>>
+	<<set $args[0].leader = _elNpc>>
+	<<set $tmpGuy  = _elSavedGuy>>
+	<<set $tmpGirl = _elSavedGirl>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<</widget>>
+
+
 :: Widget sayNpc [widget]
 
 <<widget sayNpc container>>

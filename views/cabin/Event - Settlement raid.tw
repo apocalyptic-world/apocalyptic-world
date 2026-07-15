@@ -1,0 +1,58 @@
+:: Event - Settlement raid [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<<set _srS = setup.settlements.getById($tmpSettlement)>>
+<<if !_srS>><<goto 'Wood cabin'>><</if>>
+<<ensureLeader _srS>>
+<<set _srLeader = _srS.leader>>
+
+<center>
+	<<image 'places/cabin/settlement_raid.jpg' sfw>>
+</center>
+<br />
+
+The gate alarm tripped before dawn. You grabbed your weapon and stepped outside to find a column of armed figures spread across the perimeter — not wandering scavengers but a coordinated unit. Their markings gave them away.
+<br /><br />
+
+<<set _srDialogs = setup.settlements.leaderDialogs[_srS.type]>>
+<<if _srLeader && _srDialogs>>
+	<<set _srLine = _srDialogs.intro[randomInteger(0, _srDialogs.intro.length - 1)]>>
+	<<sayNpc _srLeader>><<= _srLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<<set _srDefense = setup.settlements.getDefenseStrength(_srS)>>
+<<set _srCount = Math.max(2, Math.min(8, Math.floor(_srDefense / 60)))>>
+<<generateEnemies _srCount 0 _srCount>>
+<<for _srEi = 0; _srEi < $enemies.length; _srEi++>>
+	<<set $enemies[_srEi].strength += randomInteger(30, 80)>>
+	<<set $enemies[_srEi].endurance += randomInteger(30, 80)>>
+<</for>>
+
+A raiding party from <strong><<= _srS.name>></strong>. <<= _srCount>> fighters, armed and ready.
+<br /><br />
+
+<<set _srGuards = setup.getPersonsForLocation($guests, 'guard')>>
+
+<div id="sraid_fight">
+<<link 'Defend the base'>>
+	<<fight $enemies 'Event - Settlement raid - won' 'Event - Settlement raid - lost' false _srGuards>>
+	<<set $fight.skipEndingLost = true>>
+<</link>>
+</div>
+<<if $player.money >= 200>>
+<div id="sraid_pay">
+<<linkreplace 'Pay them off (200 caps)'>>
+	<<run $('#sraid_fight').hide()>>
+	<<set $player.money -= 200>>
+	<<set _srS.settlementRaidDay = $game.day>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	Paying once makes you a target for next time.
+	<br /><br />
+	<<link 'Go inside'>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+<</linkreplace>>
+</div>
+<</if>>

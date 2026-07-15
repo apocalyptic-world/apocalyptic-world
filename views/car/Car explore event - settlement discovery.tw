@@ -1,0 +1,58 @@
+:: Car explore event - settlement discovery [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+
+<<set _isFirst = setup.settlements.getAll().length === 0>>
+<<if _isFirst>>
+	<<set _settlement = setup.settlements.add({ type: 'raider_camp' })>>
+<<else>>
+	<<set _settlement = setup.settlements.add()>>
+<</if>>
+<<run setup.settlements.discover(_settlement, $game.day)>>
+<<set $tmpSettlement = _settlement.id>>
+
+<<set _popSize = setup.settlements.getPopulationDescription(_settlement)>>
+<<set _genderDesc = setup.settlements.getGenderDescription(_settlement)>>
+<<set _defenseDesc = setup.settlements.getDefenseDescription(_settlement)>>
+<<set _imgPath = 'places/world/' + _settlement.type + '.jpg'>>
+
+<<set _typeIntros = {
+	raider_camp: 'Columns of dark smoke rise over a compound of scrap-metal walls and salvaged watchtowers. Movement on the perimeter. Armed.',
+	biker_gang: 'The sound reached you first — engines, music, shouting. A compound built around an old mechanics yard, bikes lined up outside.',
+	survivor_camp: 'A cluster of patched tents and prefab modules arranged around a central fire pit. People move between them without hurrying.',
+	monastery: 'Stone walls that predate the collapse, repaired with newer brick where they\'ve crumbled. A bell tower still stands.',
+	convent: 'A walled compound, old construction, a small garden visible over the gate. Quiet. Well maintained.',
+	trading_post: 'A sprawl of stalls and permanent structures built along an old highway junction. Vehicles parked in clusters. People moving goods.',
+	cult_compound: 'Painted symbols on the outer walls. Banners on poles. The gates are open but the people inside move in deliberate patterns.',
+	military_base: 'Razor wire. Sandbag positions. A watch post with a working light. Someone kept military discipline alive here after everything else fell apart.',
+	farming_community: 'Fields. Actual working fields — crops in rows, irrigation lines running from a raised tank. Buildings clustered at the far end.',
+	medical_colony: 'A white cross on the largest structure, still legible from here. People in pale clothing moving between buildings with purpose.',
+	tribal_village: 'Circular structures with fire pits between them. Carved wood poles. Traditional construction, built after the collapse.',
+	prison_colony: 'High walls, minimal windows, a guard tower with a rotating lamp. Whether or not it started as a prison, it functions as one now.',
+	nomad_caravan: 'A circle of vehicles — trucks, campers, trailers — parked in a defensive ring. They\'ve stopped here, but they don\'t look like they intend to stay.',
+	amazonian_tribe: 'A settlement built with deliberate care. Watchtowers manned by figures with bows. No men visible from here.',
+	scavenger_den: 'An enormous mass of salvage — vehicles, appliances, structural steel — surrounding a core of crude buildings. Smoke from a smelter.'
+}>>
+
+
+<center>
+	<<image _imgPath sfw>>
+</center>
+<br />
+
+<<=_typeIntros[_settlement.type] ?? setup.settlements.getDescription(_settlement)>>
+<br /><br />
+A <<= _popSize>> settlement, <<= _genderDesc>>. <<= _defenseDesc[0].toUpperCase() + _defenseDesc.slice(1)>>.
+<br /><br />
+
+<<if _isFirst>>
+	<<goto 'Car explore event - first settlement'>>
+<<else>>
+	<<link 'Approach'>>
+		<<goto 'Garage - World'>>
+	<</link>>
+	<br />
+	<<link 'Leave for now'>>
+		<<goto 'Garage'>>
+	<</link>>
+<</if>>

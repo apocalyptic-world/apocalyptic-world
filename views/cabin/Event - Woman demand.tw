@@ -1,0 +1,155 @@
+:: Event - Woman demand [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _wdData = $game.womanDemand>>
+<<set _wdS = setup.settlements.getById(_wdData.id)>>
+<<if !_wdS>>
+	<<unset $game.womanDemand>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
+<<set _wdDaysLeft = Math.max(0, (_wdData.deadline ?? ($game.day + 3)) - $game.day)>>
+
+<center>
+	<<image 'places/cabin/woman_demand.jpg'>>
+</center>
+<br />
+
+A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a folded message at the gate and didn't wait to see it read.
+<br /><br />
+
+<div style="background: rgba(0,0,0,0.25); border-left: 3px solid #e05555; padding: 12px 16px; margin-bottom: 16px; font-style: italic; color: #ccc;">
+	"Send us a woman. Young, healthy. Three days or we take one ourselves — and we take more than one."
+	<br /><br />
+	<span style="font-style: normal; color: #888; font-size: 0.85em;">— <<= _wdData.name >></span>
+</div>
+
+<<if _wdDaysLeft > 0>>
+	<span style="color: #e09855; font-size: 0.88em;">⏳ <<= _wdDaysLeft>> day<<= _wdDaysLeft !== 1 ? 's' : ''>> remaining.</span>
+<<else>>
+	<span style="color: #e05555; font-size: 0.88em;">⚠ Deadline has passed.</span>
+<</if>>
+<br /><br />
+
+<div id="wd_choices">
+
+<<set _wdSendable = []>>
+<<for _wdi = 0; _wdi < $slaves.length; _wdi++>>
+	<<if setup.getAge($slaves[_wdi]) >= 18>>
+		<<run _wdSendable.push({ npc: $slaves[_wdi], kind: 'slave' })>>
+	<</if>>
+<</for>>
+<<for _wdg = 0; _wdg < $guests.length; _wdg++>>
+	<<if $guests[_wdg].gender === 0 && setup.getAge($guests[_wdg]) >= 18>>
+		<<run _wdSendable.push({ npc: $guests[_wdg], kind: 'guest' })>>
+	<</if>>
+<</for>>
+
+<<if _wdSendable.length>>
+<div id="wd_send_section">
+<span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SEND SOMEONE</span>
+<br /><br />
+<<set $game.wdSendId = $game.wdSendId ?? null>>
+<table class="npc-list">
+<<for _wdi = 0; _wdi < _wdSendable.length; _wdi++>>
+	<<set _wdEntry = _wdSendable[_wdi]>>
+	<<capture _wdi _wdEntry>>
+		<tr class="item">
+			<td style="min-width: 25%">
+				<span class="gender-f">
+					<<= _wdEntry.npc.name >>
+					<span style="color: #888; font-size: 0.85em;"> (<<= _wdEntry.kind >>, age <<= setup.getAge(_wdEntry.npc) >>)</span>
+				</span>
+			</td>
+			<td>
+				<<npcListView _wdEntry.npc _wdi _wdEntry.kind>>
+			</td>
+			<td>
+				<<radiobutton "$game.wdSendId" _wdEntry.npc.id autocheck>>
+			</td>
+		</tr>
+	<</capture>>
+<</for>>
+</table>
+<br />
+<<set _wdSendLabel = 'Send selected'>>
+<<linkreplace _wdSendLabel>>
+	<<if $game.wdSendId>>
+		<<set _wdSlaveIdx = $slaves.findIndex(function(g) { return g.id === $game.wdSendId; })>>
+		<<set _wdGuestIdx = $guests.findIndex(function(g) { return g.id === $game.wdSendId; })>>
+		<<if _wdSlaveIdx >= 0>>
+			<<set _wdSentNpc = clone($slaves[_wdSlaveIdx])>>
+			<<run $slaves.splice(_wdSlaveIdx, 1)>>
+		<<elseif _wdGuestIdx >= 0>>
+			<<set _wdSentNpc = clone($guests[_wdGuestIdx])>>
+			<<guestLeft _wdGuestIdx>>
+		<</if>>
+		<<if _wdSentNpc>>
+			<<set _wdHandle = setup.settlements.getById($game.womanDemand.id)>>
+			<<set _wdSettleName = $game.womanDemand.name>>
+			<<run setup.settlements.resolveWomanDemand(_wdHandle, true)>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<run $('#wd_choices').hide()>>
+			<<unset $game.womanDemand, $game.wdSendId>>
+			<<addmins 60>>
+			You handed <<= _wdSentNpc.name >> over at the gate without ceremony. <<= setup.pronounceWhat(_wdSentNpc, true) >> walked out and didn't look back — whether from pride or resignation, you couldn't tell.
+			<br /><br />
+			<span style="color: #888;"><<= _wdSettleName >> got what they asked for. The pressure lifted — for now.</span>
+			<br /><br />
+			<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+		<<else>>
+			<span style="color: #e05555;">Something went wrong finding that person.</span>
+		<</if>>
+	<<else>>
+		<span style="color: #888;">Select someone from the list first.</span>
+	<</if>>
+<</linkreplace>>
+</div>
+<br />
+<<else>>
+	<span style="color: #555; font-size: 0.88em;">You have no women to send.</span>
+	<br /><br />
+<</if>>
+
+<<if $player.money >= 1000>>
+<div id="wd_pay">
+<<set _wdPayLabel = 'Pay them off (1000 caps)'>>
+<<linkreplace _wdPayLabel>>
+	<<run $('#wd_choices').hide()>>
+	<<set $player.money -= 1000>>
+	<<set _wdHandle3 = setup.settlements.getById($game.womanDemand.id)>>
+	<<run setup.settlements.resolveWomanDemand(_wdHandle3, true)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $game.womanDemand, $game.wdSendId>>
+	<<addmins 30>>
+	You sent a message back: 1000 caps, take it or find someone else to push around.
+	<br /><br />
+	A pause. Then the rider returned with a nod. Apparently they had a price for everything.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<<else>>
+	<span style="color: #555; font-size: 0.88em;">Pay them off (1000 caps) — not enough caps.</span>
+	<br />
+<</if>>
+<br />
+<div id="wd_refuse">
+<<set _wdRefuseLabel = 'Refuse'>>
+<<linkreplace _wdRefuseLabel>>
+	<<run $('#wd_choices').hide()>>
+	<<set _wdHandle4 = setup.settlements.getById($game.womanDemand.id)>>
+	<<run setup.settlements.resolveWomanDemand(_wdHandle4, false)>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<set $game.pendingUltimatumRaid = $game.womanDemand.id>>
+	<<unset $game.womanDemand, $game.wdSendId>>
+	You crumpled the message and said nothing. Let them come.
+	<br /><br />
+	<span style="color: #e05555;">You've made your choice. They won't wait long.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+
+</div>

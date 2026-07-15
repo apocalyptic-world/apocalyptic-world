@@ -1,0 +1,226 @@
+:: Garage - World - Negotiate [Place bg-garage]
+<h1 class="ptitle">NEGOTIATE</h1>
+<br />
+
+<<set _s = setup.settlements.getById($tmpSettlement)>>
+<<if !_s>><<goto 'Garage - World'>><</if>>
+<<ensureLeader _s>>
+
+<<set _config  = setup.settlements.typeConfig[_s.type]>>
+<<set _leader  = _s.leader>>
+<<set _dialogs = setup.settlements.leaderDialogs[_s.type]>>
+<<set _relLevel = setup.settlements.getRelationshipLevel(_s)>>
+<<set _relColors = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999999', friendly: '#55cc88', allied: '#5599e0' }>>
+<<set _relColor = _relColors[_relLevel]>>
+<<set _relLabel = setup.settlements.getRelationshipLabel(_s)>>
+<<set _offersStr = _config.tradeGoods.map(function(i) { return i.replace(/_/g, ' '); }).join(', ')>>
+<<set _needsStr = _config.wantsGoods.map(function(i) { return i.replace(/_/g, ' '); }).join(', ')>>
+<<set _introLine = _dialogs.intro[randomInteger(0, _dialogs.intro.length - 1)]>>
+
+<<if _leader>>
+	<<sayNpc _leader>><<= _introLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<div style="background: rgba(0,0,0,0.15); border-left: 3px solid #555; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9em;">
+	<span style="color: #aaa;"><strong style="color: #ddd;">They offer:</strong> <<= _offersStr>></span>
+	<br />
+	<span style="color: #aaa;"><strong style="color: #ddd;">They need:</strong> <<= _needsStr>></span>
+</div>
+
+<span style="color: <<= _relColor>>; font-size: 0.9em;">◈ Currently <<= _relLabel>></span>
+<br /><br />
+
+<<if _s.relationship > -60>>
+	<div id="neg_greeting">
+		<<set _greetLabel = 'Approach with a friendly greeting'>>
+		<<linkreplace _greetLabel>>
+			<<run $('#neg_trade, #neg_gift, #neg_tribute, #neg_proposition, #neg_back').hide()>>
+			<<set _oldLevel = setup.settlements.getRelationshipLevel(_s)>>
+			<<set _result = setup.settlements.negotiate(_s, 'friendly_greeting')>>
+			<<run _s.negotiatedCount = (_s.negotiatedCount ?? 0) + 1; setup.settlements.save(setup.settlements.getAll())>>
+			<<addmins 30>>
+			You approach with open hands and keep your voice steady.
+			<br /><br />
+			<<if _leader>>
+				<<set _line = _result.success ? _dialogs.greeting_ok[randomInteger(0, _dialogs.greeting_ok.length - 1)] : _dialogs.greeting_fail[randomInteger(0, _dialogs.greeting_fail.length - 1)]>>
+				<<sayNpc _leader>><<= _line>><</sayNpc>>
+				<br />
+			<</if>>
+			<<if _result.success>>
+				<<if setup.settlements.getRelationshipLevel(_s) !== _oldLevel>>
+					<span style="color: #55cc88;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_s)>></span>
+				<<else>>
+					<span style="color: #55cc88;">Relationship improved slightly.</span>
+				<</if>>
+			<<else>>
+				<span style="color: #e05555;">They're not ready to listen.</span>
+			<</if>>
+			<br /><br />
+			<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if _s.relationship > -20>>
+	<div id="neg_trade">
+		<<set _tradeLabel = 'Propose a trade arrangement'>>
+		<<linkreplace _tradeLabel>>
+			<<run $('#neg_greeting, #neg_gift, #neg_tribute, #neg_proposition, #neg_back').hide()>>
+			<<set _oldLevel = setup.settlements.getRelationshipLevel(_s)>>
+			<<set _result = setup.settlements.negotiate(_s, 'trade_offer')>>
+			<<run _s.negotiatedCount = (_s.negotiatedCount ?? 0) + 1; setup.settlements.save(setup.settlements.getAll())>>
+			<<addmins 60>>
+			You lay out what you can offer and what you're looking for.
+			<br /><br />
+			<<if _leader>>
+				<<set _line = _result.success ? _dialogs.trade_ok[randomInteger(0, _dialogs.trade_ok.length - 1)] : _dialogs.trade_fail[randomInteger(0, _dialogs.trade_fail.length - 1)]>>
+				<<sayNpc _leader>><<= _line>><</sayNpc>>
+				<br />
+			<</if>>
+			<<if _result.success>>
+				<<if setup.settlements.getRelationshipLevel(_s) !== _oldLevel>>
+					<span style="color: #55cc88;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_s)>></span>
+				<<else>>
+					<span style="color: #55cc88;">Relationship improved slightly.</span>
+				<</if>>
+			<<else>>
+				<span style="color: #e05555;">They're not ready for that yet.</span>
+			<</if>>
+			<br /><br />
+			<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="neg_gift">
+	<<set _giftLabel = 'Leave a gift (50 caps)'>>
+	<<linkreplace _giftLabel>>
+		<<run $('#neg_greeting, #neg_trade, #neg_tribute, #neg_proposition, #neg_back').hide()>>
+		<<if $player.money >= 50>>
+			<<set _oldLevel = setup.settlements.getRelationshipLevel(_s)>>
+			<<set _result = setup.settlements.negotiate(_s, 'gift', 50)>>
+			<<if _result.success>>
+				<<set $player.money -= 50>>
+				<<run _s.negotiatedCount = (_s.negotiatedCount ?? 0) + 1; setup.settlements.save(setup.settlements.getAll())>>
+				<<addmins 30>>
+				You set 50 caps on the table without a word.
+				<br /><br />
+				<<if _leader>>
+					<<set _line = _dialogs.gift_accept[randomInteger(0, _dialogs.gift_accept.length - 1)]>>
+					<<sayNpc _leader>><<= _line>><</sayNpc>>
+					<br />
+				<</if>>
+				<<if setup.settlements.getRelationshipLevel(_s) !== _oldLevel>>
+					<span style="color: #55cc88;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_s)>></span>
+				<<else>>
+					<span style="color: #55cc88;">Relationship improved slightly.</span>
+				<</if>>
+			<<else>>
+				<span style="color: #e05555;">They're too hostile to accept a gift.</span>
+			<</if>>
+		<<else>>
+			<span style="color: #e05555;">You don't have enough caps.</span>
+		<</if>>
+		<br /><br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</linkreplace>>
+</div>
+<div id="neg_tribute">
+	<<set _tributeLabel = 'Offer a large tribute (200 caps)'>>
+	<<linkreplace _tributeLabel>>
+		<<run $('#neg_greeting, #neg_trade, #neg_gift, #neg_proposition, #neg_back').hide()>>
+		<<if $player.money >= 200>>
+			<<set _oldLevel = setup.settlements.getRelationshipLevel(_s)>>
+			<<set _result = setup.settlements.offerTribute(_s, 200)>>
+			<<set $player.money -= 200>>
+			<<run _s.negotiatedCount = (_s.negotiatedCount ?? 0) + 1; setup.settlements.save(setup.settlements.getAll())>>
+			<<addmins 30>>
+			You laid out 200 caps — enough to make them stop and think.
+			<br /><br />
+			<<if _leader>>
+				<<set _line = _dialogs.gift_accept[randomInteger(0, _dialogs.gift_accept.length - 1)]>>
+				<<sayNpc _leader>><<= _line>><</sayNpc>>
+				<br />
+			<</if>>
+			<<if setup.settlements.getRelationshipLevel(_s) !== _oldLevel>>
+				<span style="color: #55cc88;">Relationship improved significantly — now <<= setup.settlements.getRelationshipLabel(_s)>></span>
+			<<else>>
+				<span style="color: #55cc88;">Relationship improved (+<<= _result.relationshipGain>>).</span>
+			<</if>>
+		<<else>>
+			<span style="color: #e05555;">You don't have enough caps.</span>
+		<</if>>
+		<br /><br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</linkreplace>>
+</div>
+<<set _propTypes = ['raider_camp', 'biker_gang', 'prison_colony', 'amazonian_tribe']>>
+<<if _leader && _leader.gender === 0 && (_leader.likesGuys ?? true) && _s.relationship <= -30 && !(_s.flags?.propositionDone ?? false) && _propTypes.includes(_s.type)>>
+<div id="neg_proposition">
+	<<set _propLabel = 'There\'s another way to settle this'>>
+	<<linkreplace _propLabel>>
+		<<run $('#neg_greeting, #neg_trade, #neg_gift, #neg_tribute, #neg_back').hide()>>
+		<<horny_reset>>
+		<<addmins 30>>
+		<<set _propOpeners = {
+			raider_camp:    either('Caps are fine. But I want something caps can\'t buy.', 'You want to leave breathing? Start by telling me what else you\'ve got.'),
+			biker_gang:     either('You\'ve got nerve walking in here alone. I can appreciate that. I appreciate other things too.', 'Money\'s one language. Not the only one.'),
+			prison_colony:  either('In here, every new arrangement starts the same way.', 'Currency comes in more forms than caps. Picking that up?'),
+			amazonian_tribe: either('Words and money mean little to us. There is another way to earn standing here.', 'Our tradition. Outsiders prove themselves. All the way.')
+		}>>
+		<<set _propLine = _propOpeners[_s.type] ?? 'There\'s another way to open this door.'>>
+		<<sayNpc _leader>><<= _propLine>><</sayNpc>>
+		<br />
+
+		She didn't wait for a response. She caught your arm and pulled you toward the back — past the noise, past the others, into a space just barely out of sight.
+		<br /><br />
+
+				<center>
+			<<image 'places/world/negotiate_proposition.jpg'>>
+		</center>
+		<br />
+
+		No preamble. She put her hand flat on your chest and pushed you back against the wall, holding eye contact the whole time. No heat in it. Just authority, expressed the old-fashioned way.
+		<br /><br />
+
+		She opened your belt with one hand, unhurried. Then took your cock out and sized you up with the same appraising look she gave everything she picked up. Decided you'd do.
+		<br /><br />
+
+		She hitched her own clothing aside, guided your hand between her thighs — already warm, already slick — then pulled you forward and positioned you herself. The moment you pushed inside her she tilted her hips once, testing, then set a pace that didn't leave room for hesitation. Hard and steady. Her fingers dug into your shoulder. The only sounds she made were her breath and the creak of the wall behind you.
+		<br /><br />
+
+		When you were close she read it somehow and caught the back of your neck.
+		<br /><br />
+
+		<<sayNpc _leader>>
+			Not inside me.
+		<</sayNpc>>
+		<br />
+
+		You pulled out and finished across her thigh. She watched without expression, then straightened her clothing with the same efficiency she'd brought to everything else.
+		<br /><br />
+
+		<<sayNpc _leader>>
+			Now we understand each other. Don't push it.
+		<</sayNpc>>
+		<br />
+
+		<<set _oldLevel = setup.settlements.getRelationshipLevel(_s)>>
+		<<if !_s.flags>><<set _s.flags = {}>><</if>>
+		<<set _s.flags.propositionDone = true>>
+		<<run setup.settlements.modifyRelationship(_s, 25, 'Proposition encounter')>>
+		<<run _s.negotiatedCount = (_s.negotiatedCount ?? 0) + 1; setup.settlements.save(setup.settlements.getAll())>>
+		<<if setup.settlements.getRelationshipLevel(_s) !== _oldLevel>>
+			<span style="color: #55cc88;">Relationship changed — now <<= setup.settlements.getRelationshipLabel(_s)>></span>
+		<<else>>
+			<span style="color: #55cc88;">Relationship improved (+25).</span>
+		<</if>>
+		<br /><br />
+		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	<</linkreplace>>
+</div>
+<</if>>
+<div id="neg_back">
+	<<link 'Back'>>
+		<<goto 'Garage - World - Settlement'>>
+	<</link>>
+</div>

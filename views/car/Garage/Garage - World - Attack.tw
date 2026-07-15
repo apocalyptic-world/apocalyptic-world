@@ -1,0 +1,227 @@
+:: Garage - World - Attack [Place bg-garage]
+<h1 class="ptitle">ATTACK</h1>
+<br />
+
+<<set _s = setup.settlements.getById($tmpSettlement)>>
+<<if !_s>><<goto 'Garage - World'>><</if>>
+
+<<if !setup.settlements.canBeRaided(_s, $game.day)>>
+	<p style="color: #e05555;">This settlement is still recovering from your last raid. Come back in a few days.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<else>>
+	<<set $tmpRaidersMap = {}>>
+	<<set _defense = setup.settlements.getDefenseStrength(_s)>>
+
+	<p style="color: #aaa; font-size: 0.9em;">Choose which guests will join the attack. Fighter skill adds 50% to their combat power. You always fight alongside them.</p>
+
+	<div style="background: rgba(0,0,0,0.15); border-left: 3px solid #e05555; padding: 8px 14px; margin-bottom: 16px; font-size: 0.85em;">
+		<span style="color: #ccc;"><strong style="color: #ddd;">Settlement defense:</strong> <<= _defense>></span>
+		<br />
+		<span style="color: #ccc;"><strong style="color: #ddd;">Your base power:</strong> <<= $player.strength ?? 20>></span>
+	</div>
+
+	<<if $guests.length>>
+	<table class="npc-list">
+	<<for _gi = 0; _gi < $guests.length; _gi++>>
+		<<if $guests[_gi]>>
+			<<set _cg = $guests[_gi]>>
+			<<set _cgFighter = (_cg.skills ?? []).includes('fighter')>>
+			<<set _cgPower = _cg.strength + (_cgFighter ? Math.floor(_cg.strength * 0.5) : 0)>>
+			<<set _capturedGuestId = _cg.id>>
+			<<capture _gi _cg _cgFighter _cgPower _capturedGuestId>>
+				<tr class="item">
+					<td>
+						<<checkbox `"$tmpRaidersMap[_capturedGuestId]"` false true autocheck>>
+					</td>
+					<td style="min-width: 25%">
+						<span class="gender-f">
+							<<= _cg.name >>
+							<span style="color: #aaa; font-size: 0.85em;"> STR <<= _cg.strength>><<if _cgFighter>> · <span style="color: #e0a055;">Fighter</span><</if>> · Power <<= _cgPower>></span>
+						</span>
+					</td>
+					<td>
+						<<npcListView _cg _gi 'guest'>>
+					</td>
+				</tr>
+			<</capture>>
+		<</if>>
+	<</for>>
+	</table>
+	<<else>>
+		<p style="color: #888; font-size: 0.9em;">You have no guests. You'll be going in alone.</p>
+	<</if>>
+
+	<br />
+	<<link 'Quick Raid'>>
+		<<set $tmpAttackMode = 'raid'>>
+		<<goto 'Garage - World - Attack - Result'>>
+	<</link>>
+	<<link 'Full Siege'>>
+		<<set $tmpAttackMode = 'siege'>>
+		<<goto 'Garage - World - Attack - Result'>>
+	<</link>>
+	<<link 'Back'>>
+		<<goto 'Garage - World - Settlement'>>
+	<</link>>
+<</if>>
+
+
+:: Garage - World - Attack - Result [Place bg-garage]
+<<set _s = setup.settlements.getById($tmpSettlement)>>
+<<if !_s>><<goto 'Garage - World'>><</if>>
+<<set _mode = $tmpAttackMode ?? 'raid'>>
+
+<<set _attackStrength = $player.strength ?? 20>>
+<<set _raiders = []>>
+<<for _gi = 0; _gi < $guests.length; _gi++>>
+	<<if $guests[_gi] && ($tmpRaidersMap ?? {})[$guests[_gi].id]>>
+		<<set _cg = $guests[_gi]>>
+		<<set _cgPower = _cg.strength + ((_cg.skills ?? []).includes('fighter') ? Math.floor(_cg.strength * 0.5) : 0)>>
+		<<set _attackStrength = _attackStrength + _cgPower>>
+		<<set _raiders = _raiders.concat([{ idx: _gi, npc: _cg }])>>
+	<</if>>
+<</for>>
+
+<<set _outcome = setup.settlements.calculateAttackOutcome(_s, _attackStrength, _mode)>>
+<<addhours 4>>
+<<run setup.settlements.applyAttackOutcome(_s, _outcome, $game.day)>>
+<<run setup.settlements.save(setup.settlements.getAll())>>
+
+<h1 class="ptitle"><<= _mode === 'siege' ? 'SIEGE' : 'RAID'>></h1>
+<br />
+
+<<if _outcome.victory>>
+	<h2 style="color: #55cc88; margin: 0 0 10px 0;">VICTORY</h2>
+	Your group hit <<= _s.name>> hard and broke through their defenses. The settlement took heavy losses — <<= _outcome.populationLoss>> people down.
+<<else>>
+	<h2 style="color: #e05555; margin: 0 0 10px 0;">DEFEAT</h2>
+	<<= _s.name>> held the line. Your group was driven back before doing any real damage.
+<</if>>
+<br /><br />
+
+<<set _killed = []>>
+<<set _captured = []>>
+<<for _ri = 0; _ri < _raiders.length; _ri++>>
+	<<set _raider = _raiders[_ri]>>
+	<<if randomInteger(1, 100) <= _outcome.mcCasualtyChance>>
+		<<if _outcome.victory>>
+			<<set _killed = _killed.concat([_raider])>>
+		<<elseif randomInteger(1, 100) <= 60>>
+			<<set _captured = _captured.concat([_raider])>>
+		<<else>>
+			<<set _killed = _killed.concat([_raider])>>
+		<</if>>
+	<</if>>
+<</for>>
+
+<<if _killed.length > 0 || _captured.length > 0>>
+	<div style="border-left: 3px solid #e05555; padding: 8px 14px; margin-bottom: 14px; background: rgba(224,85,85,0.08);">
+		<<if _killed.length > 0>>
+			<strong style="color: #e05555;">Killed in action:</strong>
+			<br />
+			<<for _ki = 0; _ki < _killed.length; _ki++>>
+				<<= _killed[_ki].npc.name>>
+				<br />
+			<</for>>
+		<</if>>
+		<<if _captured.length > 0>>
+			<<if _killed.length > 0>><br /><</if>>
+			<strong style="color: #e09855;">Captured by <<= _s.name>>:</strong>
+			<br />
+			<<for _ci = 0; _ci < _captured.length; _ci++>>
+				<<= _captured[_ci].npc.name>>
+				<br />
+			<</for>>
+		<</if>>
+	</div>
+<</if>>
+
+<<if _outcome.victory && Object.keys(_outcome.spoils).length > 0>>
+	<div style="border-left: 3px solid #55cc88; padding: 8px 14px; margin-bottom: 14px; background: rgba(85,204,136,0.08);">
+		<strong style="color: #55cc88;">Seized:</strong>
+		<br />
+		<<for _sKey, _sVal range _outcome.spoils>>
+			<<pickup $backpack _sKey _sVal>>
+			<<= _sVal>>× <<= _sKey.replace(/_/g, ' ')>>
+			<br />
+		<</for>>
+	</div>
+<</if>>
+
+<<set _allCasualties = _killed.concat(_captured).sort(function(a, b) { return b.idx - a.idx; })>>
+<<for _ci = 0; _ci < _allCasualties.length; _ci++>>
+	<<guestLeft _allCasualties[_ci].idx>>
+<</for>>
+
+<<if _captured.length > 0>>
+	<<if !_s.playerCaptives>><<set _s.playerCaptives = []>><</if>>
+	<<for _cri = 0; _cri < _captured.length; _cri++>>
+		<<set _captNpc = clone(_captured[_cri].npc)>>
+		<<set _captNpc.loyal = false>>
+		<<run _s.playerCaptives.push({ npc: _captNpc, day: $game.day })>>
+	<</for>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+
+<<if _outcome.victory && !(_s.flags.tributeDemanded ?? false) && _s.relationship <= -30>>
+	<div id="tribute_block">
+	<<linkreplace 'Demand tribute'>>
+		<<set _trHandle = setup.settlements.getById($tmpSettlement)>>
+		<<set _tribResult = setup.settlements.demandTribute(_trHandle)>>
+		<<if _tribResult.success>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<div style="border-left: 3px solid #e0a055; padding: 8px 14px; margin: 8px 0; background: rgba(224,160,85,0.08);">
+				<strong style="color: #e0a055;">Tribute collected:</strong>
+				<br />
+				<<for _trKey, _trVal range _tribResult.tribute>>
+					<<if _trVal > 0>>
+						<<pickup $backpack _trKey _trVal>>
+						<<= _trVal>>× <<= _trKey.replace(/_/g, ' ')>>
+						<br />
+					<</if>>
+				<</for>>
+			</div>
+		<<else>>
+			<span style="color: #e05555;"><<= _tribResult.reason>></span>
+		<</if>>
+	<</linkreplace>>
+	</div>
+<</if>>
+<<if _outcome.victory && _s.relationship <= -20 && !(_s.flags?.captiveTaken ?? false)>>
+	<div id="captive_block">
+	<<linkreplace 'Take someone with you'>>
+		<<newgirl>>
+		<<set $tmpGirl.name        = either('Sara', 'Mara', 'Lia', 'Ash', 'Vee', 'Rosa', 'Kira', 'Nora')>>
+		<<set $tmpGirl.origin      = _s.name>>
+		<<set $tmpGirl.loyal       = false>>
+		<<set _captHandle = setup.settlements.getById($tmpSettlement)>>
+		<<set $tmpGirl.originId    = _captHandle.id>>
+		<<set _captHandle.population = Math.max(1, _captHandle.population - 1)>>
+		<<if !_captHandle.flags>><<set _captHandle.flags = {}>><</if>>
+		<<set _captHandle.flags.captiveTaken = true>>
+		<<run setup.settlements.modifyRelationship(_captHandle, -5, 'Player took a captive')>>
+		<<run setup.settlements.logEvent(_captHandle, 'One of theirs was taken captive.')>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+		She was among those who hadn't made it out. Young, still breathing hard — from the fight, or from fear. Hard to tell which.
+		<br /><br />
+		<<sayNpc $tmpGirl>>
+			You can't do this.
+		<</sayNpc>>
+		<br />
+		She looked at you like she still thought you were going to make the right choice.
+		<br /><br />
+		<<link 'Take her'>>
+			<<run $slaves.push($tmpGirl)>>
+			<<unset $tmpGirl>>
+			<<goto 'Garage - World'>>
+		<</link>>
+		<<link 'Leave her'>>
+			<<unset $tmpGirl>>
+			<<goto 'Garage - World'>>
+		<</link>>
+	<</linkreplace>>
+	</div>
+<</if>>
+<<link 'Leave'>>
+	<<goto 'Garage - World'>>
+<</link>>

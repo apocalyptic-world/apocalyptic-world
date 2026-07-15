@@ -1,0 +1,67 @@
+:: Event - Settlement trader [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<<set _stS = setup.settlements.getById($tmpSettlement)>>
+<<if !_stS>><<goto 'Wood cabin'>><</if>>
+<<set _stConfig = setup.settlements.typeConfig[_stS.type]>>
+<<set _stGcomp = _stConfig.genderComp>>
+
+<<if _stGcomp === 'all_female' || _stGcomp === 'mostly_female'>>
+	<<newgirl>>
+	<<set _stTrader = $tmpGirl>>
+<<else>>
+	<<newguy>>
+	<<set _stTrader = $tmpGuy>>
+<</if>>
+
+<center>
+	<<image 'places/cabin/settlement_trader.jpg' sfw>>
+</center>
+<br />
+
+Someone knocked on the gate mid-morning — a runner from <<= _stS.name>>, pack loaded, unarmed, waving a strip of white cloth.
+<br /><br />
+
+<<sayNpc _stTrader>>
+	We trade with people we trust. Thought we'd come to you this time instead of waiting.
+<</sayNpc>>
+<br />
+
+<<set _stGoods = (_stConfig.tradeGoods ?? []).slice(0, 4)>>
+<<set _stMod = setup.settlements.getTradeModifier(_stS)>>
+
+<<if _stGoods.length>>
+	<div style="background: rgba(0,0,0,0.12); border-left: 3px solid #5599e0; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9em; color: #aaa;">What they're carrying:</div>
+	<<for _sti = 0; _sti < _stGoods.length; _sti++>>
+		<<capture _sti>>
+			<<set _stItem = _stGoods[_sti]>>
+			<<set _stPrice = Math.ceil(setup.settlements.getItemPrice(_stItem) * _stMod)>>
+			<div id="st_item_<<= _sti>>">
+				<<set _stLabel = _stItem.replace(/_/g, ' ') + ' — ' + _stPrice + ' caps'>>
+				<<linkreplace _stLabel>>
+					<<run $('#st_item_' + _sti).hide()>>
+					<<if $player.money >= _stPrice>>
+						<<set $player.money -= _stPrice>>
+						<<pickup $backpack _stItem 1>>
+						<span style="color: #55cc88;">Bought 1× <<= _stItem.replace(/_/g, ' ')>>.</span>
+					<<else>>
+						<span style="color: #e05555;">Not enough caps.</span>
+					<</if>>
+				<</linkreplace>>
+			</div>
+		<</capture>>
+	<</for>>
+	<br />
+<<else>>
+	<p style="color: #888; font-size: 0.9em;">They don't have anything worth trading right now.</p>
+<</if>>
+
+<<link 'Send them off'>>
+	<<set _stCloseS = setup.settlements.getById($tmpSettlement)>>
+	<<if _stCloseS>>
+		<<set _stCloseS.traderVisitDay = $game.day>>
+		<<run setup.settlements.save(setup.settlements.getAll())>>
+	<</if>>
+	<<goto 'Wood cabin'>>
+<</link>>

@@ -13,8 +13,9 @@ function checkAndFixTraits(npc)
 }
 
 Save.onSave.add(function (save, details) {
+    save.metadata = save.metadata || {};
+    save.metadata.worldSettlements = clone(setup.worldSettlements || []);
     if (details.type === 'disk') {
-        save.metadata = {};
         save.metadata.settings = clone(settings);
     }
 });
@@ -36,6 +37,12 @@ Save.onLoad.add(function (save) {
 
 
     let variables = save.state.history[save.state.index].variables; // shortcut to be used when we cleanup
+
+    // Restore worldSettlements into setup (not story variables) for performance
+    setup.worldSettlements = (save.metadata && save.metadata.worldSettlements)
+        ? save.metadata.worldSettlements
+        : (variables.worldSettlements || []);
+    delete variables.worldSettlements;
 
     // Cleanup old variables
     var _oldVariables = [
@@ -70,7 +77,7 @@ Save.onLoad.add(function (save) {
         'randomNumber',
         'charactersInLocation',
     ];
-    for (var _i = 0; _i <= _oldVariables.length; _i++) {
+    for (var _i = 0; _i < _oldVariables.length; _i++) {
         if (typeof save.state.history[save.state.index].variables[_oldVariables[_i]] !== 'undefined') {
             delete save.state.history[save.state.index].variables[_oldVariables[_i]];
         }
@@ -161,6 +168,12 @@ Save.onLoad.add(function (save) {
         }
     }
 
+    if (variables.player?.baseManagement) {
+        const bm = variables.player.baseManagement;
+        if (isNaN(bm.settlers))        bm.settlers        = 0;
+        if (isNaN(bm.settlersFemales)) bm.settlersFemales = 0;
+    }
+
     if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
         save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
         save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
@@ -169,9 +182,10 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.characters.vincent.quests ??= {};
             save.state.history[save.state.index].variables.characters.vincent.quests.shop_talk ??= true;
         }
-        if (variables.player?.car?.explore && !(variables.characters.vincent?.quests?.car_fixed)) {
+        if (variables.player?.car?.explore) {
             variables.characters.vincent.quests ??= {};
             variables.characters.vincent.quests.car_fixed = true;
+            variables.characters.vincent.quests.car_fixed_day ??= 0;
         }
     }
 

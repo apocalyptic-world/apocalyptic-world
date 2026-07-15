@@ -1,0 +1,18 @@
+:: Garage - World - Help - Lost [Place bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+
+<<set _hlpS = setup.settlements.getById($tmpSettlement)>>
+<<if _hlpS>>
+	<<set _hlpS.callForHelp = false>>
+	<<set _hlpS.callForHelpNotified = false>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+
+You tried. But they had the numbers and the ground. You took too much punishment to keep pushing and had to pull back before it got fatal.
+<br /><br />
+
+<<= _hlpS ? _hlpS.name : 'The settlement'>> was left to handle the rest on its own.
+<br /><br />
+
+<<link 'Leave'>><<goto 'Garage'>><</link>>

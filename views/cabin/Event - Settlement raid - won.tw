@@ -1,0 +1,8 @@
+:: Event - Settlement raid - won [Place]
+<<set _srwS = setup.settlements.getById($tmpSettlement)>>
+<<if _srwS>>
+	<<set _srwS.settlementRaidDay = $game.day>>
+	<<run setup.settlements.modifyRelationship(_srwS, 10, 'Repelled settlement raid')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+<</if>>
+<<goto 'Wood cabin'>>

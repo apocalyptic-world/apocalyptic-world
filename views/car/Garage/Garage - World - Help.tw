@@ -1,0 +1,42 @@
+:: Garage - World - Help [Place bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+
+<<set _hlpS = setup.settlements.getById($tmpSettlement)>>
+<<if !_hlpS>><<goto 'Garage'>><</if>>
+
+<<if !_hlpS.callForHelp>>
+	By the time you arrive, the attack is already over. Whatever happened here, it didn't need you.
+	<br /><br />
+	<<link 'Leave'>><<goto 'Garage'>><</link>>
+<<else>>
+
+<center>
+	<<image 'places/world/settlement_help.jpg' sfw>>
+</center>
+<br />
+
+You pushed the engine hard to reach <<= _hlpS.name>> before it was too late. You could hear it from the road — gunfire, shouting, the clatter of a breach attempt at the gates.
+<br /><br />
+
+A raider party. Not large, but enough to overwhelm them if no one stepped in.
+<br /><br />
+
+<<set _hlpCount = Math.max(1, Math.min(2, Math.floor(_hlpS.population / 40)))>>
+<<generateEnemies _hlpCount 0 _hlpCount>>
+<<for _hlpEi = 0; _hlpEi < $enemies.length; _hlpEi++>>
+	<<set $enemies[_hlpEi].strength += randomInteger(15, 40)>>
+	<<set $enemies[_hlpEi].endurance += randomInteger(15, 40)>>
+<</for>>
+
+<<set _hlpGuards = setup.getPersonsForLocation($guests, 'guard')>>
+
+<<link 'Fight them off'>>
+	<<fight $enemies 'Garage - World - Help - Won' 'Garage - World - Help - Lost' false _hlpGuards>>
+	<<set $fight.skipEndingLost = true>>
+<</link>>
+<<link 'This isn\'t your fight'>>
+	<<goto 'Garage'>>
+<</link>>
+
+<</if>>

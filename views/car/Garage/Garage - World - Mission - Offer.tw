@@ -1,0 +1,39 @@
+:: Garage - World - Mission - Offer [Place bg-garage]
+<h1 class="ptitle">MISSION OFFER</h1>
+<br />
+
+<<set _ofS = setup.settlements.getById($tmpSettlement)>>
+<<if !_ofS || !$tmpMission>><<goto 'Garage - World - Settlement'>><</if>>
+<<ensureLeader _ofS>>
+
+<<set _ofItem = $tmpMission.item.replace(/_/g, ' ')>>
+
+<<if _ofS.leader>>
+	<<set _ofDial = setup.settlements.leaderDialogs[_ofS.type]>>
+	<<set _ofLine = _ofDial.trade_ok[randomInteger(0, _ofDial.trade_ok.length - 1)]>>
+	<<sayNpc _ofS.leader>><<= _ofLine>><</sayNpc>>
+	<br />
+<</if>>
+
+They have a job that needs doing.
+<br /><br />
+
+<div style="background: rgba(0,0,0,0.15); border-left: 3px solid #e0a055; padding: 12px 16px; margin-bottom: 16px;">
+	<strong style="color: #e0a055;">Supply run</strong>
+	<br /><br />
+	<span style="color: #ccc;">Bring us <strong><<= $tmpMission.quantity>>× <<= _ofItem>></strong> and we'll pay you <strong style="color: #e0c055;"><<= $tmpMission.reward>> caps</strong>.</span>
+	<br /><br />
+	<span style="color: #666; font-size: 0.85em;">You have 10 days to deliver.</span>
+</div>
+
+<<link 'Accept'>>
+	<<set _accHandle = setup.settlements.getById($tmpSettlement)>>
+	<<set _accHandle.activeMission = $tmpMission>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<unset $tmpMission>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>
+<<link 'Not interested'>>
+	<<unset $tmpMission>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>

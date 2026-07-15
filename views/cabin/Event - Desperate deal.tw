@@ -1,0 +1,150 @@
+:: Event - Desperate deal [Place]
+<h1 class="ptitle"><<cabinName>></h1>
+<br />
+
+<<set _ddData = $game.desperateDeal>>
+<<set _ddS = setup.settlements.getById(_ddData.id)>>
+<<if !_ddS>>
+	<<unset $game.desperateDeal>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<unset $game.desperateDeal>>
+<<set _ddS.desperateDealActive = false>>
+<<set _ddS.desperateDealCooldown = $game.day + 60>>
+<<run setup.settlements.save(setup.settlements.getAll())>>
+
+<<newgirl>>
+<<set $tmpGirl.name = either('Lena', 'Mara', 'Anya', 'Reva', 'Cara', 'Vera', 'Nadia', 'Beth')>>
+<<set $tmpGirl.origin = _ddData.name>>
+<<set _ddGirl = clone($tmpGirl)>>
+<<unset $tmpGirl>>
+
+<center>
+	<<image 'places/cabin/desperate_deal.jpg'>>
+</center>
+<br />
+
+The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. Not running low — gone. They had a few days left, maybe less.
+<br /><br />
+
+<<sayNpc { name: 'Messenger', gender: 1 }>>
+	We have nothing left to trade. But we have people. <<= _ddGirl.name >> volunteered. She knows what she's agreeing to.
+<</sayNpc>>
+<br />
+
+<<= _ddGirl.name >> stood behind him, eyes on the ground. Whatever volunteered meant to her, it hadn't been an easy word to say.
+<br /><br />
+
+<div id="dd_choices">
+
+<<if setup.cabinInventory.count('food') >= 10>>
+<div id="dd_slave">
+<<set _ddSlaveLabel = 'Take her as a slave — send 10 food'>>
+<<linkreplace _ddSlaveLabel>>
+	<<run $('#dd_choices').hide()>>
+	<<run setup.cabinInventory.drop('food', 10)>>
+	<<run setup.settlements.modifyRelationship(_ddS, 5, 'Accepted desperate deal — took slave, sent food')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 60>>
+	<<set _ddGirl.sub = Math.min((_ddGirl.sub ?? 0) + 20, 100)>>
+	<<run $slaves.push(_ddGirl)>>
+	You loaded ten units of food onto the cart. The messenger nodded once and left without looking back at <<= _ddGirl.name >>.
+	<br /><br />
+	She stood in your yard looking at nothing in particular.
+	<br /><br />
+	<<sayNpc _ddGirl>>
+		Tell me what you need me to do.
+	<</sayNpc>>
+	<br />
+	<<if (_ddGirl.likesGuys ?? true)>>
+		<div id="dd_use_now">
+		<<set _ddUseLabel = 'Show her what she\'s here for'>>
+		<<linkreplace _ddUseLabel>>
+			<<run $('#dd_use_now, #dd_after_slave').hide()>>
+			<<horny_reset>>
+			<<addmins 30>>
+			You took her inside. She didn't resist — she'd already made that decision before she got here. You stripped her down, pushed her onto the bed, and took your time.
+			<br /><br />
+						<center>
+				<<image 'places/cabin/desperate_deal_sex.jpg'>>
+			</center>
+			<br />
+			Her body was thin but warm. She did what you asked and held her breath when you pushed inside her. You fucked her slow at first, then harder when she stopped flinching. When you came inside her she just lay there, eyes on the ceiling.
+			<br /><br />
+			<<set _ddPreg = setup.pregnancyChance(_ddGirl)>>
+			<<if _ddPreg>>
+				<<set _ddGirl.pregnant = 1>>
+				<<set _ddGirl.pregnantDay = $game.day>>
+				<<set _ddGirl.pregnantBy = 'player'>>
+			<</if>>
+			<span style="color: #888;">She's yours now. She knows it.</span>
+			<br /><br />
+			<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+		<</linkreplace>>
+		</div>
+	<</if>>
+	<div id="dd_after_slave">
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	</div>
+<</linkreplace>>
+</div>
+<br />
+
+<div id="dd_guest">
+<<set _ddGuestLabel = 'Take her in as a free person — send 10 food'>>
+<<linkreplace _ddGuestLabel>>
+	<<run $('#dd_choices').hide()>>
+	<<run setup.cabinInventory.drop('food', 10)>>
+	<<run setup.settlements.modifyRelationship(_ddS, 10, 'Accepted person as guest, sent food')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 45>>
+	<<run $guests.push(_ddGirl)>>
+	You sent the food and told her she was a guest, not property. She blinked at that like she wasn't sure she believed it.
+	<br /><br />
+	<<sayNpc _ddGirl>>
+		I can work. I'll earn my place.
+	<</sayNpc>>
+	<br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+<</if>>
+
+<<if setup.cabinInventory.count('food') >= 15>>
+<div id="dd_aid">
+<<set _ddAidLabel = 'Send aid, take no one (15 food)'>>
+<<linkreplace _ddAidLabel>>
+	<<run $('#dd_choices').hide()>>
+	<<run setup.cabinInventory.drop('food', 15)>>
+	<<run setup.settlements.modifyRelationship(_ddS, 20, 'Sent emergency aid without conditions')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	<<addmins 30>>
+	You told the messenger to take <<= _ddGirl.name >> home. She looked up at that — the first time since she'd arrived.
+	<br /><br />
+	The food left on the cart. <<= _ddData.name >> would remember this.
+	<br /><br />
+	<span style="color: #55cc88;">+20 relationship with <<= _ddData.name >>. <<= _ddGirl.name >> returned home.</span>
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+<br />
+<<elseif setup.cabinInventory.count('food') < 10>>
+	<span style="color: #555; font-size: 0.88em;">You don't have enough food to help them.</span>
+	<br /><br />
+<</if>>
+
+<div id="dd_refuse">
+<<set _ddRefuseLabel = 'Turn them away'>>
+<<linkreplace _ddRefuseLabel>>
+	<<run $('#dd_choices').hide()>>
+	<<run setup.settlements.modifyRelationship(_ddS, -10, 'Turned away desperate plea')>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
+	You sent them back with nothing. The messenger said nothing. <<= _ddGirl.name >> walked away without looking at you.
+	<br /><br />
+	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+<</linkreplace>>
+</div>
+
+</div>
