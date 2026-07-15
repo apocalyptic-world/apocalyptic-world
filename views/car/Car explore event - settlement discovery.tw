@@ -1,10 +1,16 @@
-:: Car explore event - settlement discovery [bg-garage]
+﻿:: Car explore event - settlement discovery [bg-garage settlement]
 <h1 class="ptitle">OUTSIDE</h1>
 <br />
 
-<<set _isFirst = setup.settlements.getAll().length === 0>>
+<<set _isFirst = !($game.worldMapUnlocked ?? false)>>
 <<if _isFirst>>
-	<<set _settlement = setup.settlements.add({ type: 'raider_camp' })>>
+	<<if !setup.settlements.getAll().length>>
+		<<set _settlement = setup.settlements.add({ type: 'raider_camp' })>>
+	<<else>>
+		<<set _settlement = setup.settlements.getAll()[0]>>
+	<</if>>
+	<<set $game.worldMapUnlocked = true>>
+	<<set $game.location.world = true>>
 <<else>>
 	<<set _settlement = setup.settlements.add()>>
 <</if>>

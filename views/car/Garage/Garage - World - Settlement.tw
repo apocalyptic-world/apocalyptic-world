@@ -1,4 +1,4 @@
-:: Garage - World - Settlement [Place bg-garage]
+﻿:: Garage - World - Settlement [Place bg-garage settlement]
 <<set _s = setup.settlements.getDiscovered().find(s => s.id === $tmpSettlement)>>
 <<if !_s>>
 	<<goto 'Garage - World'>>
@@ -70,7 +70,6 @@
 			<div id="famine_help">
 			<<set _famineLabel = 'Send emergency food (10)'>>
 			<<linkreplace _famineLabel>>
-				<<run $('#famine_help').hide()>>
 				<<run setup.cabinInventory.drop('food', 10)>>
 				<<run setup.settlements.sendEmergencyFood(_s, 10)>>
 				<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -134,7 +133,6 @@
 		<div id="invest_block">
 		<<set _investLabel = 'Invest (200 caps)'>>
 		<<linkreplace _investLabel>>
-			<<run $('#invest_block').hide()>>
 			<<if $player.money >= 200>>
 				<<set _invResult = setup.settlements.investInSettlement(_s, 200)>>
 				<<if _invResult.success>>
@@ -166,7 +164,7 @@
 		<<if $player.money >= 500>>
 			<div id="ransom_block">
 			<<linkreplace 'Pay ransom (500 caps)'>>
-				<<run $('#ransom_block, #rescue_block').hide()>>
+				<<run $('#rescue_block').hide()>>
 				<<set $player.money -= 500>>
 				<<run setup.settlements.modifyRelationship(_s, 5, 'Ransom paid')>>
 				<<run _s.captiveId = null; _s.captiveName = null>>
@@ -211,7 +209,7 @@
 			<div id="pc_ransom_block">
 			<<set _ransomLabel = 'Pay ransom (' + _ransomTotal + ' caps)'>>
 			<<linkreplace _ransomLabel>>
-				<<run $('#pc_ransom_block, #pc_rescue_block').hide()>>
+				<<run $('#pc_rescue_block').hide()>>
 				<<set $player.money -= _ransomTotal>>
 				<<for _rci = 0; _rci < _s.playerCaptives.length; _rci++>>
 					<<run $guests.push(_s.playerCaptives[_rci].npc)>>
@@ -252,7 +250,6 @@
 			<div id="ultimatum_pay">
 			<<set _payLabel = 'Pay the demand (' + (_s.ultimatumAmount ?? 500) + ' caps)'>>
 			<<linkreplace _payLabel>>
-				<<run $('#ultimatum_pay').hide()>>
 				<<set _ultResult = setup.settlements.payUltimatum(_s)>>
 				<<set $player.money -= (_s.ultimatumAmount ?? 500)>>
 				<<run setup.settlements.save(setup.settlements.getAll())>>
