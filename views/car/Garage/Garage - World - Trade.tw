@@ -1,4 +1,4 @@
-:: Garage - World - Trade [Place bg-garage]
+﻿:: Garage - World - Trade [Place bg-garage settlement]
 <h1 class="ptitle">TRADE</h1>
 <br />
 
@@ -27,7 +27,6 @@
 			<div id="tr_b_<<= _tBi>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
 				<<set _trBLabel = _trBItem.replace(/_/g, ' ') + ' — ' + _trBPrice + ' caps'>>
 				<<linkreplace _trBLabel>>
-					<<run $('#tr_b_' + _tBi).hide()>>
 					<<set _trBHandle = setup.settlements.getById($tmpSettlement)>>
 					<<if _trBHandle && $player.money >= _trBPrice && (_trBHandle.resources[_trBItem] || 0) >= 1>>
 						<<set _trBOldLevel = setup.settlements.getRelationshipLevel(_trBHandle)>>
@@ -66,7 +65,6 @@
 			<div id="tr_s_<<= _tSi>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
 				<<set _tSLabel = 'Sell ' + _tSwItem.replace(/_/g, ' ') + ' — ' + _tSwPrice + ' caps'>>
 				<<linkreplace _tSLabel>>
-					<<run $('#tr_s_' + _tSi).hide()>>
 					<<set _tSHandle = setup.settlements.getById($tmpSettlement)>>
 					<<if _tSHandle && $backpack.count(_tSwItem) >= 1>>
 						<<set _tSOldLevel = setup.settlements.getRelationshipLevel(_tSHandle)>>

@@ -1,4 +1,4 @@
-:: Garage - World - Donate [Place bg-garage]
+﻿:: Garage - World - Donate [Place bg-garage settlement]
 <h1 class="ptitle">DONATE</h1>
 <br />
 
@@ -31,7 +31,6 @@ You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal,
 			<div id="dn_item_<<= _dni>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
 				<<set _dnLabel = 'Give ' + _dnItem.replace(/_/g, ' ') + ' (you have ' + $backpack.count(_dnItem) + ')'>>
 				<<linkreplace _dnLabel>>
-					<<run $('#dn_item_' + _dni).hide()>>
 					<<set _dnHandle = setup.settlements.getById($tmpSettlement)>>
 					<<if _dnHandle && $backpack.count(_dnItem) >= 1>>
 						<<set _dnOldLevel = setup.settlements.getRelationshipLevel(_dnHandle)>>
