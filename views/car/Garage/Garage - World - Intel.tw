@@ -23,6 +23,7 @@
 
 	<div id="intel_ask">
 	<<linkreplace 'Ask for information'>>
+		<<run $('#intel_back').hide()>>
 		<<addmins 30>>
 		<<set _inHandle = setup.settlements.getById($tmpSettlement)>>
 		<<set _inRes = setup.settlements.getIntelligence(_inHandle)>>
@@ -42,5 +43,7 @@
 		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
 	<</linkreplace>>
 	</div>
+	<div id="intel_back">
 	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	</div>
 <</if>>
