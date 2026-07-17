@@ -1,10 +1,13 @@
+:: Event - Raider prisoner - check [Place]
+<<if setup.percentageChance(40)>>
+	<<goto 'Event - Raider prisoner'>>
+<<else>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
 :: Event - Raider prisoner [Place]
 <h1 class="ptitle"><<cabinName>></h1>
 <br />
-
-<<if !setup.percentageChance(40)>>
-	<<goto 'Wood cabin'>>
-<</if>>
 
 <<set _rpFemale = randomInteger(0, 1) === 1>>
 <<if _rpFemale>>
@@ -102,7 +105,6 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 	</div>
 <</linkreplace>>
 </div>
-<br />
 
 <<if _rpS>>
 <div id="rp_ransom">
@@ -120,7 +122,6 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
 <</linkreplace>>
 </div>
-<br />
 <</if>>
 
 <div id="rp_recruit">
@@ -148,7 +149,6 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 	<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
 <</linkreplace>>
 </div>
-<br />
 
 <div id="rp_execute">
 <<set _rpExecLabel = 'Execute ' + _rpNpc.name>>

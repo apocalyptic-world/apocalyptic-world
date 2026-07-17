@@ -34,9 +34,9 @@ Someone knocked on the gate mid-morning — a runner from <<= _stS.name>>, pack 
 <<if _stGoods.length>>
 	<div style="background: rgba(0,0,0,0.12); border-left: 3px solid #5599e0; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9em; color: #aaa;">What they're carrying:</div>
 	<<for _sti = 0; _sti < _stGoods.length; _sti++>>
-		<<capture _sti>>
-			<<set _stItem = _stGoods[_sti]>>
-			<<set _stPrice = Math.ceil(setup.settlements.getItemPrice(_stItem) * _stMod)>>
+		<<set _stItem = _stGoods[_sti]>>
+		<<set _stPrice = Math.ceil(setup.settlements.getItemPrice(_stItem) * _stMod)>>
+		<<capture _sti, _stItem, _stPrice>>
 			<div id="st_item_<<= _sti>>">
 				<<set _stLabel = _stItem.replace(/_/g, ' ') + ' — ' + _stPrice + ' caps'>>
 				<<linkreplace _stLabel>>
