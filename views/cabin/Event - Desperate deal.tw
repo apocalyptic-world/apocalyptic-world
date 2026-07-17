@@ -27,9 +27,12 @@
 The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. Not running low — gone. They had a few days left, maybe less.
 <br /><br />
 
-<<sayNpc { name: 'Messenger', gender: 1 }>>
+<<newguy>>
+<<set $tmpGuy.name = 'Messenger'>>
+<<sayNpc $tmpGuy>>
 	We have nothing left to trade. But we have people. <<= _ddGirl.name >> volunteered. She knows what she's agreeing to.
 <</sayNpc>>
+<<unset $tmpGuy>>
 <br />
 
 <<= _ddGirl.name >> stood behind him, eyes on the ground. Whatever volunteered meant to her, it hadn't been an easy word to say.
@@ -41,7 +44,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 <div id="dd_slave">
 <<set _ddSlaveLabel = 'Take her as a slave — send 10 food'>>
 <<linkreplace _ddSlaveLabel>>
-	<<run $('#dd_choices').hide()>>
+	<<run $('#dd_guest, #dd_aid, #dd_refuse').hide()>>
 	<<run setup.cabinInventory.drop('food', 10)>>
 	<<run setup.settlements.modifyRelationship(_ddS, 5, 'Accepted desperate deal — took slave, sent food')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -93,7 +96,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 <div id="dd_guest">
 <<set _ddGuestLabel = 'Take her in as a free person — send 10 food'>>
 <<linkreplace _ddGuestLabel>>
-	<<run $('#dd_choices').hide()>>
+	<<run $('#dd_slave, #dd_aid, #dd_refuse').hide()>>
 	<<run setup.cabinInventory.drop('food', 10)>>
 	<<run setup.settlements.modifyRelationship(_ddS, 10, 'Accepted person as guest, sent food')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -115,7 +118,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 <div id="dd_aid">
 <<set _ddAidLabel = 'Send aid, take no one (15 food)'>>
 <<linkreplace _ddAidLabel>>
-	<<run $('#dd_choices').hide()>>
+	<<run $('#dd_slave, #dd_guest, #dd_refuse').hide()>>
 	<<run setup.cabinInventory.drop('food', 15)>>
 	<<run setup.settlements.modifyRelationship(_ddS, 20, 'Sent emergency aid without conditions')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -138,7 +141,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 <div id="dd_refuse">
 <<set _ddRefuseLabel = 'Turn them away'>>
 <<linkreplace _ddRefuseLabel>>
-	<<run $('#dd_choices').hide()>>
+	<<run $('#dd_slave, #dd_guest, #dd_aid').hide()>>
 	<<run setup.settlements.modifyRelationship(_ddS, -10, 'Turned away desperate plea')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
 	You sent them back with nothing. The messenger said nothing. <<= _ddGirl.name >> walked away without looking at you.

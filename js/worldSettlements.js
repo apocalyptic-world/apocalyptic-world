@@ -737,21 +737,12 @@ setup.settlements = {
 		const gender = setup.settlements.rollRecruitGender(s);
 		const maleNames   = ['Marcus', 'Cole', 'Rex', 'Duke', 'Ivan', 'Seth', 'Zane', 'Leon', 'Bruno', 'Colt'];
 		const femaleNames = ['Vera', 'Maya', 'Jade', 'Sasha', 'Nora', 'Iris', 'Kira', 'Leah', 'Dena', 'Skye'];
-		const namePool    = gender === 1 ? maleNames : femaleNames;
-		const traitPool   = ['strong', 'fast', 'smart', 'charismatic', 'medic', 'fighter', 'farmer', 'mechanic', 'scout'];
-		const shuffled    = traitPool.sort(function() { return Math.random() - 0.5; });
-
-		const npc = {
-			name:   namePool[window.randomInteger(0, namePool.length - 1)],
-			gender: gender,
-			origin: s.name,
-			type:   s.type,
-			traits: shuffled.slice(0, window.randomInteger(1, 2)),
-		};
+		const namePool = gender === 1 ? maleNames : femaleNames;
+		const name     = namePool[window.randomInteger(0, namePool.length - 1)];
 
 		s.population = Math.max(1, s.population - 1);
 		setup.settlements.modifyRelationship(s, -2, 'Recruited member');
-		return { success: true, npc: npc };
+		return { success: true, gender: gender, name: name };
 	},
 
 	rollRecruitGender: function (s) {

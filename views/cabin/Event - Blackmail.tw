@@ -38,7 +38,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 <div id="bm_pay">
 <<set _bmPayLabel = 'Pay the 300 caps'>>
 <<linkreplace _bmPayLabel>>
-	<<run $('#bm_choices').hide()>>
+	<<run $('#bm_person, #bm_intercept, #bm_bluff, #bm_attack').hide()>>
 	<<set $player.money -= 300>>
 	<<set _bmHandle = setup.settlements.getById(_bmData.id)>>
 	<<run setup.settlements.resolveBlackmail(_bmHandle, true)>>
@@ -71,6 +71,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 <<if _bmSendable.length>>
 <div id="bm_person">
 <<set $game.bmSendId = $game.bmSendId ?? null>>
+<div id="bm_person_list">
 <span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SEND SOMEONE INSTEAD</span>
 <br /><br />
 <table class="npc-list">
@@ -94,6 +95,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 	<</capture>>
 <</for>>
 </table>
+</div>
 <br />
 <<set _bmSendPersonLabel = 'Send selected'>>
 <<linkreplace _bmSendPersonLabel>>
@@ -112,7 +114,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 			<<set _bmSendName = $game.blackmailEvent.name>>
 			<<run setup.settlements.resolveBlackmail(_bmSendHandle, true)>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
-			<<run $('#bm_choices').hide()>>
+			<<run $('#bm_person_list, #bm_pay, #bm_intercept, #bm_bluff, #bm_attack').hide()>>
 			<<unset $game.blackmailEvent, $game.bmSendId>>
 			<<addmins 45>>
 			<<= _bmSentNpc.name >> was handed over in place of caps. They accepted without protest.
@@ -136,7 +138,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 <div id="bm_intercept">
 <<set _bmIntLabel = 'Get a friend to intercept'>>
 <<linkreplace _bmIntLabel>>
-	<<run $('#bm_choices').hide()>>
+	<<run $('#bm_pay, #bm_person, #bm_bluff, #bm_attack').hide()>>
 	<<set _bmFriendPick = _bmFriends.reduce(function(best, s) { return s.relationship > best.relationship ? s : best; }, _bmFriends[0])>>
 	<<set _bmHandle5 = setup.settlements.getById(_bmData.id)>>
 	<<run setup.settlements.modifyRelationship(_bmFriendPick, -8, 'Called in a favour against blackmailer')>>
@@ -156,7 +158,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 <div id="bm_bluff">
 <<set _bmBluffLabel = 'Call the bluff — refuse to pay'>>
 <<linkreplace _bmBluffLabel>>
-	<<run $('#bm_choices').hide()>>
+	<<run $('#bm_pay, #bm_person, #bm_intercept, #bm_attack').hide()>>
 	<<set _bmHandle4 = setup.settlements.getById(_bmData.id)>>
 	<<run setup.settlements.resolveBlackmail(_bmHandle4, false)>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -172,7 +174,7 @@ The letter arrived unsigned, but the seal made it obvious. Someone at <<= _bmDat
 <div id="bm_attack">
 <<set _bmAttackLabel = 'Hit them before they can talk'>>
 <<linkreplace _bmAttackLabel>>
-	<<run $('#bm_choices').hide()>>
+	<<run $('#bm_pay, #bm_person, #bm_intercept, #bm_bluff').hide()>>
 	<<unset $game.blackmailEvent>>
 	<<set $tmpSettlement = _bmData.id>>
 	Best way to silence someone.

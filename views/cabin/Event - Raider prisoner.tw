@@ -49,7 +49,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 <div id="rp_interrogate">
 <<set _rpInterLabel = 'Interrogate ' + _rpNpc.name>>
 <<linkreplace _rpInterLabel>>
-	<<run $('#rp_choices').hide()>>
+	<<run $('#rp_ransom, #rp_recruit, #rp_execute').hide()>>
 	<<if _rpS>>
 		<<run setup.settlements.modifyRelationship(_rpS, -5, 'Prisoner gave intel under interrogation')>>
 		<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -110,7 +110,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 <div id="rp_ransom">
 <<set _rpRansomLabel = 'Send word to ' + _rpS.name + ' — ransom (150 caps)'>>
 <<linkreplace _rpRansomLabel>>
-	<<run $('#rp_choices').hide()>>
+	<<run $('#rp_interrogate, #rp_recruit, #rp_execute').hide()>>
 	<<run setup.settlements.modifyRelationship(_rpS, 8, 'Returned prisoner instead of executing')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
 	<<set $player.money += 150>>
@@ -127,7 +127,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 <div id="rp_recruit">
 <<set _rpRecruitLabel = 'Offer ' + _rpNpc.name + ' a place here'>>
 <<linkreplace _rpRecruitLabel>>
-	<<run $('#rp_choices').hide()>>
+	<<run $('#rp_interrogate, #rp_ransom, #rp_execute').hide()>>
 	<<addmins 30>>
 	<<if _rpFemale>>
 		<<set $tmpGirl = _rpNpc>>
@@ -153,7 +153,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 <div id="rp_execute">
 <<set _rpExecLabel = 'Execute ' + _rpNpc.name>>
 <<linkreplace _rpExecLabel>>
-	<<run $('#rp_choices').hide()>>
+	<<run $('#rp_interrogate, #rp_ransom, #rp_recruit').hide()>>
 	<<addmins 15>>
 	Quick and without ceremony. You left <<= _rpFemale ? 'her' : 'him'>> outside the gate as a message.
 	<br /><br />
