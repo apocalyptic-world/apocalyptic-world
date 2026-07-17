@@ -304,10 +304,18 @@ setup.settlements = {
 		}
 
 		const names = config.names;
+		const baseName = names[window.randomInteger(0, names.length - 1)];
+		const usedNames = setup.settlements.getAll().map(function(s) { return s.name; });
+		let finalName = baseName;
+		if (usedNames.includes(baseName)) {
+			let n = 1;
+			while (usedNames.includes(baseName + ' - Outpost #' + n)) { n++; }
+			finalName = baseName + ' - Outpost #' + n;
+		}
 		return {
 			id:                'settlement_' + window.randomInteger(100000, 999999),
 			type:              type,
-			name:              names[window.randomInteger(0, names.length - 1)],
+			name:              finalName,
 			discovered:        false,
 			destroyed:         false,
 			dayCreated:        options.dayCreated || 0,
