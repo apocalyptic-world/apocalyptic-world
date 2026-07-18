@@ -34,24 +34,21 @@
 			<<set _rResult = setup.settlements.recruit(_rHandle)>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
 			<<if _rResult.success>>
-				<<set _rNpc = _rResult.npc>>
-				<<if _rNpc.gender === 1>>
+				<<if _rResult.gender === 1>>
 					<<newguy>>
-					<<set $tmpGuy.name   = _rNpc.name>>
-					<<set $tmpGuy.skills = _rNpc.traits>>
-					<<set $tmpGuy.origin = _rNpc.origin>>
+					<<set $tmpGuy.name   = _rResult.name>>
+					<<set $tmpGuy.origin = _rHandle.name>>
 					<<set $tmpRecruitNpc = $tmpGuy>>
 				<<else>>
 					<<newgirl>>
-					<<set $tmpGirl.name   = _rNpc.name>>
-					<<set $tmpGirl.skills = _rNpc.traits>>
-					<<set $tmpGirl.origin = _rNpc.origin>>
+					<<set $tmpGirl.name   = _rResult.name>>
+					<<set $tmpGirl.origin = _rHandle.name>>
 					<<set $tmpRecruitNpc = $tmpGirl>>
 				<</if>>
 				<<set _rFull = $tmpRecruitNpc>>
 
 				<<sayNpc _rFull>>
-					<<if _rNpc.gender === 1>>
+					<<if _rResult.gender === 1>>
 						Been here long enough. If you've got room, I'm in.
 					<<else>>
 						This place has its problems. What are you offering?

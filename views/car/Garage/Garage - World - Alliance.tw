@@ -27,6 +27,7 @@
 	<div id="alliance_propose">
 	<<linkreplace 'Propose a formal alliance'>>
 
+		<<run $('#alliance_back').hide()>>
 		<<addmins 60>>
 		<<set _alHandle = setup.settlements.getById($tmpSettlement)>>
 		<<set _alRes = setup.settlements.requestAlliance(_alHandle)>>
@@ -49,5 +50,7 @@
 		<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
 	<</linkreplace>>
 	</div>
+	<div id="alliance_back">
 	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+	</div>
 <</if>>

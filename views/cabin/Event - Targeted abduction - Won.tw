@@ -17,9 +17,19 @@ The last one turned and ran. Those who couldn't run stayed on the ground.
 <br /><br />
 
 <<if _taData && _taData.guestName>>
-	<<sayNpc { name: _taData.guestName, gender: 0 }>>
-		They knew my name. That's not something you forget.
-	<</sayNpc>>
+	<<set _taWonGuest = $guests.find(function(g) { return g.id === _taData.guestId; })>>
+	<<if _taWonGuest>>
+		<<sayNpc _taWonGuest>>
+			They knew my name. That's not something you forget.
+		<</sayNpc>>
+	<<else>>
+		<<newgirl>>
+		<<set $tmpGirl.name = _taData.guestName>>
+		<<sayNpc $tmpGirl>>
+			They knew my name. That's not something you forget.
+		<</sayNpc>>
+		<<unset $tmpGirl>>
+	<</if>>
 	<br />
 <</if>>
 

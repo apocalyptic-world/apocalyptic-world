@@ -51,6 +51,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 <span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SEND SOMEONE</span>
 <br /><br />
 <<set $game.wdSendId = $game.wdSendId ?? null>>
+<div id="wd_send_table">
 <table class="npc-list">
 <<for _wdi = 0; _wdi < _wdSendable.length; _wdi++>>
 	<<set _wdEntry = _wdSendable[_wdi]>>
@@ -72,6 +73,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 	<</capture>>
 <</for>>
 </table>
+</div>
 <br />
 <<set _wdSendLabel = 'Send selected'>>
 <<linkreplace _wdSendLabel>>
@@ -90,7 +92,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 			<<set _wdSettleName = $game.womanDemand.name>>
 			<<run setup.settlements.resolveWomanDemand(_wdHandle, true)>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
-			<<run $('#wd_choices').hide()>>
+			<<run $('#wd_send_table, #wd_pay, #wd_refuse').hide()>>
 			<<unset $game.womanDemand, $game.wdSendId>>
 			<<addmins 60>>
 			You handed <<= _wdSentNpc.name >> over at the gate without ceremony. <<= setup.pronounceWhat(_wdSentNpc, true) >> walked out and didn't look back — whether from pride or resignation, you couldn't tell.
@@ -116,7 +118,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 <div id="wd_pay">
 <<set _wdPayLabel = 'Pay them off (1000 caps)'>>
 <<linkreplace _wdPayLabel>>
-	<<run $('#wd_choices').hide()>>
+	<<run $('#wd_send_section, #wd_refuse').hide()>>
 	<<set $player.money -= 1000>>
 	<<set _wdHandle3 = setup.settlements.getById($game.womanDemand.id)>>
 	<<run setup.settlements.resolveWomanDemand(_wdHandle3, true)>>
@@ -138,7 +140,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 <div id="wd_refuse">
 <<set _wdRefuseLabel = 'Refuse'>>
 <<linkreplace _wdRefuseLabel>>
-	<<run $('#wd_choices').hide()>>
+	<<run $('#wd_send_section, #wd_pay').hide()>>
 	<<set _wdHandle4 = setup.settlements.getById($game.womanDemand.id)>>
 	<<run setup.settlements.resolveWomanDemand(_wdHandle4, false)>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>
