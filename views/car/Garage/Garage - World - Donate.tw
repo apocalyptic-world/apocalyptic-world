@@ -11,6 +11,7 @@
 <<set _dnRelLevel  = setup.settlements.getRelationshipLevel(_dnS)>>
 <<set _dnRelColor  = _dnRelColors[_dnRelLevel]>>
 
+<<addmins 30>>
 You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal, no strings — just goodwill.
 <br /><br />
 
@@ -36,7 +37,6 @@ You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal,
 						<<set _dnOldLevel = setup.settlements.getRelationshipLevel(_dnHandle)>>
 						<<drop $backpack _dnItem 1>>
 						<<run _dnHandle.resources[_dnItem] = (_dnHandle.resources[_dnItem] || 0) + 1; setup.settlements.modifyRelationship(_dnHandle, 8, 'Donated needed supplies'); setup.settlements.save(setup.settlements.getAll())>>
-						<<addmins 30>>
 						<span style="color: #55cc88;">Donated 1× <<= _dnItem.replace(/_/g, ' ')>>. They appreciated it.</span>
 						<<if setup.settlements.getRelationshipLevel(_dnHandle) !== _dnOldLevel>>
 							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_dnHandle)>></span>
