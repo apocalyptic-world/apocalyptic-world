@@ -1087,6 +1087,10 @@ setup.npc = {
 			case 'divorced':         return day + 'Divorced ' + (withName || 'someone');
 			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
 			case 'captured':         return day + 'Captured';
+			case 'tribute_accepted': return day + 'Accepted as tribute from ' + (entry.place ?? 'a settlement');
+			case 'tribute_slave':    return day + 'Taken as tribute from ' + (entry.place ?? 'a settlement') + ', made a slave';
+			case 'recruited':        return day + 'Recruited from ' + (entry.place ?? 'a settlement');
+			case 'siege_captive':    return day + 'Taken captive after attack on ' + (entry.place ?? 'a settlement');
 			case 'invited':          return day + 'Invited to settlement';
 			case 'bought':           return day + 'Bought at slave market';
 			case 'moved_to_guest':   return day + 'Moved to guest house';

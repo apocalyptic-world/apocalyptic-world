@@ -41,12 +41,21 @@
 A small group from <<= _tgData.name >> arrived at the gate before sunrise. No weapons drawn — a show of trust. Their speaker stepped forward.
 <br /><br />
 
-<<newguy>>
-<<set $tmpGuy.name = 'Elder'>>
-<<sayNpc $tmpGuy>>
-	<<= _tgOpener >>
-<</sayNpc>>
-<<unset $tmpGuy>>
+<<if _tgData.type === 'amazonian_tribe'>>
+	<<newgirl>>
+	<<set $tmpGirl.name = 'Elder'>>
+	<<sayNpc $tmpGirl>>
+		<<= _tgOpener >>
+	<</sayNpc>>
+	<<unset $tmpGirl>>
+<<else>>
+	<<newguy>>
+	<<set $tmpGuy.name = 'Elder'>>
+	<<sayNpc $tmpGuy>>
+		<<= _tgOpener >>
+	<</sayNpc>>
+	<<unset $tmpGuy>>
+<</if>>
 <br />
 
 <<= _tgDesc >>
@@ -63,6 +72,7 @@ A small group from <<= _tgData.name >> arrived at the gate before sunrise. No we
 <<set _tgGuestLabel = 'Accept her — she stays as a free member of the household'>>
 <<linkreplace _tgGuestLabel>>
 	<<run $('#tg_slave, #tg_decline, #tg_gifts').hide()>>
+	<<run setup.npc.addHistory(_tgGirl, 'tribute_accepted', { place: _tgData.name })>>
 	<<run $guests.push(_tgGirl)>>
 	<<addmins 30>>
 	You nodded to the elder and stepped aside. <<= _tgGirl.name >> walked through the gate without being led.
@@ -78,6 +88,7 @@ A small group from <<= _tgData.name >> arrived at the gate before sunrise. No we
 <<linkreplace _tgSlaveLabel>>
 	<<run $('#tg_guest, #tg_decline, #tg_gifts').hide()>>
 	<<set _tgGirl.sub = Math.min((_tgGirl.sub ?? 0) + 10, 100)>>
+	<<run setup.npc.addHistory(_tgGirl, 'tribute_slave', { place: _tgData.name })>>
 	<<run $slaves.push(_tgGirl)>>
 	<<run setup.settlements.modifyRelationship(_tgS, -5, 'Tribute accepted as slave — slight disrespect to the gift')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>

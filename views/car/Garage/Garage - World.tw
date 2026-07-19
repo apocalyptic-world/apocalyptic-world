@@ -79,6 +79,19 @@
 							</span>
 						<</if>>
 					<</if>>
+					<<if $game.capturedGuest && $game.capturedGuest.settlementId === _s.id>>
+						<br />
+						<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ HOLDING <<= $game.capturedGuest.npc.name>></span>
+					<</if>>
+					<<if (_s.playerCaptives ?? []).length > 0>>
+						<br />
+						<<set _pcNames = _s.playerCaptives.map(function(p) { return p.npc.name; }).join(', ')>>
+						<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ YOUR PEOPLE HELD — <<= _pcNames>></span>
+					<</if>>
+					<<if _s.blackmailActive>>
+						<br />
+						<span style="color: #e0c055; font-size: 0.82em; font-weight: bold;">⚠ BLACKMAIL DEMAND</span>
+					<</if>>
 				</div>
 			<</if>>
 		<</capture>>
