@@ -48,7 +48,22 @@
 	<</link>>
 <</if>>
 
-<<link "Sleep">><<sleep>><</link>>
+<<link "Sleep">>
+	<<if $game.partyNight>>
+		<<set _dnvCandidates = setup.filterNPCs($guests, {gender: 0, likesGuys: true, relationship_gte: 60, chastityBelt_not: [true], race_in: ['white', 'latina']})[0] ?? []>>
+		<<run console.log('[DNV] partyNight:', $game.partyNight, '| candidates:', _dnvCandidates, '| guests:', $guests.map(function(g){return {name:g.name,gender:g.gender,race:g.race,likesGuys:g.likesGuys,relationship:g.relationship,chastityBelt:g.chastityBelt}}))>>
+		<<if _dnvCandidates.length>>
+			<<set $tmpEvent = { id: _dnvCandidates[Math.floor(Math.random() * _dnvCandidates.length)] }>>
+			<<unset $game.partyNight>>
+			<<goto 'Bedroom - drunk night visitor'>>
+		<<else>>
+			<<unset $game.partyNight>>
+			<<sleep>>
+		<</if>>
+	<<else>>
+		<<sleep>>
+	<</if>>
+<</link>>
 
 <<if timeBetween('08:00','23:00') && !$player.nap>>
 	<<link 'Take a nap'>>

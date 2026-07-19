@@ -1,0 +1,166 @@
+:: Bedroom - drunk night visitor [bg-bedroom]
+<<set _dnvData = $tmpEvent>>
+<<set _dnvGuest = $guests[_dnvData.id]>>
+<<if !_dnvGuest>>
+	<<unset $game.partyNight, $tmpEvent>>
+	<<goto 'Bedroom-sleep'>>
+<</if>>
+<<unset $game.partyNight, $tmpEvent>>
+
+<h1 class="ptitle">BEDROOM</h1>
+<br />
+
+You fell asleep fast. The party had burned through whatever was left.
+<br /><br />
+
+At some point in the night — you couldn't say when — you felt her. Warmth. A hand moving under the sheets, slow and deliberate. Lips pressing against your chest.
+<br /><br />
+
+<<video 'bedroom/drunk_visitor1'>>
+<br /><br />
+
+You were still half asleep, eyes heavy, but your body was already awake. Her hand wrapped around your cock and stroked it slowly, like she had nowhere else to be.
+<br /><br />
+
+Then she moved lower.
+<br /><br />
+
+<<video 'bedroom/drunk_visitor2'>>
+<br /><br />
+
+She slipped under the sheets completely. The warmth of her mouth replaced the warmth of her hand — wet and soft, taking her time, her tongue working the underside of the head.
+<br /><br />
+
+<<video 'bedroom/drunk_visitor3'>>
+<br /><br />
+
+She took you deeper. All the way. You felt the back of her throat and heard a small, muffled sound from her that wasn't protest.
+<br /><br />
+
+<<set _dnvRideLabel = 'Let her keep going'>>
+<<set _dnvPushLabel = 'Push her away'>>
+
+<div id="dnv_ride">
+<<linkreplace _dnvRideLabel>>
+	<<run $('#dnv_push').hide()>>
+	<<addmins 10>>
+
+	You put a hand on the back of her head under the sheets — not forcing, just acknowledging. She pulled off slowly and came up from under the covers, hair loose, lips swollen, eyes reading you in the dark.
+	<br /><br />
+
+	<<sayNpc _dnvGuest>>
+		Sorry. I know I'm drunk. I just — I really wanted to do this.
+	<</sayNpc>>
+	<br />
+
+	She held your gaze, waiting to see how you'd take it.
+	<br /><br />
+
+	<<sayNpc _dnvGuest>>
+		You sure?
+	<</sayNpc>>
+	<br />
+
+	You didn't answer. She took that for a yes.
+	<br /><br />
+
+	<<video 'bedroom/drunk_visitor4'>>
+	<br /><br />
+
+	She straddled you, reached down to guide you in, and sank down slowly — her breath catching at the end of it. She sat still for a moment with you fully inside her, getting used to it.
+	<br /><br />
+
+	<<video 'bedroom/drunk_visitor5'>>
+	<br /><br />
+
+	Then she started moving. Slow rolls of her hips at first, testing the angle, finding her rhythm. The sheets pooled around her. You watched her in the dark, her outline above you.
+	<br /><br />
+
+	<<video 'bedroom/drunk_visitor6'>>
+	<br /><br />
+
+	You started thrusting up into her — meeting each drop of her hips. She made a sharp sound and grabbed the headboard, her thighs beginning to tremble. Her rhythm broke apart. She was close.
+	<br /><br />
+
+	<<set _dnvCumInLabel = 'Cum inside her'>>
+	<<set _dnvPullLabel = 'Pull out'>>
+
+	<div id="dnv_cum_in">
+	<<linkreplace _dnvCumInLabel>>
+		<<run $('#dnv_pull_out').hide()>>
+		<<horny_reset>>
+		<<set _dnvPreg = setup.pregnancyChance(_dnvGuest)>>
+		<<if _dnvPreg>>
+			<<set _dnvGuest.pregnant = 1>>
+			<<set _dnvGuest.pregnantDay = $game.day>>
+			<<set _dnvGuest.pregnantBy = 'player'>>
+		<</if>>
+		<<setNpcStats 'guest' _dnvData.id 'relationship' +5>>
+		<<setNpcStats 'guest' _dnvData.id 'happy' +5>>
+
+		You drove up hard and held there. She gasped and pressed down against you, her whole body shuddering as she came. You followed right behind her — filling her, hands gripping her hips, keeping her still while you finished.
+		<br /><br />
+
+		<center>
+			<<image 'game/misc/creampie_cowgirl.webp'>>
+		</center>
+		<br />
+
+		She sat there on top of you for a moment, catching her breath, then carefully climbed off and lay down beside you without a word.
+		<br /><br />
+
+		<<sayNpc _dnvGuest>>
+			Go back to sleep.
+		<</sayNpc>>
+		<br />
+
+		<<link 'Go back to sleep'>><<sleep>><</link>>
+	<</linkreplace>>
+	</div>
+
+	<div id="dnv_pull_out">
+	<<linkreplace _dnvPullLabel>>
+		<<run $('#dnv_cum_in').hide()>>
+		<<horny_reset>>
+		<<setNpcStats 'guest' _dnvData.id 'relationship' +3>>
+		<<setNpcStats 'guest' _dnvData.id 'happy' +3>>
+
+		You grabbed her hips and lifted her off just in time.
+		<br /><br />
+
+		<<video 'bedroom/drunk_visitor7'>>
+		<br /><br />
+
+		She looked down at herself — chest rising and falling, your cum warm across her stomach — and let out a slow breath.
+		<br /><br />
+
+		<<sayNpc _dnvGuest>>
+			Nice.
+		<</sayNpc>>
+		<br />
+
+		<<link 'Go back to sleep'>><<sleep>><</link>>
+	<</linkreplace>>
+	</div>
+
+<</linkreplace>>
+</div>
+
+<div id="dnv_push">
+<<linkreplace _dnvPushLabel>>
+	<<run $('#dnv_ride').hide()>>
+
+	You put a hand flat on her chest and pressed — firm, no room for misreading it. She pulled back from you and sat up in the dark.
+	<br /><br />
+
+	<<sayNpc _dnvGuest>>
+		Okay.
+	<</sayNpc>>
+	<br />
+
+	She climbed out of the bed without another word and slipped back toward the door.
+	<br /><br />
+
+	<<link 'Go back to sleep'>><<sleep>><</link>>
+<</linkreplace>>
+</div>
