@@ -6,6 +6,7 @@
 	<<goto 'Bedroom-sleep'>>
 <</if>>
 <<unset $game.partyNight, $tmpEvent>>
+<<set _dnvName = setup.displayName(_dnvGuest)>>
 
 <h1 class="ptitle">BEDROOM</h1>
 <br />
@@ -19,22 +20,22 @@ At some point in the night — you couldn't say when — you felt her. Warmth. A
 <<video 'bedroom/drunk_visitor1'>>
 <br /><br />
 
-You were still half asleep, eyes heavy, but your body was already awake. Her hand wrapped around your cock and stroked it slowly, like she had nowhere else to be.
+You were still half asleep, eyes heavy, but your body was already awake. <<= _dnvName>>'s hand wrapped around your cock and stroked it slowly, like she had nowhere else to be.
 <br /><br />
 
-Then she moved lower.
+Then <<= _dnvName>> moved lower.
 <br /><br />
 
 <<video 'bedroom/drunk_visitor2'>>
 <br /><br />
 
-She slipped under the sheets completely. The warmth of her mouth replaced the warmth of her hand — wet and soft, taking her time, her tongue working the underside of the head.
+<<= _dnvName>> slipped under the sheets completely. The warmth of her mouth replaced the warmth of her hand — wet and soft, taking her time, her tongue working the underside of the head.
 <br /><br />
 
 <<video 'bedroom/drunk_visitor3'>>
 <br /><br />
 
-She took you deeper. All the way. You felt the back of her throat and heard a small, muffled sound from her that wasn't protest.
+<<= _dnvName>> took you deeper. All the way. You felt the back of her throat and heard a small, muffled sound from her that wasn't protest.
 <br /><br />
 
 <<set _dnvRideLabel = 'Let her keep going'>>
@@ -45,7 +46,7 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 	<<run $('#dnv_push').hide()>>
 	<<addmins 10>>
 
-	You put a hand on the back of her head under the sheets — not forcing, just acknowledging. She pulled off slowly and came up from under the covers, hair loose, lips swollen, eyes reading you in the dark.
+	You put a hand on the back of her head under the sheets — not forcing, just acknowledging. <<= _dnvName>> pulled off slowly and came up from under the covers, hair loose, lips swollen, eyes reading you in the dark.
 	<br /><br />
 
 	<<sayNpc _dnvGuest>>
@@ -53,7 +54,7 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 	<</sayNpc>>
 	<br />
 
-	She held your gaze, waiting to see how you'd take it.
+	<<= _dnvName>> held your gaze, waiting to see how you'd take it.
 	<br /><br />
 
 	<<sayNpc _dnvGuest>>
@@ -61,26 +62,32 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 	<</sayNpc>>
 	<br />
 
-	You didn't answer. She took that for a yes.
+	You didn't answer. <<= _dnvName>> took that for a yes.
 	<br /><br />
 
 	<<video 'bedroom/drunk_visitor4'>>
 	<br /><br />
 
-	She straddled you, reached down to guide you in, and sank down slowly — her breath catching at the end of it. She sat still for a moment with you fully inside her, getting used to it.
+	<<= _dnvName>> straddled you, reached down to guide you in, and sank down slowly — her breath catching at the end of it. <<= _dnvName>> sat still for a moment with you fully inside her, getting used to it.
 	<br /><br />
 
 	<<video 'bedroom/drunk_visitor5'>>
 	<br /><br />
 
-	Then she started moving. Slow rolls of her hips at first, testing the angle, finding her rhythm. The sheets pooled around her. You watched her in the dark, her outline above you.
+	Then <<= _dnvName>> started moving. Slow rolls of her hips at first, testing the angle, finding her rhythm. The sheets pooled around her. You watched her in the dark, her outline above you.
 	<br /><br />
 
 	<<video 'bedroom/drunk_visitor6'>>
 	<br /><br />
 
-	You started thrusting up into her — meeting each drop of her hips. She made a sharp sound and grabbed the headboard, her thighs beginning to tremble. Her rhythm broke apart. She was close.
+	You started thrusting up into her — meeting each drop of her hips. <<= _dnvName>> made a sharp sound and grabbed the headboard, her thighs beginning to tremble. Her rhythm broke apart. <<= _dnvName>> was close.
 	<br /><br />
+
+	<<if _dnvGuest.virgin>>
+		<<run setup.npc.addHistory(_dnvGuest, 'virgin_lost', { with: 'mc' })>>
+		<<set _dnvGuest.virgin = false>>
+	<</if>>
+	<<run setup.npc.addHistory(_dnvGuest, 'first_sex_mc', { with: 'mc' })>>
 
 	<<set _dnvCumInLabel = 'Cum inside her'>>
 	<<set _dnvPullLabel = 'Pull out'>>
@@ -91,14 +98,13 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 		<<horny_reset>>
 		<<set _dnvPreg = setup.pregnancyChance(_dnvGuest)>>
 		<<if _dnvPreg>>
-			<<set _dnvGuest.pregnant = 1>>
-			<<set _dnvGuest.pregnantDay = $game.day>>
-			<<set _dnvGuest.pregnantBy = 'player'>>
+			<<set _dnvGuest.pregnancy = 0>>
+			<<set _dnvGuest.pregnancy_father = 'mc'>>
 		<</if>>
 		<<setNpcStats 'guest' _dnvData.id 'relationship' +5>>
 		<<setNpcStats 'guest' _dnvData.id 'happy' +5>>
 
-		You drove up hard and held there. She gasped and pressed down against you, her whole body shuddering as she came. You followed right behind her — filling her, hands gripping her hips, keeping her still while you finished.
+		You drove up hard and held there. <<= _dnvName>> gasped and pressed down against you, her whole body shuddering as she came. You followed right behind her — filling her, hands gripping her hips, keeping her still while you finished.
 		<br /><br />
 
 		<center>
@@ -106,7 +112,7 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 		</center>
 		<br />
 
-		She sat there on top of you for a moment, catching her breath, then carefully climbed off and lay down beside you without a word.
+		<<= _dnvName>> sat there on top of you for a moment, catching her breath, then carefully climbed off and lay down beside you without a word.
 		<br /><br />
 
 		<<sayNpc _dnvGuest>>
@@ -131,7 +137,11 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 		<<video 'bedroom/drunk_visitor7'>>
 		<br /><br />
 
-		She looked down at herself — chest rising and falling, your cum warm across her stomach — and let out a slow breath.
+		<<= _dnvName>> came at the same moment — her thighs clenching, a sharp gasp she couldn't hold back. She shuddered through it while you finished across her stomach.
+		<br /><br />
+
+		<<set $guests[_dnvData.id].horny = 0>>
+		<<= _dnvName>> looked down at herself — chest rising and falling, your cum warm across her skin — and let out a slow breath.
 		<br /><br />
 
 		<<sayNpc _dnvGuest>>
@@ -149,8 +159,9 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 <div id="dnv_push">
 <<linkreplace _dnvPushLabel>>
 	<<run $('#dnv_ride').hide()>>
+	<<setNpcStats 'guest' _dnvData.id 'relationship' -5>>
 
-	You put a hand flat on her chest and pressed — firm, no room for misreading it. She pulled back from you and sat up in the dark.
+	You put a hand flat on her chest and pressed — firm, no room for misreading it. <<= _dnvName>> pulled back from you and sat up in the dark.
 	<br /><br />
 
 	<<sayNpc _dnvGuest>>
@@ -158,7 +169,7 @@ She took you deeper. All the way. You felt the back of her throat and heard a sm
 	<</sayNpc>>
 	<br />
 
-	She climbed out of the bed without another word and slipped back toward the door.
+	<<= _dnvName>> climbed out of the bed without another word and slipped back toward the door.
 	<br /><br />
 
 	<<link 'Go back to sleep'>><<sleep>><</link>>
