@@ -232,6 +232,44 @@
 		</div>
 	</div>
 <</if>>
+<<if _s.blackmailActive>>
+	<div style="border-left: 3px solid #e0c055; padding: 10px 14px; margin: 14px 0; background: rgba(224,192,85,0.06);">
+		<span style="color: #e0c055; font-weight: bold;">⚠ BLACKMAIL DEMAND</span>
+		<br />
+		<span style="color: #888; font-size: 0.88em;">They're holding something over you and expect payment. Deal with it before they act on it.</span>
+		<br /><br />
+		<div id="bm_settle_pay">
+		<<set _bmPayLabel = 'Pay them off (300 caps)'>>
+		<<linkreplace _bmPayLabel>>
+			<<run $('#bm_settle_threaten').hide()>>
+			<<if $player.money >= 300>>
+				<<set $player.money -= 300>>
+				<<run setup.settlements.resolveBlackmail(_s, true)>>
+				<<run setup.settlements.save(setup.settlements.getAll())>>
+				<<addmins 30>>
+				<span style="color: #55cc88;">Demand settled. They got their money. You got your peace — for now.</span>
+			<<else>>
+				<span style="color: #e05555; font-size: 0.88em;">You don't have 300 caps.</span>
+			<</if>>
+		<</linkreplace>>
+		</div>
+		<div id="bm_settle_threaten">
+		<<set _bmThreatenLabel = 'Confront them — make clear there will be consequences'>>
+		<<linkreplace _bmThreatenLabel>>
+			<<run $('#bm_settle_pay').hide()>>
+			<<set _s.blackmailActive = false>>
+			<<set _s.blackmailCooldown = $game.day + 30>>
+			<<run setup.settlements.modifyRelationship(_s, -10, 'Player confronted and shut down blackmail demand')>>
+			<<run setup.settlements.logEvent(_s, 'Player showed up and made the threat clear. They dropped it.')>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<addmins 30>>
+			You laid it out plainly — what would happen to them if they followed through. Their contact went quiet. The message didn't get sent.
+			<br /><br />
+			<span style="color: #e09855; font-size: 0.88em;">Blackmail dropped. Relationship −10.</span>
+		<</linkreplace>>
+		</div>
+	</div>
+<</if>>
 <<link 'Attack'>>
 	<<goto 'Garage - World - Attack'>>
 <</link>>

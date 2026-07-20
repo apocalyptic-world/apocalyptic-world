@@ -13,6 +13,7 @@
 <<set _trOffer = setup.settlements.getTradeOffer(_trS)>>
 <<set _trWants = setup.settlements.getWantsOffer(_trS)>>
 
+<<addmins 30>>
 <span style="color: #aaa; font-size: 0.88em;">Your caps: <strong style="color: #e0c055;"><<=$player.money>></strong></span>
 <br /><br />
 
@@ -33,7 +34,6 @@
 						<<set $player.money -= _trBPrice>>
 						<<pickup $backpack _trBItem 1>>
 						<<run _trBHandle.resources[_trBItem] = Math.max(0, (_trBHandle.resources[_trBItem] || 0) - 1); setup.settlements.modifyRelationship(_trBHandle, 1, 'Trade'); setup.settlements.save(setup.settlements.getAll())>>
-						<<addmins 15>>
 						<span style="color: #55cc88;">Bought 1× <<= _trBItem.replace(/_/g, ' ')>>.</span>
 						<<if setup.settlements.getRelationshipLevel(_trBHandle) !== _trBOldLevel>>
 							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_trBHandle)>></span>
@@ -71,7 +71,6 @@
 						<<drop $backpack _tSwItem 1>>
 						<<set $player.money += _tSwPrice>>
 						<<run _tSHandle.resources[_tSwItem] = (_tSHandle.resources[_tSwItem] || 0) + 1; setup.settlements.modifyRelationship(_tSHandle, 2, 'Sold wanted goods'); setup.settlements.save(setup.settlements.getAll())>>
-						<<addmins 15>>
 						<span style="color: #55cc88;">Sold 1× <<= _tSwItem.replace(/_/g, ' ')>> for <<= _tSwPrice>> caps.</span>
 						<<if setup.settlements.getRelationshipLevel(_tSHandle) !== _tSOldLevel>>
 							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_tSHandle)>></span>
