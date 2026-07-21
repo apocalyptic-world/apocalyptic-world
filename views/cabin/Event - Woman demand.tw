@@ -6,8 +6,10 @@
 <<set _wdS = setup.settlements.getById(_wdData.id)>>
 <<if !_wdS>>
 	<<unset $game.womanDemand>>
+	<<set $locationEvents.cabin = false>>
 	<<goto 'Wood cabin'>>
 <</if>>
+<<set $locationEvents.cabin = false>>
 
 <<set _wdDaysLeft = Math.max(0, (_wdData.deadline ?? ($game.day + 3)) - $game.day)>>
 

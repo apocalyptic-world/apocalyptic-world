@@ -6,9 +6,11 @@
 <<set _ddS = setup.settlements.getById(_ddData.id)>>
 <<if !_ddS>>
 	<<unset $game.desperateDeal>>
+	<<set $locationEvents.cabin = false>>
 	<<goto 'Wood cabin'>>
 <</if>>
 <<unset $game.desperateDeal>>
+<<set $locationEvents.cabin = false>>
 <<set _ddS.desperateDealActive = false>>
 <<set _ddS.desperateDealCooldown = $game.day + 60>>
 <<run setup.settlements.save(setup.settlements.getAll())>>
