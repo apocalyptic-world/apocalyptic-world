@@ -7,7 +7,12 @@
 <</if>>
 </center>
 <br /><br />
-<<if $tmpGirl.likesGuys>>
+<<if $player?.baseManagement?.noIncest && setup.family.getRelationToMC($tmpGirl)>>
+	<<set _mcRelFromNpc = ({'daughter':'father','son':'father','mother':'son','father':'son','sister':'brother','brother':'brother','granddaughter':'grandfather','grandson':'grandfather'})[setup.family.getRelationToMC($tmpGirl)] ?? setup.family.getRelationToMC($tmpGirl)>>
+	No, you're my <<=_mcRelFromNpc>>, sex with family members is forbidden.
+	<br /><br />
+	<strong>Incest is prohibited by settlement policy</strong>
+<<elseif $tmpGirl.likesGuys>>
 	<<if $tmpGirl.married  && $tmpGirl.family && $tmpGirl.family.husband !== 'mc'>>
 		You know that I am married to someone else. I don't want to do it.
 	<<else>>

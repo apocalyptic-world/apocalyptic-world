@@ -795,7 +795,9 @@ setup.sexChance = function (person, gender = 1, beauty) {
     var spouseId = person.family?.husband;
     var spouseDead = setup.npc.isSpouseLost(spouseId);
 
-    if (person.married && (!person.family || person.family.husband !== 'mc') && !spouseDead) {
+    if (variables().player?.baseManagement?.noIncest && setup.family.isBloodToMC(person)) {
+        return Math.floor(Math.max(person.sub, person.drunk ?? 0) / 2);
+    } else if (person.married && (!person.family || person.family.husband !== 'mc') && !spouseDead) {
         return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
     } else if ((person.traits ?? []).includes('nymphomaniac')) {
 		return 100;
