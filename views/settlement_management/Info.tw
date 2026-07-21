@@ -44,12 +44,14 @@
 	church: 0,
 	wood: 0,
 	birthday: [],
+	anniversary: [],
 	pregnant: 0,
 	virgin: 0
 }>>
 
 <<set _preglist = ''>>
 <<set _virglist = ''>>
+<<set _seenAnnivPairs = new Set()>>
 
 <<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
 	<<if _statsNpc.assignedTo>>
@@ -148,6 +150,20 @@
 	<</if>>
 	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
 		<<set _settlementStatsData.birthday.push(_statsNpc.name)>>
+	<</if>>
+	<<set _annivEntry = (_statsNpc.history ?? []).find(h => h.event === 'married')>>
+	<<if _annivEntry && setup.npc.isAnniversary(_statsNpc)>>
+		<<set _annivYears = setup.npc.yearsMarried(_statsNpc)>>
+		<<if _annivEntry.with === 'mc'>>
+			<<set _settlementStatsData.anniversary.push('You & ' + _statsNpc.name + ' (' + _annivYears + '-year)')>>
+		<<else>>
+			<<set _annivKey = [_statsNpc.id, _annivEntry.with].sort().join('|')>>
+			<<if !_seenAnnivPairs.has(_annivKey)>>
+				<<run _seenAnnivPairs.add(_annivKey)>>
+				<<set _spouseNpc = setup.getNpcById(_annivEntry.with)>>
+				<<set _settlementStatsData.anniversary.push(_statsNpc.name + ' & ' + (_spouseNpc?.name ?? 'someone') + ' (' + _annivYears + '-year)')>>
+			<</if>>
+		<</if>>
 	<</if>>
 <</for>>
 
@@ -329,6 +345,13 @@
 		)
 		</td>
 	</tr>
+	<<if _settlementStatsData.anniversary.length>>
+		<tr>
+			<td>Today's anniversaries:</td>
+			<td></td>
+			<td><<=_settlementStatsData.anniversary.join('<br/>')>></td>
+		</tr>
+	<</if>>
 	<<if _settlementStatsData.birthday.length>>
 		<tr>
 			<td>Today's birthdays:</td>

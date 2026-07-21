@@ -8,9 +8,24 @@
 You found nothing while driving around.
 <br /><br />
 <<set _companionKeys = Object.keys($player.companions ?? {})>>
-<<if _companionKeys.length > 0>>
-    <<set _splitCompanionKey = _companionKeys[0].split(':')>>
-    <<set $tmpGirl = setup.companionGet(_companionKeys[0])>>
+<<set _eligibleKeys = []>>
+<<for _ck range _companionKeys>>
+    <<set _ckNpc = setup.companionGet(_ck)>>
+    <<if !_ckNpc>><<continue>><</if>>
+    <<if _ckNpc.married && _ckNpc.family?.husband !== 'mc' && !setup.npc.isSpouseLost(_ckNpc.family?.husband)>><<continue>><</if>>
+    <<if $player?.baseManagement?.noIncest && setup.family.isBloodToMC(_ckNpc)>><<continue>><</if>>
+    <<if (_ckNpc.traits ?? []).includes('nymphomaniac')>>
+        <<run _eligibleKeys.push(_ck)>>
+        <<continue>>
+    <</if>>
+    <<if !_ckNpc.likesGuys>><<continue>><</if>>
+    <<if setup.npc.isExOfMc(_ckNpc)>><<continue>><</if>>
+    <<run _eligibleKeys.push(_ck)>>
+<</for>>
+<<if _eligibleKeys.length > 0>>
+    <<set _chosenKey = either(..._eligibleKeys)>>
+    <<set _splitCompanionKey = _chosenKey.split(':')>>
+    <<set $tmpGirl = setup.companionGet(_chosenKey)>>
     <<if _splitCompanionKey[0] === 'guest'>>
         <<set $guestId = _splitCompanionKey[1]>>
     <<else>>

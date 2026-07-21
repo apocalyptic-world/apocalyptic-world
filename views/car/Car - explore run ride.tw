@@ -2,7 +2,24 @@
 <h1 class="ptitle">OUTSIDE</h1>
 <br />
 <<set _hornyCompanions = setup.companions.getHorny(50)>>
-<<set _randomNpc = setup.getRandomElement(_hornyCompanions[0])>>
+<<set _eligibleKeys = []>>
+<<for _ck range (_hornyCompanions[0] ?? [])>>
+    <<set _ckNpc = setup.companionGet(_ck)>>
+    <<if !_ckNpc>><<continue>><</if>>
+    <<if _ckNpc.married && _ckNpc.family?.husband !== 'mc' && !setup.npc.isSpouseLost(_ckNpc.family?.husband)>><<continue>><</if>>
+    <<if $player?.baseManagement?.noIncest && setup.family.isBloodToMC(_ckNpc)>><<continue>><</if>>
+    <<if (_ckNpc.traits ?? []).includes('nymphomaniac')>>
+        <<run _eligibleKeys.push(_ck)>>
+        <<continue>>
+    <</if>>
+    <<if !_ckNpc.likesGuys>><<continue>><</if>>
+    <<if setup.npc.isExOfMc(_ckNpc)>><<continue>><</if>>
+    <<run _eligibleKeys.push(_ck)>>
+<</for>>
+<<if _eligibleKeys.length == 0>>
+    <<include 'Car explore - nothing found'>>
+<<else>>
+<<set _randomNpc = setup.getRandomElement(_eligibleKeys)>>
 <<set _guestId = _randomNpc.split(':')[1]>>
 <<set _npc = setup.companionGet(_randomNpc)>>
 <<set $locationEvents.explore_car = true>>
@@ -91,3 +108,4 @@ The sensation was almost too much to bear, and you had to fight to keep your eye
         <</linkreplace>>
     <</linkreplace>>
 </div>
+<</if>>
