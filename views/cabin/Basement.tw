@@ -64,7 +64,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _mistressId = _girlGuest[0]>>
 	<</if>>
 
-	<<if _mistressId && $player.quests.slave_party>>
+	<<if !(typeof _mistressId === 'undefined') && $player.quests.slave_party>>
 		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4>>
 			<<link 'Throw a party'>>
 				<<goto 'Basement - slave party'>>
