@@ -180,202 +180,15 @@
 	);
 >>
 
+<<set _sleepNpcOpts = { type: 'slave', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false }>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
 		<<set _npc = $slaves[_i]>>
-		<<run Object.assign(_npc, {talked:false, milked:false, groped:false, washed:false, workout:false, gift:false, cosmetics:false, offerSlave:false, drunk:0})>>
-		<<if _npc.horny < 90>>
-			<<set _npc.horny++>>
-		<</if>>
-		
-		<<if typeof $slaves[_i].stats  === 'undefined'>>
-			<<set $slaves[_i].stats = {}>>
-		<</if>>
+		<<set _sleepNpcOpts.npcIndex = _i>>
+		<<run setup.sleep.processNpc(_npc, _sleepNpcOpts)>>
+		<<if _sleepNpcOpts.shouldSkip>><<continue>><</if>>
 
-		// buttplug
-		<<if $slaves[_i].buttplug && $slaves[_i].anal < 20>>
-			<<set $slaves[_i].anal++>>
-		<</if>>
-
-		// dumbbell
-		<<run setup.sleep.processDumbbell(_npc, _isHeatWave)>>
-/*
-		<<if setup.npcInventoryHas($slaves[_i], 'dumbbell') && $slaves[_i].strength < 30>>
-			<<set $slaves[_i].strength++>>
-		<</if>>
-*/
-
-		// Wash beauty
-		<<if typeof $slaves[_i].washDays !== 'undefined'>>
-			<<set $slaves[_i].washDays-->>
-			<<if $slaves[_i].baseBeauty>>
-				<<set $slaves[_i].beauty = Math.max($slaves[_i].baseBeauty, ($slaves[_i].beauty - $slaves[_i].washBeauty))>>
-			<<else>>
-				<<set $slaves[_i].beauty -= $slaves[_i].washBeauty>>
-			<</if>>
-			<<if $slaves[_i].washDays <= 0>>
-				<<run delete $slaves[_i].washDays>>
-			<</if>>
-		<</if>>
-
-		<<if typeof $slaves[_i].noPregnancyDays !== 'undefined'>>
-			<<set $slaves[_i].noPregnancyDays-->>
-			<<if $slaves[_i].noPregnancyDays <= 0>>
-				<<run delete $slaves[_i].noPregnancyDays>>
-			<</if>>
-		<</if>>
-
-		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
-			<<set _npc.sub++>>
-		<</if>>
-		
-		// Assigned jobs
-		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
-		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
-		<<set _dayOff = _isSick || _isRest>>
-		<<if $slaves[_i].assignedTo === 'garden' && _isHeatWave>>
-			<<set $slaves[_i].gardenDay = 0>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'garden' && !_isDayOff && !_isHeatWave>>
-			<<if typeof $slaves[_i].stats['garden'] === 'undefined'>>
-				<<set $slaves[_i].stats['garden'] = 0>>
-			<</if>>
-			<<set $slaves[_i].stats['garden']++>>
-			
-			// Learn skill
-			<<if $slaves[_i].stats['garden'] > 100 && !($slaves[_i].skills ?? []).includes('gardener')>>
-				<<if typeof $slaves[_i].skills === 'undefined'>>
-					<<set $slaves[_i].skills = []>>
-				<</if>>
-				<<run $slaves[_i].skills.push('gardener')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">' + $slaves[_i].name + ' learned the gardener skill</span>', 'garden')>>
-			<</if>>
-
-			<<set $slaves[_i].gardenDay++>>
-			<<set _foodGive = _giveFood>>
-			<<if ($slaves[_i].skills ?? []).includes('gardener')>>
-				<<set _foodGive += 2>>
-			<</if>>
-			<<if $slaves[_i].gardenDay == 3>>
-				<<set $slaves[_i].gardenDay = 0>>
-				<<if ($slaves[_i].traits ?? []).includes('hoarder')>>
-					<<set _foodGive = Math.max(1, Math.floor(_foodGive / 2))>>
-				<</if>>
-				<<set _totals.food += _foodGive>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'food' _foodGive>>
-				<<else>>
-					<<pickup $backpack 'food' _foodGive>>
-				<</if>>
-				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden', 'garden')>>
-			<</if>>
-			<<if setup.percentageChance(10)>>
-				<<set _totals.wood++>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'wood' 1>>
-				<<else>>
-					<<pickup $backpack 'wood' 1>>
-				<</if>>
-				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow a small fruit tree while working in the garden. <strong class="iitem">+1 wood</strong>', 'garden')>>
-			<</if>>
-		<</if>>
-		<<if _npc.assignedTo == 'milk_barn' && !_dayOff && _hasMilkwarden>>
-			<<if typeof _npc.milkingDay === 'undefined'>>
-				<<set _npc.milkingDay = 0>>
-			<</if>>
-			<<if _npc.pregnancy < 7 && !(_npc.traits ?? []).includes('milker')>>
-				<<run delete _npc.assignedTo>>
-				<<run setup.sleepMessages.addJob($slaves[_i].name + ' has dried out and produces no extra milk (for now). Unassigned from barn!', 'milk_barn')>>
-			<<else>>
-				<<if _hasElectricity>>
-					<<set _npc.milkingDay++>>
-					<<setNpcStats 'slave' _i 'happy' -5>>
-					<<if _npc.milkingDay >= 3>>
-						<<run setup.cabinInventory.pickup('milk', 1)>>
-						<<run setup.sleepMessages.addJob($slaves[_i].name + ' filled a pack of milk', 'milk_barn')>>
-						<<set _npc.milkingDay = 0>>
-						<<set _totals.milk ??= 0>>
-						<<set _totals.milk++>>
-					<</if>>
-				<<else>>
-					<<run setup.sleepMessages.addJob($slaves[_i].name + ' could not work as there was no electricity in the barn', 'milk_barn')>>
-				<</if>>
-			<</if>>
-		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
-			<<set _girlChanceToDie = 5>>
-			<<if ($slaves[_i].strength ?? 0) > 20>>
-				<<set _girlChanceToDie = 3>>
-			<<elseif ($slaves[_i].strength ?? 0) > 10>>
-				<<set _girlChanceToDie = 4>>
-			<</if>>
-			
-			<<if $characters.dom.quests.accepted_deal>>
-				<<set _girlChanceToDie = 1>>
-			<</if>>
-			<<if setup.npcInventoryHas($slaves[_i], 'knife')>>
-				<<set _girlChanceToDie -=1>>
-			<</if>>
-			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
-				<<set _totals['streetworker'] = (_totals['streetworker'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' <strong class="iitem">was found dead</strong> in the streets...', 'streets')>>
-				<<set $slaves.splice(_i, 1)>>
-				<<set _i-->>
-				<<continue>>
-			<<else>>
-				<<if setup.percentageChance(10)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' had a close call in the streets last night but made it back.', 'streets')>>
-				<</if>>
-				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
-					<<setNpcStats 'slave' _i 'happy' -5>>
-				<</if>>
-				<<if randomInteger(0, 1) === 0>>
-					<<if !_npc.chastityBelt>>
-						<<set $slaves[_i].virgin = false>>
-						<<if setup.percentageChance(50)>>
-							<<run setup.jobs.applyJobAct(_npc, 'pussy')>>
-						<</if>>
-					<</if>>
-
-					<<if setup.percentageChance(50)>>
-						<<run setup.jobs.applyJobAct(_npc, 'bj')>>
-					<</if>>
-
-					<<if setup.percentageChance(20)>>
-						<<run setup.jobs.applyJobAct(_npc, 'anal')>>
-					<</if>>
-
-					<<set _randomAction = [];>>
-
-					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
-					<<set $player.money += _moneyEarned>>
-					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' had a client in the streets, ' + setup.pronounceWhat($slaves[_i]) + ' got you <strong>' + _moneyEarned + '</strong> caps', 'streets')>>
-				
-					<<if setup.pregnancyChance($slaves[_i]) && !setup.npcInventoryHas($slaves[_i], 'condom') && !_npc.chastityBelt>>
-						<<set $slaves[_i].pregnancy = 0>>
-						<<set $slaves[_i].pregnancy_father = 'unknown'>>
-						<<set $slaves[_i].pregnancy_event = 'streets'>>
-					<</if>>
-				<</if>>
-			<</if>>
-		<</if>>
-
-		<<if _npc.assignedTo === 'kitchen' && !_isSick>>
-			<<set _npc.stats['kitchen'] ??= 0>>
-			<<set _npc.stats['kitchen']++>>
-			<<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set _npc.stats['kitchen']++>>
-			<</if>>
-			// Learn skill
-			<<if _npc.stats['kitchen'] > 100 && !(_npc.skills ?? []).includes('cook')>>
-				<<if typeof _npc.skills === 'undefined'>>
-					<<set _npc.skills = []>>
-				<</if>>
-				<<run _npc.skills.push('cook')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">Guest ' + _npc.name + ' learned the cook skill</span>', 'kitchen')>>
-			<</if>>
-		<</if>>
-
+		<<set _isSick = _sleepNpcOpts.resultIsSick>>
+		<<set _dayOff = _sleepNpcOpts.resultIsDayOff>>
 		<<set _isGuest = false>>
 		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepNightClub'>>
@@ -425,85 +238,6 @@
 			<</if>>
 		<</if>>
 
-		// Pregnancy
-		<<if typeof $slaves[_i].pregnancy !== 'undefined'>>
-			<<set $slaves[_i].pregnancy++>>
-			<<if ($slaves[_i].traits ?? []).includes('breeder')>>
-				<<set $slaves[_i].pregnancy++>>
-			<</if>>
-			<<if $slaves[_i].pregnancy == 8>>
-				<<set _pregnantMsg = $slaves[_i].name + ' told you that <strong>she is pregnant</strong>.'>>
-				<<if $slaves[_i].pregnancy_father !== 'mc'>>
-					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
-						<<if !$pregnancyStreetsHappening && $slaves[_i].pregnancy_event === 'streets'>>
-							<<set $pregnancyStreetsHappening = {
-								type: 'slave',
-								id: _i
-							}>>
-						<</if>>
-				<</if>>
-				
-				<<run setup.sleepMessages.addMain(_pregnantMsg)>>
-				<<set $characters.vincent.quests.pregnancy = true>>
-			<</if>>
-
-			<<set _streetWork = $slaves[_i].assignedTo === 'streets' && !_dayOff>>
-			<<if $slaves[_i].pregnancy > 30 && _streetWork && setup.percentageChance(_miscarrieageChance)>>
-				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addMain($slaves[_i].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage.</strong>')>>
-				<<set $slaves[_i].happy -= 20>>
-				<<set $slaves[_i].relationship -= 10>>
-				<<run delete $slaves[_i].pregnancy>>
-			<</if>>
-			
-			<<if !$pregnancyHappening && $slaves[_i].pregnancy > 260 && ($slaves[_i].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<if _hasWorkingHospital>>
-					<<run $pregnancysHappeningHospital.push(
-						{
-							type: 'slave',
-							id: _i
-						}
-					)>>
-				<<else>>
-					<<set $pregnancyHappening = {
-						type: 'slave',
-						id: _i
-					}>>
-				<</if>>
-			<</if>>
-		<</if>>
-		
-		// Sick
-		<<if _isSick>>
-			<<set $slaves[_i].sick.days-->>
-			<<if _hasWorkingHospital || (_hasDoctor && setup.percentageChance(42))>>
-				<<set $slaves[_i].sick.days-->>
-			<</if>>
-			<<if $slaves[_i].sick.days <= 0>>
-				<<run delete $slaves[_i].sick>>
-			<</if>>
-		<</if>>
-		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
-			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
-			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
-		<</if>>
-		// Resting
-		<<if  _isRest>>
-			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
-			<<if _unhappy_jobs.includes($slaves[_i].assignedTo)>>
-				<<setNpcStats slave _i happy +5>>
-			<<else>>
-				<<setNpcStats slave _i happy +2>>
-			<</if>>
-			<<set $slaves[_i].rest.days-->>
-			<<if $slaves[_i].rest.days <= 0>>
-				<<run delete $slaves[_i].rest>>
-			<</if>>
-		<</if>>
-
-		<<if (_npc?.quests?.lastInteractionDay + 14) < $game.day && !$player?.quests?.subDecayDisabled>>
-			<<set _npc.relationship = Math.max(-100, (_npc.relationship ?? 0) - 1)>>
-		<</if>>
 
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
@@ -527,6 +261,10 @@
 		<</if>>
 <</for>>
 
+// Deferred slave removals — reverse order preserves lower indices
+<<for _remI = _sleepNpcOpts.pendingRemovals.length - 1; _remI >= 0; _remI-->>
+	<<run $slaves.splice(_sleepNpcOpts.pendingRemovals[_remI].index, 1)>>
+<</for>>
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
 <<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
@@ -535,336 +273,18 @@
 <<elseif _isOvercrowded>>
 	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + $guests.length + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
 <</if>>
+<<set _sleepGuestOpts = { type: 'guest', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false, scavengingDidntReturnId: null }>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 		<<set _npc = $guests[_guestI]>>
 		<<if _isOvercrowded>>
 			<<setNpcStats 'guest' _guestI 'happy' -5>>
 		<</if>>
-		<<run Object.assign(_npc, {talked:false, milked:false, groped:false, workout:false, washed:false, gift:false, cosmetics:false, sleeping:false, washedBathhouse:false, drunk:0})>>
-		<<if $guests[_guestI].horny <= 90>>
-			<<set $guests[_guestI].horny += window.randomInteger(1, 9)>>
-		<<else>>
-			<<set $guests[_guestI].horny = 0>>
-		<</if>>
-		<<if typeof $guests[_guestI].stats  === 'undefined'>>
-			<<set $guests[_guestI].stats = {}>>
-		<</if>>
+		<<set _sleepGuestOpts.npcIndex = _guestI>>
+		<<run setup.sleep.processNpc(_npc, _sleepGuestOpts)>>
+		<<if _sleepGuestOpts.shouldSkip>><<continue>><</if>>
 
-		// buttplug
-		<<if $guests[_guestI].buttplug && $guests[_guestI].anal < 20>>
-			<<set $guests[_guestI].anal++>>
-		<</if>>
-
-		// dumbbell
-		<<run setup.sleep.processDumbbell(_npc, _isHeatWave)>>
-/*
-		<<if setup.npcInventoryHas($guests[_guestI], 'dumbbell') && $guests[_guestI].strength < 30>>
-			<<set $guests[_guestI].strength++>>
-		<</if>>
-*/
-
-		// Wash beauty
-		<<if typeof $guests[_guestI].washDays !== 'undefined'>>
-			<<set $guests[_guestI].washDays-->>
-			<<set $guests[_guestI].beauty -= $guests[_guestI].washBeauty>>
-			<<if $guests[_guestI].washDays <= 0>>
-				<<run delete $guests[_guestI].washDays>>
-			<</if>>
-		<</if>>
-
-		<<if _npc.sub < 20 && !Object.keys(_npc.clothes ?? {}).length && setup.percentageChance(50)>>
-			<<set _npc.sub++>>
-		<</if>>
-
-		<<if (_npc?.quests?.lastInteractionDay + 7) < $game.day && setup.percentageChance && !$player?.quests?.subDecayDisabled>>
-			<<set _npc.sub = Math.max(0, (_npc.sub - 1))>>
-		<</if>>
-		<<if (_npc?.quests?.lastInteractionDay + 14) < $game.day && !$player?.quests?.subDecayDisabled>>
-			<<set _npc.relationship = Math.max(-100, (_npc.relationship ?? 0) - 1)>>
-		<</if>>
-		
-		// Leave
-		<<if ($guests[_guestI].relationship < 0 || $guests[_guestI].happy < -70) && setup.getAge(_npc) >= 18>>
-			<<run setup.sleepMessages.addMain(_npc.name + ' was missing in the morning, ' + setup.pronounceWhat(_npc) + ' probably decided to leave this place.')>>
-			<<guestLeft _guestI >>
-			<<set _guestI-->>
-			<<continue>>
-		<</if>>
-
-		<<if typeof $guests[_guestI].noPregnancyDays !== 'undefined'>>
-			<<set $guests[_guestI].noPregnancyDays-->>
-			<<if $guests[_guestI].noPregnancyDays <= 0>>
-				<<run delete $guests[_guestI].noPregnancyDays>>
-			<</if>>
-		<</if>>
-		
-		<<set _isSick = (typeof $guests[_guestI].sick !== 'undefined')>>
-		<<set _isRest = (typeof $guests[_guestI].rest !== 'undefined')>>
-		<<set _dayOff = _isSick || _isRest>>
-		// Assigned jobs
-		<<if _npc.assignedTo === 'garden' && _isHeatWave>>
-			<<set _npc.gardenDay = 0>>
-		<</if>>
-		<<if $guests[_guestI].assignedTo === 'garden' && !_dayOff && !_isHeatWave>>
-			<<if typeof $guests[_guestI].stats['garden'] === 'undefined'>>
-				<<set $guests[_guestI].stats['garden'] = 0>>
-			<</if>>
-			<<set $guests[_guestI].stats['garden']++>>
-			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set $guests[_guestI].stats['garden']++>>
-			<</if>>
-
-			// Learn skill
-			<<if $guests[_guestI].stats['garden'] > 100 && !($guests[_guestI].skills ?? []).includes('gardener')>>
-				<<if typeof $guests[_guestI].skills === 'undefined'>>
-					<<set $guests[_guestI].skills = []>>
-				<</if>>
-				<<run $guests[_guestI].skills.push('gardener')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">' + $guests[_guestI].name + ' learned the gardening skill</span>', 'garden')>>
-			<</if>>
-
-			<<set $guests[_guestI].gardenDay++>>
-			<<set _foodGive = _giveFood>>
-			<<if ($guests[_guestI].skills ?? []).includes('gardener')>>
-				<<set _foodGive += 2>>
-			<</if>>
-			<<if $guests[_guestI].gardenDay == 3>>
-				<<set $guests[_guestI].gardenDay = 0>>
-				<<if ($guests[_guestI].traits ?? []).includes('hoarder')>>
-					<<set _foodGive = Math.max(1, Math.floor(_foodGive / 2))>>
-				<</if>>
-				<<set _totals.food += _foodGive>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'food' _foodGive>>
-				<<else>>
-					<<pickup $backpack 'food' _foodGive>>
-				<</if>>
-				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden.', 'garden')>>
-			<</if>>
-			<<if setup.percentageChance(10)>>
-				<<set _totals.wood++>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'wood' 1>>
-				<<else>>
-					<<pickup $backpack 'wood' 1>>
-				<</if>>
-				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to grow a small fruit tree while working in the garden. <strong class="iitem">+1 wood</strong>', 'garden')>>
-			<</if>>
-		<</if>>
-		
-		
-		<<if $guests[_guestI].assignedTo === 'church' && !_isSick>>
-			<<if typeof $guests[_guestI].stats['church'] === 'undefined'>>
-				<<set $guests[_guestI].stats['church'] = 0>>
-			<</if>>
-			<<set $guests[_guestI].stats['church']++>>
-			<<for _ci = 0; _ci < $guests.length; _ci++>>
-				<<if _ci !== _guestI>>
-					<<set $guests[_ci].happy = Math.min(100, ($guests[_ci].happy ?? 0) + 1)>>
-				<</if>>
-			<</for>>
-			<<run setup.sleepMessages.addJob($guests[_guestI].name + ' spent the day at the church, lifting the spirits of those around <strong>+1 happy to all guests</strong>.', 'church')>>
-		<</if>>
-
-		<<if $guests[_guestI].assignedTo === 'streets' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
-			<<set _girlChanceToDie = 5>>
-			<<if ($guests[_guestI].strength ?? 0) > 20>>
-				<<set _girlChanceToDie = 3>>
-			<<elseif ($guests[_guestI].strength ?? 0) > 10>>
-				<<set _girlChanceToDie = 4>>
-			<</if>>
-			
-			<<if $characters.dom.quests.accepted_deal>>
-				<<set _girlChanceToDie = 1>>
-			<</if>>
-			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
-				<<set _girlChanceToDie -=1>>
-			<</if>>
-			<<if setup.percentageChance(_girlChanceToDie) && (!$characters.dom.quests.accepted_deal || setup.percentageChance(50))>>
-				<<set _totals['streetworker'] = (_totals['streetworker'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' <strong class="iitem">was found dead</strong> in the streets!', 'streets')>>
-				<<guestLeft _guestI >>
-				<<set _guestI-->>
-				<<continue>>
-			<<else>>
-				<<if setup.percentageChance(20)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' had a close call in the streets last night but made it back.', 'streets')>>
-				<</if>>
-				<<if !(_npc.traits ?? []).includes('cumslut') && !(_npc.traits ?? []).includes('masochist')>>
-					<<setNpcStats 'guest' _guestI 'happy' -5>>
-				<</if>>
-				<<if randomInteger(0, 1) === 0>>
-					<<if !_npc.chastityBelt>>
-						<<set _npc.virgin = false>>
-						<<if setup.percentageChance(50)>>
-							<<run setup.jobs.applyJobAct(_npc, 'pussy')>>
-						<</if>>
-					<</if>>
-
-					<<if setup.percentageChance(50)>>
-						<<run setup.jobs.applyJobAct(_npc, 'bj')>>
-					<</if>>
-
-					<<if setup.percentageChance(20)>>
-						<<run setup.jobs.applyJobAct(_npc, 'anal')>>
-					<</if>>
-					<<set _moneyEarned = setup.jobs.getStreetsEarned(_npc)>>
-					<<set $player.money += _moneyEarned>>
-					<<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' had a client in the streets. She got you <strong>' + _moneyEarned + '</strong> caps', 'streets')>>
-					<<if setup.pregnancyChance($guests[_guestI]) && !setup.npcInventoryHas($guests[_guestI], 'condom') && !_npc.chastityBelt>>
-						<<set $guests[_guestI].pregnancy = 0>>
-						<<set $guests[_guestI].pregnancy_father = 'unknown'>>
-						<<set $guests[_guestI].pregnancy_event = 'streets'>>
-					<</if>>
-				<</if>>
-			<</if>>
-		<</if>>
-	
-
-		<<if _npc.assignedTo === 'kitchen' && !_isSick>>
-			<<set _npc.stats['kitchen'] ??= 0>>
-			<<set _npc.stats['kitchen']++>>
-			<<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set _npc.stats['kitchen']++>>
-			<</if>>
-			// Learn skill
-			<<if _npc.stats['kitchen'] > 100 && !(_npc.skills ?? []).includes('cook')>>
-				<<if typeof _npc.skills === 'undefined'>>
-					<<set _npc.skills = []>>
-				<</if>>
-				<<run _npc.skills.push('cook')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">Guest ' + _npc.name + ' learned the cook skill</span>', 'kitchen')>>
-			<</if>>
-
-		<</if>>
-
-		<<if $guests[_guestI].assignedTo === 'scavenging' && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
-			<<if typeof $guests[_guestI].stats['scavenging'] === 'undefined'>>
-				<<set $guests[_guestI].stats['scavenging'] = 0>>
-			<</if>>
-			<<set $guests[_guestI].stats['scavenging']++>>
-			<<if ($guests[_guestI].skills ?? []).includes('teacher') && setup.percentageChance(30)>>
-				<<set $guests[_guestI].stats['scavenging']++>>
-			<</if>>
-			
-			// Learn skill
-			<<if $guests[_guestI].stats['scavenging'] > 100 && !($guests[_guestI].skills ?? []).includes('scavenger')>>
-				<<if typeof $guests[_guestI].skills === 'undefined'>>
-					<<set $guests[_guestI].skills = []>>
-				<</if>>
-				<<run $guests[_guestI].skills.push('scavenger')>>
-				<<run setup.sleepMessages.addJob('<span class="skill">' + _npc.name + ' learned the scavenger skill</span>', 'scavenging')>>
-			<</if>>
-
-			<<set _chanceOfNotComingHome = 10>>
-			<<if $guests[_guestI].strength >= 60>>
-				<<set _chanceOfNotComingHome -= 5>>
-			<<elseif $guests[_guestI].strength >= 40>>
-				<<set _chanceOfNotComingHome -= 3>>
-			<<elseif $guests[_guestI].strength >= 20>>
-				<<set _chanceOfNotComingHome -= 1>>
-			<</if>>
-			<<if ($guests[_guestI].skills ?? []).includes('scavenger')>>
-				<<set _chanceOfNotComingHome -= 3>>
-			<</if>>
-			<<if setup.npcInventoryHas($guests[_guestI], 'knife')>>
-				<<set _chanceOfNotComingHome -= 1>>
-			<</if>>
-			<<if setup.npcInventoryHas($guests[_guestI], 'crossbow') || setup.npcInventoryHas($guests[_guestI], 'bow')>>
-				<<set _chanceOfNotComingHome -= 1>>
-			<</if>>
-			<<set _chanceOfNotComingHome = Math.max(1, _chanceOfNotComingHome)>>
-			<<set _scavHostiles = setup.settlements.getAll().filter(function(s) { return s.discovered && !s.destroyed && setup.settlements.isHostile(s); })>>
-			<<if _scavHostiles.length && !($game.capturedGuest ?? false) && setup.percentageChance(2) && $guests[_guestI].gender === 0>>
-				<<set _scavCaptor = _scavHostiles[randomInteger(0, _scavHostiles.length - 1)]>>
-				<<set _scavCaptor.captiveId   = $guests[_guestI].id>>
-				<<set _scavCaptor.captiveName = $guests[_guestI].name>>
-				<<set $game.capturedGuest = { npc: clone($guests[_guestI]), settlementId: _scavCaptor.id, settlementName: _scavCaptor.name }>>
-				<<run setup.settlements.modifyRelationship(_scavCaptor, -5, 'Captured player\'s guest')>>
-				<<run setup.settlements.logEvent(_scavCaptor, 'Captured one of the player\'s people during scavenging.')>>
-				<<run setup.settlements.save(setup.settlements.getAll())>>
-				<<run setup.sleepMessages.addMain($guests[_guestI].name + ' didn\'t come home from scavenging. She was taken by ' + _scavCaptor.name + '.')>>
-				<<guestLeft _guestI>>
-				<<set _guestI-->>
-				<<continue>>
-			<</if>>
-			<<if setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30)>>
-				<<set $scavengingDidntReturn = _guestI>>
-			<<else>>
-			  <<set _randomItem = either(_randomScavengingItems)>>
-			  <<set _giveCount = 1>>
-			  <<if ($guests[_guestI].skills ?? []).includes('scavenger') && setup.percentageChance(50)>>
-				<<set _giveCount++>>
-			  <</if>>
-			  <<if ($guests[_guestI].traits ?? []).includes('hoarder')>>
-				<<set _giveCount = Math.max(0, Math.floor(_giveCount / 2))>>
-			  <</if>>
-			  <<if _giveCount > 0>>
-				<<set _totals[_randomItem] = (_totals[_randomItem] ?? 0) + _giveCount>>
-				<<if _isStorageAvailable>>
-					<<pickup $storage _randomItem _giveCount>>
-				<<else>>
-					<<pickup $backpack _randomItem _giveCount>>
-				<</if>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging.', 'scavenging')>>
-			  <<else>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' went scavenging but kept everything they found.', 'scavenging')>>
-			  <</if>>
-			<</if>>
-			<<if setup.percentageChance(10) || (setup.isNewMoon() && setup.percentageChance(20))>>
-				<<set _totals['glowing_mushroom'] = (_totals['glowing_mushroom'] ?? 0) + 1 >>
-				<<if _isStorageAvailable>>
-					<<pickup $storage 'glowing_mushroom' 1>>
-				<<else>>
-					<<pickup $backpack 'glowing_mushroom' 1>>
-				<</if>>
-				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to find a mushroom among the debris while scavenging. <strong class="iitem">+1 glowing mushroom</strong>', 'scavenging')>>
-			<</if>>
-		<</if>>
-		
-		<<if $guests[_guestI].assignedTo === 'mistress' && !_isSick>>
-			<<for _mistressSlaveI, _mistressSlave range $slaves>>
-				<<if setup.getAge(_mistressSlave) < 18>>
-					<<continue>>
-				<</if>>
-				<<if setup.percentageChance(30) && _mistressSlave.sub < 100>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
-					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
-				<</if>>
-				<<if setup.percentageChance(20) && _mistressSlave.corruption < 50>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s corruption')>>
-					<<set $slaves[_mistressSlaveI].corruption = Math.min(100, ($slaves[_mistressSlaveI].corruption + 1))>>
-				<</if>>
-			<</for>>
-		<</if>>
-
-		<<if $guests[_guestI].assignedTo === 'hunter' && !_isSick && setup.npcInventoryHas($guests[_guestI], 'bow') && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
-			<<set _percentageHunter = 10>>
-			<<if $guests[_guestI].strength > 50>>
-				<<set _percentageHunter += 25>>
-			<<elseif $guests[_guestI].strength > 20>>
-				<<set _percentageHunter += 10>>
-			<</if>>
-			<<set _hunterItem = 'food'>>
-			<<set _giveCount = randomInteger(2,5)>>
-
-			<<if setup.percentageChance(20) || (setup.isFullMoon() && setup.percentageChance(40))>>
-				<<set _hunterItem = 'pelt_wolf'>>
-				<<set _giveCount = randomInteger(1,2)>>
-			<</if>>
-
-			<<if setup.percentageChance(_percentageHunter)>>
-				<<set _totals[_hunterItem] = (_totals[_hunterItem] ?? 0) + _giveCount>>
-				<<if _isStorageAvailable>>
-			  		<<pickup $storage _hunterItem _giveCount>>
-			  	<<else>>
-			  		<<pickup $backpack _hunterItem _giveCount>>
-			  	<</if>>
-				<<run setup.sleepMessages.addJob(_npc.name + ' managed to get ' + _giveCount  + ' ' + Item.get(_hunterItem).name + ' while hunting.', 'hunting')>>
-			<</if>>
-		<</if>>
-
+		<<set _isSick = _sleepGuestOpts.resultIsSick>>
+		<<set _dayOff = _sleepGuestOpts.resultIsDayOff>>
 		<<set _isGuest = true>>
 		<<if _npc.assignedTo === 'quarry' && !_dayOff && !_isSandStorm>>
 			<<include 'sleepQuarry'>>
@@ -886,54 +306,6 @@
 		<<unset _hunter_no_bow>>
 		<<include 'sleepNpcInventory'>>
 
-		// Pregnancy
-		<<if typeof $guests[_guestI].pregnancy !== 'undefined'>>
-			<<set $guests[_guestI].pregnancy++>>
-			<<if ($guests[_guestI].traits ?? []).includes('breeder')>>
-				<<set $guests[_guestI].pregnancy++>>
-			<</if>>
-			<<if $guests[_guestI].pregnancy == 8>>
-				<<set _pregnantMsg = $guests[_guestI].name + ' told you that <strong>she is pregnant</strong>.'>>
-				<<if $guests[_guestI].pregnancy_father !== 'mc'>>
-					<<set _pregnantMsg = _pregnantMsg + ' <strong>You ARE NOT the father!</strong>'>>
-					<<if !$pregnancyStreetsHappening && $guests[_guestI].pregnancy_event === 'streets'>>
-						<<set $pregnancyStreetsHappening = {
-							type: 'guest',
-							id: _guestI
-						}>>
-					<</if>>
-				<</if>>
-				
-				<<run setup.sleepMessages.addMain(_pregnantMsg)>>
-				<<set $characters.vincent.quests.pregnancy = true>>
-			<</if>>
-			
-			<<set _streetWork = $guests[_guestI].assignedTo === 'streets' && !_dayOff>>
-			<<if $guests[_guestI].pregnancy > 30 && _streetwork && setup.percentageChance(_miscarrieageChance)>>
-				<<set _totals['pregnancy'] = (_totals['pregnancy'] ?? 0) - 1>>
-				<<run setup.sleepMessages.addMain($guests[_guestI].name + ' woke up with her blood all over her. <strong class="iitem">She had a miscarriage</strong>')>>
-				<<set $guests[_guestI].happy -= 20>>
-				<<set $guests[_guestI].relationship -= 10>>
-				<<run delete $guests[_guestI].pregnancy>>
-			<</if>>
-			
-			<<if !$pregnancyHappening && $guests[_guestI].pregnancy > 260 && ($guests[_guestI].pregnancy > 280 || randomInteger(1,3) === 3)>>
-				<<if _hasWorkingHospital>>
-					<<run $pregnancysHappeningHospital.push(
-						{
-							type: 'guest',
-							id: _guestI
-						}
-					)>>
-				<<else>>
-					<<set $pregnancyHappening = {
-						type: 'guest',
-						id: _guestI
-					}>>
-				<</if>>
-			<</if>>
-		<</if>>
-		
 		// Starvation
 		<<if _isHeatWave>>
 			<<set $guests[_guestI].food = -10>>
@@ -969,34 +341,6 @@
 			<</if>>
 		<</if>>
 		
-		// Sick
-		<<if _isSick>>
-			<<set $guests[_guestI].sick.days-->>
-			<<if _hasWorkingHospital || (_hasDoctor && setup.percentageChance(42))>>
-				<<set $guests[_guestI].sick.days-->>
-			<</if>>
-			<<if $guests[_guestI].sick.days <= 0>>
-				<<run delete $guests[_guestI].sick>>
-			<</if>>
-		<</if>>
-		<<if _isColdSnap && !_isSick && !_dayOff && ['garden', 'quarry', 'scavenging'].includes(_npc.assignedTo) && !setup.npcInventoryHas(_npc, 'coat_wolf') && setup.percentageChance(10)>>
-			<<set _npc.sick = { days: randomInteger(3, 5), desc: 'caught a cold working outside in freezing temperatures', id: 'coldsnap' }>>
-			<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' caught a cold from working outside in the freezing cold. She will need ' + _npc.sick.days + ' days to recover.</span>')>>
-		<</if>>
-		// Resting
-		<<if _isRest>>
-			<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
-			<<if _unhappy_jobs.includes($guests[_guestI].assignedTo)>>
-				<<setNpcStats guest _guestI happy +5>>
-			<<else>>
-				<<setNpcStats guest _guestI happy +2>>
-			<</if>>
-			<<set $guests[_guestI].rest.days-->>
-			<<if $guests[_guestI].rest.days <= 0>>
-				<<run delete $guests[_guestI].rest>>
-			<</if>>
-		<</if>>
-
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
 			<<run setup.sleepMessages.add('Your guest <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
@@ -1018,6 +362,15 @@
 			<</if>>
 		<</if>>
 <</for>>
+
+// Deferred guest removals — reverse order preserves lower indices
+<<for _remI = _sleepGuestOpts.pendingRemovals.length - 1; _remI >= 0; _remI-->>
+	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index>>
+<</for>>
+// Resolve scavenging-didn't-return to a post-removal index via guest id
+<<if _sleepGuestOpts.scavengingDidntReturnId>>
+	<<set $scavengingDidntReturn = $guests.findIndex(function(g) { return g.id === _sleepGuestOpts.scavengingDidntReturnId; })>>
+<</if>>
 
 <<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
 		<<set _npc = $nursery[_nurseryI]>>
