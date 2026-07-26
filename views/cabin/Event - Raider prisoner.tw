@@ -75,7 +75,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 		<div id="rp_sex">
 		<<set _rpSexLabel = 'Take it further'>>
 		<<linkreplace _rpSexLabel>>
-			<<run $('#rp_sex, #rp_after_interrogate').hide()>>
+			<<run $('#rp_after_interrogate').hide()>>
 			<<horny_reset>>
 			<<addmins 30>>
 			She read what you were thinking. Her jaw tightened but she didn't pull back — there wasn't anywhere to go.
@@ -90,18 +90,22 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 			<br /><br />
 			<<set _rpPreg = setup.pregnancyChance(_rpNpc)>>
 			<<if _rpPreg>>
-				<<set _rpNpc.pregnant = 1>>
-				<<set _rpNpc.pregnantDay = $game.day>>
-				<<set _rpNpc.pregnantBy = 'player'>>
+				<<set _rpNpc.pregnancy = 0>>
+				<<set _rpNpc.pregnancy_father = 'mc'>>
 			<</if>>
 			<span style="color: #888;">She told you everything after that anyway.</span>
 			<br /><br />
-			<<link 'Decide what to do with them'>><<goto 'Wood cabin'>><</link>>
+			<<link 'Decide what to do with them'>>
+				<<run $('#rp_recruit, #rp_ransom, #rp_execute').show()>>
+			<</link>>
 		<</linkreplace>>
 		</div>
 	<</if>>
 	<div id="rp_after_interrogate">
-	<<link 'Decide what to do with them' 'Wood cabin'>><</link>>
+	<<link 'Decide what to do with them'>>
+		<<run $('#rp_recruit, #rp_ransom, #rp_execute').show()>>
+		<<run $('#rp_after_interrogate').hide()>>
+	<</link>>
 	</div>
 <</linkreplace>>
 </div>
@@ -129,6 +133,7 @@ When the dust settled you found <<= _rpNpc.name >> still breathing — barely. <
 <<linkreplace _rpRecruitLabel>>
 	<<run $('#rp_interrogate, #rp_ransom, #rp_execute').hide()>>
 	<<addmins 30>>
+	<<run setup.npc.addHistory(_rpNpc, 'raider_turned', { place: _rpS ? _rpS.name : null })>>
 	<<if _rpFemale>>
 		<<set $tmpGirl = _rpNpc>>
 		<<run $guests.push($tmpGirl)>>

@@ -1091,6 +1091,8 @@ setup.npc = {
 			case 'tribute_slave':    return day + 'Taken as tribute from ' + (entry.place ?? 'a settlement') + ', made a slave';
 			case 'recruited':        return day + 'Recruited from ' + (entry.place ?? 'a settlement');
 			case 'siege_captive':    return day + 'Taken captive after attack on ' + (entry.place ?? 'a settlement');
+			case 'refugee':          return day + 'Arrived as refugee from fallen ' + (entry.place ?? 'a settlement');
+			case 'raider_turned':    return day + 'Offered a home after attacking' + (entry.place ? ' from ' + entry.place : '');
 			case 'invited':          return day + 'Invited to settlement';
 			case 'bought':           return day + 'Bought at slave market';
 			case 'moved_to_guest':   return day + 'Moved to guest house';
