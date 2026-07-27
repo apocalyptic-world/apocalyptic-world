@@ -85,6 +85,10 @@
 <<set _outcome = setup.settlements.calculateAttackOutcome(_s, _attackStrength, _mode)>>
 <<addhours 4>>
 <<run setup.settlements.applyAttackOutcome(_s, _outcome, $game.day)>>
+<<if _outcome.victory && $game.blackmailEvent && $game.blackmailEvent.id === $tmpSettlement>>
+	<<run setup.settlements.resolveBlackmail(_s, true)>>
+	<<unset $game.blackmailEvent>>
+<</if>>
 <<run setup.settlements.save(setup.settlements.getAll())>>
 
 <h1 class="ptitle"><<= _mode === 'siege' ? 'SIEGE' : 'RAID'>></h1>
