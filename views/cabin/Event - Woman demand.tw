@@ -51,7 +51,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 <<if _wdSendable.length>>
 <div id="wd_send_section">
 <span style="color: #aaa; font-size: 0.9em; letter-spacing: 0.05em;">SEND SOMEONE</span>
-<br /><br />
+<br />
 <<set $game.wdSendId = $game.wdSendId ?? null>>
 <div id="wd_send_table">
 <table class="npc-list">
@@ -76,9 +76,8 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 <</for>>
 </table>
 </div>
-<br />
-<<set _wdSendLabel = 'Send selected'>>
-<<linkreplace _wdSendLabel>>
+<div id="wd_send_validation"></div>
+<<link 'Send selected'>>
 	<<if $game.wdSendId>>
 		<<set _wdSlaveIdx = $slaves.findIndex(function(g) { return g.id === $game.wdSendId; })>>
 		<<set _wdGuestIdx = $guests.findIndex(function(g) { return g.id === $game.wdSendId; })>>
@@ -94,26 +93,30 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 			<<set _wdSettleName = $game.womanDemand.name>>
 			<<run setup.settlements.resolveWomanDemand(_wdHandle, true)>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
-			<<run $('#wd_send_table, #wd_pay, #wd_refuse').hide()>>
+			<<run $('#wd_pay, #wd_refuse').hide()>>
 			<<unset $game.womanDemand, $game.wdSendId>>
 			<<addmins 60>>
-			You handed <<= _wdSentNpc.name >> over at the gate without ceremony. <<= setup.pronounceWhat(_wdSentNpc, true) >> walked out and didn't look back — whether from pride or resignation, you couldn't tell.
-			<br /><br />
-			<span style="color: #888;"><<= _wdSettleName >> got what they asked for. The pressure lifted — for now.</span>
-			<br /><br />
-			<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+			<<replace '#wd_send_section'>>
+				You handed <<= _wdSentNpc.name >> over at the gate without ceremony. <<= setup.pronounceWhat(_wdSentNpc, true) >> walked out and didn't look back — whether from pride or resignation, you couldn't tell.
+				<br /><br />
+				<span style="color: #888;"><<= _wdSettleName >> got what they asked for. The pressure lifted — for now.</span>
+				<br /><br />
+				<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+			<</replace>>
 		<<else>>
-			<span style="color: #e05555;">Something went wrong finding that person.</span>
+			<<replace '#wd_send_validation'>>
+				<span style="color: #e05555; font-size: 0.85em;">Something went wrong finding that person.</span>
+			<</replace>>
 		<</if>>
 	<<else>>
-		<span style="color: #888;">Select someone from the list first.</span>
+		<<replace '#wd_send_validation'>>
+			<span style="color: #888; font-size: 0.85em;">Select someone from the list first.</span>
+		<</replace>>
 	<</if>>
-<</linkreplace>>
+<</link>>
 </div>
-<br />
 <<else>>
 	<span style="color: #555; font-size: 0.88em;">You have no women to send.</span>
-	<br /><br />
 <</if>>
 
 <<if $player.money >= 1000>>
@@ -136,9 +139,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 </div>
 <<else>>
 	<span style="color: #555; font-size: 0.88em;">Pay them off (1000 caps) — not enough caps.</span>
-	<br />
 <</if>>
-<br />
 <div id="wd_refuse">
 <<set _wdRefuseLabel = 'Refuse'>>
 <<linkreplace _wdRefuseLabel>>

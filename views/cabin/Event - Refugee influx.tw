@@ -39,10 +39,6 @@ They came at dawn. <<= _refCount>> survivor<<= _refCount > 1 ? 's' : ''>> from <
 <</sayNpc>>
 <br />
 
-<<set _girlVisual = _refNpc>>
-<<include 'NPC visual'>>
-<br />
-
 <<set _refRoomLeft = $guesthouseLimit - $guests.length>>
 
 <div id="ref_open">
@@ -51,6 +47,7 @@ They came at dawn. <<= _refCount>> survivor<<= _refCount > 1 ? 's' : ''>> from <
 	<<linkreplace _refOpenLabel>>
 		<<run $('#ref_away').hide()>>
 		<<run $guests.push(_refNpc)>>
+		<<run setup.npc.addHistory(_refNpc, 'refugee', { place: _refName })>>
 		<<if _refOriginS>>
 			<<run setup.settlements.modifyRelationship(_refOriginS, 10, 'Accepted survivors from ' + _refName)>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>

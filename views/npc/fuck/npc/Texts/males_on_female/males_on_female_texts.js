@@ -30,6 +30,9 @@ setup.actionText.males_on_female = {
     cum_in_mouth: [
         "%male% and %male2% fill %female%'s mouth with their cum."
     ],
+    cum_in_pussy: [
+        "%male% fills %female%'s pussy with cum while %male2% finishes on her."
+    ],
     cum_on_face: [
         "%male% and %male2% cum all over %female%'s face."
     ],
