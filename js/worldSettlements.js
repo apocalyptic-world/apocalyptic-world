@@ -734,10 +734,8 @@ setup.settlements = {
 			return { success: false, reason: 'No one is willing to leave.' };
 		}
 
-		const gender = setup.settlements.rollRecruitGender(s);
-		const maleNames   = ['Marcus', 'Cole', 'Rex', 'Duke', 'Ivan', 'Seth', 'Zane', 'Leon', 'Bruno', 'Colt'];
-		const femaleNames = ['Vera', 'Maya', 'Jade', 'Sasha', 'Nora', 'Iris', 'Kira', 'Leah', 'Dena', 'Skye'];
-		const namePool = gender === 1 ? maleNames : femaleNames;
+		const gender   = setup.settlements.rollRecruitGender(s);
+		const namePool = gender === 1 ? setup.npcMaleNames : setup.npcFemaleNames;
 		const name     = namePool[window.randomInteger(0, namePool.length - 1)];
 
 		s.population = Math.max(1, s.population - 1);
@@ -1268,13 +1266,12 @@ setup.settlements = {
 			return s.slavesForSale;
 		}
 		const count = window.randomInteger(1, 3);
-		const fNames = ['Mia', 'Lena', 'Cara', 'Ivy', 'Sable', 'Rin', 'Cass', 'Vela', 'Mara', 'Trix', 'Anya', 'Reva'];
 		const priceBases = { raider_camp: 150, prison_colony: 120, biker_gang: 175, scavenger_den: 100 };
 		const base = priceBases[s.type] || 140;
 		const slaves = [];
 		for (let i = 0; i < count; i++) {
 			slaves.push({
-				name:  fNames[window.randomInteger(0, fNames.length - 1)],
+				name:  setup.npcFemaleNames[window.randomInteger(0, setup.npcFemaleNames.length - 1)],
 				age:   window.randomInteger(18, 32),
 				price: base + window.randomInteger(-20, 60),
 			});
