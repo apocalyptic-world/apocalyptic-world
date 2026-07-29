@@ -13,9 +13,8 @@ function checkAndFixTraits(npc)
 }
 
 Save.onSave.add(function (save, details) {
-    save.metadata = save.metadata || {};
-    save.metadata.worldSettlements = clone(setup.worldSettlements || []);
     if (details.type === 'disk') {
+        save.metadata = save.metadata || {};
         save.metadata.settings = clone(settings);
     }
 });
@@ -38,11 +37,15 @@ Save.onLoad.add(function (save) {
 
     let variables = save.state.history[save.state.index].variables; // shortcut to be used when we cleanup
 
-    // Restore worldSettlements into setup (not story variables) for performance
-    setup.worldSettlements = (save.metadata && save.metadata.worldSettlements)
-        ? save.metadata.worldSettlements
-        : (variables.worldSettlements || []);
-    delete variables.worldSettlements;
+    // Migrate worldSettlements from old metadata/root-variable storage into $game.worldSettlements
+    if (save.metadata && save.metadata.worldSettlements && save.metadata.worldSettlements.length > 0) {
+        variables.game.worldSettlements = save.metadata.worldSettlements;
+        delete save.metadata.worldSettlements;
+    }
+    if (variables.worldSettlements) {
+        variables.game.worldSettlements = variables.game.worldSettlements || variables.worldSettlements;
+        delete variables.worldSettlements;
+    }
 
     // Cleanup old variables
     var _oldVariables = [
@@ -320,7 +323,7 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.basementLimit = Math.max(3, save.state.history[save.state.index].variables.slaves.length);
     }
     if (typeof save.state.history[save.state.index].variables.companionsLimit === 'undefined') {
-        save.state.history[save.state.index].variables.companionsLimit = 6;
+        save.state.history[save.state.index].variables.companionsLimit = 8;
     }
     if (typeof save.state.history[save.state.index].variables.player.reputation_bounty_hunter === 'undefined') {
         save.state.history[save.state.index].variables.player.reputation_bounty_hunter = 0;

@@ -734,10 +734,8 @@ setup.settlements = {
 			return { success: false, reason: 'No one is willing to leave.' };
 		}
 
-		const gender = setup.settlements.rollRecruitGender(s);
-		const maleNames   = ['Marcus', 'Cole', 'Rex', 'Duke', 'Ivan', 'Seth', 'Zane', 'Leon', 'Bruno', 'Colt'];
-		const femaleNames = ['Vera', 'Maya', 'Jade', 'Sasha', 'Nora', 'Iris', 'Kira', 'Leah', 'Dena', 'Skye'];
-		const namePool = gender === 1 ? maleNames : femaleNames;
+		const gender   = setup.settlements.rollRecruitGender(s);
+		const namePool = gender === 1 ? setup.npcMaleNames : setup.npcFemaleNames;
 		const name     = namePool[window.randomInteger(0, namePool.length - 1)];
 
 		s.population = Math.max(1, s.population - 1);
@@ -1017,11 +1015,11 @@ setup.settlements = {
 	// -------------------------------------------------------------------------
 
 	getAll: function () {
-		return setup.worldSettlements || [];
+		return (variables().game && variables().game.worldSettlements) || [];
 	},
 
 	save: function (list) {
-		setup.worldSettlements = list;
+		if (variables().game) variables().game.worldSettlements = list;
 	},
 
 	getById: function (id) {
@@ -1054,7 +1052,7 @@ setup.settlements = {
 
 	/** First-time world init. Safe to call on every new game — won't overwrite an existing world. */
 	init: function (count) {
-		if ((setup.worldSettlements || []).length > 0) return;
+		if (setup.settlements.getAll().length > 0) return;
 		const day  = (variables().game && variables().game.day) || 1;
 		const list = setup.settlements.generateBatch(count || 12, day);
 		setup.settlements.save(list);
@@ -1268,13 +1266,12 @@ setup.settlements = {
 			return s.slavesForSale;
 		}
 		const count = window.randomInteger(1, 3);
-		const fNames = ['Mia', 'Lena', 'Cara', 'Ivy', 'Sable', 'Rin', 'Cass', 'Vela', 'Mara', 'Trix', 'Anya', 'Reva'];
 		const priceBases = { raider_camp: 150, prison_colony: 120, biker_gang: 175, scavenger_den: 100 };
 		const base = priceBases[s.type] || 140;
 		const slaves = [];
 		for (let i = 0; i < count; i++) {
 			slaves.push({
-				name:  fNames[window.randomInteger(0, fNames.length - 1)],
+				name:  setup.npcFemaleNames[window.randomInteger(0, setup.npcFemaleNames.length - 1)],
 				age:   window.randomInteger(18, 32),
 				price: base + window.randomInteger(-20, 60),
 			});
@@ -1340,6 +1337,7 @@ setup.settlements = {
 
 	leaderDialogs: {
 		raider_camp: {
+			raid:           ["Hand over what you've got and nobody has to die. Your call.", "This is a collection. Not a negotiation."],
 			intro:          ["You've got nerve walking up here alone. Say what you came to say.", "We don't get visitors. We get targets. Which are you?"],
 			greeting_ok:    ["We've heard worse. You're still breathing, so that's something.", "Fine. Keep talking."],
 			greeting_fail:  ["Turn around. Now.", "We don't do friendly."],
@@ -1348,6 +1346,7 @@ setup.settlements = {
 			gift_accept:    ["Caps talk. Everything else is noise.", "A gesture. It's noted. Don't push it."],
 		},
 		biker_gang: {
+			raid:           ["You're on our road now. This is the toll.", "We don't ask twice. What's it going to be?"],
 			intro:          ["We don't get many visitors who leave the same way they came in. What do you want?", "State your business. We've got roads to cover."],
 			greeting_ok:    ["Not bad for an outsider. What's your angle?", "You know how to talk to people. Noted."],
 			greeting_fail:  ["We don't trust smiles. Especially from strangers.", "Save the friendliness. We're not interested."],
@@ -1356,6 +1355,7 @@ setup.settlements = {
 			gift_accept:    ["Now we're speaking the same language.", "Caps. Practical. I can work with that."],
 		},
 		survivor_camp: {
+			raid:           ["We need what you have. Don't make this harder than it has to be.", "We're not raiders. We're starving. That's the difference."],
 			intro:          ["We're cautious around strangers. It's kept us alive.", "A lot of people claim to be friendly. Most aren't. What do you want?"],
 			greeting_ok:    ["You seem decent enough. That's more than we usually get.", "We'll hear you out. That's a start."],
 			greeting_fail:  ["We've been burned by friendly strangers before.", "Not today. Come back when we've had time to think."],
@@ -1364,6 +1364,7 @@ setup.settlements = {
 			gift_accept:    ["This helps. More than you know.", "We don't forget people who help us out here."],
 		},
 		monastery: {
+			raid:           ["God forgives necessity. Give us what we need and step aside.", "We do not come in hatred. But we will not leave empty-handed."],
 			intro:          ["Peace be with you, traveller. What brings you to our gates?", "We welcome all who come in peace. Are you one such person?"],
 			greeting_ok:    ["A civil greeting. It is appreciated.", "May your intentions be as kind as your words."],
 			greeting_fail:  ["Forgive us. Trust is earned slowly here.", "We are cautious. That is not personal, only wise."],
@@ -1372,6 +1373,7 @@ setup.settlements = {
 			gift_accept:    ["Generosity is its own reward. Thank you.", "The Lord provides — sometimes through unexpected hands."],
 		},
 		convent: {
+			raid:           ["We take no pleasure in this. But we will not go hungry.", "Stand down. This ends quickly if you don't resist."],
 			intro:          ["We do not turn away those who come with good intentions. State yours.", "Our doors are open to those who respect what we have built here."],
 			greeting_ok:    ["A respectful approach. We can work with that.", "You conduct yourself well. That matters to us."],
 			greeting_fail:  ["We have learned to be careful. Do not take it personally.", "We are not ready to extend ourselves to strangers."],
@@ -1380,6 +1382,7 @@ setup.settlements = {
 			gift_accept:    ["Your generosity will not be forgotten.", "Thank you. It means more than its value."],
 		},
 		trading_post: {
+			raid:           ["The markets dried up. We're taking what we're owed.", "Nothing personal. Business changed. So did we."],
 			intro:          ["Welcome. We do business with everyone here — that's the policy.", "No politics, no factions. Just trade. You're in the right place."],
 			greeting_ok:    ["Pleasant enough. Now, what are you buying or selling?", "Nice manners. Good for business."],
 			greeting_fail:  ["We've dealt with worse. But we're still cautious.", "Everything starts somewhere. Try again."],
@@ -1388,6 +1391,7 @@ setup.settlements = {
 			gift_accept:    ["Caps are always welcome. Good start.", "You know how to do business. Good."],
 		},
 		cult_compound: {
+			raid:           ["The Shepherd has spoken. What is yours is ours by right.", "You have been chosen to provide. Surrender what you have."],
 			intro:          ["The Chosen do not receive outsiders lightly. State your purpose and it will be judged.", "You stand at the edge of a new world. Tread carefully."],
 			greeting_ok:    ["Your words are... acceptable. The Shepherd will hear more.", "You have not come to mock us. That is noted."],
 			greeting_fail:  ["The faithful do not open themselves to all who knock.", "Leave. The Shepherd is not ready to receive you."],
@@ -1396,6 +1400,7 @@ setup.settlements = {
 			gift_accept:    ["A gesture of goodwill. The Shepherd approves.", "Material things are fleeting. But this gesture is noted."],
 		},
 		military_base: {
+			raid:           ["This is a resource acquisition operation. Do not resist.", "You're outmatched. We've done the math. Stand down."],
 			intro:          ["Identify yourself and state your purpose. You have thirty seconds.", "This is a restricted area. You're here because we allowed it. Don't waste our time."],
 			greeting_ok:    ["Civilian. Not a threat. For now.", "Minimal formality. Fine. Get to the point."],
 			greeting_fail:  ["We don't do pleasantries. Move on.", "Next time, skip the preamble."],
@@ -1404,6 +1409,7 @@ setup.settlements = {
 			gift_accept:    ["Payment noted. Your status is being reviewed.", "Caps don't buy clearance. But they help."],
 		},
 		farming_community: {
+			raid:           ["The harvest failed. We need your stores. That's the whole of it.", "We're not here to hurt anyone. But we're not leaving empty-handed either."],
 			intro:          ["We don't see many strangers out here. Passing through, or is there something you need?", "We're a quiet community. We'd like to keep it that way. What brings you here?"],
 			greeting_ok:    ["You seem harmless enough. That's a good sign.", "We appreciate people who don't lead with a weapon."],
 			greeting_fail:  ["We've been wary since the raiders came through last season. Can't help it.", "Not today. We need time."],
@@ -1412,6 +1418,7 @@ setup.settlements = {
 			gift_accept:    ["Every little helps out here. Thank you.", "Kindness isn't forgotten in a place like this."],
 		},
 		medical_colony: {
+			raid:           ["Our patients are dying. We need your supplies. Step aside.", "We're not proud of this. But we need what you have."],
 			intro:          ["We're a medical facility, not a fort. If you're hurt, we can help. If not, what do you need?", "Our priority is care, not commerce. But we can't survive on goodwill alone. What are you here for?"],
 			greeting_ok:    ["Calm and civil. That's a good sign after the week we've had.", "We deal with enough pain. A pleasant approach is appreciated."],
 			greeting_fail:  ["We're careful. It's a habit. Don't take it personally.", "Everyone who's hurt us seemed friendly at first."],
@@ -1420,6 +1427,7 @@ setup.settlements = {
 			gift_accept:    ["Caps help us keep the lights on. Genuinely, thank you.", "Resources like this go directly to patient care."],
 		},
 		tribal_village: {
+			raid:           ["You have taken more than your share. We are here to reclaim it.", "The land demands balance. We restore it now."],
 			intro:          ["Outsiders must earn the right to speak here. Begin by telling us who you are.", "The spirits watch all who enter. Be honest in your purpose."],
 			greeting_ok:    ["You speak without deception. The elders have noticed.", "A stranger who does not rush. Interesting."],
 			greeting_fail:  ["Our trust is not given. It is earned.", "The elders are not ready. Return when the season changes."],
@@ -1428,6 +1436,7 @@ setup.settlements = {
 			gift_accept:    ["An offering. The spirits accept it.", "You understand how things are done. That is good."],
 		},
 		prison_colony: {
+			raid:           ["You've got something we want. That's the whole story.", "Nobody wins a fight with us. Smart play is to cooperate."],
 			intro:          ["Nobody comes through the gate without a reason. What's yours?", "We run a tight operation here. No room for passengers. What do you want?"],
 			greeting_ok:    ["You've got manners. Unusual. What do you want?", "Fine. You didn't come in shooting. That puts you ahead of most."],
 			greeting_fail:  ["We don't do friendly. Not with outsiders.", "Save it. We've heard every approach."],
@@ -1436,6 +1445,7 @@ setup.settlements = {
 			gift_accept:    ["Cold hard caps. Now we're talking.", "Money talks. The rest is noise."],
 		},
 		nomad_caravan: {
+			raid:           ["We passed through before. You looked well-stocked then too.", "Nothing personal. Supplies ran short and you were close."],
 			intro:          ["We move fast and trade fair. That's the deal. What are you after?", "You caught us at a rest stop. Lucky timing. What do you need?"],
 			greeting_ok:    ["An honest approach. We've seen worse.", "Good instincts — we respond to civil better than most."],
 			greeting_fail:  ["We've been on the road too long to take risks with strangers.", "We're not unfriendly. Just careful."],
@@ -1444,6 +1454,7 @@ setup.settlements = {
 			gift_accept:    ["Caps smooth every road. Appreciated.", "You know how to open a conversation. Good."],
 		},
 		amazonian_tribe: {
+			raid:           ["Your stores will sustain us through the season. Don't test our resolve.", "We take what we need. Resistance is unwise."],
 			intro:          ["Men who come in peace are tolerated. Choose your words carefully.", "State your purpose. We don't have patience for those who waste our time."],
 			greeting_ok:    ["You carry yourself without arrogance. Unusual.", "Acceptable. What do you want?"],
 			greeting_fail:  ["Your kind has given us little reason for warmth.", "We are not impressed by pleasantries."],
@@ -1452,6 +1463,7 @@ setup.settlements = {
 			gift_accept:    ["Practical. We respect that.", "An offering of value. It has been received."],
 		},
 		scavenger_den: {
+			raid:           ["You've been hoarding. We're redistributing.", "We find things. Right now we found you. Empty your stores."],
 			intro:          ["You're either a customer or you're in the way. Which is it?", "We find things other people lose. You looking to buy, sell, or leave?"],
 			greeting_ok:    ["Fine. You're not here to cause trouble. What do you need?", "Direct enough. We can work with that."],
 			greeting_fail:  ["We don't warm up to strangers fast. That's policy.", "Try again another time."],

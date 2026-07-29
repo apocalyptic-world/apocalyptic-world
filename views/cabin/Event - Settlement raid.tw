@@ -18,7 +18,8 @@ The gate alarm tripped before dawn. You grabbed your weapon and stepped outside 
 
 <<set _srDialogs = setup.settlements.leaderDialogs[_srS.type]>>
 <<if _srLeader && _srDialogs>>
-	<<set _srLine = _srDialogs.intro[randomInteger(0, _srDialogs.intro.length - 1)]>>
+	<<set _srPool = _srDialogs.raid ?? _srDialogs.intro>>
+	<<set _srLine = _srPool[randomInteger(0, _srPool.length - 1)]>>
 	<<sayNpc _srLeader>><<= _srLine>><</sayNpc>>
 	<br />
 <</if>>
