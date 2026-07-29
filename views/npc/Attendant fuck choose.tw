@@ -5,14 +5,15 @@
 
 <<set _afcMistressIds = setup.getPersonsForLocation($guests, 'mistress')>>
 
+/* Collect fellow attendants; exclude males when the current attendant is male (no MMM support) */
 <<set _afcOtherAtts = []>>
 <<for _afcI range setup.getPersonsForLocation($guests, 'attendant')>>
-	<<if $guests[_afcI].id !== $tmpGirl.id>>
+	<<if $guests[_afcI].id !== $tmpGirl.id && !($tmpGirl.gender === 1 && $guests[_afcI].gender === 1)>>
 		<<run _afcOtherAtts.push({type: 'guest', id: _afcI})>>
 	<</if>>
 <</for>>
 <<for _afcI range setup.getPersonsForLocation($slaves, 'attendant')>>
-	<<if $slaves[_afcI].id !== $tmpGirl.id>>
+	<<if $slaves[_afcI].id !== $tmpGirl.id && !($tmpGirl.gender === 1 && $slaves[_afcI].gender === 1)>>
 		<<run _afcOtherAtts.push({type: 'slave', id: _afcI})>>
 	<</if>>
 <</for>>
@@ -27,14 +28,33 @@
 	<<capture _afcMIdx>>
 		<<set _afcMLink = 'Threesome with Mistress (' + setup.displayName($guests[_afcMIdx]) + ')'>>
 		<<link `_afcMLink`>>
-			<<if typeof $slaveId !== 'undefined'>>
-				<<set $tmpGirlViewBack = 'NPC view'>>
-			<<else>>
+			<<if $tmpGirl.gender === 1>>
+				/* Male attendant: make the mistress the focus NPC */
+				<<set _afcAttNpc = $tmpGirl>>
+				<<set _afcAttGuestId = $guestId>>
+				<<set _afcAttSlaveId = $slaveId>>
+				<<set $tmpGirl = $guests[_afcMIdx]>>
+				<<set $guestId = _afcMIdx>>
+				<<unset $slaveId, $charId>>
+				<<set $tmpGirl2 = _afcAttNpc>>
+				<<if typeof _afcAttGuestId !== 'undefined'>>
+					<<set $guestId2 = _afcAttGuestId>>
+					<<unset $slaveId2, $charId2>>
+				<<else>>
+					<<set $slaveId2 = _afcAttSlaveId>>
+					<<unset $guestId2, $charId2>>
+				<</if>>
 				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<<else>>
+				<<if typeof $slaveId !== 'undefined'>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+				<<else>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<</if>>
+				<<set $tmpGirl2 = $guests[_afcMIdx]>>
+				<<set $guestId2 = _afcMIdx>>
+				<<unset $slaveId2, $charId2>>
 			<</if>>
-			<<set $tmpGirl2 = $guests[_afcMIdx]>>
-			<<set $guestId2 = _afcMIdx>>
-			<<unset $slaveId2, $charId2>>
 			<<threesome $tmpGirl $tmpGirl2>>
 		<</link>>
 	<</capture>>
@@ -46,18 +66,43 @@
 	<<capture _afcOthEntry, _afcOthNpc>>
 		<<set _afcOthLink = 'Threesome with fellow attendant (' + setup.displayName(_afcOthNpc) + ')'>>
 		<<link `_afcOthLink`>>
-			<<if typeof $slaveId !== 'undefined'>>
-				<<set $tmpGirlViewBack = 'NPC view'>>
+			<<if $tmpGirl.gender === 1>>
+				/* Male attendant: make the female fellow attendant the focus NPC */
+				<<set _afcAttNpc = $tmpGirl>>
+				<<set _afcAttGuestId = $guestId>>
+				<<set _afcAttSlaveId = $slaveId>>
+				<<set $tmpGirl = _afcOthNpc>>
+				<<if _afcOthEntry.type === 'guest'>>
+					<<set $guestId = _afcOthEntry.id>>
+					<<unset $slaveId, $charId>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<<else>>
+					<<set $slaveId = _afcOthEntry.id>>
+					<<unset $guestId, $charId>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+				<</if>>
+				<<set $tmpGirl2 = _afcAttNpc>>
+				<<if typeof _afcAttGuestId !== 'undefined'>>
+					<<set $guestId2 = _afcAttGuestId>>
+					<<unset $slaveId2, $charId2>>
+				<<else>>
+					<<set $slaveId2 = _afcAttSlaveId>>
+					<<unset $guestId2, $charId2>>
+				<</if>>
 			<<else>>
-				<<set $tmpGirlViewBack = 'NPC view - guest'>>
-			<</if>>
-			<<set $tmpGirl2 = _afcOthNpc>>
-			<<if _afcOthEntry.type === 'guest'>>
-				<<set $guestId2 = _afcOthEntry.id>>
-				<<unset $slaveId2, $charId2>>
-			<<else>>
-				<<set $slaveId2 = _afcOthEntry.id>>
-				<<unset $guestId2, $charId2>>
+				<<if typeof $slaveId !== 'undefined'>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+				<<else>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+				<</if>>
+				<<set $tmpGirl2 = _afcOthNpc>>
+				<<if _afcOthEntry.type === 'guest'>>
+					<<set $guestId2 = _afcOthEntry.id>>
+					<<unset $slaveId2, $charId2>>
+				<<else>>
+					<<set $slaveId2 = _afcOthEntry.id>>
+					<<unset $guestId2, $charId2>>
+				<</if>>
 			<</if>>
 			<<threesome $tmpGirl $tmpGirl2>>
 		<</link>>
