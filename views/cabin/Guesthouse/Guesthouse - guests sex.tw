@@ -66,16 +66,14 @@
 	<<unset $randEvent>>
 	<<goto 'Guesthouse [Event] - female on female'>>
 <<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
-	<<set $tmpEvent = [
-		setup.commonValues([_guestsLikesGuys, _guests18yoWomen]),
-		setup.commonValues([_guestsLikesGirls, _guests18yoMen])
-	]>>
+	<<set _mofFemalePool = setup.commonValues([_guestsLikesGuys, _guests18yoWomen])>>
+	<<set _mofMalePool = setup.commonValues([_guestsLikesGirls, _guests18yoMen])>>
+	<<set $tmpEvent = {
+		femaleGuestIds: setup.getRandomPersons(_mofFemalePool, 1),
+		maleGuestIds: setup.getRandomPersons(_mofMalePool, 1)
+	}>>
 	<<set $locationEvents.guesthouse = true>>
 	<<unset $randEvent>>
-	<<set
-		$tmpEvent.femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 1);
-		$tmpEvent.maleGuestIds = setup.getRandomPersons($tmpEvent[1], 1);
-	>>
 	<<if (!setup.family.isBlood($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]) || !$player?.baseManagement?.noIncest) && setup.npc.canHaveSexBetween($tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0])>>
 		<<goto 'Guesthouse [Event] - male on female'>>
 	<</if>>
