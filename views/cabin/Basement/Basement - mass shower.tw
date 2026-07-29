@@ -1,11 +1,13 @@
 :: Basement - mass shower [bg-basement]
 <h1 class="ptitle">
-	BATTHOUSE
+	BATHHOUSE
 </h1>
 <br />
-<<set _hasMistress = typeof $massShowerMistressId !== 'undefined'>>
+<<set _hasAttendants = ($massShowerAttendantCount ?? 0) > 0>>
 <<set _mistressGuestId = $massShowerMistressId>>
-<<set _minsPerSlave = _hasMistress ? 2 : 5>>
+<<set _hasMistress = !_hasAttendants && typeof _mistressGuestId !== 'undefined' && setup.isAtWork($guests[_mistressGuestId], $weather)>>
+<<set _minsPerSlave = (_hasAttendants || _hasMistress) ? 2 : 5>>
+<<set _happyBonus = _hasAttendants ? 10 : (_hasMistress ? 3 : 5)>>
 <<set _washed = []>>
 
 <<for _i to 0; _i lt $slaves.length; _i++>>
@@ -13,25 +15,28 @@
 	<<if setup.isAtWork(_s, $weather)>>
 		<<continue>>
 	<</if>>
-	<<run setup.wash(_s, { beautyMultiplier: 7, washDays: 7, happyBonus: 10, markWashed: true })>>
+	<<run setup.wash(_s, { beautyMultiplier: 7, washDays: 7, happyBonus: _happyBonus, markWashed: true })>>
 	<<set $slaves[_i] = _s>>
 	<<run _washed.push(setup.displayName(_s))>>
 	<<addmins _minsPerSlave>>
 <</for>>
 
-<<unset $massShowerMistressId>>
+<<set _attendantNames = $massShowerAttendantNames ?? []>>
+<<unset $massShowerMistressId, $massShowerAttendantCount, $massShowerAttendantNames>>
 
 <center>
 	<<image 'game/misc/massshower.gif'>>
 </center>
 <br /><br />
-<<if _hasMistress>>
+<<if _hasAttendants>>
+	<<=_attendantNames.join(' and ')>> bring each slave through the shower individually, scrubbing them down with soap and water.
+<<elseif _hasMistress>>
 	<<=setup.displayName($guests[_mistressGuestId])>> lines them up and runs them through the shower one by one while you watch.
 <<else>>
 	You bring them upstairs one by one and let them wash under the hot water.
 <</if>>
 <br /><br />
-<strong>Mass shower complete.</strong> <<=_washed.join(', ')>> washed and feeling better. <strong>+10 happiness each.</strong>
+<strong>Mass shower complete.</strong> <<=_washed.join(', ')>> washed and feeling better. <strong>+<<=_happyBonus>> happiness each.</strong>
 <br /><br />
 
 <<link 'Back'>>

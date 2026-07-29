@@ -1,0 +1,77 @@
+:: Attendant fuck choose [sex no-redirect girlview]
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<set _afcMistressIds = setup.getPersonsForLocation($guests, 'mistress')>>
+
+<<set _afcOtherAtts = []>>
+<<for _afcI range setup.getPersonsForLocation($guests, 'attendant')>>
+	<<if $guests[_afcI].id !== $tmpGirl.id>>
+		<<run _afcOtherAtts.push({type: 'guest', id: _afcI})>>
+	<</if>>
+<</for>>
+<<for _afcI range setup.getPersonsForLocation($slaves, 'attendant')>>
+	<<if $slaves[_afcI].id !== $tmpGirl.id>>
+		<<run _afcOtherAtts.push({type: 'slave', id: _afcI})>>
+	<</if>>
+<</for>>
+
+<<set _linkAlone = 'Fuck ' + _himOrHer>>
+<<link `_linkAlone`>>
+	<<fuck $tmpGirl>>
+<</link>>
+
+<<if _afcMistressIds.length > 0 && setup.isAtWork($guests[_afcMistressIds[0]], $weather)>>
+	<<set _afcMIdx = _afcMistressIds[0]>>
+	<<capture _afcMIdx>>
+		<<set _afcMLink = 'Threesome with Mistress (' + setup.displayName($guests[_afcMIdx]) + ')'>>
+		<<link `_afcMLink`>>
+			<<if typeof $slaveId !== 'undefined'>>
+				<<set $tmpGirlViewBack = 'NPC view'>>
+			<<else>>
+				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<</if>>
+			<<set $tmpGirl2 = $guests[_afcMIdx]>>
+			<<set $guestId2 = _afcMIdx>>
+			<<unset $slaveId2, $charId2>>
+			<<threesome $tmpGirl $tmpGirl2>>
+		<</link>>
+	<</capture>>
+<</if>>
+
+<<if _afcOtherAtts.length > 0>>
+	<<set _afcOthEntry = _afcOtherAtts[0]>>
+	<<set _afcOthNpc = _afcOthEntry.type === 'guest' ? $guests[_afcOthEntry.id] : $slaves[_afcOthEntry.id]>>
+	<<capture _afcOthEntry, _afcOthNpc>>
+		<<set _afcOthLink = 'Threesome with fellow attendant (' + setup.displayName(_afcOthNpc) + ')'>>
+		<<link `_afcOthLink`>>
+			<<if typeof $slaveId !== 'undefined'>>
+				<<set $tmpGirlViewBack = 'NPC view'>>
+			<<else>>
+				<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<</if>>
+			<<set $tmpGirl2 = _afcOthNpc>>
+			<<if _afcOthEntry.type === 'guest'>>
+				<<set $guestId2 = _afcOthEntry.id>>
+				<<unset $slaveId2, $charId2>>
+			<<else>>
+				<<set $slaveId2 = _afcOthEntry.id>>
+				<<unset $guestId2, $charId2>>
+			<</if>>
+			<<threesome $tmpGirl $tmpGirl2>>
+		<</link>>
+	<</capture>>
+<</if>>
+
+<<link 'Threesome with slave'>>
+	<<script>>
+		Dialog.setup("Choose a slave", "attendant-threesome-slave-choose");
+		Dialog.wiki(Story.get("Attendant - threesome slave choose").processText());
+		Dialog.open();
+	<</script>>
+<</link>>
+
+<<link 'Back'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>

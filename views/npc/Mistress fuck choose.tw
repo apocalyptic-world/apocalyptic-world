@@ -1,0 +1,50 @@
+:: Mistress fuck choose [sex no-redirect girlview]
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<set _linkAlone = 'Fuck ' + _himOrHer>>
+<<link `_linkAlone`>>
+	<<fuck $tmpGirl>>
+<</link>>
+
+<<set _mfcAttendants = []>>
+<<for _mfcI range setup.getPersonsForLocation($guests, 'attendant')>>
+	<<if setup.isAtWork($guests[_mfcI], $weather)>>
+		<<run _mfcAttendants.push({type: 'guest', id: _mfcI})>>
+	<</if>>
+<</for>>
+<<for _mfcI range setup.getPersonsForLocation($slaves, 'attendant')>>
+	<<if setup.isAtWork($slaves[_mfcI], $weather)>>
+		<<run _mfcAttendants.push({type: 'slave', id: _mfcI})>>
+	<</if>>
+<</for>>
+
+<<for _mfcAttEntry range _mfcAttendants>>
+	<<set _mfcAttNpc = _mfcAttEntry.type === 'guest' ? $guests[_mfcAttEntry.id] : $slaves[_mfcAttEntry.id]>>
+	<<capture _mfcAttEntry, _mfcAttNpc>>
+		<<set _mfcAttLink = 'Threesome with Attendant (' + setup.displayName(_mfcAttNpc) + ')'>>
+		<<link `_mfcAttLink`>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<<set $tmpGirl2 = _mfcAttNpc>>
+			<<if _mfcAttEntry.type === 'guest'>>
+				<<set $guestId2 = _mfcAttEntry.id>>
+				<<unset $slaveId2, $charId2>>
+			<<else>>
+				<<set $slaveId2 = _mfcAttEntry.id>>
+				<<unset $guestId2, $charId2>>
+			<</if>>
+			<<threesome $tmpGirl $tmpGirl2>>
+		<</link>>
+	<</capture>>
+<</for>>
+
+<<link 'Threesome with slave'>>
+	<<script>>
+		Dialog.setup("Choose a slave", "attendant-threesome-slave-choose");
+		Dialog.wiki(Story.get("Attendant - threesome slave choose").processText());
+		Dialog.open();
+	<</script>>
+<</link>>
+
+<<link 'Back'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>

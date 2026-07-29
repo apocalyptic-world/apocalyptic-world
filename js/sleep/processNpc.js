@@ -229,6 +229,66 @@ setup.sleep.processNpc = function(npc, opts) {
             }
         }
 
+        // Attendant: beauty grooming + optional stimulation of all slaves
+        // Slave attendant skips itself; guest attendant applies to all slaves
+        if (job === 'attendant' && !isSick) {
+            const slaves = sv.slaves;
+            for (let ai = 0; ai < slaves.length; ai++) {
+                if (isSlave && ai === npcIndex) continue;
+                if (setup.getAge(slaves[ai]) < 18) continue;
+
+                // Beauty: higher chance the more stale (washDays counts down from last wash)
+                const wd = slaves[ai].washDays ?? 0;
+                const washChance = wd >= 7 ? 0 : wd === 0 ? 35 : (7 - wd) * 2;
+                const beautyMax  = (slaves[ai].baseBeauty ?? slaves[ai].beauty) + (slaves[ai].washBeauty ?? 1) * 7;
+                if (slaves[ai].beauty < beautyMax && setup.percentageChance(washChance)) {
+                    const wasFullyExpired = !slaves[ai].washDays;
+                    const oldBeauty = slaves[ai].beauty;
+                    setup.wash(slaves[ai], { beautyMultiplier: 7, washDays: 7 });
+                    const gain = slaves[ai].beauty - oldBeauty;
+                    if (gain > 0) {
+                        if (!wasFullyExpired)
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' did not need much today');
+                        else if (slaves[ai].washBeauty >= 2)
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' is back to ' + setup.pronounceWhos(slaves[ai]) + ' peak');
+                        else
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' looks fresh and clean');
+                    }
+                }
+
+                // Horny: 15% chance to raise by 7-15 if below 80 and stimulation is enabled
+                if ((sv.player.baseManagement.attendantStimulate ?? true) && slaves[ai].horny < 80 && setup.percentageChance(15)) {
+                    let hornyGain = window.randomInteger(7, 15);
+                    const slaveAttrToAtt = npc.gender === 0 ? slaves[ai].likesGirls
+                                         : npc.gender === 1 ? slaves[ai].likesGuys
+                                         : npc.gender === 2 ? slaves[ai].likesTGirls
+                                         :                    slaves[ai].likesTGuys;
+                    if (!slaveAttrToAtt) {
+                        hornyGain = Math.ceil(hornyGain / 2);
+                        slaves[ai].happy = Math.max(0, (slaves[ai].happy ?? 0) - window.randomInteger(0, 3));
+                    }
+                    slaves[ai].horny = Math.min(99, slaves[ai].horny + hornyGain);
+                    const hornySuffix = slaves[ai].horny >= 80
+                        ? ' ' + setup.pronounceWhat(slaves[ai])[0].toUpperCase() + setup.pronounceWhat(slaves[ai]).slice(1) + ' looks like ' + setup.pronounceWhat(slaves[ai]) + ' could use your attention...'
+                        : '';
+                    setup.sleepMessages.addJob(npc.name + ' got a little frisky with ' + setup.displayName(slaves[ai]) + ' in the shower, increasing ' + setup.pronounceWhos(slaves[ai]) + ' arousal.' + hornySuffix);
+
+                    // Attendant gets a little aroused too if attracted to this slave
+                    const attAttrToSlave = slaves[ai].gender === 0 ? npc.likesGirls
+                                         : slaves[ai].gender === 1 ? npc.likesGuys
+                                         : slaves[ai].gender === 2 ? npc.likesTGirls
+                                         :                            npc.likesTGuys;
+                    if (attAttrToSlave) npc.horny = Math.min(81, (npc.horny ?? 0) + window.randomInteger(2, 5));
+                }
+
+                // Happiness: 20% chance if attendant has Pacifist trait and slave is unhappy
+                if ((npc.traits ?? []).includes('pacifist') && slaves[ai].happy < 50 && setup.percentageChance(20)) {
+                    slaves[ai].happy = Math.min(100, (slaves[ai].happy ?? 0) + window.randomInteger(2, 5));
+                    setup.sleepMessages.addJob(npc.name + ' pampered ' + setup.displayName(slaves[ai]) + ' while grooming, improving ' + setup.pronounceWhos(slaves[ai]) + ' happiness');
+                }
+            }
+        }
+
         // Hunter (guests only, bow required)
         if (job === 'hunter' && isGuest && !isSick && setup.npcInventoryHas(npc, 'bow') &&
             !isSandStorm && (!isColdSnap || setup.npcInventoryHas(npc, 'coat_wolf'))) {

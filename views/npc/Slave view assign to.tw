@@ -5,6 +5,22 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if ($tmpGirl.traits ?? []).includes('feral')>>
 	<i>This person is feral and cannot be assigned to any task.</i>
 <<else>>
+<<set _attendantTotal = setup.getPersonsForLocation($guests, 'attendant').length + setup.getPersonsForLocation($slaves, 'attendant').length>>
+<<set _autoAttendantOk = ($automatization.job ?? false) && setup.cabinInventory.has('towel', 1)>>
+<<if _attendantTotal < 2 && (setup.npcInventoryHas($tmpGirl, 'towel') || _autoAttendantOk)>>
+	<div>
+	  <<link 'Assign as attendant'>>
+		  <<if !setup.npcInventoryHas($tmpGirl, 'towel')>>
+			  <<run setup.cabinInventory.to_npc($tmpGirl, 'towel', 1)>>
+		  <</if>>
+		  <<assignedTo $tmpGirl 'attendant'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Tends to slaves in the bathhouse. Improves their beauty and mood)
+	</div>
+<<else>>
+	Assign as attendant [Need towel] (Tends to slaves in the bathhouse)
+<</if>>
 <<if ($game.location.greenhouse ?? false) && $tmpGirl.relationship >= 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>

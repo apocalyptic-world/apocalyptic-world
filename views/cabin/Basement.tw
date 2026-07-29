@@ -42,7 +42,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	</div>
 <<else>>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
-	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined' && _isSlaveInBasement>>
+	<<if _girlGuest.length > 0 && setup.isAtWork($guests[_girlGuest[0]], $weather) && _isSlaveInBasement>>
 		<<set $tmpGirl = $guests[_girlGuest[0]]>>
 		<<set $tmpGirl.location = 'mistress'>>
 		<center>
@@ -64,7 +64,71 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set _mistressId = _girlGuest[0]>>
 	<</if>>
 
-	<<if !(typeof _mistressId === 'undefined') && $player.quests.slave_party>>
+	/* Collect attendants who are on duty (work hours 10:00-20:00, not sick) */
+	<<set _attendantIds = []>>
+	<<for _attI range setup.getPersonsForLocation($guests, 'attendant')>>
+		<<if setup.isAtWork($guests[_attI], $weather) && _isSlaveInBasement>>
+			<<run _attendantIds.push({type: 'guest', id: _attI})>>
+		<</if>>
+	<</for>>
+	<<for _attI range setup.getPersonsForLocation($slaves, 'attendant')>>
+		<<if setup.isAtWork($slaves[_attI], $weather) && _isSlaveInBasement>>
+			<<run _attendantIds.push({type: 'slave', id: _attI})>>
+		<</if>>
+	<</for>>
+
+	/* Display attendants (on-duty check already applied when building _attendantIds) */
+	<<if _attendantIds.length > 0>>
+		<<if typeof _mistressId === 'undefined'>>
+			<center>
+				<img src="https://imagex1.sx.cdn.live/images/pinporn/2013/09/13/3642511.webp?width=620" style="max-width: 100%;">
+			</center>
+		<</if>>
+		<<set _attVerbs = ['cleaning', 'grooming', 'washing', 'drying off', 'scrubbing', 'rinsing']>>
+		<<if ($player.baseManagement.attendantStimulate ?? true)>>
+			<<run _attVerbs.push('tickling', 'teasing')>>
+			<<if $slaves.some(s => s.gender === 0 || s.gender === 2)>>
+				<<run _attVerbs.push('fingering')>>
+			<</if>>
+			<<if $slaves.some(s => s.gender === 1 || s.gender === 3)>>
+				<<run _attVerbs.push('stroking')>>
+			<</if>>
+		<</if>>
+		<<set _attSelectedVerbs = _attendantIds.map(() => _attVerbs.random())>>
+		<<for _attI, _attEntry range _attendantIds>>
+			<<set _attNpc = _attEntry.type === 'guest' ? $guests[_attEntry.id] : $slaves[_attEntry.id]>>
+			<<=setup.displayName(_attNpc)>> is <<=_attSelectedVerbs[_attI]>> one of your slaves<br />
+		<</for>>
+		<br />
+		<<for _attEntry range _attendantIds>>
+			<<set _attNpc = _attEntry.type === 'guest' ? $guests[_attEntry.id] : $slaves[_attEntry.id]>>
+			<<set _attLink = 'Approach ' + _attNpc.name>>
+			<<capture _attEntry, _attNpc, _attLink>>
+			<<link `_attLink`>>
+				<<set $tmpGirl = _attNpc>>
+				<<set $tmpGirl.location = _attEntry.type === 'guest' ? 'shower' : 'basement'>>
+				<<set $tmpGirlBack = 'Basement'>>
+				<<set $tmpGirlCapture to false>>
+				<<set $tmpGirlInvite to false>>
+				<<set $tmpGirl.rape to false>>
+				<<if _attEntry.type === 'guest'>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<set $guestId = _attEntry.id>>
+					<<unset $slaveId, $charId, $childId>>
+					<<goto 'NPC view - guest'>>
+				<<else>>
+					<<set $tmpGirlViewBack = 'NPC view'>>
+					<<set $slaveId = _attEntry.id>>
+					<<unset $guestId, $charId, $childId>>
+					<<goto 'NPC view'>>
+				<</if>>
+			<</link>>
+			<</capture>>
+		<</for>>
+		<br /><br />
+	<</if>>
+
+	<<if (!(typeof _mistressId === 'undefined') || _attendantIds.length > 0) && $player.quests.slave_party>>
 		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4>>
 			<<link 'Throw a party'>>
 				<<goto 'Basement - slave party'>>
@@ -103,6 +167,8 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<if ($game.location.bathhouse ?? false) && _isSlaveInBasement>>
 		<<link 'Mass shower'>>
 			<<set $massShowerMistressId = _mistressId>>
+			<<set $massShowerAttendantCount = _attendantIds.length>>
+			<<set $massShowerAttendantNames = _attendantIds.map(a => setup.displayName(a.type === 'guest' ? $guests[a.id] : $slaves[a.id]))>>
 			<<goto 'Basement - mass shower'>>
 		<</link>>
 	<</if>>
@@ -352,7 +418,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $slaveId = _suicidalSlaves[0]>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave hangman'>>
-	<<elseif typeof _mistressId !== 'undefined' && $guests[_mistressId].relationship >= 90 && !$player.quests.slave_party && $slaves.length >= 6 && $guests.length >= 6>>
+	<<elseif !$player.quests.slave_party && $slaves.length >= 6 && $guests.length >= 6 && ((typeof _mistressId !== 'undefined' && $guests[_mistressId].relationship >= 90) || _attendantIds.some(a => (a.type === 'guest' ? $guests[a.id] : $slaves[a.id]).relationship > 60))>>
 		<<set $guestId = _mistressId>>
 		<<unset $charId, $slaveId>>
 		<<set $locationEvents.basement = true>>

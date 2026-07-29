@@ -42,7 +42,13 @@
 <<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
 	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
-		<<goto 'NPC fuck choose'>>
+		<<if $tmpGirl.assignedTo === 'attendant' && ($tmpGirl.location === 'shower' || $tmpGirl.location === 'basement')>>
+			<<goto 'Attendant fuck choose'>>
+		<<elseif $tmpGirl.assignedTo === 'mistress' && $tmpGirl.location === 'mistress'>>
+			<<goto 'Mistress fuck choose'>>
+		<<else>>
+			<<goto 'NPC fuck choose'>>
+		<</if>>
 	<</link>>
 <</if>>
 

@@ -2,8 +2,21 @@
 <h1 class="ptitle">BASEMENT</h1>
 <br />
 
-<<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
-<<set _mistress = $guests[_mistress[0]]>>
+<<set _mistressIds = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set _introPresenter = _mistressIds.length ? $guests[_mistressIds[0]] : null>>
+<<set _introIsAttendant = false>>
+<<if !_introPresenter>>
+    <<set _attGuestQual = setup.getPersonsForLocation($guests, 'attendant').find(id => $guests[id].relationship > 60)>>
+    <<set _attSlaveQual = setup.getPersonsForLocation($slaves, 'attendant').find(id => $slaves[id].relationship > 60)>>
+    <<if typeof _attGuestQual !== 'undefined'>>
+        <<set _introPresenter = $guests[_attGuestQual]>>
+        <<set _introIsAttendant = true>>
+    <<elseif typeof _attSlaveQual !== 'undefined'>>
+        <<set _introPresenter = $slaves[_attSlaveQual]>>
+        <<set _introIsAttendant = true>>
+    <</if>>
+<</if>>
+
 <<set _slaves = setup.getAvailablePersons18yo($slaves)>>
 <<set _randomSlave = $slaves[setup.getRandomElement(_slaves[0] ?? _slaves[1])]>>
 <<set _npc = _randomSlave>>
@@ -14,37 +27,67 @@
     [img[setup.ImagePath+'places/basement/mistress_' + _url + '.jpg']]
 </center>
 <br />
-As you descended into the dank basement, the <<=setup.displayName(_mistress)>>'s chilling presence hung heavy in the air, casting long shadows across the stone walls. 
-<<=setup.pronounceWho(_mistress, true)>> piercing gaze met yours as you approached.
-<br /><br />
-<<sayNpc _mistress>>
-    I have an idea. A way to tighten our grip on these wretched souls.
-<</sayNpc>>
-<br />
-You braced yourself for what was to come, knowing all too well the depths of her depravity.
-<br /><br />
-<<you>>
-    Go on
-<</you>>
-<br />
-<<sayNpc _mistress>>
-    We shall host a feast. A celebration of their submission, a testament to our absolute control.
-<</sayNpc>>
-<br />
-Your stomach churned at the thought, but you dared not show weakness in the presence of such malevolence.
-<br /><br />
-<<you>>
-    And what purpose will this serve?
-<</you>>
-<br />
-<<=setup.pronounceWho(_mistress, true)>> laughter echoed off the walls, a discordant symphony of madness and malice.
-<br /><br />
-<<sayNpc _mistress>>
-    To break them or to make them more happy?... Your choice.
-<</sayNpc>>
-<br />
-You swallowed hard, the bitter taste of fear coating your tongue like poison.
-<br /><br />
+<<if _introIsAttendant>>
+    As you stepped into the basement, <<=setup.displayName(_introPresenter)>> paused mid-task, hands still damp, and turned to face you with a thoughtful look.
+    <br /><br />
+    <<sayNpc _introPresenter>>
+        I've been thinking... these people work hard. A proper gathering — food, something to drink — it might do them a world of good.
+    <</sayNpc>>
+    <br />
+    You raised an eyebrow, curious where this was going.
+    <br /><br />
+    <<you>>
+        Go on.
+    <</you>>
+    <br />
+    <<sayNpc _introPresenter>>
+        Clean bodies, full bellies, a little music. They'd feel human again for a night. Happier people cause less trouble, and they work better for it.
+    <</sayNpc>>
+    <br />
+    It was a practical argument, delivered with quiet sincerity.
+    <br /><br />
+    <<you>>
+        And what would you need?
+    <</you>>
+    <br />
+    <<sayNpc _introPresenter>>
+        Food enough for everyone, and something to celebrate with. Leave the rest to me.
+    <</sayNpc>>
+    <br />
+    <br />
+<<else>>
+    As you descended into the dank basement, the <<=setup.displayName(_introPresenter)>>'s chilling presence hung heavy in the air, casting long shadows across the stone walls.
+    <<=setup.pronounceWho(_introPresenter, true)>> piercing gaze met yours as you approached.
+    <br /><br />
+    <<sayNpc _introPresenter>>
+        I have an idea. A way to tighten our grip on these wretched souls.
+    <</sayNpc>>
+    <br />
+    You braced yourself for what was to come, knowing all too well the depths of her depravity.
+    <br /><br />
+    <<you>>
+        Go on
+    <</you>>
+    <br />
+    <<sayNpc _introPresenter>>
+        We shall host a feast. A celebration of their submission, a testament to our absolute control.
+    <</sayNpc>>
+    <br />
+    Your stomach churned at the thought, but you dared not show weakness in the presence of such malevolence.
+    <br /><br />
+    <<you>>
+        And what purpose will this serve?
+    <</you>>
+    <br />
+    <<=setup.pronounceWho(_introPresenter, true)>> laughter echoed off the walls, a discordant symphony of madness and malice.
+    <br /><br />
+    <<sayNpc _introPresenter>>
+        To break them or to make them more happy?... Your choice.
+    <</sayNpc>>
+    <br />
+    You swallowed hard, the bitter taste of fear coating your tongue like poison.
+    <br /><br />
+<</if>>
 <<if _npc>>
     <center>
         <<actionImage _npc begging>>
@@ -56,8 +99,12 @@ You swallowed hard, the bitter taste of fear coating your tongue like poison.
     <br />
 <</if>>
 <<linkreplace 'Leave'>>
-    As you turned to leave, the Mistress's laughter followed you like a ghostly specter, a haunting reminder of the darkness that dwelled within us all. 
-    And in the depths of that desolate basement, where shadows danced with the echoes of suffering, you knew that the true horrors had only just begun.
+    <<if _introIsAttendant>>
+        You gave a slow nod. <<=setup.displayName(_introPresenter)>> smiled — the quiet, satisfied kind — and got back to work, already planning.
+    <<else>>
+        As you turned to leave, the Mistress's laughter followed you like a ghostly specter, a haunting reminder of the darkness that dwelled within us all.
+        And in the depths of that desolate basement, where shadows danced with the echoes of suffering, you knew that the true horrors had only just begun.
+    <</if>>
     <<set $player.quests.slave_party = true>>
     <<set $locationEvents.basement = true>>
     <br /><br />
