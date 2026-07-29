@@ -238,18 +238,22 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (setup.getAge(slaves[ai]) < 18) continue;
 
                 // Beauty: higher chance the more stale (washDays counts down from last wash)
-                const washChance = (7 - (slaves[ai].washDays ?? 0)) * 5;
+                const wd = slaves[ai].washDays ?? 0;
+                const washChance = wd >= 7 ? 0 : wd === 0 ? 35 : (7 - wd) * 2;
                 const beautyMax  = (slaves[ai].baseBeauty ?? slaves[ai].beauty) + (slaves[ai].washBeauty ?? 1) * 7;
                 if (slaves[ai].beauty < beautyMax && setup.percentageChance(washChance)) {
+                    const wasFullyExpired = !slaves[ai].washDays;
                     const oldBeauty = slaves[ai].beauty;
                     setup.wash(slaves[ai], { beautyMultiplier: 7, washDays: 7 });
                     const gain = slaves[ai].beauty - oldBeauty;
-                    if (gain >= 14)
-                        setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' is back to ' + setup.pronounceWhos(slaves[ai]) + ' peak');
-                    else if (gain >= 7)
-                        setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' looks fresh and clean');
-                    else if (gain > 0)
-                        setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' did not need much today');
+                    if (gain > 0) {
+                        if (!wasFullyExpired)
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' did not need much today');
+                        else if (slaves[ai].washBeauty >= 2)
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' is back to ' + setup.pronounceWhos(slaves[ai]) + ' peak');
+                        else
+                            setup.sleepMessages.addJob(npc.name + ' bathed ' + setup.displayName(slaves[ai]) + ', ' + setup.pronounceWhat(slaves[ai]) + ' looks fresh and clean');
+                    }
                 }
 
                 // Horny: 15% chance to raise by 7-15 if below 80 and stimulation is enabled
