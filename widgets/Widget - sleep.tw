@@ -260,49 +260,6 @@
 			<</if>>
 		<</if>>
 
-		// Slave attendant — applies grooming effects to other slaves
-		<<if _npc.assignedTo === 'attendant' && !_isSick>>
-			<<for _attOtherI, _attOtherSlave range $slaves>>
-				<<if _attOtherI === _i || setup.getAge(_attOtherSlave) < 18>>
-					<<continue>>
-				<</if>>
-				/* Beauty */
-				<<set _attWashChance = (7 - ($slaves[_attOtherI].washDays ?? 0)) * 5>>
-				<<set _attBeautyMax = (($slaves[_attOtherI].baseBeauty ?? $slaves[_attOtherI].beauty) + ($slaves[_attOtherI].washBeauty ?? 1) * 7)>>
-				<<if $slaves[_attOtherI].beauty < _attBeautyMax && setup.percentageChance(_attWashChance)>>
-					<<set _attOldBeauty = $slaves[_attOtherI].beauty>>
-					<<run setup.wash($slaves[_attOtherI], { beautyMultiplier: 7, washDays: 7 })>>
-					<<set _attBeautyGain = $slaves[_attOtherI].beauty - _attOldBeauty>>
-					<<if _attBeautyGain >= 14>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attOtherSlave) + ', ' + setup.pronounceWhat(_attOtherSlave) + ' is back to ' + setup.pronounceWhos(_attOtherSlave) + ' peak')>>
-					<<elseif _attBeautyGain >= 7>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attOtherSlave) + ', ' + setup.pronounceWhat(_attOtherSlave) + ' looks fresh and clean')>>
-					<<elseif _attBeautyGain > 0>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attOtherSlave) + ', ' + setup.pronounceWhat(_attOtherSlave) + ' did not need much today')>>
-					<</if>>
-				<</if>>
-				/* Horny */
-				<<if ($player.baseManagement.attendantStimulate ?? true) && $slaves[_attOtherI].horny < 80 && setup.percentageChance(15)>>
-					<<set _attHornyGain = randomInteger(7, 15)>>
-					<<set _attSlaveAttrToAtt = _npc.gender === 0 ? _attOtherSlave.likesGirls : _npc.gender === 1 ? _attOtherSlave.likesGuys : _npc.gender === 2 ? _attOtherSlave.likesTGirls : _attOtherSlave.likesTGuys>>
-					<<if !_attSlaveAttrToAtt>>
-						<<set _attHornyGain = Math.ceil(_attHornyGain / 2)>>
-						<<set $slaves[_attOtherI].happy = Math.max(0, $slaves[_attOtherI].happy - randomInteger(0, 3))>>
-					<</if>>
-					<<set $slaves[_attOtherI].horny = Math.min(99, $slaves[_attOtherI].horny + _attHornyGain)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' got a little frisky with ' + setup.displayName(_attOtherSlave) + ' in the shower, increasing ' + setup.pronounceWhos(_attOtherSlave) + ' arousal.' + ($slaves[_attOtherI].horny >= 80 ? ' ' + setup.pronounceWhat(_attOtherSlave)[0].toUpperCase() + setup.pronounceWhat(_attOtherSlave).slice(1) + ' looks like ' + setup.pronounceWhat(_attOtherSlave) + ' could use your attention...' : ''))>>
-					<<if _attOtherSlave.gender === 0 ? _npc.likesGirls : _attOtherSlave.gender === 1 ? _npc.likesGuys : _attOtherSlave.gender === 2 ? _npc.likesTGirls : _npc.likesTGuys>>
-						<<set _npc.horny = Math.min(81, (_npc.horny ?? 0) + randomInteger(2, 5))>>
-					<</if>>
-				<</if>>
-				/* Happiness (Pacifist only) */
-				<<if (_npc.traits ?? []).includes('pacifist') && $slaves[_attOtherI].happy < 50 && setup.percentageChance(20)>>
-					<<set _attHappyGain = randomInteger(2, 5)>>
-					<<set $slaves[_attOtherI].happy = Math.min(100, $slaves[_attOtherI].happy + _attHappyGain)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' pampered ' + setup.displayName(_attOtherSlave) + ' while grooming, improving ' + setup.pronounceWhos(_attOtherSlave) + ' happiness')>>
-				<</if>>
-			<</for>>
-		<</if>>
 <</for>>
 
 // Deferred slave removals — reverse order preserves lower indices
@@ -406,49 +363,6 @@
 			<</if>>
 		<</if>>
 
-		// Guest attendant — applies grooming effects to slaves
-		<<if $guests[_guestI].assignedTo === 'attendant' && !_isSick>>
-			<<for _attSlaveI, _attSlave range $slaves>>
-				<<if setup.getAge(_attSlave) < 18>>
-					<<continue>>
-				<</if>>
-				/* Beauty: higher chance the more stale (washDays counts down from last wash) */
-				<<set _attWashChance = (7 - ($slaves[_attSlaveI].washDays ?? 0)) * 5>>
-				<<set _attBeautyMax = (($slaves[_attSlaveI].baseBeauty ?? $slaves[_attSlaveI].beauty) + ($slaves[_attSlaveI].washBeauty ?? 1) * 7)>>
-				<<if $slaves[_attSlaveI].beauty < _attBeautyMax && setup.percentageChance(_attWashChance)>>
-					<<set _attOldBeauty = $slaves[_attSlaveI].beauty>>
-					<<run setup.wash($slaves[_attSlaveI], { beautyMultiplier: 7, washDays: 7 })>>
-					<<set _attBeautyGain = $slaves[_attSlaveI].beauty - _attOldBeauty>>
-					<<if _attBeautyGain >= 14>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attSlave) + ', ' + setup.pronounceWhat(_attSlave) + ' is back to ' + setup.pronounceWhos(_attSlave) + ' peak')>>
-					<<elseif _attBeautyGain >= 7>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attSlave) + ', ' + setup.pronounceWhat(_attSlave) + ' looks fresh and clean')>>
-					<<elseif _attBeautyGain > 0>>
-						<<run setup.sleepMessages.addJob(_npc.name + ' bathed ' + setup.displayName(_attSlave) + ', ' + setup.pronounceWhat(_attSlave) + ' did not need much today')>>
-					<</if>>
-				<</if>>
-				/* Horny: 15% chance to raise by 7-15 if below 80 */
-				<<if ($player.baseManagement.attendantStimulate ?? true) && $slaves[_attSlaveI].horny < 80 && setup.percentageChance(15)>>
-					<<set _attHornyGain = randomInteger(7, 15)>>
-					<<set _attSlaveAttrToAtt = _npc.gender === 0 ? _attSlave.likesGirls : _npc.gender === 1 ? _attSlave.likesGuys : _npc.gender === 2 ? _attSlave.likesTGirls : _attSlave.likesTGuys>>
-					<<if !_attSlaveAttrToAtt>>
-						<<set _attHornyGain = Math.ceil(_attHornyGain / 2)>>
-						<<set $slaves[_attSlaveI].happy = Math.max(0, $slaves[_attSlaveI].happy - randomInteger(0, 3))>>
-					<</if>>
-					<<set $slaves[_attSlaveI].horny = Math.min(99, $slaves[_attSlaveI].horny + _attHornyGain)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' got a little frisky with ' + setup.displayName(_attSlave) + ' in the shower, increasing ' + setup.pronounceWhos(_attSlave) + ' arousal.' + ($slaves[_attSlaveI].horny >= 80 ? ' ' + setup.pronounceWhat(_attSlave)[0].toUpperCase() + setup.pronounceWhat(_attSlave).slice(1) + ' looks like ' + setup.pronounceWhat(_attSlave) + ' could use your attention...' : ''))>>
-					<<if _attSlave.gender === 0 ? _npc.likesGirls : _attSlave.gender === 1 ? _npc.likesGuys : _attSlave.gender === 2 ? _npc.likesTGirls : _npc.likesTGuys>>
-						<<set _npc.horny = Math.min(81, (_npc.horny ?? 0) + randomInteger(2, 5))>>
-					<</if>>
-				<</if>>
-				/* Happiness: 20% chance if attendant has Pacifist trait and slave happiness < 50 */
-				<<if ($guests[_guestI].traits ?? []).includes('pacifist') && $slaves[_attSlaveI].happy < 50 && setup.percentageChance(20)>>
-					<<set _attHappyGain = randomInteger(2, 5)>>
-					<<set $slaves[_attSlaveI].happy = Math.min(100, $slaves[_attSlaveI].happy + _attHappyGain)>>
-					<<run setup.sleepMessages.addJob(_npc.name + ' pampered ' + setup.displayName(_attSlave) + ' while grooming, lifting ' + setup.pronounceWhos(_attSlave) + ' mood')>>
-				<</if>>
-			<</for>>
-		<</if>>
 <</for>>
 
 // Deferred guest removals — reverse order preserves lower indices
