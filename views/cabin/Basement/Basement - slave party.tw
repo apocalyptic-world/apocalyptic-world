@@ -50,7 +50,20 @@ Slaves who had once been strangers found themselves sharing stories and laughter
         <</linkreplace>>
     </div>
 <</if>>
-<<linkreplace 'Nod at your overseer'>>
+<<set _partyMistressIds = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set _partyMistress = _partyMistressIds.length ? $guests[_partyMistressIds[0]] : null>>
+<<set _partyAttendant = null>>
+<<if !_partyMistress>>
+    <<set _guestAttIds = setup.getPersonsForLocation($guests, 'attendant')>>
+    <<set _slaveAttIds = setup.getPersonsForLocation($slaves, 'attendant')>>
+    <<if _guestAttIds.length>>
+        <<set _partyAttendant = $guests[_guestAttIds[0]]>>
+    <<elseif _slaveAttIds.length>>
+        <<set _partyAttendant = $slaves[_slaveAttIds[0]]>>
+    <</if>>
+<</if>>
+<<set _partySignalLabel = _partyMistress ? 'Nod at your overseer' : 'Signal to the attendant'>>
+<<linkreplace `_partySignalLabel`>>
     <<if !_champagne>>
         <<run $('#option_champagne').hide()>>
     <</if>>
@@ -59,10 +72,13 @@ Slaves who had once been strangers found themselves sharing stories and laughter
     <<set _girlSlaves = setup.getRandomPersonIdsGirls($slaves.filter(s => !s.chastityBelt), 2)>>
     <<set _npc1 = $slaves[_girlSlaves[0]]>>
     <<set _npc2 = $slaves[_girlSlaves[1]]>>
-    <<set _mistress = setup.getPersonsForLocation($guests, 'mistress')>>
-    <<set _mistress = $guests[_mistress[0]]>>
-    With a commanding gesture, <<=setup.displayName(_mistress)>> presented the <<=setup.displayName(_npc1)>> before you, a silent offering in the midst of revelry. 
-    The air grew heavy with anticipation as the settlers around you fell silent, their whispers hushed in anticipation of what would unfold.
+    <<if _partyMistress>>
+        With a commanding gesture, <<=setup.displayName(_partyMistress)>> presented the <<=setup.displayName(_npc1)>> before you, a silent offering in the midst of revelry.
+        The air grew heavy with anticipation as the settlers around you fell silent, their whispers hushed in anticipation of what would unfold.
+    <<else>>
+        With a warm smile, <<=setup.displayName(_partyAttendant)>> gently guided <<=setup.displayName(_npc1)>> toward you — <<=setup.pronounceWhos(_npc1)>> skin soft from lotion, smelling faintly of soap and perfume, freshly bathed and prepared for your pleasure.
+        The room quieted as the guests sensed what was unfolding, eyes turning toward you with knowing anticipation.
+    <</if>>
     <br /><br />
     As you unzipped your pants and pulled out your dick another girl from back of the room shouted.
     <br /><br />

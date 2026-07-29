@@ -36,7 +36,12 @@
   <<elseif !$tmpGirl.rape>>
 		<<set _linkName = 'Fuck ' + _himOrHer>>
 		<<link `_linkName`>>
-			<<fuck $tmpGirl>>
+			<<if $tmpGirl.assignedTo === 'attendant'>>
+				<<set $tmpGirlViewBack = 'NPC view'>>
+				<<goto 'Attendant fuck choose'>>
+			<<else>>
+				<<fuck $tmpGirl>>
+			<</if>>
 		<</link>>
   <</if>>
   <<include 'Girl invite - include'>>
@@ -147,7 +152,7 @@
 			<<goto 'NPC punish'>>
 		<</link>>
 	<</if>>
-	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+	<<if _girlGuest.length > 0 && setup.isAtWork($guests[_girlGuest[0]], $weather)>>
 		<<if $player.energy >= 5 && hasTime(1)>>
 			<<set _linkName = 'Mistress punishes ' + _himOrHer>>
 			<<link `_linkName`>>

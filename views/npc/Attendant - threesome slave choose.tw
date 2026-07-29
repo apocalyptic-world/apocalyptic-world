@@ -1,0 +1,41 @@
+:: Attendant - threesome slave choose
+
+<<set _atscEligible = []>>
+<<for _atscI, _atscNpc range $slaves>>
+	<<if setup.getAge(_atscNpc) >= 18 && typeof _atscNpc.sick === 'undefined' && _atscNpc.id !== $tmpGirl.id>>
+		<<run _atscEligible.push({id: _atscI, npc: _atscNpc})>>
+	<</if>>
+<</for>>
+
+<<if _atscEligible.length === 0>>
+	No eligible slaves available.
+<<else>>
+	<<for _atscEntry range _atscEligible>>
+		<<set _atscId2 = _atscEntry.id>>
+		<<set _atscNpc2 = _atscEntry.npc>>
+		<<set _atscGenderClass = 'gender-' + setup.genderClass(_atscNpc2)>>
+		<<capture _atscId2, _atscNpc2, _atscGenderClass>>
+			<div>
+				<span @class="_atscGenderClass">
+					<<link _atscNpc2.name>>
+						<<dialogclose>>
+						<<if typeof $slaveId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view'>>
+						<<else>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+						<</if>>
+						<<set $tmpGirl2 = _atscNpc2>>
+						<<set $slaveId2 = _atscId2>>
+						<<unset $guestId2, $charId2>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</link>>
+				</span>
+			</div>
+		<</capture>>
+	<</for>>
+<</if>>
+
+<br /><br />
+<<link 'Back'>>
+	<<dialogclose>>
+<</link>>

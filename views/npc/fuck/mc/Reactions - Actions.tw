@@ -271,6 +271,19 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"Mmmhh...  *gasping*  ...everything at once...  the pull, the ache, and now you deep inside me...  *shaking*  ...I can't think straight, don't stop...",
+				"Ahh, " + setup.npc.mcName($tmpGirl) + "...  *pressing back against you*  ...I was already so close to the edge when you walked in...  *breathlessly*  ...this is almost too much...",
+				"*breathless* I'm already so sensitive...  and you feel so...  *gasping*  ...please don't stop...  please...",
+				"Ohh...  *gripping the frame*  ...I can't reach you, I can't pull you closer...  *whimpering softly*  ...just give me more...",
+				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  *trembling*  ...I'm going to fall apart right here...  *exhaling*  ...and I don't mind at all.",
+				"*softly* The whole barn disappears when you're inside me...  *gasping*  ...all I feel is you..."
+			])>>
+		<</sayNpc>>
+
 	<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(45)>>
 
 		<<if $tmpGirl.family?.father === 'mc'>>
@@ -597,6 +610,19 @@
 				])>>
 			<</sayNpc>>
 
+		<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+			<<sayNpc $tmpGirl>>
+				<<=either([
+					"*gripping the frame* Ahh, " + setup.npc.mcName($tmpGirl) + "...  held completely still and you're right there behind me...  *gasping*  ...I have no choice but to feel every single thing...",
+					"Mmmhh...  *trembling*  ...I was already so wound up...  and now you're inside me too...  *breathlessly*  ...it's almost too much...",
+					"Ohh...  *straining toward you*  ...I want to push back, I want to give you more...  *whimpering*  ...take what I can't reach to give you...",
+					"*quietly* I was already so close to losing it...  and then you walked in and...  *gasping*  ...everything goes quiet except you, " + setup.npc.mcName($tmpGirl) + "...",
+					"Ahh, " + setup.npc.mcName($tmpGirl) + "...  *shaking*  ...please tell me this is what you wanted...  *softly*  ...I want so much to be what you want...",
+					"*exhaling slowly* Right here, just like this...  *barely audible*  ...don't stop...  please don't stop..."
+				])>>
+			<</sayNpc>>
+
 		<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(45)>>
 
 			<<if $tmpGirl.family?.father === 'mc'>>
@@ -889,58 +915,6 @@
 
 		<</if>>
 
-	<<elseif $tmpGirl.location === 'nightclub' && setup.percentageChance(70)>>
-
-		<<sayNpc $tmpGirl>>
-			<<=either([
-				"Mmmhh...  *exhaling*  Your cum inside me in a nightclub bathroom...  I don't even know your last name, " + setup.npc.mcName($tmpGirl) + "...",
-				"*shivering* I have to go back out there now...  *softly*  with you still inside me...  knowing what just happened...",
-				"Ahh...  The bass is still going out there...  and you just came inside me...  this night went places I didn't expect.",
-				"*catching her breath* I was out there dancing an hour ago, " + setup.npc.mcName($tmpGirl) + "...  *quietly*  How did I end up here...",
-				"Mmmhh...  *tilting her head back*  That was completely reckless...  and I loved every second of it, " + setup.npc.mcName($tmpGirl) + "..."
-			])>>
-		<</sayNpc>>
-
-	<<elseif $tmpGirl.location === 'mistress' && setup.percentageChance(35)>>
-
-		<<if ($tmpGirl.sub ?? 0) < 20>>
-
-			<<sayNpc $tmpGirl>>
-				<<=either([
-					"*exhaling* Warm inside your Mistress...  *quietly*  ...consider that a reward, " + setup.npc.mcName($tmpGirl) + ".  You've earned it.",
-					"Mmmhh...  I decided to let you do that, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...I want you to understand the distinction.",
-					"Ahh...  *catching her breath*  You came inside your Mistress...  *quietly*  ...that is a privilege not given lightly.",
-					"*tilting her head* Good...  *softly*  ...very good, " + setup.npc.mcName($tmpGirl) + "...  I may permit this again.",
-					"Mmmhh...  Warm and deep...  *quietly*  ...because I allowed it...  remember who holds the power in this dungeon, " + setup.npc.mcName($tmpGirl) + "."
-				])>>
-			<</sayNpc>>
-
-		<<elseif ($tmpGirl.sub ?? 0) <= 50>>
-
-			<<sayNpc $tmpGirl>>
-				<<=either([
-					"Mmmhh...  *exhaling slowly*  You claimed me, " + setup.npc.mcName($tmpGirl) + "...  I claim everyone in this dungeon...  only you claim me.",
-					"*quietly*  Warm inside me...  I don't give this to anyone, " + setup.npc.mcName($tmpGirl) + "...  You know how rare that is.",
-					"Ahh...  *catching her breath*  The master marks his territory...  *softly*  ...I won't pretend I mind.",
-					"*leaning against the wall*  I've spent years being untouchable in here, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...and then there's you.",
-					"Mmmhh...  *tilting her head*  Nobody else gets that from me...  not the prisoners, not anyone...  just you, " + setup.npc.mcName($tmpGirl) + "."
-				])>>
-			<</sayNpc>>
-
-		<<else>>
-
-			<<sayNpc $tmpGirl>>
-				<<=either([
-					"*exhaling slowly* You have claimed me completely, " + setup.npc.mcName($tmpGirl) + "...  I am yours...  every part of me...  and I am glad.",
-					"Mmmhh...  *softly*  Fill me as you wish...  the master of this dungeon fills his Mistress however he pleases...",
-					"Ahh...  *trembling*  I give this to you freely, " + setup.npc.mcName($tmpGirl) + "...  I give you everything freely...  always.",
-					"*leaning into him* You are the true master here...  *quietly*  ...and I have never been so willing to be claimed.",
-					"Mmmhh...  *tilting her head back*  Take everything, " + setup.npc.mcName($tmpGirl) + "...  every room in this dungeon, every chain...  and me."
-				])>>
-			<</sayNpc>>
-
-		<</if>>
-
 	<<elseif $tmpGirl.location === 'streets' && setup.percentageChance(35)>>
 
 		<<sayNpc $tmpGirl>>
@@ -960,6 +934,23 @@
 				"*quietly* Be fruitful...  *exhaling* ...I have always taken that scripture very literally, " + setup.npc.mcName($tmpGirl) + ".",
 				"Warm and deep inside me, " + setup.npc.mcName($tmpGirl) + "...  *softly* This is how life begins.  This is the holiest thing.",
 				"*sighing* The womb is a temple and you just left an offering, " + setup.npc.mcName($tmpGirl) + "...  it is received with gratitude..."
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*exhaling slowly* Ohh...  *softly*  ...warm and deep inside me, " + setup.npc.mcName($tmpGirl) + "...  *trembling*  ...I feel so completely yours right now...",
+				"Mmmhh...  *shaking gently*  ...I can feel every pulse of it...  *quietly*  ...stay in me a little longer...",
+				"Ahh...  *softly*  ...I was already so wound up...  and then this...  *breathlessly*  ...you always know exactly how to undo me, " + setup.npc.mcName($tmpGirl) + "...",
+				"*pressing into you as much as she can* Mmmhh...  *quietly*  ...warm everywhere...  *exhaling*  ...I don't want this to end.",
+				"*whispering* " + setup.npc.mcName($tmpGirl) + "...  *shaking*  ...everything at once...  *softly*  ...I don't know where one feeling ends and the other begins...",
+				"Ohh...  *trembling*  ...still aching from the pull, and warm now, and so full...  *quietly*  ...I feel so much right now...",
+				"*quietly amused* They send me here to give milk...  *shaking*  ...and here you are, leaving yours inside me...  *softly*  ...I think I got the better end of today.",
+				"*laughing softly* I spend all afternoon giving what I make...  *warmly*  ...and you give something back...  *exhaling*  ...this is the only kind of cream I want to keep.",
+				"*gasping* A milk girl who gets to receive her own cream...  *trembling*  ...I could get very used to you coming to me here, " + setup.npc.mcName($tmpGirl) + "...",
+				"*softly* Everything in this barn produces...  *exhaling slowly*  ...and now you've made your own contribution...  *quietly*  ...I'll keep every drop of this one."
 			])>>
 		<</sayNpc>>
 
@@ -985,7 +976,24 @@
 
 :: Reactions - nipple_lick
 
-	<<if (($tmpGirl.traits ?? []).includes('milker') || ($tmpGirl.pregnancy ?? 0) >= 60) && setup.percentageChance(60)>>
+	<<if $tmpGirl.location === 'milk_barn' && setup.percentageChance(60)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*gasping softly as you disconnect her* Ohh...  *breathlessly*  ...couldn't wait, could you, " + setup.npc.mcName($tmpGirl) + "?  *warmly*  ...I was hoping you wouldn't...",
+				"*looking down at you* Mmmhh...  *quietly amused*  ...the machine gets all afternoon and you get a minute...  *pressing closer*  ...let's make it count.",
+				"*shivering* The machine is so cold...  your mouth is so warm...  *exhaling slowly*  ...there is no comparison, " + setup.npc.mcName($tmpGirl) + "...",
+				"*arching into you* Ohh...  *softly*  ...I'm so full right now, so sensitive...  *trembling*  ...and your tongue right there is...  *gasping*  ...perfect...",
+				"*exhaling* Mmmhh...  *threading fingers into your hair*  ...I've been giving all afternoon and now you're taking for yourself...  *softly*  ...good.  Take more.",
+				"*quietly* They're yours, " + setup.npc.mcName($tmpGirl) + "...  *pressing toward you*  ...take your time...  take everything you want...",
+				"*softly* I've been so full...  so long...  *arching toward you*  ...and the machine doesn't care...  *quietly*  ...but your mouth does.  Please don't stop.",
+				"*watching you, trembling* Mmmhh...  *softly*  ...do I taste the way you wanted?  *quietly*  ...I've been thinking about this all afternoon...",
+				"*breathless* Is this what you came for, " + setup.npc.mcName($tmpGirl) + "?  *pressing closer*  ...tell me I'm giving you what you wanted...",
+				"*cradling your head gently* Mmmhh...  *softly*  ...let me give you this...  *quietly*  ...I have so much, and I want so much to share it with you, " + setup.npc.mcName($tmpGirl) + "..."
+			])>>
+		<</sayNpc>>
+
+	<<elseif (($tmpGirl.traits ?? []).includes('milker') || ($tmpGirl.pregnancy ?? 0) >= 60) && setup.percentageChance(60)>>
 
 		<<sayNpc $tmpGirl>>
 			<<=either([
@@ -1224,6 +1232,18 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*pausing, breathless* Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...I've been so wound up in here alone, and the moment you walk in, all I want is to taste you...",
+				"*looking up* You came to me...  *pressing forward as far as she can*  ...let me show you how much I wanted you to...",
+				"Mmmhh...  *closing her eyes*  ...I'd stay right here for you no matter what...  *softly*  ...just like this...",
+				"*breathlessly* I was already aching...  and then your hands in my hair...  *quietly*  ...I want to give you everything I have, " + setup.npc.mcName($tmpGirl) + "...",
+				"*looking up at you* Everything else in this barn just...  *softly*  ...disappears when you're here...  *exhaling*  ...this is what I've been waiting for."
+			])>>
+		<</sayNpc>>
+
 	<<else>>
 
 		<<sayNpc $tmpGirl>>
@@ -1393,6 +1413,18 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"Mmmhh...  *straining softly toward you*  ...I can't pull you closer the way I want to...  *against your lips*  ...so don't you dare pull away...",
+				"*breathlessly* You always find me...  *pressing into the kiss*  ...even here, like this...  *softly*  ...especially here, like this...",
+				"Ohh, " + setup.npc.mcName($tmpGirl) + "...  *exhaling against you*  ...a stolen moment in the middle of all of this...  *quietly*  ...I needed this more than I realized...",
+				"*softly* Everything else keeps going...  *leaning into you*  ...but this...  this makes it all feel like something else entirely...",
+				"Mmmhh...  *unable to reach back*  ...it's cruel, not being able to hold you...  *pressing closer*  ...just stay right here, " + setup.npc.mcName($tmpGirl) + "..."
+			])>>
+		<</sayNpc>>
+
 	<<elseif !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(45)>>
 
 		<<if $tmpGirl.family?.father === 'mc'>>
@@ -1501,6 +1533,18 @@
 				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  Show me how much you like my cooking...",
 				"*gasping* I know you wanted a snack, " + setup.npc.mcName($tmpGirl) + ", but I had no idea...",
 				"Ahh, " + setup.npc.mcName($tmpGirl) + "!  Taste me, devour me!"
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  *gasping*  ...I'm already trembling and now your mouth is right there...  *gripping the frame*  ...ohh...  don't stop...",
+				"Ohh, " + setup.npc.mcName($tmpGirl, 1) + "  I can't move toward you, I can't pull you in...  *shaking*  ...please just don't stop...",
+				"*breathless* Already aching, and now your tongue right there and...  *gasping*  ...I'm going to lose my mind in here...",
+				"Mmmhh...  *quietly*  ...the whole long afternoon...  and then you come in and do that...  *shaking*  ...everything else just disappears...",
+				"Ahh...  *gripping the frame above her*  ...I can only take what you give me...  *barely a whisper*  ...and what you're giving me is perfect, " + setup.npc.mcName($tmpGirl) + "..."
 			])>>
 		<</sayNpc>>
 
@@ -1704,6 +1748,22 @@
 			])>>
 		<</sayNpc>>
 
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*looking down, breathless* Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...warm all over me and I can't wipe it away, I can't even move...  *quietly*  ...I don't want to...",
+				"Ahh...  *shaking slightly*  ...still held here, still aching, and now this too...  *exhaling*  ...you make me feel so completely undone...",
+				"*softly* I'll wear this for the rest of my time here...  *looking up at you*  ...and think of nothing but this moment, " + setup.npc.mcName($tmpGirl) + "...",
+				"Mmmhh...  *trembling, unable to move*  ...warm everywhere...  *quietly*  ...I want you to know I loved every second of it.",
+				"*exhaling slowly* The barn goes on and I'm just...  *softly*  ...glowing...  *quietly*  ...thank you for coming to me here, " + setup.npc.mcName($tmpGirl) + ".",
+				"*looking down with a soft laugh* The barn makes its cream every day...  *touching herself lightly*  ...and here's a batch I didn't expect...  *quietly*  ...this one's mine to keep.",
+				"*amused, breathless* All day I give what my body makes...  *exhaling*  ...I love it when you give something back...  *softly*  ...I like this kind of trade.",
+				"*quietly* I'm usually producing the milk...  *looking down, warmly*  ...and now I've got yours all over me...  *softly*  ...I'm not complaining at all.",
+				"*softly* The finest cream this barn has seen all day...  *exhaling*  ...and I get to wear it...  *quietly*  ...leave it a while, " + setup.npc.mcName($tmpGirl) + "..."
+			])>>
+		<</sayNpc>>
+
 	<<else>>
 
 		<<sayNpc $tmpGirl>>
@@ -1766,6 +1826,22 @@
 				"*licking lips* Every drop received, " + setup.npc.mcName($tmpGirl) + "...  just as we are taught — waste nothing that is given in grace.",
 				"Mmmhh...  *exhaling* The cup is offered and the cup is drunk.  *softly* Amen.",
 				"*looking up* I have taken the sacrament many times, " + setup.npc.mcName($tmpGirl) + "...  this vintage is my favorite by far."
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.location === 'milk_barn' && setup.percentageChance(35)>>
+
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*swallowing, eyes closing* Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  *softly*  ...warm and slow...  *exhaling*  ...I'd stay here all afternoon for that.",
+				"*looking up at you* Ahh...  *quietly*  ...still aching, still here...  and then you gave me that...  *licking her lips*  ...it was worth everything.",
+				"Mmmhh...  *savoring it*  ...still so sensitive...  and now this warmth...  *softly*  ...yours is sweeter than anything else in here, " + setup.npc.mcName($tmpGirl) + ".",
+				"*exhaling slowly* Still here, still aching, and now that warmth...  *looking up*  ...I feel so satisfied, " + setup.npc.mcName($tmpGirl) + ".",
+				"*licking her lips, quietly* Mmmhh...  *softly*  ...stay a little longer...  even just like this...  *exhaling*  ...I don't want you to go yet.",
+				"*licking her lips slowly* We make milk in here all day...  *softly amused*  ...but yours is the only batch worth tasting, " + setup.npc.mcName($tmpGirl) + ".",
+				"*swallowing with a quiet laugh* I'm something of an expert in milk quality...  *exhaling*  ...and I can tell you, yours is exceptional.",
+				"*softly* The settlement gets everything I make in here...  *licking her lips*  ...but this batch...  *quietly*  ...this one I took for myself.",
+				"*breathing slowly* The finest thing this barn has produced all day...  *looking up*  ...and it came from you...  *smiling softly*  ...no wonder you're the master..."
 			])>>
 		<</sayNpc>>
 
