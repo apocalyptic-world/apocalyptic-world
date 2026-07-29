@@ -2,7 +2,7 @@
 <h1 class="ptitle">WORLD</h1>
 <br />
 
-<<set _discovered = setup.settlements.getAll().filter(function(s) { return s.discovered; })>>
+<<set _discovered = setup.settlements.getAll().filter(function(s) { return s.discovered && !s.destroyed; })>>
 
 <<if _discovered.length === 0>>
 	You haven't discovered any settlements yet. Explore the roads to find them.
@@ -40,60 +40,51 @@
 		<<set _typeName = _typeNames[_s.type] ?? _s.type>>
 		<<set _popDesc = setup.settlements.getPopulationDescription(_s)>>
 		<<capture _s, _relColor, _relLabel, _typeName, _popDesc>>
-			<<if _s.destroyed>>
-				<div style="border-left: 3px solid #2a2a2a; padding: 8px 14px; margin-bottom: 10px; background: rgba(0,0,0,0.12); opacity: 0.5;">
-					<span style="color: #444;">☠ <<= _s.name>></span>
-					<span style="color: #333; font-size: 0.9em; margin-left: 8px;"><<= _typeName>></span>
+			<div style="border-left: 3px solid <<= _relColor>>; padding: 8px 14px; margin-bottom: 10px; background: rgba(0,0,0,0.2);">
+				<<if $player.car.fuel >= 20>>
+					<<set _viewLabel = _s.name>>
+					<<link _viewLabel>>
+						<<addhours 2>>
+						<<carFuel 20>>
+						<<set $tmpSettlement = _s.id>>
+						<<goto 'Garage - World - Settlement'>>
+					<</link>>
+				<<else>>
+					<span style="color: #444; cursor: not-allowed;"><<= _s.name>></span>
+					<span style="color: #e05555; font-size: 0.78em; margin-left: 6px;">(need 20 fuel)</span>
+				<</if>>
+				<span style="color: #777; font-size: 0.9em; margin-left: 8px;"><<= _typeName>></span>
+				<br />
+				<span style="color: #aaa; font-size: 0.85em;"><<= _popDesc>></span>
+				<span style="color: <<= _relColor>>; font-size: 0.85em; margin-left: 10px;">◈ <<= _relLabel>></span>
+				<<if _s.callForHelp>>
 					<br />
-					<span style="color: #333; font-size: 0.82em;">Destroyed</span>
-				</div>
-			<<else>>
-				<div style="border-left: 3px solid <<= _relColor>>; padding: 8px 14px; margin-bottom: 10px; background: rgba(0,0,0,0.2);">
+					<span style="color: #e05555; font-size: 0.82em; font-weight: bold;">⚠ UNDER ATTACK</span>
 					<<if $player.car.fuel >= 20>>
-						<<set _viewLabel = _s.name>>
-						<<link _viewLabel>>
-							<<addhours 2>>
-							<<carFuel 20>>
-							<<set $tmpSettlement = _s.id>>
-							<<goto 'Garage - World - Settlement'>>
-						<</link>>
-					<<else>>
-						<span style="color: #444; cursor: not-allowed;"><<= _s.name>></span>
-						<span style="color: #e05555; font-size: 0.78em; margin-left: 6px;">(need 20 fuel)</span>
+						<span style="margin-left: 8px;">
+							<<link 'Respond'>>
+								<<addhours 2>>
+								<<carFuel 20>>
+								<<set $tmpSettlement = _s.id>>
+								<<goto 'Garage - World - Help'>>
+							<</link>>
+						</span>
 					<</if>>
-					<span style="color: #777; font-size: 0.9em; margin-left: 8px;"><<= _typeName>></span>
+				<</if>>
+				<<if $game.capturedGuest && $game.capturedGuest.settlementId === _s.id>>
 					<br />
-					<span style="color: #aaa; font-size: 0.85em;"><<= _popDesc>></span>
-					<span style="color: <<= _relColor>>; font-size: 0.85em; margin-left: 10px;">◈ <<= _relLabel>></span>
-					<<if _s.callForHelp>>
-						<br />
-						<span style="color: #e05555; font-size: 0.82em; font-weight: bold;">⚠ UNDER ATTACK</span>
-						<<if $player.car.fuel >= 20>>
-							<span style="margin-left: 8px;">
-								<<link 'Respond'>>
-									<<addhours 2>>
-									<<carFuel 20>>
-									<<set $tmpSettlement = _s.id>>
-									<<goto 'Garage - World - Help'>>
-								<</link>>
-							</span>
-						<</if>>
-					<</if>>
-					<<if $game.capturedGuest && $game.capturedGuest.settlementId === _s.id>>
-						<br />
-						<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ HOLDING <<= $game.capturedGuest.npc.name>></span>
-					<</if>>
-					<<if (_s.playerCaptives ?? []).length > 0>>
-						<br />
-						<<set _pcNames = _s.playerCaptives.map(function(p) { return p.npc.name; }).join(', ')>>
-						<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ YOUR PEOPLE HELD — <<= _pcNames>></span>
-					<</if>>
-					<<if _s.blackmailActive>>
-						<br />
-						<span style="color: #e0c055; font-size: 0.82em; font-weight: bold;">⚠ BLACKMAIL DEMAND</span>
-					<</if>>
-				</div>
-			<</if>>
+					<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ HOLDING <<= $game.capturedGuest.npc.name>></span>
+				<</if>>
+				<<if (_s.playerCaptives ?? []).length > 0>>
+					<br />
+					<<set _pcNames = _s.playerCaptives.map(function(p) { return p.npc.name; }).join(', ')>>
+					<span style="color: #e09855; font-size: 0.82em; font-weight: bold;">⚠ YOUR PEOPLE HELD — <<= _pcNames>></span>
+				<</if>>
+				<<if _s.blackmailActive>>
+					<br />
+					<span style="color: #e0c055; font-size: 0.82em; font-weight: bold;">⚠ BLACKMAIL DEMAND</span>
+				<</if>>
+			</div>
 		<</capture>>
 	<</for>>
 

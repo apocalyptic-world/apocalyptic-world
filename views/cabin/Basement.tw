@@ -81,7 +81,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<if _attendantIds.length > 0>>
 		<<if typeof _mistressId === 'undefined'>>
 			<center>
-				<img src="https://imagex1.sx.cdn.live/images/pinporn/2013/09/13/3642511.webp?width=620" style="max-width: 100%;">
+				<<image 'game/misc/basement_attendant.jpg'>>
 			</center>
 		<</if>>
 		<<set _attVerbs = ['cleaning', 'grooming', 'washing', 'drying off', 'scrubbing', 'rinsing']>>
@@ -419,7 +419,11 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave hangman'>>
 	<<elseif !$player.quests.slave_party && $slaves.length >= 6 && $guests.length >= 6 && ((typeof _mistressId !== 'undefined' && $guests[_mistressId].relationship >= 90) || _attendantIds.some(a => (a.type === 'guest' ? $guests[a.id] : $slaves[a.id]).relationship > 60))>>
-		<<set $guestId = _mistressId>>
+		<<if typeof _mistressId !== 'undefined'>>
+			<<set $guestId = _mistressId>>
+		<<else>>
+			<<unset $guestId>>
+		<</if>>
 		<<unset $charId, $slaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave party introduction'>>
