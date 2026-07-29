@@ -44,7 +44,7 @@
 	<<link `_linkName`>>
 		<<if $tmpGirl.assignedTo === 'attendant' && ($tmpGirl.location === 'shower' || $tmpGirl.location === 'basement')>>
 			<<goto 'Attendant fuck choose'>>
-		<<elseif $tmpGirl.assignedTo === 'mistress' && $tmpGirl.location === 'mistress'>>
+		<<elseif $tmpGirl.assignedTo === 'mistress' && setup.isAtWork($tmpGirl, $weather)>>
 			<<goto 'Mistress fuck choose'>>
 		<<else>>
 			<<goto 'NPC fuck choose'>>
@@ -52,7 +52,7 @@
 	<</link>>
 <</if>>
 
-<<if setup.NpcInHome($tmpGirl)>>
+<<if setup.NpcInHome($tmpGirl) && !(($tmpGirl.assignedTo === 'attendant' || $tmpGirl.assignedTo === 'mistress') && setup.isAtWork($tmpGirl, $weather))>>
 	<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
 	<<link `_linkName`>>
 		<<addmins 15>>

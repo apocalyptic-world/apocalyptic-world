@@ -2,7 +2,7 @@
 
 <<set _atscEligible = []>>
 <<for _atscI, _atscNpc range $slaves>>
-	<<if setup.getAge(_atscNpc) >= 18 && typeof _atscNpc.sick === 'undefined' && _atscNpc.id !== $tmpGirl.id>>
+	<<if setup.getAge(_atscNpc) >= 18 && typeof _atscNpc.sick === 'undefined' && _atscNpc.id !== $tmpGirl.id && !($tmpGirl.gender === 1 && _atscNpc.gender === 1)>>
 		<<run _atscEligible.push({id: _atscI, npc: _atscNpc})>>
 	<</if>>
 <</for>>
@@ -19,14 +19,33 @@
 				<span @class="_atscGenderClass">
 					<<link _atscNpc2.name>>
 						<<dialogclose>>
-						<<if typeof $slaveId !== 'undefined'>>
+						<<if $tmpGirl.gender === 1>>
+							/* Male attendant: make the female slave the focus NPC */
+							<<set _atscAttNpc = $tmpGirl>>
+							<<set _atscAttGuestId = $guestId>>
+							<<set _atscAttSlaveId = $slaveId>>
+							<<set $tmpGirl = _atscNpc2>>
+							<<set $slaveId = _atscId2>>
+							<<unset $guestId, $charId>>
 							<<set $tmpGirlViewBack = 'NPC view'>>
+							<<set $tmpGirl2 = _atscAttNpc>>
+							<<if typeof _atscAttGuestId !== 'undefined'>>
+								<<set $guestId2 = _atscAttGuestId>>
+								<<unset $slaveId2, $charId2>>
+							<<else>>
+								<<set $slaveId2 = _atscAttSlaveId>>
+								<<unset $guestId2, $charId2>>
+							<</if>>
 						<<else>>
-							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<if typeof $slaveId !== 'undefined'>>
+								<<set $tmpGirlViewBack = 'NPC view'>>
+							<<else>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<</if>>
+							<<set $tmpGirl2 = _atscNpc2>>
+							<<set $slaveId2 = _atscId2>>
+							<<unset $guestId2, $charId2>>
 						<</if>>
-						<<set $tmpGirl2 = _atscNpc2>>
-						<<set $slaveId2 = _atscId2>>
-						<<unset $guestId2, $charId2>>
 						<<threesome $tmpGirl $tmpGirl2>>
 					<</link>>
 				</span>
