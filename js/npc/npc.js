@@ -426,8 +426,18 @@ setup.npcClothes = {
     shoes: setup.range(1, 4)
 };
 
+setup.npcMaleClothes = {
+	panties: [1]
+};
+
 setup.getRandomNpcClothes = function(npc)
 {
+	if ([1,3].includes(npc.gender)) {
+		return {
+			panties: setup.getRandomElement(setup.npcMaleClothes.panties)
+		};
+	}
+
 	if (![0,2].includes(npc.gender)) {
 		return null;
 	}

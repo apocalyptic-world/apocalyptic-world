@@ -23,6 +23,9 @@
 		<div id="girl_face">
 			<<include 'NPC visual face'>>
 		</div>
+		<<if _girlVisual?.clothes?.panties>>
+			<div id="girl_panties" @class="'panties' + _girlVisual.clothes.panties + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/male/panties/' + _girlVisual.clothes.panties + '.png\')'"></div>
+		<</if>>
 		<<if !_girlVisual?.clothes?.panties && !_girlVisual?.clothes?.bot && !_girlVisual.chastityBelt>>
 			<div id="girl_penis" @class="'race-' + _girlVisual.race + ''">
 				<<include 'NPC visual penis'>>
