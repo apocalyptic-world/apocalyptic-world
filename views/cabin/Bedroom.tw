@@ -115,8 +115,8 @@
 <<if !($locationEvents.bedroom ?? false)>>
 	<<if !$player?.quests?.policy_talk && $game?.cabinName && $game.day > 100 && _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 		<<goto 'Blair - policy talk'>>
-	<<elseif timeBetween('20:00', '23:00') && setup.percentageChance(100)>>
-		<<set _hornyGuests = setup.filterNPCs($guests, {gender: 0, horny_gt: 50, likesGuys: true, relationship_gte: 70, chastityBelt:false})[0] ?? []>>
+	<<elseif timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
+		<<set _hornyGuests = setup.filterNPCs($guests, {gender: 0, horny_gte: 51, likesGuys: true, relationship_gte: 70, chastityBelt_not: [true]})[0] ?? []>>
 		<<if _hornyGuests.length>>
 			<<set $guestId = _hornyGuests[Math.floor(Math.random()*_hornyGuests.length)]>>
 			<<unset $charId, $slaveId>>
