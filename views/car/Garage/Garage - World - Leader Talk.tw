@@ -1,0 +1,81 @@
+:: Garage - World - Leader Talk [Place bg-garage settlement]
+
+<<set _lt = setup.settlements.getById($tmpSettlement)>>
+<<if !_lt>><<goto 'Garage - World'>><</if>>
+
+<<set _ltLeader    = _lt.leader>>
+<<set _ltRelLevel  = setup.settlements.getRelationshipLevel(_lt)>>
+<<set _ltTopRes    = setup.settlements.getTopResources(_lt, 5)>>
+<<set _ltFoodCrit  = (_lt.resources?.food ?? 0) < 10>>
+
+<<set _ltOpeners = _ltRelLevel === 'allied'
+    ? ["Here's the honest picture of where things stand.",
+       "Good timing. Let me run you through the full account.",
+       "Pull up a seat. I'll give you the actual numbers.",
+       "Glad you came. Let me show you where we're at."]
+    : ["I can give you a quick rundown of how things are holding up.",
+       "Fair question — here's where things stand with us.",
+       "Let me give you a picture of the situation."]>>
+
+<<if _ltLeader>>
+    <<sayNpc _ltLeader>>
+        <<= _ltOpeners[randomInteger(0, _ltOpeners.length - 1)]>><<if _ltFoodCrit>> I won't sugarcoat it — food is our biggest concern right now.<</if>>
+    <</sayNpc>>
+    <br />
+<</if>>
+
+<div style="background: rgba(0,0,0,0.18); border-left: 3px solid #333; padding: 12px 18px; font-size: 0.88em; line-height: 1.9;">
+
+    <span style="color: #555; font-size: 0.78em; letter-spacing: 0.06em;">POPULATION</span><br />
+    <span style="color: #ccc;"><strong><<= _lt.population>></strong> people</span>
+    <span style="color: #666;"> — <<= setup.settlements.getPopulationDescription(_lt)>>, <<= setup.settlements.getGenderDescription(_lt)>></span>
+    <br /><br />
+
+    <span style="color: #555; font-size: 0.78em; letter-spacing: 0.06em;">DEFENSE</span><br />
+    <span style="color: #ccc;"><<= setup.settlements.getDefenseDescription(_lt)[0].toUpperCase() + setup.settlements.getDefenseDescription(_lt).slice(1)>></span>
+    <br /><br />
+
+    <<if _ltTopRes.length > 0>>
+        <span style="color: #555; font-size: 0.78em; letter-spacing: 0.06em;">RESOURCES</span><br />
+        <<for _ltrI = 0; _ltrI < _ltTopRes.length; _ltrI++>>
+            <<set _ltrKey = _ltTopRes[_ltrI]>>
+            <<set _ltrQty = _lt.resources[_ltrKey] ?? 0>>
+            <<if _ltrQty < 10>>
+                <<set _ltrLabel = 'critically low'>><<set _ltrColor = '#e05555'>>
+            <<elseif _ltrQty < 30>>
+                <<set _ltrLabel = 'low'>><<set _ltrColor = '#e09855'>>
+            <<elseif _ltrQty < 80>>
+                <<set _ltrLabel = 'adequate'>><<set _ltrColor = '#aaa'>>
+            <<elseif _ltrQty < 140>>
+                <<set _ltrLabel = 'well-stocked'>><<set _ltrColor = '#55cc88'>>
+            <<else>>
+                <<set _ltrLabel = 'abundant'>><<set _ltrColor = '#5599e0'>>
+            <</if>>
+            <span style="color: #999;"><<= (Item.get(_ltrKey)?.name ?? _ltrKey.replace(/_/g, ' '))>>:</span>
+            <span style="color: <<= _ltrColor>>;"><<= _ltrQty>> — <<= _ltrLabel>></span><br />
+        <</for>>
+        <br />
+    <</if>>
+
+    <<set _ltProdKeys = Object.keys(_lt.production).filter(function(k) { return _lt.production[k] > 0; })>>
+    <<if _ltProdKeys.length > 0>>
+        <span style="color: #555; font-size: 0.78em; letter-spacing: 0.06em;">PRODUCTION</span><br />
+        <<for _ltpI = 0; _ltpI < _ltProdKeys.length; _ltpI++>>
+            <<set _ltpKey = _ltProdKeys[_ltpI]>>
+            <span style="color: #999;"><<= (Item.get(_ltpKey)?.name ?? _ltpKey.replace(/_/g, ' '))>>:</span>
+            <span style="color: #aaa;">×<<= _lt.production[_ltpKey]>>/tick</span><br />
+        <</for>>
+        <br />
+    <</if>>
+
+    <span style="color: #555; font-size: 0.78em; letter-spacing: 0.06em;">STANDING</span><br />
+    <<set _ltRelColor = { hostile: '#e05555', unfriendly: '#e09855', neutral: '#999', friendly: '#55cc88', allied: '#5599e0' }[_ltRelLevel]>>
+    <span style="color: <<= _ltRelColor>>;"><<= setup.settlements.getRelationshipLabel(_lt)>></span>
+    <span style="color: #444;"> (<<= _lt.relationship>>/100)</span>
+    <<if _lt.lastInvestDay>>
+        <br /><span style="color: #666; font-size: 0.88em;">Last investment: day <<= _lt.lastInvestDay>></span>
+    <</if>>
+
+</div>
+<br />
+<<link 'Close'>><<dialogclose>><</link>>

@@ -150,6 +150,15 @@
 		</div>
 	<</if>>
 <</if>>
+<<if _leader && (setup.settlements.isFriendly(_s) || setup.settlements.isAllied(_s))>>
+	<<link 'Speak with Leader'>>
+		<<script>>
+			Dialog.setup("Speak with Leader", "leader-talk");
+			Dialog.wiki(Story.get("Garage - World - Leader Talk").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
 <<if setup.settlements.typeConfig[_s.type].canSlaveTrade && !setup.settlements.isAllied(_s)>>
 	<<link 'Slave Trade'>>
 		<<goto 'Garage - World - Slave Trade'>>
