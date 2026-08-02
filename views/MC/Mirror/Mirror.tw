@@ -1,6 +1,32 @@
 :: Mirror [Place bg-bedroom]
-<h1 class="ptitle">BEDROOM</h1>
-<br /><br />
+<h1 class="ptitle">BEDROOM - MIRROR</h1>
+<br />
+
+<<set _mcPortraitSrc = $player.portrait
+    ? ($player.portrait.includes('http') || $player.portrait.includes('packs/')
+        ? $player.portrait
+        : setup.ImagePath + 'custom_portraits/' + $player.portrait)
+    : setup.ImagePath + 'people/you/avatar.png'>>
+<div id="mc-mirror-portrait">
+    <div class="mc-mirror-portrait-wrapper">
+        <div class="mc-mirror-portrait-frame">
+            <img @src="_mcPortraitSrc">
+        </div>
+        <<capture _mcPortraitSrc>>
+            <span class="mc-mirror-expand-btn">
+                <<link '&#10530;'>>
+                    <<dialog 'Portrait'>>
+                        <div class="mc-mirror-full-portrait">
+                            <img @src="_mcPortraitSrc">
+                        </div>
+                    <</dialog>>
+                <</link>>
+            </span>
+        <</capture>>
+    </div>
+</div>
+<br />
+
 <<link 'Change name'>>
 	<<dialog 'Change name'>>	
 		<<textbox "_mcName" `$player.name ?? ''`>>
@@ -11,7 +37,74 @@
 		<</link>>
 	<</dialog>>	
 <</link>>
+<<link 'Change portrait'>>
+	<<script>>
+		Dialog.setup("MC - change portrait", "MC - change portrait");
+		Dialog.wiki(Story.get("MC - change portrait").processText());
+		Dialog.open();
+	<</script>>
+<</link>>
 <<link 'Leave'>>
     <<addmins 5>>
     <<goto 'Bedroom'>>
 <</link>>
+
+<style>
+    #mc-mirror-portrait {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .mc-mirror-portrait-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+    }
+    .mc-mirror-portrait-frame {
+        display: flex;
+        justify-content: center;
+        width: 200px;
+        height: 200px;
+        border: 1px solid brown;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .mc-mirror-portrait-frame img {
+        display: block;
+        object-fit: contain;
+        max-width: 100%;
+        max-height: 100%;
+        margin: 0;
+    }
+    .mc-mirror-expand-btn {
+        position: absolute;
+        right: 20px;
+        top: 4px;
+        text-shadow: 2px 2px 0px #000000;
+    }
+    .mc-mirror-expand-btn a.link-internal {
+        background: none !important;
+        color: white !important;
+        width: auto !important;
+        display: inline !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        font-size: 18px !important;
+        font-weight: normal !important;
+    }
+    .mc-mirror-full-portrait {
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .mc-mirror-full-portrait img {
+        display: block;
+        max-height: 100%;
+        object-fit: contain;
+        margin: 0;
+    }
+</style>

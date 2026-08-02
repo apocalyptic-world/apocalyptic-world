@@ -1,0 +1,83 @@
+:: MC - change portrait
+
+<div id="custom_portraits">
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            [img[setup.ImagePath + '/people/you/avatar.png']]
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<run delete $player.portrait>>
+                <<dialogclose>>
+                <<goto 'Mirror'>>
+            <</link>>
+        </div>
+    </div>
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            Use your custom image from link
+            <br />
+            Need to add full link to the image, with starting http protocol.
+            <br />
+            Ratio: [1:1]
+            <br /><br />
+            <<set _customValue = (($player.portrait ?? '').includes('http') ? $player.portrait : '')>>
+            <<textbox '_portraitUrl' _customValue>>
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<set $player.portrait = _portraitUrl>>
+                <<dialogclose>>
+                <<goto 'Mirror'>>
+            <</link>>
+        </div>
+    </div>
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            Use your custom image from pc
+            <br />
+            File needs to be under game/custom_portraits
+            <br />
+            Ratio: [1:1]
+            <br /><br /><br />
+            <input type="file" name="_mcPortraitPath" id="mcPortraitPath">
+            <script>
+                $('#mcPortraitPath').on('change', function () {
+                    SugarCube.State.variables.tmpPortraitPath = this.files[0].name || null;
+                });
+            </script>
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<set $player.portrait = $tmpPortraitPath>>
+                <<unset $tmpPortraitPath>>
+                <<dialogclose>>
+                <<goto 'Mirror'>>
+            <</link>>
+        </div>
+    </div>
+</div>
+
+<style>
+    #custom_portraits {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    .custom_portrait_item {
+        width: 200px;
+        padding: 10px;
+    }
+    .custom_portrait_item img {
+        width: 200px;
+        height: 200px;
+    }
+    .custom_portrait_item_img {
+        position: relative;
+        height: 200px;
+    }
+    .custom_portrait_item_img input {
+        width: 100%;
+        min-width: auto;
+    }
+</style>
