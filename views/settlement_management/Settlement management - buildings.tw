@@ -1,4 +1,5 @@
 :: Settlement management buildings  [include]
+
 <<set _managementBuildings = {
    solar_panel: {
 		show: true,
@@ -13,6 +14,25 @@
             $player.baseManagement.buildings ??= {};
             $player.baseManagement.buildings.solar_panel ??= 0;
             $player.baseManagement.buildings.solar_panel++;
+		},
+		goto: "Settlement management",
+        currentCount: true
+	},
+   windturbine: {
+		show: true,
+		title: "Wind turbine",
+		description: "Generates 1 electricity. Generates 2 during storms and sandstorms.",
+		required: {
+			wood: 20,
+			metal: 10,
+			rope: 10
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.windturbine ??= 0;
+            $player.baseManagement.buildings.windturbine++;
 		},
 		goto: "Settlement management",
         currentCount: true

@@ -31,6 +31,13 @@ setup.baseManagement = {
                     }
                 }
 
+                if (_building === 'windturbine') {
+                    let isStorm = variables().weather?.weather === 'storm';
+                    if (isStorm || isSandStorm) {
+                        electricityIncrease += (variables().player?.baseManagement?.buildings?.windturbine ?? 0);
+                    }
+                }
+
                 production += electricityIncrease;
             }
             return production;
@@ -59,6 +66,7 @@ setup.baseManagement = {
         },
         list: {
             solar_panel: 1,
+            windturbine: 1,
             coal_furnace: 4,
             hospital: -5,
             house: -0.5,
