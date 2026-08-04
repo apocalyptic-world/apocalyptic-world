@@ -398,12 +398,9 @@
 <</widget>>
 
 <<widget fightEnd>>
-	<<if typeof $fight === 'undefined'>>
-		<<set $fight = {
-			defeatedEnemies: [],
-			defeatedAllies: [],
-			killedEnemies: []
-		}>>
+	<<if typeof $fight === 'undefined' || !$fight.passageWon>>
+		<<unset $fight, $fightStart>>
+		<<goto 'Wood cabin'>>
 	<</if>>
 	<<set $fight.killedEnemies = $fight.killedEnemies ?? []>>
 	<<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
