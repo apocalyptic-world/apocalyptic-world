@@ -1,9 +1,12 @@
-/* MC portrait override: updates <<you>> say boxes after each passage renders */
-$(document).on(':passageend', function () {
-    const portrait = State.variables.player && State.variables.player.portrait;
-    if (!portrait) return;
-    const src = portrait.includes('http')
-        ? portrait
-        : setup.ImagePath + 'custom_portraits/' + portrait;
-    $('.you.say img').attr('src', src);
+/* Patch <<you>> to resolve MC portrait at render time, like sayNpc does */
+$(document).one(':passageend', function () {
+    var youMacro = Macro.get('you');
+    if (!youMacro) return;
+    youMacro.handler = function () {
+        var portrait = State.variables.player && State.variables.player.portrait;
+        var src = portrait
+            ? (portrait.startsWith('http') ? portrait : setup.ImagePath + 'custom_portraits/' + portrait)
+            : undefined;
+        setup.say(this.output, 'you', this.payload[0].contents, src);
+    };
 });

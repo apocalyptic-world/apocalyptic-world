@@ -81,6 +81,10 @@
 		<<pickup $backpack 'wood' _giveWood>>
 	<</if>>
 	<<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveWood + '</strong> wood in the forest', 'forest')>>
+	<<if setup.percentageChance(15) && (_npc.strength ?? 0) < 100>>
+		<<set _npc.strength = Math.min((_npc.strength ?? 0) + 1, 100)>>
+		<<run setup.sleepMessages.addJob(_npc.name + ' is building muscle from the hard work. <strong>+1 strength</strong>', 'forest')>>
+	<</if>>
 	<<if setup.percentageChance(10)>>
 		<<set _totals.food++>>
 		<<if _isStorageAvailable>>

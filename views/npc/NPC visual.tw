@@ -17,7 +17,23 @@
 	<<if _girlVisual.visual === 'trooper'>>
 		<<set _bodyImage = 'trooper.png'>>
 	<<elseif [1,3].includes(_girlVisual.gender)>>
-		<<set _bodyImage = 'body_' + _girlVisual.race + '_male.gif'>>
+		<div id="npc_visual_body_male" @class="'' + _girlVisual.race + ''">
+			<<include 'NPC visual body male'>>
+		</div>
+		<div id="girl_face" @class="'race-' + _girlVisual.race + ''">
+			<<include 'NPC visual face male'>>
+		</div>
+		<<if _girlVisual?.clothes?.top>>
+			<div id="girl_top" @class="'top' + _girlVisual.clothes.top + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/male/top/' + _girlVisual.clothes.top + '.png\')'"></div>
+		<</if>>
+		<<if _girlVisual?.clothes?.panties>>
+			<div id="girl_panties" @class="'panties' + _girlVisual.clothes.panties + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/male/panties/' + _girlVisual.clothes.panties + '.png\')'"></div>
+		<</if>>
+		<<if !_girlVisual?.clothes?.panties && !_girlVisual?.clothes?.bot && !_girlVisual.chastityBelt>>
+			<div id="girl_penis" @class="'race-' + _girlVisual.race + ''">
+				<<include 'NPC visual penis'>>
+			</div>
+		<</if>>
 	<<elseif [0,2].includes(_girlVisual.gender)>>
 		<div id="npc_visual_body" @class="'' + _girlVisual.race + ''">
 			<<include 'NPC visual body'>>

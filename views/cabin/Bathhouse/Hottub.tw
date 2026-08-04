@@ -1,6 +1,14 @@
 :: Hottub [bg-bathhouse]
 <h1 class="ptitle">HOT TUB</h1>
 <br />
+<<if !($locationEvents.hottub_party ?? false) && ($game.partyNight ?? false)>>
+	<<set _partyHotTubGirls = setup.filterNPCs($guests, { likesGuys: true, hair_in: ['black', 'brown'], race_not: ['black'] })>>
+	<<if (_partyHotTubGirls[0] ?? []).length >= 3>>
+		<<set $locationEvents.hottub_party = true>>
+		<<set $tmpEvent = { ids: _partyHotTubGirls[0] }>>
+		<<goto 'Hottub \[Event\] - post party'>>
+	<</if>>
+<</if>>
 <<if _charactersInLocation['hottub'].includes('blair')>>
 	<<link 'Approach Blair'>>
 		<<goto 'Blair - hottub'>>
