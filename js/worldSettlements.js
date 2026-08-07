@@ -295,7 +295,22 @@ setup.settlements = {
 
 		const population  = options.forcePopulation || window.randomInteger(config.sizeRange[0], config.sizeRange[1]);
 		const relOffset   = window.randomInteger(-15, 15);
-		const relationship = Math.max(-100, Math.min(100, (options.relationship !== undefined ? options.relationship : config.baseRelationship) + relOffset));
+
+		const _goodwill = (typeof variables === 'function' && variables().player?.goodwill) || 0;
+		const _gwScale  = Math.max(-20, Math.min(20, _goodwill));
+		const _peacefulTypes    = ['convent', 'monastery', 'medical_colony', 'farming_community', 'survivor_camp', 'nomad_caravan', 'trading_post'];
+		const _aggressiveTypes  = ['raider_camp', 'biker_gang', 'prison_colony'];
+		const _waryTypes        = ['tribal_village', 'cult_compound', 'scavenger_den'];
+		let _goodwillMod = 0;
+		if (_peacefulTypes.includes(type)) {
+			_goodwillMod = _gwScale;
+		} else if (_aggressiveTypes.includes(type)) {
+			_goodwillMod = -_gwScale;
+		} else if (_waryTypes.includes(type)) {
+			_goodwillMod = _gwScale > 0 ? Math.floor(_gwScale / 2) : Math.floor(_gwScale * 0.75);
+		}
+
+		const relationship = Math.max(-100, Math.min(100, (options.relationship !== undefined ? options.relationship : config.baseRelationship) + relOffset + _goodwillMod));
 
 		const resources = {};
 		for (const res in config.production) {
