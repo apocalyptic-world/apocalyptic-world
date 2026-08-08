@@ -80,8 +80,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	/* Display attendants (on-duty check already applied when building _attendantIds) */
 	<<if _attendantIds.length > 0>>
 		<<if typeof _mistressId === 'undefined'>>
+			<<set _attImgNpc = _attendantIds[0].type === 'guest' ? $guests[_attendantIds[0].id] : $slaves[_attendantIds[0].id]>>
 			<center>
-				<<image 'game/misc/basement_attendant.jpg'>>
+				<<actionImage _attImgNpc 'attendant' 'no-text'>>
 			</center>
 		<</if>>
 		<<set _attVerbs = ['cleaning', 'grooming', 'washing', 'drying off', 'scrubbing', 'rinsing']>>

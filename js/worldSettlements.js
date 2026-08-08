@@ -167,6 +167,23 @@ setup.settlements = {
 			description:       'A cult compound led by a charismatic figure. Outsiders are viewed with deep suspicion — or as potential converts.',
 			canSlaveTrade:     false,
 			recruitDifficulty: 3,
+			femaleNames: [
+				'Faith', 'Grace', 'Mercy', 'Hope', 'Charity', 'Patience', 'Prudence', 'Chastity',
+				'Serenity', 'Constance', 'Temperance', 'Purity', 'Blessing', 'Harmony', 'Devotion',
+				'Reverence', 'Felicity', 'Verity', 'Clarity', 'Jubilee', 'Radiance', 'Celestia',
+				'Magdalene', 'Miriam', 'Rebekah', 'Hannah', 'Ruth', 'Naomi', 'Esther', 'Delilah',
+				'Salome', 'Abigail', 'Leah', 'Rachel', 'Deborah', 'Tamar', 'Lydia', 'Priscilla',
+				'Joanna', 'Martha', 'Dinah', 'Kezia', 'Huldah', 'Jael', 'Adah', 'Zillah', 'Orpah',
+				'Eunice', 'Tabitha', 'Damaris', 'Rhoda', 'Lois', 'Dorcas', 'Phoebe', 'Tryphena',
+			],
+			maleNames: [
+				'Ezekiel', 'Elijah', 'Zachariah', 'Obadiah', 'Solomon', 'Amos', 'Nehemiah', 'Malachi',
+				'Abel', 'Enoch', 'Mordecai', 'Lazarus', 'Matthias', 'Barnabas', 'Silas', 'Cornelius',
+				'Thaddeus', 'Isaiah', 'Josiah', 'Gideon', 'Samson', 'Jedediah', 'Jeremiah', 'Micah',
+				'Hosea', 'Joel', 'Phineas', 'Eleazar', 'Ezra', 'Abner', 'Jethro', 'Balthazar',
+				'Caleb', 'Lemuel', 'Zion', 'Asa', 'Boaz', 'Dathan', 'Ethan', 'Gershom', 'Hezekiah',
+				'Uzziah', 'Ahab', 'Barak', 'Jairus', 'Levi', 'Nicodemus', 'Raphael', 'Simeon',
+			],
 		},
 		military_base: {
 			names:             ['Fort Valor', 'Camp Steel', 'Firebase Omega', 'Redoubt Alpha', 'The Garrison', 'Fortress Knox'],
@@ -295,7 +312,22 @@ setup.settlements = {
 
 		const population  = options.forcePopulation || window.randomInteger(config.sizeRange[0], config.sizeRange[1]);
 		const relOffset   = window.randomInteger(-15, 15);
-		const relationship = Math.max(-100, Math.min(100, (options.relationship !== undefined ? options.relationship : config.baseRelationship) + relOffset));
+
+		const _goodwill = (typeof variables === 'function' && variables().player?.goodwill) || 0;
+		const _gwScale  = Math.max(-20, Math.min(20, _goodwill));
+		const _peacefulTypes    = ['convent', 'monastery', 'medical_colony', 'farming_community', 'survivor_camp', 'nomad_caravan', 'trading_post'];
+		const _aggressiveTypes  = ['raider_camp', 'biker_gang', 'prison_colony'];
+		const _waryTypes        = ['tribal_village', 'cult_compound', 'scavenger_den'];
+		let _goodwillMod = 0;
+		if (_peacefulTypes.includes(type)) {
+			_goodwillMod = _gwScale;
+		} else if (_aggressiveTypes.includes(type)) {
+			_goodwillMod = -_gwScale;
+		} else if (_waryTypes.includes(type)) {
+			_goodwillMod = _gwScale > 0 ? Math.floor(_gwScale / 2) : Math.floor(_gwScale * 0.75);
+		}
+
+		const relationship = Math.max(-100, Math.min(100, (options.relationship !== undefined ? options.relationship : config.baseRelationship) + relOffset + _goodwillMod));
 
 		const resources = {};
 		for (const res in config.production) {
@@ -735,7 +767,10 @@ setup.settlements = {
 		}
 
 		const gender   = setup.settlements.rollRecruitGender(s);
-		const namePool = gender === 1 ? setup.npcMaleNames : setup.npcFemaleNames;
+		const _typeNames = setup.settlements.typeConfig[s.type];
+		const namePool = gender === 1
+			? (_typeNames.maleNames   || setup.npcMaleNames)
+			: (_typeNames.femaleNames || setup.npcFemaleNames);
 		const name     = namePool[window.randomInteger(0, namePool.length - 1)];
 
 		s.population = Math.max(1, s.population - 1);
