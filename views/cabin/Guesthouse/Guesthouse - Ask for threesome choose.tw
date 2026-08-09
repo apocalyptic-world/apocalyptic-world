@@ -1,14 +1,5 @@
 :: Guesthouse - Ask for threesome choose {"position":"2307,223","size":"100,100"}
 
-<<set
-	_hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 20, '>='),
-	_nymphoGuests = setup.propertyMatchIndexes($guests, 'traits', 'nymphomaniac', 'includes'),
-	_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
-	_prospects = 0,
-	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id)
->>
-<<run _interestedGuests.delete(_k)>>
-
 <<if !setup.percentageChance(setup.sexChance($tmpGirl))>>
 	<<if $tmpGirl.married && $tmpGirl.family.husband !== 'mc'>>
 		You know that I am married to someone else. I don't want to do it.
@@ -17,95 +8,259 @@
 	<<else>>
 		I'm not in the mood right now, maybe some other time.
 	<</if>>
-<<elseif _interestedGuests.length == 0>>
-	Didn't find anyone interested, maybe some other time.
-<<else>>
-	<<for _i to 0; _i lt _interestedGuests.length; _i++>>
-		<<capture _i, _j>>
-			<<set
-				_guest = $guests[_interestedGuests[_i]],
-				_genderClass = 'gender-' + setup.genderClass(_guest),
-				_j = _interestedGuests[_i],
-				_guestYes = (setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty))),
-				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty))),
-				_mcYes = setup.percentageChance(setup.sexChance(_guest)) || _guest.gender === 1
-			>>
-			<<if setup.getAge(_guest) < 18 || ![0, 1, 2].includes(_guest.gender)>>
-				<<continue>>
+
+<<elseif $tmpGirl.location === 'church' || $tmpGirl.location === 'hospital' || $tmpGirl.location === 'bathhouse'>>
+
+	/* ── Location-filtered threesome pool ── */
+	<<set _tscLoc = $tmpGirl.location, _tscGuestIdxs = [], _tscSlaveIdxs = [], _tscCharKeys = [], _prospects = 0>>
+
+	<<if _tscLoc === 'church'>>
+		<<for _tscI, _tscNpc range $guests>>
+			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18 && _tscNpc.assignedTo === 'church' && setup.isAtWork(_tscNpc, $weather)>>
+				<<run _tscGuestIdxs.push(_tscI)>>
 			<</if>>
+		<</for>>
+		<<for _tscI, _tscNpc range $slaves>>
+			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18 && _tscNpc.assignedTo === 'church' && setup.isAtWork(_tscNpc, $weather)>>
+				<<run _tscSlaveIdxs.push(_tscI)>>
+			<</if>>
+		<</for>>
+		<<set _tscCharKeys = (_charactersInLocation['church'] ?? [])>>
 
-			<div>
-				<span @class="''+_genderClass+''">
-					<<if (_guestYes && _mainYes && _mcYes && (!_guest.gender || !$tmpGirl.gender))>>
-						<<set _prospects++>>
-						<<link _guest.name>>
-							<<set $locationEvents.guesthouse = true>>
-							<<dialogclose>>
+	<<elseif _tscLoc === 'hospital'>>
+		<<for _tscI, _tscNpc range $guests>>
+			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18 && ((_tscNpc.assignedTo === 'hospital' && setup.isAtWork(_tscNpc, $weather)) || typeof _tscNpc.sick !== 'undefined')>>
+				<<run _tscGuestIdxs.push(_tscI)>>
+			<</if>>
+		<</for>>
+		<<for _tscI, _tscNpc range $slaves>>
+			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18 && ((_tscNpc.assignedTo === 'hospital' && setup.isAtWork(_tscNpc, $weather)) || typeof _tscNpc.sick !== 'undefined')>>
+				<<run _tscSlaveIdxs.push(_tscI)>>
+			<</if>>
+		<</for>>
 
-							<<set $guestId2 = _j>>
-							<<set $tmpGirl2 = $guests[_j]>>
-							<<if typeof $charId !== 'undefined'>>
-								<<set $tmpGirlViewBack = 'NPC view - character'>>
-								<<unset $slaveId>>
-							<<elseif typeof $slaveId !== 'undefined'>>
-								<<set $tmpGirlViewBack = 'NPC view'>>
-								<<unset $charId>>
-							<<else>>
-								<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<unset $charId, $slaveId>>
-							<</if>>
-							<<threesome $tmpGirl $tmpGirl2>>
-						<</link>>
-					<</if>>
-				</span>
-			</div>
+	<<else>> /* bathhouse */
+		<<for _tscI, _tscNpc range $guests>>
+			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18>>
+				<<set _tscBsd = setup.bathSchedule[_tscNpc.assignedTo]>>
+				<<if !_tscBsd || timeBetween(_tscBsd.from, _tscBsd.to)>>
+					<<run _tscGuestIdxs.push(_tscI)>>
+				<</if>>
+			<</if>>
+		<</for>>
+		<<set _tscCharKeys = (_charactersInLocation['bathhouse'] ?? [])>>
+	<</if>>
+
+	/* Guests */
+	<<for _tscIdx range _tscGuestIdxs>>
+		<<capture _tscIdx>>
+			<<set _tscG = $guests[_tscIdx]>>
+			<<if ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
+			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
+			<<set
+				_tscGYes = (setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty))),
+				_tscMYes = (setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty))),
+				_tscPYes = setup.percentageChance(setup.sexChance(_tscG)) || _tscG.gender === 1
+			>>
+			<div><span @class="''+_tscGClass+''">
+				<<if _tscGYes && _tscMYes && _tscPYes && (!_tscG.gender || !$tmpGirl.gender)>>
+					<<set _prospects++>>
+					<<link _tscG.name>>
+						<<dialogclose>>
+						<<set $guestId2 = _tscIdx, $tmpGirl2 = $guests[_tscIdx]>>
+						<<unset $charId2, $slaveId2>>
+						<<if typeof $charId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view - character'>>
+							<<unset $slaveId>>
+						<<elseif typeof $slaveId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view'>>
+							<<unset $charId>>
+						<<else>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+						<</if>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</link>>
+				<</if>>
+			</span></div>
 		<</capture>>
 	<</for>>
-	
-	<<set _charPool = (_charactersInLocation['guesthouse'] ?? []).concat(_charactersInLocation['kitchen'] ?? [])>>
-	<<for _charI range _charPool>>
-		<<capture _charI>>
+
+	/* Slaves */
+	<<for _tscIdx range _tscSlaveIdxs>>
+		<<capture _tscIdx>>
+			<<set _tscG = $slaves[_tscIdx]>>
+			<<if ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
+			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
 			<<set
-				_char = $characters[_charI],
-				_genderClass = 'gender-' + setup.genderClass(_char),
-				_charYes = (setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty))),
-				_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty))),
-				_mcYes = setup.percentageChance(setup.sexChance(_char)) || _char.gender === 1
+				_tscGYes = (setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty))),
+				_tscMYes = (setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty))),
+				_tscPYes = setup.percentageChance(setup.sexChance(_tscG)) || _tscG.gender === 1
 			>>
-			<<if setup.getAge(_char) < 18 || ![0, 1, 2].includes(_char.gender)>>
-				<<continue>>
-			<</if>>
-
-			<div>
-				<span @class="''+_genderClass+''">
-					<<if (_charYes && _mainYes && _mcYes && (!_char.gender || !$tmpGirl.gender))>>
-						<<set _prospects++>>
-						<<link _char.name>>
-							<<set $locationEvents.guesthouse = true>>
-							<<dialogclose>>
-
-							<<set $charId2 = _charI>>
-							<<set $tmpGirl2 = $characters[_charI]>>
-							<<if typeof $guestId !== 'undefined'>>
-								<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<unset $charId, $slaveId>>
-							<<elseif typeof $slaveId !== 'undefined'>>
-								<<set $tmpGirlViewBack = 'NPC view'>>
-								<<unset $charId>>
-							<<else>>
-								<<set $tmpGirlViewBack = 'NPC view - character'>>
-								<<unset $slaveId>>
-							<</if>>
-							<<threesome $tmpGirl $tmpGirl2>>
-						<</link>>
-					<</if>>
-				</span>
-			</div>
+			<div><span @class="''+_tscGClass+''">
+				<<if _tscGYes && _tscMYes && _tscPYes && (!_tscG.gender || !$tmpGirl.gender)>>
+					<<set _prospects++>>
+					<<link _tscG.name>>
+						<<dialogclose>>
+						<<set $slaveId2 = _tscIdx, $tmpGirl2 = $slaves[_tscIdx]>>
+						<<unset $charId2, $guestId2>>
+						<<if typeof $charId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view - character'>>
+							<<unset $slaveId>>
+						<<elseif typeof $slaveId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view'>>
+							<<unset $charId>>
+						<<else>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+						<</if>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</link>>
+				<</if>>
+			</span></div>
 		<</capture>>
 	<</for>>
-	
+
+	/* Characters */
+	<<for _tscKey range _tscCharKeys>>
+		<<capture _tscKey>>
+			<<set _tscG = $characters[_tscKey]>>
+			<<if !_tscG || _tscG.id === $tmpGirl.id || setup.getAge(_tscG) < 18 || ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
+			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
+			<<set
+				_tscGYes = (setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty))),
+				_tscMYes = (setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty))),
+				_tscPYes = setup.percentageChance(setup.sexChance(_tscG)) || _tscG.gender === 1
+			>>
+			<div><span @class="''+_tscGClass+''">
+				<<if _tscGYes && _tscMYes && _tscPYes && (!_tscG.gender || !$tmpGirl.gender)>>
+					<<set _prospects++>>
+					<<link _tscG.name>>
+						<<dialogclose>>
+						<<set $charId2 = _tscKey, $tmpGirl2 = $characters[_tscKey]>>
+						<<unset $guestId2, $slaveId2>>
+						<<if typeof $charId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view - character'>>
+							<<unset $slaveId>>
+						<<elseif typeof $slaveId !== 'undefined'>>
+							<<set $tmpGirlViewBack = 'NPC view'>>
+							<<unset $charId>>
+						<<else>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<unset $charId, $slaveId>>
+						<</if>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</link>>
+				<</if>>
+			</span></div>
+		<</capture>>
+	<</for>>
+
 	<<if _prospects == 0>>
-		I didn't match with anyone, maybe some othertime.
+		I didn't match with anyone, maybe some other time.
+	<</if>>
+
+<<else>>
+	/* ── Default: guesthouse/kitchen pool (unchanged) ── */
+	<<set
+		_hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 20, '>='),
+		_nymphoGuests = setup.propertyMatchIndexes($guests, 'traits', 'nymphomaniac', 'includes'),
+		_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
+		_prospects = 0,
+		_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id)
+	>>
+	<<run _interestedGuests.delete(_k)>>
+
+	<<if _interestedGuests.length == 0>>
+		Didn't find anyone interested, maybe some other time.
+	<<else>>
+		<<for _i to 0; _i lt _interestedGuests.length; _i++>>
+			<<capture _i, _j>>
+				<<set
+					_guest = $guests[_interestedGuests[_i]],
+					_genderClass = 'gender-' + setup.genderClass(_guest),
+					_j = _interestedGuests[_i],
+					_guestYes = (setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_guest, $tmpGirl.gender, $tmpGirl.beauty))),
+					_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _guest.gender, _guest.beauty))),
+					_mcYes = setup.percentageChance(setup.sexChance(_guest)) || _guest.gender === 1
+				>>
+				<<if setup.getAge(_guest) < 18 || ![0, 1, 2].includes(_guest.gender)>>
+					<<continue>>
+				<</if>>
+
+				<div>
+					<span @class="''+_genderClass+''">
+						<<if (_guestYes && _mainYes && _mcYes && (!_guest.gender || !$tmpGirl.gender))>>
+							<<set _prospects++>>
+							<<link _guest.name>>
+								<<set $locationEvents.guesthouse = true>>
+								<<dialogclose>>
+
+								<<set $guestId2 = _j>>
+								<<set $tmpGirl2 = $guests[_j]>>
+								<<if typeof $charId !== 'undefined'>>
+									<<set $tmpGirlViewBack = 'NPC view - character'>>
+									<<unset $slaveId>>
+								<<elseif typeof $slaveId !== 'undefined'>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<unset $charId>>
+								<<else>>
+									<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<unset $charId, $slaveId>>
+								<</if>>
+								<<threesome $tmpGirl $tmpGirl2>>
+							<</link>>
+						<</if>>
+					</span>
+				</div>
+			<</capture>>
+		<</for>>
+
+		<<set _charPool = (_charactersInLocation['guesthouse'] ?? []).concat(_charactersInLocation['kitchen'] ?? [])>>
+		<<for _charI range _charPool>>
+			<<capture _charI>>
+				<<set
+					_char = $characters[_charI],
+					_genderClass = 'gender-' + setup.genderClass(_char),
+					_charYes = (setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_char, $tmpGirl.gender, $tmpGirl.beauty))),
+					_mainYes = (setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _char.gender, _char.beauty))),
+					_mcYes = setup.percentageChance(setup.sexChance(_char)) || _char.gender === 1
+				>>
+				<<if setup.getAge(_char) < 18 || ![0, 1, 2].includes(_char.gender)>>
+					<<continue>>
+				<</if>>
+
+				<div>
+					<span @class="''+_genderClass+''">
+						<<if (_charYes && _mainYes && _mcYes && (!_char.gender || !$tmpGirl.gender))>>
+							<<set _prospects++>>
+							<<link _char.name>>
+								<<set $locationEvents.guesthouse = true>>
+								<<dialogclose>>
+
+								<<set $charId2 = _charI>>
+								<<set $tmpGirl2 = $characters[_charI]>>
+								<<if typeof $guestId !== 'undefined'>>
+									<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<unset $charId, $slaveId>>
+								<<elseif typeof $slaveId !== 'undefined'>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<unset $charId>>
+								<<else>>
+									<<set $tmpGirlViewBack = 'NPC view - character'>>
+									<<unset $slaveId>>
+								<</if>>
+								<<threesome $tmpGirl $tmpGirl2>>
+							<</link>>
+						<</if>>
+					</span>
+				</div>
+			<</capture>>
+		<</for>>
+
+		<<if _prospects == 0>>
+			I didn't match with anyone, maybe some othertime.
+		<</if>>
 	<</if>>
 <</if>>
 
@@ -113,5 +268,3 @@
 <<link 'Back'>>
 	<<dialogclose>>
 <</link>>
-
-
