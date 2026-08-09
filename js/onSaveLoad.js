@@ -409,6 +409,10 @@ Save.onLoad.add(function (save) {
                 saveSlaveTraitI--;
             }
         }
+        var _saveSlave = save.state.history[save.state.index].variables.slaves[varsSlaveI];
+        if (!_saveSlave.clothes) {
+            _saveSlave.clothes = setup.getRandomNpcClothes(_saveSlave) ?? {};
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair.quests !== 'undefined' && typeof save.state.history[save.state.index].variables.characters.blair.quests.missing_friend_talked_day === 'undefined') {
@@ -484,6 +488,10 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.guests[saveGuestI].traits.splice(saveGuestTraitI, 1);
                 saveGuestTraitI--;
             }
+        }
+        var _saveGuest = save.state.history[save.state.index].variables.guests[saveGuestI];
+        if (!_saveGuest.clothes) {
+            _saveGuest.clothes = setup.getRandomNpcClothes(_saveGuest) ?? {};
         }
 
     }
