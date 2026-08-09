@@ -13,13 +13,17 @@ function checkAndFixTraits(npc)
 }
 
 Save.onSave.add(function (save, details) {
+    save.metadata = save.metadata || {};
+    save.metadata.version = (document.getElementById('version') || {}).textContent || 'unknown';
     if (details.type === 'disk') {
-        save.metadata = save.metadata || {};
         save.metadata.settings = clone(settings);
     }
 });
 
+
 Save.onLoad.add(function (save) {
+    const _saveVersion = (save.metadata && save.metadata.version) ? save.metadata.version : 'unknown (pre-version tracking)';
+    console.log('[AW] Save was created on version: ' + _saveVersion);
 
     if (save.metadata && save.metadata.settings) {
         for (const name in save.metadata.settings) {
