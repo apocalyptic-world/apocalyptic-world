@@ -1,15 +1,52 @@
 :: NPC foursome choose [sex no-redirect girlview]
 
-<<set _eligible = []>>
-<<for _fci, _fcg range $guests>>
-	<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>>
-		<<continue>>
-	<</if>>
-	<<if !setup.percentageChance(setup.sexChance(_fcg))>>
-		<<continue>>
-	<</if>>
-	<<run _eligible.push(_fci)>>
-<</for>>
+<<set _eligible = [], _foursomeLoc = $tmpGirl.location>>
+
+<<if _foursomeLoc === 'church'>>
+	<<for _fci, _fcg range $guests>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if _fcg.assignedTo !== 'church' || !setup.isAtWork(_fcg, $weather)>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'guest', id: _fci})>>
+	<</for>>
+	<<for _fci, _fcg range $slaves>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if _fcg.assignedTo !== 'church' || !setup.isAtWork(_fcg, $weather)>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'slave', id: _fci})>>
+	<</for>>
+
+<<elseif _foursomeLoc === 'hospital'>>
+	<<for _fci, _fcg range $guests>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if !(_fcg.assignedTo === 'hospital' && setup.isAtWork(_fcg, $weather)) && typeof _fcg.sick === 'undefined'>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'guest', id: _fci})>>
+	<</for>>
+	<<for _fci, _fcg range $slaves>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if typeof _fcg.sick === 'undefined'>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'slave', id: _fci})>>
+	<</for>>
+
+<<elseif _foursomeLoc === 'bathhouse'>>
+	<<for _fci, _fcg range $guests>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<set _fBsd = setup.bathSchedule[_fcg.assignedTo]>>
+		<<if _fBsd && !timeBetween(_fBsd.from, _fBsd.to)>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'guest', id: _fci})>>
+	<</for>>
+
+<<else>>
+	/* Default: all guests */
+	<<for _fci, _fcg range $guests>>
+		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'guest', id: _fci})>>
+	<</for>>
+<</if>>
 
 <<if _eligible.length < 2>>
 	Not enough willing participants right now.
@@ -22,15 +59,16 @@
 		Choose the first partner:
 		<br /><br />
 		<table id="slaves" class="npc-list">
-		<<for _fi range _eligible>>
-			<<capture _fi>>
+		<<for _fentry range _eligible>>
+			<<capture _fentry>>
+				<<set _fnpc = _fentry.type === 'guest' ? $guests[_fentry.id] : $slaves[_fentry.id]>>
 				<tr class="item">
 					<td>
-						<<=setup.displayName($guests[_fi])>> <<=setup.npcListInfo($guests[_fi])>>
+						<<=setup.displayName(_fnpc)>> <<=setup.npcListInfo(_fnpc)>>
 					</td>
 					<td>
 						<<link 'Choose'>>
-							<<set $foursomePickedFirst = _fi>>
+							<<set $foursomePickedFirst = _fentry>>
 							<<goto 'NPC foursome choose'>>
 						<</link>>
 					</td>
@@ -39,7 +77,8 @@
 		<</for>>
 		</table>
 	<<else>>
-		<<set _remaining = _eligible.filter(function(id) { return id !== $foursomePickedFirst; })>>
+		<<set _remaining = _eligible.filter(function(e) { return !(e.type === $foursomePickedFirst.type && e.id === $foursomePickedFirst.id); })>>
+		<<set _fpFirstNpc = $foursomePickedFirst.type === 'guest' ? $guests[$foursomePickedFirst.id] : $slaves[$foursomePickedFirst.id]>>
 		<<if _remaining.length < 1>>
 			Not enough willing participants left.
 			<br /><br />
@@ -48,23 +87,36 @@
 				<<goto 'NPC fuck choose'>>
 			<</link>>
 		<<else>>
-			First partner: <strong><<=setup.displayName($guests[$foursomePickedFirst])>></strong>
+			First partner: <strong><<=setup.displayName(_fpFirstNpc)>></strong>
 			<br />
 			Choose the second partner:
 			<br /><br />
 			<table id="slaves" class="npc-list">
-			<<for _ri range _remaining>>
-				<<capture _ri>>
+			<<for _rentry range _remaining>>
+				<<capture _rentry, _fpFirstNpc>>
+					<<set _rnpc = _rentry.type === 'guest' ? $guests[_rentry.id] : $slaves[_rentry.id]>>
 					<tr class="item">
 						<td>
-							<<=setup.displayName($guests[_ri])>> <<=setup.npcListInfo($guests[_ri])>>
+							<<=setup.displayName(_rnpc)>> <<=setup.npcListInfo(_rnpc)>>
 						</td>
 						<td>
 							<<link 'Choose'>>
-								<<set $guestId2 = $foursomePickedFirst>>
-								<<set $tmpGirl2 = $guests[$foursomePickedFirst]>>
-								<<set $guestId3 = _ri>>
-								<<set $tmpGirl3 = $guests[_ri]>>
+								<<if $foursomePickedFirst.type === 'guest'>>
+									<<set $guestId2 = $foursomePickedFirst.id>>
+									<<unset $slaveId2, $charId2>>
+								<<else>>
+									<<set $slaveId2 = $foursomePickedFirst.id>>
+									<<unset $guestId2, $charId2>>
+								<</if>>
+								<<set $tmpGirl2 = _fpFirstNpc>>
+								<<if _rentry.type === 'guest'>>
+									<<set $guestId3 = _rentry.id>>
+									<<unset $slaveId3, $charId3>>
+								<<else>>
+									<<set $slaveId3 = _rentry.id>>
+									<<unset $guestId3, $charId3>>
+								<</if>>
+								<<set $tmpGirl3 = _rnpc>>
 								<<unset $foursomePickedFirst, $charId, $slaveId>>
 								<<set $tmpGirlViewBack = 'NPC view - guest'>>
 								<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
