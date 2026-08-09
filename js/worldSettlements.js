@@ -906,6 +906,7 @@ setup.settlements = {
 			quantity: s.activeMission.quantity,
 			reward:   s.activeMission.reward,
 		};
+		s.resources[result.item] = Math.min((s.resources[result.item] || 0) + result.quantity, 200);
 		s.activeMission = null;
 		setup.settlements.modifyRelationship(s, 10, 'Completed supply mission');
 		return result;
