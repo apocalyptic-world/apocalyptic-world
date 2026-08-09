@@ -41,7 +41,8 @@ Looking back at them, you take a deep breath, weighing the cost of rejecting the
     <<linkreplace 'Let them stay as settlers'>>
         <<set $player.quests.first_settlers = true>>
         <<set $player.baseManagement ??= {}>>
-        <<set $player.baseManagement.settlers = 3>>
+        <<set $player.baseManagement.settlers = ($player.baseManagement.settlers ?? 0) + 3>>
+        <<set $player.baseManagement.settlersFemales = ($player.baseManagement.settlersFemales ?? 0) + 1>>
         <<run $('#option_away').hide()>>
         <<you>>
             All right. But here, every settler has responsibilities. 

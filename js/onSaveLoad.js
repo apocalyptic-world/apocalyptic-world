@@ -13,13 +13,17 @@ function checkAndFixTraits(npc)
 }
 
 Save.onSave.add(function (save, details) {
+    save.metadata = save.metadata || {};
+    save.metadata.version = (document.getElementById('version') || {}).textContent || 'unknown';
     if (details.type === 'disk') {
-        save.metadata = save.metadata || {};
         save.metadata.settings = clone(settings);
     }
 });
 
+
 Save.onLoad.add(function (save) {
+    const _saveVersion = (save.metadata && save.metadata.version) ? save.metadata.version : 'unknown (pre-version tracking)';
+    console.log('[AW] Save was created on version: ' + _saveVersion);
 
     if (save.metadata && save.metadata.settings) {
         for (const name in save.metadata.settings) {
@@ -405,6 +409,10 @@ Save.onLoad.add(function (save) {
                 saveSlaveTraitI--;
             }
         }
+        var _saveSlave = save.state.history[save.state.index].variables.slaves[varsSlaveI];
+        if (!_saveSlave.clothes) {
+            _saveSlave.clothes = setup.getRandomNpcClothes(_saveSlave) ?? {};
+        }
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair.quests !== 'undefined' && typeof save.state.history[save.state.index].variables.characters.blair.quests.missing_friend_talked_day === 'undefined') {
@@ -480,6 +488,10 @@ Save.onLoad.add(function (save) {
                 save.state.history[save.state.index].variables.guests[saveGuestI].traits.splice(saveGuestTraitI, 1);
                 saveGuestTraitI--;
             }
+        }
+        var _saveGuest = save.state.history[save.state.index].variables.guests[saveGuestI];
+        if (!_saveGuest.clothes) {
+            _saveGuest.clothes = setup.getRandomNpcClothes(_saveGuest) ?? {};
         }
 
     }
