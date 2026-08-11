@@ -326,7 +326,7 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.basementLimit === 'undefined') {
         save.state.history[save.state.index].variables.basementLimit = Math.max(3, save.state.history[save.state.index].variables.slaves.length);
     }
-    if (typeof save.state.history[save.state.index].variables.companionsLimit === 'undefined') {
+    if ((save.state.history[save.state.index].variables.companionsLimit ?? 0) < 8) {
         save.state.history[save.state.index].variables.companionsLimit = 8;
     }
     if (typeof save.state.history[save.state.index].variables.player.reputation_bounty_hunter === 'undefined') {
