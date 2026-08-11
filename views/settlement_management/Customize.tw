@@ -1,6 +1,6 @@
 :: Settlement management - customize
     <div class="cabin-name" style="margin-bottom: 20px">
-        <<textbox "$game.cabinName" $game.cabinName>> 
+        Cabin Name: <<textbox "$game.cabinName" $game.cabinName>> 
     </div>
 
     <div id="flag_choose" style="display: flex; justify-content: center">
@@ -78,3 +78,264 @@
             <</link>>
         </div>
     </div>
+
+<br />
+
+    <div id="thumbnail_choose" style="margin-top: 20px;">
+        <div style="margin-bottom: 8px;"><strong>Change location thumbnails:</strong></div>
+        <div class="cust-thumb-grid">
+
+        /* ── Base/cabin ── */
+        <<set _ctSrc = ($game.baseThumbnail ?? false)
+            ? ($game.baseThumbnail.includes('http') || $game.baseThumbnail.includes('packs/')
+                ? $game.baseThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.baseThumbnail)
+            : setup.ImagePath + 'places/outside/gate.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog 'Base/cabin'>>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link 'Base/cabin'>>
+                    <<set $tmpLocThumbKey = 'baseThumbnail', $tmpLocThumbDefault = 'places/outside/gate.jpg'>>
+                    <<script>>
+                        Dialog.setup("Base/cabin", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+
+        <<if $game.location.farm ?? false>>
+        /* ── Vincent's farm ── */
+        <<set _ctSrc = ($game.farmThumbnail ?? false)
+            ? ($game.farmThumbnail.includes('http') || $game.farmThumbnail.includes('packs/')
+                ? $game.farmThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.farmThumbnail)
+            : setup.ImagePath + 'places/outside/farm.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog "Vincent's farm">>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link "Vincent's farm">>
+                    <<set $tmpLocThumbKey = 'farmThumbnail', $tmpLocThumbDefault = 'places/outside/farm.jpg'>>
+                    <<script>>
+                        Dialog.setup("Vincent's farm", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+        <</if>>
+
+        <<if ($game.location.settlement ?? false) && !$player?.quests?.settlement_burned>>
+        /* ── Rodger's settlement ── */
+        <<set _ctSrc = ($game.settlementThumbnail ?? false)
+            ? ($game.settlementThumbnail.includes('http') || $game.settlementThumbnail.includes('packs/')
+                ? $game.settlementThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.settlementThumbnail)
+            : setup.ImagePath + 'places/outside/settlement.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog "Rodger's settlement">>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link "Rodger's settlement">>
+                    <<set $tmpLocThumbKey = 'settlementThumbnail', $tmpLocThumbDefault = 'places/outside/settlement.jpg'>>
+                    <<script>>
+                        Dialog.setup("Rodger's settlement", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+        <</if>>
+
+        <<if ($characters?.rodger?.quests?.dead && !$characters.octavia.quests.next_move) || $characters.octavia.quests.emberclaw_ready_day>>
+        /* ── Octavia's camp ── */
+        <<set _ctSrc = ($game.octaviaThumbnail ?? false)
+            ? ($game.octaviaThumbnail.includes('http') || $game.octaviaThumbnail.includes('packs/')
+                ? $game.octaviaThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.octaviaThumbnail)
+            : setup.ImagePath + 'places/settlement/octavia.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog "Octavia's camp">>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link "Octavia's camp">>
+                    <<set $tmpLocThumbKey = 'octaviaThumbnail', $tmpLocThumbDefault = 'places/settlement/octavia.jpg'>>
+                    <<script>>
+                        Dialog.setup("Octavia's camp", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+        <</if>>
+
+        <<if $game.location.underground ?? false>>
+        /* ── Underground city ── */
+        <<set _ctSrc = ($game.undergroundThumbnail ?? false)
+            ? ($game.undergroundThumbnail.includes('http') || $game.undergroundThumbnail.includes('packs/')
+                ? $game.undergroundThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.undergroundThumbnail)
+            : setup.ImagePath + 'places/outside/underground.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog 'Underground city'>>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link 'Underground city'>>
+                    <<set $tmpLocThumbKey = 'undergroundThumbnail', $tmpLocThumbDefault = 'places/outside/underground.jpg'>>
+                    <<script>>
+                        Dialog.setup("Underground city", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+        <</if>>
+
+        <<if $game.location.sanctuary ?? false>>
+        /* ── Sanctuary ── */
+        <<set _ctSrc = ($game.sanctuaryThumbnail ?? false)
+            ? ($game.sanctuaryThumbnail.includes('http') || $game.sanctuaryThumbnail.includes('packs/')
+                ? $game.sanctuaryThumbnail
+                : setup.ImagePath + 'custom_portraits/' + $game.sanctuaryThumbnail)
+            : setup.ImagePath + 'places/outside/sanctuary.jpg'>>
+        <div class="cust-thumb-cell">
+            <div class="cust-thumb-wrapper">
+                <img @src="_ctSrc" class="cust-thumb-img">
+                <<capture _ctSrc>>
+                    <span class="cust-thumb-expand-btn">
+                        <<link '&#10530;'>>
+                            <<dialog 'Sanctuary'>>
+                                <div class="cust-thumb-full"><img @src="_ctSrc"></div>
+                            <</dialog>>
+                        <</link>>
+                    </span>
+                <</capture>>
+            </div>
+            <div class="cust-thumb-link-wrap">
+                <<link 'Sanctuary'>>
+                    <<set $tmpLocThumbKey = 'sanctuaryThumbnail', $tmpLocThumbDefault = 'places/outside/sanctuary.jpg'>>
+                    <<script>>
+                        Dialog.setup("Sanctuary", "loc-thumbnail");
+                        Dialog.wiki(Story.get("Customize - location thumbnail").processText());
+                        Dialog.open();
+                    <</script>>
+                <</link>>
+            </div>
+        </div>
+        <</if>>
+
+        </div>
+    </div>
+
+<style>
+    .cust-thumb-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding-left: 12px;
+    }
+    .cust-thumb-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: calc(50% - 8px);
+    }
+    .cust-thumb-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 180px;
+        height: 135px;
+    }
+    .cust-thumb-img {
+        width: 180px;
+        height: 135px;
+        object-fit: cover;
+        border: 1px solid brown;
+        border-radius: 4px;
+        display: block;
+    }
+    .cust-thumb-expand-btn {
+        position: absolute;
+        right: 6px;
+        top: 4px;
+        text-shadow: 2px 2px 0px #000000;
+    }
+    .cust-thumb-expand-btn a.link-internal {
+        background: none !important;
+        color: white !important;
+        width: auto !important;
+        display: inline !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        font-size: 18px !important;
+        font-weight: normal !important;
+    }
+    .cust-thumb-full img {
+        max-width: 100%;
+        object-fit: contain;
+    }
+    .cust-thumb-link-wrap a.link-internal {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 4px 10px !important;
+    }
+</style>

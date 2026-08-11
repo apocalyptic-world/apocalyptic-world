@@ -1,0 +1,86 @@
+:: Customize - location thumbnail
+
+<div id="custom_portraits">
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            [img[setup.ImagePath + $tmpLocThumbDefault]]
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<run delete $game[$tmpLocThumbKey]>>
+                <<unset $tmpLocThumbKey, $tmpLocThumbDefault>>
+                <<dialogclose>>
+                <<goto 'Settlement management'>>
+            <</link>>
+        </div>
+    </div>
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            Use your custom image from link
+            <br />
+            Need to add full link to the image, with starting http protocol.
+            <br />
+            Ratio: [4:3]
+            <br /><br />
+            <<set _locThumbUrl = (($game[$tmpLocThumbKey] ?? '').includes('http') ? $game[$tmpLocThumbKey] : '')>>
+            <<textbox '_locThumbUrl' _locThumbUrl>>
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<set $game[$tmpLocThumbKey] = _locThumbUrl>>
+                <<unset $tmpLocThumbKey, $tmpLocThumbDefault>>
+                <<dialogclose>>
+                <<goto 'Settlement management'>>
+            <</link>>
+        </div>
+    </div>
+    <div class="custom_portrait_item">
+        <div class="custom_portrait_item_img">
+            Use your custom image from pc
+            <br />
+            File needs to be under game/custom_portraits
+            <br />
+            Ratio: [4:3]
+            <br /><br /><br />
+            <input type="file" name="_locThumbnailPath" id="locThumbnailPath">
+            <script>
+                $('#locThumbnailPath').on('change', function () {
+                    SugarCube.State.variables.tmpLocThumbPath = this.files[0].name || null;
+                });
+            </script>
+        </div>
+        <div class="custom_portrait_item_link">
+            <<link 'Choose'>>
+                <<set $game[$tmpLocThumbKey] = $tmpLocThumbPath>>
+                <<unset $tmpLocThumbKey, $tmpLocThumbDefault, $tmpLocThumbPath>>
+                <<dialogclose>>
+                <<goto 'Settlement management'>>
+            <</link>>
+        </div>
+    </div>
+</div>
+
+<style>
+    #custom_portraits {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    .custom_portrait_item {
+        width: 200px;
+        padding: 10px;
+    }
+    .custom_portrait_item img {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+    }
+    .custom_portrait_item_img {
+        position: relative;
+        height: 200px;
+    }
+    .custom_portrait_item_img input {
+        width: 100%;
+        min-width: auto;
+    }
+</style>
