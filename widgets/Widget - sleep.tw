@@ -55,6 +55,7 @@
   <<set $player.metTransGirl = false>>
   <<horny 5>>
   <<set $game.day += 1>>
+  <<if ($game.streetsKilledNpc?._killedDay ?? 0) + 3 < $game.day>><<unset $game.streetsKilledNpc>><</if>>
   <<set _settleDaily = setup.settlements.dailyUpdateAll()>>
   <<for _sdi = 0; _sdi < (_settleDaily.destroyed ?? []).length; _sdi++>>
     <<run setup.sleepMessages.addMain(_settleDaily.destroyed[_sdi] + ' has gone quiet. Word is, they didn\'t make it.')>>

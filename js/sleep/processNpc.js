@@ -165,6 +165,9 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (tmp.totals) tmp.totals.streetworker = (tmp.totals.streetworker ?? 0) - 1;
                 const punct = isGuest ? '!' : '...';
                 setup.sleepMessages.addJob(npc.name + ' <strong class="iitem">was found dead</strong> in the streets' + punct, 'streets');
+                if (!sv.game.streetsKilledNpc) {
+                    sv.game.streetsKilledNpc = Object.assign(clone(npc), { _killedDay: sv.game.day });
+                }
                 opts.pendingRemovals.push({ index: npcIndex });
                 opts.shouldSkip = true;
                 return;

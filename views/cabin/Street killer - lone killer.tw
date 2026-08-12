@@ -1,0 +1,52 @@
+:: Street killer - lone killer [Place bg-underground]
+<h1 class="ptitle">STREETS</h1>
+<br />
+<center>
+    <<image 'places/underground/street_killer_lone.jpg'>>
+</center>
+<br /><br />
+The tip led you to a storage room behind the old market — the kind of place people use when they don't want to be found.
+<br /><br />
+He was alone. Drunk, still wearing the same jacket from last night. He looked up when you stepped through the door and didn't even try to run.
+<br /><br />
+<<newguy>>
+<<set $tmpGuy.name = either('Cain', 'Voss', 'Rex', 'Decker', 'Harlan', 'Pike', 'Slade', 'Murt', 'Breck')>>
+<<set $tmpGuy.strength = randomInteger(15, 35)>>
+<<set $tmpGuy.loyal = false>>
+<<sayNpc $tmpGuy>>
+    You got nothing on me. She was just a whore.
+<</sayNpc>>
+<br />
+He said it like it was supposed to end the conversation.
+<br /><br />
+<div id="sk_kill_block">
+<<linkreplace 'Kill him'>>
+    <<set _skKillerName = $tmpGuy.name>>
+    <<unset $tmpGuy>>
+    <<unset $game.streetsKilledNpc>>
+    <<run $('#sk_enslave_block').hide()>>
+    He barely got another word out. You made it quick — as quick as he'd made it for <<=($game.streetsKilledNpc?.name ?? 'her')>>.
+    <br /><br />
+    <<=_skKillerName>> wouldn't be doing this to anyone else.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>
+<div id="sk_enslave_block">
+<<linkreplace 'Take him'>>
+    <<run setup.npc.addHistory($tmpGuy, 'enslaved', { reason: 'street_murder' })>>
+    <<run $slaves.push($tmpGuy)>>
+    <<unset $tmpGuy>>
+    <<unset $game.streetsKilledNpc>>
+    <<run $('#sk_kill_block').hide()>>
+    You dragged him out by the collar. He started talking then — explaining, justifying — but you weren't listening.
+    <br /><br />
+    The kind of man who only goes after people who can't fight back tends to go very quiet once someone finally does.
+    <br /><br />
+    <<link 'Head home'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>

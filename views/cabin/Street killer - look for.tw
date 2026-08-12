@@ -1,0 +1,24 @@
+:: Street killer - look for [Place bg-underground]
+<h1 class="ptitle">STREETS</h1>
+<br />
+<center>
+    <<image 'places/underground/street_killer_search.jpg'>>
+</center>
+<br /><br />
+<<set _killedName = $game.streetsKilledNpc.name>>
+You worked the block for hours — the girls who were out last night, the cigarette vendor near the corner arch, the drunk sleeping in the doorway opposite the body site. Most looked through you. Nobody wanted to be the one who talked.
+<br /><br />
+Eventually a nod here, a gesture there gave you something. Three possible directions the killer might have gone. No guarantee any of them leads anywhere real.
+<br /><br />
+<<addhours 3>>
+<<set _skOptions = ['Street killer - not found', 'Street killer - lone killer', 'Street killer - group']>>
+<<set _skOutcome = either(_skOptions)>>
+<<link 'Follow the alley east'>>
+    <<goto `_skOutcome`>>
+<</link>>
+<<link 'Check the old warehouse district'>>
+    <<goto `_skOutcome`>>
+<</link>>
+<<link 'Head toward the underground market'>>
+    <<goto `_skOutcome`>>
+<</link>>
