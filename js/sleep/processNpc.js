@@ -257,7 +257,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 }
 
                 // Horny: 15% chance to raise by 7-15 if below 80 and stimulation is enabled
-                if ((sv.player.baseManagement.attendantStimulate ?? true) && slaves[ai].horny < 80 && setup.percentageChance(15)) {
+                if ((sv.player.baseManagement?.attendantStimulate ?? true) && slaves[ai].horny < 80 && setup.percentageChance(15)) {
                     let hornyGain = window.randomInteger(7, 15);
                     const slaveAttrToAtt = npc.gender === 0 ? slaves[ai].likesGirls
                                          : npc.gender === 1 ? slaves[ai].likesGuys
