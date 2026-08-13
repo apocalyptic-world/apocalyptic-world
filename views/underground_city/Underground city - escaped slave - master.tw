@@ -1,0 +1,84 @@
+:: Underground city - escaped slave - master [Place bg-underground]
+<h1 class="ptitle">BAR</h1>
+<br />
+<<newguy>>
+<<set $tmpGuy.name = either('Brek', 'Olar', 'Stet', 'Harv', 'Dune', 'Mace', 'Crog', 'Vane')>>
+<center>
+    <<image 'places/underground/underground_escaped_slave_master.jpg'>>
+</center>
+<br />
+It didn't take long. You described her and the barman jerked his head toward a corner booth without a word. The man was three drinks in — broad, with a face that had gotten used to getting what it wanted. When you sat across from him something shifted in his expression.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    You found her.
+<</sayNpc>>
+<br />
+He straightened up.
+<br /><br />
+<<sayNpc $tmpGuy>>
+    Where is she? Bring her to me and there's caps in it.
+<</sayNpc>>
+<br />
+He slid <strong class="iitem"><<=_reward>> caps</strong> across the table. His eyes stayed flat.
+<br /><br />
+<<set _reward = randomInteger(30, 50)>>
+<<set _canCapture = $slaves.length < $basementLimit>>
+<div id="esm_handover">
+<<linkreplace 'Hand her over'>>
+    <<run $('#esm_keep').hide()>>
+    <<run $('#esm_walk').hide()>>
+    You told him where she was. He was already moving before you finished.
+    <br /><br />
+    You received <strong class="iitem"><<=_reward>> caps</strong>.
+    <<set $player.money += _reward>>
+    <<unset $tmpGirl>>
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>
+<div id="esm_keep">
+<<if _canCapture>>
+<<linkreplace 'Keep her yourself'>>
+    <<run $('#esm_handover').hide()>>
+    <<run $('#esm_walk').hide()>>
+    <<if $player.strength >= $tmpGuy.strength>>
+        You pushed the caps back across the table. He read your face and decided it wasn't worth the trouble.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            Fine. She's yours. Not my problem anymore.
+        <</sayNpc>>
+        <br />
+        He picked up his drink. The conversation was over.
+        <br /><br />
+        <<run $slaves.push($tmpGirl)>>
+        <<statsAdd 'people_captured'>>
+        <<unset $tmpGirl>>
+        <br />
+        <<link 'Leave'>>
+            <<goto 'Underground city'>>
+        <</link>>
+    <<else>>
+        He didn't move. Just looked at you like you'd said something stupid.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            That's my property. You want to make this a thing?
+        <</sayNpc>>
+        <br />
+        Three men at the bar turned to look. You weren't carrying enough to make it worth it.
+        <br /><br />
+        <<unset $tmpGirl>>
+        <<link 'Back down'>>
+            <<goto 'Underground city'>>
+        <</link>>
+    <</if>>
+<</linkreplace>>
+<</if>>
+</div>
+<div id="esm_walk">
+<<link 'Say nothing and walk away'>>
+    <<unset $tmpGirl>>
+    <<goto 'Underground city'>>
+<</link>>
+</div>
