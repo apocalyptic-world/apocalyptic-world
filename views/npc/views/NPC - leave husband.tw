@@ -1,0 +1,93 @@
+:: NPC - leave husband [no-redirect]
+
+<!-- #### npc_leave_husband.jpg | two people in a quiet post-apocalyptic cabin room, intimate conversation, warm dim light, serious mood --ar 4:2 --p -->
+<center>
+    <<actionImage $tmpGirl approach>>
+</center>
+<br />
+
+<<set _rel = $tmpGirl.relationship ?? 0>>
+<<set _corruption = $tmpGirl.corruption ?? 0>>
+<<set _husbandName = setup.getNpcById($tmpGirl.family.husband)?.name ?? 'her husband'>>
+
+You steered the conversation toward <<=_husbandName>>. Not accusingly — just asking how things really were between them. Whether she was happy.
+<br /><br />
+
+<<if _rel >= 80>>
+
+She was quiet for a moment. Something shifted in her expression.
+<br /><br />
+
+<<if _rel >= 90 || _corruption >= 50>>
+<<sayNpc $tmpGirl>>
+    Honestly? It's not what I thought it would be. I don't know anymore.
+<</sayNpc>>
+<<else>>
+<<sayNpc $tmpGirl>>
+    That's... a complicated question.
+<</sayNpc>>
+<</if>>
+<br />
+She didn't walk away.
+<br /><br />
+
+<div id="lh_push">
+<<linkreplace 'Tell her you want her for yourself'>>
+    <<run $('#lh_leave').hide()>>
+    You said it plainly — that you wanted her here, with you. Not just as a guest passing through.
+    <br /><br />
+    <<set _leaveChance = Math.min(_rel - 40 + Math.floor(_corruption / 2), 90)>>
+    <<if setup.percentageChance(_leaveChance)>>
+        She looked at you for a long moment. Then something in her settled.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            I've been telling myself it's fine. It's not fine. I'll end it with him.
+        <</sayNpc>>
+        <br />
+        She said it quietly, like a decision she'd already been building to.
+        <br /><br />
+        <<include 'NPC end marriage - finalize'>>
+        <<set $guests[$guestId] = $tmpGirl>>
+        <strong>(Marriage ended)</strong>
+    <<else>>
+        She looked at you. Then at the floor.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            I... I can't. It's not that simple. I'm sorry.
+        <</sayNpc>>
+        <br />
+        She seemed genuinely torn about it, which was something.
+        <br /><br />
+        <<set $tmpGirl.relationship = Math.max(_rel - 3, -100)>>
+        <<set $guests[$guestId] = $tmpGirl>>
+        <strong>(Relationship − 3)</strong>
+    <</if>>
+    <br /><br />
+    <<link 'Back'>>
+        <<if $tmpGirlViewBack>><<goto $tmpGirlViewBack>><<else>><<goto 'NPC view - guest'>><</if>>
+    <</link>>
+<</linkreplace>>
+</div>
+<div id="lh_leave">
+<<link 'Leave it alone'>>
+    <<if $tmpGirlViewBack>><<goto $tmpGirlViewBack>><<else>><<goto 'NPC view - guest'>><</if>>
+<</link>>
+</div>
+
+<<else>>
+
+<<sayNpc $tmpGirl>>
+    My marriage is my business. But... thank you for asking.
+<</sayNpc>>
+<br />
+She wasn't offended. If anything, she seemed a little flattered that someone cared enough to ask.
+<br /><br />
+<<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 2, 100)>>
+<<set $guests[$guestId] = $tmpGirl>>
+<strong>(Happy + 2)</strong>
+<br /><br />
+<<link 'Back'>>
+    <<if $tmpGirlViewBack>><<goto $tmpGirlViewBack>><<else>><<goto 'NPC view - guest'>><</if>>
+<</link>>
+
+<</if>>
