@@ -278,6 +278,7 @@
 <<set _sleepGuestOpts = { type: 'guest', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false, scavengingDidntReturnId: null }>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 		<<set _npc = $guests[_guestI]>>
+		<<run delete $guests[_guestI].basementVoluntary>>
 		<<if _isOvercrowded>>
 			<<setNpcStats 'guest' _guestI 'happy' -5>>
 		<</if>>

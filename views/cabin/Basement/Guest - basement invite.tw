@@ -1,0 +1,43 @@
+:: Guest - basement invite [Place bg-basement]
+
+<h1 class="ptitle">BASEMENT</h1>
+<br />
+
+<center>
+    <<image 'places/cabin/guest_basement_invite.jpg' sfw>>
+</center>
+<br />
+
+You pulled <<=setup.displayName($tmpGirl)>> aside and asked if she wanted to come spend some time with you down in the basement.
+<br /><br />
+
+<<if ($tmpGirl.likesGuys ?? true)>>
+    <<if ($tmpGirl.relationship ?? 0) >= 85>>
+    <<sayNpc $tmpGirl>>
+        The basement? Sure. Lead the way.
+    <</sayNpc>>
+    <<else>>
+    <<sayNpc $tmpGirl>>
+        The basement? I — okay. Yeah.
+    <</sayNpc>>
+    <</if>>
+    <br />
+    She followed you to the basement door without another word.
+    <br /><br />
+    <<link 'Take her down'>>
+        <<run $guests[$guestId].basementVoluntary = true>>
+        <<goto 'Basement'>>
+    <</link>><<link 'Actually, never mind'>>
+        <<if $tmpGirlBack>><<goto $tmpGirlBack>><<else>><<goto 'Guest house'>><</if>>
+    <</link>>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        No thanks. That's not really my thing.
+    <</sayNpc>>
+    <br />
+    She walked away without another word.
+    <br /><br />
+    <<link 'Go back'>>
+        <<if $tmpGirlBack>><<goto $tmpGirlBack>><<else>><<goto 'Guest house'>><</if>>
+    <</link>>
+<</if>>
