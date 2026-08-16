@@ -116,7 +116,7 @@
 									<<set $slaveId3 = _rentry.id>>
 									<<unset $guestId3, $charId3>>
 								<</if>>
-								<<set $tmpGirl3 = _rnpc>>
+								<<set $tmpGirl3 = _rentry.type === 'guest' ? $guests[_rentry.id] : $slaves[_rentry.id]>>
 								<<unset $foursomePickedFirst, $charId, $slaveId>>
 								<<set $tmpGirlViewBack = 'NPC view - guest'>>
 								<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
