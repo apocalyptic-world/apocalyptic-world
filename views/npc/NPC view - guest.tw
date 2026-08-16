@@ -204,11 +204,23 @@
 	<<goto 'NPC customize'>>
 <</link>>
 
-<<if $player.energy >= 10 && hasTime(1) && ($tmpGirl.traits ?? []).includes('masochist') && setup.NpcInHome($tmpGirl)>>
+<<if $player.energy >= 10 && hasTime(1) && ($tmpGirl.traits ?? []).includes('masochist') && ($tmpGirl.basementVoluntary ?? false) && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Punish ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<set $tmpGirl.location = 'basement'>>
 		<<goto 'NPC punish'>>
+	<</link>>
+<</if>>
+
+<<if [0, 2].includes($tmpGirl.gender) && ($tmpGirl.relationship ?? 0) >= 70 && !($tmpGirl.basementVoluntary ?? false) && setup.NpcInHome($tmpGirl)>>
+	<<link 'Invite her to the basement'>>
+		<<goto 'Guest - basement invite'>>
+	<</link>>
+<</if>>
+<<if ($tmpGirl.basementVoluntary ?? false) && setup.NpcInHome($tmpGirl)>>
+	<<link 'Send her back to guesthouse'>>
+		<<run delete $guests[$guestId].basementVoluntary>>
+		<<if $tmpGirlBack>><<goto $tmpGirlBack>><<else>><<goto 'Guest house'>><</if>>
 	<</link>>
 <</if>>
 

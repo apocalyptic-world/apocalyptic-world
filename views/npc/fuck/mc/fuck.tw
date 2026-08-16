@@ -59,18 +59,27 @@
         <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
         <br />
         <<if $sexForced && !$tmpGirl.traits.includes('masochist')>>
-            <<set
-                $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
-                $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
-                $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
-            >>
-            <<=setup.pronounceWhat($tmpGirl, true)>> asks you to leave <<=setup.pronounceWho($tmpGirl)>> alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+            <<set $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100)>>
+            <<if !($tmpGirl.basementVoluntary ?? false)>>
+                <<set
+                    $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+                    $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+                >>
+                <<=setup.pronounceWhat($tmpGirl, true)>> asks you to leave <<=setup.pronounceWho($tmpGirl)>> alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+            <<else>>
+                <<=setup.pronounceWhat($tmpGirl, true)>> goes along with it.<strong> (Submission + 2)</strong>
+            <</if>>
         <<else>>
             <<set
                 $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
                 $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
             >>
-            <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+            <<if ($tmpGirl.basementVoluntary ?? false)>>
+                <<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 1, 100)>>
+                <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1, Submission + 1)</strong>
+            <<else>>
+                <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+            <</if>>
         <</if>>
          <br />
     <</if>>

@@ -234,6 +234,12 @@ He says, his voice carrying the oily slickness of someone used to making bargain
             }>>
             <<unset $fightClubPrize, $fightCage>>
             <<goto 'NPC fight cage - proposal'>>
+        <<elseif (_fighterWomen[0] ?? []).length && setup.percentageChance(5)>>
+            <<set $tmpEvent = {
+                npc: $fightCage.fighters[_fighterWomen[0][0]]
+            }>>
+            <<unset $fightClubPrize, $fightCage>>
+            <<goto 'NPC fight cage - crowd gangbang'>>
         <<else>>
             <<unset $fightClubPrize, $fightCage>>
             <<goto 'Fight cage'>>

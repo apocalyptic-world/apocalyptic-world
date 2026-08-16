@@ -5,7 +5,7 @@
 
 <<set _ltLeader    = _lt.leader>>
 <<set _ltRelLevel  = setup.settlements.getRelationshipLevel(_lt)>>
-<<set _ltTopRes    = setup.settlements.getTopResources(_lt, 5)>>
+<<set _ltTopRes    = Object.keys(_lt.resources ?? {}).filter(function(k) { return (_lt.resources[k] ?? 0) > 0; }).sort(function(a,b) { return _lt.resources[b] - _lt.resources[a]; })>>
 <<set _ltFoodCrit  = (_lt.resources?.food ?? 0) < 10>>
 
 <<set _ltOpeners = _ltRelLevel === 'allied'

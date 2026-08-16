@@ -1,0 +1,45 @@
+:: Street killer - group won [Place bg-underground]
+<h1 class="ptitle">STREETS</h1>
+<br />
+<center>
+    <<image 'places/underground/street_killer_group_won.jpg'>>
+</center>
+<br /><br />
+Both of them were down. One wasn't getting back up. The other was conscious, barely, hands raised — more reflex than surrender.
+<br /><br />
+<<newguy>>
+<<set $tmpGuy.name = either('Vorn', 'Cass', 'Drek', 'Sutter', 'Bale', 'Rook')>>
+<<set $tmpGuy.strength = randomInteger(10, 25)>>
+<<set $tmpGuy.loyal = false>>
+<<sayNpc $tmpGuy>>
+    Alright — alright. Just don't —
+<</sayNpc>>
+<br />
+He couldn't finish the sentence.
+<br /><br />
+<<unset $game.streetsKilledNpc>>
+<div id="skgw_kill_block">
+<<linkreplace 'Kill him'>>
+    <<set _skgwName = $tmpGuy.name>>
+    <<unset $tmpGuy>>
+    <<run $('#skgw_take_block').hide()>>
+    You didn't leave him with a choice. Neither had he.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>
+<div id="skgw_take_block">
+<<linkreplace 'Take him'>>
+    <<run setup.npc.addHistory($tmpGuy, 'enslaved', { reason: 'street_murder' })>>
+    <<run $slaves.push($tmpGuy)>>
+    <<unset $tmpGuy>>
+    <<run $('#skgw_kill_block').hide()>>
+    You hauled him up by the collar. He came without a fight — which somehow made it worse.
+    <br /><br />
+    <<link 'Head home'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>

@@ -38,6 +38,11 @@
 <<if $charId && $tmpGirl.corruption > 50 && !$tmpGirl.canPunish>>
 	<<set $tmpGirl.canPunish = true>>
 <</if>>
+<<if [0, 2].includes($tmpGirl.gender) && ($tmpGirl.married ?? false) && ($tmpGirl.family?.husband) && $tmpGirl.family.husband !== 'mc' && ($tmpGirl.relationship ?? 0) >= 60 && $guestId !== undefined>>
+	<<link 'Ask her about her husband'>>
+		<<goto 'NPC - leave husband'>>
+	<</link>>
+<</if>>
 <<link 'Back'>>
   	<<if $tmpGirlViewBack>>
 		<<goto $tmpGirlViewBack>>

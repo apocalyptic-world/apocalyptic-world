@@ -53,7 +53,7 @@
 
 	/* Guests */
 	<<for _tscIdx range _tscGuestIdxs>>
-		<<capture _tscIdx>>
+		<<capture _tscIdx, _tscLoc>>
 			<<set _tscG = $guests[_tscIdx]>>
 			<<if ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
 			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
@@ -79,6 +79,7 @@
 							<<set $tmpGirlViewBack = 'NPC view - guest'>>
 							<<unset $charId, $slaveId>>
 						<</if>>
+						<<set $tmpGirl2.location = _tscLoc>>
 						<<threesome $tmpGirl $tmpGirl2>>
 					<</link>>
 				<</if>>
@@ -88,7 +89,7 @@
 
 	/* Slaves */
 	<<for _tscIdx range _tscSlaveIdxs>>
-		<<capture _tscIdx>>
+		<<capture _tscIdx, _tscLoc>>
 			<<set _tscG = $slaves[_tscIdx]>>
 			<<if ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
 			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
@@ -114,6 +115,7 @@
 							<<set $tmpGirlViewBack = 'NPC view - guest'>>
 							<<unset $charId, $slaveId>>
 						<</if>>
+						<<set $tmpGirl2.location = _tscLoc>>
 						<<threesome $tmpGirl $tmpGirl2>>
 					<</link>>
 				<</if>>
@@ -123,7 +125,7 @@
 
 	/* Characters */
 	<<for _tscKey range _tscCharKeys>>
-		<<capture _tscKey>>
+		<<capture _tscKey, _tscLoc>>
 			<<set _tscG = $characters[_tscKey]>>
 			<<if !_tscG || _tscG.id === $tmpGirl.id || setup.getAge(_tscG) < 18 || ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
 			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
@@ -149,6 +151,7 @@
 							<<set $tmpGirlViewBack = 'NPC view - guest'>>
 							<<unset $charId, $slaveId>>
 						<</if>>
+						<<set $tmpGirl2.location = _tscLoc>>
 						<<threesome $tmpGirl $tmpGirl2>>
 					<</link>>
 				<</if>>

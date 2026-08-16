@@ -7,6 +7,72 @@
 	<<backButton 'Wood cabin'>>
 	BASEMENT
 </h1>
+<<set _voluntaryGuests = ($guests ?? []).map(function(g, i) { return { npc: g, idx: i }; }).filter(function(e) { return e.npc.basementVoluntary; })>>
+<<if _voluntaryGuests.length > 0>>
+<h3>Guests</h3>
+<table id="guests" class="npc-list">
+<<for _vgEntry range _voluntaryGuests>>
+<<capture _vgEntry>>
+<<set _vgGenderClass = 'gender-' + setup.genderClass(_vgEntry.npc)>>
+<<set _vgColorStyle = (typeof _vgEntry.npc.color !== 'undefined') ? (' npc-color color-' + _vgEntry.npc.color) : ''>>
+<tr class="item">
+	<td style="min-width: 25%">
+		<span @class="_vgGenderClass + _vgColorStyle">
+			<div class="tooltip">
+				<span class="tooltiptext" style="left: -130px; background-color: transparent; opacity: 1;">
+					<<set _girlVisual to _vgEntry.npc>>
+					<<for _skill range (_vgEntry.npc.skills ?? [])>>
+						<<if typeof setup.skills[_skill] !== 'undefined'>>
+							<div class="trait tooltip">
+								<<=setup.skills[_skill].title>>
+							</div>
+						<</if>>
+						<br />
+					<</for>>
+					<div class="say npcsay npc-say-visual">
+						<div class="girl_info_picture">
+							<<if _vgEntry.npc.portrait>>
+								<div class="say_custom_portrait">
+									<<include 'NPC visual'>>
+								</div>
+							<<else>>
+								<<include 'NPC visual'>>
+							<</if>>
+						</div>
+					</div>
+					<<for _trait range (_vgEntry.npc.traits ?? [])>>
+						<div class="trait tooltip">
+							<<=setup.traits[_trait].title>>
+						</div>
+						<br />
+					<</for>>
+				</span>
+				<<link _vgEntry.npc.name>>
+					<<set $tmpGirl = _vgEntry.npc>>
+					<<set $tmpGirl.location = 'basement'>>
+					<<set $tmpGirlBack = 'Basement'>>
+					<<set $tmpGirl.rape = false>>
+					<<set $tmpGirlCapture = false>>
+					<<set $tmpGirlInvite = false>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<set $guestId = _vgEntry.idx>>
+					<<unset $slaveId, $charId, $childId>>
+					<<goto 'NPC view - guest'>>
+				<</link>>
+			</div>
+		</span>
+		<<=setup.npcListInfo(_vgEntry.npc)>>
+	</td>
+	<td>
+		<<npcListView _vgEntry.npc _vgEntry.idx 'guest'>>
+	</td>
+</tr>
+<</capture>>
+<</for>>
+</table>
+<br />
+<</if>>
+
 <h3>Slaves</h3>
 <<set _basementLimitShow = ($basementLimit - $slaves.length)>>
 <<if _basementLimitShow < 0>>
@@ -81,12 +147,13 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<if _attendantIds.length > 0>>
 		<<if typeof _mistressId === 'undefined'>>
 			<<set _attImgNpc = _attendantIds[0].type === 'guest' ? $guests[_attendantIds[0].id] : $slaves[_attendantIds[0].id]>>
+			<<set _attImgNpc.location = 'basement'>>
 			<center>
 				<<actionImage _attImgNpc 'attendant' 'no-text'>>
 			</center>
 		<</if>>
 		<<set _attVerbs = ['cleaning', 'grooming', 'washing', 'drying off', 'scrubbing', 'rinsing']>>
-		<<if ($player.baseManagement.attendantStimulate ?? true)>>
+		<<if ($player.baseManagement?.attendantStimulate ?? true)>>
 			<<run _attVerbs.push('tickling', 'teasing')>>
 			<<if $slaves.some(s => s.gender === 0 || s.gender === 2)>>
 				<<run _attVerbs.push('fingering')>>

@@ -165,6 +165,9 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (tmp.totals) tmp.totals.streetworker = (tmp.totals.streetworker ?? 0) - 1;
                 const punct = isGuest ? '!' : '...';
                 setup.sleepMessages.addJob(npc.name + ' <strong class="iitem">was found dead</strong> in the streets' + punct, 'streets');
+                if (!sv.game.streetsKilledNpc) {
+                    sv.game.streetsKilledNpc = Object.assign(clone(npc), { _killedDay: sv.game.day });
+                }
                 opts.pendingRemovals.push({ index: npcIndex });
                 opts.shouldSkip = true;
                 return;
@@ -257,7 +260,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 }
 
                 // Horny: 15% chance to raise by 7-15 if below 80 and stimulation is enabled
-                if ((sv.player.baseManagement.attendantStimulate ?? true) && slaves[ai].horny < 80 && setup.percentageChance(15)) {
+                if ((sv.player.baseManagement?.attendantStimulate ?? true) && slaves[ai].horny < 80 && setup.percentageChance(15)) {
                     let hornyGain = window.randomInteger(7, 15);
                     const slaveAttrToAtt = npc.gender === 0 ? slaves[ai].likesGirls
                                          : npc.gender === 1 ? slaves[ai].likesGuys

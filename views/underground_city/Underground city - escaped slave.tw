@@ -1,0 +1,95 @@
+:: Underground city - escaped slave [Place bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br />
+<<newgirl>>
+<<set $tmpGirl.relationship = 0>>
+<<set $tmpGirl.happy = random(5, 20)>>
+<center>
+    <<image 'places/underground/underground_escaped_slave.jpg'>>
+</center>
+<br />
+You were cutting through one of the service corridors behind the main hall when you saw her — pressed into a gap between two rusted storage units, knees drawn up, watching the passage entrance. A collar around her throat. She spotted you a half-second after you spotted her.
+<br /><br />
+She didn't run. Just went very still.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I'm not going back.
+<</sayNpc>>
+<br />
+She said it quietly. Not a plea. A statement.
+<br /><br />
+You didn't move. She read something in that and her jaw tightened.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    Two years. Two years I worked for him. Did everything right. And then he just —
+<</sayNpc>>
+<br />
+She stopped. Looked at the floor for a moment, then back at you.
+<br /><br />
+<<sayNpc $tmpGirl>>
+    I'm not going back. Whatever you do to me out here, it's better than that place. I mean it.
+<</sayNpc>>
+<br />
+She held your gaze when she said it. Not begging. Daring you to make it worse than what she left.
+<br /><br />
+<<set _canCapture = $player.energy >= 20 && $slaves.length < $basementLimit>>
+<<set _canInvite = ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<div id="es_capture">
+<<if _canCapture>>
+<<linkreplace 'Capture her'>>
+    <<run $('#es_invite').hide()>>
+    <<run $('#es_return').hide()>>
+    <<run $('#es_leave').hide()>>
+    She saw it in your face before you moved. Didn't fight — maybe she'd known this was how it was going to go. You hauled her up by the arm and she came with you, quiet the whole way.
+    <br /><br />
+    <<set $tmpGirl.capture = false>>
+    <<energy -20>>
+    <<run $slaves.push($tmpGirl)>>
+    <<statsAdd 'people_captured'>>
+    <br />
+    <<link 'Head home'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+<</if>>
+</div>
+<div id="es_invite">
+<<if _canInvite>>
+<<linkreplace 'Offer her a place to stay'>>
+    <<run $('#es_capture').hide()>>
+    <<run $('#es_return').hide()>>
+    <<run $('#es_leave').hide()>>
+    She studied your face like she was looking for the part where it turned into something worse. You waited.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        You're serious.
+    <</sayNpc>>
+    <br />
+    Not a question. She grabbed the collar and pulled it off over her head in one motion, let it drop.
+    <br /><br />
+    <<set $tmpGirl.capture = false>>
+    <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 30, 100)>>
+    <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 40, 100)>>
+    <<run $guests.push($tmpGirl)>>
+    <br />
+    <<link 'Head home'>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+<</if>>
+</div>
+<div id="es_return">
+<<linkreplace 'Find her master'>>
+    <<run $('#es_capture').hide()>>
+    <<run $('#es_invite').hide()>>
+    <<run $('#es_leave').hide()>>
+    She grabbed your arm when she realized where you were going. You shook her off.
+    <br /><br />
+    <<goto 'Underground city - escaped slave - master'>>
+<</linkreplace>>
+</div>
+<div id="es_leave">
+<<link 'Leave her be'>>
+    <<goto 'Underground city'>>
+<</link>>
+</div>

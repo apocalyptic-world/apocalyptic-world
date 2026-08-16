@@ -292,6 +292,10 @@ Save.onLoad.add(function (save) {
         }
     }
 
+    if (save.state.history[save.state.index].variables.characters.laura?.name) {
+        save.state.history[save.state.index].variables.characters.laura.race ??= 'white';
+    }
+
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
     save.state.history[save.state.index].variables.characters.eve = (save.state.history[save.state.index].variables.characters.eve ?? {});
     if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' ) {
@@ -326,9 +330,11 @@ Save.onLoad.add(function (save) {
     if (typeof save.state.history[save.state.index].variables.basementLimit === 'undefined') {
         save.state.history[save.state.index].variables.basementLimit = Math.max(3, save.state.history[save.state.index].variables.slaves.length);
     }
-    if (typeof save.state.history[save.state.index].variables.companionsLimit === 'undefined') {
-        save.state.history[save.state.index].variables.companionsLimit = 8;
-    }
+    save.state.history.forEach(function(state) {
+        if ((state.variables.companionsLimit ?? 0) < 8) {
+            state.variables.companionsLimit = 8;
+        }
+    });
     if (typeof save.state.history[save.state.index].variables.player.reputation_bounty_hunter === 'undefined') {
         save.state.history[save.state.index].variables.player.reputation_bounty_hunter = 0;
     }

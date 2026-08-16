@@ -23,6 +23,11 @@
 		<div id="girl_face" @class="'race-' + _girlVisual.race + ''">
 			<<include 'NPC visual face male'>>
 		</div>
+		<<if _girlVisual.hair && _girlVisual.hair !== 'bald'>>
+			<div id="male_hair" @class="'color-' + _girlVisual.hair + ''">
+				<<include 'NPC visual hair male'>>
+			</div>
+		<</if>>
 		<<if _girlVisual?.clothes?.top>>
 			<div id="girl_top" @class="'top' + _girlVisual.clothes.top + ''" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/male/top/' + _girlVisual.clothes.top + '.png\')'"></div>
 		<</if>>

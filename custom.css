@@ -407,19 +407,23 @@ div#t3m a {
   cursor: pointer;
 }
 
-table#slaves .gender-girl a {
+table#slaves .gender-girl a,
+table#guests .gender-girl a {
   color: pink;
 }
 
-table#slaves .gender-guy a {
+table#slaves .gender-guy a,
+table#guests .gender-guy a {
   color: #1e3e9e;
 }
 
-table#slaves .gender-tgirl a {
+table#slaves .gender-tgirl a,
+table#guests .gender-tgirl a {
   color: #793fef;
 }
 
-table#slaves .gender-tguy a {
+table#slaves .gender-tguy a,
+table#guests .gender-tguy a {
   color: mediumaquamarine;
 }
 
@@ -762,6 +766,16 @@ div.girl_info_picture {
   transform-origin: 100% 0;
 }
 
+.npcsay div.girl_info_picture:has(#npc_visual_body_male) {
+  transform: scale(1);
+  transform-origin: 100% 0;
+}
+
+.companion div.girl_info_picture:has(#npc_visual_body_male) {
+  transform: scale(0.7);
+  transform-origin: 70% 0;
+}
+
 div#mobile_clock {
   position: fixed;
   top: 0;
@@ -776,7 +790,8 @@ div#mobile_clock {
 }
 
 @media only screen and (max-width: 1024px) {
-  #slaves.npc-list tr.item .tooltiptext {
+  #slaves.npc-list tr.item .tooltiptext,
+  #guests.npc-list tr.item .tooltiptext {
     display:none !important;
   }
 }
@@ -1191,7 +1206,8 @@ div#characters-in-location a {
   width: 39pt;
 }
 
-#slaves .item {
+#slaves .item,
+#guests .item {
   font-size: 11pt;
 }
 
