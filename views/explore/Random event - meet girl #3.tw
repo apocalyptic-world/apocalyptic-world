@@ -43,7 +43,7 @@
 	}
 ]>>
 
-<<set _type = (!_npcGender && setup.percentageChance(20) ? 'masturbate' : 'default')>>
+<<set _type = (!_npcGender && setup.percentageChance(100) ? 'masturbate' : 'default')>>
 <<if _type === 'masturbate'>>
 	<<set $tmpGirl.horny = 100>>
 <</if>>
@@ -64,14 +64,56 @@
 <<=_npcData.text>>
 <br /><br />
 
-<<link 'Go closer'>>
-	<<set $tmpGirl.rape to true>>
-	<<set $tmpGirlCapture = true>>
-	<<set $tmpGirlInvite = true>>
-	<<unset $tmpGirlViewBack>>
-	<<unset $slaveId, $guestId, $charId, $childId>>
-	<<set $tmpGirlBack = 'Outside'>>
-	<<goto [[NPC view]]>>
+<<if _type === 'masturbate'>>
+<div id="fml_ask">
+<<linkreplace 'Step into the clearing'>>
+    <<run $('#fml_hide').hide()>>
+    A twig snapped under your foot. She spun around, hands flying to cover herself — then froze when she saw you standing at the treeline.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        How long have you been standing there?
+    <</sayNpc>>
+    <br />
+    <<you>>
+        Long enough. You want company?
+    <</you>>
+    <br />
+    She held your gaze for a long moment. Then her hands dropped.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        <<=either(['...come here.', "Lock you out of my head for two minutes and look what happens.", "You'd better be worth the interruption."])>>
+    <</sayNpc>>
+    <br />
+    <<link 'Go to her'>>
+        <<set $tmpGirlInvite = true>>
+        <<unset $tmpGirlViewBack>>
+        <<unset $slaveId, $guestId, $charId, $childId>>
+        <<set $tmpGirlBack = 'Outside'>>
+        <<goto [[NPC view]]>>
+    <</link>>
+<</linkreplace>>
+</div>
+<div id="fml_hide">
+<<link 'Watch from the treeline'>>
+    <<set $tmpGirl.rape to true>>
+    <<set $tmpGirlCapture = true>>
+    <<set $tmpGirlInvite = true>>
+    <<unset $tmpGirlViewBack>>
+    <<unset $slaveId, $guestId, $charId, $childId>>
+    <<set $tmpGirlBack = 'Outside'>>
+    <<goto [[NPC view]]>>
 <</link>>
+</div>
+<<else>>
+<<link 'Go closer'>>
+    <<set $tmpGirl.rape to true>>
+    <<set $tmpGirlCapture = true>>
+    <<set $tmpGirlInvite = true>>
+    <<unset $tmpGirlViewBack>>
+    <<unset $slaveId, $guestId, $charId, $childId>>
+    <<set $tmpGirlBack = 'Outside'>>
+    <<goto [[NPC view]]>>
+<</link>>
+<</if>>
 
 [[Leave|Outside]]
