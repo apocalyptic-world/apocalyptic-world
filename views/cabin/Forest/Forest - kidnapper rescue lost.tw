@@ -1,0 +1,28 @@
+:: Forest - kidnapper rescue lost [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+<<set _kidnapped = $guests[$forestKidnapEvent]>>
+<<set _kidnappedName = _kidnapped.name>>
+
+
+<center>
+    <<image 'places/forest/forest_kidnapper_lost.jpg' sfw>>
+</center>
+<br />
+
+They were better than they looked. You took a knife across the ribs and had to pull back before they finished the job. By the time you cleared the treeline, they were already moving deeper into the forest with her.
+
+You didn't find them again.
+<br /><br />
+
+<<set $player.energy = Math.max(($player.energy ?? 0) - 30, 0)>>
+<<guestRemove $forestKidnapEvent>>
+<<set $forestKidnapEvent = null>>
+
+<strong>(You were injured: −30 energy. <<=_kidnappedName>> was taken.)</strong>
+<br /><br />
+
+<<link 'Head back'>>
+    <<goto 'Wood cabin'>>
+<</link>>

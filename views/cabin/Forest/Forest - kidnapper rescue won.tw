@@ -1,0 +1,28 @@
+:: Forest - kidnapper rescue won [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+<<set _kidnapped = $guests[$forestKidnapEvent]>>
+
+
+<center>
+    <<image 'places/forest/forest_kidnapper_won.jpg' sfw>>
+</center>
+<br />
+
+They're down. You moved to the post and cut her loose. She didn't say anything for a long time — just stood there, breathing. Her hands were shaking but her jaw was set.
+
+Then she nodded and followed you back without a word.
+<br /><br />
+
+<<set _kidnapped.relationship = Math.max((_kidnapped.relationship ?? 0) + 15, -100)>>
+<<set _kidnapped.happy = Math.max((_kidnapped.happy ?? 0) - 15, -100)>>
+<<set _kidnapped.sick = {days: randomInteger(2, 5), desc: 'Shaken and bruised', id: 'exhaustion'}>>
+<<set $forestKidnapEvent = null>>
+
+<strong>(<<=setup.displayName(_kidnapped)>>: Relationship +15, Happy −15, sick <<=_kidnapped.sick.days>> days)</strong>
+<br /><br />
+
+<<link 'Take her home'>>
+    <<goto 'Wood cabin'>>
+<</link>>

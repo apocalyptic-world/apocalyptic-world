@@ -1,0 +1,60 @@
+:: Forest - kidnapper event [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+
+<<set _kidnapped = $guests[$forestKidnapEvent]>>
+<<newguy>>
+<<set $tmpGuy.name = 'Worker'>>
+
+<center>
+    <<image 'places/forest/forest_kidnapper.jpg' sfw>>
+</center>
+<br />
+
+One of the other forest workers came back at dawn, breathing hard. Two men — not scavengers, too deliberate for that. They'd pulled <<=setup.displayName(_kidnapped)>> off the logging path while she was working alone at the far end of the site. It happened fast. She didn't have time to shout.
+<br /><br />
+
+<<sayNpc $tmpGuy>>
+    I couldn't do anything. There were two of them and they had knives. I'm sorry.
+<</sayNpc>>
+<br />
+
+They had maybe a six-hour head start. If you move now, you might still find the trail.
+<br /><br />
+
+<div id="fke_rescue">
+<<link 'Go after them'>>
+    <<goto 'Forest - kidnapper rescue'>>
+<</link>>
+</div>
+<div id="fke_ignore">
+<<linkreplace 'Leave it'>>
+    <<run $('#fke_rescue').hide()>>
+    <<if setup.percentageChance(35)>>
+        <<=setup.displayName(_kidnapped)>> made it back on her own four days later. Exhausted, barely talking, but alive. Whatever happened in those four days she kept to herself.
+        <br /><br />
+        <<set _kidnapped.happy = Math.max((_kidnapped.happy ?? 0) - 30, -100)>>
+        <<set _kidnapped.relationship = Math.max((_kidnapped.relationship ?? 0) - 25, -100)>>
+        <<set _kidnapped.sick = {days: randomInteger(5, 10), desc: 'Exhausted and injured', id: 'exhaustion'}>>
+        <<if _kidnapped.virgin>><<run setup.npc.addHistory(_kidnapped, 'virgin_lost')>><</if>>
+        <<set _kidnapped.virgin = false>>
+        <<set _kidnapped.sexStats ??= {}>>
+        <<set _kidnapped.sexStats.pussy = (_kidnapped.sexStats.pussy ?? 0) + randomInteger(3, 8)>>
+        <<set _kidnapped.sexStats.bj = (_kidnapped.sexStats.bj ?? 0) + randomInteger(2, 5)>>
+        <<if setup.pregnancyChance(_kidnapped)>>
+            <<set _kidnapped.pregnancy = 0>>
+            <<set _kidnapped.pregnancy_father = 'unknown'>>
+        <</if>>
+        <strong>(<<=setup.displayName(_kidnapped)>>: Happy −30, Relationship −25, sick <<=_kidnapped.sick.days>> days)</strong>
+    <<else>>
+        <<=setup.displayName(_kidnapped)>> never came back.
+        <<guestRemove $forestKidnapEvent>>
+    <</if>>
+    <<set $forestKidnapEvent = null>>
+    <br /><br />
+    <<link 'Continue'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+<</linkreplace>>
+</div>
