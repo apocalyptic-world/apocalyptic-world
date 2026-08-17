@@ -96,38 +96,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	</div>
 <<else>>
 
-	<<set _guestSorter to clone($guests)>>
-	<<if $sortBy === 'N'>>
-		<<set _guestSorter.sort((a, b) => {
-			if (a.name < b.name) return -1;
-			if (a.name > b.name) return 1;
-			return 0;
-		})>>
-	<<elseif $sortBy === 'A'>>
-		<<set _guestSorter.sort((a, b) => {
-			let assignedToTempA = ('assignedTo' in a)
-				? a.assignedTo
-				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === a.id)] !== 'undefined')
-					? 'companion'
-					: 'zzz';
-
-			let assignedToTempB = ('assignedTo' in b)
-				? b.assignedTo
-				: (typeof $player.companions['guest:' + $guests.findIndex(obj => obj.id === b.id)] !== 'undefined')
-					? 'companion'
-					: 'zzz';
-
-			if (assignedToTempA < assignedToTempB) return -1;
-			if (assignedToTempA > assignedToTempB) return 1;
-			return 0;
-		})>>
-	<<elseif $sortBy === 'P'>>
-		<<set _guestSorter.sort((a, b) => {
-			if ((a.pregnancy ?? 0) < (b.pregnancy ?? 0)) return 1;
-			if ((a.pregnancy ?? 0) > (b.pregnancy ?? 0)) return -1;
-			return 0;
-		})>>
-	<</if>>
+	<<set _sortedIndices = setup.npcSortedIndices($guests, $sortBy, $player.companions, 'guest:')>>
 
 	<table id="slaves" class="npc-list">
 
@@ -167,8 +136,9 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		</tr>
 
 
-	<<for _guestI, _guest range _guestSorter>>
-		<<capture _guestI, _guest>>
+	<<for _sortOrder, _realIdx range _sortedIndices>>
+		<<set _guest = $guests[_realIdx]>>
+		<<capture _realIdx, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
 			<<set _isRest = (typeof _guest.rest !== 'undefined')>>
 			<<set _dayOff = _isSick || _isRest>>
@@ -189,15 +159,15 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			<</if>>
 			<<if (timeBetween('20:00', '23:59') && setup.npcInventoryHas(_guest, 'alcohol') && !(_guest.pregnancy >= 7)  && !_guest.sleeping && _guest.drunk <= (_guest.happy >= 50 ? 55 : (_guest.happy >= 0 ? 60 : 70)) && setup.percentageChance(_guest.happy >= 50 ? 5 : (_guest.happy >= 0 ? 15 : 45)))>>
 				<<set _guest.drunk =  Math.min(99, _guest.drunk + randomInteger(20, 55))>>
-				<<set $guests[$guests.findIndex(obj => obj.id === _guest.id)].drunk =  _guest.drunk>>
+				<<set $guests[_realIdx].drunk =  _guest.drunk>>
 				<<set _guest.happy =  Math.min(100, _guest.happy + (_guest.drunk <= 50 ? 1 : (_guest.drunk <= 75 ? 2 : (_guest.drunk < 95 ? 0 : -5))))>>
-				<<set $guests[$guests.findIndex(obj => obj.id === _guest.id)].happy =  _guest.happy>>
+				<<set $guests[_realIdx].happy =  _guest.happy>>
 
 				<<if setup.percentageChance(_guest.drunk - 10)>>
 					<<set _guest.sleeping = true>>
 				<</if>>
 				<<if setup.percentageChance(50)>>
-	            	<<run setup.npcInventoryRemove($guests[$guests.findIndex(obj => obj.id === _guest.id)], 'alcohol')>>
+	            	<<run setup.npcInventoryRemove($guests[_realIdx], 'alcohol')>>
 				<</if>>
 			<</if>>
 			<tr class="item">
@@ -205,7 +175,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<<if setup.getAge(_guest) < 18>>
 						<span @class="_genderClass + _customColorStyle">
 							<<link _guest.name>>
-								<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
+								<<set $guestId = _realIdx >>
 								<<unset $slaveId, $charId, $childId>>
 								<<set $tmpGirl = _guest>>
 								<<set $tmpGirlBack = 'Guest house'>>
@@ -215,13 +185,13 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						</span>
 					<<else>>
 						<<if !_guest.gender>>
-							<<set _guestI = $guests.findIndex(obj => obj.id === _guest.id) >>
+							<<set _guestI = _realIdx >>
 							<<run _guests18yoWomen.push(_guestI)>>
 						<<elseif _guest.gender == 1>>
-							<<set _guestI = $guests.findIndex(obj => obj.id === _guest.id) >>
+							<<set _guestI = _realIdx >>
 							<<run _guests18yoMen.push(_guestI)>>
 						<<elseif _guest.gender == 2>>
-							<<set _guestI = $guests.findIndex(obj => obj.id === _guest.id) >>
+							<<set _guestI = _realIdx >>
 							<<run _guests18yoTransWomen.push(_guestI)>>
 						<</if>>
 						<span @class="_genderClass + _customColorStyle">
@@ -263,7 +233,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 									<<set $tmpGirl.rape to false>>
 									<<set $tmpGirlCapture to false>>
 									<<set $tmpGirlInvite to false>>
-									<<set $guestId = $guests.findIndex(obj => obj.id === _guest.id) >>
+									<<set $guestId = _realIdx >>
 									<<unset $slaveId, $charId>>
 									<<set $tmpGirlViewBack = 'NPC view - guest'>>
 									<<if _guest.sleeping && !_guest.gender>>
@@ -281,7 +251,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 					<</if>>
 				</td>
 				<td>
-					<<set _guestI = $guests.findIndex(obj => obj.id === _guest.id) >>
+					<<set _guestI = _realIdx >>
 					<<npcListView _guest _guestI 'guest'>>
 				</td>
 			</tr>

@@ -58,3 +58,28 @@ setup.isAtWork = function (npc, weather) {
 
     return true;
 };
+
+// Returns an array of real indices into arr, sorted by sortBy.
+// 'N' = name, 'P' = pregnancy desc, 'A' = assignment (needs companions + prefix like 'guest:' or 'slave:')
+// Any unrecognised sortBy returns indices in original order.
+setup.npcSortedIndices = function (arr, sortBy, companions, prefix) {
+    var indices = arr.map(function (_, i) { return i; });
+    if (sortBy === 'N') {
+        indices.sort(function (a, b) {
+            return arr[a].name < arr[b].name ? -1 : arr[a].name > arr[b].name ? 1 : 0;
+        });
+    } else if (sortBy === 'A') {
+        indices.sort(function (a, b) {
+            var ta = 'assignedTo' in arr[a] ? arr[a].assignedTo
+                   : (companions && typeof companions[prefix + a] !== 'undefined') ? 'companion' : 'zzz';
+            var tb = 'assignedTo' in arr[b] ? arr[b].assignedTo
+                   : (companions && typeof companions[prefix + b] !== 'undefined') ? 'companion' : 'zzz';
+            return ta < tb ? -1 : ta > tb ? 1 : 0;
+        });
+    } else if (sortBy === 'P') {
+        indices.sort(function (a, b) {
+            return (arr[b].pregnancy || 0) - (arr[a].pregnancy || 0);
+        });
+    }
+    return indices;
+};

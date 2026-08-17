@@ -21,37 +21,15 @@
 	</div>
 <<else>>
 
-	<<set _nurserySorter to clone($nursery)>>
-	<<if ($nsortBy === 'N')>>
-		<<set _nurserySorter.sort((a, b) => {
-		  	if (a.name < b.name) {
-		    		return -1;
-	  		}
-	  		if (a.name > b.name) {
-		    		return 1;
-	  		}
-	  		return 0;
-		})>>
-	<<elseif ($nsortBy === 'M')>>
-		<<set _nurserySorter.sort((a, b) => {
-		  	if ((setup.getNpcById(a.family?.mother)?.name ?? 'zzz') < (setup.getNpcById(b.family?.mother)?.name ?? 'zzz')) {
-	    			return -1;
-	  		}
-	  		if ((setup.getNpcById(a.family?.mother)?.name ?? 'zzz') > (setup.getNpcById(b.family?.mother)?.name ?? 'zzz')) {
-	    			return 1;
-	  		}
-	  		return 0;
+	<<set _nurserySorter = setup.npcSortedIndices($nursery, $nsortBy)>>
+	<<if ($nsortBy === 'M')>>
+		<<run _nurserySorter.sort((a, b) => {
+			const mA = setup.getNpcById($nursery[a].family?.mother)?.name ?? 'zzz';
+			const mB = setup.getNpcById($nursery[b].family?.mother)?.name ?? 'zzz';
+			return mA < mB ? -1 : mA > mB ? 1 : 0;
 		})>>
 	<<elseif ($nsortBy === 'A')>>
-		<<set _nurserySorter.sort((a, b) => {
-		  	if (setup.getAge(b) < setup.getAge(a)) {
-		    		return -1;
-	  		}
-	  		if (setup.getAge(b) > setup.getAge(a)) {
-		    		return 1;
-	  		}
-	  		return 0;
-		})>>
+		<<run _nurserySorter.sort((a, b) => setup.getAge($nursery[b]) - setup.getAge($nursery[a]))>>
 	<</if>>
 
 	<table id="slaves" class="npc-list">
@@ -99,8 +77,9 @@
 
 	<<set _currentMom = ''>>
 
-	<<for _nurseryI, _nursery range _nurserySorter>>
-		<<capture _nurseryI, _nursery>>
+	<<for _sortOrder, _realIdx range _nurserySorter>>
+		<<set _nursery = $nursery[_realIdx]>>
+		<<capture _realIdx, _nursery>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_nursery)>>
 			<<if setup.percentageChance(_sleepingChance)>>
 				<<set _nursery.sleeping = true>>
@@ -135,7 +114,7 @@
 						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
 								<<unset $guestId, $charId, $slaveId>>
-								<<set $childId = $nursery.findIndex(obj => obj.id === _nursery.id)>>
+								<<set $childId = _realIdx>>
 								<<set $tmpGirl = _nursery>>
 								<<set $tmpGirlBack = 'Nursery'>>
 								<<set $tmpGirlViewBack = 'Child view'>>
@@ -161,7 +140,7 @@
 						  Are you sure you want to throw <<=(_nursery.gender ? 'him' : 'her')>> out?
 						  <br />
 						  <<link 'Yes' 'Nursery'>>
-							<<set _nurseryI = $nursery.findIndex(obj => obj.id === _nursery.id) >>
+							<<set _nurseryI = _realIdx >>
 							<<run $nursery.splice(_nurseryI, 1)>>
 							<<dialogclose>>
 							<<set $player.goodwill -= 2>>
