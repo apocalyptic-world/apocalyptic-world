@@ -21,8 +21,16 @@
 <<link "Invite to visit the settlement">>
 	<<dialog "Invitation">>
 		<center>
-    		<<image 'people/isabel/at_table.jpg'>>
+			<<image 'people/isabel/at_table.jpg'>>
 		</center>
+		<<set _isabelId = $characters.isabel.id ?? 'isabel'>>
+		<<set _isabelOffspring = []>>
+		<<for _onpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+			<<if (_onpc.family?.mother === _isabelId || _onpc.family?.father === _isabelId) && setup.getAge(_onpc) >= 5>>
+				<<run _isabelOffspring.push(_onpc)>>
+			<</if>>
+		<</for>>
+		<<set _isabelFeaturedChild = _isabelOffspring.length > 0 ? either(..._isabelOffspring) : null>>
 		<<if !($characters.isabel.visitDay ?? false)>>
 			Isabel smiles at the suggestion, "I would love to spend more time together and see how far you've come with your settlement, <<= setup.npc.mcName($characters.isabel)>>."<br />"Running the strip club, the city, and rebuilding Dom's empire demand much of my time, but I would love to reserve an evening each week for us.  Name the day, and I shall see you at your home.  We can relive the time when you sheltered me from Dom.  The way you took care of me...  I look forward to it."
 		<<elseif $characters.isabel.visitDay === 'none'>>
@@ -30,17 +38,20 @@
 		<<else>>
 			Isabel looks up at you from as she reviews the club's earnings, "It's good to see you, <<= setup.npc.mcName($characters.isabel)>>.  Did you have another day in mind for our weekly visits?"
 		<</if>>
+		<<if _isabelFeaturedChild>>
+			<br /><<if setup.getAge(_isabelFeaturedChild) >= 18>>"<<=_isabelFeaturedChild.name>> has grown into someone truly remarkable in your household.  <<=setup.pronounceWhat(_isabelFeaturedChild, true)>> makes me so proud."<<else>>"<<=_isabelFeaturedChild.name>> seems to be thriving in the <<if $game.location.school ?? false>>school<<else>>nursery<</if>>.  It warms my heart to know <<=setup.pronounceWhat(_isabelFeaturedChild)>> is doing so well."<</if>>
+		<</if>>
 		<br /><br />
 		<strong>Travel day</strong><br />
 		Select the day of the week for Isabel to visit the settlement.  She will arrive at 6pm, and leave the following day at noon.
 		<br /><br />
 		<<set _weekDays = ['none','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']>>
-                    <<set _visitDayVar = "$characters.isabel.visitDay">>
-                    <<for _dayOfWeek range _weekDays>>
-                        <label>
-                            <<radiobutton _visitDayVar _dayOfWeek autocheck>> <<= _dayOfWeek >>
-                        </label>
-                    <</for>>
+		<<set _visitDayVar = "$characters.isabel.visitDay">>
+		<<for _dayOfWeek range _weekDays>>
+			<label>
+				<<radiobutton _visitDayVar _dayOfWeek autocheck>> <<= _dayOfWeek >>
+			</label>
+		<</for>>
 		<<link "OK">>
 			<<dialogclose>>
 		<</link>>

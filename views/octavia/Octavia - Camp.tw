@@ -5,11 +5,20 @@
 </div>
 <br /><br />
 
-<<if ($characters.octavia.quests.warriors ?? []).length > 0>>
+<<set _octWeekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]>>
+<<set _octToday = _octWeekday[$gameDate.getDay()]>>
+<<set _octYesterday = _octWeekday[$gameDate.getDay() == 0 ? 6 : $gameDate.getDay() - 1]>>
+<<set _octVisitDays = [$characters.octavia.visitDay1, $characters.octavia.visitDay2].filter(d => d && d !== 'none')>>
+<<set _octIsVisiting = ($characters.octavia.quests.emberclaw_ready_day ?? false) && _octVisitDays.length > 0 && _octVisitDays.some(d => (d === _octToday && timeBetween('18:00', '02:00')) || (d === _octYesterday && timeBetween('08:00', '12:00')))>>
+
+<<set _octAllWarriors = $characters.octavia.quests.warriors ?? []>>
+<<set _octCampWarriors = _octIsVisiting ? _octAllWarriors.filter(w => w.id !== ($characters.octavia.visitWarriorResolvedId ?? null)) : _octAllWarriors>>
+
+<<if _octCampWarriors.length > 0>>
 <h3>Emberclaw Warriors</h3>
 <div style="display: flex; flex-direction: column; align-items: center;">
 <table id="slaves" class="npc-list">
-	<<for _warriorI, _warrior range $characters.octavia.quests.warriors>>
+	<<for _warriorI, _warrior range _octCampWarriors>>
 		<<capture _warrior>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_warrior)>>
 			<tr class="item">
@@ -64,26 +73,124 @@
 
 <<set $tmpGirlBack = 'Octavia - Camp'>>
 
-<<octavia>>
-	<<print either([
-		"Good to see you out here.",
-		"You made the trip. Good.",
-		"The camp is coming together. What brings you out?"
-	])>>
-<</octavia>>
-<br /><br />
+<<if _octIsVisiting>>
+	<<if _octCampWarriors.length > 0>>
+		<<set _octGreetingWarrior = either(..._octCampWarriors)>>
+		<<set _octWarriorMcName = setup.npc.mcName(_octGreetingWarrior.myMcName ? _octGreetingWarrior : $characters.octavia)>>
+		<<sayNpc _octGreetingWarrior>>
+			<<print either([
+				"Welcome, " + _octWarriorMcName + ". Chief Octavia is away from the encampment today — visiting your settlement. <br />She'll return tomorrow.",
+				"She's not here. Chief Octavia left for your settlement earlier. The camp is holding steady.",
+				"Good to see you, " + _octWarriorMcName + ". Chief Octavia is away at your settlement. <br />I'll pass along that you came by."
+			])>>
+		<</sayNpc>>
+	<<else>>
+		<em>The camp is quieter than usual. A warrior on watch nods as you approach.</em>
+		<br />"Chief Octavia is away at your settlement today. She'll return tomorrow."
+	<</if>>
+	<br />
+<<else>>
+	<<octavia>>
+		<<print either([
+			"Good to see you out here.",
+			"You made the trip. Good.",
+			"The camp is coming together. What brings you out?"
+		])>>
+	<</octavia>>
+	<br /><br />
 
-<<link 'Approach her'>>
-	<<set $charId = 'octavia'>>
-	<<unset $slaveId, $guestId, $childId>>
-	<<set $tmpGirl = $characters.octavia>>
-	<<set $tmpGirl.location = 'bedroom'>>
-	<<set $tmpGirlViewBack = 'NPC view - character'>>
-	<<goto 'NPC view - character'>>
-<</link>>
-<<if $characters.octavia.quests.canDate>>
-	<<link 'Date'>>
-		<<goto 'Octavia - date'>>
+	<<link 'Approach her'>>
+		<<set $charId = 'octavia'>>
+		<<unset $slaveId, $guestId, $childId>>
+		<<set $tmpGirl = $characters.octavia>>
+		<<set $tmpGirl.location = 'bedroom'>>
+		<<set $tmpGirlViewBack = 'NPC view - character'>>
+		<<goto 'NPC view - character'>>
+	<</link>>
+	<<if $characters.octavia.quests.canDate>>
+		<<link 'Date'>>
+			<<goto 'Octavia - date'>>
+		<</link>>
+	<</if>>
+	<<link 'Invite to visit settlement'>>
+		<<set _octFirstVisitSetup = !($characters.octavia.visitDay1 ?? false)>>
+		<<set $characters.octavia.visitDay1 ??= 'none'>>
+		<<set $characters.octavia.visitDay2 ??= 'none'>>
+		<<set $characters.octavia.visitWarriorId ??= 'none'>>
+		<<dialog "Invitation">>
+			<<set _octId = $characters.octavia.id ?? 'octavia'>>
+			<<set _octOffspring = []>>
+			<<for _onpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+				<<if (_onpc.family?.mother === _octId || _onpc.family?.father === _octId) && setup.getAge(_onpc) >= 5>>
+					<<run _octOffspring.push(_onpc)>>
+				<</if>>
+			<</for>>
+			<<set _octFeaturedChild = null>>
+			<<if _octOffspring.length > 0>>
+				<<set _octPool = []>>
+				<<for _oc range _octOffspring>>
+					<<run _octPool.push(_oc)>>
+					<<if setup.getAge(_oc) >= 18>><<run _octPool.push(_oc)>><</if>>
+				<</for>>
+				<<set _octFeaturedChild = either(..._octPool)>>
+			<</if>>
+			<<if _octFirstVisitSetup>>
+				Octavia looks up from the fire, studying you for a moment before she answers.
+				<br /><br />
+				<<octavia>>
+					You want me to visit? The camp can manage itself for a day or two. Name the days.<<if _octFeaturedChild>> I look forward to seeing <<=_octFeaturedChild.name>>. <<=setup.pronounceWhat(_octFeaturedChild, true)>>'s growing into a powerful warrior.<</if>>
+				<</octavia>>
+			<<else>>
+				Octavia nods as you approach.
+				<br /><br />
+				<<octavia>>
+					Adjusting the schedule?<<if _octFeaturedChild>> I look forward to seeing <<=_octFeaturedChild.name>>. <<=setup.pronounceWhat(_octFeaturedChild, true)>>'s growing into a powerful warrior.<</if>>
+				<</octavia>>
+			<</if>>
+			<br /><br />
+			<strong>Visit days</strong><br />
+			She will arrive at 6pm and leave the following day at noon. Select up to two days per week.
+			<br /><br />
+			<<set _weekDays = ['none','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']>>
+			<table>
+				<tr><th>Visit 1</th><th>Visit 2</th></tr>
+				<tr>
+					<td style="padding-right: 2em">
+						<<for _dayOfWeek range _weekDays>>
+							<label>
+								<<radiobutton "$characters.octavia.visitDay1" _dayOfWeek autocheck>>
+								<<if _dayOfWeek === 'none'>>None<<else>><<=_dayOfWeek>><</if>>
+							</label><br />
+						<</for>>
+					</td>
+					<td>
+						<<for _dayOfWeek range _weekDays>>
+							<label>
+								<<radiobutton "$characters.octavia.visitDay2" _dayOfWeek autocheck>>
+								<<if _dayOfWeek === 'none'>>None<<else>><<=_dayOfWeek>><</if>>
+							</label><br />
+						<</for>>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<strong>Warrior companion</strong><br />
+			<<if ($characters.octavia.quests.warriors ?? []).length > 0>>
+				Select who will accompany her during visits.
+				<br /><br />
+				<label><<radiobutton "$characters.octavia.visitWarriorId" 'none' autocheck>> None</label><br />
+				<label><<radiobutton "$characters.octavia.visitWarriorId" 'random' autocheck>> Random — she picks one each visit</label><br />
+				<<for _warrior range $characters.octavia.quests.warriors>>
+					<label><<radiobutton "$characters.octavia.visitWarriorId" _warrior.id autocheck>> <<=_warrior.name>></label><br />
+				<</for>>
+			<<else>>
+				No warriors have been assigned to her camp yet.
+			<</if>>
+			<br /><br />
+			<<link "OK">>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
 	<</link>>
 <</if>>
 <<link 'Leave'>>
