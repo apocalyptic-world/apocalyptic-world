@@ -1,0 +1,130 @@
+:: Date - stargazing
+
+<<set _npc = $tmpGirl>>
+
+<h1 class="ptitle">DATE</h1>
+<br />
+
+<center>
+	<<image 'places/dates/date_stargazing.jpg' sfw>>
+</center>
+<br />
+
+You waited until after dark. She thought you'd forgotten about the plan — you could tell from the look she gave you when you came to find her.
+<br /><br />
+
+<<sayNpc _npc>>
+	It's late.
+<</sayNpc>>
+<br />
+
+You said that was the point. You brought a coat for her.
+<br /><br />
+
+The watchtower at the edge of the settlement had a ladder and an open platform at the top. Nobody used it at night. When she climbed through the hatch and saw the sky she stopped and didn't say anything for a long moment.
+<br /><br />
+
+There were too many stars to count. No light pollution, no haze — just the whole sky, unfiltered, the way it must have been for most of human history and was again now.
+<br /><br />
+
+<<sayNpc _npc>>
+	I didn't know it looked like this.
+<</sayNpc>>
+<br />
+
+You said it had been like this the whole time. You just had to go somewhere high enough.
+<br /><br />
+
+<<linkreplace 'Stay up there with her'>>
+	<<addmins 45>>
+
+	<center>
+		<<image 'places/dates/date_stargazing_2.jpg'>>
+	</center>
+	<br />
+
+	You sat with your backs against the railing, shoulders together, both looking up. She found a pattern in the stars and pointed it out. You couldn't see it. She laughed at you. You argued about it for ten minutes and ended up closer together than when you started.
+	<br /><br />
+	<<sayNpc _npc>>
+		I used to know the constellations. My dad taught me when I was young. I've forgotten most of them.
+	<</sayNpc>>
+	<br />
+	You asked which ones she still remembered.
+	<br /><br />
+	<<sayNpc _npc>>
+		Orion. That's the only one I can always find. Three stars in a row — he's there.
+	<</sayNpc>>
+	<br />
+	She pointed. You looked for a long time. You found three stars that were probably the right ones.
+	<br /><br />
+
+	<<linkreplace 'Wait as the night gets deep'>>
+		<<addmins 60>>
+
+		The cold came in slow and she'd moved fully under your arm without mentioning it. The settlement below was dark and still. From up here it looked almost peaceful — almost like somewhere people had chosen to live, not just survived to.
+		<br /><br />
+		<<sayNpc _npc>>
+			I'm glad we did this.
+		<</sayNpc>>
+		<br />
+		You said you were too.
+		<br /><br />
+		<<sayNpc _npc>>
+			I mean all of it. Not just tonight. All of it.
+		<</sayNpc>>
+		<br />
+		You didn't answer. You didn't need to. She knew.
+		<br /><br />
+
+		<<linkreplace 'Climb back down and head home'>>
+			<<addmins 20>>
+
+			<center>
+				<<image 'places/dates/date_stargazing_3.jpg'>>
+			</center>
+			<br />
+
+			The cabin was warm and quiet. She stopped in the middle of the room and turned to look at you — coat still on, hair a little wind-messed, the kind of tired that comes from something good.
+			<br /><br />
+			<<sayNpc _npc>>
+				Don't look at me like that.
+			<</sayNpc>>
+			<br />
+			You asked what look.
+			<br /><br />
+			<<sayNpc _npc>>
+				That look.
+			<</sayNpc>>
+			<br />
+
+			<div id="dsg_bed">
+			<<linkreplace 'Take her to bed'>>
+				<<run $('#dsg_night').hide()>>
+				<<set $tmpGirl = _npc>>
+				<<set $tmpGirlViewBack = 'Wood cabin'>>
+				<<fuck>>
+			<</linkreplace>>
+			</div>
+			<div id="dsg_night">
+			<<linkreplace 'Call it a night'>>
+				<<run $('#dsg_bed').hide()>>
+				<<addmins 5>>
+				You took her coat, hung it up, and kissed her forehead.
+				<br /><br />
+				<<sayNpc _npc>>
+					Goodnight.
+				<</sayNpc>>
+				<br />
+				<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 10, 100)>>
+				<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
+				<strong>(<<=setup.displayName(_npc)>>: Relationship +10, Happy +10)</strong>
+				<br /><br />
+				<<link 'Return'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+			</div>
+
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>

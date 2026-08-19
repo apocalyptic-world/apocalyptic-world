@@ -1,0 +1,120 @@
+:: Date - lake
+
+<<set _npc = $tmpGirl>>
+
+<h1 class="ptitle">DATE</h1>
+<br />
+
+<center>
+	<<image 'places/dates/date_lake.jpg' sfw>>
+</center>
+<br />
+
+You told <<=setup.displayName(_npc)>> you wanted to take her somewhere. She gave you a look that said she didn't entirely believe you had a plan.
+<br /><br />
+
+You did. Barely.
+<br /><br />
+
+The lake was half an hour's walk through the tree line — overgrown banks, still water, completely quiet. No one else came here. She went quiet when she saw it, which was the best thing she could have done.
+<br /><br />
+
+<<sayNpc _npc>>
+	This is real.
+<</sayNpc>>
+<br />
+
+You said you'd been meaning to bring her for a while.
+<br /><br />
+
+<<sayNpc _npc>>
+	You should've said something sooner.
+<</sayNpc>>
+<br />
+
+<<linkreplace 'Sit with her at the water'>>
+	<<addmins 30>>
+
+	<center>
+		<<image 'places/dates/date_lake_2.jpg'>>
+	</center>
+	<br />
+
+	You found a flat rock near the bank and sat with her, shoulders touching. The surface of the lake reflected the sky — grey and pale gold where the clouds broke. She leaned into you after a while, not saying anything. You didn't either.
+	<br /><br />
+	<<sayNpc _npc>>
+		Do you think it was like this before? Quiet like this?
+	<</sayNpc>>
+	<br />
+	You said maybe. Or maybe everyone was too busy to notice.
+	<br /><br />
+	<<sayNpc _npc>>
+		I think I'd have missed it either way.
+	<</sayNpc>>
+	<br />
+
+	<<linkreplace 'Stay until the light fades'>>
+		<<addmins 45>>
+
+		The sun dropped low and the lake went copper, then dark. She'd fallen asleep against your shoulder for twenty minutes before waking up embarrassed. You told her you hadn't moved. She didn't believe you but liked it anyway.
+		<br /><br />
+		<<sayNpc _npc>>
+			We should head back before it's completely black.
+		<</sayNpc>>
+		<br />
+		You walked back through the trees in the last of the light. She took your hand without making anything of it.
+		<br /><br />
+		<<sayNpc _npc>>
+			Thank you. For this.
+		<</sayNpc>>
+		<br />
+
+		<<linkreplace 'Arrive home'>>
+			<<addmins 30>>
+
+			<center>
+				<<image 'places/dates/date_lake_3.jpg'>>
+			</center>
+			<br />
+
+			The cabin was warm when you got in. Quiet. Everyone else had gone to bed.
+			<br /><br />
+			She stopped in the doorway and looked at you.
+			<br /><br />
+			<<sayNpc _npc>>
+				Good night?
+			<</sayNpc>>
+			<br />
+
+			<div id="dl_bed">
+			<<linkreplace 'Take her to bed'>>
+				<<run $('#dl_night').hide()>>
+				<<set $tmpGirl = _npc>>
+				<<set $tmpGirl.location = 'forest'>>
+				<<set $tmpGirlViewBack = 'Wood cabin'>>
+				<<fuck>>
+			<</linkreplace>>
+			</div>
+			<div id="dl_night">
+			<<linkreplace 'Call it a night'>>
+				<<run $('#dl_bed').hide()>>
+				<<addmins 5>>
+				You kissed her at the door and told her it was a good night.
+				<br /><br />
+				<<sayNpc _npc>>
+					It was.
+				<</sayNpc>>
+				<br />
+				<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 10, 100)>>
+				<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
+				<strong>(<<=setup.displayName(_npc)>>: Relationship +10, Happy +10)</strong>
+				<br /><br />
+				<<link 'Return'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+			</div>
+
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
