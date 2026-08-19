@@ -80,10 +80,18 @@
 		</div>
 	</div>
 
-	<<if !($locationEvents.shop ?? false)>>
+	<<if !($locationEvents.shop ?? false) && !setup.family.isBloodToMC(_shopKeeper)>>
 		<<if !_shopKeeper.gender && _shopKeeper.sub <= 50 && setup.percentageChance(5)>>
 			<<set $locationEvents.shop = true>>
 			<<goto 'Shop - stealing shopkeeper'>>
+		<<elseif !_shopKeeper.gender && (_shopKeeper.likesGuys ?? true) && _shopKeeper.relationship >= 40 && timeBetween('09:00', '18:00') && setup.percentageChance(10)>>
+			<<set $tmpEvent = {id: _shopKeeperIds[0]}>>
+			<<set $locationEvents.shop = true>>
+			<<goto 'Shop [Event] - slow day'>>
+		<<elseif !_shopKeeper.gender && _shopKeeper.race !== 'black' && setup.percentageChance(8)>>
+			<<set $tmpEvent = {id: _shopKeeperIds[0]}>>
+			<<set $locationEvents.shop = true>>
+			<<goto 'Shop [Event] - storeroom'>>
 		<</if>>
 	<</if>>
 <<else>>
