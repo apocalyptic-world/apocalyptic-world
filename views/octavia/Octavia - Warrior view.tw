@@ -1,0 +1,74 @@
+:: Octavia - Warrior view [sex no-redirect girlview bg-guesthouse]
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<span>Strength: <<=($tmpGirl.strength ?? 0)>></span>
+<br /><br />
+
+<<if ($tmpGirl.talkedDate ?? -1) !== $game.day>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.quests ??= {}>>
+		<<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 3, 100)>>
+		<<set $tmpGirl.talkedDate = $game.day>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'Octavia - Warrior view'>>
+		<<goto 'NPC talk'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy > 30 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.chastityBelt>>
+	<<set _fuckLink = 'Fuck ' + _himOrHer>>
+	<<link `_fuckLink`>>
+		<<set $tmpGirl.location = 'bedroom'>>
+		<<set $tmpGirl.rape = false>>
+		<<set $tmpGirlCapture = false>>
+		<<set $tmpGirlInvite = false>>
+		<<set $tmpGirl.pregnancy = 0>>
+		<<set $tmpGirlViewBack = 'Octavia - Warrior view'>>
+		<<if setup.npc.isExOfMc($tmpGirl)>>
+			<<goto 'Mc fuck - ex'>>
+		<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<fuck $tmpGirl>>
+		<<else>>
+			<<goto 'Mc fuck - no'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if ($tmpGirl.workoutDate ?? -1) !== $game.day>>
+	<<link 'Work out'>>
+		<<set $tmpGirl.workoutDate = $game.day>>
+		<<set $tmpGirlViewBack = 'Octavia - Warrior view'>>
+		<<goto 'NPC - workout together'>>
+	<</link>>
+<</if>>
+
+<<if ($tmpGirl.giftDate ?? -1) !== $game.day>>
+	<<link 'Give gift'>>
+		<<set $tmpGirl.giftDate = $game.day>>
+		<<script>>
+			Dialog.setup("NPC gift", "NPC gift");
+			Dialog.wiki(Story.get("NPC gift").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
+
+<<link 'Customize'>>
+	<<set $tmpGirlViewBack = 'Octavia - Warrior view'>>
+	<<goto 'NPC customize'>>
+<</link>>
+
+<<link 'Go back'>>
+	<<script>>
+		var v = State.variables;
+		var warriors = v.characters && v.characters.octavia && v.characters.octavia.quests && v.characters.octavia.quests.warriors;
+		if (warriors && typeof v.warriorId === 'number' && v.warriorId >= 0) {
+			warriors[v.warriorId] = clone(v.tmpGirl);
+		}
+		delete v.warriorId;
+		delete v.warriorViewActive;
+	<</script>>
+	<<goto 'Octavia room'>>
+<</link>>

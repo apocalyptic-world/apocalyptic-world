@@ -130,6 +130,7 @@
 </div>
 <h2>Buildings</h2>
 <<include 'Settlement management buildings'>>
+<<run window.buildMultipliers = {}; window.buildRequirements = {};>>
 <<for _baseBuildingName, _baseBuilding range _managementBuildings>>
     <<set _required to Object.keys(_baseBuilding.required)>>
     <<set _workEnergy = _baseBuilding.energy>>
@@ -137,8 +138,9 @@
         <<if !_baseBuilding.show>>
             <<continue>>
         <</if>>
+        <<set _maxBuild = Math.floor($player.energy / _baseBuilding.energy)>>
         <<set _itemHasResources = true>>
-	  <div class="base-management-building-item">
+	  <div class="base-management-building-item" @data-building="_baseBuildingName">
 		  <table>
 			  <tr>
                 <td class="base-building-img">
@@ -150,7 +152,7 @@
 					  <br />
                       <<if _baseBuilding.currentCount >>
                         <<if _baseBuilding.currentTitle>>
-                            <<=_baseBuilding.currentTitle>>: 
+                            <<=_baseBuilding.currentTitle>>:
                         <<else>>
                             Current count:
                         <</if>>
@@ -164,17 +166,20 @@
 						  	  <<set _reqKey   = _required[_r]>>
 							  <<set _reqCount = _baseBuilding.required[_reqKey]>>
                               <<set _hasCount = setup.cabinInventory.count(_reqKey)>>
+							  <<set _maxBuild = Math.min(_maxBuild, Math.floor(_hasCount / _reqCount))>>
 							  <<set _needtxt = ''>>
+
 							  <<if _hasCount < _reqCount>>
 								  <<set _itemHasResources = false>>
-								  <<set _needtxt = '(missing ' + (_reqCount - _hasCount) +  ')'>>
+								  <<set _needtxt = '(missing ' + (_reqCount - _hasCount) + ')'>>
 							  <</if>>
-							  <span><<=_reqCount>> <<=Item.get(_reqKey).name>> _needtxt</span><br />
+							  <span @class="_hasCount < _reqCount ? 'req-insufficient' : ''"><span class="req-amount" @data-req-key="_reqKey" @data-req-base="_baseBuilding.required[_reqKey]"><<=_reqCount>></span> <<=Item.get(_reqKey).name>> <span class="req-missing"><<=_needtxt>></span></span><br />
 						  <</for>>
-						  <span><<=_baseBuilding.energy>> energy</span>
+						  <span @class="$player.energy < _baseBuilding.energy ? 'req-insufficient' : ''"><span class="req-amount" @data-energy-base="_baseBuilding.energy"><<=_baseBuilding.energy>></span> energy</span>
 						  <<if $player.energy < _baseBuilding.energy>>
 					   	  	<<set _itemHasResources = false>>
 						  <</if>>
+						  <<run window.buildRequirements[_baseBuildingName] = {max: _maxBuild, energy: _baseBuilding.energy, minutes: _baseBuilding.minutes || 0, materials: Object.assign({}, _baseBuilding.required)};>>
 					  </div>
 				  </td>
 				  <td style="width: 10%">
@@ -182,27 +187,47 @@
                         <div class="workbench-not-enough">
                             Not enough intelligence
                         </div>
-					<<elseif _itemHasResources && timeBetween('08:00', '23:59')>>
-						<<link 'Build'>>
-
-							<<energy `-_workEnergy`>>
-							
-							<<for _r to 0; _r lt _required.length; _r++>>
-								<<capture _r>>
-                                    <<set _reqKey   = _required[_r]>>
-                                    <<set _reqCount = _baseBuilding.required[_reqKey]>>
-                                    <<run setup.cabinInventory.drop(_reqKey, _reqCount)>>
-								<</capture>>
-							<</for>>
-                            <<if _baseBuilding.minutes>>
-                                <<addmins _baseBuilding.minutes>>
-                            <</if>>
-							<<run _baseBuilding.after()>>
-							<<goto _baseBuilding.goto>>
-						<</link>>
+					<<elseif timeBetween('08:00', '23:59')>>
+						<span class="build-link-wrap" @style="_itemHasResources ? '' : 'display:none'">
+							<<link 'Build'>>
+								<<set _buildMult = (window.buildMultipliers?.[_baseBuildingName] ?? 1)>>
+								<<energy `-_workEnergy * _buildMult`>>
+								<<for _r to 0; _r lt _required.length; _r++>>
+									<<capture _r>>
+	                                    <<set _reqKey   = _required[_r]>>
+	                                    <<set _reqCount = _baseBuilding.required[_reqKey] * _buildMult>>
+	                                    <<run setup.cabinInventory.drop(_reqKey, _reqCount)>>
+									<</capture>>
+								<</for>>
+	                            <<if _baseBuilding.minutes>>
+	                                <<addmins `_baseBuilding.minutes * _buildMult`>>
+	                            <</if>>
+								<<for _mi to 0; _mi lt _buildMult; _mi++>>
+									<<run _baseBuilding.after()>>
+								<</for>>
+								<<goto _baseBuilding.goto>>
+							<</link>>
+						</span>
+						<div class="workbench-not-enough build-not-enough-dyn" @style="_itemHasResources ? 'display:none' : ''">
+							Not enough resources
+						</div>
+						<<if _baseBuilding.currentCount>>
+							<div class="build-multiplier">
+								<button class="mult-btn mult-decr" disabled onclick="adjustBuildMult(this, -1)">−</button>
+								<span class="mult-value">×1</span>
+								<<if _maxBuild > 1>>
+									<button class="mult-btn mult-incr" onclick="adjustBuildMult(this, 1)">+</button>
+								<<else>>
+									<button class="mult-btn mult-incr" disabled onclick="adjustBuildMult(this, 1)">+</button>
+								<</if>>
+							</div>
+						<</if>>
+						<<if _baseBuilding.minutes>>
+							<div class="build-time-cost"><span class="build-time-value"><<=_baseBuilding.minutes>></span> min</div>
+						<</if>>
 					  <<else>>
                             <div class="workbench-not-enough">
-                                Not enough resources
+                                Too late for building
                             </div>
 					  <</if>>
 				  </td>
@@ -211,6 +236,43 @@
 	  </div>
 	<</capture>>
 <</for>>
+
+<script>
+    window.adjustBuildMult = function(btn, delta) {
+        var bldg = btn.closest('.base-management-building-item');
+        if (!bldg) return;
+        var key = bldg.dataset.building;
+        var reqs = window.buildRequirements && window.buildRequirements[key];
+        var max = reqs ? reqs.max : 1;
+        var curr = window.buildMultipliers[key] || 1;
+        var next = Math.max(1, Math.min(max, curr + delta));
+        window.buildMultipliers[key] = next;
+        window.refreshBuildMult(bldg, next);
+    };
+
+    window.refreshBuildMult = function(bldg, mult) {
+        var key = bldg.dataset.building;
+        var reqs = window.buildRequirements && window.buildRequirements[key];
+        if (!reqs) return;
+
+        var max = reqs.max;
+        bldg.querySelector('.mult-value').textContent = '×' + mult;
+
+        var decrBtn = bldg.querySelector('.mult-decr');
+        var incrBtn = bldg.querySelector('.mult-incr');
+        if (decrBtn) decrBtn.disabled = mult <= 1;
+        if (incrBtn) incrBtn.disabled = mult >= max;
+
+        var allOk = mult <= max;
+        var buildWrap = bldg.querySelector('.build-link-wrap');
+        var notEnough = bldg.querySelector('.build-not-enough-dyn');
+        if (buildWrap) buildWrap.style.display = allOk ? '' : 'none';
+        if (notEnough) notEnough.style.display  = allOk ? 'none' : '';
+
+        var timeSpan = bldg.querySelector('.build-time-value');
+        if (timeSpan && reqs.minutes) timeSpan.textContent = reqs.minutes * mult;
+    };
+</script>
 
 <style>
     #base-management {
@@ -252,5 +314,55 @@
 
     .base-management-building-item td {
         padding: 5px;
+    }
+
+    .req-insufficient {
+        color: red;
+    }
+
+    .build-multiplier {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 5px;
+    }
+
+    .mult-btn {
+        background: #3a3a3a;
+        border: 1px solid #777;
+        color: #ccc;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        font-size: 14px;
+        line-height: 1;
+        text-align: center;
+        border-radius: 2px;
+    }
+
+    .mult-btn:hover:not(:disabled) {
+        background: #555;
+        border-color: #aaa;
+    }
+
+    .mult-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+    .mult-value {
+        font-size: 11px;
+        min-width: 22px;
+        text-align: center;
+        color: #ccc;
+    }
+
+    .build-time-cost {
+        font-size: 10px;
+        text-align: center;
+        color: #aaa;
+        margin-top: 3px;
     }
 </style>

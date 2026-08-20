@@ -6,6 +6,22 @@
     <<goto 'Octavia \[Event\] - Emberclaw Ready'>>
 <<else>>
 
+<<if $characters.octavia.visitWarriorResolvedId>>
+	<<set _octVisitWarrior = ($characters.octavia.quests.warriors ?? []).find(w => w.id === $characters.octavia.visitWarriorResolvedId) ?? null>>
+	<<if _octVisitWarrior>>
+			<<if setup.percentageChance(75) || !settings.lesbiansEnabled>>
+				You enter to find Octavia and <<=_octVisitWarrior.name>> hunched over a rough map spread across the table, voices low as they talk through plans for the Emberclaw encampment. They don't notice you at first — it's only when you step further into the room that Octavia glances up. Without a word she gives the warrior a small nod, and <<=setup.pronounceWhat(_octVisitWarrior)>> gathers the map and slips out, leaving the two of you alone.
+			<<else>>
+				<center>
+					[img[https://imagex1.sx.cdn.live/images/pinporn/2020/09/14/23631687.webp?width=620]]
+				</center>
+				<br />
+				You step through the door and stop. Octavia is on the bed with <<=_octVisitWarrior.name>>, clearly not engaged in any sort of planning. The moment she catches your eye she gives you a mischievous wink and holds up a single finger. You wait as she turns her passionate attention back to her warrior. <br /><br />She finishes, looking quite satisfied, says something quiet to the warrior, and leaves <<=setup.pronounceWho(_octVisitWarrior)>> there on the bed as she slides off and strides over to you, not bothering with her clothes.
+			<</if>>
+			<br /><br />
+	<</if>>
+<</if>>
+
 <<octavia>>
     Hey! How it's going?
 <</octavia>>
@@ -45,6 +61,16 @@
     <<link 'Date'>>
         <<goto 'Octavia - date'>>
     <</link>>
+<</if>>
+<<if _octVisitWarrior>>
+	<<link `'Approach warrior companion (' + _octVisitWarrior.name + ')'`>>
+		<<set $warriorId = ($characters.octavia.quests.warriors ?? []).findIndex(w => w.id === $characters.octavia.visitWarriorResolvedId)>>
+		<<set $tmpGirl = $characters.octavia.quests.warriors[$warriorId]>>
+		<<set $tmpGirlBack = 'Octavia room'>>
+		<<set $warriorViewActive = true>>
+		<<unset $slaveId, $guestId, $charId, $childId>>
+		<<goto 'Octavia - Warrior view'>>
+	<</link>>
 <</if>>
 <<link 'Leave'>>
     <<goto 'Guest house'>>
