@@ -1,0 +1,63 @@
+:: Forest - kidnapper rescue [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+<<set _kidnapped = $guests[$forestKidnapEvent]>>
+<<newguy>>
+<<set $tmpGuy.name = 'Kidnapper'>>
+
+<center>
+    <<image 'places/forest/forest_kidnapper_rescue.jpg' sfw>>
+</center>
+<br />
+
+The trail wasn't hard to follow — they hadn't expected anyone to come after them. You moved fast, cutting through the undergrowth, and found them maybe two miles in at an old lean-to shelter. Three men. <<=setup.displayName(_kidnapped)>> was tied to one of the posts. She saw you through the gap in the wall before they did.
+<br /><br />
+
+<<addhours 3>>
+
+<<if $backpack.has('revolver') || $backpack.has('shotgun')>>
+<div id="fkr_gun">
+<<linkreplace 'Step into the clearing'>>
+    <<if setup.percentageChance(70)>>
+        You stepped into the clearing with the weapon already up. They took one look and ran — no argument, no hesitation. Some men know when they've lost before it starts.
+        <br /><br />
+        You cut <<=setup.displayName(_kidnapped)>> loose. She didn't say anything for a while. Just stood there, breathing. Then she nodded and followed you back.
+        <br /><br />
+        <<set _kidnapped.relationship = Math.max((_kidnapped.relationship ?? 0) + 15, -100)>>
+        <<set _kidnapped.happy = Math.max((_kidnapped.happy ?? 0) - 15, -100)>>
+        <<set _kidnapped.sick = {days: randomInteger(2, 5), desc: 'Shaken and bruised', id: 'exhaustion'}>>
+        <<set $forestKidnapEvent = null>>
+        <strong>(<<=setup.displayName(_kidnapped)>>: Relationship +15, Happy −15, sick <<=_kidnapped.sick.days>> days)</strong>
+        <br /><br />
+        <<link 'Take her home'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <<else>>
+        None of them moved. The closest one kept his eyes on the barrel, knife already in hand.
+        <br /><br />
+        <<sayNpc $tmpGuy>>
+            You won't shoot. Not over some girl.
+        <</sayNpc>>
+        <br />
+        He was wrong about that.
+        <br /><br />
+        <<link 'Fight them'>>
+            <<generateEnemies 3>>
+            <<fight $enemies 'Forest - kidnapper rescue won' 'Forest - kidnapper rescue lost'>>
+        <</link>>
+    <</if>>
+<</linkreplace>>
+</div>
+<<else>>
+<div id="fkr_move">
+<<linkreplace 'Move in'>>
+    All three turned as you stepped into the clearing — knives already drawn, no hesitation. They'd done this before.
+    <br /><br />
+    <<link 'Fight them'>>
+        <<generateEnemies 3>>
+        <<fight $enemies 'Forest - kidnapper rescue won' 'Forest - kidnapper rescue lost'>>
+    <</link>>
+<</linkreplace>>
+</div>
+<</if>>

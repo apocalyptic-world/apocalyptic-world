@@ -503,6 +503,10 @@
 			<<goto 'Pregnancy street client'>>
 		<<elseif $scavengingDidntReturn !== null>>
 			<<goto 'Scavenging - didnt came home'>>
+		<<elseif $forestKidnapEvent !== null>>
+			<<goto 'Forest - kidnapper event'>>
+		<<elseif $forestTollEvent !== null>>
+			<<goto 'Forest - toll demand'>>
 		<<elseif (setup.getPersonsForLocation($guests, 'kitchen').length || setup.getPersonsForLocation($slaves, 'kitchen').length) && setup.percentageChance(20)>>
 			<<set _kitchenPersons = setup.getPersonsForLocation($guests, 'kitchen')>>
 			<<set _kitchenSlaves = setup.getPersonsForLocation($slaves, 'kitchen')>>

@@ -1,0 +1,125 @@
+:: Date - garden picnic
+
+<<set _npc = $tmpGirl>>
+
+<h1 class="ptitle">DATE</h1>
+<br />
+
+<center>
+	<<image 'places/dates/date_garden.jpg' sfw>>
+</center>
+<br />
+
+You'd spent the morning putting it together — a blanket, whatever food you could make work, a bottle you'd been saving without admitting why. <<=setup.displayName(_npc)>> found you setting it up in the garden and stood watching you for a moment before she said anything.
+<br /><br />
+
+<<sayNpc _npc>>
+	Is this for me?
+<</sayNpc>>
+<br />
+
+You said it was for both of you.
+<br /><br />
+
+<<sayNpc _npc>>
+	You're terrible at this.
+<</sayNpc>>
+<br />
+
+She sat down anyway, pulled her knees up, and held out her glass.
+<br /><br />
+
+<<linkreplace 'Pour the wine and sit with her'>>
+	<<addmins 20>>
+
+	<center>
+		<<image 'places/dates/date_garden_2.jpg'>>
+	</center>
+	<br />
+
+	The afternoon was mild. Bees somewhere in the flowers — real ones, which still surprised you when you heard them. She'd taken her shoes off and was watching the far corner of the garden where something had gone to seed and spread wild.
+	<br /><br />
+	<<sayNpc _npc>>
+		I used to have a garden. Before. Not like this. Just tomatoes, mostly.
+	<</sayNpc>>
+	<br />
+	You asked if she'd been good at it.
+	<br /><br />
+	<<sayNpc _npc>>
+		No. Half of them rotted. I didn't care. I just liked having somewhere to go.
+	<</sayNpc>>
+	<br />
+
+	<<linkreplace 'Stay and talk as the afternoon goes long'>>
+		<<addmins 60>>
+
+		<center>
+			<<image 'places/dates/date_garden_3.jpg'>>
+		</center>
+		<br />
+
+		You went through the food slowly, refilled the glasses twice, talked about nothing that mattered and everything that did. She laughed at something you said and then looked almost surprised at herself for it.
+		<br /><br />
+		<<sayNpc _npc>>
+			I forget, sometimes. That things can just be... nice.
+		<</sayNpc>>
+		<br />
+		You said you knew what she meant.
+		<br /><br />
+		<<sayNpc _npc>>
+			I know you do. That's the thing.
+		<</sayNpc>>
+		<br />
+
+		<<linkreplace 'Pack up as the sun gets low'>>
+			<<addmins 30>>
+
+			The light was going amber and cool by the time you folded the blanket. She helped without being asked, which still meant something to you even after everything. She tucked the empty bottle under her arm like a prize.
+			<br /><br />
+			<<sayNpc _npc>>
+				I'm keeping this.
+			<</sayNpc>>
+			<br />
+			You said it was hers.
+			<br /><br />
+			Back inside, the cabin felt smaller in the good way — the way it only did when you came in from somewhere you'd actually wanted to be.
+			<br /><br />
+			She looked at you with the bottle still in her hands.
+			<br /><br />
+			<<sayNpc _npc>>
+				So. What now?
+			<</sayNpc>>
+			<br />
+
+			<div id="dgp_bed">
+			<<linkreplace 'Take her to bed'>>
+				<<run $('#dgp_night').hide()>>
+				<<set $tmpGirl = _npc>>
+				<<set $tmpGirl.location = 'forest'>>
+				<<set $tmpGirlViewBack = 'Wood cabin'>>
+				<<fuck>>
+			<</linkreplace>>
+			</div>
+			<div id="dgp_night">
+			<<linkreplace 'Call it a night'>>
+				<<run $('#dgp_bed').hide()>>
+				<<addmins 5>>
+				You took the bottle from her hands, set it on the shelf, and kissed her.
+				<br /><br />
+				<<sayNpc _npc>>
+					Good answer.
+				<</sayNpc>>
+				<br />
+				<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 10, 100)>>
+				<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
+				<strong>(<<=setup.displayName(_npc)>>: Relationship +10, Happy +10)</strong>
+				<br /><br />
+				<<link 'Return'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+			</div>
+
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>

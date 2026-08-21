@@ -1,0 +1,60 @@
+:: Forest - toll demand [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+
+<<set _tollNpc = $guests[$forestTollEvent.npcIndex]>>
+<<set _amount = $forestTollEvent.amount>>
+<<newguy>>
+<<set $tmpGuy.name = 'Stranger'>>
+
+<center>
+    <<image 'places/forest/forest_toll_demand.jpg' sfw>>
+</center>
+<br />
+
+The message came through <<=setup.displayName(_tollNpc)>>. A man she passed on the path out — armed, unhurried. Polite about it, which somehow made it worse.
+<br /><br />
+
+<<sayNpc $tmpGuy>>
+    <<=_amount>> caps. Weekly. Your workers move through my stretch of forest without trouble. Miss a payment... accidents start happening. Trees fall funny out here.
+<</sayNpc>>
+<br />
+
+He didn't give a name. Just said he'd know if you paid.
+<br /><br />
+
+<div id="ftd_pay">
+<<linkreplace 'Pay the <<=_amount>> caps'>>
+    <<run $('#ftd_refuse').hide()>>
+    <<if $player.money >= _amount>>
+        <<set $player.money -= _amount>>
+        You left the caps at the treeline the next morning. No sign of the man, no acknowledgement — just the money gone by midday. Your workers moved through without incident after that. For now.
+        <br /><br />
+        <<set $forestTollEvent = null>>
+        <strong>−<<=_amount>> caps</strong>
+        <br /><br />
+        <<link 'Continue'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <<else>>
+        You don't have enough caps.
+    <</if>>
+<</linkreplace>>
+</div>
+<div id="ftd_refuse">
+<<linkreplace 'Refuse'>>
+    <<run $('#ftd_pay').hide()>>
+    You sent word back that you don't pay. Three days later, <<=setup.displayName(_tollNpc)>> came back from the forest with a split lip and two broken fingers. Her haul was gone. The point had been made.
+    <br /><br />
+    <<set _tollNpc.sick = {days: randomInteger(4, 8), desc: 'Beaten up', id: 'bruised'}>>
+    <<set _tollNpc.happy = Math.max((_tollNpc.happy ?? 0) - 20, -100)>>
+    <<set _tollNpc.relationship = Math.max((_tollNpc.relationship ?? 0) - 10, -100)>>
+    <<set $forestTollEvent = null>>
+    <strong>(<<=setup.displayName(_tollNpc)>>: Happy −20, Relationship −10, sick <<=_tollNpc.sick.days>> days)</strong>
+    <br /><br />
+    <<link 'Continue'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
+<</linkreplace>>
+</div>

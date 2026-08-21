@@ -142,6 +142,13 @@
 	<</link>>
 <</if>>
 
+<<if [0, 2].includes($tmpGirl.gender) && $tmpGirl.married && $tmpGirl?.family?.husband === 'mc' && setup.NpcInHome($tmpGirl)>>
+	<<link 'Take her on a date'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'Date - pick'>>
+	<</link>>
+<</if>>
+
 <<if $tmpGirl.married && $tmpGirl?.family?.husband === 'mc' && setup.NpcInHome($tmpGirl)>>
 	<<link 'End marriage'>>
 		<<dialog 'End marriage'>>

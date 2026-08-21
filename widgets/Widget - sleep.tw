@@ -269,11 +269,21 @@
 <</for>>
 <<run $slaves.filter(n=>n)>>
 <<set $scavengingDidntReturn = null>>
-<<set _isOvercrowded = (($guesthouseLimit - $guests.length) < 3)>>
-<<if $guests.length >= $guesthouseLimit>>
-	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + $guests.length + '/' + $guesthouseLimit + '). No new guests can arrive.</span>')>>
+<<set $forestKidnapEvent = null>>
+<<set $forestTollEvent = null>>
+<<set _guestCount = $guests.length>>
+<<set _bedsFree = $guesthouseLimit - _guestCount>>
+<<if _guestCount >= 25>>
+	<<set _isOvercrowded = (_bedsFree < 3)>>
+<<elseif _guestCount >= 15>>
+	<<set _isOvercrowded = (_bedsFree < 1)>>
+<<else>>
+	<<set _isOvercrowded = false>>
+<</if>>
+<<if _guestCount >= $guesthouseLimit>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + _guestCount + '/' + $guesthouseLimit + '). No new guests can arrive.</span>')>>
 <<elseif _isOvercrowded>>
-	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + $guests.length + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + _guestCount + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
 <</if>>
 <<set _sleepGuestOpts = { type: 'guest', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false, scavengingDidntReturnId: null }>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>

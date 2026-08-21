@@ -739,33 +739,61 @@ setup.npc = {
 				"I still remember when I used to fall asleep on your lap...",
 				"You were always the one keeping me safe. I never said it back then, but thank you.",
 				"Sometimes I wonder if things would be different if we never left home.",
-				
+
 				"You say you protected me, but look where we are now.",
 				"I didn’t ask to be born into this. You made choices, and I live with them.",
 				"Do you even remember what it means to be a parent anymore?",
 
 				"What were you like before everything fell apart? Were you different?",
-				"Do you think I'd still be me if the world had stayed normal?",
-				"Do you ever wish I hadn't been born into all this chaos?",
+				"Do you think I’d still be me if the world had stayed normal?",
+				"Do you ever wish I hadn’t been born into all this chaos?",
 
 				"No matter what happens, I’m glad I have you. Really.",
-				"I feel safe when you're nearby. I know I shouldn't admit it, but I do.",
-				"You're not perfect, but you're all I have. And I need you.",
+				"I feel safe when you’re nearby. I know I shouldn’t admit it, but I do.",
+				"You’re not perfect, but you’re all I have. And I need you.",
 
 				"I learned to fight because I had to. Not because I wanted to.",
 				"Softness gets you killed. You taught me that, remember?",
-				"I don't have time to be a kid anymore, we both know that.",
+				"I don’t have time to be a kid anymore, we both know that.",
 
 				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
 				"Things have changed between us... and not always for the better.",
-				"The choices we made... some lines can't be uncrossed, right?",
+				"The choices we made... some lines can’t be uncrossed, right?",
 
 				"People underestimate me because I smile. That’s their mistake.",
 				"I’m not just your child. I’m my own person too, even if the world forgets that.",
 				"I act confident so no one sees the cracks. But you see them, don’t you?",
 
 				"%mcNameUC%, remember when you tried to teach me how to fix that old generator? You were terrible at it.",
-				"You always said I'd be stronger than you someday. I think that day came."
+				"You always said I’d be stronger than you someday. I think that day came."
+			],
+			family_child_potion: [
+				"You say you protected me, but look where we are now.",
+				"I didn’t ask to be born into this. You made choices, and I live with them.",
+				"Do you even remember what it means to be a parent anymore?",
+
+				"Do you ever wish I hadn’t been born into all this chaos?",
+
+				"No matter what happens, I’m glad I have you. Really.",
+				"I feel safe when you’re nearby. I know I shouldn’t admit it, but I do.",
+				"You’re not perfect, but you’re all I have. And I need you.",
+
+				"I learned to fight because I had to. Not because I wanted to.",
+				"I don’t have time to be a kid anymore, we both know that.",
+
+				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
+				"Things have changed between us... and not always for the better.",
+				"The choices we made... some lines can’t be uncrossed, right?",
+
+				"People underestimate me because I smile. That’s their mistake.",
+				"I’m not just your child. I’m my own person too, even if the world forgets that.",
+				"I act confident so no one sees the cracks. But you see them, don’t you?",
+
+				"It’s strange, existing like this. One moment nothing, the next... all of this.",
+				"I have your eyes, apparently. I noticed that in the mirror. I don’t know how to feel about it.",
+				"I know what I am. But I don’t know who I am yet. Give me time.",
+				"Don’t expect me to pretend I have memories I don’t. We both know how this happened.",
+				"I don’t have a past. Just this. Whatever this is."
 			]
 		}
 
@@ -801,16 +829,20 @@ setup.npc = {
 		if (skills.includes("cook")) pool.push(...db.cook);
 
 		if (npc.family && npc.family.father === "mc") {
-			const emotionalScore = (npc.happy ?? 0) - (npc.corruption ?? 0);
-			const reflective = emotionalScore > 30;
-			const jaded = emotionalScore < -10;
-			
-			if (reflective) {
-				pool.push(...db.family_child.filter(line => line.includes("remember") || line.includes("glad")));
-			} else if (jaded) {
-				pool.push(...db.family_child.filter(line => line.includes("resent") || line.includes("lines")));
+			if (npc.grownByPotion) {
+				pool.push(...db.family_child_potion);
 			} else {
-				pool.push(...db.family_child);
+				const emotionalScore = (npc.happy ?? 0) - (npc.corruption ?? 0);
+				const reflective = emotionalScore > 30;
+				const jaded = emotionalScore < -10;
+
+				if (reflective) {
+					pool.push(...db.family_child.filter(line => line.includes("remember") || line.includes("glad")));
+				} else if (jaded) {
+					pool.push(...db.family_child.filter(line => line.includes("resent") || line.includes("lines")));
+				} else {
+					pool.push(...db.family_child);
+				}
 			}
 		}
 
