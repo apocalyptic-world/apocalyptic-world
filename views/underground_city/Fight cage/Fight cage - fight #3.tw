@@ -1,0 +1,198 @@
+:: Fight cage - fight #3 [bg-fight-cage]
+<h1 class="ptitle">FIGHT CAGE</h1>
+<br />
+
+Boris finds you before you even reach the cage entrance, steering you away from the crowd with a hand on your shoulder and a look that sits somewhere between excitement and unease.
+<br /><br />
+
+<center>
+    <<image 'places/cage_fight/milk_orders.jpg' sfw>>
+</center>
+<br />
+
+<<boris>>
+    Word's getting around about you. That's the good news.
+<</boris>>
+<br />
+<<boris>>
+    Bad news is, it means people are starting to pay attention. And some of those people — they don't like surprises.
+<</boris>>
+<br />
+
+He glances toward the cage floor, where a new figure is already waiting. Tall, lean, coiled like a spring. Different build from your last two opponents — fast rather than strong.
+<br /><br />
+
+<<boris>>
+    His name's Vex. He's beaten six fighters this season. No bullshit, no showboating. Just efficient. You'll need to be sharp.
+<</boris>>
+<br />
+
+<div id="f3_option_fight">
+    <<linkreplace "Step into the cage">>
+        <<run $('#f3_option_leave').hide()>>
+
+                <center>
+            <<image 'places/cage_fight/fight3_1.jpg' sfw>>
+        </center>
+        <br />
+
+        The gate clangs behind you. Vex is already moving — not charging, just circling. He's not here to impress the crowd. He's here to win.
+        <br /><br />
+
+        The first exchange is clean. He throws a fast jab combination, you slip left, fire back with a cross to the body. He takes it without flinching. Smart. Disciplined. The kind of fighter who's thought about this more than most.
+        <br /><br />
+
+        <<perkAdd 'beaten'>>
+        He catches you with a sharp elbow that opens a cut above your brow. Blood starts to track down the side of your face. The crowd notices. The volume in the room climbs.
+        <br /><br />
+
+        You're finding his rhythm, starting to time his combinations, when—
+        <br /><br />
+
+                <center>
+            <<image 'places/cage_fight/fight3_2.jpg' sfw>>
+        </center>
+        <br />
+
+        <strong>Every light in the building dies.</strong>
+        <br /><br />
+
+        Total blackout. The roar of the crowd cracks into confusion — shouts, bodies shuffling, the scrape of something heavy being moved. Inside the cage, you can hear Vex's breathing but can't see him. Three seconds of pure darkness, then the emergency strip lights flicker on at floor level, casting everything in dim amber. Barely enough to see by.
+        <br /><br />
+
+        That's when you hear the clang of metal hitting the cage floor between you.
+        <br /><br />
+
+        Someone threw a pipe in.
+        <br /><br />
+
+                <center>
+            <<image 'places/cage_fight/fight3_3.jpg' sfw>>
+        </center>
+        <br />
+
+        <div id="f3_grab"><<linkreplace 'Grab the pipe'>>
+            <<run $('#f3_leave').hide()>>
+            <<set _roll = random(1, 100)>>
+            <<if _roll >= 50>>
+
+                Your instincts fire before your brain does. You drop low and lunge for it.
+                <br /><br />
+
+                Your fingers close around the pipe just as Vex's boot comes down — a half-second too slow. You're back on your feet before he can adjust, the pipe raised, and for the first time in the fight you see something in his expression that isn't calm.
+                <br /><br />
+
+                He reads the situation. He backs off. One step, two steps, hands coming up slow.
+                <br /><br />
+
+                The strip lights buzz. The crowd is screaming. Someone cuts the music. Boris's voice carries from outside the cage:
+                <br /><br />
+
+                <<boris>>
+                    That's a forfeit. Fight's over. Open the gate.
+                <</boris>>
+                <br />
+
+                You toss the pipe aside and walk to the gate without looking back. Clean. Decisive. Whatever the crowd thinks of how it ended, they saw you take control the moment everything went wrong.
+                <br /><br />
+
+                <<set $player.reputation += 8>>
+
+            <<else>>
+
+                You lunge — but Vex is already moving. His reach is longer. The pipe is in his hand before your fingers get close.
+                <br /><br />
+
+                He doesn't hesitate. The first strike catches you across the shoulder, the second clips the side of your head. The world tilts. Your vision blurs at the edges. The crowd goes quiet in the way crowds do when something real is happening — not theatre, not sport.
+                <br /><br />
+
+                <<perkAdd 'bleeding'>>
+
+                You don't go down. Something in you refuses. You grab at him, take another hit to the ribs, and get your arm around his neck. It's not technique — it's pure survival instinct. You drag him down with you and don't let go until his body goes slack.
+                <br /><br />
+
+                When the lights come back on, you're both on the floor. You're up first. That's all the referee needs.
+                <br /><br />
+
+                You're bleeding from the head. Your shoulder screams. But you're standing.
+                <br /><br />
+
+                <<set $player.reputation += 3>>
+
+            <</if>>
+            <<run $('#f3_aftermath').show()>>
+        <</linkreplace>></div>
+        <div id="f3_leave"><<linkreplace 'Leave it — fight clean'>>
+            <<run $('#f3_grab').hide()>>
+
+            You step back from it. Whatever lowlife threw that pipe in, you're not playing their game.
+            <br /><br />
+
+            Vex hesitates — a fraction of a second, his eyes moving between you and the pipe. He doesn't take it either. Maybe he has his own code. Maybe he just doesn't want to win that way in front of a crowd that's already watching.
+            <br /><br />
+
+            The pipe lies there between you. Neither of you goes for it.
+            <br /><br />
+
+            The fight that follows is different — harder, quieter, more honest. In the amber half-dark you trade blows on instinct alone, no showboating, no strategy, just two people trying to outlast each other. He's good. You're better.
+            <br /><br />
+
+            When the lights come back on, he's on his knees and you're still standing. The crowd erupts — not for the spectacle, but because they all saw you refuse the easy option and win anyway.
+            <br /><br />
+
+            <<set $player.reputation += 6>>
+            <<run $('#f3_aftermath').show()>>
+
+        <</linkreplace>></div>
+
+        <div id="f3_aftermath" style="display:none;">
+            <center>
+                <<image 'places/cage_fight/fight3_4.jpg' sfw>>
+            </center>
+            <br />
+
+            Boris is waiting at the gate. His expression is harder than usual — not angry, just calculating. He lowers his voice as soon as you're clear of the crowd.
+            <br /><br />
+
+            <<boris>>
+                Someone cut the power on purpose. And someone had that pipe ready to throw.
+            <</boris>>
+            <br />
+            <<boris>>
+                That's not random. That's organized. Somebody doesn't want you climbing the ranks.
+            <</boris>>
+            <br />
+
+            He glances around once, then back at you.
+            <br /><br />
+
+            <<boris>>
+                I'm going to find out who. Until then — watch your back, especially getting in and out of here.
+            <</boris>>
+            <br />
+
+            You don't ask him if he's serious. You already know he is.
+            <br /><br />
+
+            <<link 'Leave'>>
+                <<set $characters.boris.quests.fight3 = true>>
+                <<goto 'Fight cage'>>
+            <</link>>
+        </div>
+
+    <</linkreplace>>
+</div>
+<div id="f3_option_leave">
+    <<linkreplace 'Not now'>>
+        <<run $('#f3_option_fight').hide()>>
+        <<you>>
+            Not today. I'll take him on later.
+        <</you>>
+        <br />
+        Boris gives you a look that says he's not convinced, but doesn't push it. Vex watches from across the cage floor as you turn away. He looks patient. Like he can wait.
+        <br /><br />
+        <<link 'Leave'>>
+            <<goto 'Fight cage'>>
+        <</link>>
+    <</linkreplace>>
+</div>
