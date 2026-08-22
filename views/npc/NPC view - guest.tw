@@ -133,7 +133,7 @@
 	<</if>>
 <</if>>
 
-<<if [0, 2].includes($tmpGirl.gender) && !$tmpGirl.married && $tmpGirl?.family?.husband !== 'mc' && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
+<<if [0, 2].includes($tmpGirl.gender) && !$tmpGirl.married && !$tmpGirl?.family?.husband && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
@@ -171,7 +171,7 @@
 			<</link>>
 		<</dialog>>
 	<</link>>
-<<elseif $tmpGirl.married && $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.getNpcById($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
+<<elseif $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.getNpcById($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
 	<<set _divorceHusband = setup.getNpcById($tmpGirl.family.husband)>>
 	<<set _linkName = 'End marriage to ' + _divorceHusband.name>>
 	<<link `_linkName`>>

@@ -50,11 +50,22 @@ He didn't give a name. Just said he'd know if you paid.
     <<set _tollNpc.sick = {days: randomInteger(4, 8), desc: 'Beaten up', id: 'bruised'}>>
     <<set _tollNpc.happy = Math.max((_tollNpc.happy ?? 0) - 20, -100)>>
     <<set _tollNpc.relationship = Math.max((_tollNpc.relationship ?? 0) - 10, -100)>>
-    <<set $forestTollEvent = null>>
+    <<set $forestTollEvent.refused = true>>
     <strong>(<<=setup.displayName(_tollNpc)>>: Happy −20, Relationship −10, sick <<=_tollNpc.sick.days>> days)</strong>
     <br /><br />
-    <<link 'Continue'>>
-        <<goto 'Wood cabin'>>
-    <</link>>
+    <div id="ftd_hunt"><<linkreplace 'Hunt them down'>>
+        <<run $('#ftd_letgo').hide()>>
+        <<set $forestTollEvent = null>>
+        <<goto 'Forest - toll retaliation'>>
+    <</linkreplace>></div>
+    <div id="ftd_letgo"><<linkreplace 'Let it go'>>
+        <<run $('#ftd_hunt').hide()>>
+        <<set $forestTollEvent = null>>
+        You swallow it. For now.
+        <br /><br />
+        <<link 'Continue'>>
+            <<goto 'Wood cabin'>>
+        <</link>>
+    <</linkreplace>></div>
 <</linkreplace>>
 </div>
