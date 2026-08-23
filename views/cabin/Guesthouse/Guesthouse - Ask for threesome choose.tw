@@ -163,6 +163,47 @@
 		I didn't match with anyone, maybe some other time.
 	<</if>>
 
+<<elseif ($tmpGirl.basementVoluntary ?? false)>>
+
+	/* ── Basement pool: slaves ── */
+	<<set _tscLoc = 'basement', _tscSlaveIdxs = [], _prospects = 0>>
+	<<for _tscI, _tscNpc range $slaves>>
+		<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18>>
+			<<run _tscSlaveIdxs.push(_tscI)>>
+		<</if>>
+	<</for>>
+
+	<<for _tscIdx range _tscSlaveIdxs>>
+		<<capture _tscIdx, _tscLoc>>
+			<<set _tscG = $slaves[_tscIdx]>>
+			<<if ![0, 1, 2].includes(_tscG.gender)>><<continue>><</if>>
+			<<set _tscGClass = 'gender-' + setup.genderClass(_tscG)>>
+			<<set
+				_tscGYes = (setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty)) || setup.percentageChance(setup.sexChance(_tscG, $tmpGirl.gender, $tmpGirl.beauty))),
+				_tscMYes = (setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty)) || setup.percentageChance(setup.sexChance($tmpGirl, _tscG.gender, _tscG.beauty))),
+				_tscPYes = setup.percentageChance(setup.sexChance(_tscG)) || _tscG.gender === 1
+			>>
+			<div><span @class="''+_tscGClass+''">
+				<<if _tscGYes && _tscMYes && _tscPYes && (!_tscG.gender || !$tmpGirl.gender)>>
+					<<set _prospects++>>
+					<<link _tscG.name>>
+						<<dialogclose>>
+						<<set $slaveId2 = _tscIdx, $tmpGirl2 = $slaves[_tscIdx]>>
+						<<unset $charId2, $guestId2>>
+						<<set $tmpGirlViewBack = 'NPC view - guest'>>
+						<<unset $charId, $slaveId>>
+						<<set $tmpGirl2.location = _tscLoc>>
+						<<threesome $tmpGirl $tmpGirl2>>
+					<</link>>
+				<</if>>
+			</span></div>
+		<</capture>>
+	<</for>>
+
+	<<if _prospects == 0>>
+		I didn't match with anyone down here, maybe some other time.
+	<</if>>
+
 <<else>>
 	/* ── Default: guesthouse/kitchen pool (unchanged) ── */
 	<<set
