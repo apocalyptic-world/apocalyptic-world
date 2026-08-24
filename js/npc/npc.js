@@ -418,6 +418,7 @@ setup.personalityTraits = function(count = 1) {
 
 
 setup.npcClothes = {
+	mask: [1],
 	top: setup.range(1, 12),
 	bot: setup.range(1, 3),
 	panties: setup.range(1, 4),
@@ -427,6 +428,7 @@ setup.npcClothes = {
 };
 
 setup.npcMaleClothes = {
+	mask: [1],
 	panties: [1],
 	top: [1],
 	bot: [1]
@@ -436,6 +438,7 @@ setup.getRandomNpcClothes = function(npc)
 {
 	if ([1,3].includes(npc.gender)) {
 		return {
+			mask: setup.percentageChance(15) ? setup.getRandomElement(setup.npcMaleClothes.mask) : null,
 			panties: setup.getRandomElement(setup.npcMaleClothes.panties),
 			top: setup.getRandomElement(setup.npcMaleClothes.top),
 			bot: setup.getRandomElement(setup.npcMaleClothes.bot)
@@ -447,18 +450,19 @@ setup.getRandomNpcClothes = function(npc)
 	}
 
 	return {
+		mask: setup.percentageChance(15) ? setup.getRandomElement(setup.npcClothes.mask) : null,
 		top: setup.getRandomElement(setup.npcClothes.top),
 		bot: setup.percentageChance(70) ?
-			setup.getRandomElement(setup.npcClothes.bot) : 
+			setup.getRandomElement(setup.npcClothes.bot) :
 			null,
 		panties: setup.percentageChance(90) ?
-			setup.getRandomElement(setup.npcClothes.panties) : 
+			setup.getRandomElement(setup.npcClothes.panties) :
 			null,
 		accessories: setup.percentageChance(20) ?
-			setup.getRandomElement(setup.npcClothes.accessories) : 
+			setup.getRandomElement(setup.npcClothes.accessories) :
 			null,
 		shoes: setup.percentageChance(90) ?
-			setup.getRandomElement(setup.npcClothes.shoes) : 
+			setup.getRandomElement(setup.npcClothes.shoes) :
 			null,
 	};
 };
