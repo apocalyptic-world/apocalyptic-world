@@ -29,6 +29,22 @@
         <<notPatreonIcon>>
     </div>
 <</if>>
+<<if !($player.car.explore ?? false) || ($player.car.fuel ?? 0) < 20 || ($player.car.health ?? 0) < 20>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Car trip <span style="font-size:0.8em">(car not ready or low fuel)</span>
+    </div>
+<<elseif recall($suppCode)>>
+    <<link 'Car trip'>>
+        <<set $player.companionsHome = $player.companions>>
+        <<set $player.companions = {}>>
+        <<goto 'Elsa - date [car trip]'>>
+    <</link>>
+<<else>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Car trip
+        <<notPatreonIcon>>
+    </div>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Elsa room'>>
 <</link>>

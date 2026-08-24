@@ -213,6 +213,15 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 			<</linkdesc>>
 		<</if>>
 	<</if>>
+	<<if (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 2 && $player.energy >= 20 && timeBetween('08:00', '23:00')>>
+		<<link 'Public punishment'>>
+			<<set $locationEvents.basement = true>>
+			<<goto 'Basement - public punishment'>>
+		<</link>>
+		<<linkdesc>>
+			Gather all slaves and punish 2-3 in front of everyone. All slaves gain submission.
+		<</linkdesc>>
+	<</if>>
 	<<if (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 3>>
 		<<if timeBetween('18:00','20:30') && $player.energy >= 40>>
 			<<link 'Group workout with slaves'>>

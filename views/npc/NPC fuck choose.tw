@@ -62,8 +62,16 @@
 <</if>>
 
 <<if [0, 2].includes($tmpGirl.gender) && setup.NpcInHome($tmpGirl)>>
-	<<set _eligibleForFoursome = setup.filterNPCs($guests, {gender: 0, horny_gte: 20, likesGuys: true})[0] ?? []>>
-	<<set _eligibleForFoursome = _eligibleForFoursome.filter(function(id) { return $guests[id].id !== $tmpGirl.id && setup.getAge($guests[id]) >= 18; })>>
+	<<if ($tmpGirl.basementVoluntary ?? false)>>
+		<<set _eligibleForFoursome = []>>
+		<<for _fsi, _fsnpc range $slaves>>
+			<<if _fsnpc.gender !== 0 || !(_fsnpc.likesGuys ?? true) || (_fsnpc.horny ?? 0) < 20 || setup.getAge(_fsnpc) < 18>><<continue>><</if>>
+			<<run _eligibleForFoursome.push(_fsi)>>
+		<</for>>
+	<<else>>
+		<<set _eligibleForFoursome = setup.filterNPCs($guests, {gender: 0, horny_gte: 20, likesGuys: true})[0] ?? []>>
+		<<set _eligibleForFoursome = _eligibleForFoursome.filter(function(id) { return $guests[id].id !== $tmpGirl.id && setup.getAge($guests[id]) >= 18; })>>
+	<</if>>
 	<<if _eligibleForFoursome.length >= 2>>
 		<<link 'Foursome'>>
 			<<set $tmpGirlViewBack = 'NPC view - guest'>>

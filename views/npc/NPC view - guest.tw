@@ -52,7 +52,7 @@
 	<</link>>
 <</if>>
 
-<<if setup.NpcInHome($tmpGirl) && !(($tmpGirl.assignedTo === 'attendant' || $tmpGirl.assignedTo === 'mistress') && setup.isAtWork($tmpGirl, $weather))>>
+<<if setup.NpcInHome($tmpGirl) && !($tmpGirl.basementVoluntary ?? false) && !(($tmpGirl.assignedTo === 'attendant' || $tmpGirl.assignedTo === 'mistress') && setup.isAtWork($tmpGirl, $weather))>>
 	<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
@@ -133,7 +133,7 @@
 	<</if>>
 <</if>>
 
-<<if [0, 2].includes($tmpGirl.gender) && !$tmpGirl.married && $tmpGirl?.family?.husband !== 'mc' && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
+<<if [0, 2].includes($tmpGirl.gender) && !$tmpGirl.married && !$tmpGirl?.family?.husband && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Marry ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
@@ -171,7 +171,7 @@
 			<</link>>
 		<</dialog>>
 	<</link>>
-<<elseif $tmpGirl.married && $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.getNpcById($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
+<<elseif $tmpGirl?.family?.husband && $tmpGirl.family.husband !== 'mc' && setup.getNpcById($tmpGirl.family.husband) && setup.NpcInHome($tmpGirl)>>
 	<<set _divorceHusband = setup.getNpcById($tmpGirl.family.husband)>>
 	<<set _linkName = 'End marriage to ' + _divorceHusband.name>>
 	<<link `_linkName`>>
@@ -221,11 +221,13 @@
 
 <<if [0, 2].includes($tmpGirl.gender) && ($tmpGirl.relationship ?? 0) >= 70 && !($tmpGirl.basementVoluntary ?? false) && setup.NpcInHome($tmpGirl)>>
 	<<link 'Invite her to the basement'>>
+		<<set $guests[$guestId] = $tmpGirl>>
 		<<goto 'Guest - basement invite'>>
 	<</link>>
 <</if>>
 <<if ($tmpGirl.basementVoluntary ?? false) && setup.NpcInHome($tmpGirl)>>
 	<<link 'Send her back to guesthouse'>>
+		<<set $guests[$guestId] = $tmpGirl>>
 		<<run delete $guests[$guestId].basementVoluntary>>
 		<<if $tmpGirlBack>><<goto $tmpGirlBack>><<else>><<goto 'Guest house'>><</if>>
 	<</link>>
@@ -234,6 +236,7 @@
 <<if $slaves.length < $basementLimit && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Move ' + _himOrHer + ' to the basement cell'>>
 	<<link `_linkName`>>
+		<<set $guests[$guestId] = $tmpGirl>>
 		<<assignedTo $tmpGirl 'none'>>
 		<<goto 'Guest move to basement'>>
 	<</link>>

@@ -1,0 +1,29 @@
+:: Forest - toll retaliation won [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+<<set _tollKilled = ($prevFight.killedEnemies ?? []).length > 0>>
+<<set _tollCaptured = ($prevFight.defeatedEnemies ?? []).some(e => e.captured)>>
+
+<<set _recovered = randomInteger(15, 35)>>
+<<set $player.money += _recovered>>
+<<set $player.reputation += 5>>
+
+You take the caps off the crate before you leave — not all of them, just what seems right.
+<br /><br />
+
+<<if _tollKilled>>
+    He won't be collecting from anyone's stretch again.
+<<elseif _tollCaptured>>
+    You hauled him to his feet and started back through the trees. He didn't argue. Didn't have the strength for it.
+<<else>>
+    He was still breathing when you walked away. He'd know better than to come back.
+<</if>>
+<br /><br />
+
+<strong>+<<=_recovered>> caps recovered. Reputation +5.</strong>
+<br /><br />
+
+<<link 'Head back'>>
+    <<goto 'Wood cabin'>>
+<</link>>

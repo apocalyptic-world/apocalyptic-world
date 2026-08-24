@@ -39,6 +39,13 @@
 		<<run _eligible.push({type: 'guest', id: _fci})>>
 	<</for>>
 
+<<elseif ($tmpGirl.basementVoluntary ?? false)>>
+	<<for _fci, _fcg range $slaves>>
+		<<if _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: 'slave', id: _fci})>>
+	<</for>>
+
 <<else>>
 	/* Default: all guests */
 	<<for _fci, _fcg range $guests>>

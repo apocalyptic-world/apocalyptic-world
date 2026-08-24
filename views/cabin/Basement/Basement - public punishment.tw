@@ -1,0 +1,186 @@
+:: Basement - public punishment [bg-settlement]
+<h1 class="ptitle">SETTLEMENT</h1>
+<br />
+
+<<addhours 2>>
+<<energy -20>>
+
+/* Pick from all available adult slaves */
+<<set _allSlaveIds = []>>
+<<set _availF = setup.getAvailablePersons18yo($slaves)[0] ?? []>>
+<<set _availM = setup.getAvailablePersons18yo($slaves)[1] ?? []>>
+<<set _allSlaveIds = _availF.concat(_availM)>>
+
+<<set _punishedIds = []>>
+<<set _count = Math.min(_allSlaveIds.length, either(2, 2, 3))>>
+<<for _pi to 0; _pi lt _count; _pi++>>
+    <<set _pick = setup.getRandomElement(_allSlaveIds.filter(id => !_punishedIds.includes(id)))>>
+    <<if typeof _pick !== 'undefined'>>
+        <<run _punishedIds.push(_pick)>>
+    <</if>>
+<</for>>
+<<set _p1 = $slaves[_punishedIds[0]] ?? null>>
+<<set _p2 = $slaves[_punishedIds[1]] ?? null>>
+<<set _p3 = $slaves[_punishedIds[2]] ?? null>>
+
+/* Determine image variant based on majority gender */
+<<set _maleCount = _punishedIds.filter(id => $slaves[id]?.gender === 1 || $slaves[id]?.gender === 3).length>>
+<<set _imgVariant = _maleCount > _punishedIds.length / 2 ? 'm' : 'f'>>
+
+<<set _mistressIds = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set _hasMistress = _mistressIds.length > 0>>
+<<set _mistress = _hasMistress ? $guests[_mistressIds[0]] : null>>
+
+<!-- #### public_punishment_f.jpg | Post-apocalyptic settlement square, crowd of survivors watching a public punishment of two women, man standing in the center, bright midday light, grim atmosphere --ar 5:3 --p -->
+<!-- #### public_punishment_m.jpg | Post-apocalyptic settlement square, crowd of survivors watching a public punishment of two men kneeling, authoritative man standing over them, harsh daylight --ar 5:3 --p -->
+<center>
+    <<image `'places/basement/public_punishment_' + _imgVariant + '.jpg'`>>
+</center>
+<br />
+
+You had them brought up from the basement and marched out into the square. No announcement, no explanation. Word spread on its own — the way it always did here — and by the time you reached the centre, people had already stopped what they were doing.
+<br /><br />
+
+Settlers lined the edges. Everyone could see.
+<br /><br />
+
+<<if _hasMistress>>
+    <<sayNpc _mistress>>
+        Stay where you are. All of you. Watch.
+    <</sayNpc>>
+    <br />
+    <<=setup.displayName(_mistress)>> stepped out ahead of the group, ensuring no one looked away.
+<<else>>
+    You pointed at <<=_p1 ? setup.displayName(_p1) : 'one of them'>> first. Then <<=_p2 ? setup.displayName(_p2) : 'another'>>.
+    The square went quiet.
+<</if>>
+<br /><br />
+
+<<linkreplace 'Begin the punishment'>>
+
+    <!-- #### punishment_kneel_f.jpg | Two women kneeling in a post-apocalyptic settlement square in broad daylight, crowd watching silently, tense atmosphere --ar 5:3 --p -->
+    <!-- #### punishment_kneel_m.jpg | Two men forced to kneel in a post-apocalyptic settlement square, crowd of onlookers surrounding them, daylight, tense grim atmosphere --ar 5:3 --p -->
+    <center>
+        <<image `'places/basement/punishment_kneel_' + _imgVariant + '.jpg'`>>
+    </center>
+    <br />
+
+    <<if _p1>>
+        <<=setup.displayName(_p1)>> was brought forward first — made to kneel in the open, in plain sight, in front of everyone they'd spent months living beside. No explanation. No warning. Just the flat fact of it.
+    <</if>>
+    <<if _p2>>
+        <<=setup.displayName(_p2)>> followed, pulled up beside <<=_p1 ? setup.pronounceWho(_p1) : 'them'>> and forced into the same position.
+    <</if>>
+    <<if _p3>>
+        <<=setup.displayName(_p3)>> came on <<=_p3 ? setup.pronounceWhos(_p3) : 'their'>> own when you looked at <<=_p3 ? setup.pronounceWho(_p3) : 'them'>>.
+    <</if>>
+    <br /><br />
+
+    The square was completely still. No one looked away.
+    <br /><br />
+
+    You walked a slow circle around them. In public, out in the open, the silence carried further.
+    <br /><br />
+
+    <<linkreplace 'Continue'>>
+
+        <!-- #### punishment_action_f.jpg | Man publicly punishing a kneeling woman in a post-apocalyptic settlement square, crowd watching in silence, harsh daylight --ar 5:3 --p -->
+        <!-- #### punishment_action_m.jpg | Man publicly punishing a kneeling man in a post-apocalyptic settlement square, crowd of silent onlookers, harsh daylight --ar 5:3 --p -->
+        <center>
+            <<image `'places/basement/punishment_action_' + _imgVariant + '.jpg'`>>
+        </center>
+        <br />
+
+        The punishment was methodical and unhurried. Straps. Hands. Whatever was at hand. The sound of it carried across the square in the open air — and the square made no sound back.
+        <br /><br />
+
+        <<if _p1>>
+            <<if (_p1.traits ?? []).includes('masochist')>>
+                <<=setup.displayName(_p1)>> made a noise that wasn't quite pain. Which was its own kind of message to everyone watching.
+            <<else>>
+                <<=setup.displayName(_p1)>> didn't cry out until the third stroke. By the fifth <<=setup.pronounceWhat(_p1)>> had gone somewhere else entirely.
+            <</if>>
+        <</if>>
+        <<if _p2>>
+            <<if (_p2.traits ?? []).includes('masochist')>>
+                <<=setup.displayName(_p2)>> met your eyes at one point. There was something complicated in them.
+            <<else>>
+                <<=setup.displayName(_p2)>> kept <<=setup.pronounceWhos(_p2)>> head down and didn't fight it.
+            <</if>>
+        <</if>>
+        <br /><br />
+
+        Around the square, the watchers stood rigid. Some had gone pale. A few couldn't look — though they didn't dare turn away either.
+        <br /><br />
+
+        <<linkreplace 'Make them submit'>>
+
+            <<if _hasMistress>>
+                <<sayNpc _mistress>>
+                    Say it. Loud enough for everyone to hear.
+                <</sayNpc>>
+                <br />
+            <</if>>
+
+            <<if _p1>>
+                <<=setup.displayName(_p1)>> said it. Loud enough. The words came out small and flat — submission stripped of anything except compliance.
+                <br /><br />
+            <</if>>
+            <<if _p2>>
+                <<=setup.displayName(_p2)>> followed. <<if (_p2.traits ?? []).includes('masochist')>>Said it with something almost like relief.<br /><<else>>Said it quietly and didn't raise <<=setup.pronounceWhos(_p2)>> head.<br /><</if>>
+            <</if>>
+            <<if _p3>>
+                <<=setup.displayName(_p3)>> didn't need to be asked twice.
+                <br />
+            <</if>>
+            <br />
+
+            You looked around the square once. Nobody moved.
+            <br /><br />
+
+            That was the point. Not the pain. Not the words. The stillness after — and the fact that everyone had seen it.
+            <br /><br />
+
+            /* Apply stat changes to punished slaves */
+            <<for _pi, _pid range _punishedIds>>
+                <<set _ps = $slaves[_pid]>>
+                <<if _ps>>
+                    <<set _ps.sub = Math.min((_ps.sub ?? 0) + 20, 100)>>
+                    <<if (_ps.traits ?? []).includes('masochist')>>
+                        <<set _ps.happy = Math.min((_ps.happy ?? 0) + 5, 100)>>
+                    <<else>>
+                        <<set _ps.happy = Math.max((_ps.happy ?? 0) - 10, -100)>>
+                    <</if>>
+                <</if>>
+            <</for>>
+
+            /* All other slaves watching: submission +10 */
+            <<for _si, _slave range $slaves>>
+                <<if !_punishedIds.includes(_si) && setup.getAge(_slave) >= 18>>
+                    <<set $slaves[_si].sub = Math.min(($slaves[_si].sub ?? 0) + 10, 100)>>
+                <</if>>
+            <</for>>
+
+            /* Voluntary guests in basement witness it: submission +5 */
+            <<for _gi, _guest range $guests>>
+                <<if (_guest.basementVoluntary ?? false) && setup.getAge(_guest) >= 18>>
+                    <<set $guests[_gi].sub = Math.min(($guests[_gi].sub ?? 0) + 5, 100)>>
+                <</if>>
+            <</for>>
+
+            <strong>
+                <<if _p1>><<=setup.displayName(_p1)>>: Sub +20<<if (_p1.traits ?? []).includes('masochist')>>, Happy +5<<else>>, Happy −10<</if>><br /><</if>>
+                <<if _p2>><<=setup.displayName(_p2)>>: Sub +20<<if (_p2.traits ?? []).includes('masochist')>>, Happy +5<<else>>, Happy −10<</if>><br /><</if>>
+                <<if _p3>><<=setup.displayName(_p3)>>: Sub +20<<if (_p3.traits ?? []).includes('masochist')>>, Happy +5<<else>>, Happy −10<</if>><br /><</if>>
+                All other slaves: Sub +10<br />
+                <<if ($guests.some(g => g.basementVoluntary))>>Watching guests: Sub +5<br /><</if>>
+            </strong>
+            <br />
+
+            <<link 'Return'>>
+                <<goto 'Wood cabin'>>
+            <</link>>
+
+        <</linkreplace>>
+    <</linkreplace>>
+<</linkreplace>>
