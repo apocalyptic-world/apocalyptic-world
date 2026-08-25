@@ -367,6 +367,10 @@
 		<<if _isPlayerTarget>>
 			<<set $fight.hp -= _enemyStrength>>
 		<<else>>
+			<<set _allyEndurance = $fight.allies[_randomEnemyTarget].endurance ?? 0>>
+			<<if _allyEndurance > 0>>
+				<<set _enemyStrength = Math.max(_enemyStrength - Math.round(_allyEndurance / 10), 1)>>
+			<</if>>
 			<<set $fight.allies[_randomEnemyTarget].hp -= _enemyStrength>>
 		<</if>>
 		
