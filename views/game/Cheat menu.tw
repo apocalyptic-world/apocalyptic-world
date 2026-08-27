@@ -171,6 +171,22 @@
   		Dialog.open();
   	<</script>>
   <</link>>
+	<<link `($player.cheatFreezeBeauty ? '✓' : '') + 'Freeze beauty decay'`>>
+		<<set $player.cheatFreezeBeauty = !($player.cheatFreezeBeauty ?? false)>>
+		<<goto `passage()`>>
+	<</link>>
+	<<link 'Set all guest beauty to 100'>>
+		<<for _cheatMenuNpcI, _cheatMenuNpc range ($guests ?? [])>>
+			<<set $guests[_cheatMenuNpcI].beauty = 100>>
+		<</for>>
+		<<goto `passage()`>>
+	<</link>>
+	<<link 'Set all slave beauty to 100'>>
+		<<for _cheatMenuNpcI, _cheatMenuNpc range ($slaves ?? [])>>
+			<<set $slaves[_cheatMenuNpcI].beauty = 100>>
+		<</for>>
+		<<goto `passage()`>>
+	<</link>>
 	<<link 'Increase happiness to max for all NPCs'>>
 		<<for _cheatMenuNpcI, _cheatMenuNpc range ($slaves ?? [])>>
 			<<set $slaves[_cheatMenuNpcI].happy = 100>>

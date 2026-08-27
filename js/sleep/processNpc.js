@@ -50,7 +50,7 @@ setup.sleep.processNpc = function(npc, opts) {
 
         setup.sleep.processDumbbell(npc, isHeatWave);
 
-        if (typeof npc.washDays !== 'undefined') {
+        if (typeof npc.washDays !== 'undefined' && !State.variables.player?.cheatFreezeBeauty) {
             npc.washDays--;
             if (npc.baseBeauty) npc.beauty = Math.max(npc.baseBeauty, npc.beauty - npc.washBeauty);
             else npc.beauty -= npc.washBeauty;
