@@ -164,22 +164,13 @@
 		<<set $basementLimit++>>
 		<<goto `passage()`>>
 	<</link>>
-  <<link 'Increase MC strength'>>
-  	<<set $player.strength++>>
-	<<goto `passage()`>>
+  <<link 'Edit player stats'>>
+  	<<script>>
+  		Dialog.setup("Cheatmenu - edit player", "Cheatmenu - edit player");
+  		Dialog.wiki(Story.get("Cheatmenu - edit player").processText());
+  		Dialog.open();
+  	<</script>>
   <</link>>
-  <<link 'Increase MC intelligence'>>
-  	<<set $player.int++>>
-	<<goto `passage()`>>
-  <</link>>
-	<<link 'Increase MC endurance'>>
-  		<<set $player.endurance++>>
-		<<goto `passage()`>>
-  	<</link>>
-	<<link 'Increase MC reputation'>>
-  		<<set $player.reputation++>>
-		<<goto `passage()`>>
-  	<</link>>
 	<<link 'Increase happiness to max for all NPCs'>>
 		<<for _cheatMenuNpcI, _cheatMenuNpc range ($slaves ?? [])>>
 			<<set $slaves[_cheatMenuNpcI].happy = 100>>

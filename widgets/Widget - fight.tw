@@ -367,6 +367,10 @@
 		<<if _isPlayerTarget>>
 			<<set $fight.hp -= _enemyStrength>>
 		<<else>>
+			<<set _allyEndurance = $fight.allies[_randomEnemyTarget].endurance ?? 0>>
+			<<if _allyEndurance > 0>>
+				<<set _enemyStrength = Math.max(_enemyStrength - Math.round(_allyEndurance / 10), 1)>>
+			<</if>>
 			<<set $fight.allies[_randomEnemyTarget].hp -= _enemyStrength>>
 		<</if>>
 		
@@ -468,6 +472,7 @@
 	<</if>>
 	<<for _i = 0; _i < $args[0]; _i++>>
 		<<newguy>>
+		<<set $tmpGuy.strength = random(30, 60)>>
 		<<if $tmpGuy.traits.includes("pacifist")>>
 			<<set $tmpGuy.traits = $tmpGuy.traits.filter(t => t !== "pacifist")>>
 		<</if>>
@@ -486,6 +491,10 @@
 				knife: 1
 			}>>
 			<<set _knivesLeft-->>
+		<</if>>
+		<<if setup.percentageChance(35)>>
+			<<set $tmpGuy.clothes ??= {}>>
+			<<set $tmpGuy.clothes.mask = 1>>
 		<</if>>
 		<<run $enemies.push($tmpGuy)>>
 

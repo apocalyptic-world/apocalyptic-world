@@ -23,6 +23,9 @@
 		<div id="girl_face" @class="'race-' + _girlVisual.race + ''">
 			<<include 'NPC visual face male'>>
 		</div>
+		<<if _girlVisual?.clothes?.mask>>
+			<div id="girl_mask" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/mask/' + _girlVisual.clothes.mask + '.png\')'"></div>
+		<</if>>
 		<<if _girlVisual.hair && _girlVisual.hair !== 'bald'>>
 			<div id="male_hair" @class="'color-' + _girlVisual.hair + ''">
 				<<include 'NPC visual hair male'>>
@@ -49,6 +52,9 @@
 		<div id="girl_face">
 			<<include 'NPC visual face'>>
 		</div>
+		<<if _girlVisual?.clothes?.mask>>
+			<div id="girl_mask" @style="'background-image: url(\'' + setup.ImagePath+'game/doll/mask/' + _girlVisual.clothes.mask + '.png\')'"></div>
+		<</if>>
 		<div id="girl_breasts" @class="'size-' + _girlVisual.breasts + ' race-' + _girlVisual.race + ''">
 			<<if _girlVisual.breasts == 'big'>>
 				<<include 'NPC visual breasts'>> <!-- <<include 'NPC visual breasts'>> -->

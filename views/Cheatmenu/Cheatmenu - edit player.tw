@@ -1,0 +1,33 @@
+:: Cheatmenu - edit player
+<table id="edit_npc">
+    <tr>
+        <td>Strength:</td>
+        <td><<numberbox "_strength" $player.strength>></td>
+    </tr>
+    <tr>
+        <td>Intelligence:</td>
+        <td><<numberbox "_int" $player.int>></td>
+    </tr>
+    <tr>
+        <td>Endurance:</td>
+        <td><<numberbox "_endurance" $player.endurance>></td>
+    </tr>
+    <tr>
+        <td>Reputation:</td>
+        <td><<numberbox "_reputation" $player.reputation>></td>
+    </tr>
+    <tr>
+        <td>Money (caps):</td>
+        <td><<numberbox "_money" $player.money>></td>
+    </tr>
+</table>
+
+<<link 'Save'>>
+    <<set $player.strength = Math.max(0, Math.floor(_strength))>>
+    <<set $player.int = Math.max(0, Math.floor(_int))>>
+    <<set $player.endurance = Math.max(0, Math.floor(_endurance))>>
+    <<set $player.reputation = Math.max(0, Math.floor(_reputation))>>
+    <<set $player.money = Math.max(0, Math.floor(_money))>>
+    <<goto `passage()`>>
+    <<dialogclose>>
+<</link>>
