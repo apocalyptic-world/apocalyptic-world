@@ -353,6 +353,7 @@ setup.getBirthDate = function(yearsAgo) {
 
 setup.getAge = function(person, approx) {
     var startDate = person.birthDate;
+    if (!startDate) return 0;
     var startYear = startDate.getFullYear();
     var endYear = variables().gameDate.getFullYear();
     var startMonth = startDate.getMonth();
