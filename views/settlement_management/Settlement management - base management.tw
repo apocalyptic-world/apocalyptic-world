@@ -139,6 +139,10 @@
             <<continue>>
         <</if>>
         <<set _maxBuild = Math.floor($player.energy / _baseBuilding.energy)>>
+        <<if _baseBuilding.minutes>>
+            <<set _minutesLeftToday = (23 * 60 + 59) - ($gameDate.getHours() * 60 + $gameDate.getMinutes())>>
+            <<set _maxBuild = Math.min(_maxBuild, Math.max(1, Math.floor(_minutesLeftToday / _baseBuilding.minutes)))>>
+        <</if>>
         <<set _itemHasResources = true>>
 	  <div class="base-management-building-item" @data-building="_baseBuildingName">
 		  <table>
@@ -205,6 +209,7 @@
 								<<for _mi to 0; _mi lt _buildMult; _mi++>>
 									<<run _baseBuilding.after()>>
 								<</for>>
+								<<run delete window.buildMultipliers[_baseBuildingName]>>
 								<<goto _baseBuilding.goto>>
 							<</link>>
 						</span>

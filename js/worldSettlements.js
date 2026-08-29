@@ -626,7 +626,7 @@ setup.settlements = {
 
 		const spoils = {};
 		if (victory) {
-			const fraction = mode === 'siege' ? 1.0 : Math.min(ratio * 0.2, 0.35);
+			const fraction = mode === 'siege' ? 0.60 : Math.min(ratio * 0.2, 0.35);
 			for (const res in s.resources) {
 				const taken = Math.floor(s.resources[res] * fraction);
 				if (taken > 0) spoils[res] = taken;
