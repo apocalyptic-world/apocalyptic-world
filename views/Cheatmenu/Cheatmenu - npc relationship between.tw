@@ -1,69 +1,84 @@
 :: Cheatmenu - npc relationship between
-<<set _relBetweenGuests = ($guests ?? []).filter(g => g.id)>>
-<<if _relBetweenGuests.length < 2>>
+<<if ($guests ?? []).filter(g => g.id).length < 2>>
 	<p>Need at least 2 guests in the guesthouse.</p>
 <<else>>
-	<<set _relBetweenNpcA = _relBetweenGuests[0].id>>
-	<<set _relBetweenNpcB = _relBetweenGuests[1].id>>
-	<<set _relBetweenValue = 100>>
 	<table id="edit_npc">
 		<tr>
 			<td>NPC A:</td>
-			<td>
-				<<listbox "_relBetweenNpcA" autoselect>>
-					<<for _rbI, _rbg range _relBetweenGuests>>
-						<<set _rbOptName = _rbg.name>>
-						<<set _rbOptId = _rbg.id>>
-						<<option _rbOptName _rbOptId>>
-					<</for>>
-				<</listbox>>
-			</td>
+			<td><select id="relBetweenNpcA" onchange="window.awCheatRelUpdate()" style="background:#222;color:#eee;border:1px solid #555;padding:2px 4px;"></select></td>
 		</tr>
 		<tr>
 			<td>NPC B:</td>
-			<td>
-				<<listbox "_relBetweenNpcB" autoselect>>
-					<<for _rbI, _rbg range _relBetweenGuests>>
-						<<set _rbOptName = _rbg.name>>
-						<<set _rbOptId = _rbg.id>>
-						<<option _rbOptName _rbOptId>>
-					<</for>>
-				<</listbox>>
-			</td>
+			<td><select id="relBetweenNpcB" onchange="window.awCheatRelUpdate()" style="background:#222;color:#eee;border:1px solid #555;padding:2px 4px;"></select></td>
 		</tr>
 		<tr>
 			<td>Value (−100 to 100):</td>
-			<td><<numberbox "_relBetweenValue" 100>></td>
+			<td><input type="number" id="relBetweenValue" value="0" min="-100" max="100" style="background:#222;color:#eee;border:1px solid #555;padding:2px 4px;width:80px;"></td>
 		</tr>
 	</table>
 	<br />
 	<<link 'Set relationship'>>
 		<<script>>
-			var idA = variables()._relBetweenNpcA;
-			var idB = variables()._relBetweenNpcB;
-			var val = Math.max(-100, Math.min(100, Math.floor(Number(variables()._relBetweenValue) || 0)));
+			(function() {
+				var idA = (document.getElementById('relBetweenNpcA') || {}).value;
+				var idB = (document.getElementById('relBetweenNpcB') || {}).value;
+				var valInp = document.getElementById('relBetweenValue');
+				var val = Math.max(-100, Math.min(100, Math.floor(Number(valInp ? valInp.value : 0) || 0)));
 
-			if (idA === idB) return;
+				if (!idA || !idB || idA === idB) return;
 
-			var guests = variables().guests ?? [];
-			var npcA = guests.find(function(g) { return g.id === idA; });
-			var npcB = guests.find(function(g) { return g.id === idB; });
+				var guests = variables().guests ?? [];
+				var npcA = guests.find(function(g) { return g.id === idA; });
+				var npcB = guests.find(function(g) { return g.id === idB; });
 
-			if (!npcA || !npcB) return;
+				if (!npcA || !npcB) return;
 
-			npcA.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
-			npcB.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+				npcA.relationshipBetween = npcA.relationshipBetween ?? { stats: {}, likes: null, dislikes: [] };
+				npcB.relationshipBetween = npcB.relationshipBetween ?? { stats: {}, likes: null, dislikes: [] };
 
-			npcA.relationshipBetween.stats[idB] = val;
-			npcB.relationshipBetween.stats[idA] = val;
+				npcA.relationshipBetween.stats[idB] = val;
+				npcB.relationshipBetween.stats[idA] = val;
 
-			// Max + compatible genders → set mutual likes to skip the daily 5% chance
-			if (val === 100 && npcA.gender + npcB.gender === 1) {
-				npcA.relationshipBetween.likes = idB;
-				npcB.relationshipBetween.likes = idA;
-			}
+				if (val === 100 && npcA.gender + npcB.gender === 1) {
+					npcA.relationshipBetween.likes = idB;
+					npcB.relationshipBetween.likes = idA;
+				}
+			})();
 		<</script>>
-		<<goto `passage()`>>
 		<<dialogclose>>
 	<</link>>
+	<<script>>
+		window.awCheatRelUpdate = function() {
+			var selA = document.getElementById('relBetweenNpcA');
+			var selB = document.getElementById('relBetweenNpcB');
+			var inp  = document.getElementById('relBetweenValue');
+			if (!selA || !selB || !inp) return;
+			var idA = selA.value;
+			var idB = selB.value;
+			if (!idA || !idB || idA === idB) return;
+			var guests = variables().guests ?? [];
+			var npcA = guests.find(function(g) { return g.id === idA; });
+			inp.value = npcA ? (((npcA.relationshipBetween || {}).stats || {})[idB] ?? 0) : 0;
+		};
+
+		setTimeout(function() {
+			var guests = (variables().guests ?? []).filter(function(g) { return g.id; });
+			var selA = document.getElementById('relBetweenNpcA');
+			var selB = document.getElementById('relBetweenNpcB');
+			if (!selA || !selB) return;
+
+			guests.forEach(function(g) {
+				var label = g.name || g.id;
+				[selA, selB].forEach(function(sel) {
+					var opt = document.createElement('option');
+					opt.value = g.id;
+					opt.textContent = label;
+					sel.appendChild(opt);
+				});
+			});
+
+			selB.selectedIndex = Math.min(1, guests.length - 1);
+			window.awCheatRelUpdate();
+		}, 0);
+	<</script>>
 <</if>>
