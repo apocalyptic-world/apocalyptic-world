@@ -1,0 +1,69 @@
+:: Cheatmenu - npc relationship between
+<<set _relBetweenGuests = ($guests ?? []).filter(g => g.id)>>
+<<if _relBetweenGuests.length < 2>>
+	<p>Need at least 2 guests in the guesthouse.</p>
+<<else>>
+	<<set _relBetweenNpcA = _relBetweenGuests[0].id>>
+	<<set _relBetweenNpcB = _relBetweenGuests[1].id>>
+	<<set _relBetweenValue = 100>>
+	<table id="edit_npc">
+		<tr>
+			<td>NPC A:</td>
+			<td>
+				<<listbox "_relBetweenNpcA" autoselect>>
+					<<for _rbI, _rbg range _relBetweenGuests>>
+						<<set _rbOptName = _rbg.name>>
+						<<set _rbOptId = _rbg.id>>
+						<<option _rbOptName _rbOptId>>
+					<</for>>
+				<</listbox>>
+			</td>
+		</tr>
+		<tr>
+			<td>NPC B:</td>
+			<td>
+				<<listbox "_relBetweenNpcB" autoselect>>
+					<<for _rbI, _rbg range _relBetweenGuests>>
+						<<set _rbOptName = _rbg.name>>
+						<<set _rbOptId = _rbg.id>>
+						<<option _rbOptName _rbOptId>>
+					<</for>>
+				<</listbox>>
+			</td>
+		</tr>
+		<tr>
+			<td>Value (−100 to 100):</td>
+			<td><<numberbox "_relBetweenValue" 100>></td>
+		</tr>
+	</table>
+	<br />
+	<<link 'Set relationship'>>
+		<<script>>
+			var idA = variables()._relBetweenNpcA;
+			var idB = variables()._relBetweenNpcB;
+			var val = Math.max(-100, Math.min(100, Math.floor(Number(variables()._relBetweenValue) || 0)));
+
+			if (idA === idB) return;
+
+			var guests = variables().guests ?? [];
+			var npcA = guests.find(function(g) { return g.id === idA; });
+			var npcB = guests.find(function(g) { return g.id === idB; });
+
+			if (!npcA || !npcB) return;
+
+			npcA.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+			npcB.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+
+			npcA.relationshipBetween.stats[idB] = val;
+			npcB.relationshipBetween.stats[idA] = val;
+
+			// Max + compatible genders → set mutual likes to skip the daily 5% chance
+			if (val === 100 && npcA.gender + npcB.gender === 1) {
+				npcA.relationshipBetween.likes = idB;
+				npcB.relationshipBetween.likes = idA;
+			}
+		<</script>>
+		<<goto `passage()`>>
+		<<dialogclose>>
+	<</link>>
+<</if>>
