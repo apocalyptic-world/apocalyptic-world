@@ -1,4 +1,4 @@
-﻿:: Garage - World - Donate [Place bg-garage settlement]
+:: Garage - World - Donate [Place bg-garage settlement]
 <h1 class="ptitle">DONATE</h1>
 <br />
 
@@ -11,7 +11,31 @@
 <<set _dnRelLevel  = setup.settlements.getRelationshipLevel(_dnS)>>
 <<set _dnRelColor  = _dnRelColors[_dnRelLevel]>>
 
-<<addmins 30>>
+<<if !$tmpDonateOpen>>
+	<<set $tmpDonateOpen = true>>
+	<<addmins 30>>
+<</if>>
+
+<<script>>
+window.awDonate = function(btn) {
+	var idx     = btn.dataset.idx;
+	var item    = btn.dataset.item;
+	var maxHave = parseInt(btn.dataset.have) || 0;
+	var qtyEl   = document.getElementById('dn_qty_' + idx);
+	var qty     = Math.max(1, Math.min(Math.floor(Number(qtyEl ? qtyEl.value : 1) || 1), maxHave));
+
+	var s  = setup.settlements.getById(variables().tmpSettlement);
+	var bp = variables().backpack;
+	if (!s || !bp || bp.count(item) < qty) return;
+
+	bp.drop(item, qty);
+	s.resources[item] = (s.resources[item] || 0) + qty;
+	setup.settlements.modifyRelationship(s, 8 * qty, 'Donated needed supplies');
+	setup.settlements.save(setup.settlements.getAll());
+
+	Engine.play('Garage - World - Donate');
+};
+<</script>>
 You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal, no strings — just goodwill.
 <br /><br />
 
@@ -28,23 +52,11 @@ You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal,
 	<<set _dnHave = $backpack.count(_dnItem)>>
 	<<if _dnHave > 0>>
 		<<set _dnHasAny = true>>
-		<<capture _dni, _dnItem>>
-			<div id="dn_item_<<= _dni>>" style="padding: 5px 0; border-bottom: 1px solid #1c1c1c;">
-				<<set _dnLabel = 'Give ' + (Item.get(_dnItem)?.name ?? _dnItem.replace(/_/g, ' ')) + ' (you have ' + $backpack.count(_dnItem) + ')'>>
-				<<linkreplace _dnLabel>>
-					<<set _dnHandle = setup.settlements.getById($tmpSettlement)>>
-					<<if _dnHandle && $backpack.count(_dnItem) >= 1>>
-						<<set _dnOldLevel = setup.settlements.getRelationshipLevel(_dnHandle)>>
-						<<drop $backpack _dnItem 1>>
-						<<run _dnHandle.resources[_dnItem] = (_dnHandle.resources[_dnItem] || 0) + 1; setup.settlements.modifyRelationship(_dnHandle, 8, 'Donated needed supplies'); setup.settlements.save(setup.settlements.getAll())>>
-						<span style="color: #55cc88;">Donated 1× <<= (Item.get(_dnItem)?.name ?? _dnItem.replace(/_/g, ' '))>>. They appreciated it.</span>
-						<<if setup.settlements.getRelationshipLevel(_dnHandle) !== _dnOldLevel>>
-							<br /><span style="color: #5599e0; font-size: 0.88em;">Relationship improved — now <<= setup.settlements.getRelationshipLabel(_dnHandle)>></span>
-						<</if>>
-					<<else>>
-						<span style="color: #e05555;">None left to give.</span>
-					<</if>>
-				<</linkreplace>>
+		<<capture _dni, _dnItem, _dnHave>>
+			<div id="dn_item_<<= _dni>>" style="padding: 8px 0; border-bottom: 1px solid #1c1c1c; display:flex; align-items:center; gap:8px;">
+				<span style="flex:1; min-width:120px;"><<= (Item.get(_dnItem)?.name ?? _dnItem.replace(/_/g, ' '))>> <span style="color:#666;">(have <<= _dnHave>>)</span></span>
+				<input type="number" @id="'dn_qty_' + _dni" value="1" min="1" @max="_dnHave" style="background:#222;color:#eee;border:1px solid #555;width:55px;padding:2px 4px;flex:none;">
+				<span style="flex:none;"><a href="javascript:void(0)" class="link-internal" @data-idx="_dni" @data-item="_dnItem" @data-have="_dnHave" onclick="window.awDonate(this)">Donate</a></span>
 			</div>
 		<</capture>>
 	<</if>>
@@ -55,4 +67,7 @@ You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal,
 <</if>>
 
 <br />
-<<link 'Leave'>><<goto 'Garage - World - Settlement'>><</link>>
+<<link 'Leave'>>
+	<<set $tmpDonateOpen = false>>
+	<<goto 'Garage - World - Settlement'>>
+<</link>>
