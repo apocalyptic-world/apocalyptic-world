@@ -1,6 +1,756 @@
 :: Guesthouse \[Event\] - male on female {"position":"336,1079","size":"100,100"}
 <h1 class="ptitle">GUEST HOUSE</h1>
 
+<<if ($tmpEvent.wifeGuestIdxs ?? []).length > 0 && typeof $randEvent === 'undefined'>>
+	<<set _wifeIdx = $tmpEvent.wifeGuestIdxs[0]>>
+	<<set _wife = $guests[_wifeIdx]>>
+	<<set _selectedFemale = $guests[$tmpEvent.femaleGuestIds[0]]>>
+	<<set _husband = $guests[$tmpEvent.maleGuestIds[0]]>>
+	<<set _wifeLikesGuys = (_wife.likesGuys ?? true)>>
+	<<set _wifeLikesGirls = (_wife.likesGirls ?? false)>>
+	<<set _wifeDie = random(1, 100)>>
+	<<if _wifeLikesGuys && _wifeLikesGirls>>
+		<<if _wifeDie <= 20>>
+			<<set _wifeOutcome = 'leaves_bi'>>
+		<<elseif _wifeDie <= 50>>
+			<<set _wifeOutcome = 'stays_bi'>>
+		<<else>>
+			<<set _wifeOutcome = 'joins'>>
+		<</if>>
+	<<elseif _wifeLikesGuys>>
+		<<set _wifeOutcome = _wifeDie <= 30 ? 'stays_straight' : 'leaves_straight'>>
+	<<elseif _wifeLikesGirls>>
+		<<if _wifeDie <= 20>>
+			<<set _wifeOutcome = 'joins'>>
+		<<elseif _wifeDie <= 50>>
+			<<set _wifeOutcome = 'stays_lesbian'>>
+		<<else>>
+			<<set _wifeOutcome = 'leaves_lesbian'>>
+		<</if>>
+	<<else>>
+		<<set _wifeOutcome = 'leaves_neither'>>
+	<</if>>
+	<br />
+	<<if _wifeOutcome === 'leaves_bi'>>
+		His wife, <<=setup.displayName(_wife)>>, is already at the doorway when you get there. She looks at <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> together — takes it in — and lets out a slow breath through her nose. Something in her expression tightens for a second and then closes off. She pulls the door closed softly on her way out and doesn't say anything, and her footsteps down the corridor are quiet and fast.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"I know when I'm not needed.",
+				"It should have been me.",
+				"I would have been better than her.",
+				"Fine. I get it.",
+				"I hope she's worth it."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'stays_bi'>>
+		His wife, <<=setup.displayName(_wife)>>, is leaning against the far wall when you arrive, watching <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> with obvious interest. No jealousy in it — she looks more like a spectator who got a good seat than someone who was wronged. She stays right where she is, eyes on the two of them, and when the encounter starts she doesn't move, doesn't look away, and doesn't acknowledge you.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"Sometimes it's more fun just to watch.",
+				"Let's see just how good she is.",
+				"I wouldn't mind her for myself.",
+				"I could get used to this arrangement.",
+				"Don't worry about me. I'm enjoying the show."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'joins'>>
+		His wife, <<=setup.displayName(_wife)>>, is there before you are. She looks at <<=setup.displayName(_selectedFemale)>>, looks at <<=setup.displayName(_husband)>>, and steps inside. She goes straight to <<=setup.displayName(_selectedFemale)>> — no hesitation, hands first — and <<=setup.displayName(_husband)>> comes in behind her and closes the door. All three of them are into it from the start. It works without instruction.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"Let me show you how he likes it.",
+				"Why don't we enjoy her together?",
+				"That looks fun. Room for a third?",
+				"Don't start without me.",
+				"I can share if you can."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'stays_straight'>>
+		His wife, <<=setup.displayName(_wife)>>, is inside the door when you arrive — rigid, jaw set, arms at her sides. She watches <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> with controlled blankness, the kind that costs something to maintain. She knows she doesn't get to leave. She stays for all of it, eyes forward, and by the end the effort of holding herself together has written itself into her posture.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"Go ahead. Try and enjoy yourselves.",
+				"Let's see if she's as good as I am.",
+				"I want to see if he's any different when it's not me.",
+				"I'll be right here. Don't let me get in the way.",
+				"Fine. I'll watch."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'leaves_straight'>>
+		His wife, <<=setup.displayName(_wife)>>, gets there first. She sees <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> and her posture goes tight — a quick involuntary thing she can't quite help. She doesn't make a scene. She turns and walks, and her footsteps going away are faster than they were coming in. <<=setup.displayName(_husband)>> watches her go for a second, then turns back to <<=setup.displayName(_selectedFemale)>>.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"I know when I'm not needed.",
+				"It should have been me.",
+				"I would have been better than her.",
+				"Fine. I get it.",
+				"I hope she's worth it."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'stays_lesbian'>>
+		His wife, <<=setup.displayName(_wife)>>, walks straight past <<=setup.displayName(_husband)>> — he's not why she stayed — and finds a clear angle on <<=setup.displayName(_selectedFemale)>>. Her attention fixes there and doesn't move. She watches <<=setup.displayName(_selectedFemale)>> directly and doesn't bother making it less obvious. <<=setup.displayName(_husband)>> she barely registers; when the encounter starts, he might as well not be in the room.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"Sometimes it's more fun just to watch.",
+				"Let's see just how good she is.",
+				"I wouldn't mind her for myself.",
+				"Go ahead. I'll be right here.",
+				"I'm just here for her, honestly."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _wifeOutcome === 'leaves_lesbian'>>
+		His wife, <<=setup.displayName(_wife)>>, glances in, sees <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>>, and something in her face loosens — the kind of relief you get when a problem handles itself. She turns and walks, easy, unhurried, and doesn't look back. In the room, <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> are already at it.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"I'll leave you two to it.",
+				"You two have fun.",
+				"Better her than me.",
+				"Don't mind me. I'm heading out.",
+				"Carry on. I wasn't going to get involved anyway."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<else>>
+		His wife, <<=setup.displayName(_wife)>>, looks in at <<=setup.displayName(_husband)>> and <<=setup.displayName(_selectedFemale)>> and goes. No visible reaction. She has somewhere else to be.
+		<br /><br />
+		<<sayNpc _wife>>
+			<<set _reactionOptions = [
+				"I'll leave you two to it.",
+				"You two have fun.",
+				"Don't mind me. I'm heading out.",
+				"Carry on. I wasn't going to get involved anyway.",
+				"Enjoy yourselves."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<</if>>
+	<br /><br />
+	<<if _wifeOutcome === 'joins'>>
+		<<link 'Continue'>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 5)>>
+			<<set _wife.corruption = Math.min(100, (_wife.corruption ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 1)>>
+			<<set $tmpEvent = {
+				maleGuestIds: $tmpEvent.maleGuestIds,
+				femaleGuestIds: _wifeIdx !== undefined ? [$tmpEvent.femaleGuestIds[0], _wifeIdx] : $tmpEvent.femaleGuestIds
+			}>>
+			<<goto 'Guesthouse [Event] - male on females'>>
+		<</link>>
+		<<linkdesc>>+5 happy, +1 corruption to <<=setup.displayName(_husband)>>; +3 corruption to <<=setup.displayName(_wife)>><</linkdesc>>
+	<<elseif _wifeOutcome === 'stays_bi' || _wifeOutcome === 'stays_lesbian'>>
+		<<link 'Continue'>>
+			<<set _wife.happy = Math.min(100, (_wife.happy ?? 50) + 3)>>
+			<<set _wife.corruption = Math.min(100, (_wife.corruption ?? 0) + 2)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 3)>>
+			<<run delete $tmpEvent.wifeGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>+3 happy, +2 corruption to <<=setup.displayName(_wife)>>; +3 happy to <<=setup.displayName(_husband)>><</linkdesc>>
+	<<elseif _wifeOutcome === 'stays_straight'>>
+		<<link 'Continue'>>
+			<<set _wife.happy = Math.max(0, (_wife.happy ?? 50) - 5)>>
+			<<set _wife.corruption = Math.min(100, (_wife.corruption ?? 0) + 4)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) - 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 1)>>
+			<<run delete $tmpEvent.wifeGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>−5 happy, +4 corruption to <<=setup.displayName(_wife)>>; −3 happy, +1 corruption to <<=setup.displayName(_husband)>><</linkdesc>>
+	<<elseif _wifeOutcome === 'leaves_bi' || _wifeOutcome === 'leaves_straight'>>
+		<<link 'Continue'>>
+			<<set _wife.happy = Math.max(0, (_wife.happy ?? 50) - 5)>>
+			<<run delete $tmpEvent.wifeGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>−5 happy to <<=setup.displayName(_wife)>><</linkdesc>>
+	<<else>>
+		<<link 'Continue'>>
+			<<set _wife.happy = Math.min(100, (_wife.happy ?? 50) + 3)>>
+			<<run delete $tmpEvent.wifeGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>+3 happy to <<=setup.displayName(_wife)>><</linkdesc>>
+	<</if>>
+<<elseif ($tmpEvent.husbandGuestIdxs ?? []).length > 0 && typeof $randEvent === 'undefined'>>
+	<<set _husbandIdx = $tmpEvent.husbandGuestIdxs[0]>>
+	<<set _husband = $guests[_husbandIdx]>>
+	<<set _wifeFemale = $guests[$tmpEvent.femaleGuestIds[0]]>>
+	<<set _selectedMale = $guests[$tmpEvent.maleGuestIds[0]]>>
+	<<set _husbandLikesGuys = (_husband.likesGuys ?? false)>>
+	<<set _husbandLikesGirls = (_husband.likesGirls ?? true)>>
+	<<set _husbandDie = random(1, 100)>>
+	<<if _husbandLikesGirls && _husbandLikesGuys>>
+		<<if _husbandDie <= 20>>
+			<<set _husbandOutcome = 'leaves_bi'>>
+		<<elseif _husbandDie <= 50>>
+			<<set _husbandOutcome = 'stays_bi'>>
+		<<else>>
+			<<set _husbandOutcome = 'joins_bi'>>
+		<</if>>
+	<<elseif _husbandLikesGirls>>
+		<<if setup.percentageChance((_husband.sub ?? 0) * 2)>>
+			<<set _husbandOutcome = 'stays_straight'>>
+		<<else>>
+			<<set _husbandOutcome = 'leaves_straight'>>
+		<</if>>
+	<<elseif _husbandLikesGuys>>
+		<<if _husbandDie <= 10>>
+			<<set _husbandOutcome = 'joins_gay'>>
+		<<elseif _husbandDie <= 40>>
+			<<set _husbandOutcome = 'stays_gay'>>
+		<<else>>
+			<<set _husbandOutcome = 'leaves_gay'>>
+		<</if>>
+	<<else>>
+		<<set _husbandOutcome = 'leaves_neither'>>
+	<</if>>
+	<br />
+	<<if _husbandOutcome === 'leaves_bi'>>
+		Her husband, <<=setup.displayName(_husband)>>, is at the doorway ahead of you. He takes in <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> — one look, quick and clear — and his expression tightens. His eyes find <<=setup.displayName(_wifeFemale)>> for a moment and then he decides not to do anything with that, and turns and walks. He keeps it together all the way down the corridor.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"I know when I'm not needed.",
+				"It should have been me.",
+				"I would have been better than him.",
+				"Fine. I get it.",
+				"I hope he's worth it."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'stays_bi'>>
+		Her husband, <<=setup.displayName(_husband)>>, is already in the room when you arrive, positioned along the wall, watching <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> with clear interest. Not resentful — engaged. He takes in both of them and when the encounter starts his full focus goes to the two of them. He doesn't acknowledge you when you arrive.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"Sometimes it's more fun just to watch.",
+				"Let's see just how good he is.",
+				"I wouldn't mind him for myself.",
+				"I could get used to this arrangement.",
+				"Don't worry about me. I'm enjoying the show."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'joins_bi'>>
+		Her husband, <<=setup.displayName(_husband)>>, goes in before you do. He puts a hand on <<=setup.displayName(_wifeFemale)>>'s shoulder — familiar, easy — and when she leans into him the tension in the room drops. Then he turns to <<=setup.displayName(_selectedMale)>> and the three of them start sorting themselves out. They don't need direction. It's already working.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"Let me show you how she likes it.",
+				"Why don't we enjoy him together?",
+				"That looks fun. Room for a third?",
+				"Don't start without me.",
+				"I can share if you can."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'stays_straight'>>
+		Her husband, <<=setup.displayName(_husband)>>, is standing just inside the door when you arrive. Too still — the way someone stands when they're working not to move. He watches <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> with a locked jaw and careful eyes, and he knows he's not leaving. He stays for all of it, watching <<=setup.displayName(_wifeFemale)>> the whole time, and by the end the effort it took is visible in his face.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"I'll just sit over here and stay out of the way.",
+				"He's probably a lot better than me.",
+				"I probably deserve this.",
+				"Don't mind me. I'm not going anywhere.",
+				"Fine. I'll watch."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'leaves_straight'>>
+		Her husband, <<=setup.displayName(_husband)>>, is there ahead of you. He sees <<=setup.displayName(_selectedMale)>> with <<=setup.displayName(_wifeFemale)>> — the shape of it — and goes still for a moment. Then something closes in his face and he turns and walks. No scene. He doesn't look at you on the way out. <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> don't stop.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"I know when I'm not needed.",
+				"It should have been me.",
+				"I would have been better than him.",
+				"Fine. I get it.",
+				"I hope he's worth it."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'joins_gay'>>
+		Her husband, <<=setup.displayName(_husband)>>, barely glances at <<=setup.displayName(_wifeFemale)>>. His eyes go to <<=setup.displayName(_selectedMale)>> and stay there — direct, decided. He steps inside, and when <<=setup.displayName(_wifeFemale)>> reads where his attention is she already understands. He doesn't explain himself. The three of them sort out their configuration, and what he came in for is obvious.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"Room for a third?",
+				"Don't start without me.",
+				"That looks fun.",
+				"I'll make this worth your while.",
+				"Why don't we all make the most of this?"
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'stays_gay'>>
+		Her husband, <<=setup.displayName(_husband)>>, moves past <<=setup.displayName(_wifeFemale)>> to where he can see <<=setup.displayName(_selectedMale)>> clearly and settles there. That's what he's here for and he doesn't obscure it — his attention locks onto <<=setup.displayName(_selectedMale)>> the way a man watches something he wants. <<=setup.displayName(_wifeFemale)>> he doesn't look at. When the encounter starts, <<=setup.displayName(_selectedMale)>> is all he's watching.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"Sometimes it's more fun just to watch.",
+				"Let's see just how good he is.",
+				"I wouldn't mind him for myself.",
+				"Go ahead. I'll be right here.",
+				"I'm just here for him, honestly."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<elseif _husbandOutcome === 'leaves_gay'>>
+		Her husband, <<=setup.displayName(_husband)>>, looks in, takes a clear look at <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>>, and the set of his shoulders visibly loosens. Someone else is handling it. He steps back from the door and walks, easy pace, no hurry. In the room, <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> continue.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"I'll leave you two to it.",
+				"You two have fun.",
+				"Better him than me.",
+				"Don't mind me. I'm heading out.",
+				"Carry on. I wasn't going to get involved anyway."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<<else>>
+		Her husband, <<=setup.displayName(_husband)>>, looks in at <<=setup.displayName(_wifeFemale)>> and <<=setup.displayName(_selectedMale)>> and goes. Nothing to feel about it. He just goes.
+		<br /><br />
+		<<sayNpc _husband>>
+			<<set _reactionOptions = [
+				"I'll leave you two to it.",
+				"You two have fun.",
+				"Don't mind me. I'm heading out.",
+				"Carry on. I wasn't going to get involved anyway.",
+				"Enjoy yourselves."
+			]>>
+			<<=setup.getRandomElement(_reactionOptions)>>
+		<</sayNpc>>
+	<</if>>
+	<br /><br />
+	<<if _husbandOutcome === 'joins_bi'>>
+		<<link 'Continue'>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 5)>>
+			<<set _husband.corruption = Math.min(100, (_husband.corruption ?? 0) + 2)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 1)>>
+			<<set $tmpEvent = {
+				maleGuestIds: _husbandIdx !== undefined ? [$tmpEvent.maleGuestIds[0], _husbandIdx] : $tmpEvent.maleGuestIds,
+				femaleGuestIds: $tmpEvent.femaleGuestIds
+			}>>
+			<<goto 'Guesthouse [Event] - males on female'>>
+		<</link>>
+		<<linkdesc>>+5 happy, +1 corruption to <<=setup.displayName(_wifeFemale)>>; +2 corruption to <<=setup.displayName(_husband)>><</linkdesc>>
+	<<elseif _husbandOutcome === 'joins_gay'>>
+		<<link 'Continue'>>
+			<<set _husband.corruption = Math.min(100, (_husband.corruption ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 1)>>
+			<<set $tmpEvent = {
+				maleGuestIds: _husbandIdx !== undefined ? [$tmpEvent.maleGuestIds[0], _husbandIdx] : $tmpEvent.maleGuestIds,
+				femaleGuestIds: $tmpEvent.femaleGuestIds
+			}>>
+			<<goto 'Guesthouse [Event] - males on female'>>
+		<</link>>
+		<<linkdesc>>+3 corruption to <<=setup.displayName(_husband)>>; +1 corruption to <<=setup.displayName(_wifeFemale)>><</linkdesc>>
+	<<elseif _husbandOutcome === 'stays_bi' || _husbandOutcome === 'stays_gay'>>
+		<<link 'Continue'>>
+			<<set _husband.happy = Math.min(100, (_husband.happy ?? 50) + 3)>>
+			<<set _husband.sub = Math.min(100, (_husband.sub ?? 0) + 3)>>
+			<<set _husband.corruption = Math.min(100, (_husband.corruption ?? 0) + 2)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 3)>>
+			<<run delete $tmpEvent.husbandGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>+3 happy, +3 sub, +2 corruption to <<=setup.displayName(_husband)>>; +3 happy to <<=setup.displayName(_wifeFemale)>><</linkdesc>>
+	<<elseif _husbandOutcome === 'stays_straight'>>
+		<<link 'Continue'>>
+			<<set _husband.happy = Math.max(0, (_husband.happy ?? 50) - 5)>>
+			<<set _husband.sub = Math.min(100, (_husband.sub ?? 0) + 5)>>
+			<<set _husband.corruption = Math.min(100, (_husband.corruption ?? 0) + 4)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) - 3)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 1)>>
+			<<run delete $tmpEvent.husbandGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>−5 happy, +5 sub, +4 corruption to <<=setup.displayName(_husband)>>; −3 happy, +1 corruption to <<=setup.displayName(_wifeFemale)>><</linkdesc>>
+	<<elseif _husbandOutcome === 'leaves_bi' || _husbandOutcome === 'leaves_straight'>>
+		<<link 'Continue'>>
+			<<set _husband.happy = Math.max(0, (_husband.happy ?? 50) - 5)>>
+			<<set _husband.sub = Math.min(100, (_husband.sub ?? 0) + 3)>>
+			<<run delete $tmpEvent.husbandGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>−5 happy, +3 sub to <<=setup.displayName(_husband)>><</linkdesc>>
+	<<else>>
+		<<link 'Continue'>>
+			<<set _husband.happy = Math.min(100, (_husband.happy ?? 50) + 3)>>
+			<<run delete $tmpEvent.husbandGuestIdxs>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>+3 happy to <<=setup.displayName(_husband)>><</linkdesc>>
+	<</if>>
+<<elseif $tmpEvent.isCouple && typeof $randEvent === 'undefined'>>
+	<<set _wife = $guests[$tmpEvent.femaleGuestIds[0]]>>
+	<<set _husband = $guests[$tmpEvent.maleGuestIds[0]]>>
+	<<if !(_wife.likesGuys ?? true)>>
+		<<set _wifePregnant = (_wife.pregnancy ?? 0) > 0>>
+		<<set _wifeHasChildren = (_wife.family?.kids ?? []).length > 0>>
+		<<set _wifeInfertile = (_wife.traits ?? []).includes('infertile')>>
+		<br />
+		<<=setup.displayName(_wife)>> doesn't like men. That's not something she's gone out of her way to say, but it's not a secret either.<br />
+		She looks at you, then at <<=setup.displayName(_husband)>>, and the discomfort is visible even as she holds herself together.
+		<br /><br />
+		<<set _inNameOnlyOptions = [
+			"Is there any way we could keep this just on paper? Be married without it having to be more than that?",
+			"I don't suppose there's a version of this that doesn't require us to be physical. I'm happy to stay. I just don't want to do this part.",
+			"Could this be a practical arrangement? I can be his wife. I'd just rather that didn't include being with him physically.",
+			"I was hoping we could leave it at the marriage. Not make it into something more than that.",
+			"Is the physical part of this actually required? I can handle everything else. I just can't do that."
+		]>>
+		<br /><br />
+		<<sayNpc _wife>>
+			<<=setup.getRandomElement(_inNameOnlyOptions)>>
+			<<if _wifePregnant>>
+				<<set _pregnantOptions = [
+					"I'm already pregnant. What would this accomplish?",
+					"I'm pregnant already. There's nothing left to prove on that front.",
+					"There's already a baby coming. I don't see what this is supposed to add.",
+					"I'm already with child. Whatever obligation this was meant to fulfill, it's done.",
+					"This has already happened. I'm already pregnant."
+				]>>
+				<<=setup.getRandomElement(_pregnantOptions)>>
+			<<elseif _wifeHasChildren>>
+				<<set _childrenOptions = [
+					"I've already given him a child. I thought that would be enough.",
+					"We've done what needed doing. I didn't think I'd be asked to keep going.",
+					"I've already had his child. I thought that settled things.",
+					"I've given this settlement children. I assumed that was what was being asked.",
+					"We have children. I've done my part. I didn't think this was still required."
+				]>>
+				<<=setup.getRandomElement(_childrenOptions)>>
+			<<elseif _wifeInfertile>>
+				<<set _infertileOptions = [
+					"I can't give him children. This would only be for his pleasure.",
+					"I'm not able to conceive. Whatever this is for, it isn't for the settlement.",
+					"Nothing's going to come of this. It would only be for his satisfaction.",
+					"I can't give him what this is supposed to be for. You'd only be doing this for him.",
+					"If this is about growing the settlement, I can't help with that. This would be pointless."
+				]>>
+				<<=setup.getRandomElement(_infertileOptions)>>
+			<</if>>
+		<</sayNpc>>
+		<br /><br />
+		<div id="couple-protest">
+			<<linkreplace 'Insist'>>
+				<<run $('#couple-respect').hide()>>
+				You hold her gaze and don't respond. She searches your expression for some give in it, finds none, and the question she asked dies quietly in the space between you. She looks down briefly, then back up. She's going to do this — not because she chose to, but because the alternative isn't available to her. When <<=setup.displayName(_husband)>> steps past you through the door, she follows without looking at you again.
+				<br /><br />
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) - 7)>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].sub = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].sub ?? 0) + 3)>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 3)>>
+				<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 1)>>
+				<<if _husband.likesGirls ?? true>>
+					<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 5)>>
+				<<else>>
+					<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) - 5)>>
+				<</if>>
+				<<link 'Continue'>>
+					<<run delete $tmpEvent.isCouple>>
+					<<goto 'Guesthouse [Event] - male on female'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>−7 happy, +3 sub, +3 corruption to <<=setup.displayName(_wife)>>; +1 corruption, <<if _husband.likesGirls ?? true>>+5<<else>>−5<</if>> happy to <<=setup.displayName(_husband)>><</linkdesc>>
+		</div>
+		<div id="couple-respect">
+			<<linkreplace 'Respect her wishes'>>
+				<<run $('#couple-protest').hide()>>
+				You don't push it. She holds your gaze for a moment making sure it's real, and when she's sure, the tension in her posture eases. She doesn't say thank you — doesn't quite go that far — but the way she looks at you before stepping back means something. She says something quiet to <<=setup.displayName(_husband)>> and the two of them separate from the doorway.
+				<br /><br />
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 3)>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + 5)>>
+				<<if _husband.likesGirls ?? true>>
+					<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) - 3)>>
+				<</if>>
+				<<link 'Leave'>>
+					<<unset $tmpEvent>>
+					<<goto 'Guest house'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>+3 happy, +5 relationship to <<=setup.displayName(_wife)>><<if _husband.likesGirls ?? true>>; −3 happy to <<=setup.displayName(_husband)>><</if>><</linkdesc>>
+		</div>
+	<<elseif !(_husband.likesGirls ?? true)>>
+		<<set _wifePregnant = (_wife.pregnancy ?? -1) >= 0>>
+		<<set _wifeInfertile = (_wife.traits ?? []).includes('infertile')>>
+		<<set _hasChildren = (_wife.family?.kids ?? []).length > 0>>
+		<br />
+		<<=setup.displayName(_husband)>> doesn't like women. He's been here, he's done what was asked, but there's a line he hates to cross.<br />
+		He meets your eyes when you arrive. Doesn't look at <<=setup.displayName(_wife)>>.
+		<br /><br />
+		<<set _inNameOnlyOptions = [
+			"Is there any way we could keep this on paper? The marriage is real — I'm not asking for anything to change. I just don't want to make it physical.",
+			"I was wondering if this actually had to happen. I can handle the arrangement. I'd just rather skip this part.",
+			"Could we call this what it is — a practical setup — and leave it there? I'm not looking to cause problems. I just don't want to do this.",
+			"Is the physical side of this required? I'm fine with the rest of it. I'd just like to leave this off the list.",
+			"Is there any flexibility on the physical part? I've been cooperative with everything else. I'm just asking for this one thing."
+		]>>
+		<br /><br />
+		<<sayNpc _husband>>
+			<<=setup.getRandomElement(_inNameOnlyOptions)>>
+			<<if _wifePregnant || _wifeInfertile>>
+				<<set _pointlessOptions = [
+					"It's not like it'd do anything. She can't even conceive.",
+					"There's no point. Nothing's going to come of it.",
+					"It wouldn't accomplish anything. She's not able to get pregnant.",
+					"This doesn't need to happen. There's nothing to come of it.",
+					"It literally can't do anything right now. So why does this have to happen?"
+				]>>
+				<<=setup.getRandomElement(_pointlessOptions)>>
+			<<elseif _hasChildren>>
+				<<set _doneMyPartOptions = [
+					"I've already done my part for this settlement. We have children.",
+					"We've given you what you needed. I thought that was enough.",
+					"She's already given this place children. I don't see why this still has to happen.",
+					"I've contributed what was asked of me. We both have.",
+					"We've already fulfilled that obligation. There are children. What more is required?"
+				]>>
+				<<=setup.getRandomElement(_doneMyPartOptions)>>
+			<</if>>
+		<</sayNpc>>
+		<br /><br />
+		<div id="couple-protest">
+			<<linkreplace 'Insist'>>
+				<<run $('#couple-respect').hide()>>
+				You don't answer. He waits for one, reads that it isn't coming, and his expression flattens. He knows what the silence means. His eyes go to <<=setup.displayName(_wife)>> — something complicated passes between them, quick — and then he turns toward the door. He goes in. He doesn't argue. There's nothing to argue with.
+				<br /><br />
+				<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) - 5)>>
+				<<set $guests[$tmpEvent.maleGuestIds[0]].sub = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].sub ?? 0) + 5)>>
+				<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 3)>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 1)>>
+				<<if !(_wife.likesGuys ?? true)>>
+					<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.max(0, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) - 7)>>
+				<</if>>
+				<<link 'Continue'>>
+					<<run delete $tmpEvent.isCouple>>
+					<<goto 'Guesthouse [Event] - male on female'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>−5 happy, +5 sub, +3 corruption to <<=setup.displayName(_husband)>>; +1 corruption<<if !(_wife.likesGuys ?? true)>>, −7 happy<</if>> to <<=setup.displayName(_wife)>><</linkdesc>>
+		</div>
+		<div id="couple-respect">
+			<<linkreplace 'Respect his wishes'>>
+				<<run $('#couple-protest').hide()>>
+				You let it go. He watches you do it — absorbing that you didn't push — and the edge drops out of his expression. Not gratitude exactly, but something close to it mixed with awareness of where he stands. He nods slightly. <<=setup.displayName(_wife)>> glances between the two of you without comment. The three of you clear the doorway.
+				<br /><br />
+				<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 1)>>
+				<<set $guests[$tmpEvent.maleGuestIds[0]].sub = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].sub ?? 0) + 3)>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 1)>>
+				<<link 'Leave'>>
+					<<unset $tmpEvent>>
+					<<goto 'Guest house'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>+1 happy, +3 sub to <<=setup.displayName(_husband)>>; +1 happy to <<=setup.displayName(_wife)>><</linkdesc>>
+		</div>
+	<<else>>
+		<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 5)>>
+		<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 5)>>
+		<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + 5)>>
+		<<set $guests[$tmpEvent.maleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].relationship ?? 0) + 5)>>
+		<br />
+		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> both look up when you arrive, and there's none of the tension you'd expect. <<=setup.displayName(_wife)>> moves a little closer to <<=setup.displayName(_husband)>> — an automatic thing — and he puts a hand on her waist without thinking about it. They're easy together. The structure around them is what it is and they've accepted your hand in it; what they feel about each other is real and it's clearly not a performance. She looks at you once, then back at him, and the two of them start moving toward each other.
+		<br /><br />
+		<<link 'Stay and watch'>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].sub = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].sub ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].sub = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].sub ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 3)>>
+			<<run delete $tmpEvent.isCouple>>
+			<<goto 'Guesthouse [Event] - male on female'>>
+		<</link>>
+		<<linkdesc>>+5 happy, +5 relationship, +3 sub, +3 corruption to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>><</linkdesc>>
+		<<link 'Give them privacy'>>
+			<<if $guests[$tmpEvent.femaleGuestIds[0]].virgin>>
+				<<run setup.npc.addHistory($guests[$tmpEvent.femaleGuestIds[0]], 'virgin_lost', { with: $guests[$tmpEvent.maleGuestIds[0]].id })>>
+				<<set $guests[$tmpEvent.femaleGuestIds[0]].virgin = false>>
+			<</if>>
+			<<if setup.percentageChance(50)>>
+				<<if setup.pregnancyChance($guests[$tmpEvent.femaleGuestIds[0]], $guests[$tmpEvent.maleGuestIds[0]])>>
+					<<set $guests[$tmpEvent.femaleGuestIds[0]].pregnancy_father = $guests[$tmpEvent.maleGuestIds[0]].id>>
+					<<set $guests[$tmpEvent.femaleGuestIds[0]].pregnancy = 0>>
+				<</if>>
+			<</if>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].horny = 0>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].horny = 0>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].orgasms ??= 0>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].orgasms++>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].orgasms ??= 0>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].orgasms++>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 3)>>
+			<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + 3)>>
+			<<set $guests[$tmpEvent.maleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].relationship ?? 0) + 3)>>
+			<<unset $tmpEvent>>
+			<<goto 'Guest house'>>
+		<</link>>
+		<<linkdesc>>+8 happy, +8 relationship to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>><</linkdesc>>
+	<</if>>
+<<elseif $tmpEvent.isEx && typeof $randEvent === 'undefined'>>
+	<<set _protestorIdx = $tmpEvent.exProtestorIdx>>
+	<<set _protestor = $guests[_protestorIdx]>>
+	<<set _exIdx = $tmpEvent.exIdx>>
+	<<set _ex = $guests[_exIdx]>>
+	<<set _rbStats = (_protestor.relationshipBetween ?? {}).stats ?? {}>>
+	<<set _relScore = _rbStats[_ex.id] ?? 0>>
+	<br />
+	<<if _relScore < 20>>
+		<<=setup.displayName(_protestor)>> looks up when you come in and something in <<=setup.pronounceWhos(_protestor)>> expression shuts. <<=setup.pronounceWhat(_protestor, true)>> recognises <<=setup.displayName(_ex)>> from across the room and whatever was in <<=setup.pronounceWhos(_protestor)>> face before is gone, replaced by something closed and flat. <<=setup.pronounceWhat(_protestor, true)>> meets your eyes, not the other person's.
+		<br /><br />
+		<<sayNpc _protestor>>
+			<<set _exDialogOptions = [
+			"We stopped working for a reason. I don't think either of us liked who we were around the other. Can't we just leave it there?",
+			"I think we both know there's nothing left between us. We manage to get through the day without incident. Why would we risk that?",
+			"Whatever we had, it soured. I don't need a reminder of what it felt like at the end. Neither of us came out of that well.",
+			"We're not good for each other. We never were, not really. I'd rather we just keep our distance and call it a reasonable arrangement.",
+			"I'm not interested in going back to that. We don't even get along. Can we just keep the peace and leave it at that?"
+			]>>
+			<<=setup.getRandomElement(_exDialogOptions)>>
+		<</sayNpc>>
+		<br /><br />
+		<div id="ex-protest">
+			<<linkreplace 'Insist'>>
+				<<run $('#ex-respect').hide()>>
+				You hold the look. <<=setup.pronounceWhat(_protestor, true)>> reads the answer in it and the argument dies before it starts. Whatever resistance was in <<=setup.pronounceWho(_protestor)>> settles into something else — not acceptance, just the absence of alternatives. <<=setup.pronounceWhat(_protestor, true)>> moves for the door without saying anything further, and <<=setup.pronounceWhat(_protestor)>> doesn't look at <<=setup.displayName(_ex)>> on the way out.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.max(0, ($guests[_protestorIdx].happy ?? 50) - 8)>>
+				<<set $guests[_protestorIdx].sub = Math.min(100, ($guests[_protestorIdx].sub ?? 0) + 4)>>
+				<<set $guests[_protestorIdx].corruption = Math.min(100, ($guests[_protestorIdx].corruption ?? 0) + 2)>>
+				<<set $guests[_exIdx].happy = Math.max(0, ($guests[_exIdx].happy ?? 50) - 3)>>
+				<<set $guests[_exIdx].corruption = Math.min(100, ($guests[_exIdx].corruption ?? 0) + 1)>>
+				<<link 'Continue'>>
+					<<run delete $tmpEvent.isEx>>
+					<<run delete $tmpEvent.exProtestorIdx>>
+					<<goto 'Guesthouse [Event] - male on female'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>−8 happy, +4 sub, +2 corruption to <<=setup.displayName(_protestor)>>; −3 happy, +1 corruption to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+		<div id="ex-respect">
+			<<linkreplace 'Respect their wishes'>>
+				<<run $('#ex-protest').hide()>>
+				The tension in <<=setup.pronounceWho(_protestor)>> releases almost immediately. <<=setup.pronounceWhat(_protestor, true)>>'d been braced for something worse. The look <<=setup.pronounceWhat(_protestor)>> gives you isn't warm — there isn't enough between you for that — but there's something in it that acknowledges you made a different choice than <<=setup.pronounceWhat(_protestor)>> expected. <<=setup.pronounceWhat(_protestor, true)>> doesn't linger.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.min(100, ($guests[_protestorIdx].happy ?? 50) + 2)>>
+				<<set $guests[_protestorIdx].relationship = Math.min(100, ($guests[_protestorIdx].relationship ?? 0) + 2)>>
+				<<set $guests[_exIdx].happy = Math.min(100, ($guests[_exIdx].happy ?? 50) + 1)>>
+				<<link 'Leave'>>
+					<<unset $tmpEvent>>
+					<<goto 'Guest house'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>+2 happy, +2 relationship to <<=setup.displayName(_protestor)>>; +1 happy to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+	<<elseif _relScore < 50>>
+		<<=setup.pronounceWhat(_protestor, true)>>'s found <<=setup.pronounceWhos(_protestor)>> footing since it ended — what passes for normal between them. When you arrive, <<=setup.pronounceWhat(_protestor)>> registers <<=setup.displayName(_ex)>> and something in <<=setup.pronounceWho(_protestor)>> stiffens, not with hostility but with the particular discomfort of someone who'd gotten used to not having to think about this.
+		<br /><br />
+		<<sayNpc _protestor>>
+			<<set _exDialogOptions = [
+			"We tried. It didn't take. We're better off as whatever this is — people who can nod to each other in the corridor. Can that be enough?",
+			"There was a time I thought it could work. It didn't. I think we both know we're easier to be around when we're not being asked to be more than that.",
+			"We made our peace with it. I'd rather not unsettle that. We've figured out how to exist in the same place — that counts for something.",
+			"Things are easier between us now. I don't want to go back to when they weren't. Whatever we are now — it works. Can't we leave it that way?",
+			"We weren't right for each other. That's not a failing, it's just what it was. What we have now is better. Is that not enough for the settlement?"
+			]>>
+			<<=setup.getRandomElement(_exDialogOptions)>>
+		<</sayNpc>>
+		<br /><br />
+		<div id="ex-protest">
+			<<linkreplace 'Insist'>>
+				<<run $('#ex-respect').hide()>>
+				<<=setup.pronounceWhat(_protestor, true)>> lets out a slow breath. The argument dies before <<=setup.pronounceWhat(_protestor)>> makes it — not because it wasn't there, but because it isn't going to land. <<=setup.pronounceWhat(_protestor, true)>> stands, smooths something in <<=setup.pronounceWhos(_protestor)>> expression, and heads for the door without looking back.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.max(0, ($guests[_protestorIdx].happy ?? 50) - 5)>>
+				<<set $guests[_protestorIdx].sub = Math.min(100, ($guests[_protestorIdx].sub ?? 0) + 3)>>
+				<<set $guests[_protestorIdx].corruption = Math.min(100, ($guests[_protestorIdx].corruption ?? 0) + 2)>>
+				<<set $guests[_exIdx].happy = Math.max(0, ($guests[_exIdx].happy ?? 50) - 2)>>
+				<<set $guests[_exIdx].corruption = Math.min(100, ($guests[_exIdx].corruption ?? 0) + 1)>>
+				<<link 'Continue'>>
+					<<run delete $tmpEvent.isEx>>
+					<<run delete $tmpEvent.exProtestorIdx>>
+					<<goto 'Guesthouse [Event] - male on female'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>−5 happy, +3 sub, +2 corruption to <<=setup.displayName(_protestor)>>; −2 happy, +1 corruption to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+		<div id="ex-respect">
+			<<linkreplace 'Respect their wishes'>>
+				<<run $('#ex-protest').hide()>>
+				<<=setup.pronounceWhat(_protestor, true)>> looks at you for a moment. Then a small nod — nothing more — somewhere between thanks and acknowledgment that it was always a long shot. <<=setup.pronounceWhat(_protestor, true)>> pushes off from where <<=setup.pronounceWhat(_protestor)>> was sitting and the situation disperses without another word from either of them.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.min(100, ($guests[_protestorIdx].happy ?? 50) + 2)>>
+				<<set $guests[_protestorIdx].relationship = Math.min(100, ($guests[_protestorIdx].relationship ?? 0) + 2)>>
+				<<set $guests[_exIdx].happy = Math.min(100, ($guests[_exIdx].happy ?? 50) + 1)>>
+				<<link 'Leave'>>
+					<<unset $tmpEvent>>
+					<<goto 'Guest house'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>+2 happy, +2 relationship to <<=setup.displayName(_protestor)>>; +1 happy to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+	<<else>>
+		<<=setup.pronounceWhat(_protestor, true)>> looks up when you come in and sees who's standing next to you. There's a pause — small but readable — before <<=setup.pronounceWhat(_protestor)>> gets <<=setup.pronounceWhos(_protestor)>> expression under control. Something complicated crosses <<=setup.pronounceWhos(_protestor)>> face. <<=setup.pronounceWhat(_protestor, true)>>'s not hostile. It's more like the particular discomfort of someone who hasn't quite finished deciding how they feel.
+		<br /><br />
+		<<sayNpc _protestor>>
+			<<set _exDialogOptions = [
+			"I'm not going to pretend there's nothing there. There probably is. But we tried it and it didn't work out. Is it really worth stirring that up again?",
+			"It's complicated. We ended for reasons. Those reasons haven't gone away just because we're civil now. I don't know if I trust myself around them.",
+			"Honestly? I don't hate the idea. But the last time didn't end well, and I'm not sure I want to find out if this time is any different.",
+			"We get along now. That's not nothing. I just don't know if adding this back in is going to help or set us right back to where we were.",
+			"There's probably still something there. I won't pretend otherwise. I'm just not sure opening that door again is wise. But I'm listening."
+			]>>
+			<<=setup.getRandomElement(_exDialogOptions)>>
+		<</sayNpc>>
+		<br /><br />
+		<div id="ex-protest">
+			<<linkreplace 'Insist'>>
+				<<run $('#ex-respect').hide()>>
+				<<=setup.pronounceWhat(_protestor, true)>>'s quiet for a long moment. Then, almost to <<=setup.pronounceWho(_protestor) + 'self'>>: "I knew I should have said no harder." <<=setup.pronounceWhat(_protestor, true)>> gets up and moves for the door, and there's something in the way <<=setup.pronounceWhat(_protestor)>> carries <<=setup.pronounceWho(_protestor) + 'self'>> that isn't entirely resigned.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.max(0, ($guests[_protestorIdx].happy ?? 50) - 3)>>
+				<<set $guests[_protestorIdx].sub = Math.min(100, ($guests[_protestorIdx].sub ?? 0) + 2)>>
+				<<set $guests[_protestorIdx].corruption = Math.min(100, ($guests[_protestorIdx].corruption ?? 0) + 3)>>
+				<<set $guests[_exIdx].happy = Math.min(100, ($guests[_exIdx].happy ?? 50) + 2)>>
+				<<link 'Continue'>>
+					<<run delete $tmpEvent.isEx>>
+					<<run delete $tmpEvent.exProtestorIdx>>
+					<<goto 'Guesthouse [Event] - male on female'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>−3 happy, +2 sub, +3 corruption to <<=setup.displayName(_protestor)>>; +2 happy to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+		<div id="ex-respect">
+			<<linkreplace 'Respect their wishes'>>
+				<<run $('#ex-protest').hide()>>
+				<<=setup.pronounceWhat(_protestor, true)>> looks away first. Something in <<=setup.pronounceWhos(_protestor)>> posture settles. "Yeah," <<=setup.pronounceWhat(_protestor)>> says, to no one in particular. "Probably for the best." <<=setup.pronounceWhat(_protestor, true)>> means it and <<=setup.pronounceWhat(_protestor)>> doesn't, and the way <<=setup.pronounceWhat(_protestor)>> leaves suggests <<=setup.pronounceWhat(_protestor)>>'s not entirely sure which.
+				<br /><br />
+				<<set $guests[_protestorIdx].happy = Math.min(100, ($guests[_protestorIdx].happy ?? 50) + 2)>>
+				<<set $guests[_protestorIdx].relationship = Math.min(100, ($guests[_protestorIdx].relationship ?? 0) + 2)>>
+				<<set $guests[_exIdx].happy = Math.min(100, ($guests[_exIdx].happy ?? 50) + 1)>>
+				<<link 'Leave'>>
+					<<unset $tmpEvent>>
+					<<goto 'Guest house'>>
+				<</link>>
+			<</linkreplace>>
+			<<linkdesc>>+2 happy, +2 relationship to <<=setup.displayName(_protestor)>>; +1 happy to <<=setup.displayName(_ex)>><</linkdesc>>
+		</div>
+	<</if>>
+<<else>>
 <<if typeof $randEvent === 'undefined'>>
 	<<set
 		_guestIds = [$tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]],
@@ -230,3 +980,4 @@
 	<<unset $randEvent, $tmpEvent>>
 	<<goto 'Guest house'>>
 <</link>>
+<</if>>

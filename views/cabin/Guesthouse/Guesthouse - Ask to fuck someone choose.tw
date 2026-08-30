@@ -19,12 +19,66 @@
 	_guysLikingAll3 = []
 >>
 <<run _interestedGuests.delete(_k)>>
+<<set _spouseIdxs = []>>
+<<if $tmpGirl.married>>
+	<<set _spouseWantedIds = ($tmpGirl.family?.wives ?? []).concat($tmpGirl.family?.husband ? [$tmpGirl.family.husband] : [])>>
+	<<for _si, _sg range $guests>>
+		<<if _spouseWantedIds.includes(_sg.id) && setup.getAge(_sg) >= 18>>
+			<<run _spouseIdxs.push(_si)>>
+		<</if>>
+	<</for>>
+	<<for _spi range _spouseIdxs>>
+		<<run _interestedGuests.delete(_spi)>>
+	<</for>>
+<</if>>
+<<set _intercedingSpouseIdxs = []>>
+<<for _isi range _spouseIdxs>>
+	<<if random(1, 100) <= setup.intercessionChance($guests[_isi], $weather)>>
+		<<run _intercedingSpouseIdxs.push(_isi)>>
+	<</if>>
+<</for>>
 
 <<if ($tmpGirl.horny < 20 && !($tmpGirl.traits ?? []).includes('nymphomaniac'))>>
 	I'm not in the mood, maybe some other time.
-<<elseif _interestedGuests.length == 0>>
+<<elseif _interestedGuests.length == 0 && _spouseIdxs.length == 0>>
 	Didn't find anyone interested, maybe some other time.
 <<else>>
+	<<for _spouseLoopI, _spi range _spouseIdxs>>
+		<<capture _spouseLoopI, _spi>>
+			<<set _spouseGuest = $guests[_spi]>>
+			<<set _spouseGenderClass = 'gender-' + setup.genderClass(_spouseGuest)>>
+			<div>
+				<span @class="''+_spouseGenderClass+''">
+					<<link _spouseGuest.name>>
+						<<set $locationEvents.guesthouse = true>>
+						<<addmins 15>>
+						<<dialogclose>>
+						<<if ($guests[_spi].gender == 0 && $guests[_k].gender == 0)>>
+							<<set $tmpEvent = [_spi, _k]>>
+							<<goto 'Guesthouse [Event] - female on female'>>
+						<<elseif ($guests[_spi].gender == 0 && $guests[_k].gender == 1)>>
+							<<set $tmpEvent = {
+								maleGuestIds: [_k],
+								femaleGuestIds: [_spi],
+								isCouple: true
+							}>>
+							<<goto 'Guesthouse [Event] - male on female'>>
+						<<elseif ($guests[_k].gender == 0 && $guests[_spi].gender == 1)>>
+							<<set $tmpEvent = {
+								maleGuestIds: [_spi],
+								femaleGuestIds: [_k],
+								isCouple: true
+							}>>
+							<<goto 'Guesthouse [Event] - male on female'>>
+						<<elseif ($guests[_spi].gender == 1 && $guests[_k].gender == 1)>>
+							<<set $tmpEvent = [_spi, _k]>>
+							<<goto 'Guesthouse [Event] - male on male'>>
+						<</if>>
+					<</link>>
+				</span>
+			</div>
+		<</capture>>
+	<</for>>
 	<<for _i to 0; _i lt _interestedGuests.length; _i++>>
 		<<capture _i, _j>>
 			<<set
@@ -88,19 +142,46 @@
 								<<addmins 15>>
 							<<dialogclose>>
 
+							<<set _targetSpouseIdxs = []>>
+							<<if ($guests[_j].married)>>
+								<<set _targetSpouseIds = ($guests[_j].family?.wives ?? []).concat($guests[_j].family?.husband ? [$guests[_j].family.husband] : [])>>
+								<<for _tsi, _tsg range $guests>>
+									<<if _targetSpouseIds.includes(_tsg.id) && setup.getAge(_tsg) >= 18>>
+										<<run _targetSpouseIdxs.push(_tsi)>>
+									<</if>>
+								<</for>>
+							<</if>>
+							<<set _filteredTargetIdxs = []>>
+							<<for _ftsi range _targetSpouseIdxs>>
+								<<if random(1, 100) <= setup.intercessionChance($guests[_ftsi], $weather)>>
+									<<run _filteredTargetIdxs.push(_ftsi)>>
+								<</if>>
+							<</for>>
+							<<set _targetSpouseIdxs = _filteredTargetIdxs>>
+							<<set _isEx = ($tmpGirl.family?.exes ?? []).includes($guests[_j].id)>>
 							<<if ($guests[_j].gender == 0 && $guests[_k].gender == 0)>>
 								<<set $tmpEvent = [_j, _k]>>
 								<<goto 'Guesthouse [Event] - female on female'>>
 							<<elseif ($guests[_j].gender == 0 && $guests[_k].gender == 1)>>
 								<<set $tmpEvent = {
 									maleGuestIds: [_k],
-									femaleGuestIds: [_j]
+									femaleGuestIds: [_j],
+									wifeGuestIdxs: _intercedingSpouseIdxs.length > 0 ? _intercedingSpouseIdxs : undefined,
+									husbandGuestIdxs: _targetSpouseIdxs.length > 0 ? _targetSpouseIdxs : undefined,
+									isEx: _isEx || undefined,
+									exProtestorIdx: _isEx ? _k[0] : undefined,
+									exIdx: _isEx ? _j : undefined
 								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>
 							<<elseif ($guests[_k].gender == 0 && $guests[_j].gender == 1)>>
 								<<set $tmpEvent = {
 									maleGuestIds: [_j],
-									femaleGuestIds: [_k]
+									femaleGuestIds: [_k],
+									husbandGuestIdxs: _intercedingSpouseIdxs.length > 0 ? _intercedingSpouseIdxs : undefined,
+									wifeGuestIdxs: _targetSpouseIdxs.length > 0 ? _targetSpouseIdxs : undefined,
+									isEx: _isEx || undefined,
+									exProtestorIdx: _isEx ? _k[0] : undefined,
+									exIdx: _isEx ? _j : undefined
 								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>
 							<<elseif ($guests[_j].gender == 1 && $guests[_k].gender == 1)>>
@@ -324,8 +405,8 @@
 		</div>
 	<</if>>
 
-	<<if _prospects == 0>>
-		I didn't match with anyone, maybe some othertime.
+	<<if _prospects == 0 && _spouseIdxs.length == 0>>
+		I didn't match with anyone, maybe some other time.
 	<</if>>
 <</if>>
 

@@ -188,6 +188,23 @@
 
 	<<include 'NPC view - massage table invite'>>
 
+	<<if !$tmpGirl.offeredFood>>
+		<<set _linkName = 'Offer ' + _himOrHer + ' some extra food'>>
+		<<set _foodNeeded = 1>>
+		<<for _fi range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+			<<if setup.getAge(_fi) >= 5>><<set _foodNeeded++>><</if>>
+		<</for>>
+		<<if $backpack.count('food') > _foodNeeded>>
+			<<link `_linkName`>>
+				<<goto 'NPC offer food'>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				<<=_linkName>> (insufficient food to offer surplus)
+			</div>
+		<</if>>
+	<</if>>
+
 	<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
 		<<if $backpack.has('pregnancy_potion')>>
 			<<link 'Give pregnancy termination potion'>>

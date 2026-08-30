@@ -31,7 +31,8 @@ setup.sleep.processNpc = function(npc, opts) {
     Object.assign(npc, {
         talked: false, milked: false, groped: false, washed: false,
         workout: false, gift: false, cosmetics: false, drunk: 0,
-        offerSlave: false, sleeping: false, washedBathhouse: false
+        offerSlave: false, sleeping: false, washedBathhouse: false,
+        offeredFood: false
     });
 
     npc.stats = npc.stats || {};

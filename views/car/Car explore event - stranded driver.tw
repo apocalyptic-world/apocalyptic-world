@@ -87,6 +87,9 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <<run $('#opt_water').hide()>>
         <<run $('#opt_drive').hide()>>
         <<addmins 20>>
+        <<if !($tmpGirl.skills ?? []).includes('mechanic')>>
+            <<run ($tmpGirl.skills = $tmpGirl.skills ?? []).push('mechanic')>>
+        <</if>>
         Something in her changes when you say it. She's around the front of your car before you've finished the sentence, hood up, head bent over the engine with the focused quiet of someone who spent years doing exactly this.
         <br /><br />
                 <center>
@@ -115,6 +118,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
                 <<set $tmpGirl.relationship += 40>>
                 <<set $tmpGirl.happy += 50>>
                 <<set $tmpGirl.capture = false>>
+                <<run setup.npc.addHistory($tmpGirl, 'invited')>>
                 <<run $guests.push($tmpGirl)>>
                 She looks at you. At the car. At her own dead vehicle on the shoulder. The calculation doesn't take long.
                 <br /><br />
@@ -172,6 +176,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
                 <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 30, 100)>>
                 <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 60, 100)>>
                 <<set $tmpGirl.capture = false>>
+                <<run setup.npc.addHistory($tmpGirl, 'invited')>>
                 <<run $guests.push($tmpGirl)>>
                 <<goto 'Garage'>>
             <</link>>

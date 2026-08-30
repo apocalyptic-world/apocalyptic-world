@@ -4,8 +4,8 @@
 
 <<set _randomDoctorJobs = [
 	'is cleaning up one of the beds.',
-	'is putting some medicine back in shelves',
-	'is cleaning floor'
+	'is putting some medicine back in shelves.',
+	'is cleaning floor.'
 ]>>
 
 <<set _doctors = setup.getPersonsForLocation($guests, 'hospital')>>
@@ -43,7 +43,10 @@
 								<<set $tmpGirlBack = 'Hospital'>>
 								<<goto `$tmpGirlViewBack`>>
 							<</link>>
-						</span> <<=setup.getRandomElement(_randomDoctorJobs)>> 
+						</span> <<=setup.getRandomElement(_randomDoctorJobs)>>
+						<<if (_guest.horny ?? 0) >= 80>>
+							<<=ucfirst(setup.pronounceWhat(_guest))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted</span>, and could use some attention.
+						<</if>>
 						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
 					</td>
 				</tr>

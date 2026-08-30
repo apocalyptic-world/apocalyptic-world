@@ -23,13 +23,4 @@
 		<<if setup.getAge(_scheduleSlave) < 18>>
 			<<continue>>
 		<</if>>
-
-		<<if (_hasBathhouse && !_scheduleSlave.washedBathhouse &&
-			(typeof _bathSchedule[_scheduleSlave.assignedTo] !== 'undefined' && (timeBetween(_bathSchedule[_scheduleSlave.assignedTo].from, _bathSchedule[_scheduleSlave.assignedTo].to) && setup.percentageChance(_bathSchedule[_scheduleSlave.assignedTo].p)))
-			)>>
-				<<set _scheduleSlave.washedBathhouse = true>>
-				<<run setup.wash(_scheduleSlave)>>
-				<<set _scheduleSlave.location = 'bathhouse'>>
-				<<setNpcStats 'slave' _scheduleSlaveI 'happy' 3>>
-		<</if>>
 <</for>>

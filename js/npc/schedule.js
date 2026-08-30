@@ -59,6 +59,43 @@ setup.isAtWork = function (npc, weather) {
     return true;
 };
 
+// Returns the % chance (0-100) that a married NPC will intercede when their spouse is
+// asked to have sex with someone else. Pass $weather from the calling passage.
+setup.intercessionChance = function (npc, weather) {
+    if (!npc) return 0;
+
+    var job = npc.assignedTo;
+
+    // Enslaved in guesthouse as companion-slave — cannot intercede
+    if (job === 'companion_slave') return 0;
+
+    // Always present in guesthouse
+    var alwaysHome = !job || job === 'none' || job === 'guard'
+                  || job === 'companion' || job === 'hunter';
+    if (alwaysHome) {
+        return typeof npc.sick !== 'undefined' ? 33 : 100;
+    }
+
+    // Sick/injured overrides job location for all remaining categories
+    if (typeof npc.sick !== 'undefined') return 33;
+
+    // In-and-out jobs with no fixed schedule
+    if (job === 'milkwarden' || job === 'shop') return 75;
+
+    // Jobs outside the settlement
+    var outsideJobs = ['forest', 'scavenging', 'streets', 'nightclub', 'strip_club', 'quarry'];
+
+    var schedule = setup.outsideWorkHours[job];
+    if (schedule) {
+        // Off-shift → back in guesthouse
+        if (!setup.isAtWork(npc, weather)) return 100;
+        return outsideJobs.indexOf(job) !== -1 ? 25 : 50;
+    }
+
+    // Unknown job — treat as inside settlement
+    return 50;
+};
+
 // Returns an array of real indices into arr, sorted by sortBy.
 // 'N' = name, 'P' = pregnancy desc, 'A' = assignment (needs companions + prefix like 'guest:' or 'slave:')
 // Any unrecognised sortBy returns indices in original order.

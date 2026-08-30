@@ -3,9 +3,12 @@
 <br />
 <div id="characters-in-location">
 	<<if (_charactersInLocation['strip_club'] ?? []).includes('isabel')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
-			<<goto 'Strip Club - Isabel'>>
-		<</link>>
+		<<set _hornyClass = ($characters?.isabel?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+				<<goto 'Strip Club - Isabel'>>
+			<</link>>
+		</span>
 	<</if>>
 </div>
 <br />
