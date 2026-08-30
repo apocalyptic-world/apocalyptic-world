@@ -1,0 +1,34 @@
+:: Slave fuck choose [sex no-redirect girlview]
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<set _linkAlone = 'Fuck ' + _himOrHer>>
+<<link `_linkAlone`>>
+	<<if $tmpGirl.assignedTo === 'attendant'>>
+		<<set $tmpGirlViewBack = 'NPC view'>>
+		<<goto 'Attendant fuck choose'>>
+	<<else>>
+		<<fuck $tmpGirl>>
+	<</if>>
+<</link>>
+
+<<if $tmpGirl.location === 'basement'>>
+	<<set _sfcGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+	<<if _sfcGuest.length > 0 && setup.isAtWork($guests[_sfcGuest[0]], $weather) && $player.energy >= 15 && hasTime(1)>>
+		<<set _linkMistress = 'Mistress fucks ' + _himOrHer>>
+		<<link `_linkMistress`>>
+			<<mistress $tmpGirl>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<if recall($suppCode) && $backpack.has('duck_tape')>>
+	<<link 'Restrain with duck tape'>>
+		<<goto 'Slave - duck tape scene'>>
+	<</link>>
+<</if>>
+
+<<link 'Back'>>
+	<<goto 'NPC view'>>
+<</link>>
