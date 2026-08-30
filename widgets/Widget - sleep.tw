@@ -535,7 +535,7 @@
 <</if>>
 
 // Milk warden
-<<if _hasMilkwarden && setup.cabinInventory.count('milk') >= 3>>
+<<if _hasMilkwarden && ($player.milkBarnCheese !== false) && setup.cabinInventory.count('milk') >= 3>>
 	<<set _milkwarden = setup.getPersonsForLocation($guests, 'milkwarden')>>
 	<<if _milkwarden.length && $guests[_milkwarden[0]]>>
 		<<run setup.sleepMessages.addJob($guests[_milkwarden[0]].name + ' produced 2 cheese\'s (food) from milk', 'milk_barn')>>

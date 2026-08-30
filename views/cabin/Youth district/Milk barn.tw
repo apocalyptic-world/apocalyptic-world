@@ -66,6 +66,12 @@
 		<<goto 'Milk barn - drink milk'>>
 	<</link>>
 <</if>>
+<<set _cheeseOn = ($player.milkBarnCheese !== false)>>
+<<set _cheeseToggleLabel = 'Cheese production: ' + (_cheeseOn ? 'ON' : 'OFF')>>
+<<linkreplace _cheeseToggleLabel>>
+	<<set $player.milkBarnCheese = !_cheeseOn>>
+	Cheese production is now <<if !_cheeseOn>><span style="color:#55cc88;">ON</span> — milk will be converted to food each night.<<else>><span style="color:#e09855;">OFF</span> — milk will accumulate in storage.<</if>>
+<</linkreplace>>
 <<link 'Back'>>
     <<goto 'Youth district'>>
 <</link>>
