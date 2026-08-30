@@ -18,19 +18,28 @@
 
 <div id="characters-in-location">
 	<<if (_charactersInLocation['bathhouse'] ?? []).includes('eve')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
-			<<goto 'Eve - shower'>>
-		<</link>>
+		<<set _hornyClass = ($characters?.eve?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+				<<goto 'Eve - shower'>>
+			<</link>>
+		</span>
 	<</if>>
 	<<if (_charactersInLocation['bathhouse'] ?? []).includes('octavia')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
-			<<goto 'Octavia - shower'>>
-		<</link>>
+		<<set _hornyClass = ($characters?.octavia?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
+				<<goto 'Octavia - shower'>>
+			<</link>>
+		</span>
 	<</if>>
 	<<if (_charactersInLocation['bathhouse'] ?? []).includes('laura')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
-			<<goto 'Laura - shower'>>
-		<</link>>
+		<<set _hornyClass = ($characters?.laura?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/laura/avatar.jpg"]]</div>'>>
+				<<goto 'Laura - shower'>>
+			<</link>>
+		</span>
 	<</if>>
 </div>
 <<set _peopleInBathhouse = {}>>
@@ -77,6 +86,49 @@
 						<</if>>
                       <</link>>
                   </span>
+			<<set _jobDescMap = {
+				'garden': 'the garden', 'forest': 'the forest',
+				'milk_barn': 'the barn', 'hunter': 'the hunt',
+				'scavenging': 'a scavenging run', 'streets': 'the streets',
+				'nightclub': 'a night at the nightclub', 'strip_club': 'the strip club',
+				'quarry': 'the quarry', 'companion_slave': 'the road', 'companion_guest': 'the road'
+			}>>
+			<<set _jobDesc = _jobDescMap[_bathGuest.assignedTo] ?? 'the day'>>
+			<<set _hisOrHer = setup.pronounceWhos(_bathGuest)>>
+			<<set _shaveText = (_bathGuest.gender === 1) ? 'shaving ' + _hisOrHer + ' stubble' : 'shaving ' + _hisOrHer + ' legs'>>
+			<<set _grimeText = setup.getRandomElement(['sweat', 'dust', 'grime'])>>
+			<<set _bathActivities = ['washing ' + _hisOrHer + ' hair', 'drying ' + _hisOrHer + ' hair', 'splashing water on ' + _hisOrHer + ' face', _shaveText, 'soaping off the ' + _grimeText + ' of ' + _jobDesc, 'taking some steam in the sauna']>>
+			<<if $game.location.hottub ?? false>><<run _bathActivities.push('having a soak in the hot tub')>><</if>>
+			<<if setup.npcInventoryHas(_bathGuest, 'cosmetics')>><<run _bathActivities.push('applying some lotion')>><</if>>
+			<<if (_bathGuest.traits ?? []).includes('nymphomaniac')>><<if setup.npcInventoryHas(_bathGuest, 'sextoy')>><<run _bathActivities.push('moaning softly from a shower stall, a soft hum audible under the curtain')>><<else>><<run _bathActivities.push('moaning softly from a shower stall')>><</if>><</if>>
+			<<set _massageTarget = null>><<set _massageTargetIdx = -1>><<set _massageTargetIsGuest = false>>
+			<<if !_bathGuest.gender && (_bathGuest.likesGirls ?? false) && settings.lesbiansEnabled>>
+				<<for _mgi, _mg range $guests>>
+					<<if _massageTarget>><<break>><</if>>
+					<<if _mg.gender === 0 && _mgi !== _bathGuestI && _mg.location !== 'bathhouse'>>
+						<<set _mgSched = setup.bathSchedule[_mg.assignedTo]>>
+						<<if _mgSched && timeBetween(_mgSched.from, _mgSched.to)>>
+							<<set _massageTarget = _mg>><<set _massageTargetIdx = _mgi>><<set _massageTargetIsGuest = true>>
+						<</if>>
+					<</if>>
+				<</for>>
+				<<if _massageTarget>><<run _bathActivities.push('give_massage')>><<set _targetGenderClass = 'gender-' + setup.genderClass(_massageTarget)>><<set $bathMassageGuestIdx = _massageTargetIdx>><</if>>
+			<</if>>
+			<<set _chosenActivity = setup.getRandomElement(_bathActivities)>>
+			<<if _chosenActivity === 'give_massage'>>is giving <span @class="_targetGenderClass"><<link _massageTarget.name>>
+					<<set $tmpGirl = $guests[$bathMassageGuestIdx]>>
+					<<set $tmpGirl.location = 'bathhouse'>>
+					<<set $guestId = $bathMassageGuestIdx>><<run delete $slaveId>><<run delete $charId>>
+					<<set $tmpGirl.rape to false>><<set $tmpGirlCapture to false>><<set $tmpGirlInvite to false>>
+					<<set $tmpGirlBack = 'Bathhouse'>><<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<goto 'NPC view - guest'>>
+				<</link>></span> a massage.
+			<<else>>
+				is <<=_chosenActivity>>.
+			<</if>>
+			<<if (_bathGuest.horny ?? 0) >= 80>>
+				<<=ucfirst(setup.pronounceWhat(_bathGuest))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted...</span>
+			<</if>>
 			</td>
 			<td>
 				<<if [0,2].includes(_bathGuest.gender) && setup.getAge(_bathGuest) >= 17>>
@@ -94,47 +146,6 @@
 		</tr>
 		<</capture>>
 	<</for>>
-	
-	<<for _bathSlaveI, _bathSlave range $slaves>>
-		<<capture _bathSlaveI, _bathSlave>>
-		<<if _bathSlave.location !== 'bathhouse'>>
-			<<continue>>
-		<</if>>
-		<<set _genderClass = 'gender-' + setup.genderClass(_bathSlave)>>
-		<tr>
-			<td style="width: 300px">
-           		 <span @class="''+_genderClass+''">
-                      <<link _bathSlave.name>>
-                        <<set $tmpGirl to $slaves[_bathSlaveI]>>
-                        <<set $tmpGirl.location = 'bathhouse'>>
-                        <<set $tmpGirlBack = 'Bathhouse'>>
-                        <<set $tmpGirl.rape to false>>
-                        <<set $tmpGirlCapture to false>>
-						<<set $tmpGirlInvite to false>>
-                        <<run delete $guestId>>
-						<<run delete $charId>>
-                        <<set $slaveId = _bathSlaveI>>
-						<<set $tmpGirlViewBack = 'NPC view'>>
-                        <<goto `$tmpGirlViewBack`>>
-                      <</link>>
-                  </span>
-			</td>
-			<td>
-				<<if [0,2].includes(_bathSlave.gender) && setup.getAge(_bathSlave) >= 17>>
-					Beauty score: <<=_bathSlave.beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge(_bathSlave)>>
-			</td>
-			<td>
-				<<if _bathSlave.assignedTo>>
-					(<<=_bathSlave.assignedTo>>)
-				<</if>>
-			</td>
-		</tr>
-		<</capture>>
-	<</for>> 
 </table>
 
 <br /><br />

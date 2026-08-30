@@ -3,9 +3,12 @@
 <br />
 <div id="characters-in-location">
 	<<if (_charactersInLocation['church'] ?? []).includes('eve')>>
-		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
-			<<goto 'Eve room'>>
-		<</link>>
+		<<set _hornyClass = ($characters?.eve?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/eve/avatar.png"]]</div>'>>
+				<<goto 'Eve room'>>
+			<</link>>
+		</span>
 	<</if>>
 </div>
 <br />
@@ -38,23 +41,26 @@
 				<tr>
 					<td style="min-width: 25%">
 						<center>
-							<<actionImage _guest working>>
-						</center>
-						<span @class="_genderClass + _customColorStyle">
-							<<link _guest.name>>
-								<<set $tmpGirl to _guest>>
-								<<set $tmpGirl.location = 'church'>>
-								<<set $tmpGirl.rape to false>>
-								<<set $tmpGirlCapture to false>>
-								<<set $tmpGirlInvite to false>>
-								<<set $guestId = _nun>>
-								<<unset $slaveId, $childId, $charId>>
-								<<set $tmpGirlViewBack = 'NPC view - guest'>>
-								<<set $tmpGirlBack = 'Church'>>
-								<<goto `$tmpGirlViewBack`>>
-							<</link>>
-						</span> <<=setup.getRandomElement(_randomNunJobs)>>
-						<<=setup.npcListInfo(_guest, false, false)>>
+						<<actionImage _guest working>>
+					</center>
+					<span @class="_genderClass + _customColorStyle">
+						<<link _guest.name>>
+							<<set $tmpGirl to _guest>>
+							<<set $tmpGirl.location = 'church'>>
+							<<set $tmpGirl.rape to false>>
+							<<set $tmpGirlCapture to false>>
+							<<set $tmpGirlInvite to false>>
+							<<set $guestId = _nun>>
+							<<unset $slaveId, $childId, $charId>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<set $tmpGirlBack = 'Church'>>
+							<<goto `$tmpGirlViewBack`>>
+						<</link>>
+					</span> <<=setup.getRandomElement(_randomNunJobs)>>
+					<<if (_guest.horny ?? 0) >= 80>>
+						<<=ucfirst(setup.pronounceWhat(_guest))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted</span>, and could use some attention.
+					<</if>>
+					<<=setup.npcListInfo(_guest, false, false)>>
 					</td>
 				</tr>
 			<</capture>>

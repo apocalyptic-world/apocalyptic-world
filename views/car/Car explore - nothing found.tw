@@ -28,8 +28,12 @@ You found nothing while driving around.
     <<set $tmpGirl = setup.companionGet(_chosenKey)>>
     <<if _splitCompanionKey[0] === 'guest'>>
         <<set $guestId = _splitCompanionKey[1]>>
+        <<run delete $slaveId>>
+        <<run delete $charId>>
     <<else>>
         <<set $slaveId = _splitCompanionKey[1]>>
+        <<run delete $guestId>>
+        <<run delete $charId>>
     <</if>>
     <<set $tmpGirl.location = 'car'>>
     <<set _pronHerHim = setup.pronounceWho($tmpGirl)>>

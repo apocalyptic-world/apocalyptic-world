@@ -24,6 +24,7 @@ You're not sure if that's a compliment.
                 She doesn't get much say in it. You take a different route and she understands what's happening before you need to explain. By then the car's already moving and she's not stronger than you.
                 <br /><br />
                 <<set $tmpGirl.capture = false>>
+                <<run setup.npc.addHistory($tmpGirl, 'captured')>>
                 <<run $slaves.push($tmpGirl)>>
                 <<addhours 2>>
                 <<energy -30>>
@@ -56,6 +57,7 @@ You're not sure if that's a compliment.
             <<set $tmpGirl.capture = false>>
             <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 40, 100)>>
             <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 50, 100)>>
+            <<run setup.npc.addHistory($tmpGirl, 'invited')>>
             <<run $guests.push($tmpGirl)>>
             <br /><br />
             <<link 'Continue'>>
