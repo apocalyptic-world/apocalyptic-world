@@ -1,5 +1,11 @@
 :: Inventory
+<<set _invFilter = ($player?.settings?.inventoryFilter ?? 'all')>>
+
 <div id="inventory-header">
+<div class="inv-filter-row">
+<<for _f range ['all', 'use', 'weapon', 'food', 'tool']>><<capture _f>><<set _fl = {all:'All', use:'Usable', weapon:'Weapons', food:'Food', tool:'Tools'}[_f]>><<if _f === _invFilter>><span class="inv-filter-active"><<=_fl>></span><<else>><<link `_fl`>><<set $player.settings ??= {}>><<set $player.settings.inventoryFilter = _f>><<script>>Dialog.setup("Inventory","Inventory");Dialog.wiki(Story.get("Inventory").processText());Dialog.open();<</script>><</link>><</if>> <</capture>><</for>>
+</div>
+<div class="inv-blueprint-toggle">
 	<<set _linkName = $player?.settings?.hideBlueprints ? 'Show blueprints' : 'Hide blueprints'>>
 	<<link _linkName>>
 		<<set $player.settings ??= {}>>
@@ -12,6 +18,8 @@
 		<<goto `passage()`>>
 	<</link>>
 </div>
+</div>
+
 <div id="inventory">
     <<for _item, _amount range $backpack.table>>
 		<<capture _item, _amount>>
@@ -25,12 +33,16 @@
 		  <<if _icon.indexOf("note") !== -1>>
 			  <<set _icon = 'note'>>
 		  <</if>>
+		  <<if _invFilter === 'use' && !Item.get(_item).consumable>><<continue>><</if>>
+		  <<if _invFilter === 'weapon' && !Item.get(_item).hasTag('weapon')>><<continue>><</if>>
+		  <<if _invFilter === 'food' && !Item.get(_item).hasTag('food')>><<continue>><</if>>
+		  <<if _invFilter === 'tool' && !Item.get(_item).hasTag('tool')>><<continue>><</if>>
 		  <div class='inventory-item tooltip'>
 			  <div class='inventory-img'>
 				  [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
 			  </div>
 			  <div class='inventory-title'>
-				  <<= Item.get(_item).name>> 
+				  <<= Item.get(_item).name>>
 				  <<if !Item.get(_item).unique>>
 					  <span class='inventory-amount'>x_amount</span>
 				  <</if>>
@@ -54,7 +66,7 @@
 			  <</if>>
 			  <div>
 				<<link 'Drop'>>
-					<<dialog 'Drop'>>	
+					<<dialog 'Drop'>>
 						How much do you want to drop <<=Item.get(_item).name>>? <<textbox "_dropAmount" _amount>>
 						<<link 'OK'>>
 							<<drop $backpack _item _dropAmount>>
@@ -65,7 +77,7 @@
 							<</script>>
 							<<goto `passage()`>>
 						<</link>>
-					<</dialog>>	
+					<</dialog>>
 				<</link>>
 			  </div>
 		  </div>
@@ -83,6 +95,32 @@
 
 .inventory-item {
 	 flex: 0 0 33.3333%;
+}
+
+.inv-filter-row {
+	margin-bottom: 6px;
+}
+
+.inv-filter-row .link-internal {
+	display: inline-block;
+	margin-right: 4px;
+	padding: 2px 10px;
+}
+
+.inv-filter-active {
+	display: inline-block;
+	margin-right: 4px;
+	padding: 2px 10px;
+	background: #555;
+	color: #fff;
+	border-radius: 3px;
+	cursor: default;
+}
+
+.inv-blueprint-toggle {
+	margin-bottom: 8px;
+	font-size: 0.85em;
+	opacity: 0.7;
 }
 </style>
 
