@@ -6,6 +6,7 @@
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
 <<set _begLinkText = 'Make ' + _himOrHer + ' beg for it'>>
 <<set $tmpGirl.offeredFood = true>>
+<<if typeof $slaveId !== 'undefined'>><<set $slaves[$slaveId].offeredFood = true>><</if>>
 
 The stairs to the basement are narrow and the air turns cold before you reach the bottom. You push open the heavy door and the single overhead bulb fills the cell with pale, flat light. <<=ucfirst(_heOrShe)>> hears you on the stairs — already turned toward the door when you step through, <<=_hisOrHer>> eyes going straight to what you're carrying. The attention is immediate and total. <<=ucfirst(_heOrShe)>> studies what you've brought without appearing to study it, already working out what kind of day this is going to be.
 <br /><br />
@@ -132,8 +133,6 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 					<<set _npcLines = ["Keep it.", "I won't.", "Not for that.", "I'd rather go hungry.", "Do what you want. I'm not begging."]>>
 					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
 					<br />
-					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100)>>
-					<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 5, 100)>>
 					<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
 					<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
 					<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
@@ -299,8 +298,6 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 					<<set _npcLines = ["I'm not doing that.", "Keep it.", "Not for anything.", "I'd rather starve.", "You can have it back."]>>
 					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
 					<br />
-					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 7, 100)>>
-					<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
 					<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
 					<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
 					<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
