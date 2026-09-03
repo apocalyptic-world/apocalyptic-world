@@ -188,7 +188,7 @@
 
 	<<include 'NPC view - massage table invite'>>
 
-	<<if !$tmpGirl.offeredFood>>
+	<<if !$tmpGirl.offeredFood && $tmpGirl.location === 'basement'>>
 		<<set _linkName = 'Offer ' + _himOrHer + ' some extra food'>>
 		<<set _foodNeeded = 1>>
 		<<for _fi range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
