@@ -50,6 +50,7 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 	<</link>>
 <</if>>
 <<link `_linkRelease`>>
+	<<if ($tmpGirl.relationship ?? 0) >= 50>><<achievement 'slave_release_50rel'>><</if>>
 	<<run setup.npc.addHistory($tmpGirl, 'released')>>
 	<<set $player.goodwill += 2>>
 	<<assignedTo $tmpGirl 'none'>>

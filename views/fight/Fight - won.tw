@@ -67,8 +67,11 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 		<<set $player.strength++>>
 		<strong>Your strength increased by 1</strong>
 		<br /><br />
+		<<if $player.strength >= 25>><<achievement 'strength_25'>><</if>>
 	<</if>>
+	<<if $backpack.has('knife')>><<achievement 'knife_fight_win'>><</if>>
 	<<if $fight.allies.length > 0>>
+		<<achievement 'companion_fight_win'>>
 		<<for _fightAllyI, _fightAlly range $fight.allies>>
 			<<set _guestKey = _fightAlly.key.split(':')[1]>>
 			<<if $guests[_guestKey].strength < 100>>

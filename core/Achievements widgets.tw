@@ -1,0 +1,9 @@
+:: Achievements widgets [widget]
+<<widget 'achievement'>>
+	<<if !$player.achievements>><<set $player.achievements = {}>><</if>>
+	<<if !($player.achievements[$args[0]] ?? false)>>
+		<<set $player.achievements[$args[0]] = true>>
+		<<set _achData = setup.achievements[$args[0]]>>
+		<<notify 5s>><<=(_achData?.icon ?? '🏆')>> Achievement: <<=(_achData?.name ?? $args[0])>><</notify>>
+	<</if>>
+<</widget>>

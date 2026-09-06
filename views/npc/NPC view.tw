@@ -75,6 +75,7 @@
 
 <<if $slaveId !== undefined && !($player.companions['slave:' + $slaveId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
 	<<link 'Add as companion'>>
+		<<achievement 'slave_companion'>>
 		<<companionAdd 'slave' $slaveId>>
 		<<assignedTo $tmpGirl 'companion_slave'>>
 		<<goto `passage()`>>
@@ -233,6 +234,7 @@
 	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
 		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
 		<<link `_linkName`>>
+			<<achievement 'slave_to_guest'>>
 			<<moveSlaveToGuest $tmpGirl $slaveId>>
 			<<goto 'Guest house'>>
 		<</link>>
