@@ -84,6 +84,69 @@
 			  <</for>>
 			</div>
 		<</if>>
+		<<set _npcWorkerMap = {
+			'Greenhouse':   'garden',
+			'Forest':       'forest',
+			'Shop':         'shop',
+			'Garage':       'garage',
+			'Kitchen-room': 'kitchen',
+			'Quarry':       'quarry',
+			'Streets':      'streets',
+			'Nightclub':    'nightclub',
+			'Strip Club':   'strip_club',
+			'Milk barn':    'milk_barn',
+			'School':       'school',
+			'Bedroom':  'maid',
+			'Hospital': 'hospital',
+			'Church':   'church',
+			'Basement': ['mistress', 'attendant']
+		}>>
+		<<set _npcWorkerAssign = _npcWorkerMap[$args[2]] ?? false>>
+		<<if _npcWorkerAssign && !Array.isArray(_npcWorkerAssign)>>
+			<<set _npcWorkerAssign = [_npcWorkerAssign]>>
+		<</if>>
+		<<if _npcWorkerAssign && settings.npcLocationIcons !== 'Off'>>
+			<<set _npcWorkerAvatars = []>>
+			<<for _nwNpc range $guests>>
+				<<if _npcWorkerAssign.includes(_nwNpc.assignedTo) && setup.isAtWork(_nwNpc, $weather)>>
+					<<set _nwPortraitVal = _nwNpc.portrait || setup.npcGetPackPortrait(_nwNpc)>>
+					<<run _npcWorkerAvatars.push({src: _nwPortraitVal || null, i: setup.getNpcInitials(_nwNpc.name), g: _nwNpc.gender ?? 0, c: _nwNpc.color || null, n: _nwNpc.name || ''})>>
+				<</if>>
+			<</for>>
+			<<for _nwNpc range $slaves>>
+				<<if _npcWorkerAssign.includes(_nwNpc.assignedTo) && setup.isAtWork(_nwNpc, $weather)>>
+					<<set _nwPortraitVal = _nwNpc.portrait || setup.npcGetPackPortrait(_nwNpc)>>
+					<<run _npcWorkerAvatars.push({src: _nwPortraitVal || null, i: setup.getNpcInitials(_nwNpc.name), g: _nwNpc.gender ?? 0, c: _nwNpc.color || null, n: _nwNpc.name || ''})>>
+				<</if>>
+			<</for>>
+			<<if _npcWorkerAvatars.length > 0>>
+				<<if settings.npcLocationIcons === 'Count only'>>
+					<<set _nwCountLabel = _npcWorkerAvatars.map(w => w.n).join('\n')>>
+					<div class="npc-count" @aria-label="_nwCountLabel" data-balloon-pos="up" data-balloon-length="medium"><<=_npcWorkerAvatars.length>></div>
+				<<else>>
+				<<set _nwTotalRows = Math.ceil(_npcWorkerAvatars.length / 10)>>
+				<<for _nwRow to _nwTotalRows - 1; _nwRow >= 0; _nwRow-->>
+					<<set _nwChunk = _npcWorkerAvatars.slice(_nwRow * 10, _nwRow * 10 + 10)>>
+					<<set _nwBottom = 30 + _nwRow * 27>>
+					<div @class="'grid-npcs' + (_nwTotalRows > 1 || _nwChunk.length > 5 ? ' grid-npcs-many' : '')" @style="'bottom: ' + _nwBottom + 'px'">
+						<<for _nwPortrait range _nwChunk>>
+							<<capture _nwPortrait>>
+								<<if _nwPortrait.src>>
+									<<set _nwSrc = (_nwPortrait.src.includes('http') || _nwPortrait.src.includes('packs/')
+										? _nwPortrait.src
+										: setup.ImagePath + 'custom_portraits/' + _nwPortrait.src)>>
+									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"></span>
+								<<else>>
+									<<set _nwGenderClass = (['girl','guy','tgirl','tguy'][_nwPortrait.g] ?? 'girl')>>
+									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>></div>
+								<</if>>
+							<</capture>>
+						<</for>>
+					</div>
+				<</for>>
+				<</if>>
+			<</if>>
+		<</if>>
 	  <<link '<div class="menucont">[img[_gridImgSrc]]<span class="o-text">$args[3]</span></div>'>>
 	  	<<if $args[5]>>
 			<<if ($player.horse ?? false) && $args[0] !== 'cabin'>>
@@ -136,3 +199,118 @@
 <</widget>>
 
 
+:: Grid NPC Worker Styles [stylesheet]
+
+.menu-grid .menu-col .grid-npcs {
+    position: absolute;
+    left: -5px;
+    display: flex;
+}
+.menu-grid .menu-col .npc-count {
+    position: absolute;
+    bottom: 30px;
+    left: -5px;
+    height: 40px;
+    width: 40px;
+    border-radius: 30px;
+    border: 1px solid white;
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    z-index: 40;
+}
+.menu-grid .menu-col .npc-count::after {
+    white-space: pre-line;
+}
+.menu-grid .menu-col .grid-npcs .npc-circle,
+.menu-grid .menu-col .grid-npcs .npc-placeholder {
+    height: 40px;
+    width: 40px;
+    border-radius: 30px;
+    border: 1px solid white;
+    margin-left: 3px;
+    z-index: 40;
+    flex-shrink: 0;
+}
+.menu-grid .menu-col .grid-npcs .npc-circle img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    display: block;
+    border-radius: 30px;
+}
+.menu-grid .menu-col .grid-npcs .npc-placeholder {
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle,
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder {
+    margin-left: -18px;
+}
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle:first-child,
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder:first-child {
+    margin-left: 3px;
+}
+
+
+:: Grid NPC Worker Scripts [script]
+
+setup.getNpcInitials = function(name) {
+    if (!name || !name.trim()) return '?';
+
+    const prefixRe = /^(Dr|Mr|Mrs|Ms|Miss|Prof|Rev|Capt|Sgt|Lt|Cpl|Col|Gen|Pvt|Fr|Sis|Br|Insp|Det)\.?$/i;
+    const suffixRe = /^(Jr|Sr|Esq|MD|PhD|II|III|IV|VI|VII|VIII|IX|XI|XII|XIII)\.?$/i;
+
+    const tokens = name.trim().split(/\s+/)
+        .map(t => t.replace(/^['"'"‘’“”`]+|['"'"‘’“”`]+$/g, ''))
+        .filter(t => t.length > 0);
+
+    if (tokens.length === 0) return '?';
+
+    const rem = [...tokens];
+    let prefix = null, suffix = null;
+
+    if (prefixRe.test(rem[0]) || /^#\d+/.test(rem[0])) {
+        prefix = rem.shift();
+    }
+
+    if (rem.length > 0) {
+        const last = rem[rem.length - 1];
+        if (suffixRe.test(last) || /^\d+$/.test(last)) {
+            suffix = rem.pop();
+        }
+    }
+
+    const positions = 3 - (prefix ? 1 : 0) - (suffix ? 1 : 0);
+    const initial = w => w.replace(/\.$/, '').charAt(0);
+
+    let selected = [];
+    const n = rem.length;
+    if (n > 0) {
+        if (n <= positions)       { selected = rem; }
+        else if (positions <= 1)  { selected = [rem[0]]; }
+        else if (positions === 2) { selected = [rem[0], rem[n - 1]]; }
+        else                      { selected = [rem[0], rem[1], rem[n - 1]]; }
+    }
+
+    const parts = [];
+    if (prefix) parts.push(prefix);
+    const mid = selected.map(initial).join('');
+    if (mid) parts.push(mid);
+    if (suffix) parts.push(suffix);
+
+    return parts.length ? parts.join(' ') : '?';
+};
