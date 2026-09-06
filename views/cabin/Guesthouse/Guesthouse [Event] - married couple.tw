@@ -147,7 +147,8 @@
 				<<if _yesGuestIds.length == 0>>
 					They exchange a look and both refuse without a word.
 				<<elseif _yesGuestIds.length == 1>>
-					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while <<=setup.displayName($guests[_guestIds[1]], true)>> stays back.
+					<<set _stayBackId = _guestIds.find(id => id !== _yesGuestIds[0])>>
+					<<=setup.displayName($guests[_yesGuestIds[0]], true)>> hesitantly agrees while <<=setup.displayName($guests[_stayBackId], true)>> stays back.
 					<br /><br />
 					<<linkreplace 'Continue'>>
 						<<unset $guestId, $charId, $slaveId>>
