@@ -269,6 +269,13 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 
 	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
+	<<set _ghCaughtCandidates = []>>
+	<<for _gci to 0; _gci lt $guests.length; _gci++>>
+		<<set _gcGuest = $guests[_gci]>>
+		<<if !_gcGuest.gender && (_gcGuest.likesGuys ?? true) && (['white', 'latina'].includes(_gcGuest.ethnicity ?? '')) && (_gcGuest.relationship ?? 0) >= 60 && !setup.isAtWork(_gcGuest, $weather)>>
+			<<set _ghCaughtCandidates.push(_gci)>>
+		<</if>>
+	<</for>>
 	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
@@ -278,6 +285,13 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
+	<<elseif timeBetween('20:00', '02:00') && _ghCaughtCandidates.length > 0 && $player.energy >= 20 && setup.percentageChance(2)>>
+		<<set _ghCaughtIdx = _ghCaughtCandidates[Math.floor(Math.random() * _ghCaughtCandidates.length)]>>
+		<<set $tmpGirl to $guests[_ghCaughtIdx]>>
+		<<set $guestId = _ghCaughtIdx>>
+		<<unset $slaveId, $charId>>
+		<<set $locationEvents.guesthouse = true>>
+		<<goto 'Guesthouse [Event] - caught masturbating'>>
 	<<elseif timeBetween('21:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(5) && false>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(_guests18yoWomen)
