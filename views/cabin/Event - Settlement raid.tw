@@ -28,8 +28,8 @@ The gate alarm tripped before dawn. You grabbed your weapon and stepped outside 
 <<set _srCount = Math.max(2, Math.min(8, Math.floor(_srDefense / 60)))>>
 <<generateEnemies _srCount 0 _srCount>>
 <<for _srEi = 0; _srEi < $enemies.length; _srEi++>>
-	<<set $enemies[_srEi].strength += randomInteger(30, 80)>>
-	<<set $enemies[_srEi].endurance += randomInteger(30, 80)>>
+	<<set $enemies[_srEi].strength = Math.min($enemies[_srEi].strength + randomInteger(30, 80), 100)>>
+	<<set $enemies[_srEi].endurance = Math.min($enemies[_srEi].endurance + randomInteger(30, 80), 100)>>
 <</for>>
 
 A raiding party from <strong><<= _srS.name>></strong>. <<= _srCount>> fighters, armed and ready.

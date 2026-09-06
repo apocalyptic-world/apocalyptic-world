@@ -70,17 +70,18 @@
 <</widget>>
 
 <<widget fightAction>>
+	<<set _effectiveStrength = Math.min($player.strength, 100)>>
 	<<if setup.perkHas('drunk') && setup.percentageChance(50)>>
 		<<set $fight.messages.push('You missed your shot because you are drunk')>>
 	<<elseif (typeof $args[1] === 'undefined')>>
-		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 3, 0)>>
+		<<set $fight.enemies[$args[0]].hp -= Math.round(_effectiveStrength / 3, 0)>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('hit')>>
-		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (-' + Math.round($player.strength / 3, 0) + ')')>>
+		<<set $fight.messages.push('You punched ' + $fight.enemies[$args[0]].name + ' in the face (-' + Math.round(_effectiveStrength / 3, 0) + ')')>>
 	<<elseif $args[1] === 'sword'>>
-		<<set _swordDmg = Math.round($player.strength / 1.5, 0)>>
+		<<set _swordDmg = Math.round(_effectiveStrength / 1.5, 0)>>
 		<<set $fight.enemies[$args[0]].hp -= _swordDmg>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
@@ -88,12 +89,12 @@
 		<<set $fight.enemies[$args[0]].attacks.push('sword')>>
 		<<set $fight.messages.push('You slashed ' + $fight.enemies[$args[0]].name + ' with your sword (-' + _swordDmg + ')')>>
 	<<elseif $args[1] === 'knife'>>
-		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 2, 0)>>
+		<<set $fight.enemies[$args[0]].hp -= Math.round(_effectiveStrength / 2, 0)>>
 		<<if typeof $fight.enemies[$args[0]].attacks === 'undefined'>>
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('knife')>>
-		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in the chest (-' + Math.round($player.strength / 2, 0) + ')')>>
+		<<set $fight.messages.push('You stabbed ' + $fight.enemies[$args[0]].name + ' in the chest (-' + Math.round(_effectiveStrength / 2, 0) + ')')>>
 	<<elseif $args[1] === 'revolver'>>
 		<<drop $backpack 'bullet_revolver' 1>>
 		<<set $fight.enemies[$args[0]].hp = 0>>
@@ -111,7 +112,7 @@
 			<<set $fight.arrowsOnGround++>>
 		<</if>>
 		<<drop $backpack 'arrow' 1>>
-		<<set $fight.enemies[$args[0]].hp -= Math.round($player.strength / 1.5, 0)>>
+		<<set $fight.enemies[$args[0]].hp -= Math.round(_effectiveStrength / 1.5, 0)>>
 
 		<<if $fight.enemies[$args[0]].hp < 0 && setup.percentageChance(30)>>
 			<<set $fight.enemies[$args[0]].killed = true>>
@@ -120,7 +121,7 @@
 			<<set $fight.enemies[$args[0]].attacks = []>>
 		<</if>>
 		<<set $fight.enemies[$args[0]].attacks.push('crossbow')>>
-		<<set $fight.messages.push('You shot ' + $fight.enemies[$args[0]].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + Math.round($player.strength / 1.5, 0) + ')')>>
+		<<set $fight.messages.push('You shot ' + $fight.enemies[$args[0]].name + ' in the ' + either('chest', 'leg', 'arm') + ' (-' + Math.round(_effectiveStrength / 1.5, 0) + ')')>>
 	<<elseif $args[1] === 'bandage'>>
 		<<drop $backpack 'bandage' 1>>
 		<<set $fight.allies[$args[0]].hp = Math.min(($fight.allies[$args[0]].hp ?? 0) + 30, 100)>>
@@ -133,7 +134,7 @@
 		<<set _allyActionTurn = true>>
 	<<elseif $args[1] === 'shotgun'>>
 		<<drop $backpack 'shotgun_shell' 1>>
-		<<set _shotgunDamage = Math.round($player.strength / 1.3, 0)>>
+		<<set _shotgunDamage = Math.round(_effectiveStrength / 1.3, 0)>>
 		<<set _primaryEnemy = $fight.enemies[$args[0]]>>
 		<<set _primaryEnemy.hp -= _shotgunDamage>>
 		<<if typeof _primaryEnemy.attacks === 'undefined'>>

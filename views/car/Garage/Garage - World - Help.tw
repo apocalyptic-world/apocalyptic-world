@@ -25,8 +25,8 @@ A raider party. Not large, but enough to overwhelm them if no one stepped in.
 <<set _hlpCount = Math.max(1, Math.min(2, Math.floor(_hlpS.population / 40)))>>
 <<generateEnemies _hlpCount 0 _hlpCount>>
 <<for _hlpEi = 0; _hlpEi < $enemies.length; _hlpEi++>>
-	<<set $enemies[_hlpEi].strength += randomInteger(15, 40)>>
-	<<set $enemies[_hlpEi].endurance += randomInteger(15, 40)>>
+	<<set $enemies[_hlpEi].strength = Math.min($enemies[_hlpEi].strength + randomInteger(15, 40), 100)>>
+	<<set $enemies[_hlpEi].endurance = Math.min($enemies[_hlpEi].endurance + randomInteger(15, 40), 100)>>
 <</for>>
 
 <<set _hlpGuards = setup.getPersonsForLocation($guests, 'guard')>>

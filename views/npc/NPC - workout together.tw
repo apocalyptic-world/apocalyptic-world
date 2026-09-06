@@ -14,7 +14,7 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 	<strong>You can't increase your strength with this action anymore.</strong>
 <</if>>
 <br /><br />
-<<set $tmpGirl.strength++>>
+<<set $tmpGirl.strength = Math.min($tmpGirl.strength + 1, 100)>>
 <strong><<=$tmpGirl.name>> strength increased by 1</strong>
 <br /><br />
 <<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 10))>>
@@ -33,7 +33,7 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 		<br /><br />
 
 		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
-		<<set $tmpGirl.strength++>>
+		<<set $tmpGirl.strength = Math.min($tmpGirl.strength + 1, 100)>>
 		<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
 		<br /><br />
 		<strong><<=$tmpGirl.name>> strength increased by 1</strong>
