@@ -1,0 +1,71 @@
+:: Octavia \[Event\] - Two Camps One Chief - Aftermath [bg-guesthouse]
+<h1 class="ptitle">OCTAVIA</h1>
+<br />
+<<set _twoCampsChoice = $characters.octavia.quests.two_camps_choice>>
+<<set _warriorCount = ($characters.octavia.quests.warriors ?? []).length>>
+
+<<if _twoCampsChoice === 'emberclaw'>>
+    The White column breaks before dawn — not destroyed, but turned, dragging their dead back into the tree line. Emberclaw stands. Octavia doesn't say thank you; she doesn't have to. She just stands beside you a long moment, watching the fires get put out one by one.
+    <br /><br />
+    <center>
+        <<image 'people/octavia/two_camps_ending1.jpg' sfw>>
+    </center>
+    <br />
+    <<octavia>>
+        You chose this place over your own walls. I won't forget that.
+    <</octavia>>
+    <br />
+    When you finally get back to the settlement, the damage is real but survivable — a burned storeroom, a few people shaken, nobody dead. Blair meets you at the gate with a look that says she has opinions about tonight, and she will absolutely share them later.
+    <br /><br />
+    <<set $characters.octavia.relationship = Math.min(100, ($characters.octavia.relationship ?? 0) + 15)>>
+
+<<elseif _twoCampsChoice === 'settlement'>>
+    Your own fight ends before hers does. You spend the rest of the night not knowing, which is its own kind of fight.
+    <br /><br />
+    <center>
+        <<image 'people/octavia/two_camps_ending2.jpg' sfw>>
+    </center>
+    <br />
+    <<if _warriorCount >= 4>>
+        She rides back in near dawn, bloodied but standing, her warriors around her — fewer than she left with, but not by much.
+        <br /><br />
+        <<octavia>>
+            We held. Lost two good people doing it. Was it worth it? Ask me tomorrow.
+        <</octavia>>
+        <br />
+        <<set $characters.octavia.relationship = Math.min(100, ($characters.octavia.relationship ?? 0) + 10)>>
+    <<else>>
+        She rides back in alone, favoring one side, jaw set in a way that tells you not to ask yet.
+        <br /><br />
+        <<octavia>>
+            Emberclaw held. Barely. I need more people out there before this happens again.
+        <</octavia>>
+        <br />
+        <<set $characters.octavia.relationship = Math.min(100, ($characters.octavia.relationship ?? 0) + 5)>>
+    <</if>>
+    <br />
+    She doesn't blame you for staying. That almost makes it worse.
+
+<<else>>
+    It's a long, ugly night on both sides of the split, but by morning both camps are still standing — battered, not broken. Octavia comes back with her share of your companions, all of them still breathing, all of them looking at her a little differently now.
+    <br /><br />
+    <center>
+        <<image 'people/octavia/two_camps_ending3.jpg' sfw>>
+    </center>
+    <br />
+    <<octavia>>
+        Didn't think that would work. Glad I was wrong.
+    <</octavia>>
+    <br />
+    <<octavia>>
+        Two camps, one chief. Turns out that's not a weakness if the people in both of them actually trust each other.
+    <</octavia>>
+    <br />
+    <<set $characters.octavia.relationship = Math.min(100, ($characters.octavia.relationship ?? 0) + 20)>>
+<</if>>
+
+<br /><br />
+<<link 'Leave'>>
+    <<addhours 2>>
+    <<goto 'Wood cabin'>>
+<</link>>

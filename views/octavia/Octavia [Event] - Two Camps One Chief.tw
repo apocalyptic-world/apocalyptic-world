@@ -1,0 +1,89 @@
+:: Octavia \[Event\] - Two Camps One Chief [bg-guesthouse]
+<h1 class="ptitle">OCTAVIA</h1>
+<br />
+<<set $characters.octavia.quests.two_camps_day = $game.day>>
+
+You're barely through the door when boots hit the path outside — too fast, too hard to be anything good.
+<br /><br />
+<center>
+    <<image 'people/octavia/two_camps1.jpg'>>
+</center>
+<br />
+<<newgirl>>
+<<set _messenger = $tmpGirl>>
+The door bangs open. One of Octavia's warriors, chest heaving, a fresh cut over one eyebrow, blood not all her own.
+<br /><br />
+<<sayNpc _messenger>>
+    White faction. A column of them, moving on the Emberclaw camp. We spotted them an hour out — maybe less by now.
+<</sayNpc>>
+<br />
+Octavia is already reaching for her blades before the warrior finishes talking. Then the settlement's own horn sounds — low, urgent, three long blasts. Someone else is at your gate.
+<br /><br />
+<center>
+    <<image 'people/octavia/two_camps2.jpg'>>
+</center>
+<br />
+Octavia freezes for half a second — the only half-second of hesitation you've ever seen from her.
+<br /><br />
+<<octavia>>
+    They timed it. Of course they timed it.
+<</octavia>>
+<br />
+<<octavia>>
+    I can't be in two places. Neither can you. So we decide — now.
+<</octavia>>
+<br />
+
+<div id="option_emberclaw">
+    <<linkreplace 'Ride to Emberclaw with her — the settlement holds itself'>>
+        <<set $characters.octavia.quests.two_camps_choice = 'emberclaw'>>
+        <<run $('#option_settlement').hide()>>
+        <<run $('#option_split').hide()>>
+        <<octavia>>
+            With me, then. Emberclaw needs numbers more than your walls need you tonight.
+        <</octavia>>
+        <br /><br />
+        <<link 'Ride out'>>
+            <<addhours 1>>
+            <<goto 'Octavia [Event] - Two Camps One Chief - Emberclaw Fight'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_settlement">
+    <<linkreplace 'Send her back alone — you hold the settlement'>>
+        <<set $characters.octavia.quests.two_camps_choice = 'settlement'>>
+        <<run $('#option_emberclaw').hide()>>
+        <<run $('#option_split').hide()>>
+        <<octavia>>
+            Your call. I'll take what I've got and go. Don't die here while I'm not looking.
+        <</octavia>>
+        <br /><br />
+        She's out the door before you can answer, warrior at her heels.
+        <br /><br />
+        <<link 'Turn to the settlement's defense'>>
+            <<addhours 1>>
+            <<goto 'Octavia [Event] - Two Camps One Chief - Settlement Fight'>>
+        <</link>>
+    <</linkreplace>>
+</div>
+<div id="option_split">
+    <<if Object.keys($player.companions ?? {}).length >= 2>>
+        <<linkreplace 'Split the forces — send companions with her, hold the settlement yourself'>>
+            <<set $characters.octavia.quests.two_camps_choice = 'split'>>
+            <<run $('#option_emberclaw').hide()>>
+            <<run $('#option_settlement').hide()>>
+            <<octavia>>
+                Half measures get people killed. But... it might be enough. Give me what you can spare.
+            <</octavia>>
+            <br /><br />
+            <<link 'Send them with her'>>
+                <<addhours 1>>
+                <<goto 'Octavia [Event] - Two Camps One Chief - Split Fight'>>
+            <</link>>
+        <</linkreplace>>
+    <<else>>
+        <div class="link-internal disabled" style="background: #ccc">
+            Split the forces (need at least 2 companions)
+        </div>
+    <</if>>
+</div>
