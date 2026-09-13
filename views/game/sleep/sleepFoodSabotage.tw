@@ -1,0 +1,46 @@
+:: sleepFoodSabotage [include]
+
+<<if $game.day >= ($game.foodSabotageCooldown ?? 0)>>
+    <<set _outsideJobs = ['forest', 'scavenging', 'streets', 'nightclub', 'strip_club', 'quarry']>>
+    <<set _kitchenStaff = setup.getNpcsForLocation($guests, 'kitchen').concat(setup.getNpcsForLocation($slaves, 'kitchen'))>>
+    <<set _saboteurs = _kitchenStaff.filter(function (npc) { return npc.loyal === false || (npc.relationship ?? 0) < 10; })>>
+
+    <<if _saboteurs.length && setup.percentageChance(5)>>
+        <<set _sabotageVictims = []>>
+        <<for _sabGuest range $guests>>
+            <<if typeof _sabGuest.sick === 'undefined' && !_saboteurs.includes(_sabGuest)>>
+                <<set _sabChance = _outsideJobs.includes(_sabGuest.assignedTo) ? 10 : 35>>
+                <<if (_sabGuest.relationship ?? 0) < 40>>
+                    <<set _sabChance += 25>>
+                <</if>>
+                <<if setup.percentageChance(_sabChance)>>
+                    <<run _sabotageVictims.push(_sabGuest)>>
+                <</if>>
+            <</if>>
+        <</for>>
+        <<for _sabSlave range $slaves>>
+            <<if typeof _sabSlave.sick === 'undefined' && !_saboteurs.includes(_sabSlave)>>
+                <<set _sabChance = _outsideJobs.includes(_sabSlave.assignedTo) ? 10 : 35>>
+                <<if (_sabSlave.sub ?? 0) < 50>>
+                    <<set _sabChance += 25>>
+                <</if>>
+                <<if setup.percentageChance(_sabChance)>>
+                    <<run _sabotageVictims.push(_sabSlave)>>
+                <</if>>
+            <</if>>
+        <</for>>
+
+        <<if _sabotageVictims.length>>
+            <<for _sabVictim range _sabotageVictims>>
+                <<set _sabVictim.sick = {
+                    days: 2,
+                    desc: 'Food poisoning',
+                    id: 'food_poisoning'
+                }>>
+            <</for>>
+            <<run setup.sleepMessages.addMain('Someone must have gotten into the kitchen last night — several people woke up sick.')>>
+            <<set $game.foodSabotageDiscovery = true>>
+            <<set $game.foodSabotageCooldown = $game.day + 30>>
+        <</if>>
+    <</if>>
+<</if>>

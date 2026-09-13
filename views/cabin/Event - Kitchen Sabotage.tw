@@ -1,0 +1,29 @@
+:: Event: Kitchen Sabotage
+<h1 class="ptitle">KITCHEN</h1>
+<br /><br />
+<<unset $game.foodSabotageDiscovery>>
+<center>
+	<<image 'places/cabin/event_kitchen_sabotage.jpg' sfw>>
+</center>
+<br />
+<<set _sickNow = $guests.concat($slaves).filter(function (npc) { return npc.sick?.id === 'food_poisoning'; })>>
+<<set _reporterPool = $guests.concat($slaves).filter(function (npc) { return typeof npc.sick === 'undefined'; })>>
+<<set _reporter = _reporterPool.length ? setup.getRandomElement(_reporterPool) : setup.getRandomElement($guests.concat($slaves))>>
+<<sayNpc _reporter>>
+	You should get down to the kitchen. A bunch of people got sick overnight — food poisoning, looks like. Half the settlement's doubled over.
+<</sayNpc>>
+<br />
+You headed down to see for yourself. The kitchen looked exactly like it always did — nothing spilled, nothing out of place, no rot in the stores. Whatever had happened had left no trace at all, which was its own kind of unsettling.
+<br /><br />
+<<if _sickNow.length>>
+	<<for _sickVictim range _sickNow>>
+		<strong><<=setup.displayName(_sickVictim)>></strong> was doubled over, sick with food poisoning.
+		<br />
+	<</for>>
+<</if>>
+<br />
+You asked around, but nobody had seen anything, and nothing in the kitchen said otherwise. Whatever had made everyone sick, it hadn't been an accident anyone could point to — and that bothered you more than a mess would have.
+<br /><br />
+<<link 'Leave it for now'>>
+	<<goto 'Wood cabin'>>
+<</link>>
