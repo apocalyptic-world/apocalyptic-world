@@ -1,6 +1,16 @@
 :: Nightclub - bathroom [bg-underground]
 <h1 class="ptitle">NIGHTCLUB WC</h1>
 
+<<if $characters.isabel.quests.secret_contact_day && !$characters.isabel.quests.secret_meeting1_day>>
+	<<goto 'Isabel - secret meeting 1'>>
+<<elseif $characters.isabel.quests.secret_meeting1_day && !$characters.isabel.quests.secret_meeting2_day && ($characters.isabel.quests.secret_meeting1_day + 2) <= $game.day>>
+	<<goto 'Isabel - secret meeting 2'>>
+<<elseif $characters.isabel.quests.secret_meeting2_day && !$characters.isabel.quests.secret_meeting3_day && ($characters.isabel.quests.secret_meeting2_day + 2) <= $game.day>>
+	<<goto 'Isabel - secret meeting 3'>>
+<<elseif $characters.isabel.quests.secret_meeting3_day && !$characters.isabel.quests.secret_meeting4_day && ($characters.isabel.quests.secret_meeting3_day + 2) <= $game.day>>
+	<<goto 'Isabel - secret meeting 4'>>
+<</if>>
+
 <table id="slaves" class="npc-list">
 	<<for _streetGuestI, _streetGuest range ($guests ?? [])>>
         <<set _hasWorkers = true>>

@@ -47,8 +47,10 @@
 	<<goto 'Dom - quest #6 isabel fuel'>>
 <<elseif isMetChar('dom') && $characters.dom.quests.isabel_beg && ($characters.dom.quests.isabel_beg_day + 5) <= $game.day && !$characters.dom.quests.isabel_beg_fuel && $backpack.count('fuel') >= 10>>
 	<<goto 'Dom - isabel riot'>>
-<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
+<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos && !$characters.dom.quests.alt_route>>
 	<<goto 'Dom - Underground city chaos'>>
+<<elseif $characters.dom.quests.alt_route && !$characters.dom.dead && $characters.isabel.quests.secret_meeting4_day && ($characters.isabel.quests.secret_meeting4_day + 3) <= $game.day>>
+	<<goto 'Dom - Alt route confrontation'>>
 <<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
 	<<goto 'Dom - Return to underground city plan'>>
 <<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>

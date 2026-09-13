@@ -33,6 +33,12 @@
 	<<goto 'Isabel - gas shortage'>>
 <</if>>
 
+<<if $characters.dom.quests.invite && $characters.dom.quests.accepted_deal === false && $characters.dom.quests.decline_day && ($characters.dom.quests.decline_day + 10) <= $game.day && ($game.location.gloryhole ?? false) && !$characters.isabel.quests.secret_contact_day && !($locationEvents.nightclub ?? false)>>
+	<<set $locationEvents.nightclub = true>>
+	<<set $characters.isabel.quests.secret_contact_day = $game.day>>
+	<<goto 'Isabel - secret contact'>>
+<</if>>
+
 <<link 'Leave'>>
 	<<goto 'Underground city'>>
 <</link>>

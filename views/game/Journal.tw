@@ -266,7 +266,43 @@
 		<<else>>
 			Story finished.
 		<</if>>
-	<<else>> 
+	<<elseif $characters.dom.quests.accepted_deal === false>>
+		<<if !$characters.isabel.quests.secret_contact_day>>
+			<<if !($game.location.gloryhole ?? false) || ($characters.dom.quests.decline_day + 10) > $game.day>>
+				Wait a few days
+			<<else>>
+				Go to the nightclub
+			<</if>>
+		<<elseif !$characters.isabel.quests.secret_meeting1_day>>
+			Go to the nightclub bathroom
+		<<elseif !$characters.isabel.quests.secret_meeting2_day>>
+			<<if ($characters.isabel.quests.secret_meeting1_day + 2) > $game.day>>
+				Wait a few days
+			<<else>>
+				Go to the nightclub bathroom
+			<</if>>
+		<<elseif !$characters.isabel.quests.secret_meeting3_day>>
+			<<if ($characters.isabel.quests.secret_meeting2_day + 2) > $game.day>>
+				Wait a few days
+			<<else>>
+				Go to the nightclub bathroom
+			<</if>>
+		<<elseif !$characters.isabel.quests.secret_meeting4_day>>
+			<<if ($characters.isabel.quests.secret_meeting3_day + 2) > $game.day>>
+				Wait a few days
+			<<else>>
+				Go to the nightclub bathroom
+			<</if>>
+		<<elseif !$characters.dom.dead>>
+			<<if ($characters.isabel.quests.secret_meeting4_day + 3) > $game.day>>
+				Wait a few days
+			<<else>>
+				Bring a knife or revolver and visit underground city
+			<</if>>
+		<<else>>
+			Story finished.
+		<</if>>
+	<<else>>
 		That's all for now
 	<</if>>
 

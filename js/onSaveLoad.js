@@ -201,6 +201,10 @@ Save.onLoad.add(function (save) {
         }
     }
 
+    if (variables.characters?.dom?.quests?.accepted_deal === false && typeof variables.characters.dom.quests.decline_day === 'undefined') {
+        variables.characters.dom.quests.decline_day = Math.max(0, (variables.game?.day ?? 10) - 10);
+    }
+
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
     }
