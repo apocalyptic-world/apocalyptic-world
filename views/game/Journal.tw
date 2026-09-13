@@ -54,6 +54,12 @@
 			Repair and fuel the car in the garage (100% health, 100% fuel)
 		<<elseif ($game.location.garage ?? false) && !$characters.vincent.quests.military_base>>
 			Wait few days
+		<<elseif $characters.vincent.quests.car_fixed && !$characters.vincent.quests.old_debt_day && $game.day < ($characters.vincent.quests.car_fixed_day + 20)>>
+			Wait a few days
+		<<elseif $characters.vincent.quests.car_fixed && !$characters.vincent.quests.old_debt_day>>
+			Talk with Vincent in the farm
+		<<elseif $characters.vincent.quests.old_debt_day && !$characters.vincent.quests.old_debt_followup_day>>
+			Talk with Vincent in the farm
 		<<else>>
 			<<if !$characters?.rodger?.quests?.dead>>
 				Progress with Dom's story or wait.

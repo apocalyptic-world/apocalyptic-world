@@ -95,6 +95,15 @@
 		<<goto 'Vincent - The House in the Woods'>>
 	<</link>>
 <</if>>
+<<if $characters.vincent.quests.car_fixed && !$characters.vincent.quests.old_debt_day && $player?.car?.explore && $game.day >= ($characters.vincent.quests.car_fixed_day + 20)>>
+	<<link 'Talk with Vincent'>>
+		<<goto 'Vincent - An Old Debt'>>
+	<</link>>
+<<elseif $characters.vincent.quests.old_debt_day && !$characters.vincent.quests.old_debt_followup_day>>
+	<<link 'Talk with Vincent'>>
+		<<goto 'Vincent - An Old Debt - Followup'>>
+	<</link>>
+<</if>>
 
 
 [[Shop|Farm - shop]]

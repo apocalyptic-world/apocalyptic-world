@@ -1,0 +1,53 @@
+:: Vincent - An Old Debt - Aftermath [bg-farm]
+<h1 class="ptitle">TRADING POST</h1>
+<br />
+<<set $characters.vincent.quests.old_debt_day = $game.day>>
+<<set _silasResult = $prevFight.defeatedEnemies.find(function (e) { return e.name === 'Silas'; })>>
+<center>
+	<<image 'places/explore_car/old_debt4.jpg' sfw>>
+</center>
+<br />
+<<if $prevFight.won>>
+	<<if _silasResult && _silasResult.killed>>
+		It didn't take long. Silas never was much of a fighter, and a decade of easy trading hadn't changed that. When it was over, Vincent stood over him for a long moment, breathing hard, saying nothing.
+		<br /><br />
+		<<vincent>>
+			Didn't think it would feel like anything. Guess I was wrong.
+		<</vincent>>
+		<br />
+		<<set $characters.vincent.relationship = Math.min(($characters.vincent.relationship ?? 0) + 6, 100)>>
+		<<set $player.reputation -= 2>>
+	<<else>>
+		Silas hit the ground and stayed there, more winded than hurt. Vincent crouched down next to him, close enough that only the two of them could hear what he said next.
+		<br /><br />
+		<<vincent>>
+			You're going to remember every one of their names for the rest of your life. That's the debt. That's all I want from you now.
+		<</vincent>>
+		<br />
+		Silas nodded fast, too scared to do anything else. Vincent stood, took what supplies were worth taking, and walked away without looking back.
+		<br /><br />
+		<<set _reward = randomInteger(40, 80)>>
+		<<set $player.money += _reward>>
+		You collected <strong><<=_reward>> caps</strong> from what he'd been trading.
+		<br />
+		<<set $characters.vincent.relationship = Math.min(($characters.vincent.relationship ?? 0) + 8, 100)>>
+	<</if>>
+<<else>>
+	Silas fought harder than either of you expected, and it cost you — a split lip, a ringing skull, and a bruise that would take a week to fade. By the time you came to, he was long gone.
+	<br /><br />
+	Vincent helped you up without a word, jaw tight, eyes scanning the treeline where Silas had disappeared.
+	<br /><br />
+	<<vincent>>
+		Should've seen that coming. Rats fight hardest when they're already cornered.
+	<</vincent>>
+	<br />
+	<<vincent>>
+		He's out there somewhere, still. Maybe that's worse than if we'd finished it.
+	<</vincent>>
+	<br />
+	<<set $characters.vincent.relationship = Math.min(($characters.vincent.relationship ?? 0) + 2, 100)>>
+<</if>>
+<br />
+<<link 'Head back to the farm'>>
+	<<goto 'Farm'>>
+<</link>>

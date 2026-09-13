@@ -1,0 +1,193 @@
+:: Vincent - An Old Debt [bg-farm]
+<h1 class="ptitle">FARM</h1>
+<br /><br />
+<<vincent>>
+	Got a supply run I could use a hand with. Nothing glamorous — parts, meds, whatever the trading post's got this week. Car up for it?
+<</vincent>>
+<br />
+<<if $player?.car?.explore && $player?.car?.fuel === 100 && $player?.car?.health === 100>>
+	<div id="opt_go">
+	<<linkreplace 'Yes. Lets go'>>
+		<<run $('#opt_notnow').hide()>>
+		<<set $player.companionsHome = $player.companions>>
+		<<set $player.companions = {}>>
+		<<carFuel 60>>
+		You loaded up the car with empty crates and whatever you had left to trade, and Vincent climbed in without another word. The farm shrank behind you as the road took over.
+		<br /><br />
+		<center>
+			<<image 'places/explore_car/old_debt1.jpg' sfw>>
+		</center>
+		<br />
+				The trading post came up out of the heat haze an hour later — a scatter of stalls built from shipping containers and scavenged tarps, the kind of place that existed because enough people needed it to exist. Vincent had been here before. He knew which stalls were worth the walk.
+		<br /><br />
+		You were halfway across the lot when he stopped walking.
+		<br /><br />
+		<center>
+			<<image 'places/explore_car/old_debt2.jpg' sfw>>
+		</center>
+		<br />
+				<<vincent>>
+			Son of a bitch.
+		<</vincent>>
+		<br />
+		He said it quiet, almost to himself, eyes fixed on a stall near the far end — a man haggling over a crate of batteries like he owned the place. Vincent's jaw was set in a way you'd only seen once or twice before, and never over caps.
+		<br /><br />
+		<<newguy>>
+		<<set _silas = $tmpGuy>>
+		<<set _silas.name = 'Silas'>>
+		<<set _silas.relationship = -100>>
+		<<vincent>>
+			Name's Silas. Or it was, last I bothered to remember it.
+		<</vincent>>
+		<br />
+		You asked him who that was to him.
+		<br /><br />
+		Vincent didn't answer right away. He kept his eyes on the stall, arms crossed, like he was deciding how much of it he actually wanted to say out loud.
+		<br /><br />
+		<<vincent>>
+			Before the farm. Before Blair's mother, even. I ran with a crew — three of us, scraping by same as everyone. We needed a fourth for a job, someone who knew a bunker nobody else had found yet. That was him.
+		<</vincent>>
+		<br />
+		<<vincent>>
+			Turned out he'd already sold the location to a raider gang before we ever set foot near it. Traded it for his own hide. We walked into that bunker and walked into an ambush instead.
+		<</vincent>>
+		<br />
+		<<vincent>>
+			I got out. Two of the people I'd trusted with my life didn't. And him — he was just gone. I told myself for years he probably ended up dead in a ditch somewhere. Guess that was wishful thinking.
+		<</vincent>>
+		<br />
+		<<vincent>>
+			He's stood right there, trading like none of that ever happened. Like he didn't leave two people in the ground to buy himself another day.
+		<</vincent>>
+		<br />
+		He finally looked at you.
+		<br /><br />
+		<<vincent>>
+			So. Your call as much as mine, given you're the one driving. We settle this, or we don't.
+		<</vincent>>
+		<br />
+		<div id="opt_settle">
+			<<linkreplace 'Help him settle it'>>
+				<<run $('#opt_walk').hide()>>
+				<<you>>
+					He doesn't get to just walk away from that.
+				<</you>>
+				<br />
+				Something in Vincent's shoulders loosened, just slightly, like he'd needed someone else to say it first.
+				<br /><br />
+				<center>
+					<<image 'places/explore_car/old_debt3.jpg' sfw>>
+				</center>
+				<br />
+				Silas saw you both coming before you'd covered half the distance. Whatever color he had left his face.
+				<br /><br />
+				<<sayNpc _silas>>
+					Vincent. Hey — hey, that was a long time ago, man. I don't even carry a gun anymore, I'm not—
+				<</sayNpc>>
+				<br />
+				<<vincent>>
+					You sold us out for a case of canned peaches and a promise they wouldn't shoot you too. Don't tell me how long ago it was.
+				<</vincent>>
+				<br />
+				<<sayNpc _silas>>
+					I was scared! We were all scared, that doesn't mean—
+				<</sayNpc>>
+				<br />
+				<<vincent>>
+					Doesn't mean you don't owe a debt. And I intend to collect.
+				<</vincent>>
+				<br />
+				<div id="opt_pay">
+					<<linkreplace 'Make him pay it off'>>
+						<<run $('#opt_fight').hide()>>
+						<<set $characters.vincent.quests.old_debt_method = 'paid'>>
+						<<you>>
+							Nobody has to die here. But you're not leaving with what's in that crate.
+						<</you>>
+						<br />
+						Silas looked between the two of you, doing the math on his odds, and didn't like the answer. His shoulders dropped.
+						<br /><br />
+						<<sayNpc _silas>>
+							Fine. Fine! Take it, take all of it, just — we're square after this. We're square.
+						<</sayNpc>>
+						<br />
+						<<set _reward = randomInteger(60, 100)>>
+						<<set $player.money += _reward>>
+						<<pickup $backpack 'bandage' 3>>
+						He shoved the crate of batteries and a handful of caps into your arms and backed away fast, not waiting for a reply. You picked through what was left — <strong><<=_reward>> caps</strong> and a few supplies he'd rather lose than argue over.
+						<br /><br />
+						Vincent watched him go without a word. He didn't look satisfied, exactly. Just quieter.
+						<br /><br />
+						<<vincent>>
+							Won't bring them back. Didn't expect it to. But it's more than he ever gave us.
+						<</vincent>>
+						<br />
+						<<set $characters.vincent.relationship = Math.min(($characters.vincent.relationship ?? 0) + 5, 100)>>
+						<<set $characters.vincent.quests.old_debt_day = $game.day>>
+						<br />
+						<<link 'Head back to the farm'>>
+							<<goto 'Farm'>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+				<div id="opt_fight">
+					<<linkreplace 'Let Vincent finish this'>>
+						<<run $('#opt_pay').hide()>>
+						<<set $characters.vincent.quests.old_debt_method = 'fight'>>
+						Silas saw it in your faces before either of you moved, and bolted for the treeline behind the stalls. He didn't get far.
+						<br /><br />
+						<<set _silas.strength = 45>>
+						<<set _silas.inventory = { knife: 1 }>>
+						<<generateEnemies 1 0 0>>
+						<<run $enemies.push(_silas)>>
+						<<link 'Fight'>>
+							<<fight $enemies 'Vincent - An Old Debt - Aftermath' 'Vincent - An Old Debt - Aftermath'>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+			<</linkreplace>>
+		</div>
+		<div id="opt_walk">
+			<<linkreplace 'Talk him out of it'>>
+				<<run $('#opt_settle').hide()>>
+				<<set $characters.vincent.quests.old_debt_method = 'walked_away'>>
+				<<you>>
+					Look at him. He's not worth what it'll cost you to do this here, in front of everyone.
+				<</you>>
+				<br />
+				Vincent didn't move for a long moment. His hands were shaking, just slightly, the kind of shake that comes from holding something back rather than letting it go.
+				<br /><br />
+				<<vincent>>
+					Ten years I've wondered what I'd do if I ever saw that face again. Turns out the answer's nothing. Just... nothing.
+				<</vincent>>
+				<br />
+				<<vincent>>
+					Doesn't feel like the right answer. Feels like the only one I can live with, though.
+				<</vincent>>
+				<br />
+				He turned back toward the car without another glance at Silas, who was still watching you both, too afraid to move first.
+				<br /><br />
+				<<vincent>>
+					Let's just get what we came for and go.
+				<</vincent>>
+				<br />
+				<<set $characters.vincent.relationship = Math.min(($characters.vincent.relationship ?? 0) + 3, 100)>>
+				<<set $characters.vincent.quests.old_debt_day = $game.day>>
+				<br />
+				<<link 'Head back to the farm'>>
+					<<goto 'Farm'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</linkreplace>>
+	</div>
+	<div id="opt_notnow">
+	<<link 'Not right now'>>
+		<<goto 'Farm'>>
+	<</link>>
+	</div>
+<<else>>
+	<<link 'No, need to prepare'>>
+		<<goto 'Farm'>>
+	<</link>>
+<</if>>
