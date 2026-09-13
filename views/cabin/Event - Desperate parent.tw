@@ -1,0 +1,99 @@
+:: Event - Desperate parent [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<center>
+	<<image 'places/cabin/desperate_parent.jpg' sfw>>
+</center>
+<br />
+
+A man was waiting at the gate when you came out, a young woman standing quiet beside him. He didn't look like trouble. He looked like someone who'd run out of every other option.
+
+<br /><br />
+
+<<newguy>>
+<<set _dpFather = $tmpGuy>>
+<<sayNpc _dpFather>>
+	She's sick. Getting worse every day. I heard you've got antibiotics. I don't have caps, I don't have food to trade. I have her. She's strong, she'll work hard. Please.
+<</sayNpc>>
+<br />
+
+<<newgirl>>
+<<set $tmpGirl.sick = { days: 2, desc: 'Fever', id: 'wasteland_fever' }>>
+<<set _dpGirl = clone($tmpGirl)>>
+<<unset $tmpGirl>>
+
+<<= _dpGirl.name >> kept her eyes on the ground, too tired or too ashamed to look up.
+
+<br /><br />
+
+<div id="dp_choices">
+
+<<if setup.cabinInventory.count('antibiotics') >= 2>>
+<div id="dp_slave">
+	<<linkreplace 'Take her as a slave — give 2 antibiotics'>>
+		<<run $('#dp_guest, #dp_aid, #dp_refuse').hide()>>
+		<<run setup.cabinInventory.drop('antibiotics', 2)>>
+		<<addmins 60>>
+		<<set _dpGirl.sub = Math.min((_dpGirl.sub ?? 0) + 20, 100)>>
+		<<run $slaves.push(_dpGirl)>>
+		The father pressed the medicine into her hands one last time before you took her, then turned and walked away without looking back.
+		<br /><br />
+		She stood in your yard, feverish and unsure of what came next.
+		<br /><br />
+		<<sayNpc _dpGirl>>
+			Tell me what you need me to do.
+		<</sayNpc>>
+		<br />
+		<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+
+<div id="dp_guest">
+	<<linkreplace 'Take her in as a free person — give 2 antibiotics'>>
+		<<run $('#dp_slave, #dp_aid, #dp_refuse').hide()>>
+		<<run setup.cabinInventory.drop('antibiotics', 2)>>
+		<<addmins 45>>
+		<<run $guests.push(_dpGirl)>>
+		You handed over the medicine and told her she was a guest, not property. Her father's shoulders dropped with relief he didn't bother hiding.
+		<br /><br />
+		<<sayNpc _dpGirl>>
+			I can work. I'll earn my place.
+		<</sayNpc>>
+		<br />
+		<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+
+<div id="dp_aid">
+	<<linkreplace 'Give the antibiotics, take no one'>>
+		<<run $('#dp_slave, #dp_guest, #dp_refuse').hide()>>
+		<<run setup.cabinInventory.drop('antibiotics', 2)>>
+		<<addmins 20>>
+		You pressed the bottles into his hands and told him to take her home. He stared at you like he was waiting for the catch.
+		<br /><br />
+		<<sayNpc _dpFather>>
+			I don't understand. Why—
+		<</sayNpc>>
+		<br />
+		<<you>>
+			Just go home. Take care of her.
+		<</you>>
+		<br />
+		<<set $player.goodwill += 3>>
+		<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+<</if>>
+
+<div id="dp_refuse">
+	<<linkreplace 'Turn them away'>>
+		<<run $('#dp_slave, #dp_guest, #dp_aid').hide()>>
+		<<set $player.goodwill -= 3>>
+		You told him you couldn't spare it. He didn't argue. He just picked up his daughter's hand and led her back out into the wastes.
+		<br /><br />
+		<<link 'Continue'>><<goto 'Wood cabin'>><</link>>
+	<</linkreplace>>
+</div>
+
+</div>

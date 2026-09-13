@@ -1,0 +1,48 @@
+:: Event - Medicine mob [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<center>
+	<<image 'places/cabin/medicine_mob.jpg' sfw>>
+</center>
+<br />
+
+Word had gotten out that you had medicine. A knot of gaunt, ragged figures had gathered outside the gate by the time you noticed — not soldiers, not a raiding party, just people who'd run out of options.
+
+<br /><br />
+
+<<newguy>>
+<<set _mmSpeaker = $tmpGuy>>
+<<sayNpc _mmSpeaker>>
+	We know you've got antibiotics in there. People are dying. We're not leaving without some.
+<</sayNpc>>
+<br />
+
+<<set _mmCount = randomInteger(2, 4)>>
+<<generateEnemies _mmCount 0>>
+<<for _mmEi = 0; _mmEi < $enemies.length; _mmEi++>>
+	<<set $enemies[_mmEi].strength = Math.max(10, Math.min($enemies[_mmEi].strength, 35))>>
+<</for>>
+
+<<set _mmGuards = setup.getPersonsForLocation($guests, 'guard')>>
+
+<div id="mm_fight">
+	<<link 'Drive them off'>>
+		<<fight $enemies 'Wood cabin' 'Event - Medicine mob - lost' false _mmGuards>>
+		<<set $fight.skipEndingLost = true>>
+	<</link>>
+</div>
+<<if setup.cabinInventory.count('antibiotics') >= 2>>
+	<div id="mm_pay">
+		<<linkreplace 'Hand over 2 antibiotics to make them leave'>>
+			<<run $('#mm_fight').hide()>>
+			<<run setup.cabinInventory.drop('antibiotics', 2)>>
+			You passed the bottles over the gate. The speaker checked them, nodded once, and the group melted back into the wastes without another word.
+			<br /><br />
+			<<set $player.goodwill += 2>>
+			<<link 'Go back inside'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>

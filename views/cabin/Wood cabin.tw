@@ -162,6 +162,13 @@
 	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
+	<<elseif ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance(3) && setup.baseIntruderChance()>>
+		<<set $locationEvents.cabin = true>>
+		<<if setup.percentageChance(50)>>
+			<<goto 'Event - Medicine mob'>>
+		<<else>>
+			<<goto 'Event - Desperate parent'>>
+		<</if>>
 	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30 && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: The uninvited couple'>>
