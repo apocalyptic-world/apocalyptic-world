@@ -1,8 +1,16 @@
 :: sleepPregnantStrangers [include]
 
 <<if ($pregnantStrangers ?? []).length>>
-    /* A stranger who was later brought home already carries the pregnancy on her guest/slave copy */
-    <<set $pregnantStrangers = $pregnantStrangers.filter(function (stranger) { return !(stranger.id && setup.getNpcById(stranger.id)); })>>
+    /* A stranger who was later brought home already carries the pregnancy on her guest/slave copy; also drop repeat entries of the same girl */
+    <<set $pregnantStrangers = (function (list) {
+        var seen = {};
+        return list.filter(function (stranger) {
+            if (!stranger.id) return true;
+            if (seen[stranger.id] || setup.getNpcById(stranger.id)) return false;
+            seen[stranger.id] = true;
+            return true;
+        });
+    })($pregnantStrangers)>>
 
     <<for _psI = 0; _psI < $pregnantStrangers.length; _psI++>>
         <<set _psStranger = $pregnantStrangers[_psI]>>

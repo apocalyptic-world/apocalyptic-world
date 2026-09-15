@@ -4,6 +4,15 @@
 		<<set $tmpGirl.pregnancy_father = 'mc'>>
 		<<set $tmpGirl.pregnancy = 0>>
 		<<statsAdd 'girls_impregnated'>>
+		/* One-off girls who don't live in the settlement can come back later (Event - Stranger returns) */
+		<<if $tmpGirl.id && !setup.getNpcById($tmpGirl.id)>>
+			<<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+			<<if !$tmpGirl.pregnancy_encounter_place>>
+				<<set _cipBack = String($tmpGirlBack ?? '')>>
+				<<set $tmpGirl.pregnancy_encounter_place = (_cipBack.includes('Nightclub') ? 'club' : (_cipBack.startsWith('Bar') ? 'bar' : 'unknown'))>>
+			<</if>>
+			<<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+		<</if>>
 <</if>>
 <<set $tmpGirl.virgin = false>>
 

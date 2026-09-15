@@ -12,9 +12,25 @@
 <<set _srWithBaby = _srDays >= 270>>
 <<set _srFeral = (_sr.traits ?? []).includes('feral')>>
 <<set _srPlace = _sr.pregnancy_encounter_place ?? (_srFeral ? 'forest' : 'nightclub')>>
+<<set _srCouple = !_srFeral && _srPlace === 'bar_couple'>>
+<<set _srSettler = !_srFeral && _srPlace === 'settler'>>
 <<set _srName = setup.displayName(_sr)>>
 <<set _srMonths = Math.max(Math.floor(_srDays / 30), 3)>>
-<<set _srMemory = (_srPlace === 'nightclub' ? 'The alley behind the nightclub.' : 'Out in the wastes. You and me.')>>
+<<if _srPlace === 'nightclub'>>
+	<<set _srMemory = 'The alley behind the nightclub.'>>
+	<<set _srLastSeen = 'she was bent over against a brick wall in the alley behind the nightclub, your cum dripping out of her pussy'>>
+<<elseif _srPlace === 'club'>>
+	<<set _srMemory = 'The nightclub. You and me.'>>
+	<<set _srLastSeen = 'she was pulling her clothes back on at the nightclub, your cum still dripping out of her pussy'>>
+<<elseif _srPlace === 'bar'>>
+	<<set _srMemory = 'The bar, down in the underground city.'>>
+	<<set _srLastSeen = 'she was walking out of the bar in the underground city with your cum dripping out of her pussy'>>
+<<else>>
+	<<set _srMemory = 'It was only one time. It was enough.'>>
+	<<set _srLastSeen = ''>>
+<</if>>
+<<set _srAway = (_srSettler ? 'back toward the settlement houses' : 'back down the road')>>
+<<set _srRep = 0>>
 
 <<set _srReporterPool = $guests.filter(function (npc) { return !(npc.traits ?? []).includes('feral') && setup.getAge(npc) >= 13; })>>
 <<if !_srReporterPool.length>>
@@ -32,13 +48,18 @@
 <<if _srWithBaby>>
 	<<set _srBabyDays = Math.max(_srDays - 270, 0)>>
 	<<set _srBabyGender = either(0, 1)>>
-	<<set _sr.pregnancy_father = 'mc'>>
-	<<newchild _srBabyGender _sr>>
-	<<set _srBaby = $newChild>>
-	<<unset $newChild>>
-	<<set _srBaby.birthDate = new Date($gameDate.getTime() - _srBabyDays * 86400000)>>
-	/* Injuries and a wild upbringing are not inherited */
-	<<set _srBaby.traits = (_srBaby.traits ?? []).filter(function (trait) { return !['feral', 'crippled'].includes(trait); })>>
+	<<if _srCouple>>
+		/* The couple raise the child as their own, so no NPC is created */
+		<<set _srBaby = { gender: _srBabyGender }>>
+	<<else>>
+		<<set _sr.pregnancy_father = 'mc'>>
+		<<newchild _srBabyGender _sr>>
+		<<set _srBaby = $newChild>>
+		<<unset $newChild>>
+		<<set _srBaby.birthDate = new Date($gameDate.getTime() - _srBabyDays * 86400000)>>
+		/* Injuries and a wild upbringing are not inherited */
+		<<set _srBaby.traits = (_srBaby.traits ?? []).filter(function (trait) { return !['feral', 'crippled'].includes(trait); })>>
+	<</if>>
 	<<set _srBabyWord = (_srBaby.gender ? 'son' : 'daughter')>>
 	<<set _srBabyKind = (_srBaby.gender ? 'boy' : 'girl')>>
 	<<set _srBabyName = _srBaby.name>>
@@ -94,6 +115,86 @@
 		Her head snapped up at the sound of her name. She didn't come closer, but she didn't run either. One hand stayed pressed flat over her belly, and a low, uneasy whine came out of her throat. By your count she was <<=_srMonths>> months along.
 		<br /><br />
 	<</if>>
+<<elseif _srCouple>>
+	<<if _srReporter>>
+		<<=setup.displayName(_srReporter)>> caught you on your way out of the cabin.
+		<br /><br />
+		<<sayNpc _srReporter>>
+			There's a couple at the gate asking for you. Say they know you from a bar down in the underground city.
+		<</sayNpc>>
+		<br />
+		You went down to see for yourself.
+	<<else>>
+		The morning was quiet until you noticed two people standing at the gate, waiting for you.
+	<</if>>
+	<br /><br />
+	<<newguy>>
+	<<set _srHusband = $tmpGuy>>
+	<<if _srWithBaby>>
+		<center>
+			<<image 'places/cabin/stranger_couple_baby.jpg' sfw>>
+		</center>
+		<br /><br />
+		You recognized them straight away: the couple from the bar in the underground city. The man who had asked you to give his woman what he couldn't, and <<=_srName>>, who had walked out of that upstairs room with your cum still inside her.
+		<br /><br />
+		Now she had a baby wrapped against her chest, and he couldn't stop looking at it.
+		<br /><br />
+		<<sayNpc _srHusband>>
+			It worked. This is our <<=_srBabyWord>>.
+		<</sayNpc>>
+		<br />
+		<<=_srName>> pulled the blanket back so you could see. The baby had your eyes. Nobody said it out loud.
+		<br /><br />
+	<<else>>
+		<center>
+			<<image 'places/cabin/stranger_couple_pregnant.jpg' sfw>>
+		</center>
+		<br /><br />
+		You recognized them straight away: the couple from the bar in the underground city. The man who had asked you to give his woman what he couldn't, and <<=_srName>>, who had walked out of that upstairs room with your cum still inside her.
+		<br /><br />
+		Her belly had grown round under her dress, and he kept one arm around her like she might break.
+		<br /><br />
+		<<sayNpc _srHusband>>
+			It worked. <<=_srMonths>> months along. We wanted you to hear it from us.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<sayNpc _sr>>
+		We walked a long way to get here. We don't have much, but we wanted to thank you properly.
+	<</sayNpc>>
+	<br />
+	He held out a small pouch. Caps clinked inside it.
+	<br /><br />
+<<elseif _srSettler>>
+	<center>
+		<<image 'places/cabin/settler_open_door.jpg' sfw>>
+	</center>
+	<br /><br />
+	A knock at your door. You opened it to find <<=_srName>> standing there, the settler woman who couldn't pay her taxes and paid you the other way instead.
+	<br /><br />
+	<<if _srWithBaby>>
+		This time she had a baby wrapped in a blanket against her chest.
+		<br /><br />
+		<<sayNpc _sr>>
+			This is your <<=_srBabyWord>>. Don't look at me like that. You know <<=setup.pronounceWhat(_srBaby)>> is yours.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _sr>>
+			I already had mouths to feed before this. I can't work the fields with a baby on my back.
+		<</sayNpc>>
+		<br />
+	<<else>>
+		One hand rested on a belly that had grown round since that day.
+		<br /><br />
+		<<sayNpc _sr>>
+			I'm pregnant. <<=_srMonths>> months. I haven't been with anyone else, so don't pretend you don't know whose it is.
+		<</sayNpc>>
+		<br />
+		<<sayNpc _sr>>
+			I already had mouths to feed before this. Soon I won't be able to work the fields at all.
+		<</sayNpc>>
+		<br />
+	<</if>>
 <<else>>
 	<<if _srReporter>>
 		<<=setup.displayName(_srReporter)>> caught you on your way out of the cabin.
@@ -113,8 +214,8 @@
 		</center>
 		<br /><br />
 		It took you a moment to place her. She was thinner than you remembered, with dark circles under her eyes and a bundle of blankets pressed against her chest.
-		<<if _srPlace === 'nightclub'>>
-			The last time you had seen <<=_srName>>, she was bent over against a brick wall in the alley behind the nightclub, your cum dripping out of her pussy.
+		<<if _srLastSeen>>
+			The last time you had seen <<=_srName>>, <<=_srLastSeen>>.
 		<</if>>
 		<br /><br />
 		<<sayNpc _sr>>
@@ -143,8 +244,8 @@
 		</center>
 		<br /><br />
 		It took you a moment to place her. She stood at your gate in a dusty coat, one hand resting on a round, heavy belly.
-		<<if _srPlace === 'nightclub'>>
-			The last time you had seen <<=_srName>>, she was bent over against a brick wall in the alley behind the nightclub, your cum dripping out of her pussy.
+		<<if _srLastSeen>>
+			The last time you had seen <<=_srName>>, <<=_srLastSeen>>.
 		<</if>>
 		<br /><br />
 		<<sayNpc _sr>>
@@ -274,6 +375,38 @@
 		<</linkreplace>>
 	</div>
 
+<<elseif _srCouple>>
+
+	<div id="sr_gift">
+		<<linkreplace 'Accept the gift (+40 caps)'>>
+			<<run $('#sr_gift_refuse').hide()>>
+			<<run $('#sr_end').show()>>
+			<<set $player.money += 40>>
+			<<sayNpc _srHusband>>
+				Take it. We'd have nothing without you.
+			<</sayNpc>>
+			<br />
+			They thanked you again and set off <<=_srAway>> together<<if _srWithBaby>>, the baby asleep against her shoulder<</if>>.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+
+	<div id="sr_gift_refuse">
+		<<linkreplace 'Tell them to keep it for the baby'>>
+			<<run $('#sr_gift').hide()>>
+			<<run $('#sr_end').show()>>
+			<<set _srGoodwill = 3>>
+			You pushed the pouch back into his hands.
+			<br /><br />
+			<<sayNpc _sr>>
+				Thank you. For everything.
+			<</sayNpc>>
+			<br />
+			She squeezed your hand once, and then they set off <<=_srAway>> together.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+
 <<else>>
 
 	<<set _srGuestLabel = (_srWithBaby ? 'Take them both in' : 'Take her in')>>
@@ -290,9 +423,13 @@
 				<<set _srMotherFate = 'guest'>>
 				<<set _sr.relationship = Math.min((_sr.relationship ?? 0) + 20, 100)>>
 				<<set _sr.happy = Math.min((_sr.happy ?? 0) + 20, 100)>>
-				You opened the gate and told her there was a bed for her in the guest house.
+				<<if _srSettler>>
+					You told her to bring her things over from her house. There was a bed for her in the guest house.
+				<<else>>
+					You opened the gate and told her there was a bed for her in the guest house.
+				<</if>>
 				<br /><br />
-				Her shoulders dropped, like she had been holding them up the whole way here.
+				Her shoulders dropped, like she had been holding them up for months.
 				<br /><br />
 				<<if _srWithBaby>>
 					<<sayNpc _sr>>
@@ -331,7 +468,12 @@
 				<<set _sr.relationship = Math.max((_sr.relationship ?? 0) - 20, -100)>>
 				<<set _sr.happy = Math.max((_sr.happy ?? 0) - 30, -100)>>
 				<<set _sr.sub = Math.min((_sr.sub ?? 0) + 10, 100)>>
-				You let her through the gate, and she followed you all the way to the basement door before she understood where you were taking her.
+				<<if _srSettler>>
+					<<set _srRep = -3>>
+					You told her to follow you, and she did, all the way to the basement door before she understood where you were taking her.
+				<<else>>
+					You let her through the gate, and she followed you all the way to the basement door before she understood where you were taking her.
+				<</if>>
 				<br /><br />
 				<<sayNpc _sr>>
 					No. No! I came here for help, you bastard!
@@ -373,7 +515,7 @@
 					I thought... I thought you'd take us both.
 				<</sayNpc>>
 				<br />
-				She held the baby for a long time before she let go. Then she turned and walked back down the road, crying the whole way.
+				She held the baby for a long time before she let go. Then she turned and walked <<=_srAway>>, crying the whole way.
 			<</if>>
 			<br /><br />
 		<</linkreplace>>
@@ -404,7 +546,7 @@
 					It's more than I expected. Thank you.
 				<</sayNpc>>
 				<br />
-				She tucked the supplies under her coat and set off down the road<<if _srWithBaby>>, the baby asleep against her shoulder<</if>>.
+				She tucked the supplies under her coat and set off <<=_srAway>><<if _srWithBaby>>, the baby asleep against her shoulder<</if>>.
 				<br /><br />
 			<</linkreplace>>
 		<<else>>
@@ -420,6 +562,9 @@
 		<<linkreplace _srRefuseLabel>>
 			<<run $('#sr_guest, #sr_basement, #sr_baby, #sr_supplies').hide()>>
 			<<run $('#sr_end').show()>>
+			<<if _srSettler>>
+				<<set _srRep = -2>>
+			<</if>>
 			<<if _srWithBaby>>
 				<<set _srGoodwill = -3>>
 				<<you>>
@@ -437,6 +582,14 @@
 					<<you>>
 						It's not mine. Try one of the other guys you fucked in that alley.
 					<</you>>
+				<<elseif _srPlace === 'club' || _srPlace === 'bar'>>
+					<<you>>
+						It's not mine. Try one of the other guys you fucked down there.
+					<</you>>
+				<<elseif _srSettler>>
+					<<you>>
+						It's not mine. Ask around the settlement.
+					<</you>>
 				<<else>>
 					<<you>>
 						It's not mine.
@@ -448,7 +601,7 @@
 				<</sayNpc>>
 			<</if>>
 			<br />
-			She turned and walked back down the road.
+			She turned and walked <<=_srAway>>.
 			<br /><br />
 		<</linkreplace>>
 	</div>
@@ -457,7 +610,7 @@
 </div>
 
 <div id="sr_end" style="display:none">
-	<<if _srWithBaby>>
+	<<if _srWithBaby && !_srCouple>>
 	<div id="sr_baby_name" style="display:none">
 		What will be <<=setup.pronounceWhos(_srBaby)>> name: <<textbox "_srBabyName" _srBabyName>>
 		<br /><br />
@@ -466,7 +619,15 @@
 	<<link 'Continue'>>
 		<<addmins 30>>
 		<<set $player.goodwill += _srGoodwill>>
+		<<if _srRep && $player.baseManagement>>
+			<<set $player.baseManagement.settlementReputation = Math.min(100, Math.max(0, ($player.baseManagement.settlementReputation ?? 50) + _srRep))>>
+		<</if>>
 		<<if _srMotherFate !== 'gone'>>
+			<<if _srSettler && $player.baseManagement>>
+				/* She moves out of her settlement house */
+				<<set $player.baseManagement.settlers = Math.max(0, ($player.baseManagement.settlers ?? 0) - 1)>>
+				<<set $player.baseManagement.settlersFemales = Math.max(0, ($player.baseManagement.settlersFemales ?? 0) - 1)>>
+			<</if>>
 			<<run delete _sr.pregnancy_encounter_day; delete _sr.pregnancy_encounter_place; delete _sr.pregnancy_return_day>>
 			<<set _sr.location = null, _sr.assignedTo = null>>
 			<<if _srWithBaby>>
