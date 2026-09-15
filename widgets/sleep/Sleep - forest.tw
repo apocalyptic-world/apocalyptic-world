@@ -69,18 +69,20 @@
 		id: 'broken_bones'
 	}>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' was struck by a falling tree in the forest. They made it back but are badly hurt and need ' + _npc.sick.days + ' days rest.</span>', 'forest')>>
-<<elseif _isFemale && !_isArmed && typeof _npc.sick === 'undefined' && setup.percentageChance(3) && $forestKidnapEvent === null && _isGuest>>
+<<elseif _isFemale && !_isArmed && typeof _npc.sick === 'undefined' && $forestKidnapEvent === null && (!$game.forest_kidnap_day || ($game.forest_kidnap_day + 5) <= $game.day) && setup.percentageChance(3) && _isGuest>>
 	/* Kidnapper — unarmed female worker taken by strangers */
 	<<set $forestKidnapEvent = _guestI>>
+	<<set $game.forest_kidnap_day = $game.day>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' didn\'t come back from the forest. Another worker says they saw two strangers drag her off the path.</span>', 'forest')>>
 <<elseif _isFemale && !_isArmed && typeof _npc.sick === 'undefined' && setup.percentageChance(5)>>
 	/* Assault — unarmed female worker attacked, returns shaken */
 	<<set _npc.happy = Math.max((_npc.happy ?? 0) - 20, -100)>>
 	<<set _npc.relationship = Math.max((_npc.relationship ?? 0) - 15, -100)>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' came back from the forest quiet and won\'t say much. Bruising visible. She needs space.</span>', 'forest')>>
-<<elseif typeof _npc.sick === 'undefined' && setup.percentageChance(4) && $forestTollEvent === null && _isGuest>>
+<<elseif typeof _npc.sick === 'undefined' && $forestTollEvent === null && (!$game.forest_toll_day || ($game.forest_toll_day + 7) <= $game.day) && setup.percentageChance(4) && _isGuest>>
 	/* Protection demand — stranger wants caps to let workers pass */
 	<<set $forestTollEvent = {npcIndex: _guestI, amount: randomInteger(20, 50)}>>
+	<<set $game.forest_toll_day = $game.day>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' came back with a message from an armed stranger — pay ' + $forestTollEvent.amount + ' caps or expect trouble for your workers.</span>', 'forest')>>
 <<else>>
 	<<set _giveWood = (_npc.strength > 30 ? 2 : 1)>>
