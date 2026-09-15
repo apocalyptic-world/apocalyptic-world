@@ -113,7 +113,14 @@ The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't 
 		<<if _stSIdx >= 0>>
 			<<set _stSoldNpc = clone($slaves[_stSIdx])>>
 			<<set _stSoldPrice = $game.stSellPrices[$game.stSellId] ?? 80>>
-			<<run $slaves.splice(_stSIdx, 1)>>
+			<<for _stInvItem, _stInvCount range ($slaves[_stSIdx].inventory ?? {})>>
+				<<run setup.npcInventoryRemove($slaves[_stSIdx], _stInvItem, _stInvCount)>>
+				<<pickup $backpack _stInvItem _stInvCount>>
+			<</for>>
+			<<if $slaves[_stSIdx].buttplug>>
+				<<pickup $backpack 'buttplug' 1>>
+			<</if>>
+			<<slaveRemove _stSIdx>>
 			<<set $player.money += _stSoldPrice>>
 			<<run setup.settlements.modifyRelationship(_st, 2, 'Slave sale')>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>

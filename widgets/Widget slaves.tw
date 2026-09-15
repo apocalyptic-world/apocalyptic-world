@@ -1,11 +1,13 @@
 :: Widget slaves [widget] {"position":"251,632","size":"100,100"}
 <<widget slaveValue>>
 	<<set _age = setup.getAge($args[0])>>
-	<<set _slaveValue = 
-		($args[0].beauty ?? 0 / 2) + 
-		($args[0].sub ?? 0 / 5) +
+	<<set _slaveValue =
+		(($args[0].beauty ?? 0) / 2) +
+		(($args[0].sub ?? 0) / 5) +
 		((100 - _age) / 5)
 	>>
+	/* x2.2 keeps average prices where they were before the beauty/sub division fix */
+	<<set _slaveValue = _slaveValue * 2.2>>
 	<<if $args[0].virgin>>
 		<<set _slaveValue = _slaveValue * 2>>
 	<</if>>
