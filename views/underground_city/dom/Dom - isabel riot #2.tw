@@ -57,34 +57,11 @@ Isabel nodded gratefully, a mixture of exhaustion and gratitude evident in her e
 <</isabel>>
 <br />
 <<link 'Leave'>>
-    <<newgirl>>
-    <<set 
-        $tmpGirl.id = 'isabel',
-        $tmpGirl.name = 'Isabel',
-        $tmpGirl.birthDate = setup.getBirthDate(30),
-        $tmpGirl.hair = 'black',
-        $tmpGirl.eyes = 'brown',
-        $tmpGirl.race = 'latina',
-        $tmpGirl.beauty = 94,
-        $tmpGirl.anal = 60,
-        $tmpGirl.traits = ['cumslut'],
-        $tmpGirl.quests = {},
-        $tmpGirl.virgin = false,
-        $tmpGirl.canTalk = true
-    >>
-
-    <<set $characters.isabel = Object.assign($tmpGirl, ($characters.isabel ?? {}))>>
-    <<set $characters.isabel.corruption = 70>>
-    <<set $characters.isabel.sub = 60>>
+    <<isabelNpcInit>>
+    <<set $characters.isabel.quests ??= {}>>
     <<set $characters.isabel.quests.saved = true>>
     <<set $characters.isabel.livingLocation = 'guesthouse'>>
     <<set $characters.isabel.quests.riotDay = $game.day>>
-    <<set $characters.isabel.relationship = Math.min($characters.isabel.relationship + 60, 100)>>
-    <<set 
-        $characters.isabel.likesGuys = true,
-        $characters.isabel.likesTGirls = false,
-        $characters.isabel.likesTGuys = true,
-        $characters.isabel.likesGirls = true
-    >>
+    <<set $characters.isabel.relationship = Math.min(($characters.isabel.relationship ?? 0) + 60, 100)>>
     <<goto 'Sleep eval'>>
 <</link>>

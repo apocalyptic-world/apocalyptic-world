@@ -2,6 +2,11 @@
 <h1 class="ptitle">UNDERGROUND CITY</h1>
 <br />
 
+<<if !$characters.dom.quests.alt_confront_day>>
+	<<set $characters.dom.quests.alt_confront_day = $game.day>>
+<</if>>
+<<set _hasKillWeapon = ($backpack.has('revolver') && $backpack.has('bullet_revolver')) || $backpack.has('knife')>>
+
 A folded note found its way into your pocket sometime during the day — you never saw who left it. Isabel's handwriting, three words.
 
 <br /><br />
@@ -23,12 +28,15 @@ You checked what you were carrying. Whatever happened next, there wouldn't be a 
 
 <br /><br />
 
-<<if $backpack.has('revolver') || $backpack.has('knife')>>
+<<if _hasKillWeapon>>
 	<<link 'Go to his office'>>
 		<<goto 'Dom - kill'>>
 	<</link>>
+	<<link 'Not now'>>
+		<<goto 'Underground city'>>
+	<</link>>
 <<else>>
-	<p style="color: #cc5555;">You don't have a weapon on you. Come back once you're carrying a knife or a revolver.</p>
+	<p style="color: #cc5555;">You don't have a weapon on you. Come back once you're carrying a knife or a loaded revolver.</p>
 	<br />
 	<<link 'Turn back'>>
 		<<goto 'Underground city'>>

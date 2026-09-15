@@ -152,6 +152,14 @@ Save.onLoad.add(function (save) {
             variables.characters.isabel.pregnancy_father ??= 'mc';
         }
 
+        if (variables.characters?.dom?.dead && variables.characters.isabel.married === true
+            && (variables.characters.isabel.family?.husband ?? 'dom') === 'dom') {
+            variables.characters.isabel.married = false;
+        }
+        if (variables.characters?.dom?.quests?.alt_route && variables.characters?.dom?.dead) {
+            variables.game.location.underground_office = true;
+        }
+
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {

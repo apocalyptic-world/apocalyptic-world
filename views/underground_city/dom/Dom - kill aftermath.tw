@@ -96,5 +96,11 @@ She leaned into you again, resting her head against your shoulder. Outside, dist
     <<set $characters.dom.quests.new_king = true>>
     <<set $characters.dom.quests.new_king_day = $game.day>>
     <<set $player.reputation += 50>>
+    <<set $game.location.underground_office = true>>
+    <<if $characters.dom.quests.alt_route>>
+        <<isabelNpcInit>>
+        <<set $characters.isabel.relationship = Math.min(($characters.isabel.relationship ?? 0) + 20, 100)>>
+    <</if>>
+    <<set $characters.isabel.married = false>>
     <<goto 'Underground city'>>
 <</link>>

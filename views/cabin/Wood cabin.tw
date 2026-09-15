@@ -94,7 +94,7 @@
 		timeBetween('08:00', '16:00')
 	>> 
 		<<goto 'Octavia - Annihilation'>>
-	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return>>
+	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return && !$characters?.dom?.dead && !$characters?.dom?.quests?.alt_route>>
 		<<goto 'Dom - return'>>
 	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $characters.blair?.quests?.sex && $gameDate.getDay() === 6>>
 		<<set $locationEvents.cabin = true>>
