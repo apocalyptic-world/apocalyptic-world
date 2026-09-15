@@ -83,8 +83,14 @@
                 <</if>>
                 <br />
                 <<linkreplace 'Cum'>>
+                    <<horny_reset>>
                     <<set $guests[_guestId].horny = 0>>
                     <<setNpcStats 'guest' _guestId 'happy' 5>>
+                    <<if setup.pregnancyChance($guests[_guestId])>>
+                        <<set $guests[_guestId].pregnancy_father = 'mc'>>
+                        <<set $guests[_guestId].pregnancy = 0>>
+                        <<statsAdd 'girls_impregnated'>>
+                    <</if>>
                     <center>
                         <<image 'game/misc/creampie.webp'>>
                     </center>

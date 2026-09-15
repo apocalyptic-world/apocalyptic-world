@@ -165,6 +165,14 @@ their movements synchronized in a way that sends waves of pleasure coursing thro
         <<run $('#option_face').hide()>>
         <<run $('#option_leave').show()>>
         <<horny_reset>>
+        <<if setup.pregnancyChance(_npc)>>
+            <<set _npc.pregnancy_father = 'mc'>>
+            <<set _npc.pregnancy = 0>>
+            <<statsAdd 'girls_impregnated'>>
+            <<set _npc.pregnancy_encounter_day = $game.day>>
+            <<set _npc.pregnancy_encounter_place = 'club'>>
+            <<run ($pregnantStrangers ??= []).push(clone(_npc))>>
+        <</if>>
         <center>
             <<image 'game/misc/creampie_cowgirl.webp'>>
         </center>

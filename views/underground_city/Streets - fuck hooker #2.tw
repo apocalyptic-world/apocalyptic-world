@@ -36,6 +36,15 @@ You started to move faster, your hips pounding against her, your dick sliding in
 You continued to fuck her, your movements becoming more frantic, your breath catching in your throat. 
 You were close, your orgasm building, and you couldn't hold back. You thrust into her one last time, your body shuddering as you came, your semen filling her pussy.
 <br /><br />
+<<horny_reset>>
+<<if setup.pregnancyChance(_npc)>>
+    <<set _npc.pregnancy_father = 'mc'>>
+    <<set _npc.pregnancy = 0>>
+    <<statsAdd 'girls_impregnated'>>
+    <<set _npc.pregnancy_encounter_day = $game.day>>
+    <<set _npc.pregnancy_encounter_place = 'streets'>>
+    <<run ($pregnantStrangers ??= []).push(clone(_npc))>>
+<</if>>
 <center>
     <<image 'game/misc/creampie_prone.webp'>>
 </center>
@@ -46,10 +55,11 @@ As you pulled out, she smiled, her eyes glinting with a mixture of satisfaction 
     Thanks. Hopefully will see you again.
 <</sayNpc>>
 <br />
-[[Leave|Streets]]
+<<link 'Leave'>>
+    <<goto 'Streets'>>
+<</link>>
 
 <<set $player.sexp++>>
-<<horny_reset>>
 <<addmins 30>>
 
 

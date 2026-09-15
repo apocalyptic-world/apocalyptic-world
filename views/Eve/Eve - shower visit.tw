@@ -102,6 +102,11 @@ She approached you, her expression a mix of weariness and anxiety.
                         <<run $('#option_thrust').hide()>>
                     <</if>>
                     <<horny_reset>>
+                    <<if setup.pregnancyChance($characters.eve)>>
+                        <<set $characters.eve.pregnancy_father = 'mc'>>
+                        <<set $characters.eve.pregnancy = 0>>
+                        <<statsAdd 'girls_impregnated'>>
+                    <</if>>
                     <center>
                         [img[setup.ImagePath+'game/misc/cum_in_pussy.webp']]
                     </center>

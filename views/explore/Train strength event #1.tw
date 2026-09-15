@@ -25,11 +25,16 @@
 							[img[setup.ImagePath+'places/cabin/workout_cum.webp']]
 						</center>
 						<<horny_reset>>
+						<<if setup.pregnancyChance($guests[$randomPerson])>>
+							<<set $guests[$randomPerson].pregnancy_father = 'mc'>>
+							<<set $guests[$randomPerson].pregnancy = 0>>
+							<<statsAdd 'girls_impregnated'>>
+						<</if>>
 						<br /><br />
 						She wraps her hands around your neck as you cum inside her.
 						<br /><br />
 						<strong>Your relationship with <<=$guests[$randomPerson].name>> increased by 5</strong>
-						<<set $guests.relationship = Math.min($guests[$randomPerson].relationship +5, 100)>>
+						<<set $guests[$randomPerson].relationship = Math.min(($guests[$randomPerson].relationship ?? 0) + 5, 100)>>
 						<br /><br />
 				  <</linkreplace>>
 				</div>
@@ -45,7 +50,7 @@
 						In the last moment you pull out and cum outside. She looks disappointed.
 						<br /><br />
 						<strong><<=$guests[$randomPerson].name>> submission increased by 5</strong>
-						<<set $guests.sub = Math.min($guests[$randomPerson].sub +5, 100)>>
+						<<set $guests[$randomPerson].sub = Math.min(($guests[$randomPerson].sub ?? 0) + 5, 100)>>
 						<br /><br />
 					<</linkreplace>>
 				</div>

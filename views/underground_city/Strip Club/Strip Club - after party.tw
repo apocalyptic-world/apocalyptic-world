@@ -152,10 +152,18 @@ playing on her full lips.
     <div id="option_creampie">
         <<linkreplace 'Cum inside her'>>
             <<run $('#option_facial').hide()>>
+            <<horny_reset>>
+            <<if setup.pregnancyChance(_npc5)>>
+                <<set _npc5.pregnancy_father = 'mc'>>
+                <<set _npc5.pregnancy = 0>>
+                <<statsAdd 'girls_impregnated'>>
+                <<set _npc5.pregnancy_encounter_day = $game.day>>
+                <<set _npc5.pregnancy_encounter_place = 'strip_club'>>
+                <<run ($pregnantStrangers ??= []).push(clone(_npc5))>>
+            <</if>>
             <center>
                 <<image 'game/misc/creampie_prone.webp'>>
             </center>
-            <<horny_reset>>
             <br />
             <<set $characters.isabel.horny = 0>>
             <<run $('#option_sleep').show()>>
