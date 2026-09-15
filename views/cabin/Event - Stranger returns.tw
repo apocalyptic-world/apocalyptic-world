@@ -1,0 +1,500 @@
+:: Event - Stranger returns
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _srIndex = $strangerPregnancyHappening>>
+<<set _sr = ($pregnantStrangers ?? [])[_srIndex]>>
+<<if !_sr>>
+	<<unset $strangerPregnancyHappening>>
+	<<goto 'Wood cabin'>>
+<<else>>
+
+<<set _srDays = $game.day - (_sr.pregnancy_encounter_day ?? $game.day)>>
+<<set _srWithBaby = _srDays >= 270>>
+<<set _srFeral = (_sr.traits ?? []).includes('feral')>>
+<<set _srPlace = _sr.pregnancy_encounter_place ?? (_srFeral ? 'forest' : 'nightclub')>>
+<<set _srName = setup.displayName(_sr)>>
+<<set _srMonths = Math.max(Math.floor(_srDays / 30), 3)>>
+<<set _srMemory = (_srPlace === 'nightclub' ? 'The alley behind the nightclub.' : 'Out in the wastes. You and me.')>>
+
+<<set _srReporterPool = $guests.filter(function (npc) { return !(npc.traits ?? []).includes('feral') && setup.getAge(npc) >= 13; })>>
+<<if !_srReporterPool.length>>
+	<<set _srReporterPool = $slaves.filter(function (npc) { return !(npc.traits ?? []).includes('feral') && !npc.gagBall && setup.getAge(npc) >= 13; })>>
+<</if>>
+<<set _srReporter = (_srReporterPool.length ? _srReporterPool.random() : null)>>
+
+<<set _srHasGuestRoom = ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<<set _srHasBasementRoom = ($game.location.basement ?? false) && $slaves.length < ($basementLimit ?? 3)>>
+<<set _srFood = setup.cabinInventory.count('food')>>
+<<set _srRope = setup.cabinInventory.count('rope')>>
+
+<<set _srMotherFate = 'gone', _srBabyKept = false, _srGoodwill = 0>>
+
+<<if _srWithBaby>>
+	<<set _srBabyDays = Math.max(_srDays - 270, 0)>>
+	<<set _srBabyGender = either(0, 1)>>
+	<<set _sr.pregnancy_father = 'mc'>>
+	<<newchild _srBabyGender _sr>>
+	<<set _srBaby = $newChild>>
+	<<unset $newChild>>
+	<<set _srBaby.birthDate = new Date($gameDate.getTime() - _srBabyDays * 86400000)>>
+	/* Injuries and a wild upbringing are not inherited */
+	<<set _srBaby.traits = (_srBaby.traits ?? []).filter(function (trait) { return !['feral', 'crippled'].includes(trait); })>>
+	<<set _srBabyWord = (_srBaby.gender ? 'son' : 'daughter')>>
+	<<set _srBabyKind = (_srBaby.gender ? 'boy' : 'girl')>>
+	<<set _srBabyName = _srBaby.name>>
+<</if>>
+
+<<if _srFeral>>
+	<<if _srReporter>>
+		<<=setup.displayName(_srReporter)>> came running up to the cabin, out of breath.
+		<br /><br />
+		<<if _srWithBaby>>
+			<<sayNpc _srReporter>>
+				There's a wild woman at the gate. She's got a baby with her. Bares her teeth at anyone who gets close to it.
+			<</sayNpc>>
+		<<else>>
+			<<sayNpc _srReporter>>
+				There's a wild woman circling the gate. Hisses at anyone who gets close. And she's... she's pregnant. Really pregnant.
+			<</sayNpc>>
+		<</if>>
+		<br />
+		You went down to see for yourself.
+	<<else>>
+		A low, animal growl drew you down to the gate before you had even finished waking up.
+	<</if>>
+	<br /><br />
+	<<if _srWithBaby>>
+		<center>
+			<<image 'places/cabin/stranger_feral_baby.jpg' sfw>>
+		</center>
+		<br /><br />
+		She was crouched in the dirt just past the gate, a bundle of filthy rags clutched against her chest. The bundle whimpered. When one of the settlers took a step closer, she curled her whole body around it and bared her teeth.
+		<br /><br />
+		You knew the faded label stitched on what was left of her clothes. <strong><<=_srName>></strong>. The feral woman from the forest.
+		<br /><br />
+		<<you>>
+			<<=_srName>>?
+		<</you>>
+		<br />
+		Her head snapped up at the sound of her name. She sniffed the air in your direction and went still. The rags slipped, and you caught a glimpse of a tiny, wrinkled face. A <<=_srBabyKind>>. You counted back the months and didn't need to ask whose.
+		<br /><br />
+	<<else>>
+		<center>
+			<<image 'places/cabin/stranger_feral_pregnant.jpg' sfw>>
+		</center>
+		<br /><br />
+		She was crouched in the dirt just past the gate, rags hanging off a frame gone thin everywhere except her belly, round and heavy under the torn cloth. What was left of her face turned toward you as you came closer. She sniffed the air and went still.
+		<br /><br />
+		You knew the faded label stitched on her rags. <strong><<=_srName>></strong>. The feral woman from the forest.
+		<br /><br />
+		<<you>>
+			<<=_srName>>?
+		<</you>>
+		<br />
+		Her head snapped up at the sound of her name. She didn't come closer, but she didn't run either. One hand stayed pressed flat over her belly, and a low, uneasy whine came out of her throat. By your count she was <<=_srMonths>> months along.
+		<br /><br />
+	<</if>>
+<<else>>
+	<<if _srReporter>>
+		<<=setup.displayName(_srReporter)>> caught you on your way out of the cabin.
+		<br /><br />
+		<<sayNpc _srReporter>>
+			There's a woman at the gate asking for you. Knew your name and everything. Says she came a long way.
+		<</sayNpc>>
+		<br />
+		You went down to see for yourself.
+	<<else>>
+		The morning was quiet until you noticed someone standing at the gate, waiting for you.
+	<</if>>
+	<br /><br />
+	<<if _srWithBaby>>
+		<center>
+			<<image 'places/cabin/stranger_baby_gate.jpg' sfw>>
+		</center>
+		<br /><br />
+		It took you a moment to place her. She was thinner than you remembered, with dark circles under her eyes and a bundle of blankets pressed against her chest.
+		<<if _srPlace === 'nightclub'>>
+			The last time you had seen <<=_srName>>, she was bent over against a brick wall in the alley behind the nightclub, your cum dripping out of her pussy.
+		<</if>>
+		<br /><br />
+		<<sayNpc _sr>>
+			Remember me? <<=_srMemory>>
+		<</sayNpc>>
+		<br />
+		<<you>>
+			I remember.
+		<</you>>
+		<br />
+		She pulled the blanket back. A tiny face squinted up at the light.
+		<br /><br />
+		<<sayNpc _sr>>
+			This is your <<=_srBabyWord>>. I had <<=setup.pronounceWho(_srBaby)>> alone. Nobody else came near me for months before that night, so don't ask if <<=setup.pronounceWhat(_srBaby)>> is yours.
+		<</sayNpc>>
+		<br />
+		She shifted the baby to her other arm. Her hands were shaking.
+		<br /><br />
+		<<sayNpc _sr>>
+			I can't feed us both anymore.
+		<</sayNpc>>
+		<br />
+	<<else>>
+		<center>
+			<<image 'places/cabin/stranger_pregnant_gate.jpg' sfw>>
+		</center>
+		<br /><br />
+		It took you a moment to place her. She stood at your gate in a dusty coat, one hand resting on a round, heavy belly.
+		<<if _srPlace === 'nightclub'>>
+			The last time you had seen <<=_srName>>, she was bent over against a brick wall in the alley behind the nightclub, your cum dripping out of her pussy.
+		<</if>>
+		<br /><br />
+		<<sayNpc _sr>>
+			Remember me? <<=_srMemory>>
+		<</sayNpc>>
+		<br />
+		<<you>>
+			I remember.
+		<</you>>
+		<br />
+		<<sayNpc _sr>>
+			I haven't bled since that night. <<=_srMonths>> months now. I counted twice. It's yours.
+		<</sayNpc>>
+		<br />
+		She glanced back down the road she had come from.
+		<br /><br />
+		<<sayNpc _sr>>
+			I can't raise a kid alone out there. I didn't know where else to go.
+		<</sayNpc>>
+		<br />
+	<</if>>
+<</if>>
+
+<div id="sr_choices">
+<<if _srFeral>>
+
+	<<set _srGuestLabel = (_srWithBaby ? 'Lead them both in (-1 food)' : 'Lead her in (-1 food)')>>
+	<div id="sr_guest">
+		<<if _srHasGuestRoom && _srFood >= 1 && $player.int > 20>>
+			<<linkreplace _srGuestLabel>>
+				<<run $('#sr_basement, #sr_baby, #sr_supplies, #sr_refuse').hide()>>
+				<<if _srWithBaby>>
+					<<run $('#sr_end, #sr_baby_name').show()>>
+					<<set _srBabyKept = true>>
+				<<else>>
+					<<run $('#sr_end').show()>>
+				<</if>>
+				<<run setup.cabinInventory.drop('food', 1)>>
+				<<set _srMotherFate = 'guest'>>
+				<<set _sr.relationship = Math.min((_sr.relationship ?? 0) + 20, 100)>>
+				<<set _sr.sub = Math.min((_sr.sub ?? 0) + 10, 100)>>
+				<<set _sr.happy = Math.min((_sr.happy ?? 0) + 10, 100)>>
+				You crouched down and held out the food, moving slow. She snatched it out of your hand and tore into it. When you stood and opened the gate, she hesitated for a long moment, then followed you through<<if _srWithBaby>>, the baby held tight against her chest the whole way<</if>>.
+				<br /><br />
+				<strong>She moved in as a guest.</strong>
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc"><<=_srGuestLabel>></div>
+			<<linkdesc>>
+				Free guest house room, 1 food, intelligence above 20
+			<</linkdesc>>
+		<</if>>
+	</div>
+
+	<<set _srBasementLabel = (_srWithBaby ? 'Capture her and the baby (-1 rope)' : 'Capture her (-1 rope)')>>
+	<div id="sr_basement">
+		<<if _srHasBasementRoom && _srRope >= 1 && $player.strength > 20>>
+			<<linkreplace _srBasementLabel>>
+				<<run $('#sr_guest, #sr_baby, #sr_supplies, #sr_refuse').hide()>>
+				<<if _srWithBaby>>
+					<<run $('#sr_end, #sr_baby_name').show()>>
+					<<set _srBabyKept = true>>
+				<<else>>
+					<<run $('#sr_end').show()>>
+				<</if>>
+				<<run setup.cabinInventory.drop('rope', 1)>>
+				<<statsAdd 'people_captured'>>
+				<<set _srMotherFate = 'slave'>>
+				<<set _sr.happy = Math.max((_sr.happy ?? 0) - 20, -100)>>
+				<<set _sr.relationship = Math.max((_sr.relationship ?? 0) - 10, -100)>>
+				<<set _sr.sub = Math.min((_sr.sub ?? 0) + 20, 100)>>
+				She didn't understand what the rope was for until it looped around her wrists. Then she fought, twisting and snapping at you<<if _srWithBaby>> with one arm while the other never let go of the baby<<else>>, always keeping her belly turned away from you<</if>>. You cinched the knot tight and led her down to the basement.
+				<br /><br />
+				<strong>She has been captured as a slave.</strong>
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc"><<=_srBasementLabel>></div>
+			<<linkdesc>>
+				Free basement room, 1 rope, strength above 20
+			<</linkdesc>>
+		<</if>>
+	</div>
+
+	<<if _srWithBaby>>
+	<div id="sr_baby">
+		<<if $player.strength > 30>>
+			<<linkreplace 'Take the baby from her'>>
+				<<run $('#sr_guest, #sr_basement, #sr_supplies, #sr_refuse').hide()>>
+				<<run $('#sr_end, #sr_baby_name').show()>>
+				<<set _srBabyKept = true>>
+				<<set _srGoodwill = -2>>
+				You grabbed the bundle and pulled. She clawed at your arms and sank her teeth into your wrist, but you pried the baby loose. She let out a scream that didn't sound human, circled you twice with her teeth bared, then bolted for the treeline.
+				<br /><br />
+				The baby cried in your arms until long after she was gone.
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc">Take the baby from her</div>
+			<<linkdesc>>
+				Strength above 30
+			<</linkdesc>>
+		<</if>>
+	</div>
+	<</if>>
+
+	<<if _srFood >= 1>>
+	<div id="sr_supplies">
+		<<linkreplace 'Leave food by the gate and walk away (-1 food)'>>
+			<<run $('#sr_guest, #sr_basement, #sr_baby, #sr_refuse').hide()>>
+			<<run $('#sr_end').show()>>
+			<<run setup.cabinInventory.drop('food', 1)>>
+			<<set _srGoodwill = 1>>
+			You set the food down outside the gate and backed away. She waited until you were far enough, then darted in, grabbed it, and disappeared into the trees<<if _srWithBaby>> with the baby<</if>>.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+	<</if>>
+
+	<div id="sr_refuse">
+		<<linkreplace 'Drive her off'>>
+			<<run $('#sr_guest, #sr_basement, #sr_baby, #sr_supplies').hide()>>
+			<<run $('#sr_end').show()>>
+			You shouted and waved your arms. She snarled back at you, then backed away step by step, never turning her back, until the trees swallowed her.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+
+<<else>>
+
+	<<set _srGuestLabel = (_srWithBaby ? 'Take them both in' : 'Take her in')>>
+	<div id="sr_guest">
+		<<if _srHasGuestRoom>>
+			<<linkreplace _srGuestLabel>>
+				<<run $('#sr_basement, #sr_baby, #sr_supplies, #sr_refuse').hide()>>
+				<<if _srWithBaby>>
+					<<run $('#sr_end, #sr_baby_name').show()>>
+					<<set _srBabyKept = true>>
+				<<else>>
+					<<run $('#sr_end').show()>>
+				<</if>>
+				<<set _srMotherFate = 'guest'>>
+				<<set _sr.relationship = Math.min((_sr.relationship ?? 0) + 20, 100)>>
+				<<set _sr.happy = Math.min((_sr.happy ?? 0) + 20, 100)>>
+				You opened the gate and told her there was a bed for her in the guest house.
+				<br /><br />
+				Her shoulders dropped, like she had been holding them up the whole way here.
+				<br /><br />
+				<<if _srWithBaby>>
+					<<sayNpc _sr>>
+						Thank you. I'll work, I swear. Just... let <<=setup.pronounceWho(_srBaby)>> eat first.
+					<</sayNpc>>
+				<<else>>
+					<<sayNpc _sr>>
+						Thank you. I'll pull my weight. As long as I still can, anyway.
+					<</sayNpc>>
+				<</if>>
+				<br />
+				<strong>She moved in as a guest.</strong>
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc"><<=_srGuestLabel>></div>
+			<<linkdesc>>
+				Free guest house room
+			<</linkdesc>>
+		<</if>>
+	</div>
+
+	<<set _srBasementLabel = (_srWithBaby ? 'Lock them in the basement' : 'Lock her in the basement')>>
+	<div id="sr_basement">
+		<<if _srHasBasementRoom>>
+			<<linkreplace _srBasementLabel>>
+				<<run $('#sr_guest, #sr_baby, #sr_supplies, #sr_refuse').hide()>>
+				<<if _srWithBaby>>
+					<<run $('#sr_end, #sr_baby_name').show()>>
+					<<set _srBabyKept = true>>
+				<<else>>
+					<<run $('#sr_end').show()>>
+				<</if>>
+				<<statsAdd 'people_captured'>>
+				<<set _srMotherFate = 'slave'>>
+				<<set _sr.relationship = Math.max((_sr.relationship ?? 0) - 20, -100)>>
+				<<set _sr.happy = Math.max((_sr.happy ?? 0) - 30, -100)>>
+				<<set _sr.sub = Math.min((_sr.sub ?? 0) + 10, 100)>>
+				You let her through the gate, and she followed you all the way to the basement door before she understood where you were taking her.
+				<br /><br />
+				<<sayNpc _sr>>
+					No. No! I came here for help, you bastard!
+				<</sayNpc>>
+				<br />
+				She fought when you pushed her inside<<if _srWithBaby>>, but not hard. Not with the baby in her arms<</if>>. The lock clicked shut on her screaming.
+				<br /><br />
+				<strong>She has been locked up as a slave.</strong>
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc"><<=_srBasementLabel>></div>
+			<<linkdesc>>
+				Free basement room
+			<</linkdesc>>
+		<</if>>
+	</div>
+
+	<<if _srWithBaby>>
+	<div id="sr_baby">
+		<<linkreplace 'Keep the baby, send her away'>>
+			<<run $('#sr_guest, #sr_basement, #sr_supplies, #sr_refuse').hide()>>
+			<<run $('#sr_end, #sr_baby_name').show()>>
+			<<set _srBabyKept = true>>
+			You told her the baby could stay. She couldn't.
+			<br /><br />
+			<<if setup.percentageChance(50)>>
+				She closed her eyes and let out a long breath, like something heavy had finally been lifted off her.
+				<br /><br />
+				<<sayNpc _sr>>
+					Good. That's... good. <<=setup.pronounceWhat(_srBaby, true)>> will have a better chance with you than with me.
+				<</sayNpc>>
+				<br />
+				She kissed the baby's forehead, handed <<=setup.pronounceWho(_srBaby)>> over, and walked away without looking back.
+			<<else>>
+				Her face crumpled.
+				<br /><br />
+				<<sayNpc _sr>>
+					I thought... I thought you'd take us both.
+				<</sayNpc>>
+				<br />
+				She held the baby for a long time before she let go. Then she turned and walked back down the road, crying the whole way.
+			<</if>>
+			<br /><br />
+		<</linkreplace>>
+	</div>
+	<</if>>
+
+	<<if _srFood >= 3>>
+		<<set _srSupplyItem = 'food'>>
+		<<set _srSupplyLabel = (_srWithBaby ? 'Give them 3 food and send them off' : 'Give her 3 food and send her off')>>
+	<<else>>
+		<<set _srSupplyItem = 'caps'>>
+		<<set _srSupplyLabel = (_srWithBaby ? 'Give them 30 caps and send them off' : 'Give her 30 caps and send her off')>>
+	<</if>>
+	<div id="sr_supplies">
+		<<if _srFood >= 3 || $player.money >= 30>>
+			<<linkreplace _srSupplyLabel>>
+				<<run $('#sr_guest, #sr_basement, #sr_baby, #sr_refuse').hide()>>
+				<<run $('#sr_end').show()>>
+				<<if _srSupplyItem === 'food'>>
+					<<run setup.cabinInventory.drop('food', 3)>>
+				<<else>>
+					<<set $player.money -= 30>>
+				<</if>>
+				<<set _srGoodwill = 2>>
+				You couldn't take her in, but you didn't send her away empty-handed either.
+				<br /><br />
+				<<sayNpc _sr>>
+					It's more than I expected. Thank you.
+				<</sayNpc>>
+				<br />
+				She tucked the supplies under her coat and set off down the road<<if _srWithBaby>>, the baby asleep against her shoulder<</if>>.
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<div class="link-internal disabled" style="background: #ccc"><<=_srSupplyLabel>></div>
+			<<linkdesc>>
+				3 food or 30 caps
+			<</linkdesc>>
+		<</if>>
+	</div>
+
+	<<set _srRefuseLabel = (_srWithBaby ? 'Turn them away' : "Tell her it's not yours")>>
+	<div id="sr_refuse">
+		<<linkreplace _srRefuseLabel>>
+			<<run $('#sr_guest, #sr_basement, #sr_baby, #sr_supplies').hide()>>
+			<<run $('#sr_end').show()>>
+			<<if _srWithBaby>>
+				<<set _srGoodwill = -3>>
+				<<you>>
+					I can't help you.
+				<</you>>
+				<br />
+				She stared at you for a long moment, then pulled the blanket back over the baby's face.
+				<br /><br />
+				<<sayNpc _sr>>
+					Then I hope <<=setup.pronounceWhat(_srBaby)>> never finds out who <<=setup.pronounceWhos(_srBaby)>> father is.
+				<</sayNpc>>
+			<<else>>
+				<<set _srGoodwill = -2>>
+				<<if _srPlace === 'nightclub'>>
+					<<you>>
+						It's not mine. Try one of the other guys you fucked in that alley.
+					<</you>>
+				<<else>>
+					<<you>>
+						It's not mine.
+					<</you>>
+				<</if>>
+				<br />
+				<<sayNpc _sr>>
+					Fuck you.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			She turned and walked back down the road.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+
+<</if>>
+</div>
+
+<div id="sr_end" style="display:none">
+	<<if _srWithBaby>>
+	<div id="sr_baby_name" style="display:none">
+		What will be <<=setup.pronounceWhos(_srBaby)>> name: <<textbox "_srBabyName" _srBabyName>>
+		<br /><br />
+	</div>
+	<</if>>
+	<<link 'Continue'>>
+		<<addmins 30>>
+		<<set $player.goodwill += _srGoodwill>>
+		<<if _srMotherFate !== 'gone'>>
+			<<run delete _sr.pregnancy_encounter_day; delete _sr.pregnancy_encounter_place; delete _sr.pregnancy_return_day>>
+			<<set _sr.location = null, _sr.assignedTo = null>>
+			<<if _srWithBaby>>
+				<<set _sr.noPregnancyDays = Math.max(randomInteger(180, 250) - _srBabyDays, 30)>>
+			<<else>>
+				<<set _sr.pregnancy = Math.min(_srDays * ((_sr.traits ?? []).includes('breeder') ? 2 : 1), 255)>>
+				<<set _sr.pregnancy_father = 'mc'>>
+			<</if>>
+			<<if _srMotherFate === 'guest'>>
+				<<run $guests.push(_sr)>>
+			<<else>>
+				<<run $slaves.push(_sr)>>
+			<</if>>
+		<</if>>
+		<<if _srBabyKept>>
+			<<set _srBaby.name = (_srBabyName || _srBaby.name)>>
+			<<if ($game.location.nursery ?? false)>>
+				<<run ($nursery ??= []).push(_srBaby)>>
+			<<elseif ($game.location.guesthouse ?? false)>>
+				<<run $guests.push(_srBaby)>>
+			<<else>>
+				<<run $slaves.push(_srBaby)>>
+			<</if>>
+		<</if>>
+		<<run $pregnantStrangers.splice(_srIndex, 1)>>
+		<<unset $strangerPregnancyHappening>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+</div>
+
+<</if>>
