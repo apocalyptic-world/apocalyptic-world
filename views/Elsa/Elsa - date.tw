@@ -45,6 +45,31 @@
         <<notPatreonIcon>>
     </div>
 <</if>>
+<<set _tsHasGuest = false>>
+<<for _tsNpc range $guests>>
+    <<if _tsNpc.gender === 0 && setup.getAge(_tsNpc) >= 18 && (_tsNpc.race === 'white' || _tsNpc.race === 'latina') && (_tsNpc.hair === 'black' || _tsNpc.hair === 'brown') && (_tsNpc.likesGuys ?? true) && (_tsNpc.likesGirls ?? false) && typeof _tsNpc.sick === 'undefined' && (_tsNpc.drunk ?? 0) < 50 && (_tsNpc.relationship ?? 0) >= 30>>
+        <<set _tsHasGuest = true>>
+    <</if>>
+<</for>>
+<<if !_tsHasGuest>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Relax on the couch
+    </div>
+    <<linkdesc>>
+        Needs a guest she trusts nearby (relationship 30+)
+    <</linkdesc>>
+<<elseif recall($suppCode)>>
+    <<link 'Relax on the couch'>>
+        <<set $player.companionsHome = $player.companions>>
+        <<set $player.companions = {}>>
+        <<goto 'Elsa - date \[threesome\]'>>
+    <</link>>
+<<else>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Relax on the couch
+        <<notPatreonIcon>>
+    </div>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Elsa room'>>
 <</link>>
