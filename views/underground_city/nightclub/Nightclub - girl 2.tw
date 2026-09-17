@@ -108,6 +108,14 @@ You reached out, your hands finding her hips, your fingers digging into her soft
                     <br /><br />
                     <<linkreplace 'Cum'>>
                         <<horny_reset>>
+                        <<if setup.pregnancyChance($tmpGirl)>>
+                            <<set $tmpGirl.pregnancy_father = 'mc'>>
+                            <<set $tmpGirl.pregnancy = 0>>
+                            <<statsAdd 'girls_impregnated'>>
+                            <<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+                            <<set $tmpGirl.pregnancy_encounter_place = 'club'>>
+                            <<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+                        <</if>>
                         <center>
                             <<image 'game/misc/creampie_reverse_cowgirl.webp'>>
                         </center>

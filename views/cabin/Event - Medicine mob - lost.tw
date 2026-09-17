@@ -1,0 +1,30 @@
+:: Event - Medicine mob - lost [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+
+<center>
+	<<image 'places/cabin/medicine_mob_lost.jpg' sfw>>
+</center>
+<br />
+
+They pushed past you faster than you expected. Desperation makes people reckless.
+
+<br /><br />
+
+<<set _mmlAmount = Math.min(2, setup.cabinInventory.count('antibiotics'))>>
+<<if _mmlAmount>>
+	<<run setup.cabinInventory.drop('antibiotics', _mmlAmount)>>
+	<strong><<= _mmlAmount>> antibiotics taken.</strong>
+	<br /><br />
+<<else>>
+	They tore the place apart looking for medicine and found none. At least that part didn't go to waste.
+	<br /><br />
+<</if>>
+
+By the time you got back on your feet, they were already gone.
+
+<br /><br />
+
+<<link 'Get up'>>
+	<<goto 'Wood cabin'>>
+<</link>>

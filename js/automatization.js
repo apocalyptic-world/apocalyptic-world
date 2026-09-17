@@ -70,10 +70,10 @@ setup.automatization = {
   job_tools: {
     companion: ['knife', 'gas_mask', 'body_armor', 'arrow', 'crossbow', 'sword'],
     companion_slave: ['gas_mask'],
-    forest: ['axe'],
+    forest: ['axe', 'knife'],
     garden: [],
     guard: ['knife', 'body_armor', 'arrow', 'crossbow', 'sword'],
-    hunter: ['bow'],
+    hunter: ['bow', 'knife'],
     kitchen: [],
     maid: [],
     attendant: ['towel'],

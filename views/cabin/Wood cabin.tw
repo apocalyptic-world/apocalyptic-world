@@ -74,6 +74,9 @@
 	<<elseif $game.blackmailEvent && $game.cabinName>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - Blackmail'>>
+	<<elseif $game.foodSabotageDiscovery && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Kitchen Sabotage'>>
 	<<elseif $characters?.elsa?.quests?.attack_day && !$characters?.elsa?.quests?.new_home>>
 		<<goto 'Elsa - new home'>>
 	<<elseif $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
@@ -91,7 +94,7 @@
 		timeBetween('08:00', '16:00')
 	>> 
 		<<goto 'Octavia - Annihilation'>>
-	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return>>
+	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return && !$characters?.dom?.dead && !$characters?.dom?.quests?.alt_route>>
 		<<goto 'Dom - return'>>
 	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $characters.blair?.quests?.sex && $gameDate.getDay() === 6>>
 		<<set $locationEvents.cabin = true>>
@@ -159,6 +162,13 @@
 	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
+	<<elseif ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance(3) && setup.baseIntruderChance()>>
+		<<set $locationEvents.cabin = true>>
+		<<if setup.percentageChance(50)>>
+			<<goto 'Event - Medicine mob'>>
+		<<else>>
+			<<goto 'Event - Desperate parent'>>
+		<</if>>
 	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30 && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: The uninvited couple'>>

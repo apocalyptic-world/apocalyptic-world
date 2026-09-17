@@ -99,6 +99,11 @@ The picture she painted of him was far different from the version her finder had
             <<linkreplace 'Cum inside her'>>
                 <<horny_reset>>
                 <<run $('#option_cum_back').hide()>>
+                <<if setup.pregnancyChance($wanted[$wantedId])>>
+                    <<set $wanted[$wantedId].pregnancy_father = 'mc'>>
+                    <<set $wanted[$wantedId].pregnancy = 0>>
+                    <<statsAdd 'girls_impregnated'>>
+                <</if>>
                 <center>
                     <<image 'game/misc/creampie.webp'>>
                 </center>

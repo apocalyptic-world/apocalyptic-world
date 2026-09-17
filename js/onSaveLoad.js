@@ -152,6 +152,14 @@ Save.onLoad.add(function (save) {
             variables.characters.isabel.pregnancy_father ??= 'mc';
         }
 
+        if (variables.characters?.dom?.dead && variables.characters.isabel.married === true
+            && (variables.characters.isabel.family?.husband ?? 'dom') === 'dom') {
+            variables.characters.isabel.married = false;
+        }
+        if (variables.characters?.dom?.quests?.alt_route && variables.characters?.dom?.dead) {
+            variables.game.location.underground_office = true;
+        }
+
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
@@ -199,6 +207,10 @@ Save.onLoad.add(function (save) {
             variables.characters.vincent.quests.car_fixed = true;
             variables.characters.vincent.quests.car_fixed_day ??= 0;
         }
+    }
+
+    if (variables.characters?.dom?.quests?.accepted_deal === false && typeof variables.characters.dom.quests.decline_day === 'undefined') {
+        variables.characters.dom.quests.decline_day = Math.max(0, (variables.game?.day ?? 10) - 10);
     }
 
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {

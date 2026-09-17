@@ -148,6 +148,9 @@ The man hesitates for a moment, then speaks again, voice strained.
                 <<if $tmpGirl.virgin>><<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>><</if>>
                 <<set $tmpGirl.virgin = false>>
                 <<statsAdd 'girls_impregnated'>>
+                <<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+                <<set $tmpGirl.pregnancy_encounter_place = 'bar_couple'>>
+                <<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
             <</if>>
             <br /><br />
             She stands slowly, pulling her dress back over her shoulders, and without looking at either of you, she walks toward the door. 

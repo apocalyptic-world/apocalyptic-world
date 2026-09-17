@@ -18,12 +18,14 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 		<<continue>>
 	<</if>>
 	<<set _genderClass = 'gender-' + setup.genderClass(_workoutGuest)>>
-	<<set $guests[_workoutGuestI].strength++>>
 	<<set $guests[_workoutGuestI].horny += randomInteger(10, 20)>>
-	<span @class="''+_genderClass+''" style="font-weight:bold">
-		<<=_workoutGuest.name>>
-	</span> strength increased by 1
-	<br />
+	<<if ($guests[_workoutGuestI].strength ?? 0) < 100>>
+		<<set $guests[_workoutGuestI].strength = Math.min(($guests[_workoutGuestI].strength ?? 0) + 1, 100)>>
+		<span @class="''+_genderClass+''" style="font-weight:bold">
+			<<=_workoutGuest.name>>
+		</span> strength increased by 1
+		<br />
+	<</if>>
 	<<set $guests[_workoutGuestI].quests ??= {}>>
 	<<set $guests[_workoutGuestI].quests.lastInteractionDay = $game.day>>
 <</for>>

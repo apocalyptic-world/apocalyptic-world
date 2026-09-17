@@ -73,6 +73,14 @@ Her big dark eyes lock with yours, pupils blown wide with lustful submission. Sh
                 <br /><br />
                 <<linkreplace 'Cum inside her'>>
                     <<horny_reset>>
+                    <<if setup.pregnancyChance(_npc)>>
+                        <<set _npc.pregnancy_father = 'mc'>>
+                        <<set _npc.pregnancy = 0>>
+                        <<statsAdd 'girls_impregnated'>>
+                        <<set _npc.pregnancy_encounter_day = $game.day>>
+                        <<set _npc.pregnancy_encounter_place = 'unknown'>>
+                        <<run ($pregnantStrangers ??= []).push(clone(_npc))>>
+                    <</if>>
                     <center>
                         <<image 'game/misc/creampie_on_back.webp'>>
                     </center>

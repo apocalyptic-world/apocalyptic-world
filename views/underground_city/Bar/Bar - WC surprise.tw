@@ -91,9 +91,17 @@ Before the door closed behind her, she had looked back once more — and smiled 
         <</sayNpc>>
         <br />
         <<linkreplace 'Cum inside her'>>
+            <<horny_reset>>
+            <<if setup.pregnancyChance($tmpGirl)>>
+                <<set $tmpGirl.pregnancy_father = 'mc'>>
+                <<set $tmpGirl.pregnancy = 0>>
+                <<statsAdd 'girls_impregnated'>>
+                <<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+                <<set $tmpGirl.pregnancy_encounter_place = 'bar'>>
+                <<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+            <</if>>
             You let out a loud groan, your body shaking as you found your release, your hot cum shooting into her.
             <br /><br />
-            <<horny_reset>>
             <<video 'bar/wc_surprise7'>>
             <br /><br />
             <<addmins 30>>

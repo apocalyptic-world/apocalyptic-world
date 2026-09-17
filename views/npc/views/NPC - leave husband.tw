@@ -9,6 +9,7 @@
 <<set _rel = $tmpGirl.relationship ?? 0>>
 <<set _corruption = $tmpGirl.corruption ?? 0>>
 <<set _husbandName = setup.getNpcById($tmpGirl.family.husband)?.name ?? 'her husband'>>
+<<set _relToHusband = $tmpGirl.relationshipBetween?.stats?.[$tmpGirl.family.husband] ?? 0>>
 
 You steered the conversation toward <<=_husbandName>>. Not accusingly — just asking how things really were between them. Whether she was happy.
 <br /><br />
@@ -18,7 +19,11 @@ You steered the conversation toward <<=_husbandName>>. Not accusingly — just a
 She was quiet for a moment. Something shifted in her expression.
 <br /><br />
 
-<<if _rel >= 90 || _corruption >= 50>>
+<<if _relToHusband >= 60>>
+<<sayNpc $tmpGirl>>
+    Things are good between us. Better than I expected, honestly. I'm not going to pretend otherwise.
+<</sayNpc>>
+<<elseif _rel >= 90 || _corruption >= 50>>
 <<sayNpc $tmpGirl>>
     Honestly? It's not what I thought it would be. I don't know anymore.
 <</sayNpc>>
@@ -36,7 +41,7 @@ She didn't walk away.
     <<run $('#lh_leave').hide()>>
     You said it plainly — that you wanted her here, with you. Not just as a guest passing through.
     <br /><br />
-    <<set _leaveChance = Math.min(_rel - 40 + Math.floor(_corruption / 2), 90)>>
+    <<set _leaveChance = Math.min(Math.max(_rel - 40 + Math.floor(_corruption / 2) - Math.floor(_relToHusband / 2), 0), 90)>>
     <<if setup.percentageChance(_leaveChance)>>
         She looked at you for a long moment. Then something in her settled.
         <br /><br />

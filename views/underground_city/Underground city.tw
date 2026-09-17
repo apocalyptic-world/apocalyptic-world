@@ -1,6 +1,15 @@
 :: Underground city [Place bg-underground] {"position":"1814,1223","size":"100,100"}
 <h1 class="ptitle">UNDERGROUND CITY</h1>
 <<weatherAudioStop>>
+<<if $characters.dom.quests.alt_route>>
+	<<if $characters.dom.dead && !$characters.isabel.name>>
+		<<set $characters.isabel.relationship = Math.min(($characters.isabel.relationship ?? 0) + 20, 100)>>
+	<</if>>
+	<<isabelNpcInit>>
+	<<if $characters.dom.dead>>
+		<<set $game.location.underground_office = true>>
+	<</if>>
+<</if>>
 <div class="menu-grid">
    <<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 0.5)>>
   <<grid underground cage 'Fight cage' 'Fight cage' 0 _isDisabled>>
@@ -32,8 +41,20 @@
 	<<set _officeLocation = ($characters.dom.dead ? 'Underground city office' : 'Underground city office with Dom')>>
   	<<grid underground underground_office _officeLocation 'Office' 0 1>>
   <</if>>
-</div> 
+</div>
 <br /><br />
+<<if $characters.dom.quests.alt_route && $characters.dom.quests.alt_confront_day && !$characters.dom.dead>>
+	<<if ($backpack.has('revolver') && $backpack.has('bullet_revolver')) || $backpack.has('knife')>>
+		<<link "Go to Dom's office">>
+			<<goto 'Dom - kill'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal disabled" style="background: #ccc">Go to Dom's office</div>
+	<</if>>
+	<<linkdesc>>
+		Knife or loaded revolver
+	<</linkdesc>>
+<</if>>
 <<link 'Leave'>>
 	<<weatherAudioStart>>
 	<<goto 'Outside'>>
@@ -47,8 +68,10 @@
 	<<goto 'Dom - quest #6 isabel fuel'>>
 <<elseif isMetChar('dom') && $characters.dom.quests.isabel_beg && ($characters.dom.quests.isabel_beg_day + 5) <= $game.day && !$characters.dom.quests.isabel_beg_fuel && $backpack.count('fuel') >= 10>>
 	<<goto 'Dom - isabel riot'>>
-<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
+<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos && !$characters.dom.quests.alt_route>>
 	<<goto 'Dom - Underground city chaos'>>
+<<elseif $characters.dom.quests.alt_route && !$characters.dom.dead && !$characters.dom.quests.alt_confront_day && $characters.isabel.quests.secret_meeting4_day && ($characters.isabel.quests.secret_meeting4_day + 3) <= $game.day>>
+	<<goto 'Dom - Alt route confrontation'>>
 <<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
 	<<goto 'Dom - Return to underground city plan'>>
 <<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>

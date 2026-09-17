@@ -1,0 +1,38 @@
+:: Widget isabel [widget]
+
+/* Identity is set after the merge: save loads stamp generic defaults (race, eyes) onto the stub, which Object.assign would keep. */
+<<widget isabelNpcInit>>
+	<<if !$characters.isabel.name>>
+		<<set _isabelPrevTmpGirl = $tmpGirl>>
+		<<newgirl>>
+		<<set $characters.isabel = Object.assign($tmpGirl, ($characters.isabel ?? {}))>>
+		<<set
+			$characters.isabel.id = 'isabel',
+			$characters.isabel.name = 'Isabel',
+			$characters.isabel.gender = 0,
+			$characters.isabel.birthDate = setup.getBirthDate(30),
+			$characters.isabel.hair = 'black',
+			$characters.isabel.naturalHair = 'black',
+			$characters.isabel.eyes = 'brown',
+			$characters.isabel.race = 'latina',
+			$characters.isabel.breasts = 'big',
+			$characters.isabel.beauty = 94,
+			$characters.isabel.anal = 60,
+			$characters.isabel.traits = ['cumslut'],
+			$characters.isabel.virgin = false,
+			$characters.isabel.canTalk = true,
+			$characters.isabel.canFuck = true,
+			$characters.isabel.corruption = 70,
+			$characters.isabel.sub = 60,
+			$characters.isabel.likesGuys = true,
+			$characters.isabel.likesGirls = true,
+			$characters.isabel.likesTGuys = false,
+			$characters.isabel.likesTGirls = false
+		>>
+		<<if typeof _isabelPrevTmpGirl !== 'undefined'>>
+			<<set $tmpGirl = _isabelPrevTmpGirl>>
+		<<else>>
+			<<unset $tmpGirl>>
+		<</if>>
+	<</if>>
+<</widget>>

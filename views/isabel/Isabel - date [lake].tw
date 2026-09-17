@@ -88,6 +88,11 @@ In the intimate glow of the lantern, Isabel shifted again, laying down on her ba
 <div id="option_inside">
     <<linkreplace 'Cum inside her pussy'>>
         <<horny_reset>>
+        <<if setup.pregnancyChance($characters.isabel)>>
+            <<set $characters.isabel.pregnancy_father = 'mc'>>
+            <<set $characters.isabel.pregnancy = 0>>
+            <<statsAdd 'girls_impregnated'>>
+        <</if>>
         <<run $('#option_breasts').hide()>>
         <<run $('#option_leave').show()>>
         <<image 'game/misc/cum_in_pussy2.webp'>>

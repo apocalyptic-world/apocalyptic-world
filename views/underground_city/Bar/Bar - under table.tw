@@ -113,6 +113,14 @@ She tilted her head toward the back of the bar.
 				<<linkreplace 'Cum'>>
 					<<horny_reset>>
 					<<addmins 30>>
+					<<if setup.pregnancyChance($tmpGirl)>>
+						<<set $tmpGirl.pregnancy_father = 'mc'>>
+						<<set $tmpGirl.pregnancy = 0>>
+						<<statsAdd 'girls_impregnated'>>
+						<<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+						<<set $tmpGirl.pregnancy_encounter_place = 'bar'>>
+						<<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+					<</if>>
 					<center>
 						<<actionImage $tmpGirl 'cum_in_pussy'>>
 					</center>

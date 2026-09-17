@@ -114,9 +114,9 @@
 <</if>>
 
 <!-- Isabel -->
-<<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.dom_return>>
+<<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.dom_return && !$characters.dom?.quests?.alt_route>>
 	<<run _charactersInLocation['guesthouse'].push('isabel')>>
-<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
+<<elseif isMetChar('dom') && ($characters.dom?.quests?.return_city_done || ($characters.dom?.quests?.alt_route && $characters.dom?.dead))>>
 	<<if !$characters.dom?.dead>>
 		<<run _charactersInLocation['underground_office'].push('dom')>>
 	<</if>>

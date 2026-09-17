@@ -76,11 +76,10 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 			<br />
 			Her body was thin but warm. She did what you asked and held her breath when you pushed inside her. You fucked her slow at first, then harder when she stopped flinching. When you came inside her she just lay there, eyes on the ceiling.
 			<br /><br />
-			<<set _ddPreg = setup.pregnancyChance(_ddGirl)>>
-			<<if _ddPreg>>
-				<<set _ddGirl.pregnant = 1>>
-				<<set _ddGirl.pregnantDay = $game.day>>
-				<<set _ddGirl.pregnantBy = 'player'>>
+			<<if setup.pregnancyChance(_ddGirl)>>
+				<<set _ddGirl.pregnancy_father = 'mc'>>
+				<<set _ddGirl.pregnancy = 0>>
+				<<statsAdd 'girls_impregnated'>>
 			<</if>>
 			<span style="color: #888;">She's yours now. She knows it.</span>
 			<br /><br />

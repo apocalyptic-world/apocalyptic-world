@@ -56,8 +56,13 @@ echoing in the desolation that surrounds you.
             <br /><br />
             <<linkreplace 'Cum'>>
                 <<horny_reset>>
-                <<set $guests[$tmpEvent.id].horny = 0>>
+                <<set $slaves[$tmpEvent.id].horny = 0>>
                 <<setNpcStats 'slave' $tmpEvent.id 'happy' 5>>
+                <<if setup.pregnancyChance($slaves[$tmpEvent.id])>>
+                    <<set $slaves[$tmpEvent.id].pregnancy_father = 'mc'>>
+                    <<set $slaves[$tmpEvent.id].pregnancy = 0>>
+                    <<statsAdd 'girls_impregnated'>>
+                <</if>>
                 <center>
                     [img[setup.ImagePath+'game/misc/creampie.webp']]
                 </center>

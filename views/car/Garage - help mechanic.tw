@@ -153,9 +153,15 @@ Her body was warm, her hair carrying the faint scent of sweat and something uniq
 <</linkreplace>>
 <div id="option_yes">
     <<link 'Yes'>>
+        <<if typeof $guestId !== 'undefined' && $guests[$guestId]>>
+            <<set $guests[$guestId] = $tmpGirl>>
+        <</if>>
         <<goto 'NPC talk'>>
     <</link>>
 </div>
 <<link 'Leave'>>
+    <<if typeof $guestId !== 'undefined' && $guests[$guestId]>>
+        <<set $guests[$guestId] = $tmpGirl>>
+    <</if>>
     <<goto 'Garage'>>
 <</link>>

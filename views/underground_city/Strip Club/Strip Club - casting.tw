@@ -98,8 +98,16 @@ The girl had turned toward you with a slow, warm smile—confident, but carrying
                     <</sayNpc>>
                     <br />
                     <div id="option_creampie">
-                        <<linkreplace 'Cum insider her'>>
+                        <<linkreplace 'Cum inside her'>>
                             <<horny_reset>>
+                            <<if setup.pregnancyChance($tmpGirl)>>
+                                <<set $tmpGirl.pregnancy_father = 'mc'>>
+                                <<set $tmpGirl.pregnancy = 0>>
+                                <<statsAdd 'girls_impregnated'>>
+                                <<set $tmpGirl.pregnancy_encounter_day = $game.day>>
+                                <<set $tmpGirl.pregnancy_encounter_place = 'strip_club'>>
+                                <<run ($pregnantStrangers ??= []).push(clone($tmpGirl))>>
+                            <</if>>
                             <<run $('#option_cum_face').hide()>>
                             <<run $('#option_end').show()>>
                             <center>

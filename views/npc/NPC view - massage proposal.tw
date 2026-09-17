@@ -105,6 +105,11 @@ Her offer lingered in the air, and for a second, you couldn’t help but feel an
                     <<linkreplace 'Cum inside'>>
                         <<horny_reset>>
                         <<set $tmpGirl.horny = 0>>
+                        <<if setup.pregnancyChance($tmpGirl)>>
+                            <<set $tmpGirl.pregnancy_father = 'mc'>>
+                            <<set $tmpGirl.pregnancy = 0>>
+                            <<statsAdd 'girls_impregnated'>>
+                        <</if>>
                         As the climax approached, your movements became more urgent, your bodies straining together until the release came. 
                         <br /><br />
                         <center>
@@ -118,6 +123,14 @@ Her offer lingered in the air, and for a second, you couldn’t help but feel an
                         <br /><br />
                         <<link 'Leave'>>
                             <<addmins 30>>
+                            /* $tmpGirl is a copy after navigation, so write her back before leaving */
+                            <<if typeof $slaveId !== 'undefined'>>
+                                <<set $slaves[$slaveId] = $tmpGirl>>
+                            <<elseif typeof $guestId !== 'undefined'>>
+                                <<set $guests[$guestId] = $tmpGirl>>
+                            <<elseif typeof $charId !== 'undefined'>>
+                                <<set $characters[$charId] = $tmpGirl>>
+                            <</if>>
                             <<goto 'Bathhouse'>>
                         <</link>>
                     <</linkreplace>>
