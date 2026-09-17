@@ -1,0 +1,454 @@
+:: NPC offer bar drink
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _backPassage = (typeof $slaveId !== 'undefined') ? 'NPC view' : 'NPC view - guest'>>
+<<set _workLocationBack = { streets: 'Streets', nightclub: 'Nightclub - bathroom', strip_club: 'Strip Club' }[$tmpGirl.assignedTo] ?? _backPassage>>
+<<set _attractedToMC = ($tmpGirl.likesGuys ?? true) && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isIncest($player, $tmpGirl))>>
+<<set _incestBlocked = ($player?.baseManagement?.noIncest ?? false) && setup.family.isIncest($player, $tmpGirl)>>
+<<set _barRound = 0>>
+
+<<switch $tmpGirl.assignedTo>>
+<<case 'nightclub'>>
+	<h1 class="ptitle">NIGHTCLUB</h1>
+	<br />
+	The bass thumps steady through the floor as you lead <<=_himOrHer>> toward the bar, the crowd a shifting tangle of dancers losing themselves in the noise, while near the bathroom door a couple of the club's other girls linger, waiting on their next client between songs.
+<<case 'strip_club'>>
+	<h1 class="ptitle"><<stripClubName>></h1>
+	<br />
+	You bring <<=_himOrHer>> over to the bar at the edge of the floor, the room a low-lit mix of dancers working the crowd for the right tip and customers scanning the stage for the right dancer, the air thick with bass and spilled liquor.
+<</switch>>
+<br /><br />
+
+<<set _pregnant = ($tmpGirl.pregnancy ?? 0) >= 7>>
+<<set _alcoholLikedByNpcTop = ($tmpGirl.likes ?? []).includes('alcohol')>>
+<<set _pregnancyDeclineChance = _alcoholLikedByNpcTop ? 60 : 80>>
+<<if _pregnant && setup.percentageChance(_pregnancyDeclineChance)>>
+	<<sayNpc $tmpGirl>>
+		As much as the atmosphere in here might tempt me otherwise, I'm not going to risk anything happening to the baby. But thank you for thinking of me.
+	<</sayNpc>>
+	<br /><br />
+	<div>
+		<<link 'Leave'>>
+			<<goto _backPassage>>
+		<</link>>
+	</div>
+<<else>>
+	<<include 'NPC offer bar drink - cycle'>>
+<</if>>
+
+:: NPC offer bar drink - cycle
+<<set _barRound = (_barRound ?? 0) + 1>>
+<<set _r = _barRound>>
+<<set _buyFruityLinkText = 'Buy ' + _himOrHer + ' a mild fruity drink'>>
+<<set _buyStrongLinkText = 'Buy ' + _himOrHer + ' a strong fancy drink'>>
+<<set _askLinkText = 'Ask ' + _himOrHer + ' what kind of drink ' + _heOrShe + ' wants'>>
+<<set _fruityDescId = 'opt_buy_fruity_desc_' + _r>>
+<<set _strongDescId = 'opt_buy_strong_desc_' + _r>>
+<<set _askDescId = 'opt_buy_ask_desc_' + _r>>
+
+<div @id="'opt_buy_fruity_' + _r">
+	<<if $player.money < 5>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_buyFruityLinkText>> (insufficient caps)
+		</div>
+	<<else>>
+		<<linkreplace `_buyFruityLinkText`>>
+			<<run $('#opt_buy_strong_' + _r + ', #opt_buy_ask_' + _r + ', #' + _fruityDescId + ', #' + _strongDescId + ', #' + _askDescId).hide()>>
+			<<set _herCost = 5>>
+			<<set _herHappyGain = 2>>
+			<<set _herSubGain = 1>>
+			<<set _herCorruptionGain = 0>>
+			<<set _herDrinkStrong = false>>
+			<<set _herDrunkGain = randomInteger(10, 20)>>
+			<<set _herDrinkName = setup.getRandomElement(setup.barDrinkNames.fruity)>>
+			<<set $player.money -= _herCost>>
+			<<set $tmpGirl.drunk = Math.min(99, ($tmpGirl.drunk ?? 0) + _herDrunkGain)>>
+			<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _herHappyGain, 100)>>
+			<<set $tmpGirl.sub = Math.min($tmpGirl.sub + _herSubGain, 100)>>
+			You order <<=_himOrHer>> a <<=_herDrinkName>>, something sweet and bright, and slide it across the bar to <<=_himOrHer>>.
+			<<include 'NPC offer bar drink - after her drink'>>
+		<</linkreplace>>
+		<<linkdesc _fruityDescId>>
+			Happiness +2 &bull; Submission +1 &bull; Drunk +10-20 &bull; Caps -5
+		<</linkdesc>>
+	<</if>>
+</div>
+
+<div @id="'opt_buy_strong_' + _r">
+	<<if $player.money < 7>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_buyStrongLinkText>> (insufficient caps)
+		</div>
+	<<else>>
+		<<linkreplace `_buyStrongLinkText`>>
+			<<run $('#opt_buy_fruity_' + _r + ', #opt_buy_ask_' + _r + ', #' + _fruityDescId + ', #' + _strongDescId + ', #' + _askDescId).hide()>>
+			<<set _herCost = 7>>
+			<<set _herHappyGain = 1>>
+			<<set _herSubGain = 2>>
+			<<set _herCorruptionGain = 1>>
+			<<set _herDrinkStrong = true>>
+			<<set _herDrunkGain = randomInteger(20, 40)>>
+			<<set _herDrinkName = setup.getRandomElement(setup.barDrinkNames.strong)>>
+			<<set $player.money -= _herCost>>
+			<<set $tmpGirl.drunk = Math.min(99, ($tmpGirl.drunk ?? 0) + _herDrunkGain)>>
+			<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _herHappyGain, 100)>>
+			<<set $tmpGirl.corruption = Math.min(($tmpGirl.corruption ?? 0) + _herCorruptionGain, 100)>>
+			<<set $tmpGirl.sub = Math.min($tmpGirl.sub + _herSubGain, 100)>>
+			You order <<=_himOrHer>> a <<=_herDrinkName>>, something with a serious kick to it, and set it down in front of <<=_himOrHer>>.
+			<<include 'NPC offer bar drink - after her drink'>>
+		<</linkreplace>>
+		<<linkdesc _strongDescId>>
+			Happiness +1 &bull; Corruption +1 &bull; Submission +2 &bull; Drunk +20-40 &bull; Caps -7
+		<</linkdesc>>
+	<</if>>
+</div>
+
+<div @id="'opt_buy_ask_' + _r">
+	<<if $player.money < 5>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_askLinkText>> (insufficient caps)
+		</div>
+	<<else>>
+		<<linkreplace `_askLinkText`>>
+			<<run $('#opt_buy_fruity_' + _r + ', #opt_buy_strong_' + _r + ', #' + _fruityDescId + ', #' + _strongDescId + ', #' + _askDescId).hide()>>
+			<<set _askTier = setup.getWhippitDrunkTier($tmpGirl.drunk)>>
+			<<set _askDeclines = ['tipsy', 'drunk', 'drunk90'].includes(_askTier) && setup.percentageChance($tmpGirl.drunk ?? 0)>>
+			<<if _askDeclines>>
+				You ask <<=_himOrHer>> what <<=_heOrShe>>'d like. <<=ucfirst(_heOrShe)>> thinks it over for a second, then shakes <<=_hisOrHer>> head.
+				<br /><br />
+				<<sayNpc $tmpGirl>>I think I'm good for now, but thank you.<</sayNpc>>
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto _backPassage>>
+				<</link>>
+			<<else>>
+				<<set _herDrinkStrong = !setup.percentageChance(50 + ($tmpGirl.drunk ?? 0) / 2)>>
+				<<set _herHappyGain = 3>>
+				<<set _herSubGain = 0>>
+				<<set _herCorruptionGain = 0>>
+				<<if _herDrinkStrong>>
+					<<set _herCost = 7>>
+					<<set _herDrunkGain = randomInteger(20, 40)>>
+					<<set _herDrinkName = setup.getRandomElement(setup.barDrinkNames.strong)>>
+					<<set _askLine = setup.getRandomElement(setup.barDrinkAskLines.strong)>>
+				<<else>>
+					<<set _herCost = 5>>
+					<<set _herDrunkGain = randomInteger(10, 20)>>
+					<<set _herDrinkName = setup.getRandomElement(setup.barDrinkNames.fruity)>>
+					<<set _askLine = setup.getRandomElement(setup.barDrinkAskLines.fruity)>>
+				<</if>>
+				<<set $player.money -= _herCost>>
+				<<set $tmpGirl.drunk = Math.min(99, ($tmpGirl.drunk ?? 0) + _herDrunkGain)>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _herHappyGain, 100)>>
+				<<set $tmpGirl.corruption = Math.min(($tmpGirl.corruption ?? 0) + _herCorruptionGain, 100)>>
+				<<set $tmpGirl.sub = Math.min($tmpGirl.sub + _herSubGain, 100)>>
+				You ask <<=_himOrHer>> what <<=_heOrShe>>'d like. <<=ucfirst(_heOrShe)>> thinks it over for a second.
+				<br /><br />
+				<<sayNpc $tmpGirl>><<=_askLine>><</sayNpc>>
+				<br />
+				You order <<=_himOrHer>> a <<=_herDrinkName>>.
+				<<include 'NPC offer bar drink - after her drink'>>
+			<</if>>
+		<</linkreplace>>
+		<<linkdesc _askDescId>>
+			Happiness +3 &bull; Drunk ?? &bull; Caps ??
+		<</linkdesc>>
+	<</if>>
+</div>
+
+:: NPC offer bar drink - after her drink
+<<set _mcLightDescId = 'opt_mc_light_desc_' + _r>>
+<<set _mcStrongDescId = 'opt_mc_strong_desc_' + _r>>
+<<set _mcNoneDescId = 'opt_mc_none_desc_' + _r>>
+<br /><br />
+You could use a drink yourself.
+<br /><br />
+<div @id="'opt_mc_light_' + _r">
+	<<if $player.money < 5>>
+		<div class="link-internal" style="background: #ccc">
+			Have a light drink yourself (insufficient caps)
+		</div>
+	<<else>>
+		<<linkreplace 'Have a light drink yourself'>>
+			<<run $('#opt_mc_strong_' + _r + ', #opt_mc_none_' + _r + ', #' + _mcLightDescId + ', #' + _mcStrongDescId + ', #' + _mcNoneDescId).hide()>>
+			<<set $player.money -= 5>>
+			<<set _mcDrinkChoice = 'mild'>>
+			<<set _preMcDrunk = $player.drunk ?? 0>>
+			<<set $player = setup.drink($player, 1, 20)>>
+			<<set _mcDrunkGain = $player.drunk - _preMcDrunk>>
+			<<if $player.drunk > 75>>
+				<<perkAdd 'drunk'>>
+			<</if>>
+			You order yourself something light to match.
+			<<if $player.drunk >= 100>>
+				<<include 'NPC offer bar drink - passed out'>>
+			<<else>>
+				<<include 'NPC offer bar drink - reaction'>>
+			<</if>>
+		<</linkreplace>>
+		<<linkdesc _mcLightDescId>>
+			Your Drunk ~+15-25 &bull; Caps -5
+		<</linkdesc>>
+	<</if>>
+</div>
+<div @id="'opt_mc_strong_' + _r">
+	<<if $player.money < 7>>
+		<div class="link-internal" style="background: #ccc">
+			Have a strong drink yourself (insufficient caps)
+		</div>
+	<<else>>
+		<<linkreplace 'Have a strong drink yourself'>>
+			<<run $('#opt_mc_light_' + _r + ', #opt_mc_none_' + _r + ', #' + _mcLightDescId + ', #' + _mcStrongDescId + ', #' + _mcNoneDescId).hide()>>
+			<<set $player.money -= 7>>
+			<<set _mcDrinkChoice = 'strong'>>
+			<<set _preMcDrunk = $player.drunk ?? 0>>
+			<<set $player = setup.drink($player, 1, 35)>>
+			<<set _mcDrunkGain = $player.drunk - _preMcDrunk>>
+			<<if $player.drunk > 75>>
+				<<perkAdd 'drunk'>>
+			<</if>>
+			You order yourself something with real bite to it.
+			<<if $player.drunk >= 100>>
+				<<include 'NPC offer bar drink - passed out'>>
+			<<else>>
+				<<include 'NPC offer bar drink - reaction'>>
+			<</if>>
+		<</linkreplace>>
+		<<linkdesc _mcStrongDescId>>
+			Your Drunk ~+30-40 &bull; Caps -7
+		<</linkdesc>>
+	<</if>>
+</div>
+<div @id="'opt_mc_none_' + _r">
+	<<linkreplace "I'm good">>
+		<<run $('#opt_mc_light_' + _r + ', #opt_mc_strong_' + _r + ', #' + _mcLightDescId + ', #' + _mcStrongDescId + ', #' + _mcNoneDescId).hide()>>
+		<<set _mcDrinkChoice = 'none'>>
+		You decide to hold off and let <<=_himOrHer>> have this one to herself.
+		<<include 'NPC offer bar drink - reaction'>>
+	<</linkreplace>>
+	<<linkdesc _mcNoneDescId>>
+		No cost, no effect
+	<</linkdesc>>
+</div>
+
+:: NPC offer bar drink - reaction
+<<set _herBucket = _herDrinkStrong ? 'strong' : 'mild'>>
+<<set _comboKey = (_mcDrinkChoice === 'none') ? 'abstain_' + _herBucket : _herBucket + '_' + (_mcDrinkChoice === 'strong' ? 'strong' : 'mild')>>
+<<set _comboPool = setup.barDrinkComboReactions[_comboKey] ?? []>>
+<<set _comboLine = _comboPool.length ? setup.getRandomElement(_comboPool) : ''>>
+<br /><br />
+<<if _comboLine>>
+	<<sayNpc $tmpGirl>><<=_comboLine>><</sayNpc>>
+	<br />
+<</if>>
+
+<<set _barTier = setup.getWhippitDrunkTier($tmpGirl.drunk)>>
+<<set _thankLine = setup.getRandomElement(setup.barDrinkThankYouLines)>>
+<<set _tierData = setup.barDrinkTierAddendums[_barTier] ?? null>>
+<<set _tierLine = _tierData ? setup.getRandomElement(_tierData.lines) : ''>>
+<<set _tierExtra = (_tierData && _tierData.extraIfStrong && _herDrinkStrong) ? _tierData.extraIfStrong : ''>>
+<<sayNpc $tmpGirl>>
+	<<=_thankLine>><<if _tierLine>> <<=_tierLine>><</if>><<if _tierExtra>> <<=_tierExtra>><</if>>
+<</sayNpc>>
+
+<<set _injured = false>>
+<<if _barTier === 'drunk'>>
+	<<set _injured = setup.percentageChance(5)>>
+	<<if _injured>>
+		<br /><br />
+		<div class="injury-alert">
+			&#9888; Before you can say anything else, <<=_heOrShe>> turns pale and throws up right there at the bar. There's no finishing the break like this; <<=_heOrShe>> needs to be taken to the hospital. &#128657;
+		</div>
+		<<set $tmpGirl.sick = { days: 1, desc: 'Threw up after one too many at the bar', id: 'bar_drink_injury' }>>
+	<</if>>
+<<elseif _barTier === 'drunk90'>>
+	<br /><br />
+	Behind the bar, the bartender glances over, watching <<=_himOrHer>> with a flicker of concern.
+	<<set _injured = setup.percentageChance(10)>>
+	<<if _injured>>
+		<br /><br />
+		<div class="injury-alert">
+			&#9888; <<=ucfirst(_hisOrHer)>> eyes roll back and <<=_heOrShe>> goes limp against the bar, out cold. You need to get <<=_himOrHer>> to the hospital to sleep it off. &#128657;
+		</div>
+		<<set $tmpGirl.sick = { days: 2, desc: 'Blacked out after one too many at the bar', id: 'bar_drink_injury' }>>
+	<</if>>
+<</if>>
+<br /><br />
+
+<<set _barGoodwillDelta = (_barTier === 'drunk90' ? -2 : 0) + (_injured ? -5 : 0)>>
+<<set $player.goodwill += _barGoodwillDelta>>
+<<set _statSummary = 'Happiness +' + _herHappyGain + (_herSubGain ? ' &bull; Submission +' + _herSubGain : '') + (_herCorruptionGain ? ' &bull; Corruption +' + _herCorruptionGain : '') + ' &bull; Drunk +' + _herDrunkGain + ' &bull; Caps -' + _herCost + (_mcDrinkChoice !== 'none' ? ' &bull; Your Drunk +' + _mcDrunkGain + ' &bull; Your Caps -' + (_mcDrinkChoice === 'strong' ? 7 : 5) : '') + (_barGoodwillDelta ? ' &bull; Goodwill ' + (_barGoodwillDelta >= 0 ? '+' : '') + _barGoodwillDelta : '')>>
+
+<<if _injured>>
+	<div>
+		<<link 'Leave'>>
+			<<if typeof $slaveId !== 'undefined'>>
+				<<set $slaves[$slaveId] = $tmpGirl>>
+			<<elseif typeof $guestId !== 'undefined'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+			<</if>>
+			<<unset $slaveId, $guestId, $charId>>
+			<<goto _workLocationBack>>
+		<</link>>
+		<div class="link-desc"><<=_statSummary>></div>
+	</div>
+<<else>>
+	<<set _alcoholLikedByNpc = ($tmpGirl.likes ?? []).includes('alcohol')>>
+	<<set _sexChance = _alcoholLikedByNpc ? 100 : Math.round((($tmpGirl.drunk ?? 0) + ($tmpGirl.horny ?? 0)) / 2)>>
+	<<if !($tmpGirl.likesGuys ?? true)>>
+		<<set _sexChance = _sexChance / 2>>
+	<</if>>
+	<<set _hadSexOpportunity = !_incestBlocked && setup.percentageChance(_sexChance)>>
+	<<if _hadSexOpportunity>>
+		<<if _mcDrinkChoice === 'none'>>
+			You can see by the way <<=_heOrShe>>'s loosening up, moving to the music, that <<=_heOrShe>> wouldn't mind extending this break somewhere private.
+		<<else>>
+			<<=ucfirst(_heOrShe)>> starts to vibe to the music and the alcohol, dancing against you and whispering that <<=_heOrShe>> wouldn't mind taking this somewhere away from the crowd.
+		<</if>>
+		<<set _takeUpLinkText = 'Take ' + _himOrHer + ' up on the offer'>>
+		<<set _takeSomewhereLinkText = 'Take ' + _himOrHer + ' somewhere private'>>
+		<<set _stepUpLinkText = 'Step up to the hole'>>
+		<<set _pushStallLinkText = 'Push ' + _himOrHer + ' into a stall'>>
+		<<set _continueLinkText = (_mcDrinkChoice === 'none') ? _takeSomewhereLinkText : _takeUpLinkText>>
+		<<if $tmpGirl.assignedTo === 'nightclub' && ($game.location.gloryhole ?? false)>>
+			<br /><br />
+			<div @id="'btn_bardrink_gloryhole_' + _r">
+				<<linkreplace 'Follow her to the glory hole'>>
+					<<run $('#btn_bardrink_bathroom_' + _r + ', #btn_bardrink_leave_' + _r).hide()>>
+					<<=ucfirst(_heOrShe)>> slips off toward the bathroom wall, still swaying to the beat, and taps twice to let you know <<=_heOrShe>>'s ready on the other side.
+					<br /><br />
+					<<link `_stepUpLinkText`>>
+						<<set $oldTmpGirlLocation = $tmpGirl.location>>
+						<<set $tmpGirl.location = 'gloryhole'>>
+						<<set $tmpGirlViewBack = _backPassage>>
+						<<fuck $tmpGirl>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div @id="'btn_bardrink_bathroom_' + _r">
+				<<linkreplace 'Lead her to the bathroom'>>
+					<<run $('#btn_bardrink_gloryhole_' + _r + ', #btn_bardrink_leave_' + _r).hide()>>
+					You take <<=_himOrHer>> by the hand and lead <<=_himOrHer>> to the bathroom instead, no wall between you to get in the way this time.
+					<br /><br />
+					<<link `_pushStallLinkText`>>
+						<<set $oldTmpGirlLocation = $tmpGirl.location>>
+						<<set $tmpGirl.location = 'nightclub'>>
+						<<set $tmpGirlViewBack = _backPassage>>
+						<<fuck $tmpGirl>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<<else>>
+			<br /><br />
+			<div @id="'btn_bardrink_onhouse_' + _r">
+				<<link `_continueLinkText`>>
+					<<set $tmpGirlViewBack = _backPassage>>
+					<<fuck $tmpGirl>>
+				<</link>>
+			</div>
+		<</if>>
+		<div @id="'btn_bardrink_leave_' + _r">
+			<<link 'Leave'>>
+				<<goto _backPassage>>
+			<</link>>
+			<div class="link-desc"><<=_statSummary>> (either option)</div>
+		</div>
+	<<elseif !_incestBlocked>>
+		<div @id="'btn_bardrink_another_' + _r">
+			<<linkreplace 'Buy her another drink'>>
+				<<run $('#btn_bardrink_decline_leave_' + _r + ', #btn_bardrink_another_desc_' + _r).hide()>>
+				<<set _acceptAnotherChance = 100 - ($tmpGirl.drunk ?? 0)>>
+				<<if !($tmpGirl.likesGuys ?? true)>>
+					<<set _acceptAnotherChance = _acceptAnotherChance / 2>>
+				<</if>>
+				<<set _sheDeclines = !setup.percentageChance(_acceptAnotherChance)>>
+				<<if _sheDeclines>>
+					<<=ucfirst(_heOrShe)>> smiles and shakes <<=_hisOrHer>> head. "I think I'm good for now, but thank you."
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto _backPassage>>
+					<</link>>
+				<<else>>
+					<<include 'NPC offer bar drink - cycle'>>
+				<</if>>
+			<</linkreplace>>
+		</div>
+		<div @id="'btn_bardrink_decline_leave_' + _r">
+			<<link 'Leave'>>
+				<<goto _backPassage>>
+			<</link>>
+		</div>
+		<div @id="'btn_bardrink_another_desc_' + _r" class="link-desc"><<=_statSummary>> (either option)</div>
+	<<else>>
+		<div>
+			<<link 'Leave'>>
+				<<goto _backPassage>>
+			<</link>>
+			<div class="link-desc"><<=_statSummary>></div>
+		</div>
+	<</if>>
+<</if>>
+
+:: NPC offer bar drink - passed out
+<br /><br />
+The bar starts to tilt sideways, the noise around you smearing into one long note, and before you can get a word out, everything goes dark.
+<br /><br />
+<<if $tmpGirl.assignedTo === 'strip_club'>>
+	You come to on a couch in the back office, a blanket someone tossed over you and a glass of water on the table. You're not entirely sure whether it was <<=setup.displayName($tmpGirl)>>, one of the other dancers, or Isabel herself who dragged you back here — nobody's saying, and you're in no state to ask.
+	<<addhours 2>>
+	<<set $player.drunk = 75>>
+	<br /><br />
+	<div>
+		<<link 'Continue'>>
+			<<goto 'Strip Club - office'>>
+		<</link>>
+	</div>
+<<else>>
+	<<set _hasCompanions = Object.keys($player.companions ?? {}).length > 0>>
+	<<if _hasCompanions>>
+		Your companions get you upright and out the door before you can make more of a scene, hauling you the whole way back and putting you to bed.
+		<<set _travelHours = ($player.horse ?? false) ? 2 : 4>>
+		<<addhours 2 + _travelHours>>
+		<<set $player.drunk = 50>>
+		<br /><br />
+		<div>
+			<<link 'Continue'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		</div>
+	<<else>>
+		<<set _nightclubWorkers = setup.getNpcsForLocations(($guests ?? []).concat($slaves ?? []), ['nightclub']).filter(function (npc) { return setup.isAtWork(npc, $weather); })>>
+		<<if _nightclubWorkers.length>>
+			One of the girls still on shift notices you're not getting back up on your own, and between her and the bouncer they walk you out and get you back to your office in the city to sleep it off.
+			<<addhours 2>>
+			<<addmins 30>>
+			<<set $player.drunk = 75>>
+			<br /><br />
+			<div>
+				<<link 'Continue'>>
+					<<goto 'Underground city office'>>
+				<</link>>
+			</div>
+		<<else>>
+			<<set _lossPercent = 20>>
+			<<set _capsMissing = Math.floor($player.money * (_lossPercent / 100))>>
+			Nobody's left on the floor in any state to notice, and you come to face-down, the club gone quiet around you, your skull pounding like someone set off a mine inside it.
+			<br /><br />
+			Out of old habit, you check your pockets. Emptier than they should be.
+			<<if _capsMissing>>
+				<br /><br />
+				<strong>You lost <<=_capsMissing>> caps</strong>
+				<<set $player.money -= _capsMissing>>
+			<</if>>
+			<<addhours 2>>
+			<<set $player.drunk = 75>>
+			<br /><br />
+			<div>
+				<<link 'Continue'>>
+					<<goto 'Underground city'>>
+				<</link>>
+			</div>
+		<</if>>
+	<</if>>
+<</if>>

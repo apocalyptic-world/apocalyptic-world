@@ -120,6 +120,45 @@
 	<</link>>
 <</if>>
 
+<<if ['nightclub', 'strip_club'].includes($tmpGirl.assignedTo) && setup.isAtWork($tmpGirl, $weather) && !($tmpGirl.dislikes ?? []).includes('alcohol')>>
+	<<set _linkName = 'Buy ' + _himOrHer + ' a drink'>>
+	<<if $player.money >= 5>>
+		<<link `_linkName`>>
+			<<goto 'NPC offer bar drink'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_linkName>> (insufficient caps)
+		</div>
+	<</if>>
+<</if>>
+
+<<if !$tmpGirl.offeredSoda && ['garden', 'forest', 'quarry'].includes($tmpGirl.assignedTo) && setup.isAtWork($tmpGirl, $weather) && !($tmpGirl.dislikes ?? []).includes('soda')>>
+	<<set _linkName = 'Offer ' + _himOrHer + ' a soda'>>
+	<<if $backpack.has('soda')>>
+		<<link `_linkName`>>
+			<<goto 'NPC offer soda'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_linkName>> (no soda in backpack)
+		</div>
+	<</if>>
+<</if>>
+
+<<if !$tmpGirl.offeredWhippit && ['streets', 'nightclub', 'strip_club'].includes($tmpGirl.assignedTo) && setup.isAtWork($tmpGirl, $weather) && !($tmpGirl.dislikes ?? []).includes('whippit')>>
+	<<set _linkName = 'Offer ' + _himOrHer + ' a whippit huff'>>
+	<<if $backpack.has('whippit')>>
+		<<link `_linkName`>>
+			<<goto 'NPC offer whippit'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			<<=_linkName>> (no whippit in backpack)
+		</div>
+	<</if>>
+<</if>>
+
 <<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
 	<<if $backpack.has('pregnancy_potion')>>
 		<<link 'Give pregnancy termination potion'>>

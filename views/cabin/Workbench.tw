@@ -3,16 +3,17 @@
 <<include 'Workbench items'>>
 <br />
 
+<<run window.wbMultipliers = window.wbMultipliers || {}; window.wbRequirements = {};>>
 <<set _isStorageAvailable = ($game.location.shop ?? false)>>
 <<set _items to Object.keys(_workbenchItems)>>
 <<for _i to 0; _i lt _items.length; _i++>>
 	<<set _item = _workbenchItems[_items[_i]]>>
-	  
+
 	<<capture _i, _item, _workEnergy, _required>>
 	  <<if !_item.show>>
 		  <<continue>>
 	  <</if>>
-	  
+
 	  <<run _workEnergy = clone(_item.energy)>>
 	  <<if $player.int > 30>>
 	  		<<run _workEnergy -= 20>>
@@ -20,11 +21,15 @@
 	  		<<run _workEnergy -= 10>>
 	  <</if>>
 	  <<set _workEnergy = Math.abs(Math.min(10, _workEnergy))>>
-	  
+
 	  <<set _required to Object.keys(_item.required)>>
-	  
 	  <<set _itemHasResources to true>>
-	  <div class="workbench-item">
+	  <<set _maxBuild = Math.floor($player.energy / _workEnergy)>>
+	  <<if !(_item.multi ?? false)>>
+	  	  <<set _maxBuild = Math.min(_maxBuild, 1)>>
+	  <</if>>
+
+	  <div class="workbench-item" @data-item="_items[_i]">
 		  <table>
 			  <tr>
 				  <td style="width: 67%">
@@ -40,6 +45,7 @@
 						  	  <<set _reqKey   = _required[_r]>>
 							  <<set _reqCount = _item.required[_reqKey]>>
 						  	  <<set _hasCount = $backpack.count(_reqKey) + (_isStorageAvailable ? $storage.count(_reqKey) : 0)>>
+							  <<set _maxBuild = Math.min(_maxBuild, Math.floor(_hasCount / _reqCount))>>
 							  <<set _needtxt = ''>>
 							  <<if _hasCount < _reqCount>>
 								  <<set _itemHasResources = false>>
@@ -51,39 +57,125 @@
 						  <<if $player.energy < _workEnergy>>
 					   	  	<<set _itemHasResources = false>>
 						  <</if>>
+						  <<run window.wbRequirements[_items[_i]] = {max: _maxBuild, energy: _workEnergy, materials: Object.assign({}, _item.required)};>>
 					  </div>
 				  </td>
 				  <td>
-					  <<if _itemHasResources>>
-						<<link 'Build'>>
-
-							<<energy `-_workEnergy`>>
-							
-							<<set $player.debug = _workbenchItems[_items[_i]].energy>>
-							<<for _r to 0; _r lt _required.length; _r++>>
-								<<capture _r>>
-                                                                        <<set _reqKey   = _required[_r]>>
-                                                                        <<set _reqCount = _item.required[_reqKey]>>
-									<<if _isStorageAvailable>>
-									    <<transfer $storage $backpack _reqKey _reqCount>>
-									<</if>>
-									<<drop $backpack _reqKey _reqCount>> 
-								<</capture>>
-							<</for>>
-							<<run _workbenchItems[_items[_i]].after()>>
-							<<goto _workbenchItems[_items[_i]].goto>>
-						<</link>>
-					  <<else>>
-						<div class="workbench-not-enough">
-							Not enough resources
-						</div>
-					  <</if>>
+					  <span class="build-link-wrap" @style="_itemHasResources ? '' : 'display:none'">
+						  <<link 'Build'>>
+							  <<set _wbMult = (window.wbMultipliers?.[_items[_i]] ?? 1)>>
+							  <<energy `-_workEnergy * _wbMult`>>
+							  <<set $player.debug = _workbenchItems[_items[_i]].energy>>
+							  <<for _r to 0; _r lt _required.length; _r++>>
+								  <<capture _r>>
+									  <<set _reqKey   = _required[_r]>>
+									  <<set _reqCount = _item.required[_reqKey] * _wbMult>>
+									  <<if _isStorageAvailable>>
+									      <<transfer $storage $backpack _reqKey _reqCount>>
+									  <</if>>
+									  <<drop $backpack _reqKey _reqCount>>
+								  <</capture>>
+							  <</for>>
+							  <<for _mi to 0; _mi lt _wbMult; _mi++>>
+								  <<run _workbenchItems[_items[_i]].after()>>
+							  <</for>>
+							  <<run delete window.wbMultipliers[_items[_i]]>>
+							  <<goto _workbenchItems[_items[_i]].goto>>
+						  <</link>>
+					  </span>
+					  <div class="workbench-not-enough build-not-enough-dyn" @style="_itemHasResources ? 'display:none' : ''">
+						  Not enough resources
+					  </div>
+					  <div class="build-multiplier">
+						  <button class="mult-btn mult-decr" disabled onclick="adjustWbMult(this, -1)">−</button>
+						  <span class="mult-value">×1</span>
+						  <<if _maxBuild > 1>>
+							  <button class="mult-btn mult-incr" onclick="adjustWbMult(this, 1)">+</button>
+						  <<else>>
+							  <button class="mult-btn mult-incr" disabled onclick="adjustWbMult(this, 1)">+</button>
+						  <</if>>
+					  </div>
 				  </td>
 			  </tr>
 		  </table>
 	  </div>
 	<</capture>>
 <</for>>
+
+<script>
+    window.adjustWbMult = function(btn, delta) {
+        var item = btn.closest('.workbench-item');
+        if (!item) return;
+        var key = item.dataset.item;
+        var reqs = window.wbRequirements && window.wbRequirements[key];
+        var max = reqs ? reqs.max : 1;
+        var curr = window.wbMultipliers[key] || 1;
+        var next = Math.max(1, Math.min(max, curr + delta));
+        window.wbMultipliers[key] = next;
+        window.refreshWbMult(item, next);
+    };
+
+    window.refreshWbMult = function(item, mult) {
+        var key = item.dataset.item;
+        var reqs = window.wbRequirements && window.wbRequirements[key];
+        if (!reqs) return;
+
+        var max = reqs.max;
+        item.querySelector('.mult-value').textContent = '×' + mult;
+
+        var decrBtn = item.querySelector('.mult-decr');
+        var incrBtn = item.querySelector('.mult-incr');
+        if (decrBtn) decrBtn.disabled = mult <= 1;
+        if (incrBtn) incrBtn.disabled = mult >= max;
+
+        var allOk = mult <= max;
+        var buildWrap = item.querySelector('.build-link-wrap');
+        var notEnough = item.querySelector('.build-not-enough-dyn');
+        if (buildWrap) buildWrap.style.display = allOk ? '' : 'none';
+        if (notEnough) notEnough.style.display  = allOk ? 'none' : '';
+    };
+</script>
+
+<style>
+    .build-multiplier {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 5px;
+    }
+
+    .mult-btn {
+        background: #3a3a3a;
+        border: 1px solid #777;
+        color: #ccc;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        font-size: 14px;
+        line-height: 1;
+        text-align: center;
+        border-radius: 2px;
+    }
+
+    .mult-btn:hover:not(:disabled) {
+        background: #555;
+        border-color: #aaa;
+    }
+
+    .mult-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+    .mult-value {
+        font-size: 11px;
+        min-width: 22px;
+        text-align: center;
+        color: #ccc;
+    }
+</style>
 <br /><br />
 
 [[Back|Wood cabin]]

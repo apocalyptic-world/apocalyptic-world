@@ -15,6 +15,20 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 		<br /><br />
 		<<set _Fighter = either($fight.allies)>>
 		<<sayNpc _Fighter>>
+		    <<if (_Fighter.traits ?? []).includes('feral')>>
+		        <<=either([
+		            '*gives an enthusiastic victory howl, head thrown back*',
+		            '*locks jaws on an unconscious enemy\'s pant leg and tries to drag them off the field*',
+		            '*licks a minor wound on their leg, satisfied*',
+		            '*sniffs cautiously at one of the fallen enemies, then snorts and backs away*',
+		            '*circles the fallen enemies warily, making sure none of them move*',
+		            '*paws at the ground and lets out a short, triumphant bark*',
+		            '*crouches over a defeated enemy, sniffing at their pockets*',
+		            '*trots over to you, tail wagging, and headbutts your arm*',
+		            '*bares teeth at the last fallen enemy, just to be sure*',
+		            '*sits back on their haunches and lets out a long, satisfied whine*',
+		        ])>>
+		    <<else>>
 		        <<=either([
 		            'It feels so good to give a good beat down!',
 		            "They didn't know who they were messing with!",
@@ -27,6 +41,7 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 		            "War.  War never changes...",
 		            "We came, we saw, we kicked some ass!",
 		        ])>>
+		    <</if>>
 		<</sayNpc>>
 		<br />
 	<strong>You step away from your <<=_plural ? 'team' : 'partner'>> to direct your attention to the fools who tried to fight you.</strong><br />

@@ -32,7 +32,7 @@ setup.sleep.processNpc = function(npc, opts) {
         talked: false, milked: false, groped: false, washed: false,
         workout: false, gift: false, cosmetics: false, drunk: 0,
         offerSlave: false, sleeping: false, washedBathhouse: false,
-        offeredFood: false
+        offeredFood: false, offeredSoda: false, offeredWhippit: false
     });
 
     npc.stats = npc.stats || {};

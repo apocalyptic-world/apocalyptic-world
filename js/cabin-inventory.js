@@ -34,11 +34,15 @@ setup.cabinInventory = {
         setup.cabinInventory.drop(item, count);
     },
 
-    from_npc: function(npc, item, count=1) {
+    from_npc: function(npc, item, count=1, toBackpack=false) {
         count = Math.min(count, setup.npcInventoryCount(npc, item));
         if (count <= 0) {return;};
         setup.npcInventoryRemove(npc, item, count);
-        setup.cabinInventory.pickup(item, count);
+        if (toBackpack) {
+            variables().backpack.pickup(item, count);
+        } else {
+            setup.cabinInventory.pickup(item, count);
+        }
     },
 };
 /**

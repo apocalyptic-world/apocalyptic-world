@@ -1,0 +1,137 @@
+:: NPC offer soda - spray reaction
+<<set _goodwillDelta = _goodwillDelta ?? 0>>
+<<set _goodwillPart = _goodwillDelta ? ' &bull; Goodwill ' + (_goodwillDelta >= 0 ? '+' : '') + _goodwillDelta : ''>>
+<<set _reactionPct = _mcJoined ? 100 : ($tmpGirl.relationship + (_sodaLikedByNpc ? 10 : 0))>>
+<<set _reactionPositive = _mcJoined || setup.percentageChance(_reactionPct)>>
+
+<<if _reactionPositive>>
+	<<if _mcJoined>>
+		<<set _reactHappy = 1>>
+		<<set _reactRel = 2>>
+		<<set _reactSub = -3>>
+		<<set _preSprayJoinSub = $tmpGirl.sub>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 2, 100)>>
+		<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
+		<<=ucfirst(_heOrShe)>> stares at you a second, soda dripping down your front, then breaks into laughter so hard <<=_heOrShe>> nearly drops <<=_hisOrHer>> own can. Whatever this was supposed to be, you've turned it into something the two of you did together instead of something done to <<=_himOrHer>>.
+		<br /><br />
+		<<if _preSprayJoinSub < 20>>
+			<<set _joinLines = [
+				"Ha! Serves you right. Now we're even.",
+				"Good. Now you know how it feels.",
+				"Well, look at that — you're just as much of a mess as me now, " + setup.npc.mcName($tmpGirl) + ".",
+				"Guess karma didn't waste any time with you, " + setup.npc.mcName($tmpGirl) + "."
+			]>>
+		<<elseif _preSprayJoinSub < 50>>
+			<<set _joinLines = [
+				"Okay, that's actually kind of adorable. Didn't expect that side of you.",
+				"That's surprisingly charming, watching you make a fool of yourself for me.",
+				"I like this side of you, " + setup.npc.mcName($tmpGirl) + ". Didn't know you had it in you.",
+				"You're kind of a dork, " + setup.npc.mcName($tmpGirl) + ". I mean that as a compliment."
+			]>>
+		<<elseif _preSprayJoinSub <= 90>>
+			<<set _joinLines = [
+				"You really didn't need to do that — someone who runs this whole place shouldn't be covered in soda over something so small.",
+				"It just feels wrong, seeing you like this. You've got enough weighing on you without adding 'sticky' to the list.",
+				"That's not something you should have to deal with, " + setup.npc.mcName($tmpGirl) + ". You've got bigger things to worry about than soda.",
+				"Someone like you shouldn't be dealing with this kind of mess, " + setup.npc.mcName($tmpGirl) + ". But... thank you, I guess."
+			]>>
+		<<else>>
+			<<set _joinLines = [
+				"It's sweet, I guess. Just — you shouldn't have to get messy over someone like me.",
+				"That's... funny, actually. Though it feels strange, seeing you like this. For my sake.",
+				"You didn't have to lower yourself like that for me, " + setup.npc.mcName($tmpGirl) + "... but thank you.",
+				"I appreciate it, truly. But someone like you shouldn't be covered in soda because of me, " + setup.npc.mcName($tmpGirl) + "."
+			]>>
+		<</if>>
+		<<sayNpc $tmpGirl>><<=setup.getRandomElement(_joinLines)>><</sayNpc>>
+	<<elseif _attractedToMC>>
+		<<set _reactHappy = 1>>
+		<<set _reactRel = 0>>
+		<<set _reactSub = 2>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)>>
+		<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100)>>
+		<<=ucfirst(_heOrShe)>> yelps, then laughs, soda soaking through the front of <<=_hisOrHer>> top as <<=_heOrShe>> wipes <<=_hisOrHer>> face with the back of <<=_hisOrHer>> hand, eyes finding yours through it.
+	<<else>>
+		<<set _reactHappy = 1>>
+		<<set _reactRel = 0>>
+		<<set _reactSub = 1>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)>>
+		<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100)>>
+		<<=ucfirst(_heOrShe)>> yelps, then laughs despite <<=_himOrHer>>self, soda soaking through <<=_hisOrHer>> clothes.
+	<</if>>
+	<br />
+	<<if _attractedToMC>>
+		<<=ucfirst(_hisOrHer)>> top clings wet against <<=_himOrHer>>, and as <<=_heOrShe>> plucks at the soaked fabric, grumbling about needing to get cleaned up, you find your eyes lingering on it a little too long — and an idea starts to form.
+		<br /><br />
+		<<set _showerLinkText = 'Take ' + _himOrHer + ' to the shower'>>
+		<div id="btn_spray_shower_choice">
+			<<linkreplace `_showerLinkText`>>
+				<<run $('#btn_spray_send_off').hide()>>
+				You nod toward the house, and <<=_heOrShe>> follows without needing to be asked twice, peeling the sticky shirt away from <<=_hisOrHer>> skin as you go.
+				<br /><br />
+				<<link 'Continue'>>
+					<<set $oldTmpGirlLocation = $tmpGirl.location>>
+					<<set $tmpGirl.location = 'shower'>>
+					<<set $tmpGirlViewBack = _backPassage>>
+					<<fuck $tmpGirl>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<<set _sendOffLinkText = 'Send ' + _himOrHer + ' to clean up'>>
+		<div id="btn_spray_send_off">
+			<<link `_sendOffLinkText`>>
+				<<set $tmpGirl.rest = { days: 1, desc: 'Cleaning up after a soda mishap', id: 'resting' }>>
+				<<goto _backPassage>>
+			<</link>>
+		</div>
+		<div class="link-desc">Happiness +<<=_reactHappy>><<if _reactRel>> &bull; Relationship +<<=_reactRel>><</if>> &bull; Submission <<=(_reactSub >= 0 ? '+' : '') + _reactSub>><<=_goodwillPart>> (either option)</div>
+	<<elseif $tmpGirl.location === 'milk_barn'>>
+		Sticky and a mess now, <<=_heOrShe>> looks down at <<=_himOrHer>>self, soda dripping off the tubing, somewhere between amused and annoyed as <<=_heOrShe>> mutters a "thanks" for the gesture and waits to see what you'll decide.
+		<br /><br />
+		<div id="btn_spray_milkbarn">
+			<<link 'Let her disconnect and clean up'>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)>>
+				<<set $tmpGirl.rest = { days: 1, desc: 'Cleaning up after a soda mishap', id: 'resting' }>>
+				<<goto _backPassage>>
+			<</link>>
+			<div class="link-desc">Happiness <<=((_reactHappy + 1) >= 0 ? '+' : '') + (_reactHappy + 1)>><<if _reactRel>> &bull; Relationship +<<=_reactRel>><</if>> &bull; Submission <<=(_reactSub >= 0 ? '+' : '') + _reactSub>><<=_goodwillPart>></div>
+			<br />
+			<<link 'Make her finish the workday sticky'>>
+				<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 2, -100)>>
+				<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 1, 100)>>
+				<<goto _backPassage>>
+			<</link>>
+			<div class="link-desc">Happiness <<=((_reactHappy - 2) >= 0 ? '+' : '') + (_reactHappy - 2)>><<if _reactRel>> &bull; Relationship +<<=_reactRel>><</if>> &bull; Submission <<=((_reactSub + 1) >= 0 ? '+' : '') + (_reactSub + 1)>><<=_goodwillPart>></div>
+		</div>
+	<<else>>
+		<<set $tmpGirl.rest = { days: 1, desc: 'Cleaning up after a soda mishap', id: 'resting' }>>
+		Sticky and a mess now, somewhere between amused and annoyed, <<=_heOrShe>> mutters a "thanks" for the gesture and figures <<=_heOrShe>> isn't getting any more work done like this.
+		<<switch $tmpGirl.location>>
+		<<case 'quarry'>>
+			<<=ucfirst(_heOrShe)>> heads off toward the spring to rinse off, laughing under <<=_hisOrHer>> breath the whole way.
+		<<case 'garden'>>
+			<<=ucfirst(_heOrShe)>> grabs the garden hose and rinses off right there, still grinning.
+		<<case 'forest'>>
+			<<=ucfirst(_heOrShe)>> heads for the nearby stream to rinse off, shaking <<=_hisOrHer>> head at you the whole way.
+		<</switch>>
+		<br /><br />
+		<div>
+			<<link 'Leave'>>
+				<<goto _backPassage>>
+			<</link>>
+			<div class="link-desc">Happiness +<<=_reactHappy>><<if _reactRel>> &bull; Relationship +<<=_reactRel>><</if>> &bull; Submission <<=(_reactSub >= 0 ? '+' : '') + _reactSub>><<=_goodwillPart>></div>
+		</div>
+	<</if>>
+<<else>>
+	<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 3, -100)>>
+	<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 3, -100)>>
+	<<=ucfirst(_heOrShe)>> doesn't find it funny at all. <<=ucfirst(_heOrShe)>> wipes <<=_himOrHer>>self off as best <<=_heOrShe>> can and goes back to work without a word, sticky and clearly unhappy about it.
+	<br /><br />
+	<div>
+		<<link 'Leave'>>
+			<<goto _backPassage>>
+		<</link>>
+		<div class="link-desc">Happiness -3 &bull; Relationship -3<<=_goodwillPart>></div>
+	</div>
+<</if>>
