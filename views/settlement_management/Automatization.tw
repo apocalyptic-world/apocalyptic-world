@@ -7,15 +7,44 @@
 <<set $automatization ??= {}>>
 <<set $auto_help ??= false>>
 <table class="mc-stats-table">
+    <<set _autoIdx = 0>>
     <<for _dummy, _autoId range Object.keys(setup.automatization.rule)>>
         <<capture _autoId, _auto>>
-            
+
             <<set _auto = setup.automatization.rule[_autoId] >>
+            <<if _autoIdx > 0>>
+                <tr><td colspan="2"><hr style="border-color: #555; margin: 4px 0"/></td></tr>
+            <</if>>
+            <<set _autoIdx++>>
             <tr>
-                <<if !['buttplug','streetworker'].includes(_autoId)>>
+                <<if !['buttplug','streetworker','job'].includes(_autoId)>>
                     <<set $automatization[_autoId] ??= false>>
                     <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
                     <td><<=_auto.description>></td>
+
+                <<elseif ['job'].includes(_autoId)>>
+                    <<set $automatization.job ??= false>>
+                    <<set $automatization.jobWeapons ??= 2>>
+                    <<set $automatization.jobWeaponsCustom ??= {knife: false, sword: false, crossbow: false}>>
+                    <td valign="top"><label><<checkbox '$automatization.job' false true autocheck>>&nbsp;_auto.name</label></td>
+                    <td>
+                        <<=_auto.description>>
+                        <div style="margin: 6px 0 0 10px">
+                            <em>Weapon level for companions and guards (other armed jobs have fixed loadouts: streets→knife, forest/scavenging→knife+crossbow+arrows, hunter→knife):</em><br/>
+                            <<set _wlevel = 0>>
+                            <<for _wkey, _wtext range setup.automatization.jobWeaponsText>>
+                                <<set _wlevel++>>
+                                <label><<radiobutton "$automatization.jobWeapons" _wlevel autocheck>>&nbsp;<<=_wtext>></label>
+                                <<if _wkey === 'custom'>>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <label><<checkbox '$automatization.jobWeaponsCustom.knife' false true autocheck>>&nbsp;knife</label>
+                                    <label><<checkbox '$automatization.jobWeaponsCustom.sword' false true autocheck>>&nbsp;sword</label>
+                                    <label><<checkbox '$automatization.jobWeaponsCustom.crossbow' false true autocheck>>&nbsp;crossbow + 2 arrows</label>
+                                <</if>>
+                                <br/>
+                            <</for>>
+                        </div>
+                    </td>
 
                 <<elseif ['buttplug'].includes(_autoId)>>
                     <<set $automatization.buttplug = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>

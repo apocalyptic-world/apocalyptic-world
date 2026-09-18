@@ -8,6 +8,16 @@
 <<set _teachOptions = ['random', 'gardener', 'cook', 'doctor', 'shopkeeper', 'teacher', 'hunter']>>
 <<set _teacherList = setup.getPersonsForLocation($guests, 'school')>>
 
+<<set _randomTeacherJobs = [
+    'is writing something on the board.',
+    'is reading aloud from a battered textbook.',
+    'is marking papers at the front desk.',
+    'is pinning a hand-drawn map to the wall.',
+    'is sorting through a pile of salvaged books.',
+    'is helping a student sound out a word.',
+    'is explaining something with chalk in hand, back to the class.'
+]>>
+
 <<if _teacherList.length > 0 && timeBetween('09:00', '15:00')>>
     <<set _teacher = $guests[_teacherList[0]]>>
     <<set _teacher.location = 'school'>>
@@ -15,7 +25,10 @@
         <<actionImage _teacher teaching>>
     </center>
     <br />
-    <<=setup.displayName(_teacher)>> is writing something on the board.
+    <<=setup.displayName(_teacher)>> <<=setup.getRandomElement(_randomTeacherJobs)>>
+    <<if (_teacher.horny ?? 0) >= 80>>
+        <br /><<=ucfirst(setup.pronounceWhat(_teacher))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted</span>, and could use some attention.
+    <</if>>
     <br /><br />
     <<set _girlGuestLink = 'Approach ' + _teacher.name>>
 	<<link `_girlGuestLink`>>

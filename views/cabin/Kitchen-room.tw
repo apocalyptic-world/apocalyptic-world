@@ -12,6 +12,16 @@
 	<<set _slaveId = _npcSlave[0]>>
 	<<set _isSlave = true>>
 <</if>>
+<<set _randomCookJobs = [
+	'is stirring something over the fire.',
+	'is chopping vegetables on the worn wooden counter.',
+	'is kneading dough on the floured tabletop.',
+	'is ladling soup into a row of bowls.',
+	'is picking through a basket of foraged herbs.',
+	'is scrubbing out a large pot by the sink.',
+	'is checking on something roasting over the hearth.'
+]>>
+
 <<if _npc && timeBetween('08:00', '22:00')>>
 	<<set _isKitchenGirlAssigned = true>>
 	<<if $player.hunger <= 50 && $backpack.has('food')>>
@@ -23,8 +33,12 @@
 	<<set $tmpGirl.location = 'kitchen'>>
 	<center>
 		<<actionImage $tmpGirl cooking>>
-	</center> 
-	<<=setup.displayName($tmpGirl)>> is cooking in the kitchen, <<=setup.pronounceWhat($tmpGirl)>> notices you and gives you a warm smile<br /><br />
+	</center>
+	<<=setup.displayName($tmpGirl)>> <<=setup.getRandomElement(_randomCookJobs)>> <<=ucfirst(setup.pronounceWhat($tmpGirl))>> notices you and gives you a warm smile.
+	<<if ($tmpGirl.horny ?? 0) >= 80>>
+		<br /><<=ucfirst(setup.pronounceWhat($tmpGirl))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted</span>, and could use some attention.
+	<</if>>
+	<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
 		<<set $tmpGirlViewBack = _isSlave ? 'NPC view' : 'NPC view - guest'>>

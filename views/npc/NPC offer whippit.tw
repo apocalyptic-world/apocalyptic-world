@@ -1,0 +1,437 @@
+:: NPC offer whippit
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _backPassage = (typeof $slaveId !== 'undefined') ? 'NPC view' : 'NPC view - guest'>>
+<<set _workLocationBack = { streets: 'Streets', nightclub: 'Nightclub - bathroom', strip_club: 'Strip Club' }[$tmpGirl.assignedTo] ?? _backPassage>>
+<<set _mainIsSlave = typeof $slaveId !== 'undefined'>>
+<<set _takeUpLinkText = 'Take ' + _himOrHer + ' up on the offer'>>
+<<set _takeSomewhereLinkText = 'Take ' + _himOrHer + ' somewhere private'>>
+<<set _stepUpLinkText = 'Step up to the hole'>>
+<<set _pushStallLinkText = 'Push ' + _himOrHer + ' into a stall'>>
+<<set _attractedToMC = ($tmpGirl.likesGuys ?? true) && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isIncest($player, $tmpGirl))>>
+<<set _incestBlocked = ($player?.baseManagement?.noIncest ?? false) && setup.family.isIncest($player, $tmpGirl)>>
+<<set _whippitLikedByNpc = ($tmpGirl.likes ?? []).includes('whippit')>>
+<<set $tmpGirl.offeredWhippit = true>>
+<<if typeof $slaveId !== 'undefined'>>
+	<<set $slaves[$slaveId].offeredWhippit = true>>
+<<elseif typeof $guestId !== 'undefined'>>
+	<<set $guests[$guestId].offeredWhippit = true>>
+<</if>>
+
+<<switch $tmpGirl.assignedTo>>
+<<case 'streets'>>
+	<h1 class="ptitle">STREETS</h1>
+	<br />
+	The street is dim and half-empty, lit by whatever scavenged bulbs still work along the block. <<=setup.displayName($tmpGirl)>> is leaning against the wall between clients, arms crossed against the chill, and straightens up as you approach.
+<<case 'nightclub'>>
+	<h1 class="ptitle">NIGHTCLUB</h1>
+	<br />
+	The bass thrums through the floor and the air is thick with cheap smoke and cheaper perfume. <<=setup.displayName($tmpGirl)>> spots you crossing the room between songs and breaks into a grin, glad for the distraction.
+<<case 'strip_club'>>
+	<h1 class="ptitle"><<stripClubName>></h1>
+	<br />
+	The lights over the stage are low and colored, the air heavy with bass and the smell of spilled drinks. <<=setup.displayName($tmpGirl)>> catches your eye from the edge of the floor and saunters over, still warm from the last set.
+<</switch>>
+<br /><br />
+
+You pull the whippit kit — canister and balloon — out where <<=_heOrShe>> can see it, a mischievous look on your face, and suggest <<=_heOrShe>> take a break to cut loose for a bit.
+<br /><br />
+<<set _pregnant = ($tmpGirl.pregnancy ?? 0) >= 7>>
+<<set _pregnancyDeclineChance = _whippitLikedByNpc ? 60 : 80>>
+<<if _pregnant && setup.percentageChance(_pregnancyDeclineChance)>>
+	<<sayNpc $tmpGirl>>
+		As much as the atmosphere in here might tempt me otherwise, I'm not going to risk anything happening to the baby. But thank you for thinking of me.
+	<</sayNpc>>
+	<br /><br />
+	<div>
+		<<link 'Leave'>>
+			<<goto _backPassage>>
+		<</link>>
+	</div>
+<<else>>
+	<<set _npcAgreeLines = ["Oh, hell yes.", "Thought you'd never ask.", "Say no more.", "It's been that kind of night.", "Finally, something fun."]>>
+	<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcAgreeLines)>><</sayNpc>>
+	<br />
+	The two of you find somewhere out of sight — quiet enough to let your guard down, private enough that no one's going to bother you. You crack the canister and empty it into the balloon, the nitrous hissing as it fills.
+	<br /><br />
+
+<<set _happyGain = 3 + (_whippitLikedByNpc ? 1 : 0)>>
+<<set _corruptionGain = 3 + (_whippitLikedByNpc ? 1 : 0)>>
+<<set _fullBalloonDrunkTier = ($tmpGirl.drunk ?? 0) > 0 ? setup.getWhippitDrunkTier($tmpGirl.drunk) : null>>
+<<set _fullBalloonHappyTotal = _happyGain + (_fullBalloonDrunkTier ? setup.whippitDrunkReactions[_fullBalloonDrunkTier].happyDelta : 0)>>
+<<set _fullBalloonGoodwillBase = setup.getWhippitTierGoodwill(_fullBalloonDrunkTier ?? 'not_drunk')>>
+<<set _fullBalloonLinkText = 'Let ' + _himOrHer + ' have the whole balloon'>>
+<div id="opt_full_balloon">
+	<<linkreplace `_fullBalloonLinkText`>>
+		<<run $('#opt_share_balloon, #opt_group_balloon, #opt_full_balloon_desc, #opt_share_balloon_desc, #opt_group_balloon_desc').hide()>>
+		<<drop $backpack 'whippit' 1>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _happyGain, 100)>>
+		<<set $tmpGirl.corruption = Math.min((($tmpGirl.corruption ?? 0) + _corruptionGain), 100)>>
+		You hand the whole balloon over. <<=ucfirst(_heOrShe)>> takes a long, deep inhale, getting a good, strong buzz almost immediately — dizzy and disoriented, dissolving into giggling, uncontrollable laughter.
+		<<if _whippitLikedByNpc>>
+			<br /><br />
+			<<=ucfirst(_heOrShe)>> shivers, a tingling tremor running through <<=_himOrHer>> as the high rushes in, and <<=_heOrShe>> rides it out for a good thirty seconds before <<=_hisOrHer>> eyes refocus on you.
+		<</if>>
+		<<set _injured = false>>
+		<<if _fullBalloonDrunkTier>>
+			<<set _drunkReaction = setup.whippitDrunkReactions[_fullBalloonDrunkTier]>>
+			<<set _drunkLine = setup.fillWhippitPronouns(setup.getRandomElement(_drunkReaction.lines), $tmpGirl)>>
+			<br /><br />
+			The whippit hits different on top of the alcohol already in <<=_hisOrHer>> system. <<=_drunkLine>>
+			<<if _drunkReaction.happyDelta > 0>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _drunkReaction.happyDelta, 100)>>
+			<<elseif _drunkReaction.happyDelta < 0>>
+				<<set $tmpGirl.happy = Math.max($tmpGirl.happy + _drunkReaction.happyDelta, -100)>>
+			<</if>>
+			<<set _injured = _drunkReaction.injuryChance > 0 && setup.percentageChance(_drunkReaction.injuryChance)>>
+			<<if _injured>>
+				<br /><br />
+				<<set _hospitalBuilt = $game.location.hospital ?? false>>
+				<div class="injury-alert">
+					&#9888;
+					<<if _fullBalloonDrunkTier === 'drunk90'>>
+						This time it doesn't stay funny — <<=_heOrShe>> loses control completely and takes a nasty fall, getting badly hurt in the process. There's no finishing the night like this; <<=_heOrShe>> needs to be taken to <<if _hospitalBuilt>>the hospital to get checked out<<else>>the settlement to rest it off<</if>>.
+						<<set $tmpGirl.sick = { days: 2, desc: 'Badly hurt on a whippit-and-alcohol high', id: 'whippit_injury' }>>
+					<<else>>
+						This time it doesn't stay funny — <<=_heOrShe>> goes down wrong, left with a splitting headache. There's no finishing the night like this; <<=_heOrShe>> needs to be taken to <<if _hospitalBuilt>>the hospital to get checked out<<else>>the settlement to rest it off<</if>>.
+						<<set $tmpGirl.sick = { days: 1, desc: 'Headache from a whippit-and-alcohol high', id: 'whippit_injury' }>>
+					<</if>>
+					&#128657;
+				</div>
+			<</if>>
+		<</if>>
+		<<set _fullBalloonGoodwillDelta = _fullBalloonGoodwillBase + (_injured ? -5 : 0)>>
+		<<set $player.goodwill += _fullBalloonGoodwillDelta>>
+		<br /><br />
+		<<set _hadSexOpportunity = false>>
+		<<if !_injured>>
+			<<set _sexChance = _whippitLikedByNpc ? 100 : Math.max($tmpGirl.relationship, $tmpGirl.drunk ?? 0)>>
+			<<if !($tmpGirl.likesGuys ?? true)>>
+				<<set _sexChance = _sexChance / 2>>
+			<</if>>
+			<<if !_incestBlocked && setup.percentageChance(_sexChance)>>
+				<<set _hadSexOpportunity = true>>
+				<<=ucfirst(_heOrShe)>> has completely lost <<=_hisOrHer>> inhibitions now, and the way <<=_heOrShe>> is looking at you gives you an idea. You ask if <<=_heOrShe>>'s up for a quick one on the house before <<=_hisOrHer>> break is over.
+				<<if $tmpGirl.assignedTo === 'nightclub' && ($game.location.gloryhole ?? false)>>
+					<br /><br />
+					<div id="btn_whippit_gloryhole">
+						<<linkreplace 'Follow her to the glory hole'>>
+							<<run $('#btn_whippit_bathroom, #btn_whippit_leave').hide()>>
+							<<=ucfirst(_heOrShe)>> slips off toward the bathroom wall, still giggling, and taps twice to let you know <<=_heOrShe>>'s ready on the other side.
+							<br /><br />
+							<<link `_stepUpLinkText`>>
+								<<set $oldTmpGirlLocation = $tmpGirl.location>>
+								<<set $tmpGirl.location = 'gloryhole'>>
+								<<set $tmpGirlViewBack = _backPassage>>
+								<<fuck $tmpGirl>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="btn_whippit_bathroom">
+						<<linkreplace 'Lead her to the bathroom'>>
+							<<run $('#btn_whippit_gloryhole, #btn_whippit_leave').hide()>>
+							You take <<=_himOrHer>> by the hand and lead <<=_himOrHer>> to the bathroom instead, no wall between you this time.
+							<br /><br />
+							<<link `_pushStallLinkText`>>
+								<<set $oldTmpGirlLocation = $tmpGirl.location>>
+								<<set $tmpGirl.location = 'nightclub'>>
+								<<set $tmpGirlViewBack = _backPassage>>
+								<<fuck $tmpGirl>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					<br /><br />
+					<div id="btn_whippit_onhouse">
+						<<link `_takeSomewhereLinkText`>>
+							<<set $tmpGirlViewBack = _backPassage>>
+							<<fuck $tmpGirl>>
+						<</link>>
+					</div>
+				<</if>>
+			<</if>>
+		<</if>>
+		<div id="btn_whippit_leave">
+			<<link 'Leave'>>
+				<<if _injured>>
+					<<if typeof $slaveId !== 'undefined'>>
+						<<set $slaves[$slaveId] = $tmpGirl>>
+					<<elseif typeof $guestId !== 'undefined'>>
+						<<set $guests[$guestId] = $tmpGirl>>
+					<</if>>
+					<<unset $slaveId, $guestId, $charId>>
+					<<goto _workLocationBack>>
+				<<else>>
+					<<goto _backPassage>>
+				<</if>>
+			<</link>>
+			<div class="link-desc">Happiness <<=_fullBalloonHappyTotal >= 0 ? '+' : ''>><<=_fullBalloonHappyTotal>> &bull; Corruption +<<=_corruptionGain>><<if _fullBalloonGoodwillDelta>> &bull; Goodwill <<=_fullBalloonGoodwillDelta >= 0 ? '+' : ''>><<=_fullBalloonGoodwillDelta>><</if>><<if _hadSexOpportunity>> (either option)<</if>></div>
+		</div>
+	<</linkreplace>>
+	<<linkdesc 'opt_full_balloon_desc'>>
+		Happiness <<=_fullBalloonHappyTotal >= 0 ? '+' : ''>><<=_fullBalloonHappyTotal>> &bull; Corruption +<<=_corruptionGain>><<if _fullBalloonGoodwillBase>> &bull; Goodwill <<=_fullBalloonGoodwillBase >= 0 ? '+' : ''>><<=_fullBalloonGoodwillBase>><</if>><<if _fullBalloonDrunkTier && setup.whippitDrunkReactions[_fullBalloonDrunkTier].injuryChance > 0>> (injury risk)<</if>>
+	<</linkdesc>>
+</div>
+
+<<set _shareHappyGain = 2 + (_whippitLikedByNpc ? 1 : 0)>>
+<<set _shareRelGain = 3 + (_whippitLikedByNpc ? 1 : 0)>>
+<<set _shareCorruptionGain = 1 + (_whippitLikedByNpc ? 1 : 0)>>
+<<set _togetherTier = setup.getWhippitDrunkTier($tmpGirl.drunk)>>
+<<set _togetherEffects = setup.whippitTogetherTierEffects[_togetherTier]>>
+<<set _shareHappyTotal = _shareHappyGain + _togetherEffects.happyDelta>>
+<<set _shareGoodwillBase = setup.getWhippitTierGoodwill(_togetherTier)>>
+<<set _shareBalloonLinkText = 'Share the balloon with ' + _himOrHer>>
+<div id="opt_share_balloon">
+	<<linkreplace `_shareBalloonLinkText`>>
+		<<run $('#opt_full_balloon, #opt_group_balloon, #opt_full_balloon_desc, #opt_share_balloon_desc, #opt_group_balloon_desc').hide()>>
+		<<drop $backpack 'whippit' 1>>
+		<<addmins 15>>
+		<<set $tmpGirl.happy = Math.min($tmpGirl.happy + _shareHappyGain, 100)>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + _shareRelGain, 100)>>
+		<<set $tmpGirl.corruption = Math.min((($tmpGirl.corruption ?? 0) + _shareCorruptionGain), 100)>>
+		You and <<=_himOrHer>> pass the balloon back and forth, the giggles building and growing as you laugh at each other's laughter. By the end you both feel maybe a little bit silly, but it's worth it — a moment of levity in this wasteland.
+		<<set _injured = false>>
+		<<if _togetherEffects.injuryChance > 0>>
+			<<set _injured = setup.percentageChance(_togetherEffects.injuryChance)>>
+		<</if>>
+		<<set _coworker = setup.getWhippitCoworker($tmpGirl, $weather)>>
+		<<set _coworkerName = _coworker ? setup.displayName(_coworker) : null>>
+		<<set _linePool = (setup.whippitTogetherDialogue[$tmpGirl.assignedTo] ?? {})[_togetherTier] ?? []>>
+		<<set _availablePool = _linePool.filter(function (entry) { return !entry.needsCoworker || _coworkerName; })>>
+		<<set _lineEntry = _availablePool.length ? setup.getRandomElement(_availablePool) : null>>
+		<<set _thanksForGifts = _whippitLikedByNpc && !_injured && setup.npcInventoryHas($tmpGirl, 'whippit')>>
+		<br /><br />
+		<<if _lineEntry || _thanksForGifts>>
+			<<sayNpc $tmpGirl>>
+				<<if _lineEntry>><<=_lineEntry.needsCoworker ? _lineEntry.text.replace('{coworker}', _coworkerName) : _lineEntry.text>><</if>>
+				<<if _thanksForGifts>> And thank you again for keeping me stocked up. I don't take that for granted.<</if>>
+			<</sayNpc>>
+		<</if>>
+		<<if _injured>>
+			<br />
+			<<set _hospitalBuilt = $game.location.hospital ?? false>>
+			<div class="injury-alert">
+				&#9888;
+				<<if _togetherTier === 'drunk90'>>
+					The high turns dangerous fast — <<=_heOrShe>> blacks out completely. You get <<=_himOrHer>> back to <<if _hospitalBuilt>>the hospital to recover<<else>>the settlement to sleep it off<</if>>. &#128657;
+					<<set $tmpGirl.sick = { days: _togetherEffects.sickDays, desc: 'Blacked out from a bad whippit-and-alcohol trip', id: 'whippit_together_injury' }>>
+				<<else>>
+					The high turns bad fast — the bad trip sets off a panic attack, and <<=_heOrShe>> needs the rest of the night off.
+					<<set $tmpGirl.sick = { days: _togetherEffects.sickDays, desc: 'Panic attack from a bad whippit-and-alcohol trip', id: 'whippit_together_injury' }>>
+				<</if>>
+			</div>
+			<br />
+		<</if>>
+		<<set _shareGoodwillDelta = _shareGoodwillBase + (_injured ? -5 : 0)>>
+		<<set $player.goodwill += _shareGoodwillDelta>>
+		<br />
+		<<set _hadSexOpportunity = false>>
+		<<if !_injured>>
+			<<set _sexChance = _whippitLikedByNpc ? 100 : Math.max($tmpGirl.relationship, $tmpGirl.drunk ?? 0)>>
+			<<if !($tmpGirl.likesGuys ?? true)>>
+				<<set _sexChance = _sexChance / 2>>
+			<</if>>
+			<<if !_incestBlocked && setup.percentageChance(_sexChance)>>
+				<<set _hadSexOpportunity = true>>
+				The two of you lose your inhibitions together, riding the buzz, and <<=_heOrShe>> decides to offer you a session on the house before <<=_hisOrHer>> break is over.
+				<<if $tmpGirl.assignedTo === 'nightclub' && ($game.location.gloryhole ?? false)>>
+					<br /><br />
+					<div id="btn_whippit_share_gloryhole">
+						<<linkreplace 'Follow her to the glory hole'>>
+							<<run $('#btn_whippit_share_bathroom, #btn_whippit_share_leave').hide()>>
+							<<=ucfirst(_heOrShe)>> slips off toward the bathroom wall, still giggling, and taps twice to let you know <<=_heOrShe>>'s ready on the other side.
+							<br /><br />
+							<<link `_stepUpLinkText`>>
+								<<set $oldTmpGirlLocation = $tmpGirl.location>>
+								<<set $tmpGirl.location = 'gloryhole'>>
+								<<set $tmpGirlViewBack = _backPassage>>
+								<<fuck $tmpGirl>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+					<div id="btn_whippit_share_bathroom">
+						<<linkreplace 'Lead her to the bathroom'>>
+							<<run $('#btn_whippit_share_gloryhole, #btn_whippit_share_leave').hide()>>
+							You take <<=_himOrHer>> by the hand and lead <<=_himOrHer>> to the bathroom instead, no wall between you to get in the way this time.
+							<br /><br />
+							<<link `_pushStallLinkText`>>
+								<<set $oldTmpGirlLocation = $tmpGirl.location>>
+								<<set $tmpGirl.location = 'nightclub'>>
+								<<set $tmpGirlViewBack = _backPassage>>
+								<<fuck $tmpGirl>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<<else>>
+					<br /><br />
+					<div id="btn_whippit_share_onhouse">
+						<<link `_takeUpLinkText`>>
+							<<set $tmpGirlViewBack = _backPassage>>
+							<<fuck $tmpGirl>>
+						<</link>>
+					</div>
+				<</if>>
+			<</if>>
+		<</if>>
+		<div id="btn_whippit_share_leave">
+			<<link 'Leave'>>
+				<<if _injured>>
+					<<if typeof $slaveId !== 'undefined'>>
+						<<set $slaves[$slaveId] = $tmpGirl>>
+					<<elseif typeof $guestId !== 'undefined'>>
+						<<set $guests[$guestId] = $tmpGirl>>
+					<</if>>
+					<<unset $slaveId, $guestId, $charId>>
+					<<goto _workLocationBack>>
+				<<else>>
+					<<goto _backPassage>>
+				<</if>>
+			<</link>>
+			<div class="link-desc">Happiness <<=_shareHappyTotal >= 0 ? '+' : ''>><<=_shareHappyTotal>> &bull; Relationship +<<=_shareRelGain>> &bull; Corruption +<<=_shareCorruptionGain>><<if _shareGoodwillDelta>> &bull; Goodwill <<=_shareGoodwillDelta >= 0 ? '+' : ''>><<=_shareGoodwillDelta>><</if>><<if _hadSexOpportunity>> (either option)<</if>></div>
+		</div>
+	<</linkreplace>>
+	<<linkdesc 'opt_share_balloon_desc'>>
+		Happiness <<=_shareHappyTotal >= 0 ? '+' : ''>><<=_shareHappyTotal>> &bull; Relationship +<<=_shareRelGain>> &bull; Corruption +<<=_shareCorruptionGain>><<if _shareGoodwillBase>> &bull; Goodwill <<=_shareGoodwillBase >= 0 ? '+' : ''>><<=_shareGoodwillBase>><</if>><<if _togetherEffects.injuryChance > 0>> (injury risk)<</if>>
+	<</linkdesc>>
+</div>
+
+<<set _job = $tmpGirl.assignedTo>>
+<<set _coworkerEntries = []>>
+<<for _gi, _g range $guests>>
+	<<if _g.id !== $tmpGirl.id && _g.assignedTo === _job && setup.isAtWork(_g, $weather)>>
+		<<run _coworkerEntries.push({ type: 'guest', idx: _gi, npc: _g })>>
+	<</if>>
+<</for>>
+<<for _si, _s range $slaves>>
+	<<if _s.id !== $tmpGirl.id && _s.assignedTo === _job && setup.isAtWork(_s, $weather)>>
+		<<run _coworkerEntries.push({ type: 'slave', idx: _si, npc: _s })>>
+	<</if>>
+<</for>>
+<<run _coworkerEntries.forEach(function (entry) {
+	var npc = entry.npc;
+	entry.willJoinWhippit = true;
+	if ((npc.dislikes ?? []).includes('whippit')) {
+		entry.willJoinWhippit = false;
+	} else if ((npc.pregnancy ?? 0) >= 7) {
+		var declineChance = (npc.likes ?? []).includes('whippit') ? 60 : 80;
+		if (setup.percentageChance(declineChance)) entry.willJoinWhippit = false;
+	}
+})>>
+<<set _joiningEntries = _coworkerEntries.filter(function (entry) { return entry.willJoinWhippit; })>>
+<<set _passingEntries = _coworkerEntries.filter(function (entry) { return !entry.willJoinWhippit; })>>
+
+<<if _joiningEntries.length >= 1>>
+	<<set _groupTotal = 2 + _joiningEntries.length>>
+	<<set _groupWhippitCost = Math.ceil(_groupTotal / 3)>>
+	<<set _groupLinkText = 'Invite the rest of the crew to pass the balloon around'>>
+	<div id="opt_group_balloon">
+		<<if $backpack.count('whippit') < _groupWhippitCost>>
+			<div id="opt_group_balloon_desc" class="link-internal" style="background: #ccc">
+				<<=_groupLinkText>> (insufficient whippits to go around)
+			</div>
+		<<else>>
+			<<linkreplace `_groupLinkText`>>
+				<<run $('#opt_full_balloon, #opt_share_balloon, #opt_full_balloon_desc, #opt_share_balloon_desc, #opt_group_balloon_desc').hide()>>
+				<<drop $backpack 'whippit' _groupWhippitCost>>
+				<<addmins 15>>
+				<<set _joinNames = []>>
+				<<set _passNames = []>>
+				<<for _je range _joiningEntries>>
+					<<if _je.type === 'guest'>>
+						<<set $guests[_je.idx].happy = Math.min($guests[_je.idx].happy + 1, 100)>>
+						<<set $guests[_je.idx].relationship = Math.min($guests[_je.idx].relationship + 1, 100)>>
+						<<set $guests[_je.idx].corruption = Math.min(($guests[_je.idx].corruption ?? 0) + 1, 100)>>
+					<<else>>
+						<<set $slaves[_je.idx].happy = Math.min($slaves[_je.idx].happy + 1, 100)>>
+						<<set $slaves[_je.idx].relationship = Math.min($slaves[_je.idx].relationship + 1, 100)>>
+						<<set $slaves[_je.idx].corruption = Math.min(($slaves[_je.idx].corruption ?? 0) + 1, 100)>>
+					<</if>>
+					<<run _joinNames.push(setup.displayName(_je.npc))>>
+				<</for>>
+				<<for _pe range _passingEntries>>
+					<<run _passNames.push(setup.displayName(_pe.npc))>>
+				<</for>>
+				<<set _joinText = _joinNames.length > 1 ? _joinNames.slice(0, -1).join(', ') + ' and ' + _joinNames[_joinNames.length - 1] : _joinNames[0]>>
+				You wave the rest of the crew over and pass the balloon around, refilling it with a fresh canister whenever it starts to sag to make sure everyone gets a fair hit. <<=_joinText>> pile in, each one laughing harder than the last as they watch each other get wobbly and silly — a welcome break from the harshness of reality.
+				<<if _passNames.length>>
+					<<set _passText = _passNames.length > 1 ? _passNames.slice(0, -1).join(', ') + ' and ' + _passNames[_passNames.length - 1] : _passNames[0]>>
+					<br /><br />
+					<<=_passText>> <<=_passNames.length > 1 ? 'wave it off' : 'waves it off'>>, deciding it's just not <<=_passNames.length > 1 ? 'their' : 'her'>> thing.
+				<</if>>
+				<br /><br />
+				<<set _crEntry = _joiningEntries[Math.floor(Math.random() * _joiningEntries.length)]>>
+				<<set _crOriginalFirst = setup.percentageChance(50)>>
+				<<set _crNpcA = _crOriginalFirst ? $tmpGirl : _crEntry.npc>>
+				<<set _crNpcB = _crOriginalFirst ? _crEntry.npc : $tmpGirl>>
+				<<set _crLines = setup.pickWhippitCallResponse($tmpGirl.assignedTo, _crNpcA.drunk ?? 0, _crNpcB.drunk ?? 0, _crNpcA)>>
+				<<if _crLines>>
+					<<sayNpc _crNpcA>><<=_crLines[0]>><</sayNpc>>
+					<<sayNpc _crNpcB>><<=_crLines[1]>><</sayNpc>>
+					<br />
+				<</if>>
+				<<set _noIncestSetting = $player?.baseManagement?.noIncest ?? false>>
+				<<set _lingerEligible = _joiningEntries.filter(function (entry) { return !(_noIncestSetting && setup.family.isIncest($player, entry.npc)); })>>
+				<<set _femaleJoiners = _lingerEligible.filter(function (entry) { return [0, 2].includes(entry.npc.gender); })>>
+				<<set _didFoursome = false>>
+				<<set _didThreesome = false>>
+				<<if !_incestBlocked && _femaleJoiners.length >= 2 && setup.percentageChance(50)>>
+					<<set _picked = setup.weightedSampleWithoutReplacement(_femaleJoiners, function (entry) { return setup.getWhippitParticipantWeight(entry.npc); }, 2)>>
+					<<set _p2 = _picked[0]>>
+					<<set _p3 = _picked[1]>>
+					<<if _p2.type === 'guest'>><<set $guestId2 = _p2.idx>><<unset $slaveId2, $charId2>><<else>><<set $slaveId2 = _p2.idx>><<unset $guestId2, $charId2>><</if>>
+					<<set $tmpGirl2 = _p2.npc>>
+					<<if _p3.type === 'guest'>><<set $guestId3 = _p3.idx>><<unset $slaveId3, $charId3>><<else>><<set $slaveId3 = _p3.idx>><<unset $guestId3, $charId3>><</if>>
+					<<set $tmpGirl3 = _p3.npc>>
+					<<set $tmpGirlViewBack = _backPassage>>
+					<<set _didFoursome = true>>
+					As you all catch your breath, <<=setup.displayName($tmpGirl)>>, <<=setup.displayName($tmpGirl2)>> and <<=setup.displayName($tmpGirl3)>> trade a look, then close in around you, offering to take you somewhere private they know for a proper group party.
+					<br /><br />
+					<div id="btn_group_scene">
+						<<link 'Take them up on it'>>
+							<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
+						<</link>>
+					</div>
+				<<elseif !_incestBlocked && _lingerEligible.length >= 1>>
+					<<set _picked = setup.weightedSampleWithoutReplacement(_lingerEligible, function (entry) { return setup.getWhippitParticipantWeight(entry.npc); }, 1)>>
+					<<set _p2 = _picked[0]>>
+					<<if _p2.type === 'guest'>><<set $guestId2 = _p2.idx>><<unset $slaveId2, $charId2>><<else>><<set $slaveId2 = _p2.idx>><<unset $guestId2, $charId2>><</if>>
+					<<set $tmpGirl2 = _p2.npc>>
+					<<set $tmpGirlViewBack = _backPassage>>
+					<<set _didThreesome = true>>
+					As you all catch your breath, <<=setup.displayName($tmpGirl)>> and <<=setup.displayName($tmpGirl2)>> linger close, offering to take you somewhere private they know for a little more fun.
+					<br /><br />
+					<div id="btn_group_scene">
+						<<link 'Take them up on it'>>
+							<<threesome $tmpGirl $tmpGirl2>>
+						<</link>>
+					</div>
+				<</if>>
+				<<if !_didFoursome && !_didThreesome>>
+					As you all catch your breath, the group winds down from the high and heads back to work, feeling a little more refreshed and grateful for the chance to let loose.
+					<<for _p range _joiningEntries>>
+						<<if _p.type === 'guest'>>
+							<<set $guests[_p.idx].happy = Math.min($guests[_p.idx].happy + 2, 100)>>
+							<<set $guests[_p.idx].relationship = Math.min($guests[_p.idx].relationship + 2, 100)>>
+						<<else>>
+							<<set $slaves[_p.idx].happy = Math.min($slaves[_p.idx].happy + 2, 100)>>
+							<<set $slaves[_p.idx].relationship = Math.min($slaves[_p.idx].relationship + 2, 100)>>
+						<</if>>
+					<</for>>
+					<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 2, 100)>>
+					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 2, 100)>>
+				<</if>>
+				<div id="btn_group_leave">
+					<<link 'Leave'>>
+						<<goto _backPassage>>
+					<</link>>
+					<div class="link-desc">Happiness +1 &bull; Relationship +1 &bull; Corruption +1 (all who join)</div>
+				</div>
+			<</linkreplace>>
+			<<linkdesc 'opt_group_balloon_desc'>>
+				Happiness +1 &bull; Relationship +1 &bull; Corruption +1 (all who join) &bull; costs <<=_groupWhippitCost>> whippit<<=_groupWhippitCost > 1 ? 's' : ''>>
+			<</linkdesc>>
+		<</if>>
+	</div>
+<</if>>
+<</if>>

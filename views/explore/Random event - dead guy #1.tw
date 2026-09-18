@@ -1,7 +1,7 @@
 :: Random event - dead guy #1 {"position":"5514,14","size":"100,100"}
 While walking down the road you hear a loud scream and decide to investigate.
 <br />
-You approach the source of the sound carefully but when you reach it the only thing left is some  <strong><<print either('middle', 'old')>></strong> age guy who was killed right before you got here.
+You approach the source of the sound carefully but when you reach it the only thing left is some <strong><<print either('middle', 'old')>></strong> age guy who was killed right before you got here.
 <br />
 You get the feeling that someone is close as you look down at him.
 <br /><br />
@@ -12,3 +12,427 @@ You get the feeling that someone is close as you look down at him.
 [[Leave|Outside]]
 
 
+:: Random event - dead guy #1 search {"position":"5514,236","size":"100,100"}
+<center>
+	[img[setup.ImagePath+'places/explore/search_dead.webp']]
+</center>
+<br /><br />
+You search the dead guy's pockets with hope that the attackers missed something.
+<br /><br />
+<<set $dg1Chopped = false>>
+<<if setup.percentageChance(50)>>
+	<<set $dg1Found = either('rope', 'bullet_revolver', 'necklace_cheap', 'champagne', 'cloth')>>
+	<<pickup $backpack $dg1Found 1>>
+	You found <strong><<print Item.get($dg1Found).name>></strong>.
+<<else>>
+	<<set $dg1Found = undefined>>
+	<strong>You found nothing.</strong>
+<</if>>
+<br /><br />
+You stand up and the sense of being watched sharpens — something at the edge of the tree line shifts, just beyond where you can see clearly.
+<br /><br />
+<<if setup.percentageChance(50)>>
+	[[Look up|Random event - dead guy #1 feral]]
+<<else>>
+	A moment later the noise stops. You don't wait around to find out why.
+	<br /><br />
+	[[Leave|Outside]]
+<</if>>
+
+
+:: Random event - dead guy #1 chop leg {"position":"5515,130","size":"100,100"}
+<center>
+	<<image 'places/explore/chop_leg.webp' 'sfw'>>
+</center>
+<br /><br />
+You don't have enough strength to chop off his leg with one try so you take a few additional swings. It's messy. Blood is everywhere covering your face and clothing.
+<br /><br />
+<<pickup $backpack 'raw_human_meat' 1>>
+<<set $dg1Chopped = true>>
+<<set $dg1Found = undefined>>
+<<if setup.percentageChance(50)>>
+	As you finish the cut, something breaks cover at the edge of the trees. It was watching you work.
+	<br /><br />
+	[[Look up|Random event - dead guy #1 feral]]
+<<else>>
+	As you finish the cut you hear some noise and decide to leave.
+	<br /><br />
+	[[Leave|Outside]]
+<</if>>
+
+
+:: Random event - dead guy #1 feral {"position":"5514,342","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<if settings.transEnabled>>
+	<<set _gRoll = random(1, 100)>>
+	<<if _gRoll <= 70>>
+		<<newgirl>>
+		<<set $dg1FeralGender = 0>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<<elseif _gRoll <= 90>>
+		<<newguy>>
+		<<set $tmpGirl = $tmpGuy>>
+		<<set $dg1FeralGender = 1>>
+		<<set $tmpGirl.strength = random(40, 70)>>
+	<<else>>
+		<<newtransgirl>>
+		<<set $dg1FeralGender = 2>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<</if>>
+<<else>>
+	<<if random(1, 100) <= 75>>
+		<<newgirl>>
+		<<set $dg1FeralGender = 0>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<<else>>
+		<<newguy>>
+		<<set $tmpGirl = $tmpGuy>>
+		<<set $dg1FeralGender = 1>>
+		<<set $tmpGirl.strength = random(40, 70)>>
+	<</if>>
+<</if>>
+<<set $tmpGirl.traits = [...new Set(($tmpGirl.traits ?? []).concat(['feral']))]>>
+<<set $tmpGirl.skills = ($tmpGirl.skills ?? []).filter(s => ['woodcraft', 'scavenger', 'fighter'].includes(s))>>
+<<set $tmpGirl.washDays = 0>>
+<<set $tmpGirl.washBeauty = 0>>
+<<set $tmpGirl.location = 'forest'>>
+<<set $dg1Feral = clone($tmpGirl)>>
+<<set _identItem = either('a worn name tag from some old job', 'a dirty charm bracelet with a name scratched into one of the links', 'a tarnished pendant with a name etched on the back')>>
+
+<center>
+	<<if $dg1FeralGender != 1>>
+		[img[https://media.istockphoto.com/id/93291499/photo/scary-woman.jpg?s=1024x1024&w=is&k=20&c=y_y-7ScdSoTDUa0rU71P7qu5pqOYNh8eEMFYCtx6LMY=]]
+	<<else>>
+		[img[https://img.magnific.com/premium-photo/man-halloween-costume_1091917-2787.jpg]]
+	<</if>>
+</center>
+<br /><br />
+
+<<if $dg1FeralGender != 1>>
+She was in the brush before you turned around — close enough that you're not sure how long she'd been there. Compact and low to the ground, clothes reduced to rags, hair matted and tangled. Her eyes track you the way an animal's do: wide, flat, and calculating.
+<<else>>
+He's at the treeline, maybe ten feet out. You don't know when he got there. Built lean and rough, clothes reduced to strips, body carrying the kind of wear that comes from months of hard ground and missed meals. His eyes don't blink.
+<</if>>
+<br /><br />
+You catch a glimpse of <<=_identItem>>. The name reads: <strong><<=setup.displayName($dg1Feral)>></strong>.
+<br /><br />
+
+<<if $dg1Chopped>>
+	<<set _hostile = random(1,100) <= 80>>
+<<elseif $dg1FeralGender != 1>>
+	<<set _hostile = random(1,100) <= 25>>
+<<else>>
+	<<set _hostile = random(1,100) <= 75>>
+<</if>>
+
+<<if _hostile>>
+
+<<if $dg1FeralGender != 1>>
+Something — maybe the smell of blood, maybe the fact that you're still standing over the body — shifts her. She drops lower, lips pulling back, weight forward. She takes two quick steps toward you before stopping. Not retreating. Just reassessing.
+<<else>>
+He drops into a fighting crouch and starts closing the distance. Not running — measured and deliberate, like something that's done this before and knows not to waste the approach.
+<</if>>
+<br /><br />
+
+<div id="dg1_fight">
+<<set _fightLabel = 'Fight'>>
+<<linkreplace `_fightLabel`>>
+	<<run $('#dg1_flee, #dg1_subdue').hide()>>
+	<<if $dg1FeralGender != 1>>
+	She hits you low and fast — more animal than technique, all momentum and contact. You take the impact and drive back, getting your arms into it.
+	<<else>>
+	He closes the last few feet in a burst, crashing into you with everything he has. You brace and push back hard, turning the rush.
+	<</if>>
+	<<if Object.keys($player.companions ?? {}).length>>
+	Your companion moves in immediately, taking the other side.
+	<</if>>
+	<br /><br />
+	<<link 'Fight'>>
+		<<set $enemies = [clone($dg1Feral)]>>
+		<<fight $enemies 'Random event - dead guy #1 feral won' 'Outside'>>
+	<</link>>
+<</linkreplace>>
+</div>
+<div id="dg1_flee">
+<<set _fleeLabel = 'Flee'>>
+<<linkreplace `_fleeLabel`>>
+	<<run $('#dg1_fight, #dg1_subdue').hide()>>
+	<<if $dg1Chopped && $backpack.has('raw_human_meat')>><<drop $backpack 'raw_human_meat' 1>><</if>>
+	<<if $dg1Found>><<drop $backpack $dg1Found 1>><</if>>
+	<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+	You turn and move — not running, not looking back, just putting ground between yourself and whatever that was. You leave the body behind, and everything in your pockets that came from it.
+	<br /><br />
+	<<link 'Leave'>><<goto 'Outside'>><</link>>
+<</linkreplace>>
+</div>
+<div id="dg1_subdue">
+<<if $player.int >= 50 && $player.strength >= 70 && $backpack.has('rope')>>
+<<set _subdueName = 'Attempt to subdue (−1 rope)'>>
+<<linkreplace `_subdueName`>>
+	<<run $('#dg1_fight, #dg1_flee').hide()>>
+	<<set $dg1Path = 'subdue'>>
+	<<drop $backpack 'rope' 1>>
+	<<set $dg1Feral.sub = Math.min(($dg1Feral.sub ?? 0) + 25, 100)>>
+	<<set $dg1Feral.happy = Math.max(($dg1Feral.happy ?? 0) - 10, -100)>>
+	<<set $dg1Feral.relationship = Math.max(($dg1Feral.relationship ?? 0) - 20, -100)>>
+	<<set $dg1Feral.corruption = Math.min(($dg1Feral.corruption ?? 0) + 5, 100)>>
+	You don't give <<if $dg1FeralGender != 1>>her<<else>>him<</if>> room. You step inside the aggression, take the contact, and bring <<if $dg1FeralGender != 1>>her<<else>>him<</if>> down hard. The rope goes on before <<if $dg1FeralGender != 1>>she<<else>>he<</if>> can recover the breath to fight it. <<if $dg1FeralGender != 1>>She<<else>>He<</if>> thrashes for a moment — muscle memory more than intent — and then goes still, chest heaving, watching you with something that isn't quite fear and isn't quite understanding.
+	<br /><br />
+	<<set $tmpGirl = $dg1Feral>>
+	<<include 'NPC info'>>
+	<br /><br />
+	<div id="dg1s_opts">
+		<<if $dg1FeralGender != 1 || settings.gaysEnabled>>
+		<div id="dg1s_sex">
+			<<set _sexName = 'Have sex with ' + ($dg1FeralGender != 1 ? 'her' : 'him')>>
+			<<link `_sexName`>>
+				<<run $('#dg1s_opts').hide()>>
+				<<set $tmpGirl = $dg1Feral>>
+				<<set $tmpGirlViewBack = 'Random event - dead guy #1 feral after sex'>>
+				<<unset $slaveId, $guestId, $charId, $childId>>
+				<<fuck $tmpGirl>>
+			<</link>>
+		</div>
+		<</if>>
+		<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+		<div id="dg1s_capture">
+			<<set _captureName = 'Capture as slave'>>
+			<<linkreplace `_captureName`>>
+				<<run $('#dg1s_sex, #dg1s_leave').hide()>>
+				<<set $tmpGirl = $dg1Feral>>
+				<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
+				<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 20, -100)>>
+				<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
+				<<statsAdd 'people_captured'>>
+				<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+				<<run $slaves.push($tmpGirl)>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				You haul <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> to <<if $tmpGirl.gender == 0>>her<<else>>his<</if>> feet and use what's left of the rope as a lead. <<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't fight it — not anymore.
+				<br /><br />
+				<strong>Taken as a slave.</strong>
+				<br /><br />
+				<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+			<</linkreplace>>
+		</div>
+		<</if>>
+		<div id="dg1s_leave">
+			<<link 'Leave'>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				<<goto 'Outside'>>
+			<</link>>
+		</div>
+	</div>
+<</linkreplace>>
+<<else>>
+<div class="link-internal disabled" style="background: #ccc">
+	Attempt to subdue (requires 50 INT, 70 STR, rope)
+</div>
+<</if>>
+</div>
+
+<<else>>
+
+<<if $dg1FeralGender != 1>>
+She's watching you from the brush without moving. Her weight is forward but her eyes keep cutting back toward the tree line — caught between wanting to stay and every instinct telling her to run. Something about you is holding her there, and it isn't entirely fear.
+<<else>>
+He's crouched at the treeline, patient and still. Not approaching. Not leaving either. He watches you with the wary economy of something that's learned to conserve itself, waiting to see what you do next before deciding what he does.
+<</if>>
+<br /><br />
+
+<div id="dg1_attack">
+<<set _attackLabel = 'Attack'>>
+<<linkreplace `_attackLabel`>>
+	<<run $('#dg1_leave, #dg1_tame').hide()>>
+	You don't give <<if $dg1FeralGender != 1>>her<<else>>him<</if>> the chance to decide. You move first — fast and direct.
+	<<if $dg1FeralGender != 1>>She<<else>>He<</if>> hisses and twists to meet you, defensive and reactive, the timidity burning off in an instant.
+	<<if Object.keys($player.companions ?? {}).length>>
+	Your companion is already moving to cut off any escape.
+	<</if>>
+	<br /><br />
+	<<link 'Fight'>>
+		<<set $enemies = [clone($dg1Feral)]>>
+		<<fight $enemies 'Random event - dead guy #1 feral won' 'Outside'>>
+	<</link>>
+<</linkreplace>>
+</div>
+<div id="dg1_leave">
+<<set _leaveLabel = 'Leave'>>
+<<linkreplace `_leaveLabel`>>
+	<<run $('#dg1_attack, #dg1_tame').hide()>>
+	<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+	You back away slowly, keeping your eyes on the brush until you're clear of the area. Whatever it was, it doesn't follow. You keep the road.
+	<br /><br />
+	<<link 'Leave'>><<goto 'Outside'>><</link>>
+<</linkreplace>>
+</div>
+<div id="dg1_tame">
+<<if $player.int >= 35 && $backpack.has('food')>>
+<<set _tameName = 'Attempt to tame (−1 food)'>>
+<<linkreplace `_tameName`>>
+	<<run $('#dg1_attack, #dg1_leave').hide()>>
+	<<set $dg1Path = 'tame'>>
+	<<drop $backpack 'food' 1>>
+	<<set $dg1Feral.relationship = Math.min(($dg1Feral.relationship ?? 0) + 20, 100)>>
+	<<set $dg1Feral.happy = Math.min(($dg1Feral.happy ?? 0) + 10, 100)>>
+	<<set $dg1Feral.sub = Math.min(($dg1Feral.sub ?? 0) + 5, 100)>>
+	You go slow. No sudden movements, no direct eye contact, nothing that reads as threat. You crouch, pull out the food, hold it out at arm's length. <<if $dg1FeralGender != 1>>She<<else>>He<</if>> watches you for a long moment from the brush, weight shifting — then takes one step forward. Then two. The food disappears from your hand. <<if $dg1FeralGender != 1>>She<<else>>He<</if>> retreats a half-step to eat, watching you the whole time. When <<if $dg1FeralGender != 1>>she<<else>>he<</if>>'s done, <<if $dg1FeralGender != 1>>she<<else>>he<</if>> doesn't run.
+	<br /><br />
+	<<set $tmpGirl = $dg1Feral>>
+	<<include 'NPC info'>>
+	<br /><br />
+	<div id="dg1t_opts">
+		<<if $dg1FeralGender != 1 || settings.gaysEnabled>>
+		<div id="dg1t_sex">
+			<<set _sexName = 'Have sex with ' + ($dg1FeralGender != 1 ? 'her' : 'him')>>
+			<<link `_sexName`>>
+				<<run $('#dg1t_opts').hide()>>
+				<<set $tmpGirl = $dg1Feral>>
+				<<set $tmpGirlViewBack = 'Random event - dead guy #1 feral after sex'>>
+				<<unset $slaveId, $guestId, $charId, $childId>>
+				<<fuck $tmpGirl>>
+			<</link>>
+		</div>
+		<</if>>
+		<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int >= 20>>
+		<div id="dg1t_lead">
+			<<set _leadName = 'Lead ' + ($dg1FeralGender != 1 ? 'her' : 'him') + ' home (−1 food)'>>
+			<<linkreplace `_leadName`>>
+				<<run $('#dg1t_sex, #dg1t_leave').hide()>>
+				<<drop $backpack 'food' 1>>
+				<<set $tmpGirl = $dg1Feral>>
+				<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 20, 100)>>
+				<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 10, 100)>>
+				You pull out another piece of food and the message is clear, there's more of this where that came from.  As you turn and start walking, there is a pause behind you, then the sound of footsteps falling in to follow.
+				<br /><br />
+				<<run setup.npc.addHistory($tmpGirl, 'invited')>>
+				<<run $guests.push($tmpGirl)>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				<strong><<if $tmpGirl.gender == 0>>She<<else>>He<</if>> follows you home.</strong>
+				<br /><br />
+				<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+			<</linkreplace>>
+		</div>
+		<</if>>
+		<div id="dg1t_leave">
+			<<link 'Leave'>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				<<goto 'Outside'>>
+			<</link>>
+		</div>
+	</div>
+<</linkreplace>>
+<<else>>
+<div class="link-internal disabled" style="background: #ccc">
+	Attempt to tame (requires 35 INT, food)
+</div>
+<</if>>
+</div>
+
+<</if>>
+
+
+:: Random event - dead guy #1 feral won {"position":"5514,448","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<set $tmpGirl = $dg1Feral>>
+<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
+<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 30, -100)>>
+<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
+
+<<if $tmpGirl.gender == 0>>
+She's on the ground, breathing hard, the fight gone out of her. Not unconscious — watching you from under her hair with a wary stillness that wasn't there before. The aggression has collapsed into something quieter and less certain.
+<<else>>
+He's down, chest heaving, not moving to get up. The attack is finished. He watches you from the ground with flat eyes, waiting to see what comes next.
+<</if>>
+<br /><br />
+
+<<include 'NPC info'>>
+<br /><br />
+
+<div id="dg1w_opts">
+	<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="dg1w_capture">
+		<<set _captureName = 'Capture as slave'>>
+		<<linkreplace `_captureName`>>
+			<<run $('#dg1w_leave').hide()>>
+			<<statsAdd 'people_captured'>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+			<<run $slaves.push($tmpGirl)>>
+			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+			<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't have much left to resist with. You bind <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> and get moving before that changes.
+			<br /><br />
+			<strong>Taken as a slave.</strong>
+			<br /><br />
+			<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+		<</linkreplace>>
+	</div>
+	<</if>>
+	<div id="dg1w_leave">
+		<<link 'Leave'>>
+			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+			<<goto 'Outside'>>
+		<</link>>
+	</div>
+</div>
+
+
+:: Random event - dead guy #1 feral after sex {"position":"5514,554","size":"100,100"}
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<if $dg1Path == 'subdue'>>
+	<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> comes down slowly, chest still moving fast, body loose in a way it wasn't before. The bound wrists haven't changed. Neither has whatever calculation is running behind those eyes — but it looks different now, less sharp-edged.
+<<else>>
+	When it's over <<if $tmpGirl.gender == 0>>she<<else>>he<</if>> pulls back and watches you with that same patient stillness — but quieter, settled. Not running. The same thought you had before still applies: if you start walking, <<if $tmpGirl.gender == 0>>she<<else>>he<</if>> might just follow.
+<</if>>
+<br /><br />
+
+<div id="dg1as_opts">
+	<<if $dg1Path == 'subdue' && ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="dg1as_capture">
+		<<set _captureName = 'Capture as slave'>>
+		<<linkreplace `_captureName`>>
+			<<run $('#dg1as_leave').hide()>>
+			<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
+			<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 10, -100)>>
+			<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 15, 100)>>
+			<<statsAdd 'people_captured'>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+			<<run $slaves.push($tmpGirl)>>
+			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+			<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't fight the lead. You get moving before either of you has time to reconsider.
+			<br /><br />
+			<strong>Taken as a slave.</strong>
+			<br /><br />
+			<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+		<</linkreplace>>
+	</div>
+	<</if>>
+	<<if $dg1Path == 'tame' && ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int >= 20>>
+	<div id="dg1as_lead">
+		<<set _leadName = 'Lead ' + ($tmpGirl.gender == 0 ? 'her' : 'him') + ' home (−1 food)'>>
+		<<linkreplace `_leadName`>>
+			<<run $('#dg1as_leave').hide()>>
+			<<drop $backpack 'food' 1>>
+			<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 20, 100)>>
+			<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+			<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 10, 100)>>
+			You pull out the food and start walking. The footsteps follow.
+			<br /><br />
+			<<run setup.npc.addHistory($tmpGirl, 'invited')>>
+			<<run $guests.push($tmpGirl)>>
+			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+			<strong><<if $tmpGirl.gender == 0>>She<<else>>He<</if>> follows you home.</strong>
+			<br /><br />
+			<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+		<</linkreplace>>
+	</div>
+	<</if>>
+	<div id="dg1as_leave">
+		<<link 'Leave'>>
+			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+			<<goto 'Outside'>>
+		<</link>>
+	</div>
+</div>

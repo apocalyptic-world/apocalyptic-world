@@ -124,6 +124,28 @@
 					<<set _nwCountLabel = _npcWorkerAvatars.map(w => w.n).join('\n')>>
 					<div class="npc-count" @aria-label="_nwCountLabel" data-balloon-pos="up" data-balloon-length="medium"><<=_npcWorkerAvatars.length>></div>
 				<<else>>
+				<<set _nwIsMobile = (window.innerWidth <= 800)>>
+				<<if _nwIsMobile && _npcWorkerAvatars.length > 10>>
+					<<set _nwVisible = _npcWorkerAvatars.slice(0, 9)>>
+					<<set _nwHidden = _npcWorkerAvatars.slice(9)>>
+					<<set _nwOverflowLabel = _nwHidden.map(w => w.n).join('\n')>>
+					<div class="grid-npcs grid-npcs-many" style="bottom: 30px">
+						<<for _nwPortrait range _nwVisible>>
+							<<capture _nwPortrait>>
+								<<if _nwPortrait.src>>
+									<<set _nwSrc = (_nwPortrait.src.includes('http') || _nwPortrait.src.includes('packs/')
+										? _nwPortrait.src
+										: setup.ImagePath + 'custom_portraits/' + _nwPortrait.src)>>
+									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"></span>
+								<<else>>
+									<<set _nwGenderClass = (['girl','guy','tgirl','tguy'][_nwPortrait.g] ?? 'girl')>>
+									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>></div>
+								<</if>>
+							<</capture>>
+						<</for>>
+						<div class="npc-overflow" @aria-label="_nwOverflowLabel" data-balloon-pos="up" data-balloon-length="medium">+<<=_nwHidden.length>></div>
+					</div>
+				<<else>>
 				<<set _nwTotalRows = Math.ceil(_npcWorkerAvatars.length / 10)>>
 				<<for _nwRow to _nwTotalRows - 1; _nwRow >= 0; _nwRow-->>
 					<<set _nwChunk = _npcWorkerAvatars.slice(_nwRow * 10, _nwRow * 10 + 10)>>
@@ -144,6 +166,7 @@
 						<</for>>
 					</div>
 				<</for>>
+				<</if>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -227,7 +250,8 @@
     white-space: pre-line;
 }
 .menu-grid .menu-col .grid-npcs .npc-circle,
-.menu-grid .menu-col .grid-npcs .npc-placeholder {
+.menu-grid .menu-col .grid-npcs .npc-placeholder,
+.menu-grid .menu-col .grid-npcs .npc-overflow {
     height: 40px;
     width: 40px;
     border-radius: 30px;
@@ -235,6 +259,19 @@
     margin-left: 3px;
     z-index: 40;
     flex-shrink: 0;
+}
+.menu-grid .menu-col .grid-npcs .npc-overflow {
+    background-color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    cursor: default;
+}
+.menu-grid .menu-col .grid-npcs .npc-overflow::after {
+    white-space: pre-line;
 }
 .menu-grid .menu-col .grid-npcs .npc-circle img {
     height: 40px;
@@ -257,12 +294,50 @@
     word-break: break-word;
 }
 .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle,
-.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder {
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder,
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-overflow {
     margin-left: -18px;
 }
 .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle:first-child,
-.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder:first-child {
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder:first-child,
+.menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-overflow:first-child {
     margin-left: 3px;
+}
+
+@media only screen and (max-width: 800px) {
+    .menu-grid .menu-col .npc-count {
+        height: 20px !important;
+        width: 20px !important;
+        border-radius: 14px !important;
+        bottom: 16px !important;
+        font-size: 8px !important;
+    }
+    .menu-grid .menu-col .grid-npcs {
+        bottom: 16px !important;
+    }
+    .menu-grid .menu-col .grid-npcs .npc-circle,
+    .menu-grid .menu-col .grid-npcs .npc-placeholder,
+    .menu-grid .menu-col .grid-npcs .npc-overflow {
+        height: 20px !important;
+        width: 20px !important;
+        border-radius: 14px !important;
+    }
+    .menu-grid .menu-col .grid-npcs .npc-circle img {
+        height: 20px !important;
+        width: 20px !important;
+        border-radius: 14px !important;
+    }
+    .menu-grid .menu-col .grid-npcs .npc-placeholder {
+        font-size: 6px !important;
+    }
+    .menu-grid .menu-col .grid-npcs .npc-overflow {
+        font-size: 8px !important;
+    }
+    .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle,
+    .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder,
+    .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-overflow {
+        margin-left: -9px !important;
+    }
 }
 
 

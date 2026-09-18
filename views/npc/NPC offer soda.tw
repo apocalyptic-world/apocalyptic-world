@@ -1,0 +1,263 @@
+:: NPC offer soda
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _backPassage = (typeof $slaveId !== 'undefined') ? 'NPC view' : 'NPC view - guest'>>
+<<set _attractedToMC = ($tmpGirl.likesGuys ?? true) && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isIncest($player, $tmpGirl))>>
+<<set _sodaLikedByNpc = ($tmpGirl.likes ?? []).includes('soda')>>
+<<set $tmpGirl.offeredSoda = true>>
+<<if typeof $slaveId !== 'undefined'>>
+	<<set $slaves[$slaveId].offeredSoda = true>>
+<<elseif typeof $guestId !== 'undefined'>>
+	<<set $guests[$guestId].offeredSoda = true>>
+<</if>>
+
+<<switch $tmpGirl.location>>
+<<case 'garden'>>
+	<h1 class="ptitle">GARDEN</h1>
+	<br />
+	The rows of struggling green stretch out under the pale sun, dust hanging in the air from the last dry wind. <<=setup.displayName($tmpGirl)>> straightens up from the beds, one hand pressed to <<=_hisOrHer>> lower back, and catches sight of you crossing the dirt toward <<=_himOrHer>>.
+<<case 'forest'>>
+	<h1 class="ptitle">FOREST</h1>
+	<br />
+	Broken light filters down through the canopy, and the air smells of sap and turned earth. <<=setup.displayName($tmpGirl)>> looks up from the work, sweat-damp and streaked with dirt, as you pick your way over roots toward <<=_himOrHer>>.
+<<case 'quarry'>>
+	<h1 class="ptitle">QUARRY</h1>
+	<br />
+	The quarry is a haze of stone dust and noise, the rock face pale under the flat daylight. <<=setup.displayName($tmpGirl)>> sets down what <<=_heOrShe>>'s carrying and wipes <<=_hisOrHer>> hands on <<=_hisOrHer>> pants, watching you approach across the rubble.
+<<case 'milk_barn'>>
+	<h1 class="ptitle">MILK BARN</h1>
+	<br />
+	The barn is warm and close, thick with the low hum of the pumps. <<=setup.displayName($tmpGirl)>> is exactly where she's tethered every shift, tubes running from her chest to the machine beside her, and she glances over as you step inside, grateful for any excuse to think about something other than the cycle of the pump.
+<</switch>>
+<br /><br />
+
+You reach into your insulated backpack and pull out a can of soda.
+<<set _sodaWarm = setup.percentageChance(25)>>
+<<if _sodaWarm>>
+	It's room temperature, a little warm to the touch — grabbed from storage rather than the kitchen. You give it a glance; it's been jostled around in your travels and there's no telling if it's still stable.
+	<br /><br />
+	<strong class="warning">Warning: this soda may be unstable and could spray when opened.</strong>
+<<else>>
+	It's cold, straight from the kitchen fridge, beads of condensation already forming on the can.
+<</if>>
+<br /><br />
+
+<<set _giveLinkText = 'Give ' + _himOrHer + ' the soda to drink'>>
+<div id="opt_give">
+	<<linkreplace _giveLinkText>>
+		<<run $('#opt_together, #opt_shake, #opt_give_desc, #opt_together_desc, #opt_shake_desc').hide()>>
+		<<set _sprayed = _sodaWarm && setup.percentageChance(50)>>
+		<<if _sprayed>>
+			You hand it to <<=setup.displayName($tmpGirl)>>, and <<=_heOrShe>> cracks the tab. Before either of you can react, it erupts in <<=_hisOrHer>> hand, soda foaming down over <<=_himOrHer>>self.
+			<<drop $backpack 'soda' 1>>
+			<br /><br />
+			<<set _mcJoined = false>>
+			<<set _goodwillDelta = 0>>
+			<<include 'NPC offer soda - spray reaction'>>
+		<<else>>
+			<<if $tmpGirl.location === 'milk_barn'>>
+				Before handing it over, you reach up and release <<=_hisOrHer>> arms from the restraints holding them to the machine. <<=ucfirst(_heOrShe)>> rolls <<=_hisOrHer>> shoulders, the relief plain on <<=_hisOrHer>> face, before taking the can from you and cracking the tab.
+			<<else>>
+				You hand it over. <<=ucfirst(_heOrShe)>> takes it and cracks the tab, a small, genuine bit of pleasure crossing <<=_hisOrHer>> face as the can hisses open.
+			<</if>>
+			<br /><br />
+			<<set _mcLine = setup.getRandomElement(["Figured you could use it.", "I thought you looked thirsty.", "You've been working hard, drink up.", "You've earned a break.", "Enjoy it while it lasts."])>>
+			<<you>>
+				<<=_mcLine>>
+			<</you>>
+			<br /><br />
+			<<set _npcLines = ["Thank you, I mean it.  I could use a drink.", "I wasn't expecting this today, " + setup.npc.mcName($tmpGirl) + ".", "That would hit the spot on a day like today.", "You didn't have to come all this way for that, " + setup.npc.mcName($tmpGirl) + ".", "It's been a scorcher out here.  I'll make it last, " + setup.npc.mcName($tmpGirl) + "."]>>
+			<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+			<br />
+			<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
+			<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+			<<set $player.goodwill += 3>>
+			<<drop $backpack 'soda' 1>>
+			<<if !_sodaWarm>>
+				<<=ucfirst(_heOrShe)>> takes a long pull and lets out a breath, savoring the cold.
+				<br /><br />
+				<<if $tmpGirl.location === 'milk_barn'>>
+					<<sayNpc $tmpGirl>>God, that's refreshing. It gets so stuffy, cooped up here in the barn all day... you don't know how much I needed that.<</sayNpc>>
+				<<else>>
+					<<sayNpc $tmpGirl>>God, that's refreshing. Ice cold, after working out here in this heat... you don't know how much I needed that.<</sayNpc>>
+				<</if>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
+			<</if>>
+			<<if ($tmpGirl.likes ?? []).includes('soda')>>
+				<br />
+				<<=ucfirst(_heOrShe)>> grins, turning the can over in <<=_hisOrHer>> hand.
+				<br />
+				<<sayNpc $tmpGirl>>You always remember what I like.  It means a lot.<</sayNpc>>
+			<</if>>
+			<br />
+			<<if (_sodaLikedByNpc || !_sodaWarm) && _attractedToMC>>
+				<<if !_sodaWarm>>
+					<<=ucfirst(_heOrShe)>> takes another slow sip, then draws the ice-cold can along the side of <<=_hisOrHer>> neck to cool down, eyes drifting to you as <<=_heOrShe>> does it.
+				<<else>>
+					<<=ucfirst(_heOrShe)>> lingers over the can, eyes drifting to you in a way that has nothing to do with the soda anymore.
+				<</if>>
+				<br /><br />
+				<<set _pullLinkText = ($tmpGirl.location === 'milk_barn') ? 'Step into her stall' : 'Pull ' + _himOrHer + ' over to you'>>
+				<div id="btn_step_away">
+					<<linkreplace `_pullLinkText`>>
+						<<run $('#btn_leave_give').hide()>>
+						<<if $tmpGirl.location === 'milk_barn'>>
+							You step into the stall with her, still tethered to the machine, and <<=_heOrShe>> leans back against you, offering no resistance at all.
+						<<else>>
+							You close the distance between you, and despite the sweat and heat, and <<=_heOrShe>> meets you the rest of the way without hesitation.
+						<</if>>
+						<br /><br />
+						<<link 'Continue'>>
+							<<set $tmpGirlViewBack = _backPassage>>
+							<<fuck $tmpGirl>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+			<<elseif $tmpGirl.location === 'milk_barn'>>
+				<<=ucfirst(_heOrShe)>> finishes the can and sets it down within reach, settling back against the machine to wait out the rest of the cycle.
+			<<else>>
+				<<=ucfirst(_heOrShe)>> finishes the can, sets it aside, and gets back to work, grateful for the refreshing break.
+			<</if>>
+			<div id="btn_leave_give">
+				<<link 'Leave'>>
+					<<goto _backPassage>>
+				<</link>>
+				<div class="link-desc">Happiness <<if !_sodaWarm>>+6<<else>>+3<</if>> &bull; Relationship +3 &bull; Goodwill +3<<if (_sodaLikedByNpc || !_sodaWarm) && _attractedToMC>> (either option)<</if>></div>
+			</div>
+		<</if>>
+	<</linkreplace>>
+	<<linkdesc 'opt_give_desc'>>
+		<<if _sodaWarm>>Happiness ?? &bull; Relationship ?? &bull; Goodwill ??<<else>>Happiness +6 &bull; Relationship +3 &bull; Goodwill +3<</if>>
+	<</linkdesc>>
+</div>
+
+<<if $backpack.count('soda') >= 2>>
+	<<set _togetherLinkText = 'Take a soda-break with ' + _himOrHer>>
+	<div id="opt_together">
+		<<linkreplace _togetherLinkText>>
+			<<run $('#opt_give, #opt_shake, #opt_give_desc, #opt_together_desc, #opt_shake_desc').hide()>>
+			<<set _sprayed = _sodaWarm && setup.percentageChance(50)>>
+			<<if _sprayed>>
+				<<drop $backpack 'soda' 2>>
+				You pass the first can to <<=_himOrHer>>, and just as you settle back with your own, <<=_heOrShe>> cracks hers open — and it goes off in <<=_hisOrHer>> hand, spraying all over <<=_himOrHer>>self! You haven't opened yours yet, and in the moment before <<=_heOrShe>>'s even finished reacting, you have a split second to decide whether to shake your own can too.
+				<br /><br />
+				<div id="opt_join_prank">
+					<<linkreplace 'Shake your own can and spray yourself too'>>
+						<<run $('#opt_dont_join_prank, #opt_join_prank_desc, #opt_dont_join_prank_desc').hide()>>
+						You give your own can a hard shake and crack it open before <<=_heOrShe>> can even react, dousing yourself in solidarity.
+						<br /><br />
+						<<set _mcJoined = true>>
+						<<set _goodwillDelta = 1>>
+						<<set $player.goodwill += 1>>
+						<<include 'NPC offer soda - spray reaction'>>
+					<</linkreplace>>
+					<<linkdesc 'opt_join_prank_desc'>>
+						Happiness +1 &bull; Relationship +2 &bull; Submission -3 &bull; Goodwill +1
+					<</linkdesc>>
+				</div>
+				<<set _dealWithMessLinkText = 'Let ' + _himOrHer + ' deal with the mess'>>
+				<div id="opt_dont_join_prank">
+					<<linkreplace `_dealWithMessLinkText`>>
+						<<run $('#opt_join_prank, #opt_join_prank_desc, #opt_dont_join_prank_desc').hide()>>
+						<<set _mcJoined = false>>
+						<<set _goodwillDelta = 0>>
+						<<include 'NPC offer soda - spray reaction'>>
+					<</linkreplace>>
+					<<linkdesc 'opt_dont_join_prank_desc'>>
+						Happiness ?? &bull; Relationship ?? &bull; Submission ??
+					<</linkdesc>>
+				</div>
+			<<else>>
+				<<if $tmpGirl.location === 'milk_barn'>>
+					You crack open both cans, then reach up and release <<=_hisOrHer>> arms from the restraints holding them to the machine before handing one over — the relief on <<=_hisOrHer>> face plain as she flexes <<=_hisOrHer>> fingers around the cold can. Still tethered by the tubing, she isn't going anywhere, so instead of stepping away you pull up a stool and sit beside <<=_himOrHer>>, keeping her company while the pump keeps its slow, mechanical rhythm.
+				<<else>>
+					You crack open both cans and hand one over, settling in beside <<=_himOrHer>> for a few minutes away from the work.
+				<</if>>
+				<br /><br />
+				<<if $tmpGirl.relationship <= 10>>
+					The two of you sit in something close to silence, the exchange polite and a little stiff — <<if typeof $slaveId !== 'undefined'>>slave and owner<<else>>worker and employer<</if>> sharing a can of soda, nothing more read into it than that.
+				<<elseif $tmpGirl.relationship <= 40>>
+					It's an easy enough silence, the two of you familiar with each other by now — not quite friends, but people working toward the same goal of getting through another day out here.
+				<<else>>
+					It's comfortable between you, the kind of quiet that only comes from having been through enough of the wasteland together to not need to fill it with words.
+				<</if>>
+				<br /><br />
+				<<set _breakTone = setup.pickDialogueTone($tmpGirl.happy)>>
+				<<set _breakPool = (setup.sodaBreakDialogue[$tmpGirl.assignedTo] ?? {})[_breakTone] ?? []>>
+				<<set _breakLine = _breakPool.length ? setup.getRandomElement(_breakPool) : ''>>
+				<<sayNpc $tmpGirl>>
+					<<=_breakLine.replace('{mcName}', setup.npc.mcName($tmpGirl))>>
+					<<if ($tmpGirl.likes ?? []).includes('soda') && setup.npcInventoryHas($tmpGirl, 'soda')>>
+						And thank you again for the ones before this, I still have some put away. I appreciate every one.
+					<</if>>
+				<</sayNpc>>
+				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 4, 100)>>
+				<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 6, 100)>>
+				<<set $player.goodwill += 3>>
+				<<if _breakTone === 'negative'>>
+					<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)>>
+					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100)>>
+					<br /><br />
+					<<=ucfirst(_heOrShe)>> looks like some of the weight's been lifted off <<=_hisOrHer>> shoulders, if only for a moment.
+				<</if>>
+				<<energy +5>>
+				<<addmins 15>>
+				<<drop $backpack 'soda' 2>>
+				<br />
+				<<if (_sodaLikedByNpc || !_sodaWarm) && _attractedToMC>>
+					<<if !_sodaWarm>>
+						<<=ucfirst(_heOrShe)>> takes another slow sip, then draws the ice-cold can along the side of <<=_hisOrHer>> neck to cool down, eyes drifting to you as <<=_heOrShe>> does it.
+					<<else>>
+						<<=ucfirst(_heOrShe)>> lingers over the can, eyes drifting to you in a way that has nothing to do with the soda anymore.
+					<</if>>
+					<br /><br />
+					<<set _pullLinkText = ($tmpGirl.location === 'milk_barn') ? 'Step into her stall' : 'Pull ' + _himOrHer + ' over to you'>>
+					<div id="btn_step_away_together">
+						<<linkreplace `_pullLinkText`>>
+							<<run $('#btn_leave_together').hide()>>
+							<<if $tmpGirl.location === 'milk_barn'>>
+								You step into the stall with her, still tethered to the machine, and <<=_heOrShe>> leans back against you, offering no resistance at all.
+							<<else>>
+								You close the distance between you, and despite the sweat and heat, <<=_heOrShe>> meets you the rest of the way without hesitation.
+							<</if>>
+							<br /><br />
+							<<link 'Continue'>>
+								<<set $tmpGirlViewBack = _backPassage>>
+								<<fuck $tmpGirl>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<</if>>
+				<div id="btn_leave_together">
+					<<link 'Leave'>>
+						<<goto _backPassage>>
+					<</link>>
+					<div class="link-desc">Happiness <<if _breakTone === 'negative'>>+5<<else>>+4<</if>> &bull; Relationship <<if _breakTone === 'negative'>>+7<<else>>+6<</if>> &bull; Energy +5 &bull; Goodwill +3<<if (_sodaLikedByNpc || !_sodaWarm) && _attractedToMC>> (either option)<</if>></div>
+				</div>
+			<</if>>
+		<</linkreplace>>
+		<<linkdesc 'opt_together_desc'>>
+			Happiness ?? &bull; Relationship ?? &bull; Energy <<if _sodaWarm>>??<<else>>+5<</if>> &bull; Goodwill ??
+		<</linkdesc>>
+	</div>
+<</if>>
+
+<<if _sodaWarm>>
+	<<set _shakeLinkText = 'Shake the soda and give it to ' + _himOrHer + ' as a prank'>>
+	<div id="opt_shake">
+		<<linkreplace _shakeLinkText>>
+			<<run $('#opt_give, #opt_together, #opt_give_desc, #opt_together_desc, #opt_shake_desc').hide()>>
+			You give the can a few hard shakes behind your back before holding it out with a straight face.
+			<<drop $backpack 'soda' 1>>
+			<<set $player.goodwill -= 2>>
+			<br /><br />
+			<<set _mcJoined = false>>
+			<<set _goodwillDelta = -2>>
+			<<include 'NPC offer soda - spray reaction'>>
+		<</linkreplace>>
+		<<linkdesc 'opt_shake_desc'>>
+			Happiness ?? &bull; Relationship ?? &bull; Goodwill -2
+		<</linkdesc>>
+	</div>
+<</if>>

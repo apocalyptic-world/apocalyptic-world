@@ -1,7 +1,7 @@
 :: Explore event: wolves {"position":"6986,18","size":"100,100"}
 <h1 class="ptitle">CITY</h1>
 <br /><br />
-As you roamed through the desolate ruins of the city, its once vibrant streets now reduced to debris and decay, a chilling silence hung heavy in the air. 
+As you roamed through the desolate ruins of the city, its once vibrant streets now reduced to debris and decay, a chilling silence hung heavy in the air.
 <br />
 Every step echoed, reminding you of the world that was lost. Amidst the broken buildings and crumbling structures, you became acutely aware of your solitude.
 <br /><br />
@@ -13,8 +13,67 @@ But then, a distant howl pierced through the stillness. It was haunting, yet str
 <br /><br />
 For a moment, time stood still as you locked eyes, neither predator nor prey. There was a primal understanding between you, an unspoken acknowledgment of survival in a world stripped bare.
 <br /><br />
+
+<<if $player.int > 20 && setup.percentageChance(30)>>
+	<<if settings.transEnabled>>
+		<<set _gRoll = random(1, 100)>>
+		<<if _gRoll <= 70>>
+			<<newgirl>>
+			<<set $wFeralGender = 0>>
+			<<set $tmpGirl.strength = random(35, 60)>>
+		<<elseif _gRoll <= 90>>
+			<<newguy>>
+			<<set $tmpGirl = $tmpGuy>>
+			<<set $wFeralGender = 1>>
+			<<set $tmpGirl.strength = random(40, 65)>>
+		<<else>>
+			<<newtransgirl>>
+			<<set $wFeralGender = 2>>
+			<<set $tmpGirl.strength = random(35, 60)>>
+		<</if>>
+	<<else>>
+		<<if random(1, 100) <= 75>>
+			<<newgirl>>
+			<<set $wFeralGender = 0>>
+			<<set $tmpGirl.strength = random(35, 60)>>
+		<<else>>
+			<<newguy>>
+			<<set $tmpGirl = $tmpGuy>>
+			<<set $wFeralGender = 1>>
+			<<set $tmpGirl.strength = random(40, 65)>>
+		<</if>>
+	<</if>>
+	<<set $tmpGirl.traits = [...new Set(($tmpGirl.traits ?? []).concat(['feral']))]>>
+	<<set $tmpGirl.skills = ($tmpGirl.skills ?? []).filter(s => ['woodcraft', 'scavenger', 'fighter'].includes(s))>>
+	<<set $tmpGirl.washDays = 0>>
+	<<set $tmpGirl.washBeauty = 0>>
+	<<set $tmpGirl.location = 'forest'>>
+	<<set $tmpGirl.likesGuys = true>>
+	<<set $tmpGirl.corruption = Math.max(($tmpGirl.corruption ?? 0), 70)>>
+	<<set $tmpGirl.sub = Math.max(($tmpGirl.sub ?? 0), 70)>>
+	<<set $tmpGirl.anal = Math.max(($tmpGirl.anal ?? 0), 20)>>
+	<<if $wFeralGender == 1>>
+		<<set $tmpGirl.traits = [...new Set($tmpGirl.traits.concat(['analslut', 'pacifist']))]>>
+		<<set $tmpGirl.traits = [...new Set($tmpGirl.traits.concat([either('nymphomaniac', 'crippled', 'masochist')]))]>>
+	<<else>>
+		<<set $tmpGirl.traits = [...new Set($tmpGirl.traits.concat(['nymphomaniac']))]>>
+		<<if ($tmpGirl.traits).includes('infertile')>>
+			<<set $tmpGirl.traits = [...new Set($tmpGirl.traits.concat([either('masochist', 'analslut', 'hoarder')]))]>>
+		<<else>>
+			<<set $tmpGirl.traits = [...new Set($tmpGirl.traits.concat([either('breeder', 'masochist', 'analslut', 'hoarder')]))]>>
+		<</if>>
+	<</if>>
+	<<set $wFeral = clone($tmpGirl)>>
+<</if>>
+
+<<if $wFeral>>
+You study the pack before committing. Most of them read right — low bodies, shared attention, moving as a unit. But something at the margin doesn't quite fit the pattern the others are working around.
+<br /><br />
+<</if>>
+
+<div id="w_attack">
 	<<linkreplace 'Attack them'>>
-		<<run $('#option2').hide()>>
+		<<run $('#w_watch, #w_leave').hide()>>
 		<<set _wolvesKilled = 0>>
 		<<if $player.strength > 200 && setup.percentageChance(90)>>
 			<<set _wolvesKilled = 3>>
@@ -25,11 +84,11 @@ For a moment, time stood still as you locked eyes, neither predator nor prey. Th
 		<<elseif $player.strength > 50 && setup.percentageChance(30)>>
 			<<set _wolvesKilled = 1>>
 		<</if>>
-		
+
 		But your bravado was short-lived. The wolves, sensing my aggression, quickly circled and closed in on me with a ferocity that left me paralyzed with fear. Their fangs gleamed under the pale sunlight, and their eyes burned with an intensity that matched their predatory instincts.
 		<br /><br />
 		With a swift and coordinated attack, they lunged at me, tearing through my feeble defenses.
-		
+
 		They left you bleeding in the middle of the streets...
 		<br /><br />
 		<<if _wolvesKilled>>
@@ -43,8 +102,7 @@ For a moment, time stood still as you locked eyes, neither predator nor prey. Th
 		<<if _wolvesKilled < 3>>
 			<<perkAdd 'bleeding'>>
 		<</if>>
-		
-		
+
 		<<if setup.percentageChance(40) && Object.keys($player.companions ?? {}).length > 0>>
 			<<set _eventCompanionKey = Object.keys($player.companions)[0]>>
 			<<set _npc = setup.companionGet(_eventCompanionKey)>>
@@ -52,17 +110,139 @@ For a moment, time stood still as you locked eyes, neither predator nor prey. Th
 			<<companionRemove _eventCompanionKey>>
 			<br /><br />
 		<</if>>
-		
-		
+
 		<<link 'Leave'>>
+			<<unset $wFeral, $wFeralGender>>
 			<<goto 'Outside'>>
 		<</link>>
 	<</linkreplace>>
+</div>
 
-<div id="option2">
+<<if $wFeral>>
+<div id="w_watch">
+	<<linkreplace 'Watch quietly'>>
+		<<run $('#w_attack, #w_leave').hide()>>
+		As you hold your ground and look closer, one of them isn't moving like a wolf. <<if $wFeralGender != 1>>She stands<<else>>He stands<</if>> — upright, holding <<if $wFeralGender != 1>>her<<else>>his<</if>> ground with the patient stillness of something that's learned to be still from the animals around <<if $wFeralGender != 1>>her<<else>>him<</if>>. <<if $wFeralGender != 1>>A girl<<else>>A boy<</if>>, or what was once one — watching you back with eyes that know what you are.
+		<br /><br />
+		[[Get a closer look|Explore event wolves feral]]
+		<<link 'Keep walking'>><<unset $wFeral, $wFeralGender>><<goto 'Outside'>><</link>>
+	<</linkreplace>>
+</div>
+<</if>>
+
+<div id="w_leave">
 	<<link 'Leave them'>>
+		<<unset $wFeral, $wFeralGender>>
 		<<goto 'Outside'>>
 	<</link>>
 </div>
 
 
+:: Explore event wolves feral {"position":"6986,124","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+<<set $tmpGirl = $wFeral>>
+<<set _identItem = either('a cracked locket with a name etched inside', 'a hospital ID bracelet worn nearly to illegibility', 'a strip of cloth with a name written in faded marker, knotted around the wrist')>>
+
+<<if $wFeralGender != 1>>
+She moves like she grew up low to the ground — weight always forward, never going still the way people go still, just present the way animals are. Her hair is knotted with strips of hide and small bones. She reads the space around her without looking at anything directly, until she looks at you. The wolves give her room in the way they give each other room — not like a tolerated stranger at the margins, but like a member of the pack who happened to turn out different.
+<<else>>
+He carries himself with the economy of something that's learned to waste nothing. He stands at the pack's edge and watches you with a flat, unhurried patience — the kind that waits for something to change before committing to anything. The wolves around him aren't watching him the way they watch a stray. They've stopped doing that the way you stop watching something you trust.
+<</if>>
+<br /><br />
+You notice <<=_identItem>>. The name reads: <strong><<=setup.displayName($wFeral)>></strong>.
+<br /><br />
+<<include 'NPC info'>>
+<br /><br />
+
+<div id="wf_approach">
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $backpack.has('rope')>>
+	<<set _approachName = 'Approach ' + ($wFeralGender != 1 ? 'her' : 'him') + ' (−1 food, −1 rope)'>>
+	<<linkreplace `_approachName`>>
+		<<run $('#wf_approach_desc, #wf_claim, #wf_claim_desc, #wf_walk').hide()>>
+		<<drop $backpack 'food' 1>>
+		<<drop $backpack 'rope' 1>>
+		<<set $wFeral.relationship = Math.min(($wFeral.relationship ?? 0) + 20, 100)>>
+		<<set $wFeral.happy = Math.min(($wFeral.happy ?? 0) + 15, 100)>>
+		<<set $wFeral.sub = Math.min(($wFeral.sub ?? 0) + 5, 100)>>
+		You move slowly, crouching to bring yourself down, and extend the food without looking directly at <<if $wFeralGender != 1>>her<<else>>him<</if>>. <<if $wFeralGender != 1>>She<<else>>He<</if>> holds still — then edges forward and takes it from your hand. You loop the rope loosely around <<if $wFeralGender != 1>>her<<else>>his<</if>> wrist while <<if $wFeralGender != 1>>she<<else>>he<</if>> eats, and <<if $wFeralGender != 1>>she<<else>>he<</if>> lets you.
+		<br /><br />
+		The wolves watch. After a long moment the nearest one turns away, and the rest follow. They've made their decision.
+		<br /><br />
+		<<set $tmpGirl = $wFeral>>
+		<<run setup.npc.addHistory($tmpGirl, 'invited')>>
+		<<run $guests.push($tmpGirl)>>
+		<<unset $wFeral, $wFeralGender>>
+		<strong><<=setup.displayName($tmpGirl)>> comes with you.</strong>
+		<br /><br />
+		<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+		<div class="link-desc">Relationship +20 &bull; Happiness +15 &bull; Submission +5</div>
+	<</linkreplace>>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Approach <<if $wFeralGender != 1>>her<<else>>him<</if>> (requires food, rope, and guesthouse space)
+	</div>
+<</if>>
+<<linkdesc 'wf_approach_desc'>>
+	Relationship +20 &bull; Happiness +15 &bull; Submission +5 &bull; −1 food &bull; −1 rope
+<</linkdesc>>
+</div>
+
+<div id="wf_claim">
+<<if ($wFeralGender != 1 || settings.gaysEnabled) && $player.strength > 50 && ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<<set _claimName = 'Claim ' + ($wFeralGender != 1 ? 'her' : 'him')>>
+	<<linkreplace `_claimName`>>
+		<<run $('#wf_approach, #wf_approach_desc, #wf_claim_desc, #wf_walk').hide()>>
+		<<set $wFeral.corruption = Math.min(($wFeral.corruption ?? 0) + 10, 100)>>
+		<<set $wFeral.relationship = Math.min(($wFeral.relationship ?? 0) + 40, 100)>>
+		<<set $wFeral.sub = Math.min(($wFeral.sub ?? 0) + 10, 100)>>
+		<<set $wFeral.location = 'forest'>>
+		<<if $wFeralGender != 1>>
+		You move toward her without breaking your line of sight — not a threat display, something older than that, something the wolves in her blood would recognize without needing a word for it. She holds still as you close the gap, watching you with those half-wild eyes, and when you put a hand on her hip she makes a sound low in her throat that isn't warning. The wolves have already begun pulling back, giving the clearing the privacy that packs have always known to give. You draw her down onto the ground and she goes without resistance, meeting you on your own terms.
+		<<else>>
+		You walk straight toward him without breaking eye contact — no circling, no display, just direct and certain. He squares up for a moment, the animal calculus of whether this is a fight he can win running fast behind his eyes. Then you close the last foot and put a hand on the back of his neck. He stills — not out of fear, out of recognition. The grip says what no posturing could: that the hierarchy has already settled and he's on the right side of it. He lowers his head.
+		<</if>>
+		<br /><br />
+		<<set $tmpGirl = $wFeral>>
+		<<set _takeName = 'Take ' + ($wFeralGender != 1 ? 'her' : 'him')>>
+		<<link `_takeName`>>
+			<<set $tmpGirlViewBack = 'Explore event wolves after claim'>>
+			<<unset $slaveId, $guestId, $charId, $childId>>
+			<<fuck $tmpGirl>>
+		<</link>>
+	<</linkreplace>>
+<<elseif ($wFeralGender != 1 || settings.gaysEnabled)>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Claim <<if $wFeralGender != 1>>her<<else>>him<</if>> (requires STR > 50 and guesthouse space)
+	</div>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Claim <<if $wFeralGender != 1>>her<<else>>him<</if>> (requires STR > 50, gay content, and guesthouse space)
+	</div>
+<</if>>
+<<linkdesc 'wf_claim_desc'>>
+	Corruption +10 &bull; Relationship +40 &bull; Submission +10
+<</linkdesc>>
+</div>
+<div id="wf_walk">
+	<<link 'Walk away'>>
+		<<unset $wFeral, $wFeralGender>>
+		<<goto 'Outside'>>
+	<</link>>
+</div>
+
+
+:: Explore event wolves after claim {"position":"6986,230","size":"100,100"}
+<h1 class="ptitle">CITY</h1>
+<br /><br />
+When it's over <<if $tmpGirl.gender != 1>>she<<else>>he<</if>> pulls back and crouches, watching you with that same uncertain calculation — but quieter now, the edge gone out of it. The pack has drawn back to a distance. One by one they turn and disappear into the ruins, until only <<=setup.displayName($tmpGirl)>> remains.
+<br /><br />
+<<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 20, 100)>>
+<<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 10, 100)>>
+<<run setup.npc.addHistory($tmpGirl, 'invited')>>
+<<run $guests.push($tmpGirl)>>
+<<unset $wFeral, $wFeralGender>>
+<strong><<=setup.displayName($tmpGirl)>> comes with you.</strong>
+<br /><br />
+<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+<div class="link-desc">Relationship +20 &bull; Happiness +10</div>
