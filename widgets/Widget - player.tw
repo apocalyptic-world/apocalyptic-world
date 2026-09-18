@@ -494,7 +494,7 @@
 
 	<<if !_morningEvent>>
 		<<set _randomSleepEventInteger = randomInteger(0,2)>>
-		<<if ($characters.blair.quests ?? false) && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0 && !setup.player.hasFlaccidDick()>>
+		<<if ($characters.blair.quests ?? false) && $characters.blair.livingLocation !== 'guesthouse' && $characters.blair.quests.missing_friend_found_finished_thanked && !$characters.blair.quests.bj && _randomSleepEventInteger === 0 && !setup.player.hasFlaccidDick()>>
 			<<goto 'Blair quest - morning bj'>>
 			<<set $characters.blair.quests.bj = true>>
 		<<elseif $pregnancyHappening>>
@@ -522,7 +522,7 @@
 			<<if !_kitchenNpc.gender && (_kitchenNpc.likesGuys ?? true) && (_kitchenNpc.horny ?? 0) >= 30>>
 				<<goto 'Bedroom - breakfast in bed'>>
 			<</if>>
-		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
+		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.livingLocation !== 'guesthouse' && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
 			<<goto 'Blair - morning surprise'>>
 		<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
 			<<goto 'Blair - pregnant'>>

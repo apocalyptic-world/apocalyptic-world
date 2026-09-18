@@ -50,7 +50,11 @@
 		<<run _charactersInLocation['bathhouse'].push('blair')>>
 		<<run _charactersInLocation['hottub'].push('blair')>>
 	<<elseif timeBetween('22:00', '08:00')>>
-		<<run _charactersInLocation['bedroom'].push('blair')>>
+		<<if $characters.blair.livingLocation === 'guesthouse'>>
+			<<run _charactersInLocation['guesthouse'].push('blair')>>
+		<<else>>
+			<<run _charactersInLocation['bedroom'].push('blair')>>
+		<</if>>
   	<</if>>
 <</if>>
 <<if isMetChar('eve') && $characters.eve.quests.cabinType > 0>>
