@@ -133,4 +133,39 @@ setup.automatization = {
   },
 
   buttplugGender: ['Women', 'Men', 'Trans women', 'Trans men', 'Other'],
+
+  /**
+   * Jobs where settlers must carry a weapon — see Sleep - forest.tw _isArmed check.
+   * fixed_weapon_jobs have a preset loadout; the rest use the jobWeapons setting.
+   */
+  armed_jobs: ['companion', 'forest', 'guard', 'hunter', 'scavenging', 'streets'],
+
+  /**
+   * Jobs with a fixed weapon loadout regardless of the jobWeapons setting.
+   * streets: knife only (sword/crossbow impractical for street work).
+   * forest/scavenging: knife + crossbow+arrows (both useful for survival).
+   * hunter: knife only (bow is already their primary tool, managed separately).
+   */
+  fixed_weapon_jobs: {
+    streets:    ['knife'],
+    forest:     ['knife', 'crossbow', 'arrow'],
+    scavenging: ['knife', 'crossbow', 'arrow'],
+    hunter:     ['knife'],
+  },
+
+  /**
+   * Weapon items managed by the jobWeapons setting.
+   * These are stripped from the static job_tools and re-added per setting.
+   * Damage order (fight.tw): crossbow+arrow (+20-30) > sword (+8-15) > knife (+2-5).
+   */
+  managed_weapons: ['knife', 'sword', 'crossbow', 'arrow'],
+
+  jobWeaponsText: {
+    minimum: 'Minimum — knife only (counts as armed; cheapest)',
+    best:    'Best — best weapon by combat damage available in storage (crossbow+arrows > sword > knife)',
+    all:     'All — full loadout: knife + sword + crossbow + 2 arrows',
+    custom:  'Custom — choose which weapons to distribute:',
+  },
+
+  jobWeaponsCustom: { knife: false, sword: false, crossbow: false },
 };

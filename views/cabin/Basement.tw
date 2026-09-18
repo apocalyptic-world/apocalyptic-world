@@ -427,6 +427,11 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 <</if>>
 <br /><br />
 
+<<set _guestsLikesGirls = setup.commonValues([setup.getAvailablePersons18yo($guests)[1] ?? [], setup.propertyMatchIndexes($guests, 'likesGirls')])>>
+<<set _slavesForFuck = setup.commonValues([setup.getAvailablePersons18yo($slaves)[0] ?? [], _slavesInBasement])>>
+<<set _preGuestIdx = (_guestsLikesGirls.length > 0 ? setup.getRandomElement(_guestsLikesGirls) : null)>>
+<<set _guestFuckChance = (_preGuestIdx !== null && (($guests[_preGuestIdx]?.family?.wives ?? []).length > 0 || $player?.baseManagement?.noOutOfMarriageSex)) ? 3 : 5>>
+
 <<if _showSlavesCount &&  !$locationEvents.basement>>
 	<<set _randomNumber = randomInteger(1, 10)>>
 	<<if _randomNumber === 0 && _lowSubmissionSlaves.length>>
@@ -459,17 +464,13 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<unset $charId, $slaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave party introduction'>>
-	<<elseif setup.percentageChance(5)>>
-		<<set _guestsLikesGirls = setup.commonValues([setup.getAvailablePersons18yo($guests)[1] ?? [], setup.propertyMatchIndexes($guests, 'likesGirls')])>>
-		<<set _slavesForFuck = setup.commonValues([setup.getAvailablePersons18yo($slaves)[0] ?? [], _slavesInBasement])>>
-		<<if _slavesForFuck.length && _guestsLikesGirls.length>>
-			<<set $locationEvents.basement = true>>
-			<<set $tmpEvent = {
-				guestId: setup.getRandomElement(_guestsLikesGirls),
-				slaveId: setup.getRandomElement(_slavesForFuck)
-			}>>
-			<<goto 'Basement - guest asks to fuck slave'>>
-		<</if>>
+	<<elseif _slavesForFuck.length && _guestsLikesGirls.length && setup.percentageChance(_guestFuckChance)>>
+		<<set $locationEvents.basement = true>>
+		<<set $tmpEvent = {
+			guestId: _preGuestIdx,
+			slaveId: setup.getRandomElement(_slavesForFuck)
+		}>>
+		<<goto 'Basement - guest asks to fuck slave'>>
 	<</if>>
 <</if>>
 [[Back|Wood cabin]]

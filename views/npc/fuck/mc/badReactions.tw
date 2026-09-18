@@ -55,6 +55,15 @@
 				</div>
 			</div>
 		</div>
+		<<if !setup.perkHas('bleeding') && setup.percentageChance(10)>>
+			<br />
+			<<if either(true, false)>>
+				In the struggle, <<=setup.displayName($tmpGirl)>> gets teeth into you — a sharp, tearing bite that draws blood.
+			<<else>>
+				<<=setup.displayName($tmpGirl)>> rakes claws across your chest and arms, leaving deep, bleeding furrows.
+			<</if>>
+			<<perkAdd 'bleeding'>>
+		<</if>>
 
 	<<elseif $tmpGirl.horny  >= 100 && setup.percentageChance(50)  >>
 

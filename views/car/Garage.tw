@@ -6,6 +6,16 @@
     fuel: 0
 }>>
 
+<<set _randomMechanicJobs = [
+	'is working on your car.',
+	'is elbow-deep under the hood, muttering to herself.',
+	'is tightening something beneath the chassis.',
+	'is wiping down a wrench, studying a part in her other hand.',
+	'is checking the tire pressure, gauge in hand.',
+	'is draining old oil into a battered pan.',
+	'is squinting at the engine with a flashlight between her teeth.'
+]>>
+
 <<set _mechanicList = setup.getPersonsForLocation($guests, 'garage')>>
 <<unset $tmpGirl>>
 <<if _mechanicList.length && timeBetween('10:00', '18:00')>>
@@ -93,7 +103,10 @@
     <center>
         <<actionImage $tmpGirl 'fix'>>
     </center>
-    <<=setup.displayName($tmpGirl)>> is working on your car.
+    <<=setup.displayName($tmpGirl)>> <<=setup.getRandomElement(_randomMechanicJobs)>>
+    <<if ($tmpGirl.horny ?? 0) >= 80>>
+        <br /><<=ucfirst(setup.pronounceWhat($tmpGirl))>> looks <span style="background-image: radial-gradient(rgba(255, 182, 193, 0.5) 10%, transparent 90%); padding: 0 4px;">distracted</span>, and could use some attention.
+    <</if>>
     <br /><br />
     <<set _linkName = 'Approach ' + $tmpGirl.name>>
     <<link _linkName>>

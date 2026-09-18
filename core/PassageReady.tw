@@ -94,7 +94,7 @@
 	<<set _octToday = _octWeekday[$gameDate.getDay()]>>
 	<<set _octYesterday = _octWeekday[$gameDate.getDay() == 0 ? 6 : $gameDate.getDay() - 1]>>
 	<<set _octVisitDays = [$characters.octavia.visitDay1, $characters.octavia.visitDay2].filter(d => d && d !== 'none')>>
-	<<if _octVisitDays.some(d => (d === _octToday && timeBetween('18:00', '02:00')) || (d === _octYesterday && timeBetween('08:00', '12:00')))>>
+	<<if _octVisitDays.some(d => (d === _octToday && timeBetween('18:00', '23:59')) || (d === _octYesterday && timeBetween('00:00', '12:00')))>>
 		<<if ($characters.octavia.visitWarriorId ?? 'none') !== 'none' && !$characters.octavia.visitWarriorResolvedId>>
 			<<if $characters.octavia.visitWarriorId === 'random'>>
 				<<set _octWList = ($characters.octavia.quests.warriors ?? [])>>

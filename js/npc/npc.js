@@ -518,7 +518,7 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 }
 
 setup.NpcInHome = function(_npc) {
-	if (['garden', 'quarry', 'school', 'nightclub', 'strip_club', 'forest'].includes(_npc.location)) {
+	if (['garden', 'quarry', 'school', 'nightclub', 'gloryhole', 'strip_club', 'forest'].includes(_npc.location)) {
 		return false;
 	}
 

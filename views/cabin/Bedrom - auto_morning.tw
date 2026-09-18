@@ -9,8 +9,10 @@
 <<set _ruleButtplug     = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>
 <<set _ruleCondom       = $automatization.condom ?? false>>
 <<set _ruleDumbbell     = $automatization.dumbbell ?? false>>
+<<set _ruleWeapons      = _ruleJob ? ($automatization.jobWeapons ?? 2) : 0>>
 <<set _ruleBPgender     = $automatization.buttplugGender ?? [_ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug]>>
 
+<<set _managedWeapons = ['knife', 'sword', 'crossbow', 'arrow']>>
 <<set _bellstrength = {
     dumbbell:    {min:  0, max: 30}, 
     kettlebell:  {min: 30, max: 50}, 
@@ -22,6 +24,7 @@
     <<set _isStorageAvailable = ($game.location.shop ?? false)>>
     <<set _npcs = $slaves.concat($guests)>> 
     <<set _want = {}>>
+    <<set _want_weapon = []>>
     <<set _companions = new Map(), _companionSlaves = new Map()>>
     <<for _companionKey, _companion range $player.companions>>
         <<set _guestType = _companionKey.split(':')[0]>>>
@@ -48,6 +51,40 @@
                  _companionSlaves.has(_npc.id) ? 'companion_slave': (_npc.assignedTo ?? 'none')>>
         <<set _outDupItems = []>>
         <<set _outMinusItems = []>>
+
+        /* effective toolbox: armed jobs get managed weapons stripped and re-added per loadout */
+        <<set _isArmedJob = _ruleJob && (setup.automatization.armed_jobs ?? []).includes(_job)>>
+        <<set _fixedWeapons = _isArmedJob ? (setup.automatization.fixed_weapon_jobs[_job] ?? null) : null>>
+        <<if _isArmedJob>>
+            <<set _effectiveJobTools = (setup.automatization.job_tools[_job] ?? []).filter(function(it) { return !_managedWeapons.includes(it); })>>
+            <<if _fixedWeapons !== null>> /* fixed loadout: streets/forest/scavenging/hunter */
+                <<for _wi range _fixedWeapons>>
+                    <<set _effectiveJobTools.push(_wi)>>
+                <</for>>
+            <<elseif _ruleWeapons === 1>> /* minimum: knife only */
+                <<set _effectiveJobTools.push('knife')>>
+            <<elseif _ruleWeapons === 3>> /* all: full weapon loadout */
+                <<for _wi range _managedWeapons>>
+                    <<set _effectiveJobTools.push(_wi)>>
+                <</for>>
+            <<elseif _ruleWeapons === 4>> /* custom: player-selected weapons */
+                <<set _customW = $automatization.jobWeaponsCustom ?? {}>>
+                <<if _customW.knife>><<set _effectiveJobTools.push('knife')>><</if>>
+                <<if _customW.sword>><<set _effectiveJobTools.push('sword')>><</if>>
+                <<if _customW.crossbow>>
+                    <<set _effectiveJobTools.push('crossbow')>>
+                    <<set _effectiveJobTools.push('arrow')>>
+                <</if>>
+            <<else>> /* best (2): keep whatever weapons they already carry */
+                <<for _wi range _managedWeapons>>
+                    <<if setup.npcInventoryHas(_npc, _wi)>>
+                        <<set _effectiveJobTools.push(_wi)>>
+                    <</if>>
+                <</for>>
+            <</if>>
+        <<else>>
+            <<set _effectiveJobTools = (setup.automatization.job_tools[_job] ?? []).slice()>>
+        <</if>>
 
         /* (setup.getNpcHappyLevel(_npc) === 'very_sad'  */
 
@@ -78,14 +115,18 @@
             <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
 
             /* duplicates go to backpack or storage */
-            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) || 
-                    (_ruleHunter &&  ['bow', 'axe'].includes(_item)) || 
+            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) ||
+                    (_ruleHunter &&  ['bow', 'axe'].includes(_item)) ||
                     (_ruleJob &&  !['condom', 'dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) >>
                 <<if _itemcount > 1>>
-                    <<run _itemcount-->>
-                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
-                    <<set _outDupItems.push(_item + ': ' + _itemcount)>>
-                    <<set _itemcount = 1>>
+                    /* armed jobs with crossbow in loadout keep up to 2 arrows */
+                    <<set _maxAllowed = (_isArmedJob && _item === 'arrow' && _effectiveJobTools.includes('crossbow')) ? 2 : 1>>
+                    <<if _itemcount > _maxAllowed>>
+                        <<set _stripCount = _itemcount - _maxAllowed>>
+                        <<run setup.cabinInventory.from_npc(_npc, _item, _stripCount, _managedWeapons.includes(_item))>>
+                        <<set _outDupItems.push(_item + ': ' + _stripCount)>>
+                        <<set _itemcount = _maxAllowed>>
+                    <</if>>
                 <</if>>
             <</if>>
 
@@ -116,17 +157,21 @@
                     <<set _want[_item] ??= []>>
                     <<set _want[_item].push(_npc)>>
                 <<elseif (_npc.strength < _bellstrength[_item].min || _npc.strength >= _bellstrength[_item].max) && _itemcount > 0>>
-                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount, _managedWeapons.includes(_item))>>
                     <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
                 <</if>>
 
             /* toolbox for job */
             <<elseif _ruleJob || (_ruleHunter &&  ['bow', 'axe'].includes(_item))>>
-                <<if (setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount == 0>>
+                /* armed jobs with crossbow in loadout want 2 arrows */
+                <<set _neededCount = (_isArmedJob && _item === 'arrow' && _effectiveJobTools.includes('crossbow')) ? 2 : 1>>
+                <<if _effectiveJobTools.includes(_item) && _itemcount < _neededCount>>
                     <<set _want[_item] ??= []>>
-                    <<set _want[_item].push(_npc)>>
-                <<elseif !(setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount > 0>>
-                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<for _wi to 0; _wi lt _neededCount - _itemcount; _wi++>>
+                        <<set _want[_item].push(_npc)>>
+                    <</for>>
+                <<elseif !_effectiveJobTools.includes(_item) && _itemcount > 0>>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount, _managedWeapons.includes(_item))>>
                     <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
                 <</if>>
             <</if>>
@@ -137,6 +182,20 @@
         <</if>>
         <<if _outMinusItems.length > 0>>
             <<set _outMinusNpcs.push(_npc.name + ' (' + _outMinusItems.sort().join(', ') + ')')>>
+        <</if>>
+
+        /* best mode: queue configurable armed-job NPCs who still have no weapon */
+        <<if _isArmedJob && _fixedWeapons === null && _ruleWeapons === 2>>
+            <<set _hasAnyWeapon = false>>
+            <<for _wt range _managedWeapons>>
+                <<if _wt !== 'arrow' && setup.npcInventoryHas(_npc, _wt)>>
+                    <<set _hasAnyWeapon = true>>
+                    <<break>>
+                <</if>>
+            <</for>>
+            <<if !_hasAnyWeapon>>
+                <<set _want_weapon.push(_npc)>>
+            <</if>>
         <</if>>
     <</for>>
 
@@ -245,6 +304,52 @@
         <</if>>
     <</if>>
     <<unset _npc, _want, _outNo>>
+
+    /* best-mode weapon distribution: give each unarmed armed-job NPC the best available weapon */
+    <<if _ruleWeapons === 2 && _want_weapon.length > 0>>
+        <<set _outWpnItems = []>>
+        <<for _wNpc range _want_weapon>>
+            <<set _got = false>>
+            /* reserve 1 of each weapon for the MC — require has(item, 2) before giving */
+            /* 1. crossbow + arrows — arrows usable if already carried OR in storage */
+            <<if !_got && setup.cabinInventory.has('crossbow', 2) && (setup.npcInventoryHas(_wNpc, 'arrow') || setup.cabinInventory.has('arrow', 2))>>
+                <<run setup.cabinInventory.to_npc(_wNpc, 'crossbow')>>
+                <<if setup.cabinInventory.has('arrow', 2)>>
+                    <<run setup.cabinInventory.to_npc(_wNpc, 'arrow')>>
+                    <<if setup.cabinInventory.has('arrow', 2)>>
+                        <<run setup.cabinInventory.to_npc(_wNpc, 'arrow')>>
+                    <</if>>
+                <</if>>
+                <<set _outWpnItems.push(_wNpc.name + ' ← crossbow')>>
+                <<set _got = true>>
+            <</if>>
+            /* 2. sword */
+            <<if !_got && setup.cabinInventory.has('sword', 2)>>
+                <<run setup.cabinInventory.to_npc(_wNpc, 'sword')>>
+                <<set _outWpnItems.push(_wNpc.name + ' ← sword')>>
+                <<set _got = true>>
+            <</if>>
+            /* 3. knife */
+            <<if !_got && setup.cabinInventory.has('knife', 2)>>
+                <<run setup.cabinInventory.to_npc(_wNpc, 'knife')>>
+                <<set _outWpnItems.push(_wNpc.name + ' ← knife')>>
+                <<set _got = true>>
+            <</if>>
+            /* 4. crossbow without arrows — at least they can scavenge arrows in the field */
+            <<if !_got && setup.cabinInventory.has('crossbow', 2)>>
+                <<run setup.cabinInventory.to_npc(_wNpc, 'crossbow')>>
+                <<set _outWpnItems.push(_wNpc.name + ' ← crossbow (no arrows)')>>
+                <<set _got = true>>
+            <</if>>
+            <<if !_got>>
+                <<set _outputAutoList.push('Arm failed — no weapons in storage for: ' + _wNpc.name)>>
+            <</if>>
+        <</for>>
+        <<if _outWpnItems.length > 0>>
+            <<set _outputAutoList.push('Armed (best): ' + _outWpnItems.join(', '))>>
+        <</if>>
+        <<unset _want_weapon, _outWpnItems, _wNpc, _wt, _hasAnyWeapon, _got>>
+    <</if>>
 
     /* MC */
     <<set _outItem = []>>
