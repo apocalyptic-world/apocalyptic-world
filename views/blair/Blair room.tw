@@ -1,0 +1,46 @@
+:: Blair room [bg-guesthouse]
+<br />
+<h1 class="ptitle">BLAIR'S ROOM</h1>
+<br />
+<<blair>>
+	Hey. Come in.
+<</blair>>
+<br />
+<<link 'Approach her'>>
+	<<set $charId = 'blair'>>
+	<<unset $slaveId, $guestId, $childId>>
+	<<set $tmpGirl = $characters.blair>>
+	<<set $tmpGirl.location = 'bedroom'>>
+	<<set $tmpGirlBack = 'Blair room'>>
+	<<set $tmpGirlViewBack = 'NPC view - character'>>
+	<<goto 'NPC view - character'>>
+<</link>>
+
+<div id="blair_move_back">
+<<linkreplace 'Ask her to move back into your room'>>
+	<<addmins 20>>
+
+	You told her the bed felt wrong without her in it.
+	<br /><br />
+
+	<<blair>>
+		Took you long enough to say so. Give me a minute to get my things.
+	<</blair>>
+	<br />
+	She was back in your room before you'd finished making space for her.
+	<br /><br />
+
+	<<set $characters.blair.livingLocation = 'bedroom'>>
+	<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+	<strong>Blair moved back into your bedroom.</strong>
+	<br /><br />
+
+	<<link 'Leave'>>
+		<<goto 'Guest house'>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<<link 'Leave'>>
+	<<goto 'Guest house'>>
+<</link>>

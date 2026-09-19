@@ -1,0 +1,132 @@
+:: Companion - siphon
+<h1 class="ptitle">THE ROAD</h1>
+<br />
+<<set _cNpc = setup.companionGet($companionEvent.npcKey)>>
+<<set _cName = setup.displayName(_cNpc)>>
+<<set _cMem = setup.companionEvents.memoryFor($companionEvent.npcId)>>
+<<set _cMechanic = (_cNpc.skills ?? []).includes('mechanic')>>
+<<set _cHoarder = (_cNpc.traits ?? []).includes('hoarder')>>
+<<set _cBonus = (_cMechanic ? 10 : 0)>>
+<<addhours 1>>
+
+<center>
+	<<image 'places/explore_car/companion_siphon_wreck.jpg' sfw>>
+</center>
+<br /><br />
+
+The gauge had been sitting under a quarter for an hour when <<=_cName>> pointed through the windscreen. A station wagon, off the road, rust up to the sills — and no plates, which usually means somebody pulled them off deliberately.
+<br /><br />
+
+You both walked it once. The tank read heavy when <<=_cName>> knocked on it. But there was a bedroll under the rear wheel, a fire ring gone cold, and a shirt hanging off the open tailgate.
+<br /><br />
+
+<<sayNpc _cNpc>>
+	Somebody's living out of this. They're just not in it right now.
+<</sayNpc>>
+<br />
+
+<<if _cMem.siphonChoice === 'all'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> said it carefully, watching your face. Last time you had emptied a tank that belonged to somebody.
+	<br /><br />
+<<elseif _cMem.siphonChoice === 'none'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> said it like a question <<=setup.pronounceWhat(_cNpc)>> already knew the answer to. Last time you had walked away from fuel you needed.
+	<br /><br />
+<</if>>
+
+<<if _cMechanic>>
+	<<=_cName>> already had the hose out of <<=setup.pronounceWhos(_cNpc)>> pack and the filler neck open, working the line down past the anti-siphon screen like <<=setup.pronounceWhat(_cNpc)>>'d done it a hundred times.
+	<br /><br />
+<</if>>
+
+<center>
+	<<image 'places/explore_car/companion_siphon_tank.jpg' sfw>>
+</center>
+<br /><br />
+
+<div id="cs_all">
+<<linkreplace 'Take all of it'>>
+	<<run $('#cs_half, #cs_none').hide()>>
+	<<set $player.car.fuel = Math.min(($player.car.fuel ?? 0) + 30 + _cBonus, 100)>>
+	<<set $player.goodwill -= 2>>
+	<<if _cHoarder>>
+		<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 5, 100)>>
+	<<else>>
+		<<set _cNpc.happy = Math.max((_cNpc.happy ?? 0) - 10, -100)>>
+		<<set _cNpc.relationship = Math.max((_cNpc.relationship ?? 0) - 5, -100)>>
+	<</if>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'siphon', { siphonChoice: 'all' })>>
+
+	You ran it dry. Whoever came back to that wagon would find a shirt on the tailgate and nothing in the tank.
+	<br /><br />
+
+	<<if _cHoarder>>
+		<<sayNpc _cNpc>>
+			Good. Leaving half would just mean doing this again in a week.
+		<</sayNpc>>
+		<br />
+		<<=setup.pronounceWhat(_cNpc, true)>> coiled the hose without being asked.
+		<br /><br />
+		<strong>(Fuel +<<=30 + _cBonus>>. <<=_cName>>: Happy +5. Goodwill -2)</strong>
+	<<else>>
+		<<sayNpc _cNpc>>
+			They'll die out here without that. You know that, right?
+		<</sayNpc>>
+		<br />
+		<<=setup.pronounceWhat(_cNpc, true)>> got back in the car before you did and didn't say anything else about it.
+		<br /><br />
+		<strong>(Fuel +<<=30 + _cBonus>>. <<=_cName>>: Relationship -5, Happy -10. Goodwill -2)</strong>
+	<</if>>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cs_half">
+<<linkreplace 'Take half and leave the rest'>>
+	<<run $('#cs_all, #cs_none').hide()>>
+	<<set $player.car.fuel = Math.min(($player.car.fuel ?? 0) + 15 + _cBonus, 100)>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 2, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'siphon', { siphonChoice: 'half' })>>
+
+	You pulled the hose when the can was half full and let the rest sit. Enough to get you home, enough left that whoever slept under that wheel still had something to run on.
+	<br /><br />
+
+	<<sayNpc _cNpc>>
+		That's the right amount of wrong. I can live with that.
+	<</sayNpc>>
+	<br />
+	<strong>(Fuel +<<=15 + _cBonus>>. <<=_cName>>: Relationship +2)</strong>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cs_none">
+<<linkreplace 'Leave it alone'>>
+	<<run $('#cs_all, #cs_half').hide()>>
+	<<set $player.goodwill += 1>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 5, 100)>>
+	<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 5, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'siphon', { siphonChoice: 'none' })>>
+
+	You put the hose away and got back in. The gauge didn't move and the drive home was going to be tight, and you did it anyway.
+	<br /><br />
+
+	<<sayNpc _cNpc>>
+		Most people wouldn't have. I'm counting that.
+	<</sayNpc>>
+	<br />
+	<strong>(<<=_cName>>: Relationship +5, Happy +5. Goodwill +1)</strong>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>

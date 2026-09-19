@@ -1,5 +1,6 @@
 :: Car - Explore [Place bg-garage]
 <<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
+<<set _compEvent = (Object.keys($player.companions ?? {}).length > 0 ? setup.companionEvents.pick('car') : null)>>
 <<energy -30>>
 
 <<set _breakdownRisk = (100 - $player.car.health)/4>>
@@ -7,6 +8,11 @@
 	<<goto 'Car breakdown event - Engine Failure'>>
 <<elseif $characters?.elsa?.quests?.shower_day && !$characters?.elsa?.quests.well_day>>
 	<<goto 'Elsa - Village well'>>
+<<elseif _compEvent && setup.percentageChance(5)>>
+	<<set $companionEvent = _compEvent>>
+	<<set $companionEventBack = 'Garage'>>
+	<<set _compPassage = _compEvent.passage>>
+	<<goto _compPassage>>
 <<elseif _randomNumber <= 5 && $weather?.weather === 'sun'>>
 	<<goto 'Car explore event - The Chain Road'>>
 <<elseif _randomNumber <= 10 && $weather?.weather === 'rain'>>

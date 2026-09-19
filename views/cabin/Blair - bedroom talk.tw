@@ -28,6 +28,7 @@ You talked about <<=_talkedAbout>>.
 <</if>>
 <br /><br />
 <<if $characters.blair.quests.sex>>
+  <div id="blair_talk_fuck">
   <<link 'Fuck'>>
 	  <<set $tmpGirl = $characters.blair>>
 	  <<set $tmpGirl.location = 'bedroom'>>
@@ -40,8 +41,10 @@ You talked about <<=_talkedAbout>>.
 	  <<set $tmpGirlBack = 'Sleep eval'>>
 	  <<fuck $tmpGirl>>
   <</link>>
+  </div>
 <</if>>
 <<if $characters.blair.quests.basement>>
+	<div id="blair_talk_basement">
 	<<link 'Take her to the basement'>>
 		<<set $tmpGirl = $characters.blair>>
 	  	<<set $tmpGirl.location = 'basement'>>
@@ -54,6 +57,29 @@ You talked about <<=_talkedAbout>>.
 	  	<<set $tmpGirlBack = 'Sleep eval'>>
 		<<fuck $tmpGirl>>
 	<</link>>
+	</div>
+<</if>>
+<<if ($game.location.guesthouse ?? false) && $characters.blair.livingLocation !== 'guesthouse'>>
+	<div id="blair_move_out">
+	<<linkreplace 'Ask her to take a room in the guest house'>>
+		<<addmins 10>>
+		<<run $('#blair_talk_fuck, #blair_talk_basement').hide()>>
+
+		You told her there was a room standing empty across the yard, and that it was hers if she wanted the space to herself.
+		<br /><br />
+
+		<<blair>>
+			You're not getting rid of me that easily. But fine — I'll take the room. Don't get used to the quiet.
+		<</blair>>
+		<br />
+		She gathered up what she needed and carried it across herself, and the bed felt wider than it had the night before.
+		<br /><br />
+
+		<<set $characters.blair.livingLocation = 'guesthouse'>>
+		<strong>Blair moved into the guest house. You can ask her to move back any time.</strong>
+		<br /><br />
+	<</linkreplace>>
+	</div>
 <</if>>
 <<link 'Sleep'>>
 	<<sleep>>

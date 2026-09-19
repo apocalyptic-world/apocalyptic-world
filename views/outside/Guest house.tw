@@ -49,6 +49,14 @@
 			<</link>>
 		</span>
 	<</if>>
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('blair')>>
+		<<set _hornyClass = ($characters?.blair?.horny > 80) ? 'char-horny' : ''>>
+		<span @class="_hornyClass">
+			<<link '<div class="char-in-location">[img[setup.ImagePath+"people/blair/avatar.png"]]</div>'>>
+				<<goto 'Blair room'>>
+			<</link>>
+		</span>
+	<</if>>
 </div>
 <style>
 	.char-horny a {

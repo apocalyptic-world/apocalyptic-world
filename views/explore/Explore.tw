@@ -1,6 +1,7 @@
 :: Explore [Place] {"position":"1809,629","size":"200,100"}
 <<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<set _hasCompanions = Object.keys($player.companions ?? {}).length > 0>>
+<<set _compEvent = (_hasCompanions ? setup.companionEvents.pick('foot') : null)>>
 <<energy -30>>
 <<if (!$game.location.forest)>>
 	<<goto "Explore forest first time">>
@@ -12,6 +13,11 @@
 	<<goto "Explore quarry">>
 <<elseif $game.day >= 200 && !isMetChar('laura')>>
 	<<goto 'Laura - toxic rain'>>
+<<elseif _compEvent && setup.percentageChance(5)>>
+	<<set $companionEvent = _compEvent>>
+	<<set $companionEventBack = 'Outside'>>
+	<<set _compPassage = _compEvent.passage>>
+	<<goto _compPassage>>
 <<elseif ($game.day > 6 && _randomNumber <= 25)>>
     <<goto "Random event - meet girl #3">>
 <<elseif ($game.day > 4 && _randomNumber <= 35)>>

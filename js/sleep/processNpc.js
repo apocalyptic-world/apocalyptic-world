@@ -197,7 +197,11 @@ setup.sleep.processNpc = function(npc, opts) {
                     : npc.name + ' had a client in the streets, ' + setup.pronounceWhat(npc) + ' got you <strong>' + earned + '</strong> caps';
                 setup.sleepMessages.addJob(msg, 'streets');
 
-                if (setup.pregnancyChance(npc) && !setup.npcInventoryHas(npc, 'condom') && !npc.chastityBelt) {
+                // Street clients are throttled on top of the normal fertility roll — without
+                // it a young street worker conceives within about a week, and every street
+                // pregnancy queues its own "Pregnancy street client" morning event.
+                const streetsConceptionChance = 25;
+                if (setup.percentageChance(streetsConceptionChance) && setup.pregnancyChance(npc) && !setup.npcInventoryHas(npc, 'condom') && !npc.chastityBelt) {
                     npc.pregnancy = 0;
                     npc.pregnancy_father = 'unknown';
                     npc.pregnancy_event = 'streets';

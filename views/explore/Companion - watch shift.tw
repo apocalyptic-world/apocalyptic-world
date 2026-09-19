@@ -1,0 +1,105 @@
+:: Companion - watch shift
+<h1 class="ptitle">CAMP</h1>
+<br />
+<<set _cNpc = setup.companionGet($companionEvent.npcKey)>>
+<<set _cName = setup.displayName(_cNpc)>>
+<<set _cMem = setup.companionEvents.memoryFor($companionEvent.npcId)>>
+<<addhours 4>>
+
+<center>
+	<<image 'places/explore/companion_camp_night.jpg' sfw>>
+</center>
+<br /><br />
+
+You'd both been walking since morning and it was starting to show. <<=_cName>> called the halt before you did — a fire small enough to miss from the road, built in the lee of a fallen trunk, and a few hours off your feet before pushing on.
+<br /><br />
+
+<<sayNpc _cNpc>>
+	One of us should stay up. I'm not dozing off out here with the trees that close.
+<</sayNpc>>
+<br />
+
+<<if _cMem.watchChoice === 'her'>>
+	<<=_cName>> said it flatly, the way someone does when they already expect the answer. Last time you had left the watching to <<=setup.pronounceWho(_cNpc)>> and taken the rest for yourself.
+	<br /><br />
+<<elseif _cMem.watchChoice === 'alone'>>
+	<<=_cName>> was already unlacing <<=setup.pronounceWhos(_cNpc)>> boots, expecting the same answer as last time — when you had sat the whole halt yourself and let <<=setup.pronounceWho(_cNpc)>> sleep.
+	<br /><br />
+<</if>>
+
+<center>
+	<<image 'places/explore/companion_watch.jpg' sfw>>
+</center>
+<br /><br />
+
+<div id="cw_alone">
+<<linkreplace 'Keep watch and let her rest'>>
+	<<run $('#cw_split, #cw_her').hide()>>
+	<<energy -10>>
+	<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 5, 100)>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 3, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'watch', { watchChoice: 'alone' })>>
+
+	You told <<=_cName>> to put <<=setup.pronounceWhos(_cNpc)>> head down and meant it. <<=setup.pronounceWhat(_cNpc, true)>> argued for about a minute, then gave up and was out inside of five.
+	<br /><br />
+
+	You sat with your back to the trunk and watched the gaps between the trees until the fire burned down. Nothing came out of them. When you shook <<=setup.pronounceWho(_cNpc)>> awake <<=setup.pronounceWhat(_cNpc)>> looked better for it, and noticed that you didn't.
+	<br /><br />
+
+	<<sayNpc _cNpc>>
+		You should have swapped with me. Next time you swap with me.
+	<</sayNpc>>
+	<br />
+	<strong>(<<=_cName>>: Relationship +3, Happy +5. You got no rest.)</strong>
+	<br /><br />
+
+	<<link 'Move on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cw_split">
+<<linkreplace 'Split the halt between you'>>
+	<<run $('#cw_alone, #cw_her').hide()>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 1, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'watch', { watchChoice: 'split' })>>
+
+	You took the first stretch and woke <<=setup.pronounceWho(_cNpc)>> when the fire burned down to coals. <<=setup.pronounceWhat(_cNpc, true)>> took the second without complaint, and you got a couple of hours flat on your back, which was more than nothing.
+	<br /><br />
+
+	Neither of you saw anything. That was the point.
+	<br /><br />
+
+	<strong>(<<=_cName>>: Relationship +1)</strong>
+	<br /><br />
+
+	<<link 'Move on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cw_her">
+<<linkreplace 'Tell her to watch while you rest'>>
+	<<run $('#cw_alone, #cw_split').hide()>>
+	<<energy 15>>
+	<<set _cNpc.happy = Math.max((_cNpc.happy ?? 0) - 10, -100)>>
+	<<set _cNpc.relationship = Math.max((_cNpc.relationship ?? 0) - 3, -100)>>
+	<<set _cNpc.sub = Math.min((_cNpc.sub ?? 0) + 3, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'watch', { watchChoice: 'her' })>>
+
+	You told <<=setup.pronounceWho(_cNpc)>> to wake you if anything moved, put your pack under your head, and left <<=setup.pronounceWho(_cNpc)>> to it.
+	<br /><br />
+
+	You woke sharper than you'd felt all day. <<=_cName>> was sitting exactly where you'd left <<=setup.pronounceWho(_cNpc)>>, eyes red, jaw set, and didn't say a word about it — which was somehow worse than if <<=setup.pronounceWhat(_cNpc)>> had.
+	<br /><br />
+
+	<strong>(<<=_cName>>: Relationship -3, Happy -10, Submission +3. You're rested.)</strong>
+	<br /><br />
+
+	<<link 'Move on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
