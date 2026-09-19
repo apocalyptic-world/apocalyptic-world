@@ -1,7 +1,34 @@
 :: asks to cum inside
 
 <<if !$sexForced && $sexAction === 'pussy' && typeof $tmpGirl.pregnancy === 'undefined'>>
-    <<if ($tmpGirl.traits ?? []).includes('breeder')>>
+    <<if ($tmpGirl.traits ?? []).includes('feral') && (($tmpGirl.traits ?? []).includes('breeder') || ($tmpGirl.relationship >= 70 && setup.percentageChance(30)))>>
+        <<set _girlVisual = $tmpGirl>>
+        <<set _feralReaction = either([
+            "presses her hips flush against yours and holds them there, a slow, deliberate pressure — not letting you go anywhere",
+            "lets out a low, rhythmic panting sound of need, body warm and flushed",
+            "wraps her legs around you from behind, locking her ankles, grip tightening to keep you inside her",
+            "arches her body against you to angle herself open, a breathless, insistent sound escaping her",
+            "drags your hand to her lower abdomen and holds it there, hot skin under your palm, gaze direct and unblinking",
+            "looks into your eyes, her body open and pressed tight against you, offering to be bred",
+            "shudders as her inner muscles tighten and pull at your shaft, her body milking you for what it craves"
+        ])>>
+        <br />
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>>
+                        <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                    <<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+            </div>
+        </div>
+        <br />
+        <<set _askedToCumInside = true>>
+    <<elseif ($tmpGirl.traits ?? []).includes('breeder')>>
         <br />
         <<sayNpc $tmpGirl>>
             <<=either([

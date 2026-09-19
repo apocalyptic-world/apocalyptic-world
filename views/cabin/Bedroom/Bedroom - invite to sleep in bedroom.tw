@@ -11,9 +11,24 @@ The village is quiet, save for the distant sound of crackling fires.
 She looks at you, her expression a mixture of exhaustion and something else.
 <br /><br />
 <<if $tmpGirl.relationship > 50 && $tmpGirl.likesGuys>>
-    <<sayNpc $tmpGirl>>
-        Really? I'd like that.
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*tilts her head toward the bedroom and moves, her body almost cat-like as you follow*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Really? I'd like that.
+        <</sayNpc>>
+    <</if>>
     <br />
     In the bedroom you light a small lantern, its dim glow casting long shadows on the walls.
     <br />
@@ -27,9 +42,13 @@ She looks at you, her expression a mixture of exhaustion and something else.
         <<image 'places/bedroom/sleepover2.webp'>>
     </center>
     <br />
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+    She settles against you with the calm, relaxed movements of a creature that has found its den. She curls against you, her breath steady, safe in your arms.
+    <<else>>
     You both settle into the bed, the silence thick but companionable. You feel the warmth of her body next to yours, a strange comfort in a world that’s anything but comfortable.
     <br /><br />
-    You hesitate, then reach out to gently take her hand. She doesn’t pull away, and for the first time in what feels like foreve.
+    You hesitate, then reach out to gently take her hand. She doesn’t pull away, and for the first time in what feels like forever, she truly relaxes.
+    <</if>>
     <br /><br />
     <center>
         <<image 'places/bedroom/sleepover.webp'>>
@@ -51,9 +70,24 @@ She looks at you, her expression a mixture of exhaustion and something else.
                 <<if $tmpGirl.relationship > 50 && $tmpGirl.likesGuys>>
                     <<goto 'Bedroom - sleepover grind'>>
                 <<else>>
-                    <<sayNpc _npc>>
-                        Please don't. Let's just sleep.
-                    <</sayNpc>>
+                    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+                        <<set _girlVisual = $tmpGirl>>
+                        <div class="say npcsay">
+                            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                                <div class="girl_info_picture">
+                                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                                </div>
+                            </div>
+                            <div class="npc-say-container">
+                                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                                <div class="npc-say-text"><em>*shifts away from you with a firm, low sound and resettles against the pillow.  The meaning is clear*</em></div>
+                            </div>
+                        </div>
+                    <<else>>
+                        <<sayNpc _npc>>
+                            Please don't. Let's just sleep.
+                        <</sayNpc>>
+                    <</if>>
                     <br />
                 <</if>>
             <</linkreplace>>
@@ -70,9 +104,24 @@ She looks at you, her expression a mixture of exhaustion and something else.
         <<fuck $tmpGirl>>
     <</link>>
 <<else>>
-    <<sayNpc $tmpGirl>>
-        Thank you, but I am okay. I’ve gotten used to sleeping on my own.
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*steps back, a quiet, unhurried refusal — no hostility, just a boundary*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Thank you, but I am okay. I’ve gotten used to sleeping on my own.
+        <</sayNpc>>
+    <</if>>
     <br />
     You nod again, watching as she walks away, a shadow among many in the dim light. 
     The rejection stings a little, but you tell yourself it’s just another part of surviving in this broken world.

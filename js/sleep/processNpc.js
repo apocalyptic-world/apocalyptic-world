@@ -217,18 +217,26 @@ setup.sleep.processNpc = function(npc, opts) {
             setup.sleepMessages.addJob(npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+1 happy to all guests</strong>.', 'church');
         }
 
-        // Mistress: ticks sub/corruption of all slaves
+        // Mistress: ticks sub/corruption/strength of all slaves per policy
         if (job === 'mistress' && isGuest && !isSick) {
+            const bm = sv.player?.baseManagement ?? {};
+            const doPunish     = bm.mistressPunish    ?? true;
+            const doDiscipline = bm.mistressDiscipline ?? false;
+            const doCondition  = bm.mistressCondition  ?? true;
             const slaves = sv.slaves;
             for (let mi = 0; mi < slaves.length; mi++) {
                 if (setup.getAge(slaves[mi]) < 18) continue;
-                if (setup.percentageChance(30) && slaves[mi].sub < 100) {
+                if (doPunish && setup.percentageChance(30) && slaves[mi].sub < 100) {
                     setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s submission');
                     slaves[mi].sub = Math.min(100, (slaves[mi].sub ?? 0) + 1);
                 }
-                if (setup.percentageChance(20) && slaves[mi].corruption < 50) {
+                if (doCondition && setup.percentageChance(20) && slaves[mi].corruption < 50) {
                     setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s corruption');
                     slaves[mi].corruption = Math.min(100, (slaves[mi].corruption ?? 0) + 1);
+                }
+                if (doDiscipline && setup.percentageChance(15) && (slaves[mi].strength ?? 0) < 80) {
+                    setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s strength');
+                    slaves[mi].strength = Math.min(80, (slaves[mi].strength ?? 0) + 1);
                 }
             }
         }

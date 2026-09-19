@@ -13,22 +13,54 @@ Confused, you opened your eyes to find <<=setup.displayName($tmpGirl)>> holding 
     <<image 'places/bedroom/maid1.webp'>>
 </center>
 <br />
-<<sayNpc $tmpGirl>>
-    Oh, I'm sorry I didn't want you to oversleep and you were hard so I decided that might was well wake you up.
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<set _girlVisual = $tmpGirl>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*<<=setup.displayName($tmpGirl)>> is kneeling on the bed over you, your blanket pushed aside — licking, kissing, and playing with your cock like it's her favorite thing in the world, completely absorbed in it*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        Oh, I'm sorry I didn't want you to oversleep and you were hard so I decided that might as well wake you up.
+    <</sayNpc>>
+<</if>>
 <br />
-As you stretched and kicked off your blanket, she took a step back and checked you out with a smile on her face.
+As you stirred and kicked off your blanket, she looked up and held your gaze — not embarrassed, just waiting.
 <br /><br />
 <<linkreplace 'Tell her to undress'>>
-    <<sayNpc $tmpGirl>>
-        Oh I hoped you would suggest something like that.
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*squirms impatiently out of the uniform like it doesn't belong on her, then looks at you, bare and expectant*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Oh I hoped you would suggest something like that.
+        <</sayNpc>>
+    <</if>>
     <br />
     <center>
         <<image 'places/bedroom/maid2.webp'>>
     </center>
     <br />
-    As she looked at you with warm smile, she slowly slides down her top straps and later removes her top and let's it fall on the ground.
+    <<if !($tmpGirl.traits ?? []).includes('feral')>>
+    As she looked at you with a warm smile, she slowly slides down her top straps and later removes her top and lets it fall on the ground.
+    <</if>>
     <br /><br />
     <<link 'Fuck her'>>
         <<set $tmpGirlViewBack = $tmpEvent.isSlave ? 'NPC view' : 'NPC view - guest'>>

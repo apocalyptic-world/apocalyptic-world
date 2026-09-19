@@ -5,7 +5,11 @@ You could feel the curve of her ass pressing against you, and without conscious 
 <br /><br />
 <<video 'bedroom/sleepover_cuddle1'>>
 <br /><br />
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+<<=setup.displayName($tmpGirl)>> stirred with a low, instinctive sound, pressing back against you without thinking about it.
+<<else>>
 <<=setup.displayName($tmpGirl)>> stirred, a soft moan escaping her lips as she pressed back against you, returning the favor.
+<</if>>
 <br /><br />
 Your hands roamed her body, exploring the curves and valleys of her form, your touch growing bolder with each passing moment.
 <br /><br />
@@ -13,9 +17,29 @@ She reached down, her hand wrapping around your cock, stroking you firmly, her t
 <br /><br />
 <<video 'bedroom/sleepover_cuddle2'>>
 <br /><br />
-<<sayNpc $tmpGirl>>
-    I guess you won't let me get some sleep so easy, heh.
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<set _girlVisual = $tmpGirl>>
+    <<set _feralReaction = either([
+        "makes a soft, pleased sound and settles into position, not wasting any time",
+        "glances back at you over her shoulder, eyes drawn to your manhood",
+        "exhales through her nose in a slow, satisfied way and shifts lower"
+    ])>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        I guess you won't let me get some sleep so easy, heh.
+    <</sayNpc>>
+<</if>>
 <br />
 With that, she leaned down, taking you into her mouth, her lips soft and wet, her tongue swirling around the sensitive head.
 <br /><br />
@@ -28,23 +52,67 @@ She complied, taking you in inch by inch, her hand working in tandem with her mo
 <br /><br />
 The sensation was overwhelming, her mouth hot and tight, her tongue working magic on your shaft. You could feel the pleasure building, the pressure coiling at the base of your spine, ready to explode.
 <br /><br />
-<<sayNpc $tmpGirl>>
-    Will you fuck me?
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<set _girlVisual = $tmpGirl>>
+    <<set _feralReaction = either([
+        "rolls toward you and opens her thighs, a soft groan of invitation in her throat",
+        "pushes up onto you, hips tilting — an unambiguous invitation with no words",
+        "presses her back into you and reaches to guide your hand, offering herself to your touch"
+    ])>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        Will you fuck me?
+    <</sayNpc>>
+<</if>>
 <br />
 <<linkreplace 'Fuck her'>>
     <<set _fuck = true>>
     <<if $tmpGirl.virgin>><<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>><</if>>
     <<set $tmpGirl.virgin = false>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<=setup.displayName($tmpGirl)>> didn't wait — she shifted and opened beneath you, positioning herself with a low, urgent sound. You lined yourself up, already hard.
+    <<else>>
     <<=setup.displayName($tmpGirl)>> smiled, a look of pure desire in her eyes as she lay back, spreading her legs for you. You positioned yourself at her entrance, your cock hard and ready.
+    <</if>>
     <br /><br />
     <<video 'bedroom/sleepover_cuddle5'>>
     <br /><br />
     With one swift thrust, you entered her, your hips slamming against hers as you sheathed yourself fully inside her tight, wet pussy.
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        Deeper... Go deeper
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <<set _feralReaction = either([
+            "arches hard into you, a raw, wanting sound escaping her",
+            "curls her hips up sharply, taking more of you, a low grunt of want in her throat",
+            "drives back against you with a short, breathless moan"
+        ])>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Deeper... Go deeper
+        <</sayNpc>>
+    <</if>>
     <br />
     She let out a loud moan, her back arching as she wrapped her legs around your waist, urging you to go deeper.
     <br /><br />
@@ -58,18 +126,58 @@ The sensation was overwhelming, her mouth hot and tight, her tongue working magi
     You let out a loud groan, your hands gripping her hips, your fingers digging into her soft flesh as she began to ride you. 
     She moved with a sensual rhythm, her hips rolling and grinding against yours, taking you deep with each downward motion.
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        Oh my god... Just like that.. Don't move
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <<set _feralReaction = either([
+            "goes rigid all at once, a strangled, urgent sound locked in her throat — don't you dare move",
+            "stills suddenly, clenching around you, a high, broken sound catching in her chest",
+            "freezes with a sharp inhale, trembling — holding herself exactly there"
+        ])>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Oh my god... Just like that.. Don't move
+        <</sayNpc>>
+    <</if>>
     <br />
     You positioned yourself behind her, your cock hard and ready. With one swift thrust, you entered her, your hips slamming against her ass as you took her from behind. 
     She let out a loud cry of pleasure, her body pushing back against yours, urging you to go deeper.
     <br />
     <<video 'bedroom/sleepover_cuddle8'>>
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        Don't stop, please don't stop
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <<set _girlVisual = $tmpGirl>>
+        <<set _feralReaction = either([
+            "claws the sheets with both hands and drives back harder, a desperate, raw cry",
+            "makes a series of sharp, rhythmic sounds — rising in pitch with each one",
+            "grips whatever she can reach and holds on, making an unbroken, urgent sound"
+        ])>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Don't stop, please don't stop
+        <</sayNpc>>
+    <</if>>
     <br />
     The sound of your bodies slapping together echoed through the room, mixing with her moans of pleasure and your own grunts of exertion.
     <br /><br />
@@ -83,9 +191,29 @@ The sensation was overwhelming, her mouth hot and tight, her tongue working magi
         <br /><br />
         <<video 'bedroom/sleepover_cuddle9'>>
         <br /><br />
-        <<sayNpc $tmpGirl>>
-            That was fucking incredible.. I will sleep like a dead person now
-        <</sayNpc>>
+        <<if ($tmpGirl.traits ?? []).includes('feral')>>
+            <<set _girlVisual = $tmpGirl>>
+            <<set _feralReaction = either([
+                "collapses against you with a long, spent exhale, pressing close and going still",
+                "drops flat and curls in, breathing slow and heavy, content and done",
+                "nuzzles into you with a soft, exhausted sound and doesn't move"
+            ])>>
+            <div class="say npcsay">
+                <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                    <div class="girl_info_picture">
+                        <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                    </div>
+                </div>
+                <div class="npc-say-container">
+                    <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                    <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+                </div>
+            </div>
+        <<else>>
+            <<sayNpc $tmpGirl>>
+                That was fucking incredible.. I will sleep like a dead person now
+            <</sayNpc>>
+        <</if>>
         <br />
         As you lay back down, your bodies entwined.
         <br /><br />

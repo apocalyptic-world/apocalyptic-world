@@ -32,7 +32,7 @@ The scent of cedar from nearby trees fills the air, mingling with the steam risi
     <<if _guests[0].length>>
         <<set _randomGuestId = setup.getRandomElement(_guests[0])>>
         <<set _randomGuest = $guests[_randomGuestId]>>
-        <<if _randomGuest.horny > 50 && _randomGuest.relationship >= 60>>
+        <<if _randomGuest.horny > 50 && _randomGuest.relationship >= 60 && !(_randomGuest.traits ?? []).includes('feral')>>
             <<set _npc = _randomGuest>>
         <</if>>
     <</if>>
