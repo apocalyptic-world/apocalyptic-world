@@ -1,7 +1,7 @@
 :: Explore [Place] {"position":"1809,629","size":"200,100"}
 <<set _randomNumber to Math.floor(Math.random() * 100) + 1>>
 <<set _hasCompanions = Object.keys($player.companions ?? {}).length > 0>>
-<<set _compEvent = (_hasCompanions ? setup.companionEvents.pick() : null)>>
+<<set _compEvent = (_hasCompanions ? setup.companionEvents.pick('foot') : null)>>
 <<energy -30>>
 <<if (!$game.location.forest)>>
 	<<goto "Explore forest first time">>

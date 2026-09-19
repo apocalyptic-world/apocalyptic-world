@@ -32,6 +32,26 @@ setup.companionEvents = {
             test: function (npc) {
                 return [0, 2].includes(npc.gender) && variables().backpack.count('food') === 1;
             }
+        },
+        {
+            id: 'drive',
+            passage: 'Companion - take the wheel',
+            trip: 'car',
+            test: function (npc) {
+                const car = variables().player.car ?? {};
+                return [0, 2].includes(npc.gender)
+                    && (npc.relationship ?? 0) >= 40
+                    && (car.health ?? 0) >= 40;
+            }
+        },
+        {
+            id: 'siphon',
+            passage: 'Companion - siphon',
+            trip: 'car',
+            test: function (npc) {
+                const car = variables().player.car ?? {};
+                return [0, 2].includes(npc.gender) && (car.fuel ?? 0) < 30;
+            }
         }
     ],
 
@@ -49,7 +69,7 @@ setup.companionEvents = {
      * Events already seen with this companion are weighted down so they thin out
      * instead of repeating back to back.
      */
-    pick: function () {
+    pick: function (tripType = 'any') {
         const sv = variables();
         const day = sv.game.day;
         const candidates = [];
@@ -65,6 +85,7 @@ setup.companionEvents = {
 
             for (const def of setup.companionEvents.defs) {
                 if (def.solo && !soloTrip) continue;
+                if (def.trip && def.trip !== tripType) continue;
                 if (!def.test(npc)) continue;
                 const seen = mem.seen[def.id] ?? 0;
                 candidates.push({

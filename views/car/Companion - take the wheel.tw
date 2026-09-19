@@ -1,0 +1,118 @@
+:: Companion - take the wheel
+<h1 class="ptitle">THE ROAD</h1>
+<br />
+<<set _cNpc = setup.companionGet($companionEvent.npcKey)>>
+<<set _cName = setup.displayName(_cNpc)>>
+<<set _cMem = setup.companionEvents.memoryFor($companionEvent.npcId)>>
+<<set _cMechanic = (_cNpc.skills ?? []).includes('mechanic')>>
+<<addhours 1>>
+
+<center>
+	<<image 'places/explore_car/companion_roadside.jpg' sfw>>
+</center>
+<br /><br />
+
+You pulled over where the road ran straight enough to see anything coming, and got out to stretch the drive out of your back. <<=_cName>> didn't get out. <<=setup.pronounceWhat(_cNpc, true)>> stayed in the passenger seat looking at the wheel, and when you came back around <<=setup.pronounceWhat(_cNpc)>> asked before you'd even shut the door.
+<br /><br />
+
+<<sayNpc _cNpc>>
+	Let me drive. Just this stretch. It's straight and there's nothing on it.
+<</sayNpc>>
+<br />
+
+<<if _cMem.droveChoice === 'no'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> asked like someone who expected another no, and had decided to ask anyway.
+	<br /><br />
+<<elseif _cMem.droveChoice === 'yes'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> was already reaching for the door handle. You'd handed the keys over once before and <<=setup.pronounceWhat(_cNpc)>> clearly hadn't stopped thinking about it since.
+	<br /><br />
+<</if>>
+
+<<if _cMechanic>>
+	<<=setup.pronounceWhat(_cNpc, true)>> knew the engine better than you did — <<=setup.pronounceWhat(_cNpc)>>'d had the housing open twice on this trip alone.
+	<br /><br />
+<</if>>
+
+<center>
+	<<image 'places/explore_car/companion_driving.jpg' sfw>>
+</center>
+<br /><br />
+
+<div id="cd_yes">
+<<linkreplace 'Hand her the keys'>>
+	<<run $('#cd_partial, #cd_no').hide()>>
+	<<if _cMechanic>>
+		<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 5, 100)>>
+		<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 5, 100)>>
+	<<else>>
+		<<set $player.car.health = Math.max(($player.car.health ?? 0) - 5, 0)>>
+		<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 8, 100)>>
+	<</if>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'drive', { droveChoice: 'yes' })>>
+
+	You tossed the keys across the roof and <<=setup.pronounceWhat(_cNpc)>> caught them one-handed.
+	<br /><br />
+
+	<<if _cMechanic>>
+		<<=setup.pronounceWhat(_cNpc, true)>> drove like <<=setup.pronounceWhat(_cNpc)>>'d built the thing — feathering it over the broken sections, listening to the engine more than watching the road. You got twenty miles without a single complaint from under the hood.
+		<br /><br />
+
+		<<sayNpc _cNpc>>
+			She pulls left. You knew that, right? I'll fix it when we stop.
+		<</sayNpc>>
+		<br />
+		<strong>(<<=_cName>>: Relationship +5, Happy +5)</strong>
+	<<else>>
+		<<=setup.pronounceWhat(_cNpc, true)>> ground the gears twice getting it moving and put a wheel into a rut hard enough that you heard something under the floor complain about it. <<=setup.pronounceWhat(_cNpc, true)>> didn't apologise and you didn't ask <<=setup.pronounceWho(_cNpc)>> to.
+		<br /><br />
+
+		<<sayNpc _cNpc>>
+			Nobody's let me near a working engine since before. I won't forget that you did.
+		<</sayNpc>>
+		<br />
+		<strong>(<<=_cName>>: Relationship +8. Car condition -5.)</strong>
+	<</if>>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cd_partial">
+<<linkreplace 'Let her drive until the road roughens'>>
+	<<run $('#cd_yes, #cd_no').hide()>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 2, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'drive', { droveChoice: 'partial' })>>
+
+	You gave <<=setup.pronounceWho(_cNpc)>> the straight and took it back when the surface started breaking up. <<=setup.pronounceWhat(_cNpc, true)>> slid over without argument, but <<=setup.pronounceWhat(_cNpc)>> watched the road the whole way after that, the way you watch something that was briefly yours.
+	<br /><br />
+
+	<strong>(<<=_cName>>: Relationship +2)</strong>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cd_no">
+<<linkreplace 'Keep the wheel'>>
+	<<run $('#cd_yes, #cd_partial').hide()>>
+	<<set _cNpc.relationship = Math.max((_cNpc.relationship ?? 0) - 2, -100)>>
+	<<set _cNpc.sub = Math.min((_cNpc.sub ?? 0) + 2, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'drive', { droveChoice: 'no' })>>
+
+	You told <<=setup.pronounceWho(_cNpc)>> it wasn't the place for it and got back in on the driver's side. <<=setup.pronounceWhat(_cNpc, true)>> didn't push, which you'd have preferred to the silence that followed.
+	<br /><br />
+
+	<strong>(<<=_cName>>: Relationship -2, Submission +2)</strong>
+	<br /><br />
+
+	<<link 'Drive on'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
