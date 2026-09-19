@@ -1,0 +1,115 @@
+:: Companion - last ration
+<h1 class="ptitle">CAMP</h1>
+<br />
+<<set _cNpc = setup.companionGet($companionEvent.npcKey)>>
+<<set _cName = setup.displayName(_cNpc)>>
+<<set _cMem = setup.companionEvents.memoryFor($companionEvent.npcId)>>
+<<addhours 1>>
+
+<center>
+	<<image 'places/explore/companion_ration.jpg' sfw>>
+</center>
+<br /><br />
+
+You went through the pack twice before accepting what was in it. One tin. Whatever you had counted on finding out here, you hadn't found it, and the walk home was longer than what was left in either of you.
+<br /><br />
+
+<<=_cName>> watched you work it out and didn't say anything until you looked up.
+<br /><br />
+
+<<sayNpc _cNpc>>
+	One? That's what's left?
+<</sayNpc>>
+<br />
+
+<<if _cMem.rationChoice === 'self'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> already had that look. Last time there had been one tin, and you had eaten it.
+	<br /><br />
+<<elseif _cMem.rationChoice === 'her'>>
+	<<=setup.pronounceWhat(_cNpc, true)>> reached for the pack and then stopped, remembering that last time you had handed the tin straight over without being asked.
+	<br /><br />
+<</if>>
+
+<center>
+	<<image 'places/explore/companion_ration_eat.jpg' sfw>>
+</center>
+<br /><br />
+
+<div id="cr_her">
+<<linkreplace 'Give it to her'>>
+	<<run $('#cr_split, #cr_self').hide()>>
+	<<drop $backpack 'food' 1>>
+	<<set _cNpc.food = 100>>
+	<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 10, 100)>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 5, 100)>>
+	<<if (_cNpc.relationship ?? 0) >= 50>>
+		<<set _cNpc.loyal = true>>
+	<</if>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'ration', { rationChoice: 'her' })>>
+
+	You put the tin in <<=setup.pronounceWhos(_cNpc)>> hands and told <<=setup.pronounceWho(_cNpc)>> you'd eaten at the cabin. It wasn't true and <<=setup.pronounceWhat(_cNpc)>> knew it wasn't, but <<=setup.pronounceWhat(_cNpc)>> ate anyway, and quickly, before you could change your mind.
+	<br /><br />
+
+	<<sayNpc _cNpc>>
+		I'll remember this. People don't do this out here.
+	<</sayNpc>>
+	<br />
+	<strong>(<<=_cName>>: Fed, Relationship +5, Happy +10. You went without.)</strong>
+	<br /><br />
+
+	<<link 'Head back'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cr_split">
+<<linkreplace 'Split it between you'>>
+	<<run $('#cr_her, #cr_self').hide()>>
+	<<drop $backpack 'food' 1>>
+	<<set $player.hunger = Math.min(($player.hunger ?? 0) + 40, 100)>>
+	<<set _cNpc.food = Math.min((_cNpc.food ?? 0) + 40, 100)>>
+	<<set _cNpc.happy = Math.min((_cNpc.happy ?? 0) + 3, 100)>>
+	<<set _cNpc.relationship = Math.min((_cNpc.relationship ?? 0) + 2, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'ration', { rationChoice: 'split' })>>
+
+	You halved it as carefully as you could and handed over the bigger share anyway. Neither of you was full afterwards, but neither of you was the one who went without.
+	<br /><br />
+
+	<<sayNpc _cNpc>>
+		Fair's fair. Let's get moving before I start thinking about it.
+	<</sayNpc>>
+	<br />
+	<strong>(You and <<=_cName>>: half fed each. Relationship +2, Happy +3)</strong>
+	<br /><br />
+
+	<<link 'Head back'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
+
+<div id="cr_self">
+<<linkreplace 'Eat it yourself'>>
+	<<run $('#cr_her, #cr_split').hide()>>
+	<<drop $backpack 'food' 1>>
+	<<set $player.hunger = 100>>
+	<<set _cNpc.happy = Math.max((_cNpc.happy ?? 0) - 15, -100)>>
+	<<set _cNpc.relationship = Math.max((_cNpc.relationship ?? 0) - 5, -100)>>
+	<<set _cNpc.sub = Math.min((_cNpc.sub ?? 0) + 2, 100)>>
+	<<run setup.companionEvents.record($companionEvent.npcId, 'ration', { rationChoice: 'self' })>>
+
+	You ate it. <<=_cName>> watched the whole thing without a word, and you told <<=setup.pronounceWho(_cNpc)>> that you were the one carrying the pack and doing the killing, which was true, and which didn't help.
+	<br /><br />
+
+	<<=setup.pronounceWhat(_cNpc, true)>> walked half a step behind you the rest of the way home.
+	<br /><br />
+
+	<strong>(You ate. <<=_cName>>: Relationship -5, Happy -15, Submission +2)</strong>
+	<br /><br />
+
+	<<link 'Head back'>>
+		<<goto $companionEventBack>>
+	<</link>>
+<</linkreplace>>
+</div>
