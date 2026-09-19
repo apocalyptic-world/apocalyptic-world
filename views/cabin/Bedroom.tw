@@ -125,6 +125,7 @@
 		<</if>>
 	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5) && recall($suppCode)>>
 		<<set _girls = setup.getAvailablePersons18yo($guests)>>
+		<<set _girls[0] = (_girls[0] ?? []).filter(id => !($guests[id]?.traits ?? []).includes('feral'))>>
 		<<if (_girls[0] ?? []).length>>
 			<<set $tmpEvent = {
 				id: _girls[0][Math.floor(Math.random()*_girls[0].length)]

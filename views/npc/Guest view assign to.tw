@@ -24,7 +24,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if !setup.assignedToCount('kitchen') && !$tmpGirl.assignedTo>>
+<<if !_isFeral && !setup.assignedToCount('kitchen') && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign to kitchen'>>
 		  <<assignedTo $tmpGirl 'kitchen'>>
@@ -54,7 +54,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if setup.getPersonsForLocation($guests, 'hospital').length < ($workersLimitHospital ?? 3)  && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
+<<if !_isFeral && setup.getPersonsForLocation($guests, 'hospital').length < ($workersLimitHospital ?? 3)  && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
 	<div>
 	  <<link 'Assign to hospital'>>
 		  <<assignedTo $tmpGirl 'hospital'>>

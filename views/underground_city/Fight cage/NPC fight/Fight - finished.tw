@@ -14,30 +14,67 @@
         <<else>>
             <<set _npc = $slaves[_splitKey[1]]>>
         <</if>>
-		<<sayNpc _fighter>>
-		        <<=either([
-		            'That was so satisfying!',
-		            "I bet they didn't see that coming!",
-		            "Bring it on!  Who wants some of this?!",
-		            "The truth is painfully simple: You lost because you aren't me.",
-		            "They'll have to train a lot harder to stand a chance.",
-		            "I think one of them bled on me..",
-		            "Are we getting ice cream after this?",
-		            "I bruised my knuckles on that last fighter's face..",
-		            "Mortal Kombat!!!",
-		            "I came here to kick ass and chew bubble gum.  Now where's my bubble gum?",
-		            `Did you see that, ${setup.npc.mcName(_npc)}? I barely broke a sweat!`,
-		            `That one's for you, ${setup.npc.mcName(_npc)}!`,
-		            `${setup.npc.mcName(_npc, true)}, they're going to need a bigger cage to contain this beast.`,
-		            `Next time, bet more on me, ${setup.npc.mcName(_npc)}. I'm just getting started.`,
-		            `${setup.npc.mcName(_npc, true)}, I could fight three more right now. Just say the word.`,
-		            `Don't look so tense, ${setup.npc.mcName(_npc)}. I had this the whole time.`,
-		            `${setup.npc.mcName(_npc, true)}, I think I was born for this place.`,
-		            `Send in another one, ${setup.npc.mcName(_npc)}. I'm not done yet!`,
-		            `You picked the right fighter, ${setup.npc.mcName(_npc)}.`,
-		            `Was that it? ${setup.npc.mcName(_npc)}, please tell me that wasn't the best they could do.`,
-		        ])>>
-		<</sayNpc>>
+		<<if (_npc.traits ?? []).includes('feral')>>
+			<<set _girlVisual = _npc>>
+			<<set _feralCageWin = either([
+				'throws head back and howls at the cage lights, raw and triumphant',
+				'drops to all fours over the fallen opponent and sniffs at them, then backs away satisfied',
+				'circles the cage perimeter, shoulders tense and chin raised, daring anyone else to enter',
+				'lets out a sharp, staccato bark at the crowd, whole body rigid with excitement',
+				'paws at the mat near the downed fighter, then flicks a dismissive look at the crowd',
+				'licks blood from their knuckle, eyes bright and wild',
+				'plants both feet on the fallen opponent\'s chest and releases a long, piercing howl',
+				'trots to your side of the cage and presses their face through the bars toward you',
+				'shakes out their shoulders with a low, rolling growl, scanning for another challenger',
+				'bows their head briefly over the downed opponent, then looks up with gleaming eyes',
+			])>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="_npc.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>>
+							<div class="say_custom_portrait">
+								<<include 'NPC visual'>>
+							</div>
+						<<else>>
+							<<include 'NPC visual'>>
+						<</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name">
+						<strong><<=setup.displayName(_npc)>></strong>
+					</div>
+					<div class="npc-say-text">
+						<em>*<<= _feralCageWin >>*</em>
+					</div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc _fighter>>
+				<<=either([
+					'That was so satisfying!',
+					"I bet they didn't see that coming!",
+					"Bring it on!  Who wants some of this?!",
+					"The truth is painfully simple: You lost because you aren't me.",
+					"They'll have to train a lot harder to stand a chance.",
+					"I think one of them bled on me..",
+					"Are we getting ice cream after this?",
+					"I bruised my knuckles on that last fighter's face..",
+					"Mortal Kombat!!!",
+					"I came here to kick ass and chew bubble gum.  Now where's my bubble gum?",
+					`Did you see that, ${setup.npc.mcName(_npc)}? I barely broke a sweat!`,
+					`That one's for you, ${setup.npc.mcName(_npc)}!`,
+					`${setup.npc.mcName(_npc, true)}, they're going to need a bigger cage to contain this beast.`,
+					`Next time, bet more on me, ${setup.npc.mcName(_npc)}. I'm just getting started.`,
+					`${setup.npc.mcName(_npc, true)}, I could fight three more right now. Just say the word.`,
+					`Don't look so tense, ${setup.npc.mcName(_npc)}. I had this the whole time.`,
+					`${setup.npc.mcName(_npc, true)}, I think I was born for this place.`,
+					`Send in another one, ${setup.npc.mcName(_npc)}. I'm not done yet!`,
+					`You picked the right fighter, ${setup.npc.mcName(_npc)}.`,
+					`Was that it? ${setup.npc.mcName(_npc)}, please tell me that wasn't the best they could do.`,
+				])>>
+			<</sayNpc>>
+		<</if>>
 		<br />
         <<if _npc?.fightCage?.fightsWon > 50 && !(_npc.skills ?? []).includes('fighter') && setup.percentageChance(30)>>
             <<set _npc.skills.push('fighter')>>
@@ -84,31 +121,68 @@
 		<<else>>
 		    <<set _npc = $slaves[_splitKey[1]]>>
 		<</if>>
-		<<sayNpc _fighter>>
-		        <<=either([
-		            'I should have trained harder!',
-		            "I'm sorry I let you down...",
-		            "Next time, this ends differently.",
-		            "Ouch, my ribs...",
-		            "Someone had to lose.",
-		            "They're putting rocks in their gloves!",
-		            "I think I twisted an ankle!",
-		            "Bitch is going down next time!",
-		            "We can't win them all...",
-		            "I know I'm better than this...",
-		            "I will not fail again, sir.",
-		            `${setup.npc.mcName(_npc, true)}, I'm sorry. I really am.`,
-		            `I won't let you down again, ${setup.npc.mcName(_npc)}. I swear it.`,
-		            `That thing hits like a truck, ${setup.npc.mcName(_npc)}...`,
-		            `Just... give me a minute, ${setup.npc.mcName(_npc)}.`,
-		            `I thought I had them, ${setup.npc.mcName(_npc)}. I really did.`,
-		            `${setup.npc.mcName(_npc, true)}, please don't be disappointed in me.`,
-		            `Put me back in there, ${setup.npc.mcName(_npc)}. Let me finish this.`,
-		            `${setup.npc.mcName(_npc, true)}, everything hurts. Like, everything.`,
-		            `Don't be mad at me, ${setup.npc.mcName(_npc)}...`,
-		            `I'll remember every one of these bruises, ${setup.npc.mcName(_npc)}.`,
-		        ])>>
-		<</sayNpc>>
+		<<if (_npc.traits ?? []).includes('feral')>>
+			<<set _girlVisual = _npc>>
+			<<set _feralCageLoss = either([
+				'crawls to the edge of the cage and curls against the bars, whimpering softly',
+				'lies flat on the mat, panting in short, shallow bursts, curled inward',
+				'rolls onto their side and lets out a long, low whine',
+				'drags themselves upright and licks a wound on their forearm, not meeting anyone\'s eyes',
+				'makes a low, broken sound — not quite a growl, not quite a cry',
+				'presses their forehead against the cage wall and breathes slowly, trembling',
+				'staggers upright, shaking their head dazedly, eyes unfocused',
+				'sinks back against the cage floor and lets out a quiet, defeated whimper',
+				'limps toward you, head low, and sits heavily at your feet',
+				'turns away from the crowd and tucks their face under their arm, still and quiet',
+			])>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="_npc.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>>
+							<div class="say_custom_portrait">
+								<<include 'NPC visual'>>
+							</div>
+						<<else>>
+							<<include 'NPC visual'>>
+						<</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name">
+						<strong><<=setup.displayName(_npc)>></strong>
+					</div>
+					<div class="npc-say-text">
+						<em>*<<= _feralCageLoss >>*</em>
+					</div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc _fighter>>
+				<<=either([
+					'I should have trained harder!',
+					"I'm sorry I let you down...",
+					"Next time, this ends differently.",
+					"Ouch, my ribs...",
+					"Someone had to lose.",
+					"They're putting rocks in their gloves!",
+					"I think I twisted an ankle!",
+					"Bitch is going down next time!",
+					"We can't win them all...",
+					"I know I'm better than this...",
+					"I will not fail again, sir.",
+					`${setup.npc.mcName(_npc, true)}, I'm sorry. I really am.`,
+					`I won't let you down again, ${setup.npc.mcName(_npc)}. I swear it.`,
+					`That thing hits like a truck, ${setup.npc.mcName(_npc)}...`,
+					`Just... give me a minute, ${setup.npc.mcName(_npc)}.`,
+					`I thought I had them, ${setup.npc.mcName(_npc)}. I really did.`,
+					`${setup.npc.mcName(_npc, true)}, please don't be disappointed in me.`,
+					`Put me back in there, ${setup.npc.mcName(_npc)}. Let me finish this.`,
+					`${setup.npc.mcName(_npc, true)}, everything hurts. Like, everything.`,
+					`Don't be mad at me, ${setup.npc.mcName(_npc)}...`,
+					`I'll remember every one of these bruises, ${setup.npc.mcName(_npc)}.`,
+				])>>
+			<</sayNpc>>
+		<</if>>
 		<br />
         <</for>>
 <</if>>

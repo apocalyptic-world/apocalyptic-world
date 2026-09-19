@@ -107,27 +107,12 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		You have no slaves...
 	</div>
 <<else>>
+	/* Detect mistress on duty */
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
-	<<if _girlGuest.length > 0 && setup.isAtWork($guests[_girlGuest[0]], $weather) && _isSlaveInBasement>>
+	<<set _hasMistress = _girlGuest.length > 0 && setup.isAtWork($guests[_girlGuest[0]], $weather) && _isSlaveInBasement>>
+	<<if _hasMistress>>
 		<<set $tmpGirl = $guests[_girlGuest[0]]>>
 		<<set $tmpGirl.location = 'mistress'>>
-		<center>
-			<<actionImage $tmpGirl basement>>
-		</center>
-
-		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
-		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
-		<<link `_girlGuestLink`>>
-			<<set $tmpGirlViewBack = 'NPC view - guest'>>
-			<<set $tmpGirlBack = 'Basement'>>
-			<<set $tmpGirlCapture to false>>
-			<<set $tmpGirlInvite to false>>
-			<<set $tmpGirl.rape to false>>
-			<<set $guestId = _girlGuest[0]>>
-			<<unset $slaveId, $charId, $childId>>
-			<<goto 'NPC view - guest'>>
-		<</link>>
-		<<set _mistressId = _girlGuest[0]>>
 	<</if>>
 
 	/* Collect attendants who are on duty (work hours 10:00-20:00, not sick) */
@@ -143,15 +128,87 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<</if>>
 	<</for>>
 
-	/* Display attendants (on-duty check already applied when building _attendantIds) */
-	<<if _attendantIds.length > 0>>
-		<<if typeof _mistressId === 'undefined'>>
+	/* Image area — toggle if both mistress and attendant are present */
+	<<if _hasMistress || _attendantIds.length > 0>>
+		<<if _hasMistress && _attendantIds.length > 0>>
+			<<set $player.baseManagement.basementView ??= 'mistress'>>
+			<div id="basement-view-toggle" style="text-align:center; margin-bottom:6px">
+				View:&nbsp;
+				<label><<radiobutton "$player.baseManagement.basementView" "mistress" autocheck>>&nbsp;Mistress</label>
+				&nbsp;
+				<label><<radiobutton "$player.baseManagement.basementView" "attendant" autocheck>>&nbsp;Attendant</label>
+			</div>
+			<<done>><<run jQuery('#basement-view-toggle input[type="radio"]').on('change', function() { Engine.play('Basement'); })>><</done>>
+			<<if $player.baseManagement.basementView === 'attendant'>>
+				<<set _attImgNpc = _attendantIds[0].type === 'guest' ? $guests[_attendantIds[0].id] : $slaves[_attendantIds[0].id]>>
+				<<set _attImgNpc.location = 'basement'>>
+				<center><<actionImage _attImgNpc 'attendant' 'no-text'>></center>
+			<<else>>
+				<center><<actionImage $tmpGirl basement>></center>
+			<</if>>
+		<<elseif _hasMistress>>
+			<center><<actionImage $tmpGirl basement>></center>
+		<<else>>
 			<<set _attImgNpc = _attendantIds[0].type === 'guest' ? $guests[_attendantIds[0].id] : $slaves[_attendantIds[0].id]>>
 			<<set _attImgNpc.location = 'basement'>>
-			<center>
-				<<actionImage _attImgNpc 'attendant' 'no-text'>>
-			</center>
+			<center><<actionImage _attImgNpc 'attendant' 'no-text'>></center>
 		<</if>>
+	<</if>>
+
+	/* Mistress description + approach link */
+	<<if _hasMistress>>
+		<<set _activeBehaviors = []>>
+		<<if ($player.baseManagement.mistressPunish ?? true)>><<set _activeBehaviors.push('punish')>><</if>>
+		<<if ($player.baseManagement.mistressDiscipline ?? false)>><<set _activeBehaviors.push('discipline')>><</if>>
+		<<if ($player.baseManagement.mistressCondition ?? true)>><<set _activeBehaviors.push('condition')>><</if>>
+		<<set _mistressBehavior = _activeBehaviors.length > 0 ? setup.getRandomElement(_activeBehaviors) : 'idle'>>
+		<<set _mistressDescriptions = {
+			punish: [
+				'is whipping one of your slaves at the post, making an example.',
+				'is circling a kneeling slave with a riding crop.',
+				'has one of your slaves bound tightly in an uncomfortable position.',
+				'is trying out a new piece of equipment on one of your slaves.',
+				'has one of your slaves on the ground under her foot.'
+			],
+			discipline: [
+				'is putting one of your slaves through laps around the basement.',
+				'has a slave on the ground doing push-ups as she corrects their form sharply.',
+				'has one of your slaves hauling heavy loads across the room.',
+				'is shouting at one of your slaves for taking a break.',
+				'stands over one of your slaves, counting out sit-ups.'
+			],
+			condition: [
+				'is whispering something into a slave\'s ear that makes them blush deeply.',
+				'is teaching one of your slaves a challenging sexual position.',
+				'is forcing one of your slaves to do their work in the nude.',
+				'has one of your slaves tied up in a very exposing position.',
+				'is reminding one of your slaves that their body belongs to their master.'
+			],
+			idle: [
+				'is sitting in the corner, arms crossed, watching the slaves with idle disdain.',
+				'is leaning against the wall, picking at her nails, visibly unimpressed.',
+				'has found herself a chair and is staring at nothing in particular.',
+				'is pacing slowly, as if waiting for someone to give her a reason to move.',
+				'looks up as you enter, expression flat — she has nothing to do and everyone knows it.'
+			]
+		}>>
+		<<=setup.displayName($tmpGirl)>> <<=setup.getRandomElement(_mistressDescriptions[_mistressBehavior])>><br /><br />
+		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
+		<<link `_girlGuestLink`>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<<set $tmpGirlBack = 'Basement'>>
+			<<set $tmpGirlCapture to false>>
+			<<set $tmpGirlInvite to false>>
+			<<set $tmpGirl.rape to false>>
+			<<set $guestId = _girlGuest[0]>>
+			<<unset $slaveId, $charId, $childId>>
+			<<goto 'NPC view - guest'>>
+		<</link>>
+		<<set _mistressId = _girlGuest[0]>>
+	<</if>>
+
+	/* Display attendants — image already rendered above; text descriptions only here */
+	<<if _attendantIds.length > 0>>
 		<<set _attVerbs = ['cleaning', 'grooming', 'washing', 'drying off', 'scrubbing', 'rinsing']>>
 		<<if ($player.baseManagement?.attendantStimulate ?? true)>>
 			<<run _attVerbs.push('tickling', 'teasing')>>

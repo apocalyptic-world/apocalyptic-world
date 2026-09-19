@@ -3,7 +3,55 @@
 <<set _p2 = ($tmpGirl2.nickName ?? '') !== '' ? $tmpGirl2.nickName : $tmpGirl2.name>>
 <<set _p3 = ($tmpGirl3.nickName ?? '') !== '' ? $tmpGirl3.nickName : $tmpGirl3.name>>
 
-<<if $tmpGirl.horny >= 80 && $tmpGirl.horny < 100 && setup.percentageChance(50)>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<set _girlVisual = $tmpGirl>>
+    <<if $tmpGirl.horny >= 100 && setup.percentageChance(90)>>
+        <<set _feralReaction = either([
+            "shudders with a sharp, animal cry, bucking helplessly",
+            "grabs " + _p2 + " by the wrist as the orgasm tears through " + setup.pronounceWho($tmpGirl) + ", making a raw, keening sound",
+            "collapses forward, gasping in tight, broken breaths, not making words",
+            "presses " + setup.pronounceWhos($tmpGirl) + " face into " + _p2 + "'s shoulder and howls through gritted teeth",
+            "releases a long, desperate wail and grips onto " + _p2 + " and " + _p3 + " at once, shaking so hard " + setup.pronounceWhat($tmpGirl) + " can't hold still"
+        ])>>
+    <<elseif $tmpGirl.horny >= 80 && setup.percentageChance(50)>>
+        <<set _feralReaction = either([
+            "arches back with a sharp, hungry gasp, hips rolling hard",
+            "makes a low, insistent sound and grinds faster, jaw clenched",
+            "hooks a hand in " + _p2 + "'s direction with a short, pleading whine",
+            "glances between " + _p2 + " and " + _p3 + " with glazed, unfocused eyes, rocking faster",
+            "presses into " + _p2 + " with a breathless, urgent sound, body coiled tight"
+        ])>>
+    <<elseif $tmpGirl.horny >= 25>>
+        <<set _feralReaction = either([
+            "rolls " + setup.pronounceWhos($tmpGirl) + " hips into the rhythm with a low, climbing moan — body getting louder and less careful",
+            "reaches back to grab at whoever is closest, grinding against them",
+            "turns to " + _p2 + " with flushed cheeks and a sharp, breathy sound, panting heavily in growing pleasure",
+            "makes a rising string of sounds, each one a beat higher than the last, pushing back harder into every movement",
+            "grabs at " + _p2 + " and " + _p3 + " in turn, pulling them closer — " + setup.pronounceWhat($tmpGirl) + " does not want any of this to slow down"
+        ])>>
+    <<else>>
+        <<set _feralReaction = either([
+            "makes a small, startled sound as the sensation registers — then presses in closer, wanting more of it",
+            "exhales in a slow, drawn-out breath, shoulders dropping, body already starting to warm and loosen",
+            "reaches for " + _p2 + " on instinct, drawn by the heat, a quiet, pleased sound in " + setup.pronounceWhos($tmpGirl) + " throat",
+            "tips " + setup.pronounceWhos($tmpGirl) + " chin up and makes a short, open-mouthed sound, lighting up at the touch",
+            "flicks " + setup.pronounceWhos($tmpGirl) + " gaze between " + _p2 + " and " + _p3 + " — something hungry starting behind " + setup.pronounceWhos($tmpGirl) + " eyes"
+        ])>>
+    <</if>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>>
+                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                <<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+        </div>
+    </div>
+<<elseif $tmpGirl.horny >= 80 && $tmpGirl.horny < 100 && setup.percentageChance(50)>>
 
     <<sayNpc $tmpGirl>>
         <<=either([

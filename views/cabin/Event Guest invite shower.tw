@@ -7,19 +7,64 @@
 <br />
 <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 	<<if $tmpGirl.washedBathhouse>>
-		<<sayNpc $tmpGirl>>
-			Sorry, I will have to decline. I already was in bathhouse today. Maybe some other time
-		<</sayNpc>>
+		<<if ($tmpGirl.traits ?? []).includes('feral')>>
+			<<set _girlVisual = $tmpGirl>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*pauses, sniffs in the direction of the bathhouse, then makes a small, deflecting sound and shifts back the way she came — she's done for today*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				Sorry, I will have to decline. I already was in bathhouse today. Maybe some other time
+			<</sayNpc>>
+		<</if>>
 	<<else>>
 		<<set _isOk = true>>
-		<<sayNpc $tmpGirl>>
-			Oh, I like where this is going. Lead the way. 
-		<</sayNpc>>
+		<<if ($tmpGirl.traits ?? []).includes('feral')>>
+			<<set _girlVisual = $tmpGirl>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*tilts her head toward the bathhouse and moves in that direction without hesitation, glancing back at you once*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				Oh, I like where this is going. Lead the way.
+			<</sayNpc>>
+		<</if>>
 	<</if>>
 <<else>>
-	<<sayNpc $tmpGirl>>
-		Sorry, I wouldn't be comfortable there together with you.
-	<</sayNpc>>
+	<<if ($tmpGirl.traits ?? []).includes('feral')>>
+		<<set _girlVisual = $tmpGirl>>
+		<div class="say npcsay">
+			<div class="npc-say-visual" @data-id="$tmpGirl.id">
+				<div class="girl_info_picture">
+					<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+				</div>
+			</div>
+			<div class="npc-say-container">
+				<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+				<div class="npc-say-text"><em>*takes a step back, not hostile, just firm — a quiet, direct refusal*</em></div>
+			</div>
+		</div>
+	<<else>>
+		<<sayNpc $tmpGirl>>
+			Sorry, I wouldn't be comfortable there together with you.
+		<</sayNpc>>
+	<</if>>
 <</if>>
 <br /><br />
 <<if _isOk>>

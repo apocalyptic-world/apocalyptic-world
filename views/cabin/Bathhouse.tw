@@ -76,7 +76,7 @@
 								]
 							}>>
 							<<goto 'Bathhouse - threesome'>>
-						<<elseif !_bathGuest.gender && setup.percentageChance(20)>>
+						<<elseif !_bathGuest.gender && !(_bathGuest.traits ?? []).includes('feral') && setup.percentageChance(20)>>
 							<<set $tmpEvent = {
 									id: _bathGuestI
 								}>>
@@ -149,10 +149,11 @@
 </table>
 
 <br /><br />
-<<if !($locationEvents.bathhouse ?? false) && !($game.location.hottub ?? false) && Object.keys(_peopleInBathhouse[0] ?? {}).length >= 2 && setup.percentageChance(100)>>
+<<set _bhKeys = Object.keys(_peopleInBathhouse[0] ?? {})>>
+<<if !($locationEvents.bathhouse ?? false) && !($game.location.hottub ?? false) && _bhKeys.length >= 2 && !($guests[Number(_bhKeys[0].split(':')[1])]?.traits ?? []).includes('feral') && !($guests[Number(_bhKeys[1].split(':')[1])]?.traits ?? []).includes('feral') && setup.percentageChance(100)>>
 	<<set $locationEvents.bathhouse = true>>
 	<<set $tmpEvent = {
-		ids: [Object.keys(_peopleInBathhouse[0])[0], Object.keys(_peopleInBathhouse[0])[1]]
+		ids: [_bhKeys[0], _bhKeys[1]]
 	}>>
 	<<goto 'Bathhouse - hot tub talk'>>
 	<<pickup $backpack 'blueprint_hot_tub' 1>>
@@ -165,6 +166,7 @@
 <</if>>
 <<if !($locationEvents.bathhouse ?? false)>>
 	<<set _hornyNpcsBlackHair = setup.filterNPCs($guests, { hair: 'black', horny_gte: 50, 'virgin': false, race_in: ['white', 'latina']})>>
+	<<set _hornyNpcsBlackHair[0] = (_hornyNpcsBlackHair[0] ?? []).filter(id => !($guests[id]?.traits ?? []).includes('feral'))>>
 	<<if  (_hornyNpcsBlackHair[0] ?? []).length && setup.percentageChance(10) && recall($suppCode)>>
 		<<set $locationEvents.bathhouse = true>>
 		<<set _hornyNpcsBlackHair = _hornyNpcsBlackHair[0].shuffle()>>
