@@ -131,6 +131,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	/* Image area — toggle if both mistress and attendant are present */
 	<<if _hasMistress || _attendantIds.length > 0>>
 		<<if _hasMistress && _attendantIds.length > 0>>
+			<<set $player.baseManagement ??= {}>>
 			<<set $player.baseManagement.basementView ??= 'mistress'>>
 			<div id="basement-view-toggle" style="text-align:center; margin-bottom:6px">
 				View:&nbsp;
@@ -158,9 +159,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	/* Mistress description + approach link */
 	<<if _hasMistress>>
 		<<set _activeBehaviors = []>>
-		<<if ($player.baseManagement.mistressPunish ?? true)>><<set _activeBehaviors.push('punish')>><</if>>
-		<<if ($player.baseManagement.mistressDiscipline ?? false)>><<set _activeBehaviors.push('discipline')>><</if>>
-		<<if ($player.baseManagement.mistressCondition ?? true)>><<set _activeBehaviors.push('condition')>><</if>>
+		<<if ($player.baseManagement?.mistressPunish ?? true)>><<set _activeBehaviors.push('punish')>><</if>>
+		<<if ($player.baseManagement?.mistressDiscipline ?? false)>><<set _activeBehaviors.push('discipline')>><</if>>
+		<<if ($player.baseManagement?.mistressCondition ?? true)>><<set _activeBehaviors.push('condition')>><</if>>
 		<<set _mistressBehavior = _activeBehaviors.length > 0 ? setup.getRandomElement(_activeBehaviors) : 'idle'>>
 		<<set _mistressDescriptions = {
 			punish: [
