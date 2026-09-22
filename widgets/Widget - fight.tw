@@ -47,7 +47,7 @@
 		<<set _enemiesLeftCount = $fight.enemies.length>>
 		<<set _enemies = []>>
 		<<for _enemyI, _enemy range $fight.enemies>>
-			<<if setup.percentageChance(30) && _enemiesLeftCount > 1>>
+			<<if setup.percentageChance(30) && _enemiesLeftCount > 1 && !_enemy.noFlee>>
 				<<set _enemiesLeftCount -= 1>>
 				<<set _fleeTextOpts to [
 					_enemy.name + ' fled the fight before it even started.',

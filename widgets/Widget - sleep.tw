@@ -518,8 +518,6 @@
 	<<run setup.sleepMessages.add('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!', 'weather')>>
 <</if>>
 
-<<include 'sleepCoalFurnace'>>
-
 // electricity
 <<if setup.baseManagement.electricity.storageMax()>>
 	<<set $player.baseManagement.electricityStorage = Math.max(
@@ -531,10 +529,8 @@
 	)>>
 <</if>>
 
-// restore coal furnace building flag after electricity was calculated without it
-<<if _coalFurnaceOffline>>
-	<<set $player.baseManagement.buildings.coal_furnace = 1>>
-<</if>>
+// burn the coal after electricity was calculated, so the last coal still powers this night
+<<include 'sleepCoalFurnace'>>
 
 // Milk warden
 <<if _hasMilkwarden && ($player.milkBarnCheese !== false) && setup.cabinInventory.count('milk') >= 3>>

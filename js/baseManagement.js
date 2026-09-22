@@ -31,6 +31,10 @@ setup.baseManagement = {
                     }
                 }
 
+                if (_building === 'coal_furnace' && !setup.baseManagement.electricity.hasCoal()) {
+                    continue;
+                }
+
                 if (_building === 'windturbine') {
                     let isStorm = variables().weather?.weather === 'storm';
                     if (isStorm || isSandStorm) {
@@ -41,6 +45,9 @@ setup.baseManagement = {
                 production += electricityIncrease;
             }
             return production;
+        },
+        hasCoal: function() {
+            return ((variables().storage?.count('coal') ?? 0) + (variables().backpack?.count('coal') ?? 0)) > 0;
         },
         storage: function() {
             return variables().player?.baseManagement?.electricityStorage ?? 0;
