@@ -1,16 +1,16 @@
-:: Buy a round for everyone [bg-underground] {"position":"2612,1939","size":"100,100"}
+:: Buy a round for everyone [bg-underground]
 <h1 class="ptitle">BAR</h1>
 <br /><br />
 <<you>>Next round is on me!!!<</you>>
 <br /><br />
 <center>
-[img[setup.ImagePath+'places/bar/buy_round1.webp']]
+	<<image 'places/bar/buy_round1.webp'>>
 </center>
 <br /><br />
 Everyone cheers and nods at you as you increased their mood drasticly.
 <br /><br />
 <center>
-[img[setup.ImagePath+'places/bar/buy_round2.webp']]
+	<<image 'places/bar/buy_round2.webp'>>
 </center>
 <br /><br />
 <<if $player.reputation < 50>>
@@ -24,7 +24,7 @@ Everyone cheers and nods at you as you increased their mood drasticly.
 <<if randomInteger(0, 1) === 0>>
 	<br /><br />
 	<center>
-		[img[setup.ImagePath+'places/bar/buy_round_girl' + randomInteger(1,2) + '.webp']]
+		<<image `'places/bar/buy_round_girl' + randomInteger(1,2) + '.webp'`>>
 	</center>
 	<br /><br />
 	Some girl winks at you as she drinks the beer you bought her and comes to you.<br />
@@ -38,8 +38,9 @@ Everyone cheers and nods at you as you increased their mood drasticly.
 		<<set $tmpGirlInvite to false>>
 		<<unset $slaveId, $charId, $guestId>>
 		<<set $tmpGirl.location = 'nightclub'>>
-		<<set $tmpGirlBack = 'Bar'>>
-		<<set $tmpGirlViewBack = 'Bar'>>
+		<<set $tmpGirlBack = 'Bar - invite'>>
+		<<set $tmpGirlViewBack = $tmpGirlBack>>
+		<<set $orgasmsBefore = $tmpGirl.orgasms>>
 		<<fuck $tmpGirl>>
 	<</link>>
 	<<link 'No thanks'>>
@@ -48,6 +49,8 @@ Everyone cheers and nods at you as you increased their mood drasticly.
 <<else>>
 <br /><br />
 <</if>>
-[[Leave|Bar]]
+<<link 'Leave'>>
+	<<goto 'Bar'>>
+<</link>>
 
 

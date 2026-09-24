@@ -1,0 +1,94 @@
+:: Bar - invite
+<h1 class="ptitle">BAR</h1>
+<br /><br />
+<center>
+	<<actionImage $tmpGirl 'dress_up'>>
+</center>
+
+<<include 'NPC info'>>
+
+<br /><br />
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _heOrSheCap = setup.pronounceWhat($tmpGirl, true)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+The stall door stayed shut a while longer. <<=_heOrSheCap>> hooked <<=_hisOrHer>> clothes back into place, pushed <<=_hisOrHer>> hair out of <<=_hisOrHer>> face and checked the result in the cracked mirror over the sinks, making small talk with you the whole time.
+<br /><br />
+<<sayNpc $tmpGirl>>
+	See? I always pay my debts.
+<</sayNpc>>
+<br />
+Somebody rattled the restroom door, swore, and wandered off. Beyond it the bar carried on like nothing had happened.
+<br /><br />
+
+<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<div id="option_invite">
+		<<linkreplace 'Ask to move in with you'>>
+			<<set _invited = true>>
+			<<if $orgasmsBefore === $tmpGirl.orgasms>>
+				<<=_heOrSheCap>> snorted at the mirror without turning around.
+				<br /><br />
+				<<sayNpc $tmpGirl>>
+					You couldn't even finish what you started in here and now you want me to move in? Buy another round instead.
+				<</sayNpc>>
+				<br />
+			<<elseif setup.percentageChance(50)>>
+				<<run $('#option_capture').hide()>>
+				<<=_heOrSheCap>> thought about it for exactly as long as it took to fix <<=_hisOrHer>> hair.
+				<br /><br />
+				<<sayNpc $tmpGirl>>
+					I've been sleeping four to a room down here since the winter. If you've got walls and a door that locks, I'm in.
+				<</sayNpc>>
+				<br />
+				<<=_heOrSheCap>> followed you out through the bar without looking back at anyone.
+				<br /><br />
+				<strong><<=$tmpGirl.name>> moved in as guest</strong>
+				<<run $guests.push($tmpGirl)>>
+				<br />
+			<<else>>
+				<<sayNpc $tmpGirl>>
+					That's sweet. But I've got people down here who'd notice if I stopped showing up. Come find me next time you're buying.
+				<</sayNpc>>
+				<br />
+			<</if>>
+			<br />
+		<</linkreplace>>
+	</div>
+<</if>>
+
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="option_capture">
+		<<set _captureLink = 'Capture ' + _himOrHer>>
+		<<linkreplace _captureLink>>
+			<<set _captured = true>>
+			<<if !_invited>>
+				<<run $('#option_invite').hide()>>
+			<</if>>
+			<center>
+				<<image 'places/nightclub/wc_enslave.webp'>>
+			</center>
+			<br /><br />
+			You waited until <<=_heOrShe>> turned back to the mirror, then took <<=_himOrHer>> from behind, one arm across the chest and a hand clamped over <<=_hisOrHer>> mouth. <<=_heOrSheCap>> fought hard enough to tear <<=_hisOrHer>> own sleeve against the sink, but the bar was loud and nobody came to see what the noise was.
+			<br /><br />
+			The service corridor behind the restrooms ran past the kegs to a door nobody watched. By the time the music changed you were already out in the tunnels with <<=_himOrHer>> over your shoulder.
+			<br /><br />
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+			<<statsAdd 'people_captured'>>
+			<<set $tmpGirl.capture = false>>
+			<<run $slaves.push($tmpGirl)>>
+			<strong><<=$tmpGirl.name>> was taken to your basement</strong>
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+
+<<link 'Leave'>>
+	<<unset $orgasmsBefore>>
+	<<unset $tmpGirl>>
+	<<if _captured>>
+		<<addhours 1>>
+		<<goto 'Basement'>>
+	<<else>>
+		<<goto 'Bar'>>
+	<</if>>
+<</link>>
