@@ -11,7 +11,11 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 
 <br /><br />
 
+<<set _dpGirlAge = randomInteger(18, 24)>>
+<<set _dpFatherAge = _dpGirlAge + randomInteger(19, 30)>>
+
 <<newguy>>
+<<set $tmpGuy.birthDate = setup.getBirthDate(_dpFatherAge)>>
 <<set _dpFather = $tmpGuy>>
 <<sayNpc _dpFather>>
 	She's sick. Getting worse every day. I heard you've got antibiotics. I don't have caps, I don't have food to trade. I have her. She's strong, she'll work hard. Please.
@@ -19,6 +23,7 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 <br />
 
 <<newgirl>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(_dpGirlAge)>>
 <<set $tmpGirl.sick = { days: 2, desc: 'Fever', id: 'wasteland_fever' }>>
 <<set _dpGirl = clone($tmpGirl)>>
 <<unset $tmpGirl>>

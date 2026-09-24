@@ -7,7 +7,7 @@ setup.baseManagement = {
                 if (setup.baseManagement.electricity.list[_building] > 0) {
                     continue;
                 }
-                consumption += Math.abs(((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]));
+                consumption += Math.abs(((variables().player?.baseManagement?.buildings?.[_building] ?? 0) * setup.baseManagement.electricity.list[_building]));
             }
             return consumption;
         },
@@ -20,7 +20,7 @@ setup.baseManagement = {
                 if (setup.baseManagement.electricity.list[_building] < 0) {
                     continue;
                 }
-                let electricityIncrease = ((variables().player?.baseManagement?.buildings[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
+                let electricityIncrease = ((variables().player?.baseManagement?.buildings?.[_building] ?? 0) * setup.baseManagement.electricity.list[_building]);
 
                 if (_building === 'solar_panel') {
                     if (isSandStorm) {
@@ -54,7 +54,7 @@ setup.baseManagement = {
         },
         storageMax: function() {
             let max = 0;
-            let esuEnergy = (variables().player?.baseManagement?.buildings.esu ?? 0) * 50;
+            let esuEnergy = (variables().player?.baseManagement?.buildings?.esu ?? 0) * 50;
 
             return max + esuEnergy;
         },
@@ -84,8 +84,8 @@ setup.baseManagement = {
     defense: {
         description: function()
         {
-            const _woodWalls = (variables().player?.baseManagement?.buildings['wood_wall'] ?? 0);
-            const _stoneWalls = (variables().player?.baseManagement?.buildings['stone_wall'] ?? 0);
+            const _woodWalls = (variables().player?.baseManagement?.buildings?.['wood_wall'] ?? 0);
+            const _stoneWalls = (variables().player?.baseManagement?.buildings?.['stone_wall'] ?? 0);
             if (_stoneWalls >= 100) {
                 return 'Your settlement is fully enclosed by stone walls. Raiders will think twice before attacking.'
             }
@@ -120,7 +120,7 @@ setup.baseManagement = {
         },
         livingHousesCount: function ()
         {
-            return (variables().player?.baseManagement?.buildings['house'] ?? 0); 
+            return (variables().player?.baseManagement?.buildings?.['house'] ?? 0); 
         },
         settlersCount: function ()
         {
