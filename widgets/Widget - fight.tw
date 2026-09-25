@@ -192,6 +192,7 @@
 			<<if setup.night.isDark()>>
 				<<set _allyStrength = Math.max(1, Math.round(_allyStrength * setup.night.DARK_DAMAGE))>>
 			<</if>>
+			<<set _allyStrength = Math.round(_allyStrength * setup.personality.fightMultiplier($fight.allies[_i]))>>
 
 			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
 				<<set $fight.enemies[_randomEnemyKey].attacks = []>>

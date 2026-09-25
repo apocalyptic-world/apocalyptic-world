@@ -7,6 +7,7 @@
 <<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
 	<<set _npc.stats['forest']++>>
 <</if>>
+<<set _npc.stats['forest'] += setup.personality.learnBonus(_npc)>>
 
 // Learn skill
 <<if _npc.stats['forest'] > 100 && !(_npc.skills ?? []).includes('woodcraft')>>
@@ -92,6 +93,7 @@
 	<<if setup.npcInventoryHas(_npc, 'axe')>>
 		<<set _giveWood = _giveWood * 2>>
 	<</if>>
+	<<set _giveWood = setup.personality.output(_npc, _giveWood)>>
 	<<set _totals.wood += _giveWood>>
 	<<if _isStorageAvailable>>
 		<<pickup $storage 'wood' _giveWood>>
