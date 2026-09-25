@@ -1,0 +1,57 @@
+:: Night event - dark building
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<center>
+	<<image 'places/explore/night_building.jpg'>>
+</center>
+<br />
+<<set _nightBack = setup.night.backPassage()>>
+Your light found a building nobody had bothered with in daylight: the front was a collapsed mess, but round the back a door hung open on one hinge. Inside, the dust on the floor was unbroken. Nobody had been in here for a long time.
+<br /><br />
+Shelves, cupboards, a stairwell going up into the dark. Searching it all would take a while, and a light moving from window to window could be seen from a long way off.
+<br /><br />
+<div id="nb_thorough">
+	<<linkreplace 'Search the whole building'>>
+		<<run $('#nb_quick').hide()>>
+		<<addhours 1>>
+		<<if setup.percentageChance(20)>>
+			<<set _nbFound = setup.night.loot('building', 2)>>
+			You went room by room. You had already filled your bag with <strong><<= _nbFound>></strong> when a floorboard creaked somewhere above you, and it was not your foot on it.
+			<br /><br />
+			<<say 'Squatter' setup.ImagePath+'/people/anonguy.png'>>
+				That's my stuff you're carrying. Put it down and get out of my house.
+			<</say>>
+			<br />
+			A man came down the stairs with a knife held low, squinting into your light.
+			<br /><br />
+			<<link 'Fight him'>>
+				<<generateEnemies 1 0 1>>
+				<<fight $enemies _nightBack _nightBack>>
+			<</link>><<link 'Run with what you have'>>
+				<<goto _nightBack>>
+			<</link>>
+		<<else>>
+			<<set _nbFound = setup.night.loot('building', 3)>>
+			You went room by room, into every cupboard and under every bed. It took the best part of an hour, but the building had never been picked over.
+			<br /><br />
+			You found <strong><<= _nbFound>></strong>.
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto _nightBack>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+</div>
+<div id="nb_quick">
+	<<linkreplace 'Grab what is in reach and go'>>
+		<<run $('#nb_thorough').hide()>>
+		<<set _nbFound = setup.night.loot('building', 1)>>
+		You swept the ground floor with your light, took what was in easy reach and left before anyone could wonder about the glow in the windows.
+		<br /><br />
+		You found <strong><<= _nbFound>></strong>.
+		<br /><br />
+		<<link 'Head back'>>
+			<<goto _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>

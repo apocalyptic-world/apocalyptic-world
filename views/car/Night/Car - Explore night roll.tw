@@ -1,0 +1,43 @@
+:: Car - Explore night roll [Place bg-garage]
+<<energy -30>>
+<<set _nightRoll = random(1, 100)>>
+<<set _nightGo = null>>
+<<set _breakdownRisk = (100 - $player.car.health) / 4>>
+<<if setup.percentageChance(_breakdownRisk)>>
+	<<set _nightGo = 'Car breakdown event - Engine Failure'>>
+<<elseif setup.night.trip()?.mode === 'light'>>
+	/* Headlights: you cover ground, and anyone on the road sees you coming */
+	<<if _nightRoll <= 30>>
+		<<set _nightGo = 'Car night event - roadblock'>>
+	<<elseif _nightRoll <= 48>>
+		<<set _nightGo = 'Car explore event - abandoned outpost'>>
+	<<elseif _nightRoll <= 62>>
+		<<set _nightGo = 'Car explore event - hidden cache'>>
+	<</if>>
+<<else>>
+	/* Driving dark: nobody sees you, and you do not see the road either */
+	<<if _nightRoll <= 30>>
+		<<set _nightGo = 'Car night event - dark crash'>>
+	<<elseif _nightRoll <= 50>>
+		<<set _nightGo = 'Night event - sleeping camp'>>
+	<<elseif _nightRoll <= 62>>
+		<<set _nightGo = 'Car explore event - abandoned outpost'>>
+	<<elseif _nightRoll <= 72>>
+		<<set _nightGo = 'Car explore event - hidden cache'>>
+	<</if>>
+<</if>>
+<<if _nightGo>>
+	<<goto _nightGo>>
+<<else>>
+	<h1 class="ptitle">NIGHT</h1>
+	<br /><br />
+	<center>
+		<<image 'places/explore_car/night_road_empty.jpg'>>
+	</center>
+	<br />
+	You drove for hours. The road was empty, the towns you passed were dark and dead, and in the end you turned round and followed your own tracks home with nothing to show for the fuel.
+	<br /><br />
+	<<link 'Back'>>
+		<<goto 'Garage'>>
+	<</link>>
+<</if>>

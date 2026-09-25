@@ -13,9 +13,11 @@
 	<<unset $pregnancyHappening, $pregnancyStreetsHappening, $strangerPregnancyHappening, $scavengingDidntReturn>>
 	<<set $pregnancysHappeningHospital = []>>
 	<<set _energyPenalty = 0>>
+	<<set _lateHours = 0>>
 	<<if $gameDate.getHours() < 8>>
 		<<set _addDay = 0>>
 		<<set _energyPenalty = 8 - $gameDate.getHours()>>
+		<<set _lateHours = $gameDate.getHours()>>
 	<<else>>
 		<<set _addDay = 1>>
 	<</if>>
@@ -33,6 +35,12 @@
 	<<set _isStorageAvailable = ($game.location.shop ?? false)>>
 
   <<set $player.energy = $player.maxEnergy>>
+  <<if ($player.nightTrip ?? false) && _lateHours > 0>>
+    <<set _nightPenalty = _lateHours * setup.night.SLEEP_PENALTY_PER_HOUR>>
+    <<set $player.energy = Math.max($player.energy - _nightPenalty, 10)>>
+    <<run setup.sleepMessages.addMain('You were out until the small hours. <strong>(Energy -' + _nightPenalty + ')</strong>')>>
+  <</if>>
+  <<run delete $player.nightTrip>>
   <<run delete $player?.quests.hottub>>
   <<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
   <<unset $tmpEventWedding>>

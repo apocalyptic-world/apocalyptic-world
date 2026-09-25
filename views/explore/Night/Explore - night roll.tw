@@ -1,0 +1,54 @@
+:: Explore - night roll [Place]
+<<energy -30>>
+<<set _nightRoll = random(1, 100)>>
+<<set _nightGo = null>>
+<<if setup.night.trip()?.mode === 'light'>>
+	/* With a light you find more, but you can be seen */
+	<<if _nightRoll <= 22>>
+		<<set _nightGo = 'Night event - dark building'>>
+	<<elseif _nightRoll <= 40>>
+		<<set _nightGo = 'Night event - lights seen'>>
+	<<elseif _nightRoll <= 50>>
+		<<set _nightGo = 'Night event - feral den'>>
+	<<elseif _nightRoll <= 60>>
+		<<set _nightGo = 'Random event - dead guy #1'>>
+	<<elseif _nightRoll <= 68>>
+		<<set _nightGo = 'Random event - no face #10'>>
+	<<elseif _nightRoll <= 78>>
+		<<set _nightGo = 'Random event - The Strangers by the Fire'>>
+	<</if>>
+<<else>>
+	/* In the dark you are harder to spot, and so is everything else */
+	<<if _nightRoll <= 20>>
+		<<set _nightGo = 'Night event - sleeping camp'>>
+	<<elseif _nightRoll <= 32>>
+		<<set _nightGo = 'Night event - feral den'>>
+	<<elseif _nightRoll <= 40>>
+		<<set _nightGo = 'Night event - moonlit cache'>>
+	<<elseif _nightRoll <= 50>>
+		<<set _nightGo = 'Random event - dead guy #1'>>
+	<<elseif _nightRoll <= 58>>
+		<<set _nightGo = 'Random event - no face #10'>>
+	<<elseif _nightRoll <= 66>>
+		<<set _nightGo = 'Random event - The Strangers by the Fire'>>
+	<</if>>
+<</if>>
+<<if _nightGo>>
+	<<goto _nightGo>>
+<<else>>
+	<h1 class="ptitle">NIGHT</h1>
+	<br /><br />
+	<center>
+		<<image 'places/explore/night_nothing.jpg'>>
+	</center>
+	<br />
+	<<if setup.night.trip()?.mode === 'light'>>
+		You searched until the light guttered. Every house you tried had been stripped long before you got there, and all your light showed you was how empty they were.
+	<<else>>
+		You spent hours moving between shadows, freezing at every sound. Most of it turned out to be the wind. You came back with nothing but sore feet.
+	<</if>>
+	<br /><br />
+	<<link 'Back'>>
+		<<goto 'Outside'>>
+	<</link>>
+<</if>>

@@ -80,6 +80,8 @@
 								<<replace `'#shop-error-'+_i`>>You don't have enough caps.<</replace>>
 							<<elseif _shopItems[_i].qty < 1>>
 								<<replace `'#shop-error-'+_i`>>Quantity needs to be greater than or equal to 1.<</replace>>
+							<<elseif _shopItems[_i].qty > (_shopItem.maxBuy ?? Infinity)>>
+								<<replace `'#shop-error-'+_i`>>You can only buy <<=_shopItem.maxBuy>>.<</replace>>
 							<<else>>
 								<<if $args[3]>>
 									<<run $.wiki($args[3])>>
@@ -97,7 +99,7 @@
 							<</if>>
 						<</link>>
 						<<linkdesc>>
-							<<set _maxcount = Math.floor($player.money/_buyprice)>>
+							<<set _maxcount = Math.min(Math.floor($player.money/_buyprice), _shopItem.maxBuy ?? Infinity)>>
 							(max <<=_maxcount>>)
 					<</linkdesc>>
 				<</if>>

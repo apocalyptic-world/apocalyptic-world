@@ -1,0 +1,58 @@
+:: Car night event - roadblock [bg-garage]
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<center>
+	<<image 'places/explore_car/night_roadblock.jpg'>>
+</center>
+<br />
+Your headlights picked it out a hundred metres ahead: burned-out cars dragged across the road nose to tail, and figures getting up from behind them, shielding their eyes against your lights. They had seen you coming for miles.
+<br /><br />
+<<say 'Raider' setup.ImagePath+'/people/anonguy.png'>>
+	End of the road! Engine off, hands where we can see them, and step out of the car nice and slow.
+<</say>>
+<br />
+<div id="rb_ram">
+	<<linkreplace 'Floor it through the gap'>>
+		<<run $('#rb_fight, #rb_reverse').hide()>>
+		<<set _rbDamage = randomInteger(15, 30)>>
+		<<set $player.car.health = Math.max($player.car.health - _rbDamage, 0)>>
+		You dropped a gear and aimed for the narrowest gap. Metal screamed down both sides of the car and something bounced off the roof, and then you were through with them shouting behind you.
+		<br /><br />
+		<strong>(Car damage -<<= _rbDamage>>%)</strong>
+		<<if setup.percentageChance(40)>>
+			<<set $player.car.headlightsBroken = true>>
+			<br />
+			One of the headlights had not made it through. The road ahead went half dark.
+			<br />
+			<strong>(Headlights broken, fix them in the garage with a car part)</strong>
+		<</if>>
+		<br /><br />
+		<<link 'Drive home'>>
+			<<goto 'Garage'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="rb_fight">
+	<<linkreplace 'Get out and fight'>>
+		<<run $('#rb_ram, #rb_reverse').hide()>>
+		You left the headlights blazing in their eyes and came out of the car ready.
+		<br /><br />
+		<<link 'Fight'>>
+			<<generateEnemies 2 1 1>>
+			<<fight $enemies 'Garage' 'Garage'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="rb_reverse">
+	<<linkreplace 'Reverse and take the long way round'>>
+		<<run $('#rb_ram, #rb_fight').hide()>>
+		<<set $player.car.fuel = Math.max($player.car.fuel - 10, 0)>>
+		You threw it into reverse before they could close the distance and swung onto a side road. The detour took an hour and a lot of fuel, but nobody followed.
+		<br /><br />
+		<strong>(Fuel -10%)</strong>
+		<br /><br />
+		<<link 'Drive home'>>
+			<<goto 'Garage'>>
+		<</link>>
+	<</linkreplace>>
+</div>

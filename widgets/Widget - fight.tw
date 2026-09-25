@@ -17,6 +17,9 @@
 		xtraAllies: $args[4] ?? [],
 		beforeMsgs: []
 	}>>
+	<<if setup.night.isDark()>>
+		<<run $fight.beforeMsgs.push('It is pitch dark. You can barely see who you are hitting.')>>
+	<</if>>
 	
 	<<for _i to 0; _i lt $args[0].length; _i++>>
 		<<set $args[0][_i].hp = 100>>
@@ -71,6 +74,9 @@
 
 <<widget fightAction>>
 	<<set _effectiveStrength = Math.min($player.strength, 300)>>
+	<<if setup.night.isDark()>>
+		<<set _effectiveStrength = Math.round(_effectiveStrength * setup.night.DARK_DAMAGE)>>
+	<</if>>
 	<<if setup.perkHas('drunk') && setup.percentageChance(50)>>
 		<<set $fight.messages.push('You missed your shot because you are drunk')>>
 	<<elseif (typeof $args[1] === 'undefined')>>
@@ -183,6 +189,9 @@
 			<<set _allyHasCrossbow = setup.npcInventoryHas($fight.allies[_i], 'crossbow') && setup.npcInventoryHas($fight.allies[_i], 'arrow')>>
 			<<set _randomEnemyKey = Math.floor(Math.random() * $fight.enemies.length)>>
 			<<set _allyStrength = Math.round(($fight.allies[_i].strength ?? 5) / 3, 0)>>
+			<<if setup.night.isDark()>>
+				<<set _allyStrength = Math.max(1, Math.round(_allyStrength * setup.night.DARK_DAMAGE))>>
+			<</if>>
 
 			<<if typeof $fight.enemies[_randomEnemyKey].attacks === 'undefined'>>
 				<<set $fight.enemies[_randomEnemyKey].attacks = []>>

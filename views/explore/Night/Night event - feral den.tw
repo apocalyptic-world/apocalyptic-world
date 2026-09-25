@@ -1,0 +1,124 @@
+:: Night event - feral den
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<<set _nightBack = setup.night.backPassage()>>
+<<if settings.transEnabled>>
+	<<set _fdRoll = random(1, 100)>>
+	<<if _fdRoll <= 70>>
+		<<newgirl>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<<elseif _fdRoll <= 90>>
+		<<newguy>>
+		<<set $tmpGirl = $tmpGuy>>
+		<<set $tmpGirl.strength = random(40, 70)>>
+	<<else>>
+		<<newtransgirl>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<</if>>
+<<else>>
+	<<if random(1, 100) <= 75>>
+		<<newgirl>>
+		<<set $tmpGirl.strength = random(35, 65)>>
+	<<else>>
+		<<newguy>>
+		<<set $tmpGirl = $tmpGuy>>
+		<<set $tmpGirl.strength = random(40, 70)>>
+	<</if>>
+<</if>>
+<<set $tmpGirl.traits = [...new Set(($tmpGirl.traits ?? []).concat(['feral']))]>>
+<<set $tmpGirl.skills = ($tmpGirl.skills ?? []).filter(s => ['woodcraft', 'scavenger', 'fighter'].includes(s))>>
+<<set $tmpGirl.washDays = 0>>
+<<set $tmpGirl.washBeauty = 0>>
+<<set $tmpGirl.location = 'forest'>>
+<<set $nightFeral = clone($tmpGirl)>>
+<<set _fdHe = setup.pronounceWhat($nightFeral, true)>>
+<<set _fdHim = setup.pronounceWho($nightFeral)>>
+<<set _fdHis = setup.pronounceWhos($nightFeral)>>
+<center>
+	<<image 'places/explore/night_feral_den.jpg'>>
+</center>
+<br />
+Ferals did their hunting at night. You smelled the den before you saw it: a collapsed underpass with a nest of rags in the back and bones scattered across the concrete, some of them far too big to be rabbit.
+<br /><br />
+One of them was awake. <<= _fdHe>> was crouched at the mouth of the underpass, perfectly still, head cocked toward the sound you had just made. <<= _fdHe>> had not seen you yet. <<= _fdHe>> would in a moment.
+<br /><br />
+<div id="fd_leave">
+	<<linkreplace 'Back away slowly'>>
+		<<run $('#fd_fight').hide()>>
+		<<if setup.night.trip()?.mode === 'dark' || setup.percentageChance(50)>>
+			You went back the way you came one careful step at a time. The shape at the underpass sniffed the air, made a low sound in <<= _fdHis>> throat and settled again.
+			<br /><br />
+			<<unset $nightFeral>>
+			<<link 'Head back'>>
+				<<goto _nightBack>>
+			<</link>>
+		<<else>>
+			Your light caught <<= _fdHim>> full in the eyes. <<= _fdHe>> flinched, then came out of the underpass low and fast, straight at the light.
+			<br /><br />
+			<<link 'Fight'>>
+				<<set $enemies = [clone($nightFeral)]>>
+				<<fight $enemies 'Night event - feral den won' _nightBack>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+</div>
+<div id="fd_fight">
+	<<linkreplace 'Rush the den'>>
+		<<run $('#fd_leave').hide()>>
+		You closed the distance before <<= _fdHim>> could turn. <<= _fdHe>> met you halfway, all teeth and nails and noise.
+		<br /><br />
+		<<link 'Fight'>>
+			<<set $enemies = [clone($nightFeral)]>>
+			<<fight $enemies 'Night event - feral den won' _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+:: Night event - feral den won
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<<set _nightBack = setup.night.backPassage()>>
+<<set $tmpGirl = $nightFeral>>
+<<set $tmpGirl.happy = Math.max(($tmpGirl.happy ?? 0) - 20, -100)>>
+<<set $tmpGirl.relationship = Math.max(($tmpGirl.relationship ?? 0) - 30, -100)>>
+<<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 20, 100)>>
+<<set _fdHe = setup.pronounceWhat($tmpGirl, true)>>
+<<set _fdHim = setup.pronounceWho($tmpGirl)>>
+<center>
+	<<image 'places/explore/night_feral_down.jpg'>>
+</center>
+<br />
+It was over. <<= _fdHe>> lay on the concrete breathing hard, not getting up, watching you from under a curtain of matted hair with the flat patience of an animal that had lost a fight and was waiting to see what came next.
+<br /><br />
+<<include 'NPC info'>>
+<br /><br />
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="fdw_capture">
+		<<set _fdCaptureLabel = 'Tie ' + _fdHim + ' up and take ' + _fdHim + ' home'>>
+		<<linkreplace _fdCaptureLabel>>
+			<<run $('#fdw_leave').hide()>>
+			<<statsAdd 'people_captured'>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+			<<run $slaves.push($tmpGirl)>>
+			<<unset $nightFeral>>
+			You bound <<= _fdHim>> with what was left of your rope and walked <<= _fdHim>> home through the dark.
+			<br /><br />
+			<strong>Taken as a slave.</strong>
+			<br /><br />
+			<<link 'Head to the basement'>>
+				<<goto 'Basement'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="fdw_leave">
+	<<linkreplace 'Leave'>>
+		<<run $('#fdw_capture').hide()>>
+		<<unset $nightFeral>>
+		You left <<= _fdHim>> in the den and walked away. <<= _fdHe>> did not follow.
+		<br /><br />
+		<<link 'Head back'>>
+			<<goto _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>

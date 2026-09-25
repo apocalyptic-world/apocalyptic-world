@@ -1,0 +1,64 @@
+:: Night event - lights seen
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<center>
+	<<image 'places/explore/night_lights_seen.jpg'>>
+</center>
+<br />
+<<set _nightBack = setup.night.backPassage()>>
+<<set _lsGuys = 2>>
+<<set _lsGirls = 0>>
+<<if setup.percentageChance(30)>>
+	<<set _lsGirls++>>
+	<<set _lsGuys-->>
+<</if>>
+Your light had been seen. You heard them before you saw them: boots on broken glass, spreading out to either side of you. Then three figures stepped into the edge of the light, weapons already out.
+<br /><br />
+<<say 'Raider' setup.ImagePath+'/people/anonguy.png'>>
+	Look at that. Somebody brought us a light. Put the bag down, friend, and walk away while you still can.
+<</say>>
+<br />
+<div id="ls_douse">
+	<<linkreplace 'Douse the light and slip away'>>
+		<<run $('#ls_fight, #ls_pay').hide()>>
+		<<set $player.nightTrip.mode = 'dark'>>
+		<<if setup.percentageChance($player.int >= 20 ? 70 : 50)>>
+			You killed the light and moved in the same breath. Behind you they cursed and stumbled into each other in the sudden dark. By the time anyone thought to follow, you were two streets away.
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto _nightBack>>
+			<</link>>
+		<<else>>
+			You killed the light and ran, straight into a fence you had not seen. Before you could get over it, hands were on your jacket and there was no running any more. You would have to fight, and now you could not see either.
+			<br /><br />
+			<<link 'Fight them in the dark'>>
+				<<generateEnemies _lsGuys _lsGirls 1>>
+				<<fight $enemies _nightBack _nightBack>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+</div>
+<div id="ls_fight">
+	<<linkreplace 'Fight them'>>
+		<<run $('#ls_douse, #ls_pay').hide()>>
+		You set the light down where it lit them better than it lit you, and went for the nearest one.
+		<br /><br />
+		<<link 'Fight'>>
+			<<generateEnemies _lsGuys _lsGirls 1>>
+			<<fight $enemies _nightBack _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<<if $player.money >= 10>>
+	<div id="ls_pay">
+		<<linkreplace 'Pay them off (10 caps)'>>
+			<<run $('#ls_douse, #ls_fight').hide()>>
+			<<set $player.money -= 10>>
+			You tossed a handful of caps into the light. One of them scooped it up, counted it with a thumb and jerked his head at the dark behind you.
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto _nightBack>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
