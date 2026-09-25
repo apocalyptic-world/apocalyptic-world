@@ -35,5 +35,26 @@ setup.sex = {
     {
         const sexp = Math.max(0, variables().player.sexp ?? 0);
         return 1 + 0.6 * (sexp / (sexp + 150));
+    },
+
+    /**
+     * Afterglow: an NPC who came with the MC (not forced) has a better next day,
+     * +10% work output and a little happiness. Set at the orgasm, read during the
+     * following sleep. The sleep advances $game.day before NPCs are processed, so
+     * "the day that just ended" is day - 1.
+     */
+    AFTERGLOW_OUTPUT: 0.1,
+    AFTERGLOW_HAPPY: 3,
+
+    giveAfterglow: function(npc)
+    {
+        if (npc && !variables().sexForced) {
+            npc.afterglow = variables().game.day;
+        }
+    },
+
+    hasAfterglow: function(npc)
+    {
+        return typeof npc?.afterglow !== 'undefined' && npc.afterglow === variables().game.day - 1;
     }
 }

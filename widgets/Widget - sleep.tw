@@ -22,6 +22,7 @@
 		<<set _addDay = 1>>
 	<</if>>
 	<<set _totals = {caps: 0, food: 0, hay: 0, wood: 0}>>
+	<<set _afterglowNames = []>>
 	
 	<<run 
 		$gameDate.setDate($gameDate.getDate() + _addDay);
@@ -455,6 +456,10 @@
 		<<else>>
 			<<set $characters[_charI].horny = 0>>
 		<</if>>
+		<<if setup.sex.hasAfterglow($characters[_charI])>>
+			<<set $characters[_charI].happy = Math.min(100, ($characters[_charI].happy ?? 0) + setup.personality.happyGain($characters[_charI], setup.sex.AFTERGLOW_HAPPY))>>
+			<<run _afterglowNames.push($characters[_charI].name)>>
+		<</if>>
 
 		// Pregnancy
 		<<if typeof $characters[_charI].pregnancy !== 'undefined'>>
@@ -488,6 +493,9 @@
 		<</if>>
 	<</if>>
 <</for>>
+<<if _afterglowNames.length>>
+	<<run setup.sleepMessages.addMain('Still glowing from last night: ' + _afterglowNames.join(', ') + ' <strong>(+10% work, +' + setup.sex.AFTERGLOW_HAPPY + ' happiness)</strong>')>>
+<</if>>
 
 <<if isMetChar('laura')>>
 	<<set $characters.laura.quests.sampleToday = false>>

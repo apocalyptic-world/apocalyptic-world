@@ -45,6 +45,14 @@ setup.sleep.processNpc = function(npc, opts) {
         else npc.horny = 0;
     }
 
+    // ── Afterglow: came with the MC the day that just ended ─────────────────
+    if (setup.sex.hasAfterglow(npc)) {
+        npc.happy = Math.min(100, (npc.happy ?? 0) + setup.personality.happyGain(npc, setup.sex.AFTERGLOW_HAPPY));
+        (State.temporary.afterglowNames ??= []).push(npc.name);
+    } else if (typeof npc.afterglow !== 'undefined' && npc.afterglow < day - 1) {
+        delete npc.afterglow;
+    }
+
     // ── Slave/guest-only daily ticks ─────────────────────────────────────────
     if (!isCharacter) {
         if (npc.buttplug && npc.anal < 20) npc.anal++;

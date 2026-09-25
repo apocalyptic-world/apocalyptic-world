@@ -55,7 +55,7 @@ setup.personality = {
         }
     },
 
-    /** Job output adjusted for work style. A real result never drops to zero. */
+    /** Job output adjusted for work style and afterglow. A real result never drops to zero. */
     output: function (npc, amount) {
         if (!amount || amount < 1) {
             return amount;
@@ -65,6 +65,7 @@ setup.personality = {
         if (this.has(npc, 'careless')) mult -= 0.1;
         if (this.has(npc, 'cautious')) mult -= 0.1;
         if (this.has(npc, 'consistent') && (npc.jobStreak?.days ?? 0) >= 30) mult += 0.1;
+        if (setup.sex.hasAfterglow(npc)) mult += setup.sex.AFTERGLOW_OUTPUT;
         return mult === 1 ? amount : Math.max(1, this.round(amount * mult));
     },
 
