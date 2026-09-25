@@ -119,7 +119,7 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + setup.sex.calcNpcHornyIncrease($tmpGirl, 20, $sexAction), 100)>>
         <</if>>
         <<set _npcHorny = clone($tmpGirl.horny)>>
         <<showmeter '$npcHornyBar' '_npcHorny / 100'>>

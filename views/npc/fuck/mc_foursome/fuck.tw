@@ -62,13 +62,13 @@
 
         /* horny gains */
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + (_sexActions[$sexAction].hornyGive ?? 20), 100)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + setup.sex.calcNpcHornyIncrease($tmpGirl, (_sexActions[$sexAction].hornyGive ?? 20), $sexAction), 100)>>
         <</if>>
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive2>>
-            <<set $tmpGirl2.horny = Math.min($tmpGirl2.horny + (_sexActions[$sexAction].hornyGive2 ?? 20), 100)>>
+            <<set $tmpGirl2.horny = Math.min($tmpGirl2.horny + setup.sex.calcNpcHornyIncrease($tmpGirl2, (_sexActions[$sexAction].hornyGive2 ?? 20), $sexAction), 100)>>
         <</if>>
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive3>>
-            <<set $tmpGirl3.horny = Math.min($tmpGirl3.horny + (_sexActions[$sexAction].hornyGive3 ?? 20), 100)>>
+            <<set $tmpGirl3.horny = Math.min($tmpGirl3.horny + setup.sex.calcNpcHornyIncrease($tmpGirl3, (_sexActions[$sexAction].hornyGive3 ?? 20), $sexAction), 100)>>
         <</if>>
 
         <<set _npcHorny = clone($tmpGirl.horny)>>
@@ -197,6 +197,11 @@
             <</script>>
         <</if>>
     <</if>>
+<</if>>
+/* Once per render, not per button include: the buttons passage is included twice when buttons_on_top is on */
+<<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
+	<<energy +5>>
+	<<set $player.sexp++>>
 <</if>>
 <br />
 <<include 'Mc foursome buttons'>>

@@ -47,7 +47,7 @@
 	    <<actionImage $tmpGirl $sexAction>>
         <br />
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
-            <<set _npcHornyGained = (_sexActions[$sexAction].hornyGive ?? 20)>>
+            <<set _npcHornyGained = setup.sex.calcNpcHornyIncrease($tmpGirl, (_sexActions[$sexAction].hornyGive ?? 20), $sexAction)>>
             <<set _maxNpcHorny = (_sexActions[$sexAction]?.maxHorny ?? null)>>
             <<if (_maxNpcHorny === null || $tmpGirl.horny < _maxNpcHorny)>>
                 <<set _npcHornyIncreased = true>>
@@ -157,6 +157,11 @@
         }, 400);
         <</script>>
     <</if>>
+<</if>>
+/* Once per render, not per button include: the buttons passage is included twice when buttons_on_top is on */
+<<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
+	<<energy +5>>
+	<<set $player.sexp++>>
 <</if>>
 <br />
 <<include 'Mc fuck buttons'>>
