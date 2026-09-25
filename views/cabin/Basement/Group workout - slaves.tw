@@ -24,6 +24,11 @@ The main workout involved lifting scrap metal, dragging tires, and high-intensit
 		<<set $slaves[_workoutSlaveI].quests ??= {}>>
 		<<set $slaves[_workoutSlaveI].quests.lastInteractionDay = $game.day>>
 	<</if>>
+	<<set _enduranceGain = setup.fight.gainEndurance($slaves[_workoutSlaveI], 60)>>
+	<<if _enduranceGain>>
+		<<=setup.displayName(_workoutSlave)>> endurance increased by 1
+		<br />
+	<</if>>
 <</for>>
 <br />
 As the session ended, you reflected on the day's impact, aware that today's choices could sow seeds of loyalty or defiance.

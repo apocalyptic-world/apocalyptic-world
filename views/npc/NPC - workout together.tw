@@ -17,6 +17,11 @@ You start with some light stretches to warm up your muscles and prevent injury. 
 <<set $tmpGirl.strength = Math.min($tmpGirl.strength + 1, 100)>>
 <strong><<=$tmpGirl.name>> strength increased by 1</strong>
 <br /><br />
+<<set _enduranceGain = setup.fight.gainEndurance($tmpGirl, 100)>>
+<<if _enduranceGain>>
+	<strong><<=$tmpGirl.name>> endurance increased by 1</strong>
+	<br /><br />
+<</if>>
 <<set $tmpGirl.happy += Math.min(100, $tmpGirl.happy + randomInteger(1, 10))>>
 
 <<set _pronSheHe = setup.pronounceWhat($tmpGirl)>>

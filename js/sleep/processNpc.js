@@ -262,6 +262,9 @@ setup.sleep.processNpc = function(npc, opts) {
                     setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s strength');
                     slaves[mi].strength = Math.min(80, (slaves[mi].strength ?? 0) + 1);
                 }
+                if (doDiscipline && setup.percentageChance(15) && setup.fight.gainEndurance(slaves[mi], 80)) {
+                    setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s endurance');
+                }
             }
         }
 
@@ -438,6 +441,14 @@ setup.sleep.processNpc = function(npc, opts) {
                 ' caught a cold from working outside in the freezing cold. She will need ' +
                 days + ' days to recover.</span>'
             );
+        }
+
+        // ── Hard physical work slowly builds endurance ────────────────────────
+        if (!isDayOff && setup.fight.ENDURANCE_JOBS.includes(npc.assignedTo)) {
+            npc.stats.enduranceDays = (npc.stats.enduranceDays ?? 0) + 1;
+            if (npc.stats.enduranceDays % 10 === 0 && setup.fight.gainEndurance(npc, setup.fight.JOB_ENDURANCE_CAP)) {
+                setup.sleepMessages.addJob(npc.name + '\'s endurance improved from hard work <strong>(Endurance ' + npc.endurance + ')</strong>', npc.assignedTo);
+            }
         }
 
         // ── Careless workers sometimes hurt themselves ────────────────────────
