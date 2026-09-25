@@ -999,7 +999,15 @@ setup.settlements = {
 
 	triggerRandomEvent: function (s) {
 		const events = [
-			function () { setup.settlements.modifyRelationship(s, -5, 'Internal conflict'); setup.settlements.logEvent(s, 'A power struggle broke out inside the settlement.'); },
+			function () {
+				// A power struggle cuts both ways: whoever comes out on top decides
+				// how the settlement feels about the player afterwards.
+				const playersFactionWon = window.randomInteger(1, 100) <= 50;
+				setup.settlements.modifyRelationship(s, playersFactionWon ? 5 : -5, 'Internal conflict');
+				setup.settlements.logEvent(s, playersFactionWon
+					? 'A power struggle broke out inside the settlement. The faction that favours you came out on top.'
+					: 'A power struggle broke out inside the settlement. The faction that favours you lost ground.');
+			},
 			function () { const loss = window.randomInteger(1, 5); s.population = Math.max(1, s.population - loss); setup.settlements.logEvent(s, 'Disease outbreak — ' + loss + ' people died.'); },
 			function () { s.resources.food = Math.max(0, (s.resources.food || 0) - window.randomInteger(5, 15)); setup.settlements.logEvent(s, 'Food spoilage or bad harvest.'); },
 			function () {
