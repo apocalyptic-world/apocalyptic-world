@@ -1354,6 +1354,7 @@ setup.settlements = {
 		const slaves = [];
 		for (let i = 0; i < count; i++) {
 			slaves.push({
+				gender: 0,
 				name:  setup.npcFemaleNames[window.randomInteger(0, setup.npcFemaleNames.length - 1)],
 				age:   window.randomInteger(18, 32),
 				price: base + window.randomInteger(-20, 60),

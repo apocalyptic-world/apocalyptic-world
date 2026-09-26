@@ -293,7 +293,7 @@
 			after: function() {}
 		},
 		shop: {
-			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})[0]?.length > 0) && !($game.location.shop ?? false),
+			show: ((isMetChar('vincent') && $characters.vincent.quests.shop_talk) || Object.keys(setup.filterNPCs($guests, {'skills_inc': ['shopkeeper']})).length > 0) && !($game.location.shop ?? false),
 			title: "Shop",
 			description: "Let someone else manage your storage. Sell/Buy items from random travelers.",
 			required: {

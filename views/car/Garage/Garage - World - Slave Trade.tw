@@ -25,13 +25,14 @@ The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't 
 <table class="npc-list">
 <<for _sti = 0; _sti < _stSlaves.length; _sti++>>
 	<<set _stEntry = _stSlaves[_sti]>>
+	<<set _genderClass = 'gender-' + setup.genderClass({ gender: _stEntry.gender ?? 0 })>>
 	<<capture _sti _stEntry>>
 		<tr class="item">
 			<td>
 				<<radiobutton "$game.stBuyIdx" _sti autocheck>>
 			</td>
 			<td style="min-width: 30%">
-				<span style="color: #ccc;"><<= _stEntry.name >></span>
+				<span @class="_genderClass"><<= _stEntry.name >></span>
 				<span style="color: #888; font-size: 0.85em; margin-left: 8px;">Age <<= _stEntry.age >></span>
 			</td>
 			<td>
@@ -87,13 +88,18 @@ The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't 
 	<<set _stSNpc = $slaves[_sts]>>
 	<<set _stSellPrice = $game.stSellPrices[_stSNpc.id]>>
 	<<set _capturedSellId = _stSNpc.id>>
+	<<set _genderClass = 'gender-' + setup.genderClass(_stSNpc)>>
+	<<set _customColorStyle = ''>>
+	<<if typeof _stSNpc.color !== 'undefined'>>
+		<<set _customColorStyle = ' npc-color color-' + _stSNpc.color>>
+	<</if>>
 	<<capture _sts _stSNpc _stSellPrice _capturedSellId>>
 		<tr class="item">
 			<td>
 				<<radiobutton "$game.stSellId" _capturedSellId autocheck>>
 			</td>
 			<td style="min-width: 25%">
-				<span class="gender-f"><<= _stSNpc.name >></span>
+				<span @class="_genderClass + _customColorStyle"><<= _stSNpc.name >></span>
 			</td>
 			<td>
 				<<npcListView _stSNpc _sts 'slave'>>
