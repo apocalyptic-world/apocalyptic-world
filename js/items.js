@@ -39,6 +39,7 @@ setup.items = {
         ],
         underground: [
             {name:'bandage',price:10},
+            {name:'playing_cards',price:20},
             {name:'knife',price:50, ratio:2},
             {name:'solar_panel',price:150, buyprice:180},
             {name:'fertility_potion', price: 15},

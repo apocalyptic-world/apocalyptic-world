@@ -1,0 +1,383 @@
+:: Strip poker [bg-guesthouse]
+<h1 class="ptitle">STRIP POKER</h1>
+<br /><br />
+<<set _She = setup.pronounceWhat($tmpGirl, true)>>
+<<set _she = setup.pronounceWhat($tmpGirl)>>
+<<set _her = setup.pronounceWhos($tmpGirl)>>
+<<set _herObj = setup.pronounceWho($tmpGirl)>>
+<<if $poker.phase === 'ask'>>
+	<center>
+		<<image 'places/guesthouse/strip_poker.jpg'>>
+	</center>
+	<br />
+	You sat down across from <<= setup.displayName($tmpGirl)>> and shuffled the deck where <<= _she>> could see it. It did not take long for <<= _herObj>> to work out what kind of game you had in mind.
+	<br /><br />
+	<<if !setup.poker.herPieces($tmpGirl).length>>
+		<<sayNpc $tmpGirl>>
+			With what? I'm not exactly wearing anything to bet.
+		<</sayNpc>>
+		<br />
+		<<link 'Back'>>
+			<<unset $poker>>
+			<<goto 'NPC view - guest'>>
+		<</link>>
+	<<elseif setup.poker.agrees($tmpGirl)>>
+		<<sayNpc $tmpGirl>>
+			Strip poker? <<if ($tmpGirl.drunk ?? 0) >= 40>>Oh, you're on. Deal.<<else>>Fine. But I'm warning you, I'm good at this.<</if>>
+		<</sayNpc>>
+		<br />
+		<<link 'Deal the cards'>>
+			<<set $player.gambler = ($player.gambler ?? 0) + 1>>
+			<<run setup.poker.start($tmpGirl)>>
+			<<addmins 10>>
+			<<goto 'Strip poker'>>
+		<</link>>
+	<<else>>
+		<<sayNpc $tmpGirl>>
+			Nice try. Ask me again when I like you a lot more. Or when I've had a few.
+		<</sayNpc>>
+		<br />
+		<<link 'Back'>>
+			<<unset $poker>>
+			<<goto 'NPC view - guest'>>
+		<</link>>
+	<</if>>
+<<else>>
+	/* ── The table: her, what you both still have on, and the cards ── */
+	<<set _dollGirl = clone($tmpGirl)>>
+	<<run $poker.herRemoved.forEach(slot => { if (slot !== 'bra') _dollGirl.clothes[slot] = null; })>>
+	<<if $poker.bra && $poker.herRemoved.includes('top') && !$poker.herRemoved.includes('bra')>>
+		<<set _dollGirl.clothes.top = $tmpGirl.clothes.top>>
+	<</if>>
+	<<set _herLeft = setup.poker.herPieces($tmpGirl).filter(slot => !$poker.herRemoved.includes(slot)).map(slot => setup.poker.pieceName($tmpGirl, slot))>>
+	<<set _youLeft = setup.poker.MC_ORDER.slice($poker.youRemoved)>>
+	<div class="poker-table">
+		<div class="poker-doll girl_info_picture">
+			<<set _girlVisual = _dollGirl>>
+			<<include 'NPC visual'>>
+		</div>
+		<div class="poker-status">
+			<strong><<= setup.displayName($tmpGirl)>></strong> is wearing: <<= _herLeft.length ? _herLeft.join(', ') : 'nothing'>>
+			<br />
+			<strong>You</strong> are wearing: <<= _youLeft.length ? _youLeft.join(', ') : 'nothing'>>
+			<br />
+			<span class="poker-hand-count">Hand <<= $poker.hand>></span>
+		</div>
+	</div>
+	<<if $poker.note>>
+		<<= $poker.note>>
+		<br /><br />
+		<<set $poker.note = null>>
+	<</if>>
+
+	<<if $poker.phase === 'draw'>>
+		<<= setup.poker.cardsHtml($poker.her, { faceDown: true })>>
+		<<= setup.poker.cardsHtml($poker.you, { clickable: true, holds: $poker.holds })>>
+		<div class="poker-hand-name"><<= setup.poker.evaluate($poker.you).name>></div>
+		Tap the cards you want to keep, then draw new ones for the rest.
+		<br /><br />
+		<<link 'Draw'>>
+			<<run setup.poker.draw($tmpGirl)>>
+			<<goto 'Strip poker'>>
+		<</link>><<if $backpack.has('alcohol') && ($tmpGirl.pregnancy ?? -1) < 7 && ($tmpGirl.drunk ?? 0) < 90>><<link 'Pour her a drink'>>
+			<<drop $backpack 'alcohol' 1>>
+			<<set $tmpGirl.drunk = Math.min(99, ($tmpGirl.drunk ?? 0) + randomInteger(15, 30))>>
+			<<set $poker.herLimit = Math.max($poker.herLimit, setup.poker.limit($tmpGirl))>>
+			<<set $poker.note = _She + ' knocked it back in one go and slapped the glass down on the table.'>>
+			<<goto 'Strip poker'>>
+		<</link>><</if>><<link 'Quit the game'>>
+			<<set $poker.ending = 'quit'>>
+			<<set $poker.phase = 'result'>>
+			<<set $poker.lost = []>>
+			<<set $poker.revealed = false>>
+			<<goto 'Strip poker'>>
+		<</link>>
+
+	<<elseif $poker.phase === 'bet'>>
+		<<= setup.poker.cardsHtml($poker.her, { faceDown: true })>>
+		<<= setup.poker.cardsHtml($poker.you)>>
+		<div class="poker-hand-name"><<= setup.poker.evaluate($poker.you).name>></div>
+		<<= _She>> swapped <<= $poker.herDrew === 0 ? 'none of ' + _her + ' cards' : $poker.herDrew + ($poker.herDrew === 1 ? ' card' : ' cards')>>.
+		<<set _tell = setup.poker.tell($tmpGirl, $poker.her, $player.gambler)>>
+		<<if _tell>>
+			<em><<= _tell>></em>
+		<</if>>
+		<br /><br />
+		<<link 'Check (loser strips 1)'>>
+			<<if setup.poker.herRaises($tmpGirl, $poker.her)>>
+				<<set $poker.phase = 'herRaise'>>
+			<<else>>
+				<<run setup.poker.showdown($tmpGirl, 1)>>
+			<</if>>
+			<<goto 'Strip poker'>>
+		<</link>><<link 'Raise (loser strips 2)'>>
+			<<if setup.poker.herCalls($tmpGirl, $poker.her)>>
+				<<run setup.poker.showdown($tmpGirl, 2)>>
+			<<else>>
+				<<run setup.poker.fold($tmpGirl, 'her')>>
+			<</if>>
+			<<goto 'Strip poker'>>
+		<</link>><<link 'Fold (you strip 1)'>>
+			<<run setup.poker.fold($tmpGirl, 'you')>>
+			<<goto 'Strip poker'>>
+		<</link>>
+
+	<<elseif $poker.phase === 'herRaise'>>
+		<<= setup.poker.cardsHtml($poker.her, { faceDown: true })>>
+		<<= setup.poker.cardsHtml($poker.you)>>
+		<div class="poker-hand-name"><<= setup.poker.evaluate($poker.you).name>></div>
+		<<sayNpc _dollGirl>>
+			Let's make it interesting. Two pieces.
+		<</sayNpc>>
+		<br />
+		<<link 'Call (loser strips 2)'>>
+			<<run setup.poker.showdown($tmpGirl, 2)>>
+			<<goto 'Strip poker'>>
+		<</link>><<link 'Fold (you strip 1)'>>
+			<<run setup.poker.fold($tmpGirl, 'you')>>
+			<<goto 'Strip poker'>>
+		<</link>>
+
+	<<else>>
+		/* ── Result of the hand, and the ending once someone runs out ── */
+		<<if $poker.revealed>>
+			<<= setup.poker.cardsHtml($poker.her)>>
+			<div class="poker-hand-name"><<= setup.poker.evaluate($poker.her).name>></div>
+			<<= setup.poker.cardsHtml($poker.you)>>
+			<div class="poker-hand-name"><<= setup.poker.evaluate($poker.you).name>></div>
+		<</if>>
+		<<if $poker.ending !== 'quit'>>
+			<<if $poker.winner === 'split'>>
+				It was a split. Nobody took anything off.
+			<<elseif $poker.folded === 'her'>>
+				<<= _She>> folded rather than risk two pieces.
+			<<elseif $poker.folded === 'you'>>
+				You folded.
+			<<elseif $poker.winner === 'you'>>
+				You won the hand.
+			<<else>>
+				<<= _She>> won the hand.
+			<</if>>
+			<br /><br />
+		<</if>>
+		<<if $poker.loser === 'her' && $poker.lost.length>>
+			<<set _lostNames = $poker.lost.map(slot => setup.poker.pieceName($tmpGirl, slot))>>
+			<<= _She>> stood up and took off <<= _her>> <<= _lostNames.join(' and ' + _her + ' ')>>, then sat back down.
+			<br /><br />
+			/* One action image per piece she took off: images/actions/<gender>/poker/<action>/ */
+			<<set _pokerGirl = clone($tmpGirl)>>
+			<<set _pokerGirl.location = 'poker'>>
+			<<for _lostSlot range $poker.lost>>
+				<<set _pokerAction = setup.poker.actionFor($tmpGirl, _lostSlot)>>
+				<<if _pokerAction>>
+					<center>
+						<<actionImage _pokerGirl _pokerAction 'no-text'>>
+					</center>
+					<br />
+				<</if>>
+			<</for>>
+			<<if $poker.ending !== 'herNaked'>>
+				<<set _last = $poker.lost[$poker.lost.length - 1]>>
+				<<sayNpc _dollGirl>>
+					<<if ($tmpGirl.drunk ?? 0) >= 60>>
+						<<= either('Whoops! There it goes.', 'Is it hot in here or is it just me?', 'Keep dealing, I\'m on a roll. Wait. No I\'m not.')>>
+					<<elseif ['top', 'bra'].includes(_last)>>
+						Eyes up here. ...Oh, forget it.
+					<<elseif _last === 'bot' || _last === 'accessories'>>
+						Don't get too excited. The game's not over.
+					<<else>>
+						That one doesn't count. It was barely anything.
+					<</if>>
+				<</sayNpc>>
+				<br />
+			<</if>>
+		<<elseif $poker.loser === 'you' && $poker.lost.length>>
+			You pulled off your <<= $poker.lost.join(' and your ')>>.
+			<br /><br />
+			<<if $poker.ending !== 'youNaked'>>
+				<<sayNpc _dollGirl>>
+					<<= either('Keep going, I want to see what you\'re hiding.', 'Is that all? Deal again.', 'I told you I was good at this.')>>
+				<</sayNpc>>
+				<br />
+			<</if>>
+		<</if>>
+
+		<<if !$poker.ending>>
+			<<link 'Deal the next hand'>>
+				<<run setup.poker.deal()>>
+				<<addmins 10>>
+				<<goto 'Strip poker'>>
+			<</link>>
+
+		<<elseif $poker.ending === 'herNaked'>>
+			<<if !$poker.statsDone>>
+				<<set $poker.statsDone = true>>
+				<<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 2, 100)>>
+				<<set $tmpGirl.corruption = Math.min(($tmpGirl.corruption ?? 0) + 2, 100)>>
+				<<set $tmpGirl.horny = Math.min(($tmpGirl.horny ?? 0) + 15, 100)>>
+			<</if>>
+			That was the last of it. <<= _She>> sat there with nothing left to bet, cards face down on the table, and did not bother to cover up.
+			<br /><br />
+			<<sayNpc _dollGirl>>
+				Well. You won. What are you going to do about it?
+			<</sayNpc>>
+			<br />
+			<<if $player.energy <= 30>>
+				You wanted to, but after the long night you barely had the energy left to stand up, let alone collect.
+				<br /><br />
+			<<else>>
+				<div id="poker_collect">
+					<<linkreplace 'Collect your winnings'>>
+						<<run $('#poker_leave').hide()>>
+						<<set _collect = setup.poker.collect($tmpGirl)>>
+						<<if _collect === 'yes'>>
+							<<set $tmpGirl.rape = false>>
+							<<set $tmpGirlCapture = false>>
+							<<set $tmpGirlInvite = false>>
+							<<set $tmpGirlViewBack = 'NPC view - guest'>>
+							<<set $guests[$guestId] = $tmpGirl>>
+							<<unset $poker>>
+							<<set $sexForced = false>>
+							<<fuck $tmpGirl>>
+						<<else>>
+							<<if _collect === 'type'>>
+								<<set $tmpGirl.relationship = Math.max(($tmpGirl.relationship ?? 0) - 3, -100)>>
+								<<= _She>> snatched <<= _her>> top off the floor, held it against <<= _her>> chest and pushed your hand away when you reached for <<= _herObj>>.
+								<br /><br />
+								<<sayNpc _dollGirl>>
+									Whoa. No. I played for the game, not for that. I don't do guys, remember?
+								<</sayNpc>>
+								<br />
+								<strong><<= setup.displayName($tmpGirl)>> is not attracted to men (Relationship - 3)</strong>
+							<<elseif _collect === 'married'>>
+								<<= _She>> caught your wrist before you got anywhere and shook <<= _her>> head.
+								<br /><br />
+								<<sayNpc _dollGirl>>
+									The show was one thing. I'm married, and that's as far as it goes.
+								<</sayNpc>>
+								<br />
+								<strong><<= setup.displayName($tmpGirl)>> is married to someone else</strong>
+							<<elseif _collect === 'incest'>>
+								<<= _She>> pulled back the moment you moved closer.
+								<br /><br />
+								<<sayNpc _dollGirl>>
+									It was just a game. We're family, that's not happening.
+								<</sayNpc>>
+								<br />
+								<strong>Incest is prohibited by settlement policy</strong>
+							<<else>>
+								<<= _She>> laughed, gathered up <<= _her>> clothes from the floor and kissed you on the cheek on the way past.
+								<br /><br />
+								<<sayNpc _dollGirl>>
+									A deal's a deal, you got the show. That's all you won tonight.
+								<</sayNpc>>
+								<br />
+								<strong>Not enough relationship or <<= _she>>'s not in the mood</strong>
+							<</if>>
+							<br /><br />
+							<<if _collect !== 'incest'>>
+								<<set _forceLabel = 'Force ' + _herObj>>
+								<<link _forceLabel>>
+									<<set $tmpGirl.rape = false>>
+									<<set $tmpGirlCapture = false>>
+									<<set $tmpGirlInvite = false>>
+									<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<set $guests[$guestId] = $tmpGirl>>
+									<<unset $poker>>
+									<<set $sexForced = true>>
+									<<set $wasRaped = true>>
+									<<fuck $tmpGirl>>
+								<</link>><<link 'Call it a night'>>
+									<<set $guests[$guestId] = $tmpGirl>>
+									<<unset $poker>>
+									<<goto 'NPC view - guest'>>
+								<</link>>
+							<<else>>
+								<<link 'Call it a night'>>
+									<<set $guests[$guestId] = $tmpGirl>>
+									<<unset $poker>>
+									<<goto 'NPC view - guest'>>
+								<</link>>
+							<</if>>
+						<</if>>
+					<</linkreplace>>
+				</div>
+			<</if>>
+			<div id="poker_leave">
+				<<link 'Call it a night'>>
+					<<set $guests[$guestId] = $tmpGirl>>
+					<<unset $poker>>
+					<<goto 'NPC view - guest'>>
+				<</link>>
+			</div>
+
+		<<elseif $poker.ending === 'youNaked'>>
+			<<if !$poker.statsDone>>
+				<<set $poker.statsDone = true>>
+				<<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 3, 100)>>
+				<<set $poker.pullsIn = ($tmpGirl.horny ?? 0) >= 60 && $player.energy > 30 && setup.percentageChance(setup.sexChance($tmpGirl))>>
+				<<if !$poker.pullsIn>>
+					<<set $poker.pot = Math.min($player.money, randomInteger(10, 30))>>
+					<<set $player.money -= $poker.pot>>
+				<</if>>
+			<</if>>
+			You were out of clothes and out of luck. <<= _She>> leaned back in <<= _her>> chair and took a long look at you.
+			<br /><br />
+			<<if $poker.pullsIn>>
+				<<sayNpc _dollGirl>>
+					Don't bother getting dressed. Come here.
+				<</sayNpc>>
+				<br />
+				<<link 'Let her have her prize'>>
+					<<set $tmpGirl.rape = false>>
+					<<set $tmpGirlCapture = false>>
+					<<set $tmpGirlInvite = false>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<set $guests[$guestId] = $tmpGirl>>
+					<<unset $poker>>
+					<<fuck $tmpGirl>>
+				<</link>>
+			<<else>>
+				<<sayNpc _dollGirl>>
+					I'll take the pot, thanks. You can keep the view.
+				<</sayNpc>>
+				<br />
+				<<if $poker.pot > 0>>
+					<strong>(-<<= $poker.pot>> caps)</strong>
+					<br /><br />
+				<</if>>
+				<<link 'Get dressed'>>
+					<<set $guests[$guestId] = $tmpGirl>>
+					<<unset $poker>>
+					<<goto 'NPC view - guest'>>
+				<</link>>
+			<</if>>
+
+		<<elseif $poker.ending === 'herLimit'>>
+			<<if !$poker.statsDone>>
+				<<set $poker.statsDone = true>>
+				<<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 1, 100)>>
+			<</if>>
+			<<= _She>> reached for the next piece, stopped, and shook <<= _her>> head with a grin.
+			<br /><br />
+			<<sayNpc _dollGirl>>
+				Nope. That's as far as I go tonight. Maybe next time, if you pour me a few more.
+			<</sayNpc>>
+			<br />
+			<<link 'Call it a night'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+				<<unset $poker>>
+				<<goto 'NPC view - guest'>>
+			<</link>>
+
+		<<else>>
+			You gathered up the cards and called it a night.
+			<br /><br />
+			<<link 'Back'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+				<<unset $poker>>
+				<<goto 'NPC view - guest'>>
+			<</link>>
+		<</if>>
+	<</if>>
+<</if>>

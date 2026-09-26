@@ -27,6 +27,15 @@
 	<</link>>
 <</if>>
 
+<<if [0,2].includes($tmpGirl.gender) && !($tmpGirl.traits ?? []).includes('feral') && setup.getAge($tmpGirl) >= 18 && typeof $tmpGirl.sick === 'undefined' && timeBetween('18:00', '02:00') && setup.cabinInventory.has('playing_cards') && ($tmpGirl.pokerDay ?? -1) !== $game.day>>
+	<<link 'Play strip poker'>>
+		<<set $tmpGirl.pokerDay = $game.day>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<set $poker = { phase: 'ask' }>>
+		<<goto 'Strip poker'>>
+	<</link>>
+<</if>>
+
 <<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20 && !$tmpGirl.groped>>
 	<<set $tmpGirlViewBack = 'NPC view - guest'>>
 	[[Grope|Grope]]
