@@ -38,6 +38,7 @@ Once you have <<= _wantedPron>> secure, you check <<= setup.pronounceWhos($wante
 	<<link _linkName>>
 		<<set $wanted[$wantedId].capture = false>>
 		<<set $slaves.push($wanted[$wantedId])>>
+		<<run setup.npc.addHistory($wanted[$wantedId], 'captured', { reason: 'bounty' })>>
 		<<set $wanted.splice($wantedId, 1)>>
 		<<addhours 2>>
 		<<goto 'Basement'>>
@@ -91,6 +92,7 @@ Once you have <<= _wantedPron>> secure, you check <<= setup.pronounceWhos($wante
 				<</sayNpc>>
         	<<else>>
 				<<set $guests.push($wanted[$wantedId])>>
+				<<run setup.npc.addHistory($wanted[$wantedId], 'invited')>>
 				<<set $wanted[$wantedId].capture = false>>
 				<<set $wanted.splice($wantedId, 1)>>
 				<<set $player.reputation_bounty_hunter-->>

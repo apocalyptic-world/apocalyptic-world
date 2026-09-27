@@ -36,7 +36,7 @@ While <<print $tmpGirl.name>> plows the ground, you lower your hands below her w
 <</if>>
 <<link 'Pull skirt up'>>
   <<set _availableWomen = $guests.filter(npc => npc.id !== $tmpGirl.id && npc.gender === 0 && (npc.likesGuys ?? true) && npc.horny >= 50 && npc.race === 'white' && !setup.family.isBloodToMC(npc))>>
-  <<if recall($suppCode) && $tmpGirl.likesGuys && $tmpGirl.horny >= 30 && !setup.family.isBloodToMC($tmpGirl) && _availableWomen.length >= 0 && setup.percentageChance(50)>>
+  <<if recall($suppCode) && $tmpGirl.likesGuys && $tmpGirl.horny >= 30 && !setup.family.isBloodToMC($tmpGirl) && _availableWomen.length > 0 && setup.percentageChance(50)>>
     <<goto 'Grope - sucking dick'>>
   <<else>>
     <<goto 'Grope - fuck'>>

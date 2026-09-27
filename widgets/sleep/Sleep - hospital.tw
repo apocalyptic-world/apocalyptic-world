@@ -39,6 +39,7 @@
                 <<set _childGender = randomInteger(0,1)>>
                 <<newchild _childGender _mother>>
                 <<set _child = $newChild>>
+                <<run setup.npc.addHistory(_child, 'born', { mother: _mother.id })>>
                 <<if ($game.location.nursery ?? false)>>
                     <<run $nursery.push(_child)>>
                 <<elseif ($game.location.guesthouse ?? false)>>

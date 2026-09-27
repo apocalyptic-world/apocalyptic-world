@@ -295,6 +295,7 @@ He says, his voice carrying the oily slickness of someone used to making bargain
 <<link 'Leave'>>
     <<if typeof _enemyFighterChoose !== "undefined">>
         <<run $slaves.push($fightCage.enemiesLost[_enemyFighterChoose])>>
+        <<run setup.npc.addHistory($fightCage.enemiesLost[_enemyFighterChoose], 'captured', { place: 'the fight cage' })>>
     <</if>>
     <<if $player.reputation < 300>>
         <<set $player.reputation++>>

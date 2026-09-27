@@ -28,6 +28,7 @@ She’s bruised, her clothes torn, but still conscious and defiant. She stands u
                     <br /><br />
                     <strong><<=$tmpGirl.name>> moved in as guest</strong>
                     <<run $guests.push($tmpGirl)>>
+                    <<run setup.npc.addHistory($tmpGirl, 'invited')>>
                 <<else>>
                     Sorry but no. You look like a nice guy but I've got my family and I won't leave them.
                 <</if>>
@@ -50,6 +51,7 @@ She’s bruised, her clothes torn, but still conscious and defiant. She stands u
                 As soon as you take <<=_pronounceWho>> out you quietly leave the Underground city.
                 <br /><br />
                 <<run $slaves.push($tmpGirl)>>
+                <<run setup.npc.addHistory($tmpGirl, 'captured')>>
             <</linkreplace>>
         <</if>>
     </div>

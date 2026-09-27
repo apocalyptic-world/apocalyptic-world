@@ -24,6 +24,7 @@ Curiosity piqued, you cautiously approached and reached out to investigate.
             <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
                 <<link 'Capture her'>>
                 <<run $slaves.push($tmpGirl)>>
+                <<run setup.npc.addHistory($tmpGirl, 'captured')>>
                     <<statsAdd 'people_captured'>>
                     <<goto 'Basement'>>
                 <</link>>
@@ -96,6 +97,7 @@ Curiosity piqued, you cautiously approached and reached out to investigate.
                     <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
                         <<link 'Capture her'>>
                         <<run $slaves.push($tmpGirl)>>
+                        <<run setup.npc.addHistory($tmpGirl, 'captured')>>
                             <<statsAdd 'people_captured'>>
                             <<goto 'Basement'>>
                         <</link>>

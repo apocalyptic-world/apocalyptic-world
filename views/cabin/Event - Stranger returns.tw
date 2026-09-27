@@ -644,12 +644,15 @@
 			<</if>>
 			<<if _srMotherFate === 'guest'>>
 				<<run $guests.push(_sr)>>
+				<<run setup.npc.addHistory(_sr, 'invited')>>
 			<<else>>
 				<<run $slaves.push(_sr)>>
+				<<run setup.npc.addHistory(_sr, 'captured')>>
 			<</if>>
 		<</if>>
 		<<if _srBabyKept>>
 			<<set _srBaby.name = (_srBabyName || _srBaby.name)>>
+			<<run setup.npc.addHistory(_srBaby, 'born', { mother: _sr.id })>>
 			<<if ($game.location.nursery ?? false)>>
 				<<run ($nursery ??= []).push(_srBaby)>>
 			<<elseif ($game.location.guesthouse ?? false)>>

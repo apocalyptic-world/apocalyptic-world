@@ -70,6 +70,7 @@ Just as you have circled around the house and come into her line of sight, she s
 		<<link 'Enslave her'>>
 			<<set $tmpGirl.capture = false>>
 			<<set $slaves.push($tmpGirl)>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured', { reason: 'intruder' })>>
 			<<goto 'Basement'>>
 			<<statsAdd 'people_captured'>>
 		<</link>>

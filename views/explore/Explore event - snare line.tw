@@ -76,6 +76,7 @@ Whoever set these would be back for them soon.
             <<set $tmpGirl.relationship = 35>>
             <<set $player.goodwill++>>
             <<run $guests.push($tmpGirl)>>
+            <<run setup.npc.addHistory($tmpGirl, 'invited')>>
             <<include 'NPC info'>>
             <br /><br />
             <<link 'Leave'>>
@@ -116,6 +117,7 @@ Whoever set these would be back for them soon.
                 <br /><br />
                 <<set $tmpGirl.capture = false>>
                 <<run $slaves.push($tmpGirl)>>
+                <<run setup.npc.addHistory($tmpGirl, 'captured')>>
                 <<addhours 2>>
                 <<statsAdd 'people_captured'>>
                 <<goto 'Basement'>>

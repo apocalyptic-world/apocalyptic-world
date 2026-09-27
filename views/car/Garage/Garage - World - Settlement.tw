@@ -179,6 +179,7 @@
 				<<run _s.captiveId = null; _s.captiveName = null>>
 				<<run setup.settlements.save(setup.settlements.getAll())>>
 				<<run $guests.push($game.capturedGuest.npc)>>
+				<<run setup.npc.addHistory($game.capturedGuest.npc, 'rescued', { place: _s.name })>>
 				<<unset $game.capturedGuest>>
 				<<addmins 60>>
 				<span style="color: #55cc88;">They handed her over at the gate. She looked rough but was breathing. 500 caps lighter.</span>
@@ -222,6 +223,7 @@
 				<<set $player.money -= _ransomTotal>>
 				<<for _rci = 0; _rci < _s.playerCaptives.length; _rci++>>
 					<<run $guests.push(_s.playerCaptives[_rci].npc)>>
+					<<run setup.npc.addHistory(_s.playerCaptives[_rci].npc, 'rescued', { place: _s.name })>>
 				<</for>>
 				<<run setup.settlements.modifyRelationship(_s, 5, 'Ransom paid for captured raiders')>>
 				<<set _s.playerCaptives = []>>

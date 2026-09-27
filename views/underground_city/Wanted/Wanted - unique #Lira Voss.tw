@@ -154,6 +154,7 @@ The picture she painted of him was far different from the version her finder had
 			<</sayNpc>>
     	<<else>>
 			<<set $guests.push($wanted[$wantedId])>>
+			<<run setup.npc.addHistory($wanted[$wantedId], 'invited')>>
 			<<set $wanted[$wantedId].capture = false>>
 			<<set $wanted.splice($wantedId, 1)>>
 			<<set $player.reputation_bounty_hunter-->>

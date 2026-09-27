@@ -45,6 +45,7 @@ The cries grow softer now, almost pleading, as if the child senses the weight of
         <br /><br />
         <<link _linkNameTake>>
             <<set _child.name = _childName>>
+            <<run setup.npc.addHistory(_child, 'taken_in', { place: 'the safe haven' })>>
             <<if ($game.location.nursery ?? false)>>
 				<<run $nursery.push(_child)>>
                 <<goto 'Nursery'>>

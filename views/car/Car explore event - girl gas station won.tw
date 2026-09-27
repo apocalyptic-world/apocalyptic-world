@@ -17,6 +17,7 @@ Approaching her cautiously, you extended a helping hand to lift her from the gro
 			<<set $tmpGirl.capture = false>>
 			<<set $tmpGirl.happy -= 40>>
 			<<set $slaves.push($tmpGirl)>>
+			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 			<<statsAdd 'people_captured'>>
 
 			<<sayNpc $tmpGirl>>
@@ -37,6 +38,7 @@ Approaching her cautiously, you extended a helping hand to lift her from the gro
 			<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 40, 100)>>
 			<<set $tmpGirl.happy += 80>>
 			<<set $guests.push($tmpGirl)>>
+			<<run setup.npc.addHistory($tmpGirl, 'invited')>>
 
 			<<sayNpc $tmpGirl>>
 				You don't need to do that.

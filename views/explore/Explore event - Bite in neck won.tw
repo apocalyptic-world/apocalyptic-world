@@ -28,6 +28,7 @@ She nodded, hugging herself as if trying to hold together the pieces of her comp
                 <br /><br />
                 <strong><<=$tmpGirl.name>> moved in as guest</strong>
                 <<run $guests.push($tmpGirl)>>
+                <<run setup.npc.addHistory($tmpGirl, 'invited')>>
             <<else>>
                 Sorry but no. You look like a nice guy but I've got my family and I won't leave them.
             <</if>>
@@ -48,6 +49,7 @@ She nodded, hugging herself as if trying to hold together the pieces of her comp
             You grab <<=setup.displayName($tmpGirl)>> from the back. <<=setup.pronounceWhat($tmpGirl, true)>> tries to resist but she's very weak.
             <br /><br />
             <<run $slaves.push($tmpGirl)>>
+            <<run setup.npc.addHistory($tmpGirl, 'captured')>>
         <</linkreplace>>
     <</if>>
 </div>

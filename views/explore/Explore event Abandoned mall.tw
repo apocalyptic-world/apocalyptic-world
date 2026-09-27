@@ -60,6 +60,7 @@ Exploring through the city you stumble upon a burnt out shopping center. While n
 					<<if $player.strength > $tmpGirl.strength>>
 						<<set $tmpGirl.capture = false>>
 						<<set $slaves.push($tmpGirl)>>
+						<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 						<<addhours 1>>
 						<<energy -30>>
 						<<statsAdd 'people_captured'>>

@@ -1136,7 +1136,15 @@ setup.npc = {
 			case 'married':          return day + 'Married ' + (withName || 'someone');
 			case 'divorced':         return day + 'Divorced ' + (withName || 'someone');
 			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
-			case 'captured':         return day + 'Captured';
+			case 'captured':         return day + 'Captured'
+				+ (entry.reason === 'bounty' ? ' for a bounty' : entry.reason === 'intruder' ? ' sneaking into the settlement' : '')
+				+ (entry.place ? ' at ' + entry.place : '');
+			case 'rescued':          return day + 'Rescued' + (entry.place ? ' from ' + entry.place : '');
+			case 'taken_in':         return day + 'Taken in' + (entry.place ? ' from ' + entry.place : '');
+			case 'born': {
+				const mother = entry.mother ? setup.npc.findById(entry.mother)?.name : null;
+				return day + 'Born' + (mother ? ' to ' + mother : '');
+			}
 			case 'tribute_accepted': return day + 'Accepted as tribute from ' + (entry.place ?? 'a settlement');
 			case 'tribute_slave':    return day + 'Taken as tribute from ' + (entry.place ?? 'a settlement') + ', made a slave';
 			case 'recruited':        return day + 'Recruited from ' + (entry.place ?? 'a settlement');
@@ -1144,7 +1152,7 @@ setup.npc = {
 			case 'refugee':          return day + 'Arrived as refugee from fallen ' + (entry.place ?? 'a settlement');
 			case 'raider_turned':    return day + 'Offered a home after attacking' + (entry.place ? ' from ' + entry.place : '');
 			case 'invited':          return day + 'Invited to settlement';
-			case 'bought':           return day + 'Bought at slave market';
+			case 'bought':           return day + (entry.place ? 'Bought from ' + entry.place : 'Bought at slave market');
 			case 'moved_to_guest':   return day + 'Moved to guest house';
 			case 'moved_to_slave':   return day + 'Moved to basement';
 			case 'grown_up':         return day + 'Grew up and joined settlement';

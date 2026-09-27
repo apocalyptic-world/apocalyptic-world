@@ -90,7 +90,10 @@ He hands you a small, intricately carved wedding ring.
             }>>
 
             <<run $guests.push(_mother)>>
+            <<run setup.npc.addHistory(_mother, 'invited')>>
             <<run $guests.push(_father)>>
+            <<run setup.npc.addHistory(_father, 'invited')>>
+            <<run setup.npc.addHistory(_children, 'invited')>>
 
             <<if ($game.location.nursery ?? false)>>
 				<<run $nursery.push(_children)>>

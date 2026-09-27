@@ -53,6 +53,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 	<<addmins 60>>
 	<<set _ddGirl.sub = Math.min((_ddGirl.sub ?? 0) + 20, 100)>>
 	<<run $slaves.push(_ddGirl)>>
+	<<run setup.npc.addHistory(_ddGirl, 'bought', { place: _ddS.name })>>
 	You loaded ten units of food onto the cart. The messenger nodded once and left without looking back at <<= _ddGirl.name >>.
 	<br /><br />
 	She stood in your yard looking at nothing in particular.
@@ -103,6 +104,7 @@ The messenger from <<= _ddData.name >> didn't waste words. Their food was gone. 
 	<<run setup.settlements.save(setup.settlements.getAll())>>
 	<<addmins 45>>
 	<<run $guests.push(_ddGirl)>>
+	<<run setup.npc.addHistory(_ddGirl, 'invited')>>
 	You sent the food and told her she was a guest, not property. She blinked at that like she wasn't sure she believed it.
 	<br /><br />
 	<<sayNpc _ddGirl>>
