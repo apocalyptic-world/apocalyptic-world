@@ -56,8 +56,8 @@ Then, it began.
 	<<unset $yearsGrow>>
 	<<if _isAdult>>
 		<<if typeof $childId !== 'undefined'>>
-			<<run $guests.push($tmpGirl)>>
 			<<run setup.npc.addHistory($tmpGirl, 'grown_up')>>
+			<<run $guests.push($tmpGirl)>>
 			<<run $nursery.splice($childId, 1)>>
 			<<goto 'Nursery'>>
 		<<elseif typeof $slaveId !== 'undefined'>>
