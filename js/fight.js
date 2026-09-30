@@ -95,6 +95,23 @@ setup.fight = {
         return (damage > 0 && armor > 0) ? Math.max(1, damage - armor) : damage;
       },
 
+      /**
+       * How well an NPC can look after themselves out in the wasteland, 0-100:
+       * strength (up to 40), endurance (up to 15), scavenger skill (15), knife (5), sword (10),
+       * bow or crossbow (10), body armor (15). Scavenging uses it for the "didn't come home" odds and outcomes.
+       */
+      scavengerCapability: function(npc) {
+        const has = item => setup.npcInventoryHas(npc, item);
+        let score = Math.min(40, Math.round((npc.strength ?? 0) * 0.4));
+        score += Math.min(15, Math.round((npc.endurance ?? 0) * 0.3));
+        if ((npc.skills ?? []).includes('scavenger')) score += 15;
+        if (has('knife')) score += 5;
+        if (has('sword')) score += 10;
+        if (has('bow') || has('crossbow')) score += 10;
+        if (has('body_armor')) score += 15;
+        return Math.min(100, score);
+      },
+
       /** Raise an NPC's endurance by one, up to a cap. Returns true if it went up. */
       gainEndurance: function(npc, cap) {
         const current = npc.endurance ?? 0;

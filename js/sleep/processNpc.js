@@ -366,6 +366,8 @@ setup.sleep.processNpc = function(npc, opts) {
             if ((npc.skills ?? []).includes('scavenger')) chanceNotHome -= 3;
             if (setup.npcInventoryHas(npc, 'knife')) chanceNotHome -= 1;
             if (setup.npcInventoryHas(npc, 'crossbow') || setup.npcInventoryHas(npc, 'bow')) chanceNotHome -= 1;
+            if (setup.npcInventoryHas(npc, 'sword')) chanceNotHome -= 1;
+            if (setup.npcInventoryHas(npc, 'body_armor')) chanceNotHome -= 2;
             chanceNotHome += setup.personality.scavengingRisk(npc);
             chanceNotHome = Math.max(1, chanceNotHome);
 
@@ -381,12 +383,20 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.settlements.logEvent(captor, 'Captured one of the player\'s people during scavenging.');
                 setup.settlements.save(setup.settlements.getAll());
                 setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging. She was taken by ' + captor.name + '.');
-                opts.pendingRemovals.push({ index: npcIndex });
+                opts.pendingRemovals.push({ index: npcIndex, captured: true });
                 opts.shouldSkip = true;
                 return;
             }
 
-            if (setup.percentageChance(chanceNotHome) && sv.scavengingDidntReturn === null && !sv.pregnancyHappening && setup.percentageChance(30)) {
+            const missing = setup.percentageChance(chanceNotHome) && sv.scavengingDidntReturn === null && !sv.pregnancyHappening && setup.percentageChance(30);
+            if (missing && setup.fight.scavengerCapability(npc) >= 60 && setup.percentageChance(40)) {
+                // a capable scavenger who got held up out there finds their own way back, with a bigger haul
+                const lateItem  = randomScavengingItems[window.randomInteger(0, randomScavengingItems.length - 1)];
+                const lateCount = window.randomInteger(2, 4);
+                if (tmp.totals) tmp.totals[lateItem] = (tmp.totals[lateItem] ?? 0) + lateCount;
+                setup.cabinInventory.pickup(lateItem, lateCount);
+                setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging last night, but walked through the gate at dawn, tired and dusty, with <strong>' + lateCount + ' ' + Item.get(lateItem).name + '</strong>. ' + setup.pronounceWhat(npc, true) + ' had to hole up somewhere and wait out the trouble.');
+            } else if (missing) {
                 // Store ID so SC can recompute the correct index after deferred removals
                 opts.scavengingDidntReturnId = npc.id;
             } else {

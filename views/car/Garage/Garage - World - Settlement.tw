@@ -180,6 +180,7 @@
 				<<run setup.settlements.save(setup.settlements.getAll())>>
 				<<run $guests.push($game.capturedGuest.npc)>>
 				<<run setup.npc.addHistory($game.capturedGuest.npc, 'rescued', { place: _s.name })>>
+				<<guestCaptureResolved $game.capturedGuest.npc true>>
 				<<unset $game.capturedGuest>>
 				<<addmins 60>>
 				<span style="color: #55cc88;">They handed her over at the gate. She looked rough but was breathing. 500 caps lighter.</span>
@@ -200,6 +201,7 @@
 			<<set _s.captiveId   = null>>
 			<<set _s.captiveName = null>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<guestCaptureResolved $game.capturedGuest.npc false>>
 			<<unset $game.capturedGuest>>
 			<<goto 'Garage - World - Settlement'>>
 		<</link>>

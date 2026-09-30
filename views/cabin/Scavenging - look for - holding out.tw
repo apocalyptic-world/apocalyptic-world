@@ -1,0 +1,41 @@
+:: Scavenging - look for - holding out
+<h1 class="ptitle">OUTSIDE</h1>
+<br /><br />
+<<set _npc = $guests[$scavengingDidntReturn]>>
+<!-- #### places/outside/scavenging_holding_out.jpg | a capable armed survivor sitting on a broken wall of a ruined building in a post-apocalyptic wasteland at dawn, a makeshift barricade of debris behind them, a bag full of scavenged goods at their feet, weapon resting across their knees, tired but unhurt, dust and smoke in the air, cinematic, realistic --ar 4:2 --p -->
+<center>
+	<<if _npc.gender == 1>>
+		<<image 'places/outside/scavenging_alive_male.jpg' 'sfw'>>
+	<<else>>
+		<<image 'places/outside/scavenging_walk_girl.webp' 'sfw'>>
+	<</if>>
+</center>
+<br /><br />
+After a few hours you found fresh tracks and a thin line of smoke rising from the ruins of an old building. Broken furniture and scrap had been dragged across the doorway into a barricade.
+<br /><br />
+Behind it sat <strong><<=setup.displayName(_npc)>></strong>, tired and covered in dust, but unhurt. A bag full of salvage lay at <<=setup.pronounceWhos(_npc)>> feet, and <<=setup.pronounceWhat(_npc)>> was keeping a close eye on the street.
+<br /><br />
+<<sayNpc _npc>>
+	Raiders came through last night. I couldn't outrun them with all this, so I dug in and waited them out. They lost interest after I put one of them down.
+<</sayNpc>>
+<br />
+<<=ucfirst(setup.pronounceWhat(_npc))>> grinned when <<=setup.pronounceWhat(_npc)>> saw you, clearly proud of having held <<=setup.pronounceWhos(_npc)>> ground. Together you carried the salvage back home.
+<br /><br />
+<<set _holdItem = either(setup.items.scavenging)>>
+<<set _holdCount = random(2, 4)>>
+<<run setup.cabinInventory.pickup(_holdItem, _holdCount)>>
+<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 5, 100)>>
+<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
+<<set _holdEndurance = setup.fight.gainEndurance(_npc, setup.fight.JOB_ENDURANCE_CAP)>>
+<strong>You got <<=_holdCount>> <<=Item.get(_holdItem).name>></strong>
+<br />
+<strong><<=_npc.name>> relationship increased by 5</strong>
+<<if _holdEndurance>>
+	<br />
+	<strong><<=_npc.name>> endurance increased by 1</strong>
+<</if>>
+<br /><br />
+<<set _linkHome = 'Take ' + setup.pronounceWho(_npc) + ' home'>>
+<<link _linkHome>>
+	<<goto 'Outside'>>
+<</link>>

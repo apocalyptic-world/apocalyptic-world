@@ -9,13 +9,18 @@
 <<set _npc = $guests[$scavengingDidntReturn]>>
 You took your stuff and decided to walk in the direction you thought <<=setup.pronounceWho(_npc)>> would go. You walk for a few hours till you reached crossroads and you had to decide where to go next.
 <br /><br />
-<<set _crossroadOptions = [
-	'Scavenging - look for - alive',
-	'Scavenging - look for - not found'
-]>>
-
-<<if !(_npc.skills ?? []).includes('scavenger') || setup.percentageChance(50)>>
+/* Outcomes are weighted by how well the scavenger can look after themselves (setup.fight.scavengerCapability):
+   a strong, armed and armored scavenger is rarely found dead, and at 60+ can be found holding out on their own. */
+<<set _capability = setup.fight.scavengerCapability(_npc)>>
+<<set _crossroadOptions = ['Scavenging - look for - alive', 'Scavenging - look for - not found']>>
+<<if _capability >= 30>>
+	<<run _crossroadOptions.push('Scavenging - look for - alive')>>
+<</if>>
+<<if _capability < 70 && (!(_npc.skills ?? []).includes('scavenger') || setup.percentageChance(50))>>
 	<<run _crossroadOptions.push('Scavenging - look for - dead')>>
+<</if>>
+<<if _capability >= 60>>
+	<<run _crossroadOptions.push('Scavenging - look for - holding out', 'Scavenging - look for - holding out')>>
 <</if>>
 
 <<if [0, 2].includes(_npc.gender)>>
