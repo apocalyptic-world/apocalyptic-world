@@ -39,6 +39,7 @@ setup.items = {
         ],
         underground: [
             {name:'bandage',price:10},
+            {name:'playing_cards',price:20},
             {name:'knife',price:50, ratio:2},
             {name:'solar_panel',price:150, buyprice:180},
             {name:'fertility_potion', price: 15},
@@ -72,7 +73,8 @@ setup.items = {
             {name:'milk', price:4, sell:true, buy:false}
         ],
         race_stadium: [
-            {name:'car_part', price:50, sell:false, buy:true}
+            {name:'car_part', price:50, sell:false, buy:true},
+            {name:'headlight_kit', price:250, sell:false, buy:true, maxBuy:1}
         ]
     },
     /**

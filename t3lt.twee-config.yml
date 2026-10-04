@@ -280,15 +280,29 @@ sugarcube-2:
       name: guestLeft
       container: false
       parameters: 
-      - number
+      - number |+ bool
       description: |-
-        *Syntax:* `<<guestLeft index>>`
+        *Syntax:* `<<guestLeft index [captured]>>`
         
         *Arguments:*
           * `index`: a index in the guest list
+          * `captured`: (optional) true when she was captured - lighter happiness hit on friends
 
         Does guests.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of guest.splice
+    guestCaptureResolved:
+      name: guestCaptureResolved
+      container: false
+      parameters: 
+      - var &+ bool
+      description: |-
+        *Syntax:* `<<guestCaptureResolved npc rescued>>`
+        
+        *Arguments:*
+          * `npc`: the captured npc object ($game.capturedGuest.npc)
+          * `rescued`: true if she came back, false if abandoned
+
+        Restores friends' happiness on rescue, applies the rest of the leave penalty on abandon
     guestRemove:
       name: guestRemove
       container: false

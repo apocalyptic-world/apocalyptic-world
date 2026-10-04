@@ -53,6 +53,7 @@ The mother notices you and pushes the girl behind her, falling to her knees with
 <<if $game.location.basement && $slaves.length < $basementLimit && $player.energy >= 30>>
 	<<link 'Take mother as slave'>>
 		<<run $slaves.push(_mother)>>
+		<<run setup.npc.addHistory(_mother, 'captured', { reason: 'bounty' })>>
 		<<set $player.reputation_bounty_hunter-->>
 		<<set $wanted.splice($wantedId, 1)>>
 		<<goto 'Bar'>>

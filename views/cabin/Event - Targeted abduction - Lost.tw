@@ -19,7 +19,7 @@ They took <<= _taData ? _taData.guestName : 'her'>> while you were down. By the 
 <<if _taS && _taData>>
 	<<set _taGuestIdx2 = $guests.findIndex(function(g) { return g.id === _taData.guestId; })>>
 	<<set _taGuestFull = _taGuestIdx2 >= 0 ? clone($guests[_taGuestIdx2]) : { id: _taData.guestId, name: _taData.guestName, gender: 0 }>>
-	<<if _taGuestIdx2 >= 0>><<guestLeft _taGuestIdx2>><</if>>
+	<<if _taGuestIdx2 >= 0>><<guestLeft _taGuestIdx2 true>><</if>>
 	<<set _taS.captiveId   = _taData.guestId>>
 	<<set _taS.captiveName = _taData.guestName>>
 	<<set $game.capturedGuest = { npc: _taGuestFull, settlementId: _taData.settlementId, settlementName: _taData.settlementName }>>

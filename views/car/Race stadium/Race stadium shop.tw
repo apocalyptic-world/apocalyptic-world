@@ -2,6 +2,9 @@
 <h1 class="ptitle">SHOP</h1>
 <br /><br />
 <<set _shopItems = clone(setup.items.shop.race_stadium)>>
+<<if ($player.car?.headlights ?? false) || setup.cabinInventory.has('headlight_kit')>>
+    <<set _shopItems = _shopItems.filter(shopItem => shopItem.name !== 'headlight_kit')>>
+<</if>>
 <<shop 'race_stadium' _shopItems 'Race stadium shop'>>
 
 <<link 'Leave'>>

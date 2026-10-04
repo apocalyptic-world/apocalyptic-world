@@ -1,0 +1,101 @@
+:: Night event - sleeping camp
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<<set _nightBack = setup.night.backPassage()>>
+<<if random(1, 100) <= 60>>
+	<<newguy>>
+	<<set $tmpGirl = $tmpGuy>>
+<<else>>
+	<<newgirl>>
+<</if>>
+<<set $tmpGirl.strength = random(30, 60)>>
+<<set $tmpGirl.location = 'forest'>>
+<<set $nightSentry = clone($tmpGirl)>>
+<<set _scHe = setup.pronounceWhat($nightSentry, true)>>
+<<set _scShe = setup.pronounceWhat($nightSentry)>>
+<<set _scHim = setup.pronounceWho($nightSentry)>>
+<<set _scHis = setup.pronounceWhos($nightSentry)>>
+<center>
+	<<image 'places/explore/night_sleeping_camp.jpg'>>
+</center>
+<br />
+You saw the glow of their fire long before they could have seen you. By the time you crept close it had burned down to embers, and the camp around it was asleep: four bedrolls, a pile of packs against a broken wall, and one sentry slumped at the edge of the light with <<= _scHis>> chin on <<= _scHis>> chest.
+<br /><br />
+Nobody stirred. In the dark, you were just another shadow.
+<br /><br />
+<div id="sc_steal">
+	<<linkreplace 'Steal from their packs'>>
+		<<run $('#sc_take, #sc_leave').hide()>>
+		<<if setup.percentageChance($player.strength >= 50 ? 80 : 70)>>
+			<<set _scFound = setup.night.loot('camp', 2)>>
+			You went through the packs by feel, one buckle at a time, and backed out of the camp the same way you came in. Nobody so much as rolled over.
+			<br /><br />
+			You got away with <strong><<= _scFound>></strong>.
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto _nightBack>>
+			<</link>>
+		<<else>>
+			A buckle clinked against a tin cup. It was not loud, but it was enough. The sentry's head came up.
+			<br /><br />
+			<<sayNpc $nightSentry>>
+				Hey! Up, all of you! Someone's in the camp!
+			<</sayNpc>>
+			<br />
+			<<link 'Fight'>>
+				<<unset $nightSentry>>
+				<<generateEnemies 2 1 1>>
+				<<fight $enemies _nightBack _nightBack>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+</div>
+<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<div id="sc_take">
+		<<set _scTakeLabel = 'Take the sentry'>>
+		<<linkreplace _scTakeLabel>>
+			<<run $('#sc_steal, #sc_leave').hide()>>
+			/* Asleep, the sentry only has half a chance against you */
+			<<if $player.strength > Math.round($nightSentry.strength / 2)>>
+				<<set $tmpGirl = $nightSentry>>
+				<<set $tmpGirl.happy = Math.max(($tmpGirl.happy ?? 0) - 20, -100)>>
+				<<set $tmpGirl.relationship = Math.max(($tmpGirl.relationship ?? 0) - 30, -100)>>
+				<<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 10, 100)>>
+				<<statsAdd 'people_captured'>>
+				<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+				<<run $slaves.push($tmpGirl)>>
+				<<unset $nightSentry>>
+				You had a hand over <<= _scHis>> mouth before <<= _scShe>> was properly awake. <<= _scHe>> kicked once, then went still when <<= _scShe>> felt the knife. You walked <<= _scHim>> out of the firelight and nobody else woke up.
+				<br /><br />
+				<strong>Taken as a slave.</strong>
+				<br /><br />
+				<<link 'Head to the basement'>>
+					<<goto 'Basement'>>
+				<</link>>
+			<<else>>
+				You got a hand over <<= _scHis>> mouth, but <<= _scShe>> was stronger than <<= _scShe>> looked. <<= _scHe>> twisted free and got a breath.
+				<br /><br />
+				<<sayNpc $nightSentry>>
+					Up! Get up, we've got company!
+				<</sayNpc>>
+				<br />
+				<<link 'Fight'>>
+					<<unset $nightSentry>>
+					<<generateEnemies 2 1 1>>
+					<<fight $enemies _nightBack _nightBack>>
+				<</link>>
+			<</if>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="sc_leave">
+	<<linkreplace 'Leave them sleeping'>>
+		<<run $('#sc_steal, #sc_take').hide()>>
+		<<unset $nightSentry>>
+		You left them to their dreams and slipped back into the dark.
+		<br /><br />
+		<<link 'Head back'>>
+			<<goto _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>

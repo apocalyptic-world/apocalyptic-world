@@ -1,0 +1,34 @@
+:: Explore - night [Place]
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<center>
+	<<image 'places/explore/night_explore.jpg'>>
+</center>
+<br />
+<<set _nightLight = setup.night.lightSource()>>
+You slipped out past the edge of the settlement after dark. The ruins looked different at night. Every doorway was a hole, every shape could have been a person, and somewhere far off something howled and was answered.
+<br /><br />
+<<if _nightLight === 'lantern'>>
+	The lantern hung at your belt, unlit. Light would let you search properly, and it would also tell everyone for a mile exactly where you were.
+<<elseif _nightLight === 'torch'>>
+	You carried a torch, unlit. Light would let you search properly, and it would also tell everyone for a mile exactly where you were.
+<<else>>
+	You had no light with you. Whatever you found tonight, you would find by feel and moonlight.
+<</if>>
+<br /><br />
+<<if _nightLight>>
+	<<set _searchLabel = (_nightLight === 'lantern' ? 'Light the lantern and search' : 'Light a torch and search')>>
+	<<link _searchLabel>>
+		<<run setup.night.useLight(_nightLight)>>
+		<<run setup.night.startTrip('foot', 'light', _nightLight)>>
+		<<goto 'Explore - night roll'>>
+	<</link>><<link 'Keep to the dark'>>
+		<<run setup.night.startTrip('foot', 'dark')>>
+		<<goto 'Explore - night roll'>>
+	<</link>>
+<<else>>
+	<<link 'Keep to the dark'>>
+		<<run setup.night.startTrip('foot', 'dark')>>
+		<<goto 'Explore - night roll'>>
+	<</link>>
+<</if>>

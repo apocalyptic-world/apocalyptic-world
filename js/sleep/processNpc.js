@@ -17,7 +17,7 @@ setup.sleep.processNpc = function(npc, opts) {
             randomScavengingItems } = opts;
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
-    if (isGuest && (npc.relationship < 0 || npc.happy < -70) && setup.getAge(npc) >= 18) {
+    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational'))) && setup.getAge(npc) >= 18) {
         setup.sleepMessages.addMain(
             npc.name + ' was missing in the morning, ' +
             setup.pronounceWhat(npc) + ' probably decided to leave this place.'
@@ -45,6 +45,14 @@ setup.sleep.processNpc = function(npc, opts) {
         else npc.horny = 0;
     }
 
+    // ── Afterglow: came with the MC the day that just ended ─────────────────
+    if (setup.sex.hasAfterglow(npc)) {
+        npc.happy = Math.min(100, (npc.happy ?? 0) + setup.personality.happyGain(npc, setup.sex.AFTERGLOW_HAPPY));
+        (State.temporary.afterglowNames ??= []).push(npc.name);
+    } else if (typeof npc.afterglow !== 'undefined' && npc.afterglow < day - 1) {
+        delete npc.afterglow;
+    }
+
     // ── Slave/guest-only daily ticks ─────────────────────────────────────────
     if (!isCharacter) {
         if (npc.buttplug && npc.anal < 20) npc.anal++;
@@ -67,13 +75,21 @@ setup.sleep.processNpc = function(npc, opts) {
             npc.sub++;
         }
 
-        if (isGuest && ((npc?.quests?.lastInteractionDay ?? 0) + 7) < day && !subDecayDisabled) {
+        if (isGuest && ((npc?.quests?.lastInteractionDay ?? 0) + 7) < day && !subDecayDisabled && !setup.personality.has(npc, 'reserved')) {
             npc.sub = Math.max(0, (npc.sub ?? 0) - 1);
         }
 
-        if (((npc?.quests?.lastInteractionDay ?? 0) + 14) < day && !subDecayDisabled) {
+        const neglectDays = setup.personality.relationshipNeglectDays(npc);
+        if (neglectDays !== null && ((npc?.quests?.lastInteractionDay ?? 0) + neglectDays) < day && !subDecayDisabled) {
             npc.relationship = Math.max(-100, (npc.relationship ?? 0) - 1);
         }
+
+        // Personality: how the guesthouse crowd sits with them, and how long they have held this job
+        if (isGuest) {
+            const crowd = setup.personality.crowdMood(npc);
+            if (crowd) npc.happy = Math.max(-100, Math.min(100, (npc.happy ?? 0) + crowd));
+        }
+        setup.personality.tickJobStreak(npc);
     }
 
     // Pre-tick sick/rest — stored in opts so SC <<include>> jobs see morning values
@@ -92,6 +108,7 @@ setup.sleep.processNpc = function(npc, opts) {
         if (job === 'kitchen' && !isSick) {
             npc.stats.kitchen = (npc.stats.kitchen ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.kitchen++;
+            npc.stats.kitchen += setup.personality.learnBonus(npc);
             if (npc.stats.kitchen > 100 && !(npc.skills ?? []).includes('cook')) {
                 npc.skills = npc.skills || [];
                 npc.skills.push('cook');
@@ -108,6 +125,7 @@ setup.sleep.processNpc = function(npc, opts) {
             } else if (!isGuest || !isDayOff) {
                 npc.stats.garden = (npc.stats.garden ?? 0) + 1;
                 if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.garden++;
+                npc.stats.garden += setup.personality.learnBonus(npc);
                 if (npc.stats.garden > 100 && !(npc.skills ?? []).includes('gardener')) {
                     npc.skills = npc.skills || [];
                     npc.skills.push('gardener');
@@ -120,6 +138,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (npc.gardenDay >= 3) {
                     npc.gardenDay = 0;
                     if ((npc.traits ?? []).includes('hoarder')) foodGive = Math.max(1, Math.floor(foodGive / 2));
+                    foodGive = setup.personality.output(npc, foodGive);
                     if (tmp.totals) tmp.totals.food = (tmp.totals.food ?? 0) + foodGive;
                     setup.cabinInventory.pickup('food', foodGive);
                     const period = isGuest ? '.' : '';
@@ -141,7 +160,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.sleepMessages.addJob(npc.name + ' has dried out and produces no extra milk (for now). Unassigned from barn!', 'milk_barn');
             } else if (hasElectricity) {
                 npc.milkingDay++;
-                npc.happy = Math.max(-100, (npc.happy ?? 0) - 5);
+                npc.happy = Math.max(-100, (npc.happy ?? 0) - setup.personality.happyLoss(npc, 5));
                 if (npc.milkingDay >= 3) {
                     setup.cabinInventory.pickup('milk', 1);
                     setup.sleepMessages.addJob(npc.name + ' filled a pack of milk', 'milk_barn');
@@ -178,7 +197,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.sleepMessages.addJob(npc.name + ' had a close call in the streets last night but made it back.', 'streets');
             }
             if (!(npc.traits ?? []).includes('cumslut') && !(npc.traits ?? []).includes('masochist')) {
-                npc.happy = Math.max(-100, (npc.happy ?? 0) - 5);
+                npc.happy = Math.max(-100, (npc.happy ?? 0) - setup.personality.happyLoss(npc, 5));
             }
             if (window.randomInteger(0, 1) === 0) {
                 if (!npc.chastityBelt) {
@@ -188,7 +207,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (setup.percentageChance(50)) setup.jobs.applyJobAct(npc, 'bj');
                 if (setup.percentageChance(20)) setup.jobs.applyJobAct(npc, 'anal');
 
-                const earned = setup.jobs.getStreetsEarned(npc);
+                const earned = setup.personality.output(npc, setup.jobs.getStreetsEarned(npc));
                 sv.player.money += earned;
                 if (tmp.totals) tmp.totals.caps = (tmp.totals.caps ?? 0) + earned;
 
@@ -213,12 +232,13 @@ setup.sleep.processNpc = function(npc, opts) {
         if (job === 'church' && isGuest && !isSick) {
             npc.stats.church = (npc.stats.church ?? 0) + 1;
             const guests = sv.guests;
+            const lift = setup.personality.has(npc, 'compassionate') ? 2 : 1;
             for (let ci = 0; ci < guests.length; ci++) {
                 if (guests[ci].id !== npc.id) {
-                    guests[ci].happy = Math.min(100, (guests[ci].happy ?? 0) + 1);
+                    guests[ci].happy = Math.min(100, (guests[ci].happy ?? 0) + lift);
                 }
             }
-            setup.sleepMessages.addJob(npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+1 happy to all guests</strong>.', 'church');
+            setup.sleepMessages.addJob(npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+' + lift + ' happy to all guests</strong>.', 'church');
         }
 
         // Mistress: ticks sub/corruption/strength of all slaves per policy
@@ -230,7 +250,7 @@ setup.sleep.processNpc = function(npc, opts) {
             const slaves = sv.slaves;
             for (let mi = 0; mi < slaves.length; mi++) {
                 if (setup.getAge(slaves[mi]) < 18) continue;
-                if (doPunish && setup.percentageChance(30) && slaves[mi].sub < 100) {
+                if (doPunish && setup.percentageChance(setup.personality.has(npc, 'critical') ? 45 : 30) && slaves[mi].sub < 100) {
                     setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s submission');
                     slaves[mi].sub = Math.min(100, (slaves[mi].sub ?? 0) + 1);
                 }
@@ -241,6 +261,9 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (doDiscipline && setup.percentageChance(15) && (slaves[mi].strength ?? 0) < 80) {
                     setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s strength');
                     slaves[mi].strength = Math.min(80, (slaves[mi].strength ?? 0) + 1);
+                }
+                if (doDiscipline && setup.percentageChance(15) && setup.fight.gainEndurance(slaves[mi], 80)) {
+                    setup.sleepMessages.addJob(npc.name + ' increased ' + setup.displayName(slaves[mi]) + '\'s endurance');
                 }
             }
         }
@@ -298,7 +321,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 }
 
                 // Happiness: 20% chance if attendant has Pacifist trait and slave is unhappy
-                if ((npc.traits ?? []).includes('pacifist') && slaves[ai].happy < 50 && setup.percentageChance(20)) {
+                if (((npc.traits ?? []).includes('pacifist') || setup.personality.has(npc, 'compassionate')) && slaves[ai].happy < 50 && setup.percentageChance(20)) {
                     slaves[ai].happy = Math.min(100, (slaves[ai].happy ?? 0) + window.randomInteger(2, 5));
                     setup.sleepMessages.addJob(npc.name + ' pampered ' + setup.displayName(slaves[ai]) + ' while grooming, improving ' + setup.pronounceWhos(slaves[ai]) + ' happiness');
                 }
@@ -318,6 +341,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 count = window.randomInteger(1, 2);
             }
             if (setup.percentageChance(pct)) {
+                count = setup.personality.output(npc, count);
                 if (tmp.totals) tmp.totals[item] = (tmp.totals[item] ?? 0) + count;
                 setup.cabinInventory.pickup(item, count);
                 setup.sleepMessages.addJob(npc.name + ' managed to get ' + count + ' ' + Item.get(item).name + ' while hunting.', 'hunting');
@@ -328,6 +352,7 @@ setup.sleep.processNpc = function(npc, opts) {
         if (job === 'scavenging' && isGuest && !isSick && !isSandStorm && (!isColdSnap || setup.npcInventoryHas(npc, 'coat_wolf'))) {
             npc.stats.scavenging = (npc.stats.scavenging ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.scavenging++;
+            npc.stats.scavenging += setup.personality.learnBonus(npc);
             if (npc.stats.scavenging > 100 && !(npc.skills ?? []).includes('scavenger')) {
                 npc.skills = npc.skills || [];
                 npc.skills.push('scavenger');
@@ -341,6 +366,9 @@ setup.sleep.processNpc = function(npc, opts) {
             if ((npc.skills ?? []).includes('scavenger')) chanceNotHome -= 3;
             if (setup.npcInventoryHas(npc, 'knife')) chanceNotHome -= 1;
             if (setup.npcInventoryHas(npc, 'crossbow') || setup.npcInventoryHas(npc, 'bow')) chanceNotHome -= 1;
+            if (setup.npcInventoryHas(npc, 'sword')) chanceNotHome -= 1;
+            if (setup.npcInventoryHas(npc, 'body_armor')) chanceNotHome -= 2;
+            chanceNotHome += setup.personality.scavengingRisk(npc);
             chanceNotHome = Math.max(1, chanceNotHome);
 
             const hostiles = setup.settlements.getAll().filter(function(s) {
@@ -355,12 +383,20 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.settlements.logEvent(captor, 'Captured one of the player\'s people during scavenging.');
                 setup.settlements.save(setup.settlements.getAll());
                 setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging. She was taken by ' + captor.name + '.');
-                opts.pendingRemovals.push({ index: npcIndex });
+                opts.pendingRemovals.push({ index: npcIndex, captured: true });
                 opts.shouldSkip = true;
                 return;
             }
 
-            if (setup.percentageChance(chanceNotHome) && sv.scavengingDidntReturn === null && !sv.pregnancyHappening && setup.percentageChance(30)) {
+            const missing = setup.percentageChance(chanceNotHome) && sv.scavengingDidntReturn === null && !sv.pregnancyHappening && setup.percentageChance(30);
+            if (missing && setup.fight.scavengerCapability(npc) >= 60 && setup.percentageChance(40)) {
+                // a capable scavenger who got held up out there finds their own way back, with a bigger haul
+                const lateItem  = randomScavengingItems[window.randomInteger(0, randomScavengingItems.length - 1)];
+                const lateCount = window.randomInteger(2, 4);
+                if (tmp.totals) tmp.totals[lateItem] = (tmp.totals[lateItem] ?? 0) + lateCount;
+                setup.cabinInventory.pickup(lateItem, lateCount);
+                setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging last night, but walked through the gate at dawn, tired and dusty, with <strong>' + lateCount + ' ' + Item.get(lateItem).name + '</strong>. ' + setup.pronounceWhat(npc, true) + ' had to hole up somewhere and wait out the trouble.');
+            } else if (missing) {
                 // Store ID so SC can recompute the correct index after deferred removals
                 opts.scavengingDidntReturnId = npc.id;
             } else {
@@ -368,12 +404,20 @@ setup.sleep.processNpc = function(npc, opts) {
                 let giveCount = 1;
                 if ((npc.skills ?? []).includes('scavenger') && setup.percentageChance(50)) giveCount++;
                 if ((npc.traits ?? []).includes('hoarder')) giveCount = Math.max(0, Math.floor(giveCount / 2));
+                const inventiveBonus = giveCount > 0 && setup.personality.has(npc, 'inventive');
+                if (inventiveBonus) giveCount++;
                 if (giveCount > 0) {
                     if (tmp.totals) tmp.totals[randItem] = (tmp.totals[randItem] ?? 0) + giveCount;
                     setup.cabinInventory.pickup(randItem, giveCount);
-                    setup.sleepMessages.addJob(npc.name + ' managed to collect <strong>' + giveCount + ' ' + Item.get(randItem).name + '</strong> while scavenging.', 'scavenging');
+                    setup.sleepMessages.addJob(npc.name + ' managed to collect <strong>' + giveCount + ' ' + Item.get(randItem).name + '</strong> while scavenging.' + (inventiveBonus ? ' <em>(inventive: +1)</em>' : ''), 'scavenging');
                 } else {
                     setup.sleepMessages.addJob(npc.name + ' went scavenging but kept everything they found.', 'scavenging');
+                }
+                const rareFind = setup.personality.curiousFind(npc);
+                if (rareFind) {
+                    if (tmp.totals) tmp.totals[rareFind] = (tmp.totals[rareFind] ?? 0) + 1;
+                    setup.cabinInventory.pickup(rareFind, 1);
+                    setup.sleepMessages.addJob(npc.name + ' (curious) poked around where others would not and came back with <strong class="iitem">' + Item.get(rareFind).name + '</strong>.', 'scavenging');
                 }
             }
 
@@ -389,6 +433,7 @@ setup.sleep.processNpc = function(npc, opts) {
     if (isSick) {
         npc.sick.days--;
         if (hasWorkingHospital) npc.sick.days--;
+        if (setup.personality.has(npc, 'resilient')) npc.sick.days--;
         if (npc.sick.days <= 0) delete npc.sick;
     }
 
@@ -408,12 +453,26 @@ setup.sleep.processNpc = function(npc, opts) {
             );
         }
 
+        // ── Hard physical work slowly builds endurance ────────────────────────
+        if (!isDayOff && setup.fight.ENDURANCE_JOBS.includes(npc.assignedTo)) {
+            npc.stats.enduranceDays = (npc.stats.enduranceDays ?? 0) + 1;
+            if (npc.stats.enduranceDays % 10 === 0 && setup.fight.gainEndurance(npc, setup.fight.JOB_ENDURANCE_CAP)) {
+                setup.sleepMessages.addJob(npc.name + '\'s endurance improved from hard work <strong>(Endurance ' + npc.endurance + ')</strong>', npc.assignedTo);
+            }
+        }
+
+        // ── Careless workers sometimes hurt themselves ────────────────────────
+        if (!isSick && !isDayOff && typeof npc.sick === 'undefined') {
+            setup.personality.workAccident(npc);
+        }
+
         // ── Rest tick ─────────────────────────────────────────────────────────
         if (typeof npc.rest !== 'undefined') {
             const unhappyJobs = ['milk_barn', 'nightclub', 'quarry', 'streets'];
-            const gain = unhappyJobs.includes(npc.assignedTo) ? 5 : 2;
+            const gain = setup.personality.happyGain(npc, unhappyJobs.includes(npc.assignedTo) ? 5 : 2);
             npc.happy = Math.min(100, (npc.happy ?? 0) + gain);
             npc.rest.days--;
+            if (setup.personality.has(npc, 'energetic')) npc.rest.days--;
             if (npc.rest.days <= 0) delete npc.rest;
         }
     }

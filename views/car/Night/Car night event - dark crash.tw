@@ -1,0 +1,46 @@
+:: Car night event - dark crash [bg-garage]
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<center>
+	<<image 'places/explore_car/night_dark_crash.jpg'>>
+</center>
+<br />
+<<set _dcDamage = randomInteger(10, 25)>>
+<<set $player.car.health = Math.max($player.car.health - _dcDamage, 0)>>
+Driving without lights, you never saw it. One moment the road was a grey ribbon under the moon, the next the car slammed into something big and dark lying across the lane. The wheel jerked out of your hands and the car shuddered to a stop against the wreck of an old truck.
+<br /><br />
+<strong>(Car damage -<<= _dcDamage>>%)</strong>
+<<if setup.percentageChance(25)>>
+	<<set $player.car.headlightsBroken = true>>
+	<br />
+	When you checked the front, one of the headlights was smashed.
+	<br />
+	<strong>(Headlights broken, fix them in the garage with a car part)</strong>
+<</if>>
+<br /><br />
+The truck you had hit had been there a long time, but nobody seemed to have stripped it.
+<br /><br />
+<div id="dc_search">
+	<<linkreplace 'Search the wreck'>>
+		<<run $('#dc_drive').hide()>>
+		<<addmins 30>>
+		<<set _dcFound = setup.night.loot('wreck', 2)>>
+		You worked through the truck by moonlight, the cab first and then the cargo bed.
+		<br /><br />
+		You salvaged <strong><<= _dcFound>></strong>.
+		<br /><br />
+		<<link 'Limp home'>>
+			<<goto 'Garage'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="dc_drive">
+	<<linkreplace 'Get the car moving and go home'>>
+		<<run $('#dc_search').hide()>>
+		You backed off the wreck, checked that the engine still ran and crawled home at walking pace.
+		<br /><br />
+		<<link 'Limp home'>>
+			<<goto 'Garage'>>
+		<</link>>
+	<</linkreplace>>
+</div>

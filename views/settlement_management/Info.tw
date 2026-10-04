@@ -151,7 +151,7 @@
 	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
 		<<set _settlementStatsData.birthday.push(_statsNpc.name)>>
 	<</if>>
-	<<set _annivEntry = (_statsNpc.history ?? []).find(h => h.event === 'married')>>
+	<<set _annivEntry = setup.npc.currentMarriage(_statsNpc)>>
 	<<if _annivEntry && setup.npc.isAnniversary(_statsNpc)>>
 		<<set _annivYears = setup.npc.yearsMarried(_statsNpc)>>
 		<<if _annivEntry.with === 'mc'>>

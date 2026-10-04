@@ -27,6 +27,15 @@
 	<</link>>
 <</if>>
 
+<<if [0,2].includes($tmpGirl.gender) && !($tmpGirl.traits ?? []).includes('feral') && setup.getAge($tmpGirl) >= 18 && typeof $tmpGirl.sick === 'undefined' && timeBetween('18:00', '02:00') && setup.cabinInventory.has('playing_cards') && ($tmpGirl.pokerDay ?? -1) !== $game.day>>
+	<<link 'Play strip poker'>>
+		<<set $tmpGirl.pokerDay = $game.day>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<set $poker = { phase: 'ask' }>>
+		<<goto 'Strip poker'>>
+	<</link>>
+<</if>>
+
 <<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20 && !$tmpGirl.groped>>
 	<<set $tmpGirlViewBack = 'NPC view - guest'>>
 	[[Grope|Grope]]
@@ -278,6 +287,27 @@
 		<<set $guests[$guestId] = $tmpGirl>>
 		<<assignedTo $tmpGirl 'none'>>
 		<<goto 'Guest move to basement'>>
+	<</link>>
+<</if>>
+
+/* Straight to the settlement (no basement detour). Not for the MC's spouse - she would be gone for good. */
+<<if setup.baseManagement.population.hasFreeHouse() && setup.NpcInHome($tmpGirl) && !($tmpGirl.married && $tmpGirl.family?.husband === 'mc')>>
+	<<set _linkName = 'Move ' + _himOrHer + ' to the settlement'>>
+	<<link `_linkName`>>
+		<<dialog 'Move to the settlement'>>
+			<<=setup.displayName($tmpGirl)>> will get a house in the settlement and live there as one of the settlers. You won't be able to visit <<=setup.pronounceWho($tmpGirl)>> as a guest anymore.
+			<br /><br />
+			Are you sure?
+			<br />
+			<<link 'Yes'>>
+				<<set $guests[$guestId] = $tmpGirl>>
+				<<assignedTo $tmpGirl 'none'>>
+				<<dialogclose>>
+				<<goto 'Guest move to settlement'>>
+			<</link>><<link 'No'>>
+				<<dialogclose>>
+			<</link>>
+		<</dialog>>
 	<</link>>
 <</if>>
 

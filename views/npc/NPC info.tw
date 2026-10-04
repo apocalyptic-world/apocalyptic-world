@@ -88,6 +88,7 @@
 			
 			<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined' || _isSlaveMarket>>
 				<span>Strength: <<=$tmpGirl.strength ?? 0>></span>
+				<span>Endurance: <<=$tmpGirl.endurance ?? 0>></span>
 			<</if>>
 			<<if _isLegalAge>>
 				<div>Submission: <<= $tmpGirl.sub ?? 0>></div>
@@ -165,7 +166,13 @@
 						Dislikes: <<=$tmpGirl.dislikes>>
 					</div>
 					<div>
-						Personality: <<=$tmpGirl.personality>>
+						Personality:
+						<<for _pTrait range [].concat($tmpGirl.personality ?? [])>>
+							<div class="trait tooltip">
+								<<=_pTrait>>
+								<span class="tooltiptext"><<=setup.personality.info[_pTrait] ?? ''>></span>
+							</div>
+						<</for>>
 					</div>
 				<</if>>
 				<div>

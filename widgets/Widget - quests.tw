@@ -38,7 +38,13 @@
 	]}>>
 	<<if $args[0] == 'guests'>>
 		<<run $guests.push(_mother, _daughter1, _daughter2)>>
+		<<run setup.npc.addHistory(_mother, 'invited')>>
+		<<run setup.npc.addHistory(_daughter1, 'invited')>>
+		<<run setup.npc.addHistory(_daughter2, 'invited')>>
 	<<else>>
 		<<run $slaves.push(_mother, _daughter1, _daughter2)>>
+		<<run setup.npc.addHistory(_mother, 'captured')>>
+		<<run setup.npc.addHistory(_daughter1, 'captured')>>
+		<<run setup.npc.addHistory(_daughter2, 'captured')>>
 	<</if>>
 <</widget>>

@@ -13,13 +13,16 @@
 	<<unset $pregnancyHappening, $pregnancyStreetsHappening, $strangerPregnancyHappening, $scavengingDidntReturn>>
 	<<set $pregnancysHappeningHospital = []>>
 	<<set _energyPenalty = 0>>
+	<<set _lateHours = 0>>
 	<<if $gameDate.getHours() < 8>>
 		<<set _addDay = 0>>
 		<<set _energyPenalty = 8 - $gameDate.getHours()>>
+		<<set _lateHours = $gameDate.getHours()>>
 	<<else>>
 		<<set _addDay = 1>>
 	<</if>>
 	<<set _totals = {caps: 0, food: 0, hay: 0, wood: 0}>>
+	<<set _afterglowNames = []>>
 	
 	<<run 
 		$gameDate.setDate($gameDate.getDate() + _addDay);
@@ -33,6 +36,12 @@
 	<<set _isStorageAvailable = ($game.location.shop ?? false)>>
 
   <<set $player.energy = $player.maxEnergy>>
+  <<if ($player.nightTrip ?? false) && _lateHours > 0>>
+    <<set _nightPenalty = _lateHours * setup.night.SLEEP_PENALTY_PER_HOUR>>
+    <<set $player.energy = Math.max($player.energy - _nightPenalty, 10)>>
+    <<run setup.sleepMessages.addMain('You were out until the small hours. <strong>(Energy -' + _nightPenalty + ')</strong>')>>
+  <</if>>
+  <<run delete $player.nightTrip>>
   <<run delete $player?.quests.hottub>>
   <<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
   <<unset $tmpEventWedding>>
@@ -245,7 +254,7 @@
 			<<run setup.sleepMessages.add('Your slave <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
 		// Anniversary
-		<<set _annivEntry = (_npc.history ?? []).find(h => h.event === 'married')>>
+		<<set _annivEntry = setup.npc.currentMarriage(_npc)>>
 		<<if _annivEntry && setup.npc.isAnniversary(_npc)>>
 			<<set _seenAnnivPairs = _seenAnnivPairs ?? new Set()>>
 			<<set _annivYears = setup.npc.yearsMarried(_npc)>>
@@ -359,7 +368,7 @@
 			<<run setup.sleepMessages.add('Your guest <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
 		// Anniversary
-		<<set _annivEntry = (_npc.history ?? []).find(h => h.event === 'married')>>
+		<<set _annivEntry = setup.npc.currentMarriage(_npc)>>
 		<<if _annivEntry && setup.npc.isAnniversary(_npc)>>
 			<<set _seenAnnivPairs = _seenAnnivPairs ?? new Set()>>
 			<<set _annivYears = setup.npc.yearsMarried(_npc)>>
@@ -379,7 +388,7 @@
 
 // Deferred guest removals — reverse order preserves lower indices
 <<for _remI = _sleepGuestOpts.pendingRemovals.length - 1; _remI >= 0; _remI-->>
-	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index>>
+	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index _sleepGuestOpts.pendingRemovals[_remI].captured>>
 <</for>>
 // Resolve scavenging-didn't-return to a post-removal index via guest id
 <<if _sleepGuestOpts.scavengingDidntReturnId>>
@@ -447,6 +456,10 @@
 		<<else>>
 			<<set $characters[_charI].horny = 0>>
 		<</if>>
+		<<if setup.sex.hasAfterglow($characters[_charI])>>
+			<<set $characters[_charI].happy = Math.min(100, ($characters[_charI].happy ?? 0) + setup.personality.happyGain($characters[_charI], setup.sex.AFTERGLOW_HAPPY))>>
+			<<run _afterglowNames.push($characters[_charI].name)>>
+		<</if>>
 
 		// Pregnancy
 		<<if typeof $characters[_charI].pregnancy !== 'undefined'>>
@@ -480,6 +493,9 @@
 		<</if>>
 	<</if>>
 <</for>>
+<<if _afterglowNames.length>>
+	<<run setup.sleepMessages.addMain('Still glowing from last night: ' + _afterglowNames.join(', ') + ' <strong>(+10% work, +' + setup.sex.AFTERGLOW_HAPPY + ' happiness)</strong>')>>
+<</if>>
 
 <<if isMetChar('laura')>>
 	<<set $characters.laura.quests.sampleToday = false>>
@@ -518,8 +534,6 @@
 	<<run setup.sleepMessages.add('This time of the month, around the full moon, you may have luck with the wolves. Visit the forest!', 'weather')>>
 <</if>>
 
-<<include 'sleepCoalFurnace'>>
-
 // electricity
 <<if setup.baseManagement.electricity.storageMax()>>
 	<<set $player.baseManagement.electricityStorage = Math.max(
@@ -531,10 +545,8 @@
 	)>>
 <</if>>
 
-// restore coal furnace building flag after electricity was calculated without it
-<<if _coalFurnaceOffline>>
-	<<set $player.baseManagement.buildings.coal_furnace = 1>>
-<</if>>
+// burn the coal after electricity was calculated, so the last coal still powers this night
+<<include 'sleepCoalFurnace'>>
 
 // Milk warden
 <<if _hasMilkwarden && ($player.milkBarnCheese !== false) && setup.cabinInventory.count('milk') >= 3>>

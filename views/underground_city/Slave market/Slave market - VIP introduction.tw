@@ -57,6 +57,7 @@ Suddenly, a woman emerges from the adjacent room, all dressed in black with a la
 				<<if $slaves.length < $basementLimit>>
 					<<linkreplace 'Buy her'>>
 						<<run $slaves.push($tmpGirl)>>
+						<<run setup.npc.addHistory($tmpGirl, 'bought')>>
 						<<set _bought = true>>
 						<<run $('#option_buy').hide()>>
 						<<set $player.money -= 300>>

@@ -345,8 +345,8 @@ setup.getNpcsForLocations = function (persons, locations) {
 
 setup.getBirthDate = function(yearsAgo) {
     var now = variables().gameDate;
-    var earliestDate = new Date(now.getFullYear() - yearsAgo, 0, 1);
-    var latestDate = new Date(now.getFullYear() - yearsAgo + 1, 0, 0);
+    var latestDate = new Date(now.getFullYear() - yearsAgo, now.getMonth(), now.getDate());
+    var earliestDate = new Date(now.getFullYear() - yearsAgo - 1, now.getMonth(), now.getDate() + 1);
     var randomTime = earliestDate.getTime() + Math.random() * (latestDate.getTime() - earliestDate.getTime());
     return new Date(randomTime);
 };

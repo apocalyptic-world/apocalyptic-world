@@ -108,6 +108,7 @@ Inside: canned food, a box of rounds, and a fuel can.
                 <<run $('#abw_letgo').hide()>>
                 <<set $tmpGirl.relationship = 50>>
                 <<run $guests.push($tmpGirl)>>
+                <<run setup.npc.addHistory($tmpGirl, 'invited')>>
                 <<include 'NPC info'>>
                 <br /><br />
                 <<link 'Leave'>>
@@ -135,6 +136,7 @@ Inside: canned food, a box of rounds, and a fuel can.
             <<energy -30>>
             <<addhours 2>>
             <<run $slaves.push($tmpGirl)>>
+            <<run setup.npc.addHistory($tmpGirl, 'captured')>>
             <<statsAdd 'people_captured'>>
             <<goto 'Basement'>>
         <</linkreplace>>

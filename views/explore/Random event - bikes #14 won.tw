@@ -37,6 +37,7 @@ As you finish off the guys surrounding the girl, you're prepared to also fight t
 	<<link 'Capture her'>>
 		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship - 30, 100)>>
 		<<run $slaves.push($tmpGirl)>>
+		<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 		<<goto 'Basement'>>
 	<</link>>
 <</if>>
@@ -44,6 +45,7 @@ As you finish off the guys surrounding the girl, you're prepared to also fight t
 	<<link 'Tell her that she can live at your place'>>
 		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>
 		<<run $guests.push($tmpGirl)>>
+		<<run setup.npc.addHistory($tmpGirl, 'invited')>>
 		<<goto 'Guest house'>>
 	<</link>>
 <</if>>

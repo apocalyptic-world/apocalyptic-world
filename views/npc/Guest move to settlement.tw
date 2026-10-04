@@ -1,0 +1,29 @@
+:: Guest move to settlement
+<h1 class="ptitle">SETTLEMENT</h1>
+<br /><br />
+<center>
+	<<image 'places/cabin/new_settlers2.jpg'>>
+</center>
+<br />
+You told <strong><<=setup.displayName($tmpGirl)>></strong> that it was time for <<=setup.pronounceWho($tmpGirl)>> to have a place of <<=setup.pronounceWhos($tmpGirl)>> own. The guest house had been a good start, but the settlement needed people who would stay, work and build a life inside its walls.
+<br /><br />
+<<sayNpc $tmpGirl>>
+	A house of my own? Really?
+<</sayNpc>>
+<br />
+You walked <<=setup.pronounceWho($tmpGirl)>> down the worn path through the heart of the settlement to one of the empty houses. The roof was patched in places, but it held, and the door swung open with a soft creak.
+<br /><br />
+<<=ucfirst(setup.pronounceWhat($tmpGirl))>> stepped inside, looked around the bare room and smiled. It wasn't much, but it was <<=setup.pronounceWhos($tmpGirl)>>.
+<br /><br />
+<strong><<=setup.displayName($tmpGirl)>> moved to the settlement.</strong>
+<br /><br />
+<<link 'Continue'>>
+	<<set $player.baseManagement.settlers = ($player.baseManagement.settlers ?? 0) + 1>>
+	<<if !$tmpGirl.gender>>
+		<<set $player.baseManagement.settlersFemales ??= 0>>
+		<<set $player.baseManagement.settlersFemales += 1>>
+	<</if>>
+	<<guestLeft $guestId>>
+	<<unset $guestId>>
+	<<goto 'Guest house'>>
+<</link>>

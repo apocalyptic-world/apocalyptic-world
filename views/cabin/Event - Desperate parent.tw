@@ -11,7 +11,11 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 
 <br /><br />
 
+<<set _dpGirlAge = randomInteger(18, 24)>>
+<<set _dpFatherAge = _dpGirlAge + randomInteger(19, 30)>>
+
 <<newguy>>
+<<set $tmpGuy.birthDate = setup.getBirthDate(_dpFatherAge)>>
 <<set _dpFather = $tmpGuy>>
 <<sayNpc _dpFather>>
 	She's sick. Getting worse every day. I heard you've got antibiotics. I don't have caps, I don't have food to trade. I have her. She's strong, she'll work hard. Please.
@@ -19,6 +23,7 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 <br />
 
 <<newgirl>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(_dpGirlAge)>>
 <<set $tmpGirl.sick = { days: 2, desc: 'Fever', id: 'wasteland_fever' }>>
 <<set _dpGirl = clone($tmpGirl)>>
 <<unset $tmpGirl>>
@@ -37,6 +42,7 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 		<<addmins 60>>
 		<<set _dpGirl.sub = Math.min((_dpGirl.sub ?? 0) + 20, 100)>>
 		<<run $slaves.push(_dpGirl)>>
+		<<run setup.npc.addHistory(_dpGirl, 'bought', { place: 'her father' })>>
 		The father pressed the medicine into her hands one last time before you took her, then turned and walked away without looking back.
 		<br /><br />
 		She stood in your yard, feverish and unsure of what came next.
@@ -55,6 +61,7 @@ A man was waiting at the gate when you came out, a young woman standing quiet be
 		<<run setup.cabinInventory.drop('antibiotics', 2)>>
 		<<addmins 45>>
 		<<run $guests.push(_dpGirl)>>
+		<<run setup.npc.addHistory(_dpGirl, 'invited')>>
 		You handed over the medicine and told her she was a guest, not property. Her father's shoulders dropped with relief he didn't bother hiding.
 		<br /><br />
 		<<sayNpc _dpGirl>>

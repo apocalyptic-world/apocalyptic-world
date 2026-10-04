@@ -1114,12 +1114,14 @@ setup.npc = {
 		return !npc.married && (npc.family?.exes ?? []).includes('mc');
 	},
 
-	/* Add a one-time life-event entry to npc.history */
+	/* Add a life-event entry to npc.history */
 	addHistory: function(npc, event, extra) {
 		if (!npc) return;
 		npc.history = npc.history ?? [];
-		const oneTimeEvents = ['virgin_lost', 'married', 'first_sex_mc'];
+		const oneTimeEvents = ['virgin_lost', 'first_sex_mc'];
 		if (oneTimeEvents.includes(event) && npc.history.some(h => h.event === event)) return;
+		// an NPC can divorce and remarry: each marriage gets an entry, only a repeat of the current one is skipped
+		if (event === 'married' && setup.npc.currentMarriage(npc)?.with === extra?.with) return;
 		const entry = { event, day: variables().game?.day ?? 0 };
 		if (extra) Object.assign(entry, extra);
 		npc.history.push(entry);
@@ -1136,7 +1138,15 @@ setup.npc = {
 			case 'married':          return day + 'Married ' + (withName || 'someone');
 			case 'divorced':         return day + 'Divorced ' + (withName || 'someone');
 			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
-			case 'captured':         return day + 'Captured';
+			case 'captured':         return day + 'Captured'
+				+ (entry.reason === 'bounty' ? ' for a bounty' : entry.reason === 'intruder' ? ' sneaking into the settlement' : '')
+				+ (entry.place ? ' at ' + entry.place : '');
+			case 'rescued':          return day + 'Rescued' + (entry.place ? ' from ' + entry.place : '');
+			case 'taken_in':         return day + 'Taken in' + (entry.place ? ' from ' + entry.place : '');
+			case 'born': {
+				const mother = entry.mother ? setup.npc.findById(entry.mother)?.name : null;
+				return day + 'Born' + (mother ? ' to ' + mother : '');
+			}
 			case 'tribute_accepted': return day + 'Accepted as tribute from ' + (entry.place ?? 'a settlement');
 			case 'tribute_slave':    return day + 'Taken as tribute from ' + (entry.place ?? 'a settlement') + ', made a slave';
 			case 'recruited':        return day + 'Recruited from ' + (entry.place ?? 'a settlement');
@@ -1144,7 +1154,7 @@ setup.npc = {
 			case 'refugee':          return day + 'Arrived as refugee from fallen ' + (entry.place ?? 'a settlement');
 			case 'raider_turned':    return day + 'Offered a home after attacking' + (entry.place ? ' from ' + entry.place : '');
 			case 'invited':          return day + 'Invited to settlement';
-			case 'bought':           return day + 'Bought at slave market';
+			case 'bought':           return day + (entry.place ? 'Bought from ' + entry.place : 'Bought at slave market');
 			case 'moved_to_guest':   return day + 'Moved to guest house';
 			case 'moved_to_slave':   return day + 'Moved to basement';
 			case 'grown_up':         return day + 'Grew up and joined settlement';
@@ -1163,9 +1173,19 @@ setup.npc = {
 		return d;
 	},
 
-	/* The Date an NPC was married, or null */
+	/* The history entry of the NPC's current marriage (the last 'married' with no 'divorced' after it), or null */
+	currentMarriage: function(npc) {
+		const history = npc.history ?? [];
+		for (let i = history.length - 1; i >= 0; i--) {
+			if (history[i].event === 'divorced') return null;
+			if (history[i].event === 'married') return history[i];
+		}
+		return null;
+	},
+
+	/* The Date the NPC's current marriage began, or null */
 	weddingDate: function(npc) {
-		const entry = (npc.history ?? []).find(h => h.event === 'married');
+		const entry = setup.npc.currentMarriage(npc);
 		return entry ? setup.npc.dayToDate(entry.day) : null;
 	},
 

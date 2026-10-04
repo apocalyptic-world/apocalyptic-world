@@ -12,7 +12,8 @@ You went to the guest house and noticed that
 	<<goto 'Scavenging - look for'>>
 <</link>>
 <<link 'Ignore'>>
-	<<if randomInteger(0,1) === 1>>
+	/* a capable scavenger usually finds their own way home */
+	<<if setup.percentageChance(setup.fight.scavengerCapability($guests[$scavengingDidntReturn]) >= 60 ? 15 : 50)>>
 		<<guestRemove $scavengingDidntReturn>>
 	<</if>>
 	<<unset $scavengingDidntReturn>>

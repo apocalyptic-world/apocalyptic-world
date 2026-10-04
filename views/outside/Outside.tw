@@ -4,8 +4,13 @@
 	<<set _cabinName = $game.cabinName ?? 'Cabin'>>
 	<<set _cabinImg = $game.cabinName ? 'gate' : 'cabin'>>
   <<grid outside `_cabinImg` 'Wood cabin' `_cabinName`>>
-  <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 60 : 6)>>
-  <<grid outside explore Explore Explore 30 _isDisabled>>
+  <<if setup.night.canStart()>>
+	  <<set _nightHours = setup.night.FOOT_HOURS>>
+	  <<grid outside explore 'Explore - night' 'Explore (night)' 30 _nightHours>>
+  <<else>>
+	  <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 60 : 6)>>
+	  <<grid outside explore Explore Explore 30 _isDisabled>>
+  <</if>>
   <<if ($game.location.forest ?? false)>>
       <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 1)>>
 	  <<grid outside forest Forest Forest 30 _isDisabled>>

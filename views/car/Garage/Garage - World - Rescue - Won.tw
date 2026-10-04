@@ -15,6 +15,7 @@
 		<</sayNpc>>
 		<br />
 		<<run $guests.push(_rscS.playerCaptives[_rci].npc)>>
+		<<run setup.npc.addHistory(_rscS.playerCaptives[_rci].npc, 'rescued', { place: _rscS.name })>>
 	<</for>>
 	<<run setup.settlements.modifyRelationship(_rscS, -20, 'Rescue raid')>>
 	<<run setup.settlements.logEvent(_rscS, 'Player raided compound and freed captives.')>>
