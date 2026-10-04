@@ -32,46 +32,59 @@
 		<<run _nurserySorter.sort((a, b) => setup.getAge($nursery[b]) - setup.getAge($nursery[a]))>>
 	<</if>>
 
+	<<set $nSortPanelOpen ??= false>>
+	<<set _nSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Nursery'>>
+	<<if !_nSelfReload>>
+		<<set $nSortPanelOpen = false>>
+	<</if>>
+
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
 			<td colspan="2">
-				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-					<span>
-						<<if ($nsortBy !== 'N')>>
-							Sort by: <<link 'Name'>><<set $nsortBy = 'N'>><<goto 'Nursery'>><</link>>
-						<<else>>
-							Sort by: <strong>Name</strong>
-						<</if>>
-					</span>
-					<span>
-						<<if ($nsortBy !== 'M')>>
-							<<link 'Mother'>>
-								<<set $nsortBy = 'M'>>
-								<<goto 'Nursery'>>
-							<</link>>
-						<<else>>
-							<strong> Mother </strong>
-						<</if>>
-					</span>
-					<span>
-						<<if ($nsortBy !== 'A')>>
-							<<link 'Age (descending)'>>
-								<<set $nsortBy = 'A'>>
-								<<goto 'Nursery'>>
-							<</link>>
-						<<else>>
-							<strong> Age (descending) </strong>
-						<</if>>
-					</span>
-					<span>
-						<<if ($nsortBy == 'N' || $nsortBy == 'M' || $nsortBy == 'A')>>
-							<<link 'Arrival (default)'>><<set $nsortBy = 'D'>><<goto 'Nursery'>><</link>>
-						<<else>>
-							<strong>Arrival (default)</strong>
-						<</if>>
-					</span>
-				</div>
+				<details id="nursery-sort-details">
+					<summary class="sort-summary"><small>Sort options</small></summary>
+					<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+						<span>
+							<<if ($nsortBy !== 'N')>>
+								Sort by: <<link 'Name'>><<set $nsortBy = 'N'>><<goto 'Nursery'>><</link>>
+							<<else>>
+								Sort by: <strong>Name</strong>
+							<</if>>
+						</span>
+						<span>
+							<<if ($nsortBy !== 'M')>>
+								<<link 'Mother'>>
+									<<set $nsortBy = 'M'>>
+									<<goto 'Nursery'>>
+								<</link>>
+							<<else>>
+								<strong> Mother </strong>
+							<</if>>
+						</span>
+						<span>
+							<<if ($nsortBy !== 'A')>>
+								<<link 'Age (descending)'>>
+									<<set $nsortBy = 'A'>>
+									<<goto 'Nursery'>>
+								<</link>>
+							<<else>>
+								<strong> Age (descending) </strong>
+							<</if>>
+						</span>
+						<span>
+							<<if ($nsortBy == 'N' || $nsortBy == 'M' || $nsortBy == 'A')>>
+								<<link 'Arrival (default)'>><<set $nsortBy = 'D'>><<goto 'Nursery'>><</link>>
+							<<else>>
+								<strong>Arrival (default)</strong>
+							<</if>>
+						</span>
+					</div>
+				</details>
+				<<done>>
+					<<run document.getElementById('nursery-sort-details').open = State.variables.nSortPanelOpen>>
+					<<run jQuery('#nursery-sort-details').on('toggle', function() { State.variables.nSortPanelOpen = this.open; })>>
+				<</done>>
 			</td>
 		</tr>
 

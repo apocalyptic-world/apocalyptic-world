@@ -13,7 +13,7 @@
     <<set _guestId = _guests[0][Math.floor(Math.random()*_guests[0].length)];>>
     <<set _npc = $guests[_guestId]>>
     <<if _npc.likesGuys && _npc.relationship >= 30 && _npc.horny >= 50>>
-        <<set _isFeral = _isFeral>>
+        <<set _isFeral = (_npc.traits ?? []).includes('feral')>>
         You don't notice, but you hear the sound of a door closing. You turn around and see <<=setup.displayName(_npc)>>. She stands at the door with smile on her face. After brief moment she bends and takes off her clothes.
         <br /><br />
         <center>
@@ -21,9 +21,22 @@
         </center>
         <br />
         <<if _isFeral>>
-            <<sayNpc _npc>>
-                <em>*rubs up against you, pressing her nose to your shoulder and glancing up — signalling without words that she wants to join you*</em>
-            <</sayNpc>>
+            <<set _girlVisual = _npc>>
+            <div class="say npcsay">
+                <div class="npc-say-visual" @data-id="_npc.id">
+                    <div class="girl_info_picture">
+                        <<if _girlVisual.portrait>>
+                            <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                        <<else>>
+                            <<include 'NPC visual'>>
+                        <</if>>
+                    </div>
+                </div>
+                <div class="npc-say-container">
+                    <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                    <div class="npc-say-text"><em>*presses close, her nose nuzzling your shoulder, and glances into your eyes, no words, but the intent is clear*</em></div>
+                </div>
+            </div>
         <<else>>
             <<sayNpc _npc>>
                 How about I join you?
@@ -41,9 +54,22 @@
                 She steps into the shower with you and, standing behind you, starts washing your back. After a moment, she reaches her arm around you and grabs your hard dick and starts to jerk you off.
                 <br /><br />
                 <<if _isFeral>>
-                    <<sayNpc _npc>>
-                        <em>*lets out a soft sound against the back of your neck, hand moving with instinctive rhythm*</em>
-                    <</sayNpc>>
+                    <<set _girlVisual = _npc>>
+                    <div class="say npcsay">
+                        <div class="npc-say-visual" @data-id="_npc.id">
+                            <div class="girl_info_picture">
+                                <<if _girlVisual.portrait>>
+                                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                                <<else>>
+                                    <<include 'NPC visual'>>
+                                <</if>>
+                            </div>
+                        </div>
+                        <div class="npc-say-container">
+                            <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                            <div class="npc-say-text"><em>*lets out a soft purr against the back of your neck, her hand moving over your cock with an instinctive rhythm*</em></div>
+                        </div>
+                    </div>
                 <<else>>
                     <<sayNpc _npc>>
                         Like this? Heh.
@@ -57,9 +83,22 @@
                 <<=setup.displayName(_npc)>> turns you around and puts your hard dick between her ass cheeks. She teases you by rubbing her ass against it as she presses her hands against the wall.
                 <br /><br />
                 <<if _isFeral>>
-                    <<sayNpc _npc>>
-                        <em>*presses back against you with a low sound in her throat, tail swishing*</em>
-                    <</sayNpc>>
+                    <<set _girlVisual = _npc>>
+                    <div class="say npcsay">
+                        <div class="npc-say-visual" @data-id="_npc.id">
+                            <div class="girl_info_picture">
+                                <<if _girlVisual.portrait>>
+                                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                                <<else>>
+                                    <<include 'NPC visual'>>
+                                <</if>>
+                            </div>
+                        </div>
+                        <div class="npc-say-container">
+                            <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                            <div class="npc-say-text"><em>*presses back against you with a low sound in her throat, her head dropping forward as she offers herself in a mating posture...*</em></div>
+                        </div>
+                    </div>
                 <<else>>
                     <<sayNpc _npc>>
                         You like this? I bet this will be even better.
@@ -73,9 +112,22 @@
                 Without saying anything you grab her by her hips and hold her still as you shove your dick inside her. She lets out loud moan.
                 <br /><br />
                 <<if _isFeral>>
-                    <<sayNpc _npc>>
-                        <em>*lets out a breathless whine, fingers curling against the tile*</em>
-                    <</sayNpc>>
+                    <<set _girlVisual = _npc>>
+                    <div class="say npcsay">
+                        <div class="npc-say-visual" @data-id="_npc.id">
+                            <div class="girl_info_picture">
+                                <<if _girlVisual.portrait>>
+                                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                                <<else>>
+                                    <<include 'NPC visual'>>
+                                <</if>>
+                            </div>
+                        </div>
+                        <div class="npc-say-container">
+                            <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                            <div class="npc-say-text"><em>*lets out a breathless, panting whine, her fingers curling like claws against the tiles as her body begs you to keep going*</em></div>
+                        </div>
+                    </div>
                 <<else>>
                     <<sayNpc _npc>>
                         Oh shit... Yes.. Keep going...
@@ -106,9 +158,22 @@
                 <<set $guests[_guestId].relationship -= 10>>
                 <<set $guests[_guestId].happy -= 5>>
                 <<if _isFeral>>
-                    <<sayNpc _npc>>
-                        <em>*tilts her head, confused, then slinks back with a quiet whine*</em>
-                    <</sayNpc>>
+                    <<set _girlVisual = _npc>>
+                    <div class="say npcsay">
+                        <div class="npc-say-visual" @data-id="_npc.id">
+                            <div class="girl_info_picture">
+                                <<if _girlVisual.portrait>>
+                                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                                <<else>>
+                                    <<include 'NPC visual'>>
+                                <</if>>
+                            </div>
+                        </div>
+                        <div class="npc-say-container">
+                            <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                            <div class="npc-say-text"><em>*tilts her head, confused, then slinks back with a quiet whine*</em></div>
+                        </div>
+                    </div>
                 <<else>>
                     <<sayNpc _npc>>
                         <<=either('Something wrong?', 'Eh, and I hoped for something.')>>

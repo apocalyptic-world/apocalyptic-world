@@ -195,7 +195,7 @@ He drops into a fighting crouch and starts closing the distance. Not running —
 			<</link>>
 		</div>
 		<</if>>
-		<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+		<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && !$slaves.some(function(s) { return s.id === $dg1Feral.id; })>>
 		<div id="dg1s_capture">
 			<<set _captureName = 'Capture as slave'>>
 			<<linkreplace `_captureName`>>
@@ -336,46 +336,61 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 :: Random event - dead guy #1 feral won {"position":"5514,448","size":"100,100"}
 <h1 class="ptitle">OUTSIDE</h1>
 <br /><br />
-<<set $tmpGirl = $dg1Feral>>
-<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
-<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 30, -100)>>
-<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
+<<set _feralKilled = ($prevFight.defeatedEnemies ?? []).some(e => e.killed)>>
+<<set _feralCaptured = ($prevFight.defeatedEnemies ?? []).some(e => e.captured)>>
 
-<<if $tmpGirl.gender == 0>>
-She's on the ground, breathing hard, the fight gone out of her. Not unconscious — watching you from under her hair with a wary stillness that wasn't there before. The aggression has collapsed into something quieter and less certain.
+<<if _feralKilled>>
+	<<if $dg1FeralGender != 1>>She<<else>>He<</if>> didn't get back up. Whatever <<if $dg1FeralGender != 1>>she<<else>>he<</if>> was before, <<if $dg1FeralGender != 1>>she<<else>>he<</if>> isn't anything now.
+	<br /><br />
+	<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+	<<link 'Leave'>><<goto 'Outside'>><</link>>
+<<elseif _feralCaptured>>
+	<<if $dg1FeralGender != 1>>She<<else>>He<</if>> doesn't have much left to resist with. You already bound <<if $dg1FeralGender != 1>>her<<else>>him<</if>> up back at the fight; there's nothing left to do here but get moving before that changes.
+	<br /><br />
+	<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+	<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 <<else>>
-He's down, chest heaving, not moving to get up. The attack is finished. He watches you from the ground with flat eyes, waiting to see what comes next.
-<</if>>
-<br /><br />
+	<<set $tmpGirl = $dg1Feral>>
+	<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 20, -100)>>
+	<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 30, -100)>>
+	<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
 
-<<include 'NPC info'>>
-<br /><br />
-
-<div id="dg1w_opts">
-	<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
-	<div id="dg1w_capture">
-		<<set _captureName = 'Capture as slave'>>
-		<<linkreplace `_captureName`>>
-			<<run $('#dg1w_leave').hide()>>
-			<<statsAdd 'people_captured'>>
-			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
-			<<run $slaves.push($tmpGirl)>>
-			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-			<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't have much left to resist with. You bind <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> and get moving before that changes.
-			<br /><br />
-			<strong>Taken as a slave.</strong>
-			<br /><br />
-			<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
-		<</linkreplace>>
-	</div>
+	<<if $tmpGirl.gender == 0>>
+	She's on the ground, breathing hard, the fight gone out of her. Not unconscious — watching you from under her hair with a wary stillness that wasn't there before. The aggression has collapsed into something quieter and less certain.
+	<<else>>
+	He's down, chest heaving, not moving to get up. The attack is finished. He watches you from the ground with flat eyes, waiting to see what comes next.
 	<</if>>
-	<div id="dg1w_leave">
-		<<link 'Leave'>>
-			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-			<<goto 'Outside'>>
-		<</link>>
+	<br /><br />
+
+	<<include 'NPC info'>>
+	<br /><br />
+
+	<div id="dg1w_opts">
+		<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && !$slaves.some(function(s) { return s.id === $tmpGirl.id; })>>
+		<div id="dg1w_capture">
+			<<set _captureName = 'Capture as slave'>>
+			<<linkreplace `_captureName`>>
+				<<run $('#dg1w_leave').hide()>>
+				<<statsAdd 'people_captured'>>
+				<<run setup.npc.addHistory($tmpGirl, 'captured')>>
+				<<run $slaves.push($tmpGirl)>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't have much left to resist with. You bind <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> and get moving before that changes.
+				<br /><br />
+				<strong>Taken as a slave.</strong>
+				<br /><br />
+				<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
+			<</linkreplace>>
+		</div>
+		<</if>>
+		<div id="dg1w_leave">
+			<<link 'Leave'>>
+				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
+				<<goto 'Outside'>>
+			<</link>>
+		</div>
 	</div>
-</div>
+<</if>>
 
 
 :: Random event - dead guy #1 feral after sex {"position":"5514,554","size":"100,100"}
@@ -389,7 +404,7 @@ He's down, chest heaving, not moving to get up. The attack is finished. He watch
 <br /><br />
 
 <div id="dg1as_opts">
-	<<if $dg1Path == 'subdue' && ($game.location.basement ?? false) && $slaves.length < $basementLimit>>
+	<<if $dg1Path == 'subdue' && ($game.location.basement ?? false) && $slaves.length < $basementLimit && !$slaves.some(function(s) { return s.id === $tmpGirl.id; })>>
 	<div id="dg1as_capture">
 		<<set _captureName = 'Capture as slave'>>
 		<<linkreplace `_captureName`>>

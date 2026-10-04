@@ -17,9 +17,28 @@ While <<print $tmpGirl.name>> plows the ground, you lower your hands below her w
   <br /><br />
   <<set $tmpGirl.groped = true>>
 <</if>>
-<<sayNpc $tmpGirl>>
-  <<=either('Oh! I like that...', "What's with you today? Mmm...")>>
-<</sayNpc>>
+<<set _girlVisual = $tmpGirl>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>>
+                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                <<else>>
+                    <<include 'NPC visual'>>
+                <</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*goes still for a moment, then presses back into your hands with a low sound in her throat*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        <<=either('Oh! I like that...', "What's with you today? Mmm...")>>
+    <</sayNpc>>
+<</if>>
 <br />
 <<if $tmpGirl.piercing>>
   <<linkreplace 'Grope her breast'>>
@@ -35,8 +54,8 @@ While <<print $tmpGirl.name>> plows the ground, you lower your hands below her w
   <</linkreplace>>
 <</if>>
 <<link 'Pull skirt up'>>
-  <<set _availableWomen = $guests.filter(npc => npc.id !== $tmpGirl.id && npc.gender === 0 && (npc.likesGuys ?? true) && npc.horny >= 50 && npc.race === 'white' && !setup.family.isBloodToMC(npc))>>
-  <<if recall($suppCode) && $tmpGirl.likesGuys && $tmpGirl.horny >= 30 && !setup.family.isBloodToMC($tmpGirl) && _availableWomen.length > 0 && setup.percentageChance(50)>>
+  <<set _availableWomen = $guests.filter(npc => npc.id !== $tmpGirl.id && npc.gender === 0 && (npc.likesGuys ?? true) && npc.horny >= 50 && npc.race === 'white' && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isBloodToMC(npc)))>>
+  <<if recall($suppCode) && !($tmpGirl.traits ?? []).includes('feral') && $tmpGirl.likesGuys && $tmpGirl.horny >= 30 && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isBloodToMC($tmpGirl)) && _availableWomen.length > 0 && setup.percentageChance(50)>>
     <<goto 'Grope - sucking dick'>>
   <<else>>
     <<goto 'Grope - fuck'>>
