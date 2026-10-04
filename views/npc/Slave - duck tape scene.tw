@@ -4,6 +4,7 @@
 <<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
 <<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _girlVisual = $tmpGirl>>
 
 You pressed her down onto the old mattress and worked quickly — wrists crossed above her head, ankles spread and fixed to the frame legs with duck tape. A wide strip sealed across her mouth kept her quiet while you finished.
 <br /><br />
@@ -14,17 +15,45 @@ You pressed her down onto the old mattress and worked quickly — wrists crossed
 She strained against the tape, chest heaving, eyes tracking your every move.
 <br /><br />
 
-<<sayNpc $tmpGirl>>
-	Mmpph—
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*strains against the tape with a low, muffled sound in her throat — wordless, purely animal*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        Mmpph—
+    <</sayNpc>>
+<</if>>
 <br />
 
 You crouched and peeled the strip from her lips in one clean pull.
 <br /><br />
 
-<<sayNpc $tmpGirl>>
-	What are you going to do to me?
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*doesn't cry out, she just lets out a low, timid growl.  She blinks at you, her chest still heaving, wrists still taped.  Her expression makes it clear she knows how powerless she is..*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        What are you going to do to me?
+    <</sayNpc>>
+<</if>>
 <br />
 
 <div id="dt_opt_a">
@@ -51,6 +80,7 @@ You crouched and peeled the strip from her lips in one clean pull.
 			<<linkreplace 'Fuck her pussy'>>
 				<<run $('#dt_post_mouth_b').hide()>>
 				<<run $('#dt_post_mouth_c').hide()>>
+				<<set _girlVisual = $tmpGirl>>
 				<<set _wasVirgin = $tmpGirl.virgin ?? false>>
 				<<if _wasVirgin>>
 					<<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
@@ -61,16 +91,44 @@ You crouched and peeled the strip from her lips in one clean pull.
 				<<if _wasVirgin>>
 					You pushed her thighs flat and pressed in slowly. She tensed against the tape the moment she felt resistance, a sharp cry escaping her — then you were through. She went rigid, breath coming in short ragged pulls.
 					<br /><br />
-					<<sayNpc $tmpGirl>>
-						It hurts—
-					<</sayNpc>>
+					<<if ($tmpGirl.traits ?? []).includes('feral')>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*goes rigid against the tape, a sharp, broken sound of pain tearing from her throat*</em></div>
+							</div>
+						</div>
+					<<else>>
+						<<sayNpc $tmpGirl>>
+							It hurts—
+						<</sayNpc>>
+					<</if>>
 					<br />
 				<<else>>
 					You pushed her thighs flat and pressed in. She arched off the mattress as far as the bindings allowed, a sharp inhale hissing between her teeth.
 					<br /><br />
-					<<sayNpc $tmpGirl>>
-						God—
-					<</sayNpc>>
+					<<if ($tmpGirl.traits ?? []).includes('feral')>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*arches off the mattress as far as the tape allows, a raw, urgent sound escaping her*</em></div>
+							</div>
+						</div>
+					<<else>>
+						<<sayNpc $tmpGirl>>
+							God—
+						<</sayNpc>>
+					<</if>>
 					<br />
 				<</if>>
 				<<run document.getElementById('dt_fuck').hidden = false>>
@@ -120,6 +178,7 @@ You crouched and peeled the strip from her lips in one clean pull.
 	<<linkreplace 'Fuck her pussy'>>
 		<<run $('#dt_throat').hide()>>
 		<<set _wasVirgin = $tmpGirl.virgin ?? false>>
+		<<set _girlVisual = $tmpGirl>>
 		<<if _wasVirgin>>
 			<<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
 			<<set $tmpGirl.virgin = false>>
@@ -129,16 +188,44 @@ You crouched and peeled the strip from her lips in one clean pull.
 		<<if _wasVirgin>>
 			You pushed her thighs flat and pressed in slowly. She tensed against the tape the moment she felt resistance, a sharp cry escaping her — then you were through. She went rigid, breath coming in short ragged pulls.
 			<br /><br />
-			<<sayNpc $tmpGirl>>
-				It hurts—
-			<</sayNpc>>
+			<<if ($tmpGirl.traits ?? []).includes('feral')>>
+				<div class="say npcsay">
+					<div class="npc-say-visual" @data-id="$tmpGirl.id">
+						<div class="girl_info_picture">
+							<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+						</div>
+					</div>
+					<div class="npc-say-container">
+						<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+						<div class="npc-say-text"><em>*goes rigid against the tape, a sharp, broken sound of pain tearing from her throat*</em></div>
+					</div>
+				</div>
+			<<else>>
+				<<sayNpc $tmpGirl>>
+					It hurts—
+				<</sayNpc>>
+			<</if>>
 			<br />
 		<<else>>
 			You pushed her thighs flat and pressed in. She arched off the mattress as far as the bindings allowed, a sharp inhale hissing between her teeth.
 			<br /><br />
-			<<sayNpc $tmpGirl>>
-				God—
-			<</sayNpc>>
+			<<if ($tmpGirl.traits ?? []).includes('feral')>>
+				<div class="say npcsay">
+					<div class="npc-say-visual" @data-id="$tmpGirl.id">
+						<div class="girl_info_picture">
+							<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+						</div>
+					</div>
+					<div class="npc-say-container">
+						<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+						<div class="npc-say-text"><em>*arches off the mattress as far as the tape allows, a raw, urgent sound escaping her*</em></div>
+					</div>
+				</div>
+			<<else>>
+				<<sayNpc $tmpGirl>>
+					God—
+				<</sayNpc>>
+			<</if>>
 			<br />
 		<</if>>
 		<<run document.getElementById('dt_fuck').hidden = false>>
@@ -149,6 +236,7 @@ You crouched and peeled the strip from her lips in one clean pull.
 <div id="dt_opt_b">
 <<linkreplace 'Pull her thighs apart'>>
 	<<run $('#dt_opt_a').hide()>>
+	<<set _girlVisual = $tmpGirl>>
 	<<set _wasVirgin = $tmpGirl.virgin ?? false>>
 	<<if _wasVirgin>>
 		<<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>
@@ -159,16 +247,44 @@ You crouched and peeled the strip from her lips in one clean pull.
 	<<if _wasVirgin>>
 		You pushed her thighs flat and pressed in slowly. She tensed against the tape the moment she felt resistance, a sharp cry escaping her — then you were through. She went rigid, breath coming in short ragged pulls.
 		<br /><br />
-		<<sayNpc $tmpGirl>>
-			It hurts—
-		<</sayNpc>>
+		<<if ($tmpGirl.traits ?? []).includes('feral')>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*goes rigid against the tape, a sharp, broken sound of pain tearing from her throat*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				It hurts—
+			<</sayNpc>>
+		<</if>>
 		<br />
 	<<else>>
 		You pushed her thighs flat and pressed in. She arched off the mattress as far as the bindings allowed, a sharp inhale hissing between her teeth.
 		<br /><br />
-		<<sayNpc $tmpGirl>>
-			God—
-		<</sayNpc>>
+		<<if ($tmpGirl.traits ?? []).includes('feral')>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*arches off the mattress as far as the tape allows, a raw, urgent sound escaping her*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<sayNpc $tmpGirl>>
+				God—
+			<</sayNpc>>
+		<</if>>
 		<br />
 	<</if>>
 	<<run document.getElementById('dt_fuck').hidden = false>>

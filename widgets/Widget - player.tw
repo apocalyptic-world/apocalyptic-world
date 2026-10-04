@@ -323,6 +323,15 @@
 		<</if>>
 		<br />
 	<</if>>
+	<<set _stepFatherId = _motherNpc?.family?.husband ?? null>>
+	<<if _stepFatherId && _stepFatherId !== ($args[0].father ?? null)>>
+		<<if _stepFatherId === 'mc'>>
+			Step-father: You
+		<<else>>
+			Step-father: <<=setup.getNpcById(_stepFatherId)?.name ?? '????'>>
+		<</if>>
+		<br />
+	<</if>>
 	<<if $args[0].husband>>
 		Husband: 
 		<<if $args[0].husband === 'mc'>>

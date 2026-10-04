@@ -3,6 +3,10 @@
 <br />
 <<set _npc1 = setup.getNpcById($tmpEventWedding.id1)>>
 <<set _npc2 = setup.getNpcById($tmpEventWedding.id2)>>
+<<if (_npc1.traits ?? []).includes('feral') || (_npc2.traits ?? []).includes('feral')>>
+    <<unset $tmpEventWedding>>
+    <<goto 'Wood cabin'>>
+<<else>>
 <<set _npc1.location = 'wedding'>>
 <<set _npc2.location = 'wedding'>>
 <<set _relBetween = (_npc1.relationshipBetween?.stats?.[ _npc2.id ] ?? 0)>>
@@ -829,5 +833,6 @@ You face them both. The settlement needs stability. Bonds between people are wha
         <<include 'NPC arrange marry - ceremony'>>
     <</if>>
 <</linkreplace>>
+<</if>>
 
 

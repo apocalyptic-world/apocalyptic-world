@@ -8,30 +8,31 @@ Stepping outside, you hear voices. You decide to go and see what's happening. A 
 </center>
 <br /><br />
 <<set _randomGuests = setup.getAvailablePersons18yo($guests)>>
+<<set _speakerPool = ((_randomGuests[0] ?? []).concat(_randomGuests[2] ?? [])).filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>>
 
-As they sat around the fire, <<=setup.displayName($guests[_randomGuests[0][0]])>> cleared her throat and caught the attention of the others.
+As they sat around the fire, <<=setup.displayName($guests[_speakerPool[0]])>> cleared her throat and caught the attention of the others.
 <br /><br />
-<<say $guests[_randomGuests[0][0]].name setup.ImagePath+'/people/anongirl.png'>>
+<<say $guests[_speakerPool[0]].name setup.ImagePath+'/people/anongirl.png'>>
 	Ladies, I've been thinking. We've been through so much, and it's high time we consider our own well-being
 <</say>>
 <br /><br />
-<<=setup.displayName($guests[_randomGuests[0][1]])>>, a woman with a twinkle of mischief in her eyes, raised an eyebrow.
+<<=setup.displayName($guests[_speakerPool[1]])>>, a woman with a twinkle of mischief in her eyes, raised an eyebrow.
 <br /><br />
-<<say $guests[_randomGuests[0][1]].name setup.ImagePath+'/people/anongirl.png'>>
-	What do you have in mind, <<=$guests[_randomGuests[0][0]].name>>? More scavenging runs for supplies?
+<<say $guests[_speakerPool[1]].name setup.ImagePath+'/people/anongirl.png'>>
+	What do you have in mind, <<=$guests[_speakerPool[0]].name>>? More scavenging runs for supplies?
 <</say>>
 <br /><br />
-<<say $guests[_randomGuests[0][0]].name setup.ImagePath+'/people/anongirl.png'>>
-	No, <<=$guests[_randomGuests[0][1]].name>>, not quite. I've been hearing murmurs of exhaustion among us. Washing ourselves under rainwater and whatever springs we find has become tiresome. We deserve a chance to relax and take care of ourselves.
+<<say $guests[_speakerPool[0]].name setup.ImagePath+'/people/anongirl.png'>>
+	No, <<=$guests[_speakerPool[1]].name>>, not quite. I've been hearing murmurs of exhaustion among us. Washing ourselves under rainwater and whatever springs we find has become tiresome. We deserve a chance to relax and take care of ourselves.
 	<br />
 	How about we ask <<=$player.name>> to build us something like bathhouse? maybe also with sauna?
 <</say>>
 <br />
-<<=setup.displayName($guests[_randomGuests[0][3]])>> leaned forward, her eyes alight with a newfound idea. The women exchanged glances, intrigued by the concept.
+<<=setup.displayName($guests[_speakerPool[3]])>> leaned forward, her eyes alight with a newfound idea. The women exchanged glances, intrigued by the concept.
 <br />
-<<=setup.displayName($guests[_randomGuests[0][2]])>>'s lips curled into a determined smile.
+<<=setup.displayName($guests[_speakerPool[2]])>>'s lips curled into a determined smile.
 <br /><br />
-<<say $guests[_randomGuests[0][3]].name setup.ImagePath+'/people/anongirl.png'>>
+<<say $guests[_speakerPool[3]].name setup.ImagePath+'/people/anongirl.png'>>
 	A sauna? Now that's an idea. We'll create a place where we can wash away the dirt and relax our tired bodies. A sanctuary amidst the chaos.
 <</say>>
 <br />

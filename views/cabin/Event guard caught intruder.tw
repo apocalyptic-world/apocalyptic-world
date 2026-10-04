@@ -3,6 +3,17 @@
 <br /><br />
 <<newgirl>>
 <<set _randomGuests = setup.getAvailablePersons18yo($guests)>>
+<<set _speakerPool = ((_randomGuests[0] ?? []).concat(_randomGuests[2] ?? [])).filter(function(i) {
+    var g = $guests[i];
+    return !(g.traits ?? []).includes('feral') &&
+           (g.likesGuys ?? true) &&
+           (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isIncest($player, g)) &&
+           ((g.traits ?? []).includes('masochist') || (g.traits ?? []).includes('sadistic') || g.assignedTo === 'guard');
+})>>
+<<if !_speakerPool.length>><<set _speakerPool = ((_randomGuests[0] ?? []).concat(_randomGuests[2] ?? [])).filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>><</if>>
+<<if !_speakerPool.length>><<set _speakerPool = (_randomGuests[0] ?? _randomGuests[2] ?? [])>><</if>>
+<<set _speakerIdx = setup.getRandomElement(_speakerPool)>>
+<<set _speakerNpc = $guests[_speakerIdx]>>
 As you come out of your room in the morning, one of your guests comes running towards you, loudly saying that one of your guards managed to catch a woman in the morning light who was trying to enter the resource room. He was able to apprehend her, and she is currently tied up behind the house. You decide to go and see what is really happening there.
 <br /><br />
 <<video 'cabin/intruder_caught1'>>
@@ -21,25 +32,25 @@ Just as you have circled around the house and come into her line of sight, she s
 				<<run $('#option-slave, #option-release').hide()>>
 				<<video 'cabin/intruder_caught4'>>
 				<br /><br />
-				You lean in to look into her eyes and remove the dirty cloth from her mouth. Meanwhile, <<=setup.displayName($guests[_randomGuests[0][0]])>> notices you and decides to approach. Upon arrival, she starts laughing and flirtatiously says to you that she also wants to join in or at least watch and that you should start with her delicious mouth.
+				You lean in to look into her eyes and remove the dirty cloth from her mouth. Meanwhile, <<=setup.displayName(_speakerNpc)>> notices you and decides to approach. Upon arrival, she starts laughing and flirtatiously says to you that she also wants to join in or at least watch and that you should start with her delicious mouth.
 				<br /><br />
 				<<linkreplace 'Fuck her mouth'>>
 					<<video 'cabin/intruder_caught3'>>
 					<br /><br />
-					While you untie your pants, <<=setup.displayName($guests[_randomGuests[0][0]])>> rips open girl's blouse and giggles as she stand behind her, holding her hair so she can't move her head.
+					While you untie your pants, <<=setup.displayName(_speakerNpc)>> rips open girl's blouse and giggles as she stand behind her, holding her hair so she can't move her head.
 					<br />
-					You shove your dick inside the helpless girl and make her gag on your cock. 
+					You shove your dick inside the helpless girl and make her gag on your cock.
 					<br /><br />
-					<<say $guests[_randomGuests[0][0]].name setup.ImagePath+'/people/anongirl.png'>>
-						I got an idea. Tie me too. I want to feel like her. Helpless. I want to watch as close as I can.
+					<<say _speakerNpc.name setup.ImagePath+'/people/anongirl.png'>>
+					    I got an idea. Tie me too. I want to feel like her. Helpless. I want to watch as close as I can.
 					<</say>>
 					<br />
 					<<linkreplace 'Tie them both and bring them inside'>>
-						At <<=setup.displayName($guests[_randomGuests[0][0]])>>'s request, you tie her up as well, and you lead them into your room. <<=setup.displayName($guests[_randomGuests[0][0]])>> lies down next to the girl with a wide smile, as she watchines other girl being thrown into the bed in the doggy position.
+						At <<=setup.displayName(_speakerNpc)>>'s request, you tie her up as well, and you lead them into your room. <<=setup.displayName(_speakerNpc)>> lies down next to the girl with a wide smile, as she watchines other girl being thrown into the bed in the doggy position.
 						<br /><br />
 						<<video 'cabin/intruder_caught5'>>
 						<br /><br />
-						You gently slide your dick inside intruders pussy but instead of taking it slow, you just start to pound her already wet pussy as fast and deep as you can. <<=setup.displayName($guests[_randomGuests[0][0]])>> just watches and moans together with the girl as she fantasies being in her place.
+						You gently slide your dick inside intruders pussy but instead of taking it slow, you just start to pound her already wet pussy as fast and deep as you can. <<=setup.displayName(_speakerNpc)>> just watches and moans together with the girl as she fantasies being in her place.
 						<br /><br />
 						<<video 'cabin/intruder_caught6'>>
 						<br /><br />

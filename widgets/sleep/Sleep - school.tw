@@ -46,7 +46,19 @@
 
                 <<if (_nursery.stats[_skillJob] ?? 0) >= 100 && !(_nursery.skills ?? []).includes(_learnWhat)>>
                     <<run _nursery.skills.push(_learnWhat)>>
-                    <<run setup.sleepMessages.addJob('<span class="skill">' + _nursery.name + ' learned the ' + _learnWhat + ' skill</span>', 'school')>>
+                    <<set _proudParents = []>>
+                    <<set _motherNpc = (_nursery.family?.mother && _nursery.family.mother !== 'mc') ? setup.getNpcById(_nursery.family.mother) : null>>
+                    <<set _fatherNpc = (_nursery.family?.father && _nursery.family.father !== 'mc') ? setup.getNpcById(_nursery.family.father) : null>>
+                    <<if _motherNpc>>
+                        <<set _motherNpc.happy = Math.min(100, (_motherNpc.happy ?? 0) + 5)>>
+                        <<run _proudParents.push(_motherNpc.name)>>
+                    <</if>>
+                    <<if _fatherNpc>>
+                        <<set _fatherNpc.happy = Math.min(100, (_fatherNpc.happy ?? 0) + 5)>>
+                        <<run _proudParents.push(_fatherNpc.name)>>
+                    <</if>>
+                    <<set _proudText = _proudParents.length === 1 ? '. ' + _proudParents[0] + ' is very proud!' : _proudParents.length >= 2 ? '. ' + _proudParents.join(' and ') + ' are very proud!' : ''>>
+                    <<run setup.sleepMessages.addJob('<span class="skill">' + _nursery.name + ' learned the ' + _learnWhat + ' skill' + _proudText + '</span>', 'school')>>
                 <</if>>
             <</if>>
 
