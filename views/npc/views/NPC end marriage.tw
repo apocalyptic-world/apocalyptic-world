@@ -20,13 +20,31 @@
 	<<elseif _isPregnantByMc>>
 		<<set _mcKidsPhrase = 'our unborn child'>>
 	<</if>>
-	You ask <<=setup.displayName($tmpGirl)>> to meet you somewhere quiet, away from the rest of the household. She comes without question, though there's a flicker of unease in her eyes by the time she arrives.
-	<br /><br />
-	<center>
-		<<actionImage $tmpGirl approach>>
-	</center>
-	<br />
-	<<if _relationship < 20>>
+	<<if ($tmpGirl.traits ?? []).includes('feral')>>
+		You call <<=setup.displayName($tmpGirl)>>'s name. She comes readily — open, unhurried, no flicker of dread.
+		<br /><br />
+		<center>
+			<<actionImage $tmpGirl approach>>
+		</center>
+		<br />
+		She watches your face with uncomplicated attention, not knowing what this is. She never understood what it meant when you said yes, and she doesn't understand what it means now.
+		<br /><br />
+		You say it plainly, to anyone nearby who can hear: a marriage where one person can't communicate consent — can't even comprehend the idea — isn't one you can keep. It ends here, for her sake as much as yours.
+		<br /><br />
+		<<=setup.displayName($tmpGirl)>> tips her head at the shift in your tone, then looks away and wanders off, unbothered.
+		<br /><br />
+		<<include 'NPC end marriage - finalize'>>
+		<<link 'Leave'>>
+			<<goto $tmpGirlViewBack>>
+		<</link>>
+	<<else>>
+		You ask <<=setup.displayName($tmpGirl)>> to meet you somewhere quiet, away from the rest of the household. She comes without question, though there's a flicker of unease in her eyes by the time she arrives.
+		<br /><br />
+		<center>
+			<<actionImage $tmpGirl approach>>
+		</center>
+		<br />
+		<<if _relationship < 20>>
 		<<you>>
 			This isn't working. I think we both know that. I want to end the marriage.
 		<</you>>
@@ -327,6 +345,7 @@
 				<</if>>
 			<</linkreplace>>
 		</div>
+	<</if>>
 	<</if>>
 <<elseif _isLostHusband>>
 	You ask <<=setup.displayName($tmpGirl)>> to sit with you for a while. She does, quiet, perhaps already sensing you didn't call her over for anything good.

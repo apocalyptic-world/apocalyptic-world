@@ -17,7 +17,14 @@ You dropped to one knee, holding out the makeshift ring.
     <<=$tmpGirl.name>>, will you marry me?
 <</you>>
 <br />
-<<if _isIncest && !_incestAcceptRoll>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <<addmins 10>>
+    She cocks her head at the ring, sniffs it, then looks back up at you — curious, not comprehending. She licks your hand once and pads away.
+    <br /><br />
+    <<link 'Leave'>>
+        <<goto $tmpGirlViewBack>>
+    <</link>>
+<<elseif _isIncest && !_incestAcceptRoll>>
     <<addmins 10>>
     <<=setup.displayName($tmpGirl)>>'s expression softens, but she shakes her head slowly, her eyes glistening.
     <br /><br />

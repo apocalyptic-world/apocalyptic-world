@@ -9,7 +9,10 @@ A sense of foreboding fills you as you rise from your bed and move to the door. 
     <<image 'places/cabin/heat_wave.jpg' sfw>>
 </center>
 <<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
-<<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
+<<set _weatherGenderPool = (_randomGuestIds[0] ?? _randomGuestIds[1] ?? [])>>
+<<set _weatherPool = _weatherGenderPool.filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>>
+<<if !_weatherPool.length>><<set _weatherPool = _weatherGenderPool>><</if>>
+<<set _randomGuestId = setup.getRandomPersons(_weatherPool, 1)>>
 <<set _npc = $guests[_randomGuestId[0]]>>
 <br />
 Squinting against the harsh light, you step outside and see <<=setup.displayName(_npc)>>, one of your settlers, rushing toward you. 

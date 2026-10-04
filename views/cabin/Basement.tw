@@ -309,41 +309,53 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<</if>>
 
 	<<set _slaveSorter = setup.npcSortedIndices($slaves, $bsortBy, $player.companions, 'slave:')>>
+	<<set $bSortPanelOpen ??= false>>
+	<<set _bsSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Basement'>>
+	<<if !_bsSelfReload>>
+		<<set $bSortPanelOpen = false>>
+	<</if>>
 
 	<table id="slaves" class="npc-list">
 
 		<tr class="item">
 			<td colspan="2">
-				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-					<span>
-						<<if ($bsortBy !== 'N')>>
-							Sort by: <<link 'Name'>><<set $bsortBy = 'N'>><<goto 'Basement'>><</link>>
-						<<else>>
-							Sort by: <strong>Name</strong>
-						<</if>>
-					</span>
-					<span>
-						<<if ($bsortBy !== 'A')>>
-							<<link 'Assignment'>><<set $bsortBy = 'A'>><<goto 'Basement'>><</link>>
-						<<else>>
-							<strong>Assignment</strong>
-						<</if>>
-					</span>
-					<span>
-						<<if ($bsortBy !== 'P')>>
-							<<link 'Pregnancy'>><<set $bsortBy = 'P'>><<goto 'Basement'>><</link>>
-						<<else>>
-							<strong>Pregnancy</strong>
-						<</if>>
-					</span>
-					<span>
-						<<if (!$bsortBy || $bsortBy !== 'D')>>
-							<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
-						<<else>>
-							<strong>Arrival (default)</strong>
-						<</if>>
-					</span>
-				</div>
+				<details id="bs-sort-details">
+					<summary class="sort-summary"><small>Sort options</small></summary>
+					<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+						<span>
+							<<if ($bsortBy !== 'N')>>
+								Sort by: <<link 'Name'>><<set $bsortBy = 'N'>><<goto 'Basement'>><</link>>
+							<<else>>
+								Sort by: <strong>Name</strong>
+							<</if>>
+						</span>
+						<span>
+							<<if ($bsortBy !== 'A')>>
+								<<link 'Assignment'>><<set $bsortBy = 'A'>><<goto 'Basement'>><</link>>
+							<<else>>
+								<strong>Assignment</strong>
+							<</if>>
+						</span>
+						<span>
+							<<if ($bsortBy !== 'P')>>
+								<<link 'Pregnancy'>><<set $bsortBy = 'P'>><<goto 'Basement'>><</link>>
+							<<else>>
+								<strong>Pregnancy</strong>
+							<</if>>
+						</span>
+						<span>
+							<<if (!$bsortBy || $bsortBy !== 'D')>>
+								<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
+							<<else>>
+								<strong>Arrival (default)</strong>
+							<</if>>
+						</span>
+					</div>
+				</details>
+				<<done>>
+					<<run document.getElementById('bs-sort-details').open = State.variables.bSortPanelOpen>>
+					<<run jQuery('#bs-sort-details').on('toggle', function() { State.variables.bSortPanelOpen = this.open; })>>
+				<</done>>
 			</td>
 		</tr>
 

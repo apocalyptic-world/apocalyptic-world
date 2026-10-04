@@ -3,21 +3,27 @@
 <br />
 She looked at you for a moment, her lips curling into a mischievous smile as she let out a quiet chuckle. She leaned forward a bit, the light catching in her eyes.
 <br /><br />
-<<sayNpc $tmpGirl>>
-    You offering to take care of me, or just fishing for an excuse to touch my shoulders?
-<</sayNpc>>
-<br />
-You felt your face warm slightly, but before you could think of a clever comeback, she stepped closer. Her expression shifted, the humor in her eyes softening into something more tender. She paused, her hand resting gently on your arm.
-<br /><br />
-<<sayNpc $tmpGirl>>
-    How about this.
-<</sayNpc>>
-<br />
-<<sayNpc $tmpGirl>>
-    You've been out there busting your back too—how about I give you one instead?
-<</sayNpc>>
-<br /><br />
-Her offer lingered in the air, and for a second, you couldn’t help but feel an unexpected nervousness. There was something in her gaze, a warmth that felt more intimate than anything you’d felt in a long time. You took a deep breath and nodded, your heart picking up as you gave in to her offer.
+<<if ($tmpGirl.traits ?? []).includes(‘feral’)>>
+    She watches you with wide, curious eyes, head tilting as you approach. When you reach toward her shoulder, she doesn’t pull back — she presses her head against your hand, leaning in.
+    <br /><br />
+    When you gesture toward the table, she climbs onto it without hesitation, stretches out, and looks back at you expectantly.
+<<else>>
+    <<sayNpc $tmpGirl>>
+        You offering to take care of me, or just fishing for an excuse to touch my shoulders?
+    <</sayNpc>>
+    <br />
+    You felt your face warm slightly, but before you could think of a clever comeback, she stepped closer. Her expression shifted, the humor in her eyes softening into something more tender. She paused, her hand resting gently on your arm.
+    <br /><br />
+    <<sayNpc $tmpGirl>>
+        How about this.
+    <</sayNpc>>
+    <br />
+    <<sayNpc $tmpGirl>>
+        You’ve been out there busting your back too—how about I give you one instead?
+    <</sayNpc>>
+    <br /><br />
+    Her offer lingered in the air, and for a second, you couldn’t help but feel an unexpected nervousness. There was something in her gaze, a warmth that felt more intimate than anything you’d felt in a long time. You took a deep breath and nodded, your heart picking up as you gave in to her offer.
+<</if>>
 <br /><br />
 <div id="option_agree">
     <<linkreplace 'Agree'>>
@@ -98,9 +104,13 @@ Her offer lingered in the air, and for a second, you couldn’t help but feel an
                     The table creaked softly under your weight, but neither of you noticed, lost in the rhythm of your lovemaking. 
                     Her hands were on your chest, her nails digging gently into your skin as she rode you, her eyes locked on yours with a deep, unspoken connection.
                     <br /><br />
-                    <<sayNpc $tmpGirl>>
-                        Cum inside me!
-                    <</sayNpc>>
+                    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+                        She makes a raw, urgent sound and arches up against you.
+                    <<else>>
+                        <<sayNpc $tmpGirl>>
+                            Cum inside me!
+                        <</sayNpc>>
+                    <</if>>
                     <br />
                     <<linkreplace 'Cum inside'>>
                         <<horny_reset>>
@@ -139,10 +149,11 @@ Her offer lingered in the air, and for a second, you couldn’t help but feel an
         <</linkreplace>>
     <</linkreplace>>
 </div>
+<<if !($tmpGirl.traits ?? []).includes('feral')>>
 <div id="option_deny">
     <<linkreplace 'Insist that you do the massage'>>
         <<run $('#option_agree').hide()>>
-        She looked at you, her gaze softening, a mixture of surprise and gratitude glimmering in her eyes. After a beat, she sighed and tilted her head toward the massage table with a wry smile. 
+        She looked at you, her gaze softening, a mixture of surprise and gratitude glimmering in her eyes. After a beat, she sighed and tilted her head toward the massage table with a wry smile.
         <br /><br />
         <<sayNpc $tmpGirl>>
             Alright, you win. But don't blame me if I fall asleep halfway through.
@@ -153,3 +164,4 @@ Her offer lingered in the air, and for a second, you couldn’t help but feel an
         <</link>>
     <</linkreplace>>
 </div>
+<</if>>

@@ -2,7 +2,10 @@
 <h1 class="ptitle">FIRE PLACE</h1>
 <br />
 
-<<set _npcKey = setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0] ?? [])>>
+<<set _availFemales = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+<<set _chatPool = _availFemales.filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>>
+<<if !_chatPool.length>><<set _chatPool = _availFemales>><</if>>
+<<set _npcKey = setup.getRandomElement(_chatPool)>>
 <<set _npc = $guests[_npcKey]>>
 The night air was cool and crisp as you strolled through the settlement. The soft glow of scattered lanterns illuminated the narrow paths, casting a warm hue on the wooden structures. The sounds of laughter and distant conversations filled the air, creating a comforting ambiance. 
 As you rounded a corner, you noticed a solitary figure sitting by the flickering flames of the central fireplace.

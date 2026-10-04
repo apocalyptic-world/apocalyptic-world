@@ -10,9 +10,30 @@ You sit down on  your bed when suddenly your doors open and <<=setup.displayName
 <<set $tmpGirl = _guest>>
 <<include 'NPC info'>>
 <br />
-<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
-	Hey! What you're doing? Maybe want to have some fun?
-<</say>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+	<<set _girlVisual = $tmpGirl>>
+	<<set _feralReaction = either([
+		"pads into the light of the doorway, " + setup.pronounceWhos($tmpGirl) + " nightshirt riding up, revealing " + setup.pronounceWhos($tmpGirl) + " undeniable arousal",
+		"comes in close and sets " + setup.pronounceWhos($tmpGirl) + " hand on the door frame, eyeing the bed as if awaiting an invitation...",
+		"lingers at the threshold for a beat, eyes moving over you hungrily, then steps inside, " + setup.pronounceWhos($tmpGirl) + " body gliding close enough for you to feel the heat of " + setup.pronounceWhos($tmpGirl) + " skin",
+		"crosses the room and stops right in front of you, " + setup.pronounceWhos($tmpGirl) + " body presented in a way that is unmistakable..."
+	])>>
+	<div class="say npcsay">
+		<div class="npc-say-visual" @data-id="$tmpGirl.id">
+			<div class="girl_info_picture">
+				<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+			</div>
+		</div>
+		<div class="npc-say-container">
+			<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+			<div class="npc-say-text"><em>*<<= _feralReaction >>*</em></div>
+		</div>
+	</div>
+<<else>>
+	<<say $tmpGirl.name setup.ImagePath+'/people/anongirl.png'>>
+		Hey! What you're doing? Maybe want to have some fun?
+	<</say>>
+<</if>>
 <br /><br />
 <<set _linkName = 'Fuck ' + $tmpGirl.name>>
 <<if _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && $characters.blair.relationship >= 90>>

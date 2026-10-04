@@ -1,8 +1,11 @@
 :: Grope - sucking dick [sex]
+<<set _girl2 = $guests.filter(npc => npc.id !== $tmpGirl.id && npc.gender === 0 && (npc.likesGuys ?? true) && npc.horny >= 50 && npc.race === 'white' && (!($player?.baseManagement?.noIncest ?? false) || !setup.family.isBloodToMC(npc)))[0]>>
+<<if !_girl2>>
+	<<goto 'Grope - fuck'>>
+<</if>>
 <h1 class="ptitle">GREENHOUSE</h1>
 <<addmins 30>>
 <<energy -10>>
-<<set _girl2 = $guests.filter(npc => npc.id !== $tmpGirl.id && npc.gender === 0 && (npc.likesGuys ?? true) && npc.horny >= 50 && npc.race === 'white' && !setup.family.isBloodToMC(npc))[0]>>
 <br />
 She glanced over her shoulder — then turned to face you fully. A quick sweep of the greenhouse, eyes moving between the rows of plants. No one. Her gaze dropped back to yours and she grabbed your collar, walked you backwards into the corner by the potting shelf, and pushed you down into the old wooden chair tucked there.
 <br /><br />
