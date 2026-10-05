@@ -11,8 +11,10 @@ As you open the cabin doors, a gust of wind pushes back, making it difficult to 
 <br /><br />
 <<if $guests.length>>
     <<set _randomGuestIds = setup.getAvailablePersons18yo($guests)>>
-    <<set _randomGuestId = setup.getRandomPersons(_randomGuestIds[0] ?? _randomGuestIds[1], 1)>>
-
+    <<set _weatherGenderPool = (_randomGuestIds[0] ?? _randomGuestIds[1] ?? [])>>
+    <<set _weatherPool = _weatherGenderPool.filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>>
+    <<if !_weatherPool.length>><<set _weatherPool = _weatherGenderPool>><</if>>
+    <<set _randomGuestId = setup.getRandomPersons(_weatherPool, 1)>>
     <<set _npc = $guests[_randomGuestId[0]]>>
 
     Stepping back inside, you see <<=setup.displayName(_npc)>> running towards you, their face partially covered with a makeshift scarf to keep the sand at bay.

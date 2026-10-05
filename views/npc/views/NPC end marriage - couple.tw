@@ -22,6 +22,30 @@
 	<<set _sharedKidsPhrase = 'our unborn child'>>
 <</if>>
 
+<<if (_wife.traits ?? []).includes('feral') || (_husband.traits ?? []).includes('feral')>>
+	<<set _feralOne = (_wife.traits ?? []).includes('feral') ? _wife : _husband>>
+	<<set _otherOne = (_wife.traits ?? []).includes('feral') ? _husband : _wife>>
+	You ask <<=setup.displayName(_otherOne)>> to meet you privately, away from the others.
+	<br /><br />
+	<center>
+		<<actionImage _otherOne approach>>
+	</center>
+	<br />
+	You lay it out plainly: <<=setup.displayName(_feralOne)>> can't communicate consent. Can't understand what a marriage is, let alone agree to one. Keeping this on the books isn't right for either of them.
+	<br /><br />
+	<<=setup.displayName(_otherOne)>> is quiet for a long moment. Then, slowly, nods.
+	<br /><br />
+	<<sayNpc _otherOne>>
+		I knew something wasn't right. I just didn't know how to say it.
+	<</sayNpc>>
+	<br />
+	There's relief in it, and something heavier too. But it's the right call.
+	<br /><br />
+	<<include 'NPC end marriage - finalize'>>
+	<<link 'Leave'>>
+		<<goto $tmpGirlViewBack>>
+	<</link>>
+<<else>>
 You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>> to meet you. They arrive together, exchanging a glance that tells you they already suspect this isn't a routine summons.
 <br /><br />
 <center>
@@ -667,4 +691,5 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 			<</linkreplace>>
 		</div>
 	<</if>>
+<</if>>
 <</if>>

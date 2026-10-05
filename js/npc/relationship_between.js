@@ -174,6 +174,10 @@ setup.relationshipBetween = {
                     continue;
                 }
 
+                if ((npc1.traits ?? []).includes('feral') || (npc2.traits ?? []).includes('feral')) {
+                    continue;
+                }
+
                 const maleId   = npc1.gender === 1 ? _npc1Id : _npc2Id;
                 const femaleId = npc1.gender === 1 ? _npc2Id : _npc1Id;
                 _matchesBetween.push([maleId, femaleId]);

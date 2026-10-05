@@ -3,9 +3,28 @@
 <br />
 <<addmins 30>>
 <<set $tmpGirl.location = 'massage'>>
-<<sayNpc $tmpGirl>>
-    Wow, really? I would love that
-<</sayNpc>>
+<<set _girlVisual = $tmpGirl>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>>
+                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                <<else>>
+                    <<include 'NPC visual'>>
+                <</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*walks over to the table without hesitation, climbs on, and stretches out, looking back at you expectantly*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        Wow, really? I would love that
+    <</sayNpc>>
+<</if>>
 <br />
 <<=setup.displayName($tmpGirl)>> lies down on the massage table, her back facing you. She’s using a towel to cover her lower half, 
 preserving a sense of modesty despite the intimacy of the situation. You pour a small amount of warm oil into your hands, rubbing them together to warm it up. 
@@ -18,9 +37,27 @@ As you work, you can feel her begin to relax under your touch.
 You focus on her shoulders and upper back, kneading out knots and tightness, using firm but careful pressure. 
 The warmth of the oil and the rhythm of your movements create a calming effect.
 <br /><br />
-<<sayNpc $tmpGirl>>
-    This feels so good.
-<</sayNpc>>
+<<if ($tmpGirl.traits ?? []).includes('feral')>>
+    <div class="say npcsay">
+        <div class="npc-say-visual" @data-id="$tmpGirl.id">
+            <div class="girl_info_picture">
+                <<if _girlVisual.portrait>>
+                    <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                <<else>>
+                    <<include 'NPC visual'>>
+                <</if>>
+            </div>
+        </div>
+        <div class="npc-say-container">
+            <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+            <div class="npc-say-text"><em>*makes a low, contented sound and presses back into your hands*</em></div>
+        </div>
+    </div>
+<<else>>
+    <<sayNpc $tmpGirl>>
+        This feels so good.
+    <</sayNpc>>
+<</if>>
 <br />
 <<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + 10)>>
 <<set $tmpGirl.happy += randomInteger(5, 10)>>
@@ -33,18 +70,54 @@ The warmth of the oil and the rhythm of your movements create a calming effect.
     She breathes deeply, sinking further into the relaxation that the massage is providing. 
     You take your time, ensuring that she feels safe and comfortable throughout the entire process.
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        Oh my.. This feels like a heaven. Thank  you.
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>>
+                        <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                    <<else>>
+                        <<include 'NPC visual'>>
+                    <</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*lets out a long exhale and goes completely limp, trusting in your hands*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Oh my.. This feels like a heaven. Thank  you.
+        <</sayNpc>>
+    <</if>>
     <br />
     <<actionImage $tmpGirl 'massage_ass'>>
     <br />
     As you massage her ass, you remain attentive to her responses, ensuring that she feels comfortable and relaxed throughout.
     <br /><br />
     <<if !setup.percentageChance(setup.sexChance($tmpGirl))>>
-        <<sayNpc $tmpGirl>>
-            I think it will be enough. Thanks.
-        <</sayNpc>>
+        <<if ($tmpGirl.traits ?? []).includes('feral')>>
+            <div class="say npcsay">
+                <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                    <div class="girl_info_picture">
+                        <<if _girlVisual.portrait>>
+                            <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                        <<else>>
+                            <<include 'NPC visual'>>
+                        <</if>>
+                    </div>
+                </div>
+                <div class="npc-say-container">
+                    <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                    <div class="npc-say-text"><em>*shifts restlessly and pulls away from your hands, clearly ready to stop*</em></div>
+                </div>
+            </div>
+        <<else>>
+            <<sayNpc $tmpGirl>>
+                I think it will be enough. Thanks.
+            <</sayNpc>>
+        <</if>>
         <br /><br />
     <<elseif $tmpGirl.gender === 0>>
         <<linkreplace 'Massage her pussy'>>
@@ -78,9 +151,27 @@ The warmth of the oil and the rhythm of your movements create a calming effect.
     After completing the massage on her lower back, you cover her again with the towel, ensuring she feels secure. 
     The massage has created a peaceful respite from the harshness of the post-apocalyptic world outside, a moment of care and comfort that is rare and precious.
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        Thank you so much! This really was something.
-    <</sayNpc>>
+    <<if ($tmpGirl.traits ?? []).includes('feral')>>
+        <div class="say npcsay">
+            <div class="npc-say-visual" @data-id="$tmpGirl.id">
+                <div class="girl_info_picture">
+                    <<if _girlVisual.portrait>>
+                        <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+                    <<else>>
+                        <<include 'NPC visual'>>
+                    <</if>>
+                </div>
+            </div>
+            <div class="npc-say-container">
+                <div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+                <div class="npc-say-text"><em>*stretches luxuriously, then rubs her face against your hand, purring gratefully*</em></div>
+            </div>
+        </div>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Thank you so much! This really was something.
+        <</sayNpc>>
+    <</if>>
     <br /><br />
     <<link 'Leave'>>
         <<goto 'Bathhouse'>>

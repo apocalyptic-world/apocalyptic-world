@@ -8,29 +8,55 @@
 <<set $tmpGirl.offeredFood = true>>
 <<if typeof $slaveId !== 'undefined'>><<set $slaves[$slaveId].offeredFood = true>><</if>>
 
+<<set _isFeral = ($tmpGirl.traits ?? []).includes('feral')>>
+<<set _girlVisual = $tmpGirl>>
 The stairs to the basement are narrow and the air turns cold before you reach the bottom. You push open the heavy door and the single overhead bulb fills the cell with pale, flat light. <<=ucfirst(_heOrShe)>> hears you on the stairs — already turned toward the door when you step through, <<=_hisOrHer>> eyes going straight to what you're carrying. The attention is immediate and total. <<=ucfirst(_heOrShe)>> studies what you've brought without appearing to study it, already working out what kind of day this is going to be.
 <br /><br />
 
+<img src="images/places/basement/offer_food_1.jpg" style="max-width: 100%; border-radius: 8px;">
+<br /><br />
+
+As you arrive at the cell, you lift the cover from the plate, revealing what you have decided <<=setup.displayName($tmpGirl)>> is worthy of...
+<br /><br />
+
 <div id="opt_scraps">
-	<<linkreplace 'Left over scraps from the kitchen'>>
+	<<linkreplace 'Left over slop from the kitchen'>>
 		<<run $('#opt_plate, #opt_plate_desc, #opt_scraps_desc').hide()>>
-		You set down what was left from the kitchen after the meal had cleared. The portions are uneven, things nobody went back for. Edible. Nourishing. But plainly what remained when the better parts were taken.
+		<<set _girlVisual = $tmpGirl>>
+		You uncover what was left from the kitchen after the meal had cleared. The portions are uneven, a mix of slop and scraps nobody went back for. Edible, barely nourishing, but plainly what remained when the better parts were taken.
 		<br /><br />
 		<<set _mcLine = setup.getRandomElement(["It's better than wasting it.", "You look like you need this.", "You've been behaving yourself.", "You're looking thin.", "I keep what's mine in decent shape."])>>
 		<<you>>
 			<<=_mcLine>>
 		<</you>>
 		<br /><br />
-		<<=ucfirst(_heOrShe)>> looks at the food, then at you — reading your face more than what you brought. Not performing gratitude, just collecting information. After a moment <<=_heOrShe>> steps forward and takes it, careful not to seem too eager.
+		<img src="images/places/basement/offer_food_2-slop.jpg" style="max-width: 100%; border-radius: 8px;">
 		<br /><br />
-		<<set _npcLines = ["Thank you.", "You didn't have to come down.", "I wasn't sure you'd bring anything today.", "It's more than I had.", "I'll eat."]>>
-		<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+		<<if _isFeral>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*looks at the food through the bars, then at you.  After a moment, <<=_heOrShe>> moves closer to the bars and sniffs what you've brought, a disappointed expression, though <<=_heOrShe>> knows it's better than hunger*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<=ucfirst(_heOrShe)>> looks at the food, then at you — reading your face more than what you brought. You see <<=_himOrHer>> wince at the unappetizing appearance, but hunger wins out over preference.
+			<br /><br />
+			<<set _npcLines = ["Thank you.", "You didn't have to come down.", "I wasn't sure you'd bring anything today.", "It's more than I had.", "I'll eat."]>>
+			<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+		<</if>>
 		<br />
-		<<=ucfirst(_heOrShe)>> holds the food but doesn't start eating yet. <<=_hisOrHer>> attention stays on you, reading whether you intend to stay and what staying would mean.
+		<<=ucfirst(_heOrShe)>> watches as you hold the plate outside the cell. <<=_hisOrHer>> eyes regard you, watching to see whether the food was a gift, or would call for something in return..
 		<br /><br />
 		<div id="opt_freely">
 			<<linkreplace 'Offer it freely'>>
 				<<run $('#opt_beg, #opt_freely_desc, #opt_beg_desc').hide()>>
+				<<set _girlVisual = $tmpGirl>>
 				<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 10, 100)>>
 				<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 5, 100)>>
 				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
@@ -42,10 +68,24 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 					<<=_mcLine>>
 				<</you>>
 				<br /><br />
-				<<=ucfirst(_heOrShe)>> takes it. The look on <<=_hisOrHer>> face is careful, trying to place what the gesture means. <<=ucfirst(_heOrShe)>> expected something, or at least knew that something could be expected, and the plainness of it hasn't settled yet.
-				<br /><br />
-				<<set _npcLines = ["...Thank you.", "I wasn't sure what to expect.", "I'll make it last.", "I appreciate it.", "I didn't think you'd come today."]>>
-				<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+				<<if _isFeral>>
+					<div class="say npcsay">
+						<div class="npc-say-visual" @data-id="$tmpGirl.id">
+							<div class="girl_info_picture">
+								<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+							</div>
+						</div>
+						<div class="npc-say-container">
+							<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+							<div class="npc-say-text"><em>*takes it quietly and sits down to eat, giving you a grateful nod*</em></div>
+						</div>
+					</div>
+				<<else>>
+					<<=ucfirst(_heOrShe)>> takes it. The look on <<=_hisOrHer>> face is careful, trying to place what the gesture means. <<=ucfirst(_heOrShe)>> expected something, or at least knew that something could be expected, and the plainness of it hasn't settled yet.
+					<br /><br />
+					<<set _npcLines = ["...Thank you.", "I wasn't sure what to expect.", "I'll make it last.", "I appreciate it.", "I didn't think you'd come today."]>>
+					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+				<</if>>
 				<br />
 				<<if ($tmpGirl.likesGuys ?? true) && $tmpGirl.relationship > 0>>
 					<<if $tmpGirl.relationship < 20>>
@@ -90,82 +130,190 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 		<div id="opt_beg">
 			<<linkreplace _begLinkText>>
 				<<run $('#opt_freely, #opt_freely_desc, #opt_beg_desc').hide()>>
-				You hold the portion where <<=_heOrShe>> can see it but don't pass it through. You let the pause do its work. <<=ucfirst(_heOrShe)>> reads the hesitation correctly and goes still.
-				<br /><br />
-				<<set _mcLine = setup.getRandomElement(["Then get on your knees and ask for it.", "You know what you have to do.", "Kneel. Ask properly.", "If you want it, show me you want it.", "You'd better beg for it."])>>
-				<<you>>
-					<<=_mcLine>>
-				<</you>>
-				<br /><br />
-				<<if setup.percentageChance($tmpGirl.sub * 2)>>
-					<<=ucfirst(_heOrShe)>> hesitates. Then slowly sinks to <<=_hisOrHer>> knees on the cold concrete, hands open, head bowed. The words come out low and careful. <<=ucfirst(_heOrShe)>> knows exactly what this costs.
+				<<set _girlVisual = $tmpGirl>>
+				You hold the portion where <<=_heOrShe>> can see it but don't pass it through. You let the pause do its work.
+				<<if _isFeral>>
+					<<=ucfirst(_heOrShe)>> watches the food intently, nose working.
 					<br /><br />
-					<<set _npcLines = ["Please. I'll do anything. Just let me eat.", "Please. I know what I am here. I'm asking you.", "I'm begging you. Please.", "I won't cause trouble. I promise. Please.", "Please. I'm yours. Just... please."]>>
-					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
-					<br />
-					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 10, 100)>>
-					<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
-					<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
-					<<=ucfirst(_heOrShe)>> looks submissive and receptive, understanding that <<=_hisOrHer>> body is yours — to feed or to use as you please.
+					You snap your fingers once and point to the floor.
 					<br /><br />
-					<div id="btn_enter">
-						<<linkreplace 'Enter the cell'>>
-							<<run $('#btn_leave_beg').hide()>>
-							You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head slightly lowered, posture open. <<=ucfirst(_heOrShe)>> doesn't speak. The food was enough to show <<=_himOrHer>> where things stand, and <<=_heOrShe>> has made <<=_hisOrHer>> peace with it. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you — to feed or to use as you see fit.
-							<br /><br />
-							<<link 'Continue'>>
+					<<if setup.percentageChance($tmpGirl.sub * 2)>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*hesitates, then sinks slowly to her knees on the cold concrete, hands splayed, head lowering — a soft, whimpering sound in her throat as she stills, waiting*</em></div>
+							</div>
+						</div>
+						<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 10, 100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+						<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
+						<<=ucfirst(_heOrShe)>> looks submissive and receptive, body language open.
+						<br /><br />
+						<div id="btn_enter">
+							<<linkreplace 'Enter the cell'>>
+								<<run $('#btn_leave_beg').hide()>>
+								You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head down, posture open. <<=ucfirst(_heOrShe)>> makes no sound. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you.
+								<br /><br />
+								<<link 'Continue'>>
+									<<drop $backpack 'food' 1>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_beg">
+							<<link 'Leave'>>
 								<<drop $backpack 'food' 1>>
-								<<set $tmpGirlViewBack = 'NPC view'>>
-								<<fuck $tmpGirl>>
+								<<goto 'NPC view'>>
 							<</link>>
-						<</linkreplace>>
-					</div>
-					<div id="btn_leave_beg">
-						<<link 'Leave'>>
-							<<drop $backpack 'food' 1>>
-							<<goto 'NPC view'>>
-						<</link>>
-						<div class="link-desc">Relationship +10 &bull; Submission +10 &bull; Happiness +3</div>
-					</div>
+							<div class="link-desc">Relationship +10 &bull; Submission +10 &bull; Happiness +3</div>
+						</div>
+					<<else>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*goes still — then bares her teeth, just slightly, and backs into the corner of the cell, eyes flat and watchful*</em></div>
+							</div>
+						</div>
+						<br /><br />
+						<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
+						<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
+						<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
+						<<set $player.goodwill -= 5>>
+						<<set _rackLinkText = 'Take ' + _himOrHer + ' out for punishment'>>
+						<<set _rackLinkTextRope = _rackLinkText + ' (-1 rope)'>>
+						<div id="btn_punish">
+							<<if $backpack.has('rope')>>
+								<<linkreplace `_rackLinkTextRope`>>
+									<<run $('#btn_forced, #btn_leave_fail').hide()>>
+									<<drop $backpack 'rope' 1>>
+									You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles against your grip but is no match for you. You bind <<=_hisOrHer>> arms with rope and secure <<=_himOrHer>> in place, positioning <<=_himOrHer>> for what comes next.
+									<br /><br />
+									<<link 'Continue'>>
+										<<goto 'NPC punish'>>
+									<</link>>
+								<</linkreplace>>
+							<<else>>
+								<div class="link-internal disabled" style="background: #ccc">
+									<<=_rackLinkText>> (requires rope)
+								</div>
+							<</if>>
+						</div>
+						<div id="btn_forced">
+							<<linkreplace 'Enter the cell (forced)'>>
+								<<run $('#btn_punish, #btn_leave_fail').hide()>>
+								You push open the cell door and step inside. <<=ucfirst(_heOrShe)>> reads it immediately — <<=_hisOrHer>> eyes go wide and <<=_heOrShe>> backs away. <<=ucfirst(_heOrShe)>> puts up a fight, but <<=_heOrShe>> is no match for you. You press <<=_himOrHer>> down and take what's yours.
+								<br /><br />
+								<<link 'Continue'>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<set $sexForced = true>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_fail">
+							<<link 'Leave'>>
+								<<goto 'NPC view'>>
+							<</link>>
+							<div class="link-desc">Happiness -10 &bull; Submission +2 &bull; Goodwill -5</div>
+						</div>
+					<</if>>
 				<<else>>
-					<<=ucfirst(_heOrShe)>> goes still. A long moment passes. Then <<=_heOrShe>> turns away and moves to the corner of the cell, putting <<=_hisOrHer>> back to you.
+					<<=ucfirst(_heOrShe)>> reads the hesitation correctly and goes still.
 					<br /><br />
-					<<set _npcLines = ["Keep it.", "I won't.", "Not for that.", "I'd rather go hungry.", "Do what you want. I'm not begging."]>>
-					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
-					<br />
-					<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
-					<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
-					<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
-					<<set $player.goodwill -= 5>>
-					<<set _rackLinkText = 'Take ' + _himOrHer + ' out for punishment'>>
-					<div id="btn_punish">
-						<<linkreplace `_rackLinkText`>>
-							<<run $('#btn_forced, #btn_leave_fail').hide()>>
-							You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles against your grip but is no match for you. You secure <<=_himOrHer>> in place, binding <<=_hisOrHer>> arms and positioning <<=_himOrHer>> for what comes next. <<=ucfirst(_heOrShe)>> goes still, bracing for the consequences of <<=_hisOrHer>> defiance.
-							<br /><br />
-							<<link 'Continue'>>
-								<<goto 'NPC punish'>>
+					<<set _mcLine = setup.getRandomElement(["Then get on your knees and ask for it.", "You know what you have to do.", "Kneel. Ask properly.", "If you want it, show me you want it.", "You'd better beg for it."])>>
+					<<you>>
+						<<=_mcLine>>
+					<</you>>
+					<br /><br />
+					<<if setup.percentageChance($tmpGirl.sub * 2)>>
+						<<=ucfirst(_heOrShe)>> hesitates. Then slowly sinks to <<=_hisOrHer>> knees on the cold concrete, hands open, head bowed. The words come out low and careful. <<=ucfirst(_heOrShe)>> knows exactly what this costs.
+						<br /><br />
+						<<set _npcLines = ["Please. I'll do anything. Just let me eat.", "Please. I know what I am here. I'm asking you.", "I'm begging you. Please.", "I won't cause trouble. I promise. Please.", "Please. I'm yours. Just... please."]>>
+						<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+						<br />
+						<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 10, 100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 10, 100)>>
+						<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 3, 100)>>
+						<<=ucfirst(_heOrShe)>> looks submissive and receptive, understanding that <<=_hisOrHer>> body is yours — to feed or to use as you please.
+						<br /><br />
+						<div id="btn_enter">
+							<<linkreplace 'Enter the cell'>>
+								<<run $('#btn_leave_beg').hide()>>
+								You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head slightly lowered, posture open. <<=ucfirst(_heOrShe)>> doesn't speak. The food was enough to show <<=_himOrHer>> where things stand, and <<=_heOrShe>> has made <<=_hisOrHer>> peace with it. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you — to feed or to use as you see fit.
+								<br /><br />
+								<<link 'Continue'>>
+									<<drop $backpack 'food' 1>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_beg">
+							<<link 'Leave'>>
+								<<drop $backpack 'food' 1>>
+								<<goto 'NPC view'>>
 							<</link>>
-						<</linkreplace>>
-					</div>
-					<div id="btn_forced">
-						<<linkreplace 'Enter the cell (forced)'>>
-							<<run $('#btn_punish, #btn_leave_fail').hide()>>
-							You push open the cell door and step inside, the look on your face saying everything. <<=ucfirst(_heOrShe)>> reads it immediately — <<=_hisOrHer>> eyes go wide, breath catching as <<=_heOrShe>> backs away. <<=ucfirst(_heOrShe)>> puts up a fight, hands against your chest, trying to twist free — but <<=_heOrShe>> is no match for you. You press <<=_himOrHer>> down and make it clear, in terms <<=_heOrShe>> cannot mistake, what it means to belong to you.
-							<br /><br />
-							<<link 'Continue'>>
-								<<set $tmpGirlViewBack = 'NPC view'>>
-								<<set $sexForced = true>>
-								<<fuck $tmpGirl>>
+							<div class="link-desc">Relationship +10 &bull; Submission +10 &bull; Happiness +3</div>
+						</div>
+					<<else>>
+						<<=ucfirst(_heOrShe)>> goes still. A long moment passes. Then <<=_heOrShe>> turns away and moves to the corner of the cell, putting <<=_hisOrHer>> back to you.
+						<br /><br />
+						<<set _npcLines = ["Keep it.", "I won't.", "Not for that.", "I'd rather go hungry.", "Do what you want. I'm not begging."]>>
+						<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+						<br />
+						<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
+						<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
+						<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
+						<<set $player.goodwill -= 5>>
+						<<set _rackLinkText = 'Take ' + _himOrHer + ' out for punishment'>>
+						<<set _rackLinkTextRope = _rackLinkText + ' (-1 rope)'>>
+						<div id="btn_punish">
+							<<if $backpack.has('rope')>>
+								<<linkreplace `_rackLinkTextRope`>>
+									<<run $('#btn_forced, #btn_leave_fail').hide()>>
+									<<drop $backpack 'rope' 1>>
+									You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles against your grip but is no match for you. You secure <<=_himOrHer>> in place, binding <<=_hisOrHer>> arms with rope and positioning <<=_himOrHer>> for what comes next. <<=ucfirst(_heOrShe)>> goes still, bracing for the consequences of <<=_hisOrHer>> defiance.
+									<br /><br />
+									<<link 'Continue'>>
+										<<goto 'NPC punish'>>
+									<</link>>
+								<</linkreplace>>
+							<<else>>
+								<div class="link-internal disabled" style="background: #ccc">
+									<<=_rackLinkText>> (requires rope)
+								</div>
+							<</if>>
+						</div>
+						<div id="btn_forced">
+							<<linkreplace 'Enter the cell (forced)'>>
+								<<run $('#btn_punish, #btn_leave_fail').hide()>>
+								You push open the cell door and step inside, the look on your face saying everything. <<=ucfirst(_heOrShe)>> reads it immediately — <<=_hisOrHer>> eyes go wide, breath catching as <<=_heOrShe>> backs away. <<=ucfirst(_heOrShe)>> puts up a fight, hands against your chest, trying to twist free — but <<=_heOrShe>> is no match for you. You press <<=_himOrHer>> down and make it clear, in terms <<=_heOrShe>> cannot mistake, what it means to belong to you.
+								<br /><br />
+								<<link 'Continue'>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<set $sexForced = true>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_fail">
+							<<link 'Leave'>>
+								<<goto 'NPC view'>>
 							<</link>>
-						<</linkreplace>>
-					</div>
-					<div id="btn_leave_fail">
-						<<link 'Leave'>>
-							<<goto 'NPC view'>>
-						<</link>>
-						<div class="link-desc">Happiness -10 &bull; Submission +2 &bull; Goodwill -5</div>
-					</div>
+							<div class="link-desc">Happiness -10 &bull; Submission +2 &bull; Goodwill -5</div>
+						</div>
+					<</if>>
 				<</if>>
 			<</linkreplace>>
 			<<linkdesc 'opt_beg_desc'>>
@@ -180,23 +328,41 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 <div id="opt_plate">
 	<<linkreplace "A fresh plate from the day's meals">>
 		<<run $('#opt_scraps, #opt_scraps_desc, #opt_plate_desc').hide()>>
-		You set down a full portion. The same as any other resident receives today, nothing held back and nothing added — but it is considerably more than <<=_heOrShe>> has gotten used to expecting. <<=ucfirst(_heOrShe)>> goes still when it's close enough to see clearly.
+		<<set _girlVisual = $tmpGirl>>
+		You uncover a full portion. The same as any other resident receives today, nothing held back and nothing added — but it is considerably more than <<=_heOrShe>> has gotten used to expecting. <<=ucfirst(_heOrShe)>> goes still when it's close enough to see clearly.
 		<br /><br />
 		<<set _mcLine = setup.getRandomElement(["Same as everyone else.", "Eat. It's hot.", "Don't read into it.", "It wasn't sitting right, leaving you with nothing.", "You need to keep your strength."])>>
 		<<you>>
 			<<=_mcLine>>
 		<</you>>
 		<br /><br />
-		<<=ucfirst(_heOrShe)>> stares at the plate, then at you. <<=_hisOrHer>> expression doesn't quite know where to land. <<=ucfirst(_heOrShe)>> reaches out carefully with one hand, touching the edge as if checking it's real, then draws it closer without letting go.
+		<img src="images/places/basement/offer_food_2-fresh.jpg" style="max-width: 100%; border-radius: 8px;">
 		<br /><br />
-		<<set _npcLines = ["That's... the same as what the others get.", "You didn't have to do this.", "I don't understand.", "Is this from your own meal?", "This is more than I expected."]>>
-		<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+		<<if _isFeral>>
+			<div class="say npcsay">
+				<div class="npc-say-visual" @data-id="$tmpGirl.id">
+					<div class="girl_info_picture">
+						<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+					</div>
+				</div>
+				<div class="npc-say-container">
+					<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+					<div class="npc-say-text"><em>*leans forward against the bars and sniffs towards the plate, <<=_hisOrHer>> stomach growling at the aroma, then looks back at you, waiting*</em></div>
+				</div>
+			</div>
+		<<else>>
+			<<=ucfirst(_heOrShe)>> stares at the plate, then at you. <<=_hisOrHer>> expression doesn't quite know where to land. <<=ucfirst(_heOrShe)>> looks at the appetizing plate through the bars as if uncertain it's real.
+			<br /><br />
+			<<set _npcLines = ["That's... the same as what the others get.", "You didn't have to do this.", "I don't understand.", "Is this from your own meal?", "This is more than I expected."]>>
+			<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+		<</if>>
 		<br />
-		<<=ucfirst(_heOrShe)>> holds the plate but doesn't eat. <<=_hisOrHer>> eyes come back to your face, trying to work out what it cost you to bring this down and what, if anything, comes with it.
+		<<=ucfirst(_heOrShe)>> watches as you hold the plate outside the cell. <<=_hisOrHer>> eyes regard you, watching to see whether the food was a gift, or would call for something in return..
 		<br /><br />
 		<div id="opt_freely">
 			<<linkreplace 'Offer it freely'>>
 				<<run $('#opt_beg, #opt_freely_desc, #opt_beg_desc').hide()>>
+				<<set _girlVisual = $tmpGirl>>
 				<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 12, 100)>>
 				<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 8, 100)>>
 				<<set $player.goodwill += 5>>
@@ -207,10 +373,24 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 					<<=_mcLine>>
 				<</you>>
 				<br /><br />
-				Something shifts in <<=_hisOrHer>> expression. Not quite relief and not quite gratitude yet, but the beginning of both. <<=ucfirst(_heOrShe)>> pulls the plate closer and is quiet for a moment, composing <<=_hisOrHer>> face into something more measured.
-				<br /><br />
-				<<set _npcLines = ["Thank you. I mean it.", "I didn't expect this.", "...You didn't have to.", "I've been trying to do better.", "I won't forget this."]>>
-				<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+				<<if _isFeral>>
+					<div class="say npcsay">
+						<div class="npc-say-visual" @data-id="$tmpGirl.id">
+							<div class="girl_info_picture">
+								<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+							</div>
+						</div>
+						<div class="npc-say-container">
+							<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+							<div class="npc-say-text"><em>*takes the plate and eats quickly, unselfconsciously, then looks up at you and rubs the side of her face against your arm in gratitude*</em></div>
+						</div>
+					</div>
+				<<else>>
+					Something shifts in <<=_hisOrHer>> expression. Not quite relief and not quite gratitude yet, but the beginning of both. <<=ucfirst(_heOrShe)>> pulls the plate closer and is quiet for a moment, composing <<=_hisOrHer>> face into something more measured.
+					<br /><br />
+					<<set _npcLines = ["Thank you. I mean it.", "I didn't expect this.", "...You didn't have to.", "I've been trying to do better.", "I won't forget this."]>>
+					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+				<</if>>
 				<br />
 				<<if ($tmpGirl.likesGuys ?? true) && $tmpGirl.relationship > 0>>
 					<<if $tmpGirl.relationship < 20>>
@@ -255,63 +435,170 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 		<div id="opt_beg">
 			<<linkreplace _begLinkText>>
 				<<run $('#opt_freely, #opt_freely_desc, #opt_beg_desc').hide()>>
-				You set the plate where <<=_heOrShe>> can see it — close enough to smell — but don't pass it through. You wait. The quality of what's there is obvious, and so is the fact that it hasn't moved.
-				<br /><br />
-				<<set _mcLine = setup.getRandomElement(["This kind of meal has a price. You know what it is.", "Kneel. Ask me properly.", "If you want it, you beg for it.", "You know what to do first.", "Show me you understand your place, and it's yours."])>>
-				<<you>>
-					<<=_mcLine>>
-				<</you>>
-				<br /><br />
-				<<if setup.percentageChance($tmpGirl.sub * 2)>>
-					<<=ucfirst(_heOrShe)>> goes quiet. Then slowly drops to <<=_hisOrHer>> knees on the cold concrete, hands folded, head down. <<=ucfirst(_heOrShe)>> is willing to give anything just to survive another day.
+				<<set _girlVisual = $tmpGirl>>
+				You set the plate where <<=_heOrShe>> can see it — close enough to smell — but don't pass it through.
+				<<if _isFeral>>
+					<<=ucfirst(_heOrShe)>> watches the plate intently, nose working.
 					<br /><br />
-					<<set _npcLines = ["Please. I'll do whatever you ask. Just... please.", "Please. I know what this is. I know what I am. Please.", "I'm begging you. Please let me have it.", "Please. I'm yours. I know that. Just let me eat.", "I'll be good. I'll do anything. Please."]>>
-					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
-					<br />
-					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 12, 100)>>
-					<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 6, 100)>>
-					<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 5, 100)>>
-					<<=ucfirst(_heOrShe)>> looks submissive and receptive, understanding that <<=_hisOrHer>> body is yours — to feed or to use as you please.
+					You snap your fingers once and point to the floor.
 					<br /><br />
-					<div id="btn_enter">
-						<<linkreplace 'Enter the cell'>>
-							<<run $('#btn_leave_beg').hide()>>
-							You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head slightly lowered, posture open. <<=ucfirst(_heOrShe)>> doesn't speak. The food was enough to show <<=_himOrHer>> where things stand, and <<=_heOrShe>> has made <<=_hisOrHer>> peace with it. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you — to feed or to use as you see fit.
-							<br /><br />
-							<<link 'Continue'>>
+					<<if setup.percentageChance($tmpGirl.sub * 2)>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*hesitates, then sinks to her knees on the cold concrete, head bowing — a small, whimpering sound, and she stays there, waiting*</em></div>
+							</div>
+						</div>
+						<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 12, 100)>>
+						<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 6, 100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 5, 100)>>
+						<<=ucfirst(_heOrShe)>> looks submissive and receptive, body language open.
+						<br /><br />
+						<div id="btn_enter">
+							<<linkreplace 'Enter the cell'>>
+								<<run $('#btn_leave_beg').hide()>>
+								You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head down, posture open. <<=ucfirst(_heOrShe)>> makes no sound. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you.
+								<br /><br />
+								<<link 'Continue'>>
+									<<drop $backpack 'food' 1>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_beg">
+							<<link 'Leave'>>
 								<<drop $backpack 'food' 1>>
-								<<set $tmpGirlViewBack = 'NPC view'>>
-								<<fuck $tmpGirl>>
+								<<goto 'NPC view'>>
 							<</link>>
-						<</linkreplace>>
-					</div>
-					<div id="btn_leave_beg">
-						<<link 'Leave'>>
-							<<drop $backpack 'food' 1>>
-							<<goto 'NPC view'>>
-						<</link>>
-						<div class="link-desc">Relationship +12 &bull; Happiness +6 &bull; Submission +5</div>
-					</div>
+							<div class="link-desc">Relationship +12 &bull; Happiness +6 &bull; Submission +5</div>
+						</div>
+					<<else>>
+						<div class="say npcsay">
+							<div class="npc-say-visual" @data-id="$tmpGirl.id">
+								<div class="girl_info_picture">
+									<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+								</div>
+							</div>
+							<div class="npc-say-container">
+								<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+								<div class="npc-say-text"><em>*goes still — then bares her teeth, just slightly, and backs to the corner, eyes flat and watchful*</em></div>
+							</div>
+						</div>
+						<br /><br />
+						<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
+						<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
+						<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
+						<<set $player.goodwill -= 5>>
+						<<set _rackLinkText = 'Take ' + _himOrHer + ' out for punishment'>>
+						<<set _rackLinkTextRope = _rackLinkText + ' (-1 rope)'>>
+						<div id="btn_punish">
+							<<if $backpack.has('rope')>>
+								<<linkreplace `_rackLinkTextRope`>>
+									<<run $('#btn_forced, #btn_leave_fail').hide()>>
+									<<drop $backpack 'rope' 1>>
+									You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles but is no match for you. You bind <<=_hisOrHer>> arms with rope and secure <<=_himOrHer>> in place, positioning <<=_himOrHer>> for what comes next.
+									<br /><br />
+									<<link 'Continue'>>
+										<<goto 'NPC punish'>>
+									<</link>>
+								<</linkreplace>>
+							<<else>>
+								<div class="link-internal disabled" style="background: #ccc">
+									<<=_rackLinkText>> (requires rope)
+								</div>
+							<</if>>
+						</div>
+						<div id="btn_forced">
+							<<linkreplace 'Enter the cell (forced)'>>
+								<<run $('#btn_punish, #btn_leave_fail').hide()>>
+								You push open the cell door and step inside. <<=ucfirst(_heOrShe)>> reads it immediately — <<=_hisOrHer>> eyes go wide and <<=_heOrShe>> backs away. <<=ucfirst(_heOrShe)>> puts up a fight, but <<=_heOrShe>> is no match for you. You press <<=_himOrHer>> down and take what's yours.
+								<br /><br />
+								<<link 'Continue'>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<set $sexForced = true>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_fail">
+							<<link 'Leave'>>
+								<<goto 'NPC view'>>
+							<</link>>
+							<div class="link-desc">Happiness -10 &bull; Submission +2 &bull; Goodwill -5</div>
+						</div>
+					<</if>>
 				<<else>>
-					The plate sits between you. <<=ucfirst(_heOrShe)>> looks at it, then at you. <<=_hisOrHer>> jaw sets and <<=_heOrShe>> steps back to the far corner, hands at <<=_hisOrHer>> sides.
+					You wait. The quality of what's there is obvious, and so is the fact that it hasn't moved.
 					<br /><br />
-					<<set _npcLines = ["I'm not doing that.", "Keep it.", "Not for anything.", "I'd rather starve.", "You can have it back."]>>
-					<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+					<<set _mcLine = setup.getRandomElement(["This kind of meal has a price. You know what it is.", "Kneel. Ask me properly.", "If you want it, you beg for it.", "You know what to do first.", "Show me you understand your place, and it's yours."])>>
+					<<you>>
+						<<=_mcLine>>
+					<</you>>
+					<br /><br />
+					<<if setup.percentageChance($tmpGirl.sub * 2)>>
+						<<=ucfirst(_heOrShe)>> goes quiet. Then slowly drops to <<=_hisOrHer>> knees on the cold concrete, hands folded, head down. <<=ucfirst(_heOrShe)>> is willing to give anything just to survive another day.
+						<br /><br />
+						<<set _npcLines = ["Please. I'll do whatever you ask. Just... please.", "Please. I know what this is. I know what I am. Please.", "I'm begging you. Please let me have it.", "Please. I'm yours. I know that. Just let me eat.", "I'll be good. I'll do anything. Please."]>>
+						<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
+						<br />
+						<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 12, 100)>>
+						<<set $tmpGirl.happy = Math.min($tmpGirl.happy + 6, 100)>>
+						<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 5, 100)>>
+						<<=ucfirst(_heOrShe)>> looks submissive and receptive, understanding that <<=_hisOrHer>> body is yours — to feed or to use as you please.
+						<br /><br />
+						<div id="btn_enter">
+							<<linkreplace 'Enter the cell'>>
+								<<run $('#btn_leave_beg').hide()>>
+								You step into the cell. <<=ucfirst(_heOrShe)>> is already waiting — head slightly lowered, posture open. <<=ucfirst(_heOrShe)>> doesn't speak. The food was enough to show <<=_himOrHer>> where things stand, and <<=_heOrShe>> has made <<=_hisOrHer>> peace with it. <<=ucfirst(_heOrShe)>> offers <<=_himOrHer>>self quietly, understanding that <<=_hisOrHer>> body belongs to you — to feed or to use as you see fit.
+								<br /><br />
+								<<link 'Continue'>>
+									<<drop $backpack 'food' 1>>
+									<<set $tmpGirlViewBack = 'NPC view'>>
+									<<fuck $tmpGirl>>
+								<</link>>
+							<</linkreplace>>
+						</div>
+						<div id="btn_leave_beg">
+							<<link 'Leave'>>
+								<<drop $backpack 'food' 1>>
+								<<goto 'NPC view'>>
+							<</link>>
+							<div class="link-desc">Relationship +12 &bull; Happiness +6 &bull; Submission +5</div>
+						</div>
+					<<else>>
+						The plate sits between you. <<=ucfirst(_heOrShe)>> looks at it, then at you. <<=_hisOrHer>> jaw sets and <<=_heOrShe>> steps back to the far corner, hands at <<=_hisOrHer>> sides.
+						<br /><br />
+						<<set _npcLines = ["I'm not doing that.", "Keep it.", "Not for anything.", "I'd rather starve.", "You can have it back."]>>
+						<<sayNpc $tmpGirl>><<=setup.getRandomElement(_npcLines)>><</sayNpc>>
 					<br />
 					<<set $tmpGirl.happy = Math.max($tmpGirl.happy - 10, -100)>>
 					<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100)>>
 					<<set $tmpGirl.sub = Math.max($tmpGirl.sub - 3, 0)>>
 					<<set $player.goodwill -= 5>>
 					<<set _rackLinkText = 'Take ' + _himOrHer + ' out for punishment'>>
+					<<set _rackLinkTextRope = _rackLinkText + ' (-1 rope)'>>
 					<div id="btn_punish">
-						<<linkreplace `_rackLinkText`>>
-							<<run $('#btn_forced, #btn_leave_fail').hide()>>
-							You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles against your grip but is no match for you. You secure <<=_himOrHer>> in place, binding <<=_hisOrHer>> arms and positioning <<=_himOrHer>> for what comes next. <<=ucfirst(_heOrShe)>> goes still, bracing for the consequences of <<=_hisOrHer>> defiance.
-							<br /><br />
-							<<link 'Continue'>>
-								<<goto 'NPC punish'>>
-							<</link>>
-						<</linkreplace>>
+						<<if $backpack.has('rope')>>
+							<<linkreplace `_rackLinkTextRope`>>
+								<<run $('#btn_forced, #btn_leave_fail').hide()>>
+								<<drop $backpack 'rope' 1>>
+								You pull open the cell door and step inside. <<=ucfirst(_heOrShe)>> backs against the far wall but there is nowhere to go — you take hold of <<=_himOrHer>> before <<=_heOrShe>> can offer any real resistance and pull <<=_himOrHer>> out toward the dungeon area. <<=ucfirst(_heOrShe)>> struggles against your grip but is no match for you. You secure <<=_himOrHer>> in place, binding <<=_hisOrHer>> arms and positioning <<=_himOrHer>> for what comes next. <<=ucfirst(_heOrShe)>> goes still, bracing for the consequences of <<=_hisOrHer>> defiance.
+								<br /><br />
+								<<link 'Continue'>>
+									<<goto 'NPC punish'>>
+								<</link>>
+							<</linkreplace>>
+						<<else>>
+							<div class="link-internal disabled" style="background: #ccc">
+								<<=_rackLinkText>> (requires rope)
+							</div>
+						<</if>>
 					</div>
 					<div id="btn_forced">
 						<<linkreplace 'Enter the cell (forced)'>>
@@ -331,6 +618,7 @@ The stairs to the basement are narrow and the air turns cold before you reach th
 						<</link>>
 						<div class="link-desc">Relationship +2 &bull; Happiness -7 &bull; Submission -3 &bull; Goodwill -5</div>
 					</div>
+				<</if>>
 				<</if>>
 			<</linkreplace>>
 			<<linkdesc 'opt_beg_desc'>>

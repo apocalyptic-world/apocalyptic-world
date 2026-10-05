@@ -152,8 +152,37 @@ setup.player = {
 
         let npcText = '<div style="' + family_container + '"><div style="' + npc_name + '"><span style="' + name_display + '">' + setup.player.npcNameColor(npc) + (charDead ? ' (deceased)' : '') + ': </span></div><div style="' + family_details + '">';
         const family = npc.family ?? {};
+
+        const renderSingleRelation = function(relation, id) {
+            if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
+                const rel = setup.getNpcById(id);
+                if(rel) {
+                    let relDead = false;
+                    if ((variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false)) {
+                        relDead = true;
+                    }
+                    npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.npcNameColor(rel) + (relDead ? ' (deceased)' : '') + '</span></div> ';
+                }
+            }
+        };
+        // Mother/father are rendered first (in that fixed order) so a step-father line can
+        // always be placed directly below them, regardless of the family object's key order.
+        if (family.hasOwnProperty('mother')) {
+            renderSingleRelation('mother', family.mother);
+        }
+        if (family.hasOwnProperty('father')) {
+            renderSingleRelation('father', family.father);
+        }
+        const motherNpc = family.mother ? setup.getNpcById(family.mother) : null;
+        const stepFatherID = motherNpc?.family?.husband ?? null;
+        if (stepFatherID && stepFatherID !== (family.father ?? null) && stepFatherID !== npcID) {
+            renderSingleRelation('step-father', stepFatherID);
+        }
+
         for(const relation in family) {
-            if (relation === 'exes') {
+            if (relation === 'mother' || relation === 'father') {
+                continue;
+            } else if (relation === 'exes') {
                 const out = [];
                 for(const id of (family.exes ?? [])) {
                     if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
