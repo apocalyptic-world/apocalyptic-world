@@ -17,6 +17,17 @@
                 </td>
                 <td>
                     <<= _pack.name>>
+                    <<if _pack.author>>
+                        <div class="pack-meta">
+                            by <<= _pack.author>>
+                        </div>
+                    <</if>>
+                    <<if _pack.gender != null>>
+                        <<set _genderLabel = ['Female', 'Male', 'Trans woman'][_pack.gender] ?? 'Unknown'>>
+                        <div @class="'pack-meta' + (_pack.gender === 2 ? ' pack-trans' : '')">
+                            <<= _genderLabel>>
+                        </div>
+                    <</if>>
                 </td>
                 <td>
                     <div>
@@ -62,5 +73,13 @@
 <style>
     .pack-description {
         font-size: 10px;
+    }
+    .pack-meta {
+        font-size: 10px;
+        color: #aaa;
+    }
+    .pack-trans {
+        color: #e88ad0;
+        font-weight: bold;
     }
 </style>

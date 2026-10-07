@@ -43,6 +43,9 @@
     <<set _isSlaveMarket = true>>
     <div class="slave-market-card">
         <<include 'NPC info'>>
+        <<if _card.virgin>>
+            <div><strong><<=setup.pronounceWhat(_card, true)>>'s a virgin!</strong></div>
+        <</if>>
         <div class="slave-market-card-price"><<= _card.value>> caps</div>
         <<linkreplace 'Buy'>>
             <<if $slaves.length < $basementLimit && $player.money >= _mSlaves[_msi].value>>
