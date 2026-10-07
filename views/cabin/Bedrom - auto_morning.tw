@@ -142,7 +142,7 @@
                         <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
                         <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
                     <</if>>
-                <<elseif _job === 'streets' && _itemcount == 0>>
+                <<elseif (_job === 'streets' || _job === 'nightclub') && _itemcount == 0>>
                     <<set _want[_item] ??= []>>
                     <<set _want[_item].push(_npc)>>
                 <</if>>

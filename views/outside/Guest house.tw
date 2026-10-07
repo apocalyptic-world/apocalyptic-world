@@ -239,30 +239,44 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 						<span @class="_genderClass + _customColorStyle">
 
 							<div class="tooltip">
+								<<set _tipSkills = (_guest.skills ?? []).filter(s => typeof setup.skills[s] !== 'undefined').length>>
+								<<set _tipBelow = (_guest.personality ?? []).length + (_guest.traits ?? []).length>>
+								<<set _tipTotal = _tipSkills * 22 + 106 + _tipBelow * 22>>
+								<<set _tipPct = Math.round((_tipSkills * 22 + 53) / Math.max(_tipTotal, 1) * 100)>>
+								<<set _tipStyle = "left: -130px; background-color: transparent; opacity: 1; top: 50%; transform: translateY(-" + _tipPct + "%); ">>
 								<<set _girlVisual to _guest>>
-								<span class="tooltiptext" style= "left: -130px;  background-color: transparent; opacity: 1;"> 
+								<span class="tooltiptext" @style="_tipStyle">
 									<<for _skill range (_guest.skills ?? [])>>
 										<<if typeof setup.skills[_skill] !== 'undefined'>>
 											<div class="trait tooltip">
 												<<=setup.skills[_skill].title>>
+												<span class="tooltiptext"><<=setup.skills[_skill].description>></span>
 											</div>
 										<</if>>
 										<br />
 									<</for>>
-        								<div class="say npcsay npc-say-visual" >
-            									<div class="girl_info_picture">
-                									<<if _girlVisual.portrait>>
-                    										<div class="say_custom_portrait">
-                        										<<include 'NPC visual'>>
-                    										</div>
-                									<<else>>
-                    										<<include 'NPC visual'>>
-                									<</if>>                
+									<div class="say npcsay npc-say-visual">
+										<div class="girl_info_picture">
+											<<if _girlVisual.portrait>>
+												<div class="say_custom_portrait">
+													<<include 'NPC visual'>>
+												</div>
+											<<else>>
+												<<include 'NPC visual'>>
+											<</if>>
 										</div>
 									</div>
+									<<for _pTrait range (_guest.personality ?? [])>>
+										<div class="trait trait-personality tooltip">
+											<<=_pTrait>>
+											<span class="tooltiptext"><<=setup.personality.info[_pTrait] ?? ''>></span>
+										</div>
+										<br />
+									<</for>>
 									<<for _trait range (_guest.traits ?? [])>>
 										<div class="trait tooltip">
 											<<=setup.traits[_trait].title>>
+											<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
 										</div>
 										<br />
 									<</for>>

@@ -1045,3 +1045,19 @@ setup.getDayTimeName = function() {
 
     return 'night';
 };
+
+/* NPC list thumbnails: when a new name is hovered, immediately hide all other
+   thumbnails without waiting for the CSS transition delay. */
+$(document).on('mouseenter', '.npc-list .item div.tooltip:not(.trait)', function () {
+    var thisTip = this.querySelector(':scope > .tooltiptext');
+    document.querySelectorAll('.npc-list .item div.tooltip:not(.trait) > .tooltiptext').forEach(function (el) {
+        if (el !== thisTip) {
+            el.style.transition = 'none';
+            el.style.visibility = 'hidden';
+            requestAnimationFrame(function () {
+                el.style.transition = '';
+                el.style.visibility = '';
+            });
+        }
+    });
+});
