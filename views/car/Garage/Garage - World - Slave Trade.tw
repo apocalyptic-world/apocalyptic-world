@@ -52,11 +52,12 @@ The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't 
 			<<addmins 45>>
 			<<newgirl>>
 			<<set $tmpGirl.name = _stPick.name>>
-			<<set $tmpGirl.age = _stPick.age>>
+			<<set $tmpGirl.birthDate = setup.getBirthDate(_stPick.age)>>
 			<<set $tmpGirl.origin = 'Purchased from ' + _st.name>>
 			<<run $slaves.push($tmpGirl)>>
 			<<run setup.npc.addHistory($tmpGirl, 'bought', { place: _st.name })>>
 			<<unset $tmpGirl>>
+			<<run _st.slavesForSale.splice($game.stBuyIdx, 1)>>
 			<<run setup.settlements.modifyRelationship(_st, 2, 'Slave purchase')>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>
 			<<unset $game.stBuyIdx>>
