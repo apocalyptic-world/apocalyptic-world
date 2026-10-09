@@ -46,7 +46,7 @@ setup.automatization = {
     condom: {
       name: 'Condom rotation',
       description:
-        'Gives condoms to girls who need it and removes from other. Only street workers (that can be pregnant) gets condoms for now.',
+        'Gives condoms to girls who need it and removes from other. Street workers and nightclub workers (that can be pregnant) receive condoms.',
       help: 'Only women younger than 60 years, not infertile and not already pregnant have a chance to become pregnant',
     },
     dumbbell: {

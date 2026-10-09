@@ -1433,3 +1433,39 @@ div.poker-doll.girl_info_picture {
   color: #ccc;
   text-align: left;
 }
+
+.trait.trait-personality.tooltip {
+  background: #7a6352;
+  border-color: #7a6352;
+}
+
+/* NPC list hover thumbnails: make <td> the positioning context so top: 50%
+   refers to the row height, not the tiny .tooltip div. */
+.npc-list td {
+  position: relative;
+}
+.npc-list .item div.tooltip:not(.trait) {
+  position: static;
+}
+
+/* Keep thumbnail visible while cursor moves from name to panel (0.2s grace period),
+   and while the cursor is directly over the panel or its chip tooltips. */
+.npc-list .item div.tooltip > .tooltiptext {
+  transition: visibility 0s linear 0.2s;
+}
+.npc-list .item div.tooltip:hover > .tooltiptext,
+.npc-list .item div.tooltip > .tooltiptext:hover {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* The base .tooltip:hover .tooltiptext rule has no depth limit, so it would show
+   all chip sub-tooltips the moment the outer div is hovered. Override: chip
+   sub-tooltips inside the thumbnail are hidden unless their own chip is hovered. */
+.npc-list .item div.tooltip > .tooltiptext .trait.tooltip .tooltiptext {
+  visibility: hidden;
+  pointer-events: none;
+}
+.npc-list .item div.tooltip > .tooltiptext .trait.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
