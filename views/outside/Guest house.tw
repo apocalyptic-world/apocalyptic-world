@@ -188,7 +188,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 				<<set _customColorStyle = ' npc-color color-' + _guest.color >>
 			<</if>>
 
-			<<if setup.isAtWork(_guest, $weather)>>
+			<<if setup.isAtWork(_guest, $weather) || _guest.location === 'school'>>
 				<<continue>>
 			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
@@ -328,7 +328,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	<<set _ghCaughtCandidates = []>>
 	<<for _gci to 0; _gci lt $guests.length; _gci++>>
 		<<set _gcGuest = $guests[_gci]>>
-		<<if !_gcGuest.gender && (_gcGuest.likesGuys ?? true) && (['white', 'latina'].includes(_gcGuest.ethnicity ?? '')) && (_gcGuest.relationship ?? 0) >= 60 && !setup.isAtWork(_gcGuest, $weather)>>
+		<<if !_gcGuest.gender && (_gcGuest.likesGuys ?? true) && (['white', 'latina'].includes(_gcGuest.ethnicity ?? '')) && (_gcGuest.relationship ?? 0) >= 60 && !setup.isAtWork(_gcGuest, $weather) && _gcGuest.location !== 'school'>>
 			<<set _ghCaughtCandidates.push(_gci)>>
 		<</if>>
 	<</for>>

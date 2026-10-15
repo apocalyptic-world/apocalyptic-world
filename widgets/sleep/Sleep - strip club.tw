@@ -20,13 +20,12 @@
 
 <<set _moneyEarned += Math.round(_npc.beauty/40)>>
 <<set _moneyEarned = parseInt(_moneyEarned)>>
-<<if _isSandStorm>>
-	<<set _moneyEarned = Math.max(1, Math.round(_moneyEarned * 0.5))>>
-<<elseif _isColdSnap>>
+<<if _isColdSnap>>
 	<<set _moneyEarned = Math.max(1, Math.round(_moneyEarned * 0.75))>>
 <<elseif $weather?.weather === 'storm'>>
 	<<set _moneyEarned = Math.max(1, Math.round(_moneyEarned * 0.8))>>
 <</if>>
+<<set _moneyEarned = setup.eveningSchool.output(_npc, _moneyEarned)>> /* hours lost to evening class */
 <<set $player.money += _moneyEarned>>
 <<set _totals.caps = (_totals.caps ?? 0) + _moneyEarned>>
 <<run setup.sleepMessages.addJob(_npc.name + ' earned tips in the strip club. She got you <strong>' + _moneyEarned + '</strong> caps', 'strip_club')>>

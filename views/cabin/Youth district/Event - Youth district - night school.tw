@@ -1,0 +1,124 @@
+:: Event - Youth district - night school
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* Introduction to the night school. Triggered from Youth district; unlocks the build option (here and in School). */
+<<set _cast = setup.eveningSchool.introCast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set $locationEvents.youth_district = true>>
+<<set $player.quests.evening_school_talk = true>>
+<<addmins 30>>
+
+<<set _npc = _cast.npc>>
+<<set _name = setup.displayName(_npc)>>
+<<set _heOrShe = setup.pronounceWhat(_npc)>>
+<<set _hisOrHer = setup.pronounceWhos(_npc)>>
+<<set _himOrHer = setup.pronounceWho(_npc)>>
+<<set _dayTeacherName = _cast.dayTeacher ? setup.displayName(_cast.dayTeacher) : null>>
+<<set _hasLibrary = $game.location.library ?? false>>
+
+/* What the speaker knows, and what people ask them about it */
+<<set _subject = {
+    doctor: 'medicine',
+    mechanic: 'machines',
+    shopkeeper: 'trading',
+    cook: 'cooking'
+}>>
+<<set _questions = {
+    doctor: 'how to keep a wound from going bad, what to do about a fever that won\'t break',
+    mechanic: 'how to get a seized engine turning, why the generator keeps sputtering out',
+    shopkeeper: 'what things are really worth, how to haggle without getting fleeced',
+    cook: 'how to stretch one rabbit into a meal for ten, which roots are safe to eat'
+}>>
+/* Other skilled guests, by what they know (they may not work in that job) */
+<<set _pestered = {
+    doctor: 'cornered about fevers and festering cuts',
+    mechanic: 'pestered about sputtering engines and stripped bolts',
+    shopkeeper: 'pressed for haggling and bookkeeping tips',
+    cook: 'quizzed about herbs and stretching a meal'
+}>>
+/* The backup NPC does work this job */
+<<set _jobPlace = {
+    hospital: 'the hospital',
+    garage: 'the garage',
+    shop: 'the shop',
+    kitchen: 'the kitchen',
+    school: 'the classroom'
+}>>
+
+The afternoon is wearing on as your walk takes you past the school. The children left a while ago, and the building stands quiet in the long, slanting light. You've barely slowed when <<=_name>> pushes off the schoolyard fence and falls into step beside you.
+<br /><br />
+<<sayNpc _npc>>
+    Got a minute? I keep thinking how good this school is for us. Half the settlements out there can barely keep their walls up, and our kids are learning to read.
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> nods toward the dark windows.
+<br /><br />
+<<sayNpc _npc>>
+    But once the kids clear out<<if _dayTeacherName>> and <<=_dayTeacherName>> packs up<</if>>, it just sits there. Empty, while the rest of the day goes on around it.
+<</sayNpc>>
+<br />
+<<you>>
+    It's a school. That's sort of how schools work.
+<</you>>
+<br />
+<<=ucfirst(_heOrShe)>> laughs and concedes the point, then explains. For a while now, people have been coming to <<=_himOrHer>> with questions<<if _cast.focus>> about <<=_subject[_cast.focus]>>: <<=_questions[_cast.focus]>><<else>>, not about any one subject but about teaching itself: how to explain something so it sticks<</if>>. Quick answers on the way somewhere keep turning into whole conversations.
+<<if _cast.others.length>>
+    <<set _first = _cast.others[0]>>
+    <<=ucfirst(_heOrShe)>> passes along a story from <<=setup.displayName(_first.npc)>>, who keeps getting <<=_pestered[_first.skill]>><<if _cast.others.length > 1>><<set _second = _cast.others[1]>>, and another from <<=setup.displayName(_second.npc)>>, who keeps getting <<=_pestered[_second.skill]>><</if>>. Other guests, mostly, but even a few of the slaves have worked up the nerve to ask.
+<</if>>
+<br /><br />
+<<sayNpc _npc>>
+    I figured they were just curious. Now I think they're hungry to learn.
+<</sayNpc>>
+<br />
+You think of the faces you pass around the cabin every day, most of them still doing the same work they started with. Some might want something to fall back on, <<=_heOrShe>> suggests, others a shot at something more challenging. Either way, more skilled hands would help.
+<<if _cast.backup>>
+    Right now, when <<=setup.displayName(_cast.backup.npc)>> needs a day off from <<=_jobPlace[_cast.backup.job]>>, or you need <<=setup.pronounceWho(_cast.backup.npc)>> somewhere else, nobody can cover.
+<<else>>
+    Right now, when one of your skilled people falls sick, or you need them somewhere else, nobody can cover.
+<</if>>
+<br /><br />
+<<sayNpc _npc>>
+    I know how to teach<<if _cast.focus>>, and I know <<=_subject[_cast.focus]>>, which counts for a lot around here<</if>>. <<if _dayTeacherName>><<=_dayTeacherName>> has the kids, as it should be.<<else>>The kids come first, as they should.<</if>> But I could teach everyone else.
+<</sayNpc>>
+<br />
+Without waiting for an answer, <<=_heOrShe>> pushes open the door and leads you inside. The classroom smells of chalk dust and old paper. <<=ucfirst(_heOrShe)>> paces out the length of the room, then turns and spreads <<=_hisOrHer>> arms toward the walls.
+<br /><br />
+<center>
+    <<image 'places/school/interior.jpg' sfw>>
+</center>
+<br /><br />
+<<sayNpc _npc>>
+    With some renovation and a few partitions, this could be separate work spaces. A night school, for anyone in the household after work.
+<</sayNpc>>
+<br />
+Well, <<=_heOrShe>> amends, after some work nights. No time suits everyone, but if you're willing to cut people a break on their hours, a few hours each night would add up fast.<<if _hasLibrary>> And with the library next door, a book is never far away.<</if>>
+<br /><br />
+<<you>>
+    And who would be doing the teaching?
+<</you>>
+<br />
+Anyone who can teach would take a class in their own specialty, <<=_heOrShe>> explains. There could even be a class on educational theory, so people with important skills can learn to pass them on. You'd have to choose carefully, though: some personalities are better at bringing out brilliance than others.
+<br /><br />
+<<you>>
+    And everyone crammed in here at once?
+<</you>>
+<br />
+<<=ucfirst(_heOrShe)>> shrugs, a crooked grin spreading across <<=_hisOrHer>> face.
+<br /><br />
+<<sayNpc _npc>>
+    We'll be rubbing elbows. But we've dealt with worse. It is the apocalypse, after all.
+<</sayNpc>>
+<br />
+You look around the room and picture it after dark: lamps lit, benches full, a dozen lessons murmuring at once. Lumber for the partitions, cloth to stretch across them, metal for the braces, rope to lash it all in place.
+<br /><br />
+<<include 'School - night school build button'>>
+<<link 'Consider it for later'>>
+    <<notify 5s>>
+        You can build the night school extension from the School
+    <</notify>>
+    <<goto 'Youth district'>>
+<</link>>
+<</if>>

@@ -1,0 +1,21 @@
+:: NPC view - enroll evening class
+/* "Enroll in evening class" button + class picker dialog, shared by NPC view (slaves) and NPC view - guest.
+   Offers only classes that currently have an instructor; 'undecided' puts them on the roster to wait for one. */
+<<link 'Enroll in evening class'>>
+	<<set _enrollOptions = ['undecided'].concat(setup.eveningSchool.instructedClasses().sort((a, b) => setup.eveningSchool.classes.indexOf(a) - setup.eveningSchool.classes.indexOf(b)))>>
+	<<set _enrollClass = 'undecided'>>
+	<<dialog 'Enroll in evening class'>>
+		Select the class for <<=setup.pronounceWho($tmpGirl)>> to enroll in:
+		<br /><br />
+		<<for _enrollOption range _enrollOptions>>
+			<label @style="($tmpGirl.skills ?? []).includes(_enrollOption) ? 'color: cyan' : ''"><<radiobutton "_enrollClass" _enrollOption autocheck>> <<=_enrollOption === 'undecided' ? _enrollOption : ucfirst(_enrollOption)>></label>
+			<br />
+		<</for>>
+		<br />
+		<<link 'Enroll'>>
+			<<set $tmpGirl.teach = _enrollClass>>
+			<<dialogclose>>
+			<<goto `passage()`>>
+		<</link>>
+	<</dialog>>
+<</link>>

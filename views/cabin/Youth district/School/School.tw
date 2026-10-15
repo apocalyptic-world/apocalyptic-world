@@ -2,7 +2,7 @@
 <br />
 <h1 class="ptitle">
 	<<backButton 'Youth district' 'State.setVar("$teach", undefined)'>>
-    SCHOOL
+    <<if setup.eveningSchool.isOpen()>>NIGHT SCHOOL<<else>>SCHOOL<</if>>
 </h1>
 <br />
 <<set _teachOptions = ['random', 'gardener', 'cook', 'doctor', 'shopkeeper', 'teacher', 'hunter']>>
@@ -122,6 +122,124 @@
 			<</capture>>
         <</for>>
     </table>
+<<elseif setup.eveningSchool.isOpen()>>
+    /* Evening school: adult students, one instructor per class */
+    <<set _esOptions = ['undecided'].concat(setup.eveningSchool.classes)>>
+    <<set _esInstructed = setup.eveningSchool.instructedClasses()>>
+    <<set _esPresent = setup.eveningSchool.instructorIndices().filter(i => setup.eveningSchool.attends($guests[i]))>>
+    <<set _esTextPick = {}>>
+
+    <<if _esPresent.length>>
+        <<set _esLead = $guests[_esPresent[0]]>>
+        <center>
+            <<actionImage _esLead teaching>>
+        </center>
+        <br />
+        <div id="es-class-grid"><<include 'School - evening class grid'>></div>
+        <br />
+    <<else>>
+        None of the instructors made it to class tonight.
+        <br /><br />
+    <</if>>
+
+    <<set _esStudents = setup.eveningSchool.students()>>
+    <div class="es-roster-label">Evening school roster:</div>
+    <table id="slaves" class="npc-list es-students">
+        <<for _esEntry range _esStudents>>
+            /* _esList is 'guests' or 'slaves'; variables()[_esList][_esI] is the live NPC */
+            <<set _esI = _esEntry.index>>
+            <<set _esList = _esEntry.type === 'slave' ? 'slaves' : 'guests'>>
+            <<set _esStudent = _esEntry.npc>>
+            <<capture _esI, _esList, _esStudent>>
+            <<set _genderClass = 'gender-' + setup.genderClass(_esStudent)>>
+            <<set _customColorStyle = (typeof _esStudent.color !== 'undefined') ? ' npc-color color-' + _esStudent.color : ''>>
+            <tr class="item">
+                <td class="min25">
+                    <<if (_esStudent.teachAdvStudy ?? 0) > 0>>
+                        <span style="margin-left: 18px; font-size:140%" data-balloon-length="medium" @aria-label="'Advanced Study active'" data-balloon-pos="up-left">
+                            &#x1F4D6;
+                        </span>
+                    <<elseif setup.cabinInventory.count('book')>>
+                        <span data-balloon-length="medium" @aria-label="'Enable Advanced Study'" data-balloon-pos="up-left">
+                            <<link '&#x1F4D8;'>>
+                                <<dialog 'Begin Advanced Study'>>
+                                    <<if (setup.cabinInventory.count('book') ?? 0) > 0>>
+                                        Do you want to consume one book (you have <<= setup.cabinInventory.count('book') >>) to enroll <<= _esStudent.name>> in advanced study? <br />(Accelerates learning, lasts 5-10 days) <br />
+                                        <<link 'OK'>>
+                                            <<set variables()[_esList][_esI].teachAdvStudy = randomInteger(5,10)>>
+                                            <<run setup.cabinInventory.drop('book', 1)>>
+                                            <<dialogclose>>
+                                            <<goto 'School'>>
+                                        <</link>>
+                                    <<else>>
+                                        You need at least one book in inventory to enroll a student in advanced study. <br />
+                                        <<link 'OK'>>
+                                            <<dialogclose>>
+                                        <</link>>
+                                    <</if>>
+                                <</dialog>>
+                            <</link>>
+                        </span>
+                    <</if>>
+
+                    <span @class="_genderClass + _customColorStyle">
+                        <<link `setup.displayName(_esStudent)`>>
+                            <<set $tmpGirl to variables()[_esList][_esI]>>
+                            <<set $tmpGirl.location = 'school'>>
+                            <<set $tmpGirlBack = 'School'>>
+                            <<set $tmpGirlCapture to false>>
+                            <<set $tmpGirlInvite to false>>
+                            <<set $tmpGirl.rape to false>>
+                            <<run delete $charId>>
+                            <<run delete $childId>>
+                            <<if _esList === 'slaves'>>
+                                <<run delete $guestId>>
+                                <<set $slaveId = _esI>>
+                                <<set $tmpGirlViewBack = 'NPC view'>>
+                            <<else>>
+                                <<run delete $slaveId>>
+                                <<set $guestId to _esI>>
+                                <<set $tmpGirlViewBack = 'NPC view - guest'>>
+                            <</if>>
+                            <<goto `$tmpGirlViewBack`>>
+                        <</link>>
+                    </span>
+                    <<= setup.npcListInfo(_esStudent)>>
+                </td>
+                <td>
+                    Age: <<= setup.getAge(_esStudent) >>
+                </td>
+                <td>
+                    /* Classes without an instructor are greyed out; a student already in one keeps it (waiting) but can't switch back to it. */
+                    <<set _esRadioName = 'es-teach-' + _esList + '-' + _esI>>
+                    <<for _esOpt range _esOptions>>
+                        <<set _esNoInstr = _esOpt !== 'undecided' && !_esInstructed.includes(_esOpt)>>
+                        <<set _esLabelStyle = _esNoInstr ? 'color: #888' : ((_esStudent.skills ?? []).includes(_esOpt) ? 'color: cyan' : '')>>
+                        <label @style="_esLabelStyle">
+                            <input type="radio" @name="_esRadioName" @value="_esOpt" @data-list="_esList" @data-index="_esI" @data-checked="_esStudent.teach === _esOpt" @data-noinstr="_esNoInstr"> <<= _esOpt >>
+                        </label>
+                    <</for>>
+                </td>
+            </tr>
+            <</capture>>
+        <</for>>
+    </table>
+    <<if !_esStudents.length>>
+        No students are attending evening class tonight.
+    <</if>>
+    <<done>>
+        <<run $('.es-students input[type=radio]').each(function () {
+            if (this.dataset.checked === 'true') this.checked = true;
+            if (this.dataset.noinstr === 'true' && !this.checked) this.disabled = true;
+        }).on('change', function () {
+            State.variables[this.dataset.list][Number(this.dataset.index)].teach = this.value;
+            $('.es-students input[name="' + this.name + '"][data-noinstr="true"]').prop('disabled', true);
+            $('#es-class-grid').empty().wiki(Story.get('School - evening class grid').processText());
+        })>>
+    <</done>>
+<<elseif setup.eveningSchool.isBuilt()>>
+    /* No class on right now: bulletin board notice about the night school */
+    <<include 'School - night school notice'>>
 <</if>>
 <<if !$locationEvents.school>>
     <<if !$player.quests.school_built>>
@@ -138,3 +256,6 @@
     <<unset $teach>>
     <<goto 'Youth district'>>
 <</link>>
+<<if ($player.quests.evening_school_talk ?? false) && !($player.quests.evening_school_built ?? false)>>
+    <<include 'School - night school build button'>>
+<</if>>

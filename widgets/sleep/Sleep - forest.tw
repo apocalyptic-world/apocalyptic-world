@@ -93,7 +93,7 @@
 	<<if setup.npcInventoryHas(_npc, 'axe')>>
 		<<set _giveWood = _giveWood * 2>>
 	<</if>>
-	<<set _giveWood = setup.personality.output(_npc, _giveWood)>>
+	<<set _giveWood = setup.eveningSchool.output(_npc, setup.personality.output(_npc, _giveWood))>>
 	<<set _totals.wood += _giveWood>>
 	<<if _isStorageAvailable>>
 		<<pickup $storage 'wood' _giveWood>>

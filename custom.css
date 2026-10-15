@@ -1339,6 +1339,20 @@ details[open] > .sort-summary::before {
     width: 135px;
     height: 135px;
 }
+#sidebar-content .weather-hover {
+    position: absolute;
+    left: 1px;
+    top: -21px;
+    width: 34px;
+    height: 34px;
+    z-index: 1;
+}
+#sidebar-content .weather-hover[aria-label]:after {
+    width: 230px;
+    white-space: pre-line;
+    text-align: left;
+    line-height: 1.4;
+}
 /* Aroused character indicator */
 .char-horny a {
     box-shadow: 0px 5px 5px -1px pink, 0px -5px 5px -1px pink !important;
@@ -1468,4 +1482,256 @@ div.poker-doll.girl_info_picture {
 }
 .npc-list .item div.tooltip > .tooltiptext .trait.tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+/* ── Household Roster dialog ─────────────────────────────────────────────── */
+#ui-dialog.household-roster {
+  max-width: 900px;
+}
+
+#household-roster .roster-legend {
+  font-size: 0.85em;
+  opacity: 0.75;
+  margin-bottom: 12px;
+}
+#household-roster .roster-legend-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 10px;
+  border: 1.5px solid #c8a000;
+  border-radius: 6px;
+  vertical-align: middle;
+}
+
+#household-roster .roster-group {
+  margin-bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: visible;
+}
+
+#household-roster .roster-group-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px 6px 0 0;
+}
+#household-roster .roster-group-title {
+  font-weight: bold;
+  font-size: 1.05em;
+}
+#household-roster .roster-group-sub {
+  font-size: 0.8em;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#household-roster .roster-count {
+  margin-left: auto;
+  min-width: 22px;
+  padding: 0 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.8em;
+  text-align: center;
+}
+
+#household-roster .roster-npc-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 5px 10px;
+}
+#household-roster.roster-show-stats .roster-npc-row,
+#household-roster.roster-show-inventory .roster-npc-row {
+  grid-template-columns: 200px 1fr 190px;
+}
+#household-roster.roster-show-stats.roster-show-inventory .roster-npc-row {
+  grid-template-columns: 200px 1fr 190px 170px;
+}
+#household-roster .roster-npc-row + .roster-npc-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#household-roster .roster-npc-name {
+  line-height: 20px;
+}
+#household-roster .roster-slave-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: rgba(170, 70, 70, 0.45);
+  font-size: 10px;
+  line-height: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+#household-roster .roster-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-height: 20px;
+}
+#household-roster .roster-chips .trait.tooltip {
+  border-bottom: 1px solid #666;
+  line-height: 18px;
+}
+#household-roster .trait.trait-personality {
+  text-transform: capitalize;
+}
+#household-roster .trait .tooltiptext {
+  text-transform: none;
+  padding: 5px 6px;
+  z-index: 10;
+}
+
+/* Chips that affect this person's output in their current assignment */
+#household-roster .trait.trait-job-relevant {
+  border-color: #c8a000;
+  border-bottom-color: #c8a000;
+  box-shadow: 0 0 0 1px #c8a000;
+}
+#household-roster .trait.trait-job-negative {
+  border-color: #c83232;
+  border-bottom-color: #c83232;
+  box-shadow: 0 0 0 1px #c83232;
+}
+#household-roster .trait-job-negative .roster-impact {
+  color: #ff8080;
+}
+#household-roster .roster-legend-neg {
+  border-color: #c83232;
+}
+#household-roster .roster-impact {
+  display: inline-block;
+  margin-top: 3px;
+  color: #f0d060;
+  font-style: italic;
+}
+
+/* Toolbar toggles */
+#household-roster .roster-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-bottom: 8px;
+}
+#household-roster .roster-toolbar label {
+  cursor: pointer;
+  user-select: none;
+}
+#household-roster .roster-toolbar input {
+  vertical-align: middle;
+  margin: 0 4px 0 0;
+}
+
+/* Collapse: hide chips that don't affect the job */
+#household-roster.roster-collapsed .roster-chip-other {
+  display: none;
+}
+#household-roster .roster-none {
+  opacity: 0.4;
+  line-height: 20px;
+}
+#household-roster:not(.roster-collapsed) .roster-none-collapsed {
+  display: none;
+}
+
+/* Stats column: plain "Label: value" lines like NPC info, value colour-coded */
+#household-roster .roster-stats {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+#household-roster.roster-show-stats .roster-stats {
+  display: flex;
+}
+#household-roster .roster-stat {
+  font-size: 0.85em;
+  line-height: 17px;
+  white-space: nowrap;
+}
+#household-roster .roster-stat::after {
+  line-height: 1.4;
+  white-space: normal;
+}
+#household-roster .roster-stat-value {
+  font-weight: bold;
+}
+
+/* Danger thresholds: red = vulnerable, green = safe */
+#household-roster .lvl-bad  .roster-stat-value { color: #ff5c5c; }
+#household-roster .lvl-poor .roster-stat-value { color: #ff9a3c; }
+#household-roster .lvl-fair .roster-stat-value { color: #e8d040; }
+#household-roster .lvl-good .roster-stat-value { color: #5fd06a; }
+
+/* Stepped payouts: greener = pays more */
+#household-roster .pay-0 .roster-stat-value { color: inherit; font-weight: normal; opacity: 0.55; }
+#household-roster .pay-1 .roster-stat-value { color: #a9d8ad; }
+#household-roster .pay-2 .roster-stat-value { color: #86d38d; }
+#household-roster .pay-3 .roster-stat-value { color: #66d270; }
+#household-roster .pay-4 .roster-stat-value { color: #3fe052; }
+
+/* Inventory column: icon tiles */
+#household-roster .roster-items {
+  display: none;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-height: 20px;
+}
+#household-roster.roster-show-inventory .roster-items {
+  display: flex;
+}
+#household-roster .roster-item {
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#household-roster .roster-item::after {
+  line-height: 1.4;
+  white-space: normal;
+}
+#household-roster .roster-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+#household-roster .item-good    { background: rgba(60, 160, 70, 0.25); border-color: #3ca046; }
+#household-roster .item-bad     { background: rgba(200, 50, 50, 0.40); border-color: #c83232; }
+#household-roster .item-missing { background: rgba(200, 50, 50, 0.25); border: 1px dashed #c83232; }
+#household-roster .item-missing img {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+#household-roster .roster-footer {
+  margin-top: 10px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 640px) {
+  #household-roster .roster-npc-row,
+  #household-roster.roster-show-stats .roster-npc-row,
+  #household-roster.roster-show-inventory .roster-npc-row,
+  #household-roster.roster-show-stats.roster-show-inventory .roster-npc-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
 }

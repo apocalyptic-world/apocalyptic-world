@@ -15,6 +15,7 @@ function checkAndFixTraits(npc)
 Save.onSave.add(function (save, details) {
     save.metadata = save.metadata || {};
     save.metadata.version = (document.getElementById('version') || {}).textContent || 'unknown';
+    save.metadata.eveningSchool = true; /* guests' teach field means evening class enrollment from here on, see guest cleanup in onLoad */
     if (details.type === 'disk') {
         save.metadata.settings = clone(settings);
     }
@@ -457,6 +458,15 @@ Save.onLoad.add(function (save) {
 
     if (typeof save.state.history[save.state.index].variables.locationEvents === 'undefined') {
         save.state.history[save.state.index].variables.locationEvents = {};
+    }
+
+    /* Grown-up nursery kids used to keep their child-school teach/teachAdvStudy, which now means evening class enrollment.
+       Saves made before evening school (no metadata stamp) can only hold leftovers, so clear them. */
+    if (!(save.metadata && save.metadata.eveningSchool)) {
+        save.state.history[save.state.index].variables.guests.forEach(function (guest) {
+            delete guest.teach;
+            delete guest.teachAdvStudy;
+        });
     }
 
     for(var saveGuestI = 0; saveGuestI < save.state.history[save.state.index].variables.guests.length; saveGuestI++) {

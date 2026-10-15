@@ -22,7 +22,7 @@ setup.bathSchedule = {
 //   'dayOff'    = npc.sick OR npc.rest is defined
 //   'heatWave'  = weather.heatWave
 //   'sandStorm' = weather.sandStorm
-//   'coldSnap'  = weather.coldSnap && no coat_wolf
+//   'coldSnap'  = weather.coldSnap && no coat_wolf (scavengers: 20% daily chance to go anyway)
 setup.outsideWorkHours = {
     garden:    { from: '08:00', to: '16:00', blockedBy: ['sick', 'heatWave'] },
     forest:    { from: '08:00', to: '18:00', blockedBy: ['sick', 'sandStorm', 'coldSnap'] },
@@ -32,7 +32,7 @@ setup.outsideWorkHours = {
     streets:   { from: '14:00', to: '06:00', blockedBy: ['dayOff', 'sandStorm', 'coldSnap'] },
     kitchen:   { from: '08:00', to: '22:00', blockedBy: ['sick'] },
     mistress:  { from: '12:00', to: '22:00', blockedBy: ['sick'] },
-    scavenging:{ from: '12:00', to: '20:00', blockedBy: ['sick', 'sandStorm'] },
+    scavenging:{ from: '12:00', to: '20:00', blockedBy: ['sick', 'sandStorm', 'coldSnap'] },
     hospital:  { from: '08:00', to: '22:00', blockedBy: [] },
     church:    { from: '08:00', to: '18:00', blockedBy: ['sick'] },
     quarry:    { from: '08:00', to: '18:00', blockedBy: ['dayOff', 'sick', 'sandStorm'] },
@@ -47,6 +47,7 @@ setup.outsideWorkHours = {
 setup.isAtWork = function (npc, weather) {
     const schedule = setup.outsideWorkHours[npc.assignedTo];
     if (!schedule) return false;
+    if (setup.eveningSchool.attends(npc)) return false; // night jobs start after evening class
     if (!timeBetween(schedule.from, schedule.to)) return false;
 
     const isSick   = typeof npc.sick  !== 'undefined';
@@ -59,10 +60,22 @@ setup.isAtWork = function (npc, weather) {
     if (weather) {
         if (blocked.includes('heatWave')  && (weather.heatWave  ?? false)) return false;
         if (blocked.includes('sandStorm') && (weather.sandStorm ?? false)) return false;
-        if (blocked.includes('coldSnap')  && (weather.coldSnap  ?? false) && !setup.npcInventoryHas(npc, 'coat_wolf')) return false;
+        if (blocked.includes('coldSnap')  && (weather.coldSnap  ?? false) && !setup.npcInventoryHas(npc, 'coat_wolf')) {
+            if (npc.assignedTo !== 'scavenging' || !setup.coldSnapScavengerGoesOut(npc, State.variables.game.day)) return false;
+        }
     }
 
     return true;
+};
+
+// Uncoated scavengers have a 20% chance to go out in a cold snap. Rolled once per work day and
+// stored on the npc so the location display and the nightly processing agree.
+setup.coldSnapScavengerGoesOut = function (npc, workDay) {
+    if (setup.npcInventoryHas(npc, 'coat_wolf')) return true;
+    if (npc.coldSnapOuting?.day !== workDay) {
+        npc.coldSnapOuting = { day: workDay, out: setup.percentageChance(20) };
+    }
+    return npc.coldSnapOuting.out;
 };
 
 // Returns the % chance (0-100) that a married NPC will intercede when their spouse is

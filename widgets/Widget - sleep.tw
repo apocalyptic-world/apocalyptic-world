@@ -190,6 +190,8 @@
 	);
 >>
 
+/* Capture tonight's evening class (attendance, drunk) before processNpc resets it; read by job output and sleepSchool */
+<<run setup.eveningSchool.beginNight()>>
 <<set _sleepNpcOpts = { type: 'slave', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false }>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
 		<<set _npc = $slaves[_i]>>
@@ -427,6 +429,7 @@
 				<<set _orientation = 'bisexual'>>
 			<</if>>
 			<<run $nursery[_nurseryI] = setup.setSexuality($nursery[_nurseryI], _orientation)>>
+			<<run delete $nursery[_nurseryI].teach; delete $nursery[_nurseryI].teachAdvStudy>> /* child school fields; adults use teach for evening class */
 			<<run $guests.push($nursery[_nurseryI])>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
@@ -517,6 +520,9 @@
 <<include 'sleepPregnantStrangers'>>
 <<include 'sleepShowTotals'>>
 <<include 'sleepManageGoods'>>
+<<if setup.eveningSchool.isBuilt()>>
+	<<run setup.eveningSchoolSocial.sweep()>> /* night school relationships; before sleepRelationship so a 100 can feed likes the same night */
+<</if>>
 <<include 'sleepRelationship'>>
 <<include 'sleepSettlers'>>
 <<include 'sleepSettlementEvents'>>

@@ -9,7 +9,7 @@
 		I'm not in the mood right now, maybe some other time.
 	<</if>>
 
-<<elseif $tmpGirl.location === 'church' || $tmpGirl.location === 'hospital' || $tmpGirl.location === 'bathhouse'>>
+<<elseif $tmpGirl.location === 'church' || $tmpGirl.location === 'hospital' || $tmpGirl.location === 'bathhouse' || setup.eveningSchool.isAtNightSchool($tmpGirl)>>
 
 	/* ── Location-filtered threesome pool ── */
 	<<set _tscLoc = $tmpGirl.location, _tscGuestIdxs = [], _tscSlaveIdxs = [], _tscCharKeys = [], _prospects = 0>>
@@ -37,6 +37,12 @@
 			<<if _tscNpc.id !== $tmpGirl.id && setup.getAge(_tscNpc) >= 18 && ((_tscNpc.assignedTo === 'hospital' && setup.isAtWork(_tscNpc, $weather)) || typeof _tscNpc.sick !== 'undefined')>>
 				<<run _tscSlaveIdxs.push(_tscI)>>
 			<</if>>
+		<</for>>
+
+	<<elseif _tscLoc === 'school'>> /* night school: instructors and students in class */
+		<<for _tscEntry range setup.eveningSchool.classmates($tmpGirl)>>
+			<<if setup.getAge(_tscEntry.npc) < 18>><<continue>><</if>>
+			<<run (_tscEntry.type === 'guest' ? _tscGuestIdxs : _tscSlaveIdxs).push(_tscEntry.index)>>
 		<</for>>
 
 	<<else>> /* bathhouse */

@@ -257,6 +257,11 @@
 	<tr><td>Working as attendant:</td><td><<=_settlementStatsData.work.attendant ?? 0>></td><td>(Max 2)</td></tr>
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.school ?? 0>></td><td>(Max 1)</td></tr>
+	<<if setup.eveningSchool.isBuilt()>>
+		<tr><td>Working as instructor:</td><td><<=setup.eveningSchool.instructorIndices().length>></td><td>(Max <<=setup.eveningSchool.classes.length>>)</td></tr>
+	<<elseif $player.quests.evening_school_talk ?? false>>
+		<tr><td>Working as instructor:</td><td>0</td><td>(Build the night school extension at the School)</td></tr>
+	<</if>>
 	<tr><td>Working as a nun:</td><td><<=_settlementStatsData.work.church ?? 0>></td><td>(Max 6)</td></tr>
 	<tr><td>Mechanic in garage:</td><td><<=_settlementStatsData.work.garage ?? 0>></td><td>(Max 1)</td></tr>
 
@@ -285,6 +290,21 @@
 	<tr><td>... in school:</td><td><<=_settlementStatsData.people.student ?? 0>></td></tr>
 	<tr><td>... babies, pre-school:</td><td><<=_settlementStatsData.food.none ?? 0>></td></tr>
 	<tr><td>&nbsp;</td><td> </td></tr>
+	<<if setup.eveningSchool.isBuilt()>>
+		<tr><th colspan="3">Learning after work</th></tr>
+		<<set _infoInstructors = setup.eveningSchool.instructorIndices().map(i => $guests[i])>>
+		<<if _infoInstructors.length>>
+			<<for _infoClass range setup.eveningSchool.classes>>
+				<<set _infoInstructor = _infoInstructors.find(g => setup.eveningSchool.instructorClass(g) === _infoClass)>>
+				<<if _infoInstructor>>
+					<tr><td>Enrolled in <<=_infoClass>>:</td><td><<=setup.eveningSchool.enrolledIn(_infoClass).length>></td><td>(Instructor: <<=setup.displayName(_infoInstructor)>>)</td></tr>
+				<</if>>
+			<</for>>
+		<<else>>
+			<tr><td colspan="3">No instructors assigned yet.</td></tr>
+		<</if>>
+		<tr><td>&nbsp;</td><td> </td></tr>
+	<</if>>
 	<tr><th colspan="3">Interesting?</th></tr>
 	<tr><td># pregnant women (NPCs)</td><td>
 		<span class="glyph" data-balloon-length="medium" @aria-label="_preglist" data-balloon-pos="right">
@@ -379,4 +399,12 @@
 		Dialog.wiki(Story.get("Daily Update").processText());
 		Dialog.open();
 	  <</script>>
+<</link>>
+<br>
+<<link "View household roster">>
+	<<script>>
+		Dialog.setup("Household Roster", "household-roster");
+		Dialog.wiki(Story.get("Household Roster").processText());
+		Dialog.open();
+	<</script>>
 <</link>>

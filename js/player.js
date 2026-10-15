@@ -179,6 +179,26 @@ setup.player = {
             renderSingleRelation('step-father', stepFatherID);
         }
 
+        // Grandparents: both parents' parents. A parent of 'mc' resolves to the player, so the MC's own
+        // parents show up as grandparents of the MC's kids.
+        const grandIDs = [];
+        for (const parentID of [family.mother, family.father]) {
+            const parent = parentID ? setup.getNpcById(parentID) : null;
+            for (const grandID of [parent?.family?.mother, parent?.family?.father]) {
+                if (grandID && grandID !== npcID && !grandIDs.includes(grandID)) grandIDs.push(grandID);
+            }
+        }
+        const grandNames = grandIDs.map(id => {
+            if (id === 'mc') return 'You';
+            const grand = setup.getNpcById(id);
+            if (!grand) return null;
+            const grandDead = (variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false);
+            return setup.player.npcNameColor(grand) + (grandDead ? ' (deceased)' : '');
+        }).filter(Boolean);
+        if (grandNames.length) {
+            npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">grandparents: </span><span style="' + relation_names + '">' + grandNames.join(', ') + '</span></div> ';
+        }
+
         for(const relation in family) {
             if (relation === 'mother' || relation === 'father') {
                 continue;

@@ -6,6 +6,10 @@
 		<<if setup.getAge(_scheduleGuest) < 18>>
 			<<continue>>
 		<</if>>
+		<<if setup.eveningSchool.attends(_scheduleGuest)>>
+			<<set _scheduleGuest.location = 'school'>>
+			<<continue>>
+		<</if>>
 
 		<<if (_hasBathhouse && !_scheduleGuest.washedBathhouse &&
 			(((!_scheduleGuest.assignedTo || typeof _bathSchedule[_scheduleGuest.assignedTo] === 'undefined') && setup.percentageChance(5)) ||
@@ -22,5 +26,8 @@
 		<<set _scheduleSlave.location = ''>>
 		<<if setup.getAge(_scheduleSlave) < 18>>
 			<<continue>>
+		<</if>>
+		<<if setup.eveningSchool.attends(_scheduleSlave)>>
+			<<set _scheduleSlave.location = 'school'>>
 		<</if>>
 <</for>>

@@ -1,0 +1,41 @@
+:: School - night school notice [nobr]
+/* Player-facing bulletin board notice (not diegetic), shown in School when the night school is built
+   but no day class or evening session is on screen. */
+<<set _nsInstructors = {}>>
+<<for _nsI range setup.eveningSchool.instructorIndices()>>
+	<<set _nsInstructors[setup.eveningSchool.instructorClass($guests[_nsI])] = $guests[_nsI]>>
+<</for>>
+<div class="es-board">
+	<div class="es-notice">
+		<div class="es-notice-title">Night School</div>
+		<div class="es-notice-sub">Evening classes &bull; 6pm to 9pm, every night</div>
+		<div class="es-notice-status"><<=setup.eveningSchool.noticeStatus()>></div>
+		<ul class="es-notice-classes">
+			<<for _nsClass range setup.eveningSchool.classes>>
+				<li @class="'es-class-' + _nsClass">
+					<span class="es-notice-icon"><<=setup.eveningSchool.icons[_nsClass]>></span>
+					<span class="es-notice-class"><<=ucfirst(_nsClass)>></span>
+					<<if _nsInstructors[_nsClass]>>
+						<span class="es-notice-teacher"><<=setup.displayName(_nsInstructors[_nsClass])>></span>
+						<<set _nsEnrolled = setup.eveningSchool.enrolledIn(_nsClass)>>
+						<<set _nsCountText = '(' + _nsEnrolled.length + (_nsEnrolled.length === 1 ? ' student)' : ' students)')>>
+						<<set _nsNames = _nsEnrolled.map(n => n.name).join(', ')>>
+						<<if _nsEnrolled.length>>
+							<span class="es-notice-count" @aria-label="_nsNames" data-balloon-pos="up" data-balloon-length="medium"><<=_nsCountText>></span>
+						<<else>>
+							<span class="es-notice-count"><<=_nsCountText>></span>
+						<</if>>
+					<<else>>
+						<span class="es-wanted">Instructor wanted</span>
+					<</if>>
+				</li>
+			<</for>>
+		</ul>
+		<div class="es-notice-foot">Guests with the Teacher skill and no other assignment can be assigned as instructors from their profile.</div>
+	</div>
+	<div class="es-notice es-notice-card">
+		<div class="es-notice-heading">Enrollment open</div>
+		<p>Open to everyone in the household, guests and slaves alike, as you see fit.</p>
+		<p>Classes don't replace anyone's job: students keep their current assignments and come in after work.</p>
+	</div>
+</div>

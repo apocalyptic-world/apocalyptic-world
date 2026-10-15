@@ -394,44 +394,30 @@
 			</div>
 		<</for>>
 	<</if>>
-	<<if $args[0].mother || $args[0].siblings?.length >>
-		<<if $args[0].mother >>
-			<<set _motherNpc = setup.getNpcById($args[0].mother)>>
-			<<if (_motherNpc?.family?.kids?.length > 1)>>
-				Siblings: <br />
-				<<set _siblingLabel = 1>>
-				<<for _familyTreeChildI, _familyTreeChild range _motherNpc.family.kids>>
-					<div>
-					<<if _familyTreeChild === 'mc'>>
-						You
-					<<elseif _familyTreeChild !== $tmpGirl.id>>
-						<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-						<<if _familyMember>>
-							<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
-						<</if>>
-					<</if>>
-					</div>
-				<</for>>
+	/* Siblings from both parents' kids plus explicit sibling links. The MC's kids aren't pulled in as
+	   paternal siblings: with harems that list would be long and near-identical for most NPCs. */
+	<<set _siblingIds = []>>
+	<<if $args[0].mother>>
+		<<set _siblingIds = _siblingIds.concat(setup.getNpcById($args[0].mother)?.family?.kids ?? [])>>
+	<</if>>
+	<<if $args[0].father && $args[0].father !== 'mc'>>
+		<<set _siblingIds = _siblingIds.concat(setup.getNpcById($args[0].father)?.family?.kids ?? [])>>
+	<</if>>
+	<<set _siblingIds = [...new Set(_siblingIds.concat($args[0].siblings ?? []))].filter(id => id === 'mc' || (id !== ($tmpGirl?.id ?? '') && setup.getNpcById(id)))>>
+	<<if _siblingIds.length>>
+		Siblings: <br />
+		<<for _familyTreeChild range _siblingIds>>
+			<div>
+			<<if _familyTreeChild === 'mc'>>
+				<<set _siblingHalf = setup.family.siblingKind($args[0], $player.family) === 'half'>>
+				You<<if _siblingHalf>> (half)<</if>>
+			<<else>>
+				<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
+				<<set _siblingHalf = setup.family.siblingKind($args[0], _familyMember.family) === 'half'>>
+				<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>><<if _siblingHalf>>, half<</if>>)
 			<</if>>
-		<</if>>
-		<<if $args[0].siblings?.length >>
-			<<if !_siblingLabel>>
-				Siblings: <br />
-				<<set _siblingLabel = 1>>
-			<</if>>
-			<<for _familyTreeChildI, _familyTreeChild range $args[0].siblings>>
-				<div>
-				<<if _familyTreeChild === 'mc'>>
-					You
-				<<else>>
-					<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-					<<if _familyMember && ($tmpGirl?.id ?? '') !== _familyTreeChild>>
-						<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
-					<</if>>
-				<</if>>
-				</div>
-			<</for>>
-		<</if>>
+			</div>
+		<</for>>
 	<</if>>
 	<<if $args[0].kids>>
 		Children: <br />
