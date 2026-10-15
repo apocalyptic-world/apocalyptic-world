@@ -78,6 +78,12 @@ One of them was awake. <<= _fdHe>> was crouched at the mouth of the underpass, p
 <h1 class="ptitle">NIGHT</h1>
 <br /><br />
 <<set _nightBack = setup.night.backPassage()>>
+/* already captured or killed on the generic Fight - won screen */
+<<set _fdFought = $prevFight?.defeatedEnemies?.[0]>>
+<<if !$nightFeral || (_fdFought && (_fdFought.killed || $slaves.some(s => s.id === _fdFought.id)))>>
+	<<unset $nightFeral>>
+	<<goto _nightBack>>
+<</if>>
 <<set $tmpGirl = $nightFeral>>
 <<set $tmpGirl.happy = Math.max(($tmpGirl.happy ?? 0) - 20, -100)>>
 <<set $tmpGirl.relationship = Math.max(($tmpGirl.relationship ?? 0) - 30, -100)>>

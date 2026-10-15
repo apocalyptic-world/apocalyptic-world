@@ -26,6 +26,12 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 		</span> strength increased by 1
 		<br />
 	<</if>>
+	<<if setup.fight.gainEndurance($guests[_workoutGuestI], 100)>>
+		<span @class="''+_genderClass+''" style="font-weight:bold">
+			<<=_workoutGuest.name>>
+		</span> endurance increased by 1
+		<br />
+	<</if>>
 	<<set $guests[_workoutGuestI].quests ??= {}>>
 	<<set $guests[_workoutGuestI].quests.lastInteractionDay = $game.day>>
 <</for>>
