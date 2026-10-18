@@ -1,0 +1,190 @@
+:: Event - Loyalty trial [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _ltT = $game.loyaltyTrial>>
+<<set _ltNpc = _ltT ? $guests.find(function (g) { return g.id === _ltT.guestId; }) : null>>
+<<if !_ltNpc>>
+	<<unset $game.loyaltyTrial>>
+	<<goto 'Wood cabin'>>
+<<else>>
+	<<set _ltS = setup.settlements.getById(_ltT.settlementId)>>
+	<<set _ltSName = _ltS ? _ltS.name : 'her old home'>>
+	<<set _ltShe = setup.pronounceWhat(_ltNpc)>>
+	<<set _ltHer = setup.pronounceWho(_ltNpc)>>
+	<<set _ltHers = setup.pronounceWhos(_ltNpc)>>
+	<<set _ltGender = 'gender-' + setup.genderClass(_ltNpc)>>
+	<<set _ltSpy = setup.percentageChance((_ltNpc.relationship ?? 0) < 30 ? 30 : 8)>>
+	<<set _ltMobPool = $guests.filter(function (g) { return setup.getAge(g) >= 18 && g.id !== _ltNpc.id && typeof g.sick === 'undefined'; })>>
+	<<set _ltMob = _ltMobPool.slice().sort(function () { return Math.random() - 0.5; }).slice(0, 3)>>
+	<<set _ltLead = _ltMob.length ? _ltMob[0] : null>>
+	<<set _ltCanBasement = $slaves.length < $basementLimit>>
+
+	<center>
+		<<image 'places/cabin/loyalty_trial.jpg'>>
+	</center>
+	<br />
+
+	A knot of guests had gathered in the yard before breakfast, and the sound of them reached you before you reached the door. They had <span @class="''+_ltGender+''" style="font-weight:bold"><<=_ltNpc.name>></span> in the middle of them, held by both arms, and nobody was in the mood to let go.
+	<br /><br />
+	<<if _ltLead>>
+		<<sayNpc _ltLead>>
+			<<=_ltNpc.name>> came from <<=_ltSName>>. They're the ones sending raiders at our walls. You really think <<=_ltShe>> isn't still talking to them?
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<sayNpc _ltNpc>>
+		I haven't spoken to anyone from there since the day I left. I swear. Please.
+	<</sayNpc>>
+	<br />
+	They turned to you. This was your house, which made it your problem.
+	<br /><br />
+
+	<div id="lt_stop">
+		<<set _ltStopLabel = 'Order them to stand down'>>
+		<<linkreplace _ltStopLabel>>
+			<<set _ltStopChance = (_ltNpc.relationship ?? 0) >= 50 ? 70 : 55>>
+			<<if setup.percentageChance(_ltStopChance)>>
+				<<run $('#lt_proof, #lt_hand').hide()>>
+				You told them it was over. You said it quietly, and that was what made it carry. The hands let go one by one, and the knot of people broke apart, muttering, not quite meeting your eyes.
+				<br /><br />
+				<<set _ltNpc.happy = Math.min((_ltNpc.happy ?? 0) + 5, 100)>>
+				<<set _ltNpc.relationship = Math.min((_ltNpc.relationship ?? 0) + 10, 100)>>
+				<<for _ltM range _ltMob>>
+					<<set _ltM.happy = Math.max((_ltM.happy ?? 0) - 4, -100)>>
+				<</for>>
+				<<set _ltNpc.loyaltyTrialDay = $game.day>>
+				<<set $game.loyaltyTrialDay = $game.day>>
+				<<unset $game.loyaltyTrial>>
+				<strong>(<<=_ltNpc.name>>: Happy +5, Relationship +10. The mob: Happy −4.)</strong>
+				<br /><br />
+				<<link 'Continue'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<<else>>
+				You raised your voice and told them to back off. They didn't. If anything it made it worse, because now they were angry at you too.
+				<br /><br />
+				<<set _ltNpc.happy = Math.max((_ltNpc.happy ?? 0) - 10, -100)>>
+				<strong>(<<=_ltNpc.name>>: Happy −10. It was not enough. You still had to decide.)</strong>
+			<</if>>
+		<</linkreplace>>
+	</div>
+
+	<div id="lt_proof">
+		<<set _ltProofLabel = 'Make her prove her loyalty'>>
+		<<linkreplace _ltProofLabel>>
+			<<run $('#lt_stop, #lt_hand').hide()>>
+			You had <<=_ltHer>> empty <<=_ltHers>> bag on the ground in front of everyone and swear, out loud, on whatever <<=_ltShe>> still believed in, that <<=_ltShe>> owed nothing to <<=_ltSName>>.
+			<br /><br />
+			<<if _ltSpy>>
+				There was a strip of cloth sewn into the lining, knotted the way <<=_ltSName>>'s people knotted their messages. <<=ucfirst(_ltShe)>> went white when you held it up. Then <<=_ltShe>> started to talk, and could not seem to stop. A trader on the east road. A few words every few weeks. <<=ucfirst(_ltShe)>> had told herself it was harmless.
+				<br /><br />
+				<<if _ltS>>
+					<<set _ltS.settlementRaidDay = 0>>
+				<</if>>
+				<<set _ltNpc.loyaltyTrialDay = $game.day>>
+				<<set $game.loyaltyTrialDay = $game.day>>
+				<<unset $game.loyaltyTrial>>
+				<strong>(She had been selling you out. <<=_ltSName>> is ready to raid you again.)</strong>
+				<br /><br />
+				What was left was deciding what to do with <<=_ltHer>>.
+				<br /><br />
+				<div id="lt_throw">
+					<<set _ltThrowLabel = 'Throw her out'>>
+					<<linkreplace _ltThrowLabel>>
+						<<run $('#lt_cell, #lt_forgive').hide()>>
+						<<npcLeaveSettlement _ltNpc>>
+						You walked <<=_ltHer>> to the gate yourself. Nobody spoke. The gate closed, and that was that.
+						<br /><br />
+						<<link 'Continue'>>
+							<<goto 'Wood cabin'>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+				<<if _ltCanBasement>>
+					<div id="lt_cell">
+						<<set _ltCellLabel = 'Put her in the basement'>>
+						<<linkreplace _ltCellLabel>>
+							<<run $('#lt_throw, #lt_forgive').hide()>>
+							<<set _ltNpc.happy = Math.max((_ltNpc.happy ?? 0) - 30, -100)>>
+							<<set _ltNpc.relationship = Math.max((_ltNpc.relationship ?? 0) - 25, -100)>>
+							<<set _ltNpc.sub = Math.min((_ltNpc.sub ?? 0) + 20, 100)>>
+							<<npcEnslave _ltNpc>>
+							The house watched in silence as you took <<=_ltHer>> down to the basement. A traitor was better kept where you could see <<=_ltHer>>.
+							<br /><br />
+							<<link 'Continue'>>
+								<<goto 'Wood cabin'>>
+							<</link>>
+						<</linkreplace>>
+					</div>
+				<</if>>
+				<div id="lt_forgive">
+					<<set _ltForgiveLabel = 'Forgive her'>>
+					<<linkreplace _ltForgiveLabel>>
+						<<run $('#lt_throw, #lt_cell').hide()>>
+						<<set _ltNpc.happy = Math.max((_ltNpc.happy ?? 0) - 20, -100)>>
+						<<set _ltNpc.relationship = Math.max((_ltNpc.relationship ?? 0) - 20, -100)>>
+						<<for _ltM range _ltMob>>
+							<<set _ltM.happy = Math.max((_ltM.happy ?? 0) - 6, -100)>>
+						<</for>>
+						<<sayNpc _ltNpc>>
+							I won't do it again. I'll earn it back.
+						<</sayNpc>>
+						<br />
+						The others did not forget. But you had made your point: it would be dealt with here, by you, and not in the yard.
+						<br /><br />
+						<strong>(<<=_ltNpc.name>>: Happy −20, Relationship −20. The mob: Happy −6.)</strong>
+						<br /><br />
+						<<link 'Continue'>>
+							<<goto 'Wood cabin'>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+			<<else>>
+				There was nothing in the bag but a spare shirt, half a ration and a carved wooden bead on a string. Her voice shook, but it didn't break, and when the silence went on long enough the guests started looking at their boots.
+				<br /><br />
+				<<set _ltNpc.happy = Math.min((_ltNpc.happy ?? 0) + 5, 100)>>
+				<<set _ltNpc.relationship = Math.min((_ltNpc.relationship ?? 0) + 8, 100)>>
+				<<for _ltM range _ltMob>>
+					<<set _ltM.happy = Math.max((_ltM.happy ?? 0) - 3, -100)>>
+				<</for>>
+				<<set _ltNpc.loyaltyTrialDay = $game.day>>
+				<<set $game.loyaltyTrialDay = $game.day>>
+				<<unset $game.loyaltyTrial>>
+				<strong>(<<=_ltNpc.name>> had told the truth. <<=_ltNpc.name>>: Happy +5, Relationship +8. The mob: Happy −3.)</strong>
+				<br /><br />
+				<<link 'Continue'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</if>>
+		<</linkreplace>>
+	</div>
+
+	<<if _ltCanBasement>>
+		<div id="lt_hand">
+			<<set _ltHandLabel = 'Give them what they want'>>
+			<<linkreplace _ltHandLabel>>
+				<<run $('#lt_stop, #lt_proof').hide()>>
+				You told them to put <<=_ltHer>> in the cellar until things cooled down. <<=ucfirst(_ltShe)>> stared at you like <<=_ltShe>> had not heard right, and then like <<=_ltShe>> had.
+				<br /><br />
+				<<set _ltNpc.happy = Math.max((_ltNpc.happy ?? 0) - 30, -100)>>
+				<<set _ltNpc.relationship = Math.max((_ltNpc.relationship ?? 0) - 25, -100)>>
+				<<set _ltNpc.sub = Math.min((_ltNpc.sub ?? 0) + 20, 100)>>
+				<<for _ltM range _ltMob>>
+					<<set _ltM.happy = Math.min((_ltM.happy ?? 0) + 4, 100)>>
+				<</for>>
+				<<set $player.goodwill -= 5>>
+				<<set _ltNpc.loyaltyTrialDay = $game.day>>
+				<<set $game.loyaltyTrialDay = $game.day>>
+				<<unset $game.loyaltyTrial>>
+				<<npcEnslave _ltNpc>>
+				The yard emptied quickly after that. People like it when somebody else pays for their fear.
+				<br /><br />
+				<strong>(<<=_ltNpc.name>>: Happy −30, Relationship −25, now in the basement. The mob: Happy +4. Goodwill −5.)</strong>
+				<br /><br />
+				<<link 'Continue'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+<</if>>

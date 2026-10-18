@@ -115,6 +115,10 @@
 <<if !($locationEvents.bedroom ?? false)>>
 	<<if !$player?.quests?.policy_talk && $game?.cabinName && $game.day > 100 && _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 		<<goto 'Blair - policy talk'>>
+	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.motherTalkReady() && setup.percentageChance(5)>>
+		<<goto 'Blair [Event] - Her mother'>>
+	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.smallHoursVariant() && setup.percentageChance(5)>>
+		<<goto 'Blair [Event] - The small hours'>>
 	<<elseif timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
 		<<set _hornyGuests = setup.filterNPCs($guests, {gender: 0, horny_gte: 51, likesGuys: true, relationship_gte: 70, chastityBelt_not: [true]})[0] ?? []>>
 		<<if _hornyGuests.length>>

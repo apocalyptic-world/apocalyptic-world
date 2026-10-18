@@ -33,6 +33,8 @@
 					<</if>>				
 					<<if _giftMultiplier >= 1 && setup.personality.has($tmpGirl, 'extravagant')>>
 						<<set _giftMultiplier *= 2>>
+						/* Relationship is often maxed out already, so extravagant NPCs also get a little happiness */
+						<<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + setup.personality.EXTRAVAGANT_GIFT_HAPPY, 100)>>
 					<</if>>
 
 					<<if _giftMultiplier >= 1 >>				

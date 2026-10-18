@@ -131,6 +131,10 @@
 
 <<set $tmpGirl.quests ??= {}>>
 <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+<<if ($tmpGirl.quests.feralPlayDay ?? -1) !== $game.day>>
+	<<set $tmpGirl.quests.feralPlayDays = ($tmpGirl.quests.feralPlayDays ?? 0) + 1>>
+	<<set $tmpGirl.quests.feralPlayDay = $game.day>>
+<</if>>
 
 <<if $charId && $tmpGirl.corruption > 50 && !$tmpGirl.canPunish>>
 	<<set $tmpGirl.canPunish = true>>

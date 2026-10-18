@@ -920,7 +920,10 @@ setup.settlements = {
 		s.resources[item] = (s.resources[item] || 0) + qty;
 		s.lastContactDay  = day;
 
-		const taper = s.relationship >= 60 ? 0.25 : s.relationship >= 20 ? 0.5 : 1;
+		// Leader Night bond: an allied settlement whose leader is still bonded to the player values
+		// gifts twice as much (taper 0.25 -> 0.5). The daily goodwill cap is unchanged.
+		const bonded = setup.settlements.hasLeaderBond(s, day);
+		const taper = s.relationship >= 60 ? (bonded ? 0.5 : 0.25) : s.relationship >= 20 ? 0.5 : 1;
 		const room  = Math.max(0, setup.settlements.DONATION_DAILY_CAP - (s.donateUsed ?? 0));
 		const raw   = Math.min(Math.max(1, Math.round(4 * Math.sqrt(qty))), room);
 		const gain  = raw > 0 ? Math.max(1, Math.round(raw * taper)) : 0;
@@ -962,6 +965,68 @@ setup.settlements = {
 	},
 
 	// -------------------------------------------------------------------------
+	// ALLIED LEADER NIGHT
+	// An Allied leader invites the player to stay the night ('Garage - World - Leader Night').
+	// State on the settlement: s.leaderNightDay (day of the last night), s.leaderBondUntil (bond expiry day).
+	// While the bond lasts: relationship drift is halved and neglect erosion is off (dailyUpdate),
+	// and donations to an allied settlement count double (donate).
+	// -------------------------------------------------------------------------
+
+	/** Days that must pass between two Leader Nights with the same settlement. */
+	LEADER_NIGHT_COOLDOWN: 14,
+
+	/** Days the bond lasts after a Leader Night. A new night resets it to this length (no stacking). */
+	LEADER_BOND_DAYS: 30,
+
+	/** Relationship gained from one Leader Night (capped at 100 by modifyRelationship). */
+	LEADER_NIGHT_RELATIONSHIP: 5,
+
+	/**
+	 * Which Leader Night variant this settlement's leader offers: 'female', 'male' or null (not on offer).
+	 * Needs an Allied settlement with a living adult leader who is attracted to the player. Male leaders
+	 * are gated like all other male-on-MC content: the gay content setting must be on. Trans leaders
+	 * are not covered by this scene.
+	 */
+	leaderNightKind: function (s) {
+		if (!s || s.destroyed || !s.leader || !setup.settlements.isAllied(s)) return null;
+		const leader = s.leader;
+		if (setup.getAge(leader) < 18) return null;
+		if (leader.gender === 0 && (leader.likesGuys ?? true)) return 'female';
+		if (leader.gender === 1 && settings.gaysEnabled && (leader.likesGuys ?? true)) return 'male';
+		return null;
+	},
+
+	/** Days left until the next Leader Night is possible (0 = available). */
+	leaderNightDaysLeft: function (s, day) {
+		if (s.leaderNightDay === undefined || s.leaderNightDay === null) return 0;
+		day = day ?? ((variables().game && variables().game.day) || 0);
+		return Math.max(0, s.leaderNightDay + setup.settlements.LEADER_NIGHT_COOLDOWN - day);
+	},
+
+	/** True when a Leader Night can be played right now. */
+	canLeaderNight: function (s, day) {
+		return setup.settlements.leaderNightKind(s) !== null && setup.settlements.leaderNightDaysLeft(s, day) === 0;
+	},
+
+	/** True while the bond from the last Leader Night is still in force. */
+	hasLeaderBond: function (s, day) {
+		day = day ?? ((variables().game && variables().game.day) || 0);
+		return (s.leaderBondUntil ?? 0) > day;
+	},
+
+	/** Apply a finished Leader Night: modest relationship gain, cooldown and bond. Returns { gain, bondUntil }. */
+	completeLeaderNight: function (s, day) {
+		day = day ?? ((variables().game && variables().game.day) || 0);
+		const before = s.relationship;
+		setup.settlements.modifyRelationship(s, setup.settlements.LEADER_NIGHT_RELATIONSHIP, 'Spent the night with the leader, bond formed');
+		s.leaderNightDay  = day;
+		s.leaderBondUntil = day + setup.settlements.LEADER_BOND_DAYS;
+		s.lastContactDay  = day;
+		setup.settlements.save(setup.settlements.getAll());
+		return { gain: +(s.relationship - before).toFixed(1), bondUntil: s.leaderBondUntil };
+	},
+
+	// -------------------------------------------------------------------------
 	// SIMULATION
 	// -------------------------------------------------------------------------
 
@@ -972,9 +1037,15 @@ setup.settlements = {
 			s.resources[res] = Math.min((s.resources[res] || 0) + s.production[res], 200);
 		}
 
+		// Leader Night bond (s.leaderBondUntil still in the future): the natural drift below only runs
+		// every other day (half speed, 0.1 -> 0.05/day) and the neglect erosion for allies is switched off.
+		const bonded = setup.settlements.hasLeaderBond(s, currentDay);
+
 		// Slow natural drift toward zero
-		if (s.relationship > 0) s.relationship = Math.max(0, +(s.relationship - 0.1).toFixed(1));
-		if (s.relationship < 0) s.relationship = Math.min(0, +(s.relationship + 0.1).toFixed(1));
+		if (!(bonded && currentDay % 2 === 0)) {
+			if (s.relationship > 0) s.relationship = Math.max(0, +(s.relationship - 0.1).toFixed(1));
+			if (s.relationship < 0) s.relationship = Math.min(0, +(s.relationship + 0.1).toFixed(1));
+		}
 
 		// Entrenched hostility: no contact for 7+ days drifts relationship further negative every 10 days
 		// Neglected alliances: no contact for 30+ days slowly erodes relationship every 7 days (floor: friendly)
@@ -982,8 +1053,20 @@ setup.settlements = {
 		if (s.relationship <= -30 && daysSinceContact >= 7 && currentDay % 10 === 0) {
 			s.relationship = Math.max(-100, s.relationship - 1);
 		}
-		if (s.relationship >= 60 && daysSinceContact >= 30 && currentDay % 7 === 0) {
+		if (s.relationship >= 60 && daysSinceContact >= 30 && currentDay % 7 === 0 && !bonded) {
 			s.relationship = Math.max(30, s.relationship - 1);
+		}
+
+		// A leader carrying the player's child (Leader Night): leaders are not guests/slaves, so the sleep
+		// system never ticks their pregnancy. Count the days here; after 270 the child is born (logged)
+		// and the flags are cleared so she can conceive again.
+		if (s.leader && typeof s.leader.pregnancy !== 'undefined') {
+			s.leader.pregnancy++;
+			if (s.leader.pregnancy > 270) {
+				setup.settlements.logEvent(s, s.leader.name + ' gave birth to your child.');
+				delete s.leader.pregnancy;
+				delete s.leader.pregnancy_father;
+			}
 		}
 
 		if (window.randomInteger(1, 100) <= 5) {
@@ -1317,15 +1400,40 @@ setup.settlements = {
 			setup.settlements.modifyRelationship(s, 5, 'Blackmail paid');
 			setup.settlements.logEvent(s, 'Player paid the blackmail demand.');
 		} else {
-			// Sell intel: boost a random hostile settlement's raid readiness
-			const hostiles = setup.settlements.getAll().filter(function (h) {
-				return h.id !== s.id && !h.destroyed && setup.settlements.isHostile(h) && h.discovered;
-			});
-			if (hostiles.length > 0) {
-				const target = hostiles[window.randomInteger(0, hostiles.length - 1)];
-				target.settlementRaidDay = 0;
-			}
+			setup.settlements.leakIntel(s.id);
 			setup.settlements.logEvent(s, 'Sold intel on player base to enemies.');
+		}
+	},
+
+	/**
+	 * Someone sold what they know about the player's base: a random discovered hostile settlement
+	 * (not excludeId) is ready to raid again straight away.
+	 * Returns { id, name, prevRaidDay } so the leak can be undone with undoLeakIntel, or null when
+	 * there was nobody hostile to sell to.
+	 */
+	leakIntel: function (excludeId) {
+		const hostiles = setup.settlements.getAll().filter(function (h) {
+			return h.id !== excludeId && !h.destroyed && setup.settlements.isHostile(h) && h.discovered;
+		});
+		if (!hostiles.length) {
+			return null;
+		}
+		const target = hostiles[window.randomInteger(0, hostiles.length - 1)];
+		const leak = { id: target.id, name: target.name, prevRaidDay: target.settlementRaidDay || 0 };
+		target.settlementRaidDay = 0;
+		setup.settlements.save(setup.settlements.getAll());
+		return leak;
+	},
+
+	/** Take a leakIntel back (the leaker was caught before the news spread). */
+	undoLeakIntel: function (leak) {
+		if (!leak) {
+			return;
+		}
+		const target = setup.settlements.getById(leak.id);
+		if (target) {
+			target.settlementRaidDay = leak.prevRaidDay;
+			setup.settlements.save(setup.settlements.getAll());
 		}
 	},
 
@@ -1555,6 +1663,25 @@ setup.settlements = {
 			trade_fail:     ["Come back with something worth our time.", "We deal in specifics. What've you actually got?"],
 			gift_accept:    ["Caps. Always useful.", "We'll remember this. Good way to start."],
 		},
+	},
+
+	/** Where the leader's private quarters are, per settlement type (used by the Leader Night scenes). */
+	leaderQuarters: {
+		biker_gang:        'the back room of the clubhouse, walled off from the main hall by stacked tyres and old road signs',
+		survivor_camp:     'a patched-together room at the back of the main building, plywood and canvas and a surprisingly good mattress',
+		monastery:         'a bare stone cell at the end of the cloister, with a narrow bed and a single candle',
+		convent:           'a small whitewashed room above the chapel, with a narrow bed and a wooden crucifix on the wall',
+		trading_post:      'the office above the market floor, ledgers still stacked on the desk and a cot pushed against the far wall',
+		raider_camp:       'the war room at the heart of the camp, maps pinned to the walls and trophies hanging from the rafters',
+		cult_compound:     'the inner sanctum, with candles burning in every alcove and a bed heaped with pillows',
+		military_base:     'a spartan officer\'s room with a bunk, a steel desk and a locked cabinet',
+		farming_community: 'the farmhouse bedroom, with a patchwork quilt on the bed and the smell of hay drifting through the window',
+		medical_colony:    'a private room behind the infirmary, the smell of antiseptic still clinging faintly to the sheets',
+		tribal_village:    'the biggest hut in the village, with furs spread across the floor and a fire burning low in the middle',
+		prison_colony:     'an office on the top tier, behind a steel door, with a mattress somebody had dragged out of a cell',
+		nomad_caravan:     'the lead wagon, with lamps swinging from hooks overhead and a bed built into the back',
+		amazonian_tribe:   'the longhouse, with pelts on the floor and spears racked along the walls',
+		scavenger_den:     'a nest built into the junk piles, a mattress surrounded by shelves of salvage',
 	},
 
 };

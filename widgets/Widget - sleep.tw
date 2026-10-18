@@ -395,6 +395,11 @@
 	<<set $scavengingDidntReturn = $guests.findIndex(function(g) { return g.id === _sleepGuestOpts.scavengingDidntReturnId; })>>
 <</if>>
 
+// Fever outbreak: after every guest/basement NPC is processed so a fresh infection does not tick down tonight
+<<run setup.fever.nightly({ day: $game.day, isColdSnap: _isColdSnap, isOvercrowded: _isOvercrowded, hasWorkingHospital: _hasWorkingHospital })>>
+<<run setup.loyaltyTrial.nightly($game.day)>>
+<<run setup.firstWords.nightly($game.day)>>
+
 <<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
 		<<set _npc = $nursery[_nurseryI]>>
 		<<set _npc.sleeping = false>>

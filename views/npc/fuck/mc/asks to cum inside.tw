@@ -1,6 +1,17 @@
 :: asks to cum inside
 
 <<if !$sexForced && $sexAction === 'pussy' && typeof $tmpGirl.pregnancy === 'undefined'>>
+    /* Leg-lock eligibility (non-feral): adult, into guys, relationship 70+, submission under 40, not a virgin, body in reach (not gloryhole / milk barn),
+       and either a breeder or properly worked up (horny 80+ and corruption 50+). The 5% roll is made in the chain below. */
+    <<set _llTraits = $tmpGirl.traits ?? []>>
+    <<set _legLockReady = !_llTraits.includes('feral')
+        && ($tmpGirl.likesGuys ?? true)
+        && setup.getAge($tmpGirl) >= 18
+        && !$tmpGirl.virgin
+        && ($tmpGirl.relationship ?? 0) >= 70
+        && ($tmpGirl.sub ?? 0) < 40
+        && !['gloryhole', 'milk_barn'].includes($tmpGirl.location)
+        && (_llTraits.includes('breeder') || (($tmpGirl.horny ?? 0) >= 80 && ($tmpGirl.corruption ?? 0) >= 50))>>
     <<if ($tmpGirl.traits ?? []).includes('feral') && (($tmpGirl.traits ?? []).includes('breeder') || ($tmpGirl.relationship >= 70 && setup.percentageChance(30)))>>
         <<set _girlVisual = $tmpGirl>>
         <<set _feralReaction = either([
@@ -28,6 +39,33 @@
         </div>
         <br />
         <<set _askedToCumInside = true>>
+    <<elseif _legLockReady && setup.percentageChance(5)>>
+        /* Leg-lock: a willing, non-submissive partner traps the MC inside her. Buttons then offer cum in / pry free (see Mc fuck buttons, Mc fuck leg lock). */
+        <<set _legLock = true>>
+        <<set _llName = setup.displayName($tmpGirl)>>
+        <<set _llScene = either([
+            "You were buried to the hilt in " + _llName + "'s pussy and right on the edge when she hooked her legs around your waist and locked her ankles together at the small of your back. Her heels dug into your ass and she hauled you in, grinding your cock as deep inside her as it would go, leaving you no room at all to pull out.",
+            "You felt your orgasm building and started to ease back, but " + _llName + " was faster. Her thighs clamped around your hips, her ankles crossed behind your back, and she yanked you forward until your cock was balls-deep inside her, her pussy clenching around you as if it was trying to milk you dry.",
+            _llName + "'s legs wrapped around your waist as you fucked her, loosely at first, then so tight you could barely move. Her ankles locked behind your back and her heels pressed into you, pinning your cock deep inside her pussy while she stared up at you, daring you to try and pull out."
+        ])>>
+        <<set _llLines = [
+            "Don't you dare pull out. Cum inside me.",
+            "Stay right there. I want every drop, as deep as it goes.",
+            "Where do you think you're going? Fill me up.",
+            "Give it to me. I want it inside, all of it."
+        ]>>
+        <<if ($tmpGirl.traits ?? []).includes('breeder')>>
+            <<run _llLines.push("I want your baby. Cum inside me.", "Breed me. Don't you dare waste it.")>>
+        <</if>>
+        <br />
+        <<= _llScene >>
+        <br />
+        <<sayNpc $tmpGirl>>
+            <<= either(_llLines) >>
+        <</sayNpc>>
+        <br />
+        Your cock throbbed inside her, one thrust from the edge, and her legs showed no sign of letting go. It was your call.
+        <br /><br />
     <<elseif ($tmpGirl.traits ?? []).includes('breeder')>>
         <br />
         <<sayNpc $tmpGirl>>
@@ -53,3 +91,50 @@
         <<set _askedToCumInside = true>>
     <</if>>
 <</if>>
+
+
+:: Mc fuck leg lock
+
+/* Lead-in for the cum step after a leg-lock (set by the buttons in Mc fuck buttons). Shown before the cum image/text; the pregnancy check itself runs in Mc fuck cum in pussy as usual. */
+<<if $sexLegLock === 'in'>>
+    <<set _llRel = randomInteger(5, 10)>>
+    <<set _llHappy = randomInteger(5, 10)>>
+    <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + _llRel, 100)>>
+    <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + _llHappy, 100)>>
+    <<set _llInScene = either([
+        "You gave up trying to hold back and let her legs haul you in the rest of the way. Your cock slammed to the hilt, her ankles locked tight behind you, and the first thick pulse of cum shot deep inside her pussy.",
+        "You stopped fighting her grip. Her heels pulled you forward until your hips were flush against hers, and with her legs holding you exactly where she wanted you, you let go.",
+        "You let her have what she wanted. Her thighs squeezed, her heels dragged you in, and you drove your cock as deep into her pussy as it would go while your balls emptied inside her."
+    ])>>
+    <<= _llInScene >>
+    <br />
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "Yes, just like that. Don't move. Let it all go inside me.",
+            "Mmm, I can feel it. Keep it deep, don't you dare pull out.",
+            "That's it... give me all of it."
+        ])>>
+    <</sayNpc>>
+    <strong>(Relationship + <<= _llRel >>, Happy + <<= _llHappy >>)</strong>
+    <br /><br />
+<<elseif $sexLegLock === 'out'>>
+    <<set $tmpGirl.relationship = Math.max(($tmpGirl.relationship ?? 0) - 2, -100)>>
+    <<set $tmpGirl.happy = Math.max(($tmpGirl.happy ?? 0) - 5, -100)>>
+    <<set _llOutScene = either([
+        "You grabbed her ankles, peeled her legs off your back and wrenched your hips free. She whined and clawed at you, trying to drag you back in, but you pulled your cock out of her pussy just in time.",
+        "You pushed her knees apart, broke her ankle lock and dragged yourself out of her pussy. Her heels slid down your back as you slipped free, her hips still bucking after you.",
+        "It took both hands to pry her legs open, but you managed to pull your cock out of her pussy before the point of no return, leaving her squirming and empty beneath you."
+    ])>>
+    <<= _llOutScene >>
+    <br />
+    <<sayNpc $tmpGirl>>
+        <<=either([
+            "No! Come back, put it back inside me!",
+            "Are you serious? I wanted it inside!",
+            "Why did you pull out? I wasn't done with you..."
+        ])>>
+    <</sayNpc>>
+    <strong>(Relationship - 2, Happy - 5)</strong>
+    <br /><br />
+<</if>>
+<<unset $sexLegLock>>

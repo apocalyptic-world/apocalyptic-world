@@ -1,0 +1,211 @@
+:: Blair \[Event\] - The small hours [bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br />
+<<set _shVariant = setup.blair.smallHoursVariant()>>
+<<if !_shVariant>>
+	<<goto 'Bedroom'>>
+<<else>>
+	<<set $locationEvents.bedroom = true>>
+	<<set $characters.blair.quests.small_hours_day = $game.day>>
+
+	<<if _shVariant === 'newborn'>>
+		<<set $characters.blair.quests.small_hours_newborn_day = $game.day>>
+		<<set _shKid = setup.blair.youngestKid()>>
+		<<set _shKidShe = setup.pronounceWhat(_shKid)>>
+		<<set _shKidHer = setup.pronounceWho(_shKid)>>
+		<center>
+			<<image 'places/cabin/small_hours_baby.jpg'>>
+		</center>
+		<br />
+		The bed was empty when you woke. It was the small hours, the kind where the house creaked and settled around you, and you found her at the window with <<=_shKid.name>> against her shoulder, swaying from foot to foot without any rhythm she could have named.
+		<br /><br />
+		<<blair>>
+			She won't stop. I've tried everything. Feeding, walking, singing. I sang her the only song I know about forty times.
+		<</blair>>
+		<br />
+		Her eyes were red-rimmed and she was smiling in the helpless way people smile when they are too tired to cry.
+		<br /><br />
+		<div id="sh_take">
+			<<set _shTakeLabel = 'Take ' + _shKidHer + ' so she can sleep'>>
+			<<linkreplace _shTakeLabel>>
+				<<run $('#sh_sit, #sh_nursery').hide()>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 6, 100)>>
+				<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+				<<set $player.energy = Math.max(($player.energy ?? 0) - 15, 0)>>
+				<<addmins 120>>
+				You took <<=_shKid.name>> from her arms, awkward and careful, with one hand behind <<=_shKidHer>> head the way Vincent had once showed you with a lamb. Blair stood there for a moment, empty-handed, as if she did not know what to do with them. Then she lay down on the bed and was asleep before you had finished your first lap of the room.
+				<br /><br />
+				It was not a good night. But when the light came through the window, <<=_shKid.name>> was asleep on your chest and so was Blair's hand.
+				<br /><br />
+				<strong>(Blair: Relationship +6, Happy +10. Energy −15.)</strong>
+				<br /><br />
+				<<link 'Go back to bed'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="sh_sit">
+			<<set _shSitLabel = 'Sit with them both until morning'>>
+			<<linkreplace _shSitLabel>>
+				<<run $('#sh_take, #sh_nursery').hide()>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 4, 100)>>
+				<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+				<<addmins 120>>
+				You sat on the floor beneath the window with your back against the wall, and she sat down between your knees with <<=_shKid.name>> in her arms. You did not say anything. You did not need to. Sometimes the whole of what a person needs is to not be the only one awake.
+				<br /><br />
+				<strong>(Blair: Relationship +4, Happy +10.)</strong>
+				<br /><br />
+				<<link 'Go back to bed'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<<if $game.location.nursery ?? false>>
+			<div id="sh_nursery">
+				<<set _shNurseryLabel = 'Suggest the nursery attendant takes ' + _shKidHer + ' tonight'>>
+				<<linkreplace _shNurseryLabel>>
+					<<run $('#sh_take, #sh_sit').hide()>>
+					<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 6, -100)>>
+					<<set $characters.blair.happy = Math.max(($characters.blair.happy ?? 0) - 10, -100)>>
+					<<blair>>
+						She is not a chore, <<=$player.name>>. She's my daughter. I'm tired, I'm not done.
+					<</blair>>
+					<br />
+					She turned away from you, shoulders stiff, and held <<=_shKid.name>> a little tighter. You went back to bed alone.
+					<br /><br />
+					<strong>(Blair: Relationship −6, Happy −10.)</strong>
+					<br /><br />
+					<<link 'Go back to bed'>>
+						<<goto 'Bedroom'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<</if>>
+
+	<<elseif _shVariant === 'kick'>>
+		<<set $characters.blair.quests.small_hours_kick_day = $game.day>>
+		<center>
+			<<image 'places/cabin/small_hours_kick.jpg'>>
+		</center>
+		<br />
+		She woke you by taking your hand. Not hard. She just took it, in the dark, and pressed it flat against her stomach with her own hand over yours.
+		<br /><br />
+		<<blair>>
+			Wait. Wait for it. There.
+		<</blair>>
+		<br />
+		It was small, a flutter under your palm, like something knocking on a door from the other side. Then, again, firmer, as if whatever was in there had heard you and wanted to introduce itself.
+		<br /><br />
+		<<blair>>
+			That's the third time tonight. I think the baby is taking after you. Doesn't sleep when it's supposed to.
+		<</blair>>
+		<br />
+		Her face in the dark was more open than you had ever seen it, scared and wondering and hopeful all at once.
+		<br /><br />
+		<<set _shWood = setup.cabinInventory.count('wood')>>
+		<div id="sh_cradle">
+			<<if _shWood >= 5>>
+				<<set _shCradleLabel = 'Promise to build the cradle yourself (5 wood)'>>
+				<<linkreplace _shCradleLabel>>
+					<<run $('#sh_stay').hide()>>
+					<<run setup.cabinInventory.drop('wood', 5)>>
+					<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 8, 100)>>
+					<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 12, 100)>>
+					<<addmins 60>>
+					<<you>>
+						Tomorrow. I'll find the good planks. Dad can tell me what I'm doing wrong.
+					<</you>>
+					<br />
+					She laughed, wetly, quietly, so as not to wake the house, and kissed the back of your hand where it rested on her belly.
+					<br /><br />
+					<strong>(Blair: Relationship +8, Happy +12. −5 wood.)</strong>
+					<br /><br />
+					<<link 'Fall asleep with your hand still there'>>
+						<<goto 'Bedroom'>>
+					<</link>>
+				<</linkreplace>>
+			<<else>>
+				<span style="color:#888;">Build a cradle (needs 5 wood)</span>
+			<</if>>
+		</div>
+		<div id="sh_stay">
+			<<set _shStayLabel = 'Just stay there and talk to the baby'>>
+			<<linkreplace _shStayLabel>>
+				<<run $('#sh_cradle').hide()>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 5, 100)>>
+				<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+				<<addmins 45>>
+				You did not say anything clever. You said hello, and that you were the one who snored, and that there was a lot to see out here and a lot of it was bad but some of it was very good. She listened with her eyes closed and her fingers laced through yours.
+				<br /><br />
+				<strong>(Blair: Relationship +5, Happy +10.)</strong>
+				<br /><br />
+				<<link 'Fall asleep with your hand still there'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+
+	<<else>>
+		<<set $characters.blair.quests.small_hours_try_day = $game.day>>
+		<center>
+			<<image 'places/cabin/small_hours_try.jpg'>>
+		</center>
+		<br />
+		She was awake, lying on her back in the crook of your arm with the blanket slipped off one breast, her face close to yours on the pillow, watching you the way she did when she was working up to something.
+		<br /><br />
+		<<blair>>
+			Do you ever think about it? Little ones. A house with noise in it that isn't someone yelling.
+		<</blair>>
+		<br />
+		<<if setup.blair.married()>>
+			She rolled the ring on her finger with her thumb, absently, as she asked.
+			<br /><br />
+		<</if>>
+		<<blair>>
+			I'm not asking for tomorrow. I'm just asking if there's a part of you that wants it. Because I think there's a part of me that does. And that scares me a little.
+		<</blair>>
+		<br />
+		<div id="sh_try">
+			<<set _shTryLabel = 'Tell her you would like to try'>>
+			<<linkreplace _shTryLabel>>
+				<<run $('#sh_wait').hide()>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 6, 100)>>
+				<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 15, 100)>>
+				<<addmins 45>>
+				<<you>>
+					Yes. I think about it more than I'd admit.
+				<</you>>
+				<br />
+				Her whole face changed. She did not say anything. She reached up and touched your jaw, like she was memorising it, and then she leaned over and turned the lamp down.
+				<br /><br />
+				<strong>(Blair: Relationship +6, Happy +15.)</strong>
+				<br /><br />
+				<<link 'Pull her close'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="sh_wait">
+			<<set _shWaitLabel = 'Tell her not yet, but not never'>>
+			<<linkreplace _shWaitLabel>>
+				<<run $('#sh_try').hide()>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 2, 100)>>
+				<<you>>
+					Not yet. Not never. I want it to be right.
+				<</you>>
+				<br />
+				She nodded slowly and let out a breath she had apparently been holding for a while. Then she smiled, a little crooked.
+				<br /><br />
+				<<blair>>
+					Okay. Okay. That's actually an answer I can live with.
+				<</blair>>
+				<br />
+				<strong>(Blair: Relationship +2.)</strong>
+				<br /><br />
+				<<link 'Go to sleep'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+<</if>>

@@ -1,5 +1,26 @@
 :: Library [Place]
 <h1 class="ptitle">LIBRARY</h1>
+<<if !($locationEvents.library ?? false)>>
+    <<set _libraryIdx = []>>
+    <<for _lgI, _lg range $guests>>
+        <<if _lg && !_lg.gender && (_lg.likesGuys ?? true) && !_lg.chastityBelt && !(_lg.traits ?? []).includes('feral') && setup.getAge(_lg) >= 18 && !setup.isAtWork(_lg, $weather) && !setup.family.isBloodToMC(_lg)>>
+            <<run _libraryIdx.push(_lgI)>>
+        <</if>>
+    <</for>>
+    /* Each event's images show one look (setup.sceneLooks): only a guest who fits it can star in that event */
+    <<set _libReaders = _libraryIdx.filter(function (i) { return setup.fitsSceneLook($guests[i], 'library_reading'); })>>
+    <<set _libFollowers = _libraryIdx.filter(function (i) { return setup.fitsSceneLook($guests[i], 'library_followed'); })>>
+    <<if (_libReaders.length || _libFollowers.length) && setup.percentageChance(5)>>
+        <<set $locationEvents.library = true>>
+        <<if _libReaders.length && (!_libFollowers.length || setup.percentageChance(50))>>
+            <<set $tmpEvent = {id: _libReaders.random()}>>
+            <<goto 'Library \[Event\] - caught reading'>>
+        <<else>>
+            <<set $tmpEvent = {id: _libFollowers.random()}>>
+            <<goto 'Library \[Event\] - she followed you'>>
+        <</if>>
+    <</if>>
+<</if>>
 <br />
 Unread books in your shelves: <strong><<=setup.cabinInventory.count('book')>></strong>
 

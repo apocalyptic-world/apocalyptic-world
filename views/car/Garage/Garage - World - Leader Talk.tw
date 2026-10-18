@@ -75,6 +75,12 @@
     <<if _lt.lastInvestDay>>
         <br /><span style="color: #666; font-size: 0.88em;">Last investment: day <<= _lt.lastInvestDay>></span>
     <</if>>
+    <<if setup.settlements.hasLeaderBond(_lt, $game.day)>>
+        <br /><span style="color: #5599e0; font-size: 0.88em;">Bond<<if _ltLeader>> with <<= _ltLeader.name>><</if>>:<<= _lt.leaderBondUntil - $game.day>> day(s) left. Slower decay, donations count more.</span>
+    <</if>>
+    <<if _ltLeader && _ltLeader.pregnancy_father === 'mc' && (_ltLeader.pregnancy ?? 0) >= 8>>
+        <br /><span style="color: #666; font-size: 0.88em;"><<= _ltLeader.name>> is carrying your child.</span>
+    <</if>>
 
 </div>
 <br />

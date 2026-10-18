@@ -3,7 +3,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <br /><br />
 
 <<if ($tmpGirl.traits ?? []).includes('feral')>>
-	<i>This person is feral and cannot be assigned to any task.</i>
+	<i>This person is feral and cannot be assigned to most tasks.</i>
 <<else>>
 <<set _attendantTotal = setup.getPersonsForLocation($guests, 'attendant').length + setup.getPersonsForLocation($slaves, 'attendant').length>>
 <<set _autoAttendantOk = ($automatization.job ?? false) && setup.cabinInventory.has('towel', 1)>>
@@ -87,6 +87,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
+<</if>>
 <<if [0].includes($tmpGirl.gender) && $game?.location?.milk_barn && ($tmpGirl.pregnancy >= 7 || ($tmpGirl.traits ?? []).includes('milker'))>>
 	<div>
 		<<link 'Assign to milk barn'>>
@@ -95,5 +96,4 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 			<<goto `$tmpGirlViewBack`>>
 		<</link>>
 	</div>
-<</if>>
 <</if>>

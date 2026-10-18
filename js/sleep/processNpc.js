@@ -18,9 +18,11 @@ setup.sleep.processNpc = function(npc, opts) {
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
     if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational'))) && setup.getAge(npc) >= 18) {
-        setup.sleepMessages.addMain(
-            npc.name + ' was missing in the morning, ' +
-            setup.pronounceWhat(npc) + ' probably decided to leave this place.'
+        // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
+        const betrayalKind = setup.betrayal.depart(npc);
+        setup.sleepMessages.addMain(betrayalKind
+            ? setup.betrayal.message(npc, betrayalKind)
+            : npc.name + ' was missing in the morning, ' + setup.pronounceWhat(npc) + ' probably decided to leave this place.'
         );
         opts.pendingRemovals.push({ index: npcIndex });
         opts.shouldSkip = true;

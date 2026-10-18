@@ -169,7 +169,22 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
         delete variables.characters.blair.family.mother;
         save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
-        save.state.history[save.state.index].variables.characters.blair.likesGirls = false;
+        // Blair is bisexual (likes men and women). Older saves had her forced to likesGirls = false on every load; set it once.
+        if (typeof save.state.history[save.state.index].variables.characters.blair.quests?.bi_since_day === 'undefined') {
+            save.state.history[save.state.index].variables.characters.blair.likesGirls = true;
+            save.state.history[save.state.index].variables.characters.blair.quests ??= {};
+            save.state.history[save.state.index].variables.characters.blair.quests.bi_since_day = save.state.history[save.state.index].variables.game?.day ?? 0;
+        }
+        // Older saves: Blair married the player but never got a married flag or history entry (icon, anniversaries, divorce flows missed her)
+        {
+            const _blairV = save.state.history[save.state.index].variables;
+            const _blairNpc = _blairV.characters.blair;
+            if (_blairNpc.quests?.married && _blairNpc.family?.husband === 'mc' && !(_blairNpc.history ?? []).some(function (h) { return h.event === 'married'; })) {
+                _blairNpc.married = true;
+                _blairNpc.history = _blairNpc.history ?? [];
+                _blairNpc.history.push({ event: 'married', day: _blairV.characters.vincent?.quests?.wedding_talk_day ?? _blairV.game?.day ?? 0, with: 'mc' });
+            }
+        }
         save.state.history[save.state.index].variables.characters.blair.likesTGuys = false;
         save.state.history[save.state.index].variables.characters.blair.likesTGirls = false;
         if (typeof variables.characters.blair.pregnancy !== 'undefined') {

@@ -26,6 +26,13 @@
     <<set _actionMax3 = Math.max(_actionMax3, $tmpGirl3.sub, $tmpGirl3.drunk ?? 0)>>
 <</if>>
 
+/* A virgin with enough relationship and orgasms with the MC is willing for pussy sex: her own gate drops to 40 for pussy actions */
+<<set _pussyMax = Math.min(
+    setup.sex.virginWilling($tmpGirl) ? Math.max(_actionMax, 40) : _actionMax,
+    setup.sex.virginWilling($tmpGirl2) ? Math.max(_actionMax2, 40) : _actionMax2,
+    setup.sex.virginWilling($tmpGirl3) ? Math.max(_actionMax3, 40) : _actionMax3
+)>>
+
 <<set _actionMax = Math.min(_actionMax, _actionMax2, _actionMax3)>>
 
 <<if $player.horny >= 100 && typeof $sexAction !== 'undefined'>>
@@ -108,7 +115,7 @@
         <div id="action-buttons">
             <<for _sexActionKey, _sexAction range _sexActions>>
                 <<capture _sexActionKey, _sexAction>>
-                    <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue)>>
+                    <<if (_sexAction.show ?? true) && (_actionMax >= _sexAction.minAction || _sexAction.orConditionTrue || (_pussyMax >= _sexAction.minAction && setup.sex.isPussyAction(_sexAction)))>>
                         <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey+".png"]]</span>'>>
                         <<link _linkName>>
                             <<set $sexAction = _sexActionKey>>

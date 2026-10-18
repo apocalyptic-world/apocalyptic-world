@@ -1,0 +1,186 @@
+:: Event - Fever in the house [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<unset $game.feverEvent>>
+<<set _fvPatients = setup.fever.patients()>>
+<<if !_fvPatients.length>>
+	<<goto 'Wood cabin'>>
+<</if>>
+
+<center>
+	<<image 'places/cabin/fever_house.jpg'>>
+</center>
+<br />
+
+<<set _fvHealthy = $guests.filter(function (g) { return typeof g.sick === 'undefined' && setup.getAge(g) >= 18; })>>
+<<set _fvReporter = _fvHealthy.length ? setup.getRandomElement(_fvHealthy) : setup.getRandomElement($guests)>>
+<<if _fvReporter>>
+	<<sayNpc _fvReporter>>
+		You need to come see this. Half the house is burning up. Nobody can keep anything down and they're shaking so hard the cots rattle.
+	<</sayNpc>>
+	<br />
+<</if>>
+
+You went through the house room by room. The air was thick and sour, and the fever had hit everywhere at once: <<=_fvPatients.length>> people lay in their beds, flushed and sweating, some of them too weak to lift their heads. Whatever it was, it had come in the night and it had not asked anyone's permission.
+<br /><br />
+<<if setup.hasWorkingHospital()>>
+	Your hospital had already taken in the worst of them, and the staff were working through the rooms with what little they had. It helped, but it was nowhere near enough to stop this.
+	<br /><br />
+<</if>>
+This was not a few days of bed rest. A fever like this would keep people down for weeks, and the sickest ones would be down far longer than that. Unless somebody did something about it.
+<br /><br />
+
+<<set _fvStock = setup.cabinInventory.count('antibiotics')>>
+<<if _fvStock >= _fvPatients.length>>
+	You had <strong><<=_fvStock>></strong> antibiotics in stock, one course for every bed in the house, with some to spare.
+<<elseif _fvStock>>
+	You had <strong><<=_fvStock>></strong> antibiotics in stock. Not enough for everyone, but enough to decide who got up first.
+<<else>>
+	You had no antibiotics in stock at all. All you could do was keep them comfortable and wait it out.
+<</if>>
+<br /><br />
+
+<<set $tmpFeverPick = {}>>
+<<if _fvStock>>
+	<div id="fv_allrow" style="margin-bottom: 10px;">
+		<<checkbox "_fvAll" false true>> <strong>Select all</strong>
+	</div>
+<</if>>
+<div id="fv_list">
+<<for _fvI, _fvP range _fvPatients>>
+	<<set _fvGender = 'gender-' + setup.genderClass(_fvP)>>
+	<<set _fvPid = _fvP.id>>
+	<<capture _fvPid>>
+		<div class="fv-row" @data-id="_fvPid" style="margin-bottom: 8px;">
+			<<if _fvStock>><<checkbox `"$tmpFeverPick[_fvPid]"` false true autocheck>> <</if>><span @class="''+_fvGender+''" style="font-weight:bold"><<=setup.displayName(_fvP)>></span> <<if _fvP.sick.severe>><span class="fv-status" style="color:#e05555;">severe fever</span><<else>><span class="fv-status" style="color:#e09855;">fever</span><</if>>, about <<=_fvP.sick.days>> days in bed
+		</div>
+	<</capture>>
+<</for>>
+</div>
+
+<<if _fvStock>>
+<div id="fv_give">
+	<<set _fvGiveLabel = 'Give antibiotics to the selected'>>
+	<<link _fvGiveLabel>>
+		<<set _fvDoneIds = []>>
+		<<set _fvTicked = _fvPatients.filter(function (p) { return $tmpFeverPick[p.id] && p.sick && !p.sick.treated; })>>
+		<<run _fvTicked.sort(function (a, b) { return (b.sick.severe ? 1 : 0) - (a.sick.severe ? 1 : 0); })>>
+		<<for _fvP range _fvTicked>>
+			<<if setup.cabinInventory.count('antibiotics') >= 1>>
+				<<run setup.cabinInventory.drop('antibiotics', 1)>>
+				<<set _fvWasSevere = _fvP.sick.severe>>
+				<<run setup.fever.treat(_fvP)>>
+				<<set _fvP.relationship = Math.min((_fvP.relationship ?? 0) + (_fvWasSevere ? 8 : 4), 100)>>
+				<<set _fvP.happy = Math.min((_fvP.happy ?? 0) + 10, 100)>>
+				<<set $tmpFeverPick[_fvP.id] = false>>
+				<<run _fvDoneIds.push(_fvP.id)>>
+			<</if>>
+		<</for>>
+		<<set _fvNames = _fvTicked.filter(function (p) { return _fvDoneIds.includes(p.id); }).map(function (p) { return p.name; }).join(', ')>>
+		<<if _fvDoneIds.length>>
+			<<addmins `_fvDoneIds.length * 10`>>
+		<</if>>
+		<<replace '#fv_result'>>
+			<<if _fvDoneIds.length>>
+				<span style="color:#55cc88;"><<=_fvNames>> took the pills with shaking hands. By evening the worst of it had broken, and a few days of rest would have them back on their feet.</span>
+				<<if _fvDoneIds.length < _fvTicked.length>>
+					<br />
+					<span style="color:#e05555;">The bottles ran out before everyone you ticked was treated. The sickest went first.</span>
+				<</if>>
+			<<elseif _fvTicked.length>>
+				<span style="color:#e05555;">There were no antibiotics left to give.</span>
+			<<else>>
+				<span style="color:#e09855;">Tick at least one patient first.</span>
+			<</if>>
+		<</replace>>
+		<<set $tmpFeverDone = _fvDoneIds>>
+		<<script>>
+			var done = (State.variables.tmpFeverDone || []).map(String);
+			$('#fv_list .fv-row').each(function () {
+				if (done.indexOf(String($(this).attr('data-id'))) !== -1) {
+					$(this).css('opacity', 0.55).find('input').prop('checked', false).prop('disabled', true).end().find('.fv-status').text('recovering').css('color', '#55cc88');
+				}
+			});
+			if (done.length) {
+				$('#fv_list input').prop('disabled', true);
+				$('#fv_allrow, #fv_give, #fv_quarantine, #fv_sell').hide();
+			}
+			$('#fv_allrow input').prop('checked', false);
+		<</script>>
+	<</link>>
+</div>
+<div id="fv_result" style="margin-bottom: 12px;"></div>
+<</if>>
+<<if $game.outbreak && !$game.outbreak.quarantine>>
+<div id="fv_quarantine">
+	<<set _fvQuarantineLabel = 'Separate the sick from the healthy'>>
+	<<linkreplace _fvQuarantineLabel>>
+		<<set $game.outbreak.quarantine = true>>
+		<<for _fvQ range setup.fever.patients()>>
+			<<set _fvQ.happy = Math.max((_fvQ.happy ?? 0) - 8, -100)>>
+		<</for>>
+		<<addmins 40>>
+		<br />
+		<center>
+			<<image 'places/cabin/fever_quarantine.jpg'>>
+		</center>
+		<br />
+		You had the sick carried into the empty rooms at the back and told everyone else to keep out. Nobody liked it, and the sick liked it least, listening to the house go on without them through the walls. But it would keep the fever from spreading any further.
+		<br /><br />
+		<strong>(The sick: Happy −8. The fever will not spread.)</strong>
+		<br /><br />
+	<</linkreplace>>
+</div>
+<</if>>
+
+<<if _fvStock>>
+<div id="fv_sell">
+	<<set _fvSellPrice = 100>>
+	<<set _fvSellLabel = 'Sell your antibiotics to a passing trader (' + _fvSellPrice + ' caps each)'>>
+	<<linkreplace _fvSellLabel>>
+		<<set _fvSold = setup.cabinInventory.count('antibiotics')>>
+		<<if _fvSold>>
+			<<run setup.cabinInventory.drop('antibiotics', _fvSold)>>
+			<<set $player.money += _fvSold * _fvSellPrice>>
+			<<set $player.goodwill -= 3>>
+			<<for _fvG range $guests.concat($slaves)>>
+				<<set _fvG.happy = Math.max((_fvG.happy ?? 0) - 6, -100)>>
+			<</for>>
+			<<for _fvS range setup.fever.patients()>>
+				<<set _fvS.relationship = Math.max((_fvS.relationship ?? 0) - 10, -100)>>
+			<</for>>
+			<<addmins 20>>
+			A trader had been waiting out by the road since morning, the way they do when they smell sickness. He did not even look at the house. He counted out the caps and took every bottle you had.
+			<br /><br />
+			Word got around the house fast. People lying in their own sweat could hear the cart rolling away.
+			<br /><br />
+			<strong>(+<<=_fvSold * _fvSellPrice>> caps. Everyone: Happy −6. The sick: Relationship −10. Goodwill −3.)</strong>
+			<br /><br />
+		<</if>>
+	<</linkreplace>>
+</div>
+<</if>>
+
+<div id="fv_leave">
+	<<link 'Leave them to it'>>
+		<<unset $tmpFeverPick $tmpFeverDone>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+</div>
+
+<<done>>
+	<<script>>
+		/* Clicking the text next to a checkbox toggles it, like a label */
+		$('#fv_allrow, #fv_list .fv-row').css('cursor', 'pointer').on('click', function (e) {
+			if ($(e.target).is('input')) { return; }
+			var box = $(this).find('input[type=checkbox]:not(:disabled)')[0];
+			if (box) { box.click(); }
+		});
+		$('#fv_allrow input').on('change', function () {
+			var on = this.checked;
+			$('#fv_list input[type=checkbox]:not(:disabled)').each(function () {
+				if (this.checked !== on) { $(this).prop('checked', on).trigger('change'); }
+			});
+		});
+	<</script>>
+<</done>>

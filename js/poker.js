@@ -20,6 +20,9 @@ setup.poker = {
     BOT_NAMES: { 1: 'shorts', 2: 'jeans', 3: 'skirt' },
     SHOE_NAMES: { 1: 'heels', 2: 'boots' },
 
+    // Card faces show a random picture: images/game/poker/card_01.jpg .. card_NN.jpg (raise CARD_BG_COUNT when adding more)
+    CARD_BG_COUNT: 40,
+
     // ── Cards ────────────────────────────────────────────────────────────────
 
     newDeck: function () {
@@ -33,7 +36,14 @@ setup.poker = {
             const j = Math.floor(Math.random() * (i + 1));
             [deck[i], deck[j]] = [deck[j], deck[i]];
         }
+        const offset = Math.floor(Math.random() * this.CARD_BG_COUNT);
+        deck.forEach((card, i) => { card.bg = ((offset + i) % this.CARD_BG_COUNT) + 1; });
         return deck;
+    },
+
+    /** Picture number for a card (cards dealt before pictures existed get a stable one from rank and suit). */
+    cardBg: function (card) {
+        return card.bg ?? (((card.r * 7 + card.s * 13) % this.CARD_BG_COUNT) + 1);
     },
 
     label: function (card) {
@@ -50,7 +60,9 @@ setup.poker = {
             }
             const cls = 'poker-card' + ((card.s === 1 || card.s === 2) ? ' red' : '') + (holds[i] ? ' held' : '') + (opts.clickable ? ' clickable' : '');
             const click = opts.clickable ? ' onclick="window.pokerToggle(' + i + ', this)"' : '';
-            return '<div class="' + cls + '"' + click + '>' + this.label(card) + '</div>';
+            const bg = String(this.cardBg(card)).padStart(2, '0');
+            const style = ' style="background-image:url(' + setup.ImagePath + 'game/poker/card_' + bg + '.jpg)"';
+            return '<div class="' + cls + '"' + click + style + '><span class="poker-rank">' + this.label(card) + '</span></div>';
         }).join('') + '</div>';
     },
 

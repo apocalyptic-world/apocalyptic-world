@@ -1,0 +1,240 @@
+:: Negan - She Remembers You [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<set $characters.negan.quests.remembers_day = $game.day>>
+<<if $characters.negan.quests.barter_reply === 'gave' && $characters.negan.quests.barter_npc>>
+	<<set _srW = $characters.negan.quests.barter_npc>>
+	<<set _srWho = 'barter'>>
+<<else>>
+	<<set _srW = $characters.negan.quests.new_one_npc>>
+	<<set _srWho = 'new_one'>>
+<</if>>
+<<if !_srW>>
+	<<newgirl>>
+	<<set $tmpGirl.birthDate = setup.getBirthDate(18)>>
+	<<set _srW = $tmpGirl>>
+	<<unset $tmpGirl>>
+<</if>>
+<<set _srShe = setup.pronounceWhat(_srW)>>
+<<set _srHer = setup.pronounceWho(_srW)>>
+<<set _srHers = setup.pronounceWhos(_srW)>>
+<<set _srReply = $characters.negan.quests.barter_reply ?? 'refused'>>
+<br />
+The guard at the inner gate told you Negan was busy and you could wait on the lower deck. It was the first time anyone there had let you walk it without an escort, and you were not sure whether that was a compliment.
+<br /><br />
+<center>
+	<<image 'people/negan/remembers_deck.jpg'>>
+</center>
+<br />
+The deck was loud with chains. A line of workers moved fuel drums from one end of the yard to the other, ankles shackled, eyes on the ground. Nobody looked up. Nobody talked. The guards leaned on the rail and watched the way people watch machines they own.
+<br /><br />
+<<if _srWho === 'barter'>>
+	You were halfway across before you saw <<=_srHer>>, third from the end of the line, a drum on <<=_srHers>> shoulder and <<=_srHers>> hair hacked short. It took you a moment to place the face. You had last seen it across your own table.
+	<br /><br />
+	<strong><<=_srW.name>></strong>. The woman you had named, in that office, for a handful of words and a promise that <<=_srShe>> would be <em>taken care of</em>.
+<<else>>
+	You were halfway across before you saw <<=_srHer>>, fourth from the end of the line, a drum on <<=_srHers>> shoulder and a fresh bruise on <<=_srHers>> jaw. The elbow that had broken a guard's nose had not got <<=_srHer>> anywhere, in the end. It had only got <<=_srHer>> here.
+	<br /><br />
+	The woman from Negan's office. The one he had called <em>the new one</em>.
+<</if>>
+<br /><br />
+<<=ucfirst(_srShe)>> looked up. Her eyes found you across thirty feet of yard and stopped there, and the drum on <<=_srHers>> shoulder shifted, and a guard barked a word that made <<=_srHer>> move again.
+<br /><br />
+<<sayNpc _srW>>
+	<<if _srWho === 'barter'>>You said she would be taken care of.<<else>>You were there. You stood there.<</if>>
+<</sayNpc>>
+<br />
+<<=ucfirst(_srShe)>> said it without heat. That was the worst part. There was no hatred left in it, only the flat fact of what you had been and what you had not done.
+<br /><br />
+<<negan>>
+	Well, look at that. A visitor with a conscience.
+<</negan>>
+<br />
+Negan had come down the stairs behind you without a sound, a guard at each shoulder, bat resting across his own. He followed your eyes down the line and smiled like he had been waiting for exactly this.
+<br /><br />
+<<if _srReply === 'gave'>>
+	<<negan>>
+		There's my favorite supplier. Funny how fast people settle in. Give them a week of three meals and a roof and they stop remembering where they came from.
+	<</negan>>
+	<br />
+	He nodded at <<=_srW.name>>.
+	<br /><br />
+	<<negan>>
+		I'd call it a favor, what you did for her. She'd have been miserable out there. You can pay your respects if you want. On the house.
+	<</negan>>
+<<elseif _srReply === 'refused'>>
+	<<negan>>
+		You told me no, remember? That's fine. She was already here. Don't look at me like I took something from you.
+	<</negan>>
+	<br />
+	He studied your face.
+	<br /><br />
+	<<negan>>
+		But I notice you looking. Everybody has a price, and mine is three hundred caps. For that you get her for an hour, alone. No questions from me.
+	<</negan>>
+<<else>>
+	<<negan>>
+		You and me, we're even. For now. I remember favors, and I remember debts, and tonight I'm in a generous mood.
+	<</negan>>
+	<br />
+	He tilted his head toward the line.
+	<br /><br />
+	<<negan>>
+		Take an hour with her if you want. Call it interest. I'll remember that too.
+	<</negan>>
+<</if>>
+<br />
+The guards at his shoulders did not smile. The whole deck had gone quiet around the sound of chains. Everyone was waiting to see what kind of man you were.
+<br /><br />
+
+<div id="sr_feed">
+	<<if $backpack.count('food') >= 1>>
+		<<set _srFeedLabel = 'Slip her some food as you pass'>>
+		<<linkreplace _srFeedLabel>>
+			<<run $('#sr_lend, #sr_away').hide()>>
+			<<drop $backpack 'food' 1>>
+			<<set $characters.negan.quests.remembers_reply = 'fed'>>
+			<<set _srW.relationship = Math.min((_srW.relationship ?? 0) + 10, 100)>>
+			<<addmins 20>>
+			You said you would wait for Negan upstairs. You did not take the stairs. You walked the length of the line, close enough to the last woman in it to brush her sleeve, and when you did there was a ration bar folded into her hand and nobody looked.
+			<br /><br />
+			<<if setup.percentageChance(70)>>
+				Nobody saw. Or nobody who mattered. <<=ucfirst(_srShe)>> closed her fingers around it and did not look at you, and that was how you knew <<=_srShe>> understood.
+			<<else>>
+				Negan saw. You knew it from the way he stopped talking. He said nothing. He only smiled at you, for a long moment, as if something he had been wondering about had just been answered.
+				<<set $characters.negan.quests.remembers_noticed = true>>
+			<</if>>
+			<br /><br />
+			<strong>(One food given. <<=_srW.name>>: Relationship +10.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<</linkreplace>>
+	<</if>>
+</div>
+
+<div id="sr_lend">
+	<<set _srLendLabel = 'Take him up on it'>>
+	<<linkreplace _srLendLabel>>
+		<<run $('#sr_feed, #sr_away').hide()>>
+		<<if _srReply === 'refused' && $player.money < 300>>
+			You reached for your pouch and Negan watched you count. Then he laughed, not unkindly.
+			<br /><br />
+			<<negan>>
+				You don't have it. Come back when you do.
+			<</negan>>
+			<br />
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<<else>>
+			<<if _srReply === 'refused'>>
+				<<set $player.money -= 300>>
+			<<elseif _srReply === 'negotiated'>>
+				<<set $characters.negan.quests.favor_owed = true>>
+			<</if>>
+			<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 3, 100)>>
+			<<addmins 60>>
+			A guard unlocked the shackles and walked <<=_srHer>> to a room off the lower corridor: a table, a lamp, a window sealed with boards. Then they left you alone with <<=_srHer>> and the door locked from outside.
+			<br /><br />
+			<<=ucfirst(_srShe)>> did not sit. <<=ucfirst(_srShe)>> stood against the far wall with <<=_srHers>> arms at <<=_srHers>> sides, looking at a spot just past your shoulder, like someone who had learned how to be somewhere else.
+			<br /><br />
+			Everyone out there thought they knew what an hour behind that door was for. They were waiting for you to prove it.
+			<br /><br />
+			<div id="sr_do">
+				<<set _srDoLabel = 'Do what he expects of you'>>
+				<<linkreplace _srDoLabel>>
+					<<run $('#sr_talk, #sr_door').hide()>>
+					<<set $characters.negan.quests.remembers_reply = 'lent_used'>>
+					<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 10, 100)>>
+					<<set _srW.relationship = Math.max((_srW.relationship ?? 0) - 50, -100)>>
+					<<set _srW.happy = Math.max((_srW.happy ?? 0) - 30, -100)>>
+					<<set $player.goodwill -= 10>>
+					<<run $characters.negan.quests.corrupted = ($characters.negan.quests.corrupted ?? 0) + 1>>
+					The door shut behind you and you did not leave. What happened in the next hour you would carry out of there with you, whether or not you wanted to. <<=ucfirst(_srShe)>> did not fight. <<=ucfirst(_srShe)>> did not look at you. When the guard came back, <<=_srShe>> let him put the shackles on without being asked.
+					<br /><br />
+					Negan was waiting in the corridor. He did not say a word. He did not have to. He only looked at you like a man who has finally confirmed what he suspected about a stranger.
+					<br /><br />
+					<strong>(<<=_srW.name>>: Relationship −50, Happy −30. Negan: Relationship +10. Goodwill −10.)</strong>
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto 'Sanctuary'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div id="sr_talk">
+				<<set _srTalkLabel = 'Sit down and talk to her'>>
+				<<linkreplace _srTalkLabel>>
+					<<run $('#sr_do, #sr_door').hide()>>
+					<<set $characters.negan.quests.remembers_reply = 'lent_talked'>>
+					<<set $characters.negan.quests.remembers_intel = true>>
+					<<set _srW.relationship = Math.min((_srW.relationship ?? 0) + 15, 100)>>
+					You pulled out the chair and sat in it, as far from her as the room allowed, and said nothing for a long while. It took her nearly the whole hour to believe you were not going to move.
+					<br /><br />
+					<<sayNpc _srW>>
+						Why are you doing this?
+					<</sayNpc>>
+					<br />
+					<<you>>
+						Because I'm sorry. And because you're going to tell me how to get you out.
+					<</you>>
+					<br />
+					She laughed once, a dry cracked thing, and then, quietly, because the room was probably listened to, she told you. Which guard changed shifts at dusk. Which door at the end of the lower corridor was never chained. How many men slept above the generator room.
+					<br /><br />
+					<<sayNpc _srW>>
+						You won't come back. Nobody comes back.
+					<</sayNpc>>
+					<br />
+					<<you>>
+						I'll come back.
+					<</you>>
+					<br />
+					When the guard opened the door, you were still sitting in the chair. He glanced at you, then at her, and his eyebrows went up. You let him think whatever he wanted.
+					<br /><br />
+					<strong>(<<=_srW.name>>: Relationship +15. You learned how the Sanctuary's lower deck is guarded.)</strong>
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto 'Sanctuary'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<div id="sr_door">
+				<<set _srDoorLabel = 'Walk out without touching her'>>
+				<<linkreplace _srDoorLabel>>
+					<<run $('#sr_do, #sr_talk').hide()>>
+					<<set $characters.negan.quests.remembers_reply = 'looked_away'>>
+					You looked at her. She looked at the wall. You knocked on the door and told the guard you were done, and the minute it took him to open it was the longest minute you had spent in that place.
+					<br /><br />
+					Negan raised an eyebrow when you came out too early.
+					<br /><br />
+					<<negan>>Hm.<</negan>>
+					<br />
+					Nothing else. It was an expression like a man writing something down.
+					<br /><br />
+					<<link 'Leave'>>
+						<<goto 'Sanctuary'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<</if>>
+	<</linkreplace>>
+</div>
+
+<div id="sr_away">
+	<<set _srAwayLabel = 'Look away and keep walking'>>
+	<<linkreplace _srAwayLabel>>
+		<<run $('#sr_feed, #sr_lend').hide()>>
+		<<set $characters.negan.quests.remembers_reply = 'looked_away'>>
+		You looked at the ground and kept walking. You made it three steps before the sound of the drum hitting the concrete behind you made you flinch.
+		<br /><br />
+		<<negan>>
+			Smart.
+		<</negan>>
+		<br />
+		He said it softly. He sounded almost fond. You did not look back, and the chains kept moving behind you, and nobody on that deck said anything at all.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
