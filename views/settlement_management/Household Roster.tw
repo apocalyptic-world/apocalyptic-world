@@ -1,0 +1,386 @@
+:: Household Roster [nobr]
+
+<<script>>
+(function () {
+	var OUTPUT    = ['garden','streets','hunter','forest','quarry'];        /* jobs that apply setup.personality.output */
+	var ACCIDENT  = setup.personality.ACCIDENT_JOBS;
+	var LEARN     = { kitchen: 'cook', garden: 'gardener', forest: 'woodcraft', scavenging: 'scavenger' };
+	var LEARNJOB  = Object.keys(LEARN);
+	var FIGHT     = ['guard','companion'];
+	var REST      = ['milk_barn','nightclub','quarry','streets'];          /* jobs that send unhappy workers to rest */
+	var HAPPYLOSS = ['streets','milk_barn'];                              /* jobs that use setup.personality.happyLoss */
+
+	/* text and neg may be a value, or a function(job) returning one */
+	var R = {
+		skill: {
+			gardener:   { jobs: ['garden'],     text: '+2 food per harvest' },
+			woodcraft:  { jobs: ['forest'],     text: '+1 wood per trip, fewer injuries' },
+			scavenger:  { jobs: ['scavenging'], text: '50% chance of an extra item; safer trips' },
+			shopkeeper: { jobs: ['shop'],       text: 'Required to run the shop' },
+			cook:       { jobs: ['kitchen','milkwarden'], text: function (j) { return j === 'kitchen' ? 'Less food goes rotten' : 'Better milk warden'; } },
+			doctor:     { jobs: ['hospital'],   text: 'Required; faster healing, fewer miscarriages' },
+			teacher:    { jobs: ['school'].concat(LEARNJOB), text: function (j) { return j === 'school' ? 'Required to teach' : '30% chance of extra skill progress each night'; } },
+			mechanic:   { jobs: ['garage'],     text: 'Required; may fix cars without parts' },
+			fighter:    { jobs: FIGHT,          text: 'Hits harder in fights' }
+		},
+		personality: {
+			efficient:     { jobs: OUTPUT,   text: '+20% output' },
+			careless:      { jobs: OUTPUT.concat(ACCIDENT), neg: true, text: function (j) {
+				var parts = [];
+				if (OUTPUT.indexOf(j) >= 0) parts.push('-10% output');
+				if (ACCIDENT.indexOf(j) >= 0) parts.push('5% chance of an accident each night');
+				return parts.join('; ');
+			} },
+			cautious:      { jobs: OUTPUT.concat(['scavenging']), neg: function (j) { return j !== 'scavenging'; }, text: function (j) { return j === 'scavenging' ? 'Much safer trips' : '-10% output'; } },
+			consistent:    { jobs: OUTPUT,   text: '+10% output after 30 days in a row' },
+			organized:     { jobs: LEARNJOB, text: 'Learns the job skill 50% faster' },
+			compassionate: { jobs: ['church','attendant'], text: function (j) { return j === 'church' ? '+2 happiness to all guests instead of +1' : 'Comforts unhappy slaves while grooming'; } },
+			critical:      { jobs: ['mistress'], text: 'Raises slave submission more often (45% vs 30%)' },
+			resilient:     { jobs: HAPPYLOSS, text: 'Loses half the happiness from this work' },
+			sensitive:     { jobs: HAPPYLOSS, neg: true, text: 'Loses double the happiness from this work' },
+			energetic:     { jobs: REST,      text: 'Rest days pass twice as fast' },
+			inventive:     { jobs: ['scavenging'], text: '+1 item from successful trips' },
+			curious:       { jobs: ['scavenging'], text: 'Extra chance at rare finds, but riskier' },
+			nervous:       { jobs: ['scavenging'].concat(FIGHT), neg: true, text: function (j) { return j === 'scavenging' ? 'Riskier trips' : '-15% damage in fights'; } },
+			confident:     { jobs: FIGHT,     text: '+15% damage in fights' }
+		},
+		trait: {
+			nymphomaniac: { jobs: ['streets','nightclub'], text: 'Doubles base earnings' },
+			tight_vagina: { jobs: ['streets','nightclub'], text: 'Doubles the pussy earnings bonus' },
+			deepthroat:   { jobs: ['nightclub'],           text: '+2-5 caps in tips' },
+			cumslut:      { jobs: ['streets'],             text: 'Loses no happiness on the streets' },
+			masochist:    { jobs: ['streets'],             text: 'Loses no happiness on the streets' },
+			hoarder:      { jobs: ['garden','scavenging'], neg: true, text: 'Halves the yield' },
+			milker:       { jobs: ['milk_barn'],           text: 'Produces milk without being pregnant' },
+			crippled:     { jobs: FIGHT,                   neg: true, text: 'Half damage in fights' },
+			pacifist:     { jobs: FIGHT.concat(['attendant']), neg: function (j) { return j !== 'attendant'; }, text: function (j) { return j === 'attendant' ? 'Comforts unhappy slaves while grooming' : 'Will not fight'; } },
+			sadistic:     { jobs: ['mistress'],            text: 'Qualifies her to be mistress' }
+		}
+	};
+	var val = function (v, job) { return typeof v === 'function' ? v(job) : v; };
+
+	/* returns null, or { text, neg } */
+	setup.rosterGetImpact = function (key, type, job) {
+		var e = (R[type] || {})[key];
+		if (!e || e.jobs.indexOf(job) < 0) return null;
+		return { text: val(e.text, job), neg: !!val(e.neg, job) };
+	};
+
+	/* Level classes: risk scale (lvl-bad / lvl-poor / lvl-fair / lvl-good) for danger thresholds,
+	   pay scale (pay-0 .. pay-4) for stats that pay out in steps. */
+	var risk = function (v, cuts) { /* cuts: ascending thresholds; below cuts[0] is bad */
+		var names = ['lvl-bad', 'lvl-poor', 'lvl-fair', 'lvl-good'];
+		var i = 0;
+		while (i < cuts.length && v >= cuts[i]) i++;
+		return names[Math.min(names.length - 1, i + (names.length - 1 - cuts.length))];
+	};
+	var pay = function (step) { return 'pay-' + Math.max(0, Math.min(4, step)); };
+
+	/* Stats that change output or risk in each job: { label, value, tip, cls } */
+	setup.rosterStats = function (npc, job) {
+		var s = npc.stats || {}, out = [];
+		var str = npc.strength ?? 0, end = npc.endurance ?? 0;
+		var add = function (label, value, tip, cls) { out.push({ label: label, value: value, tip: tip, cls: 'roster-stat glyph ' + (cls || '') }); };
+		var per = function (label, v, n) { add(label, v, '+1 cap per ' + n + ' (now +' + Math.round(v / n) + ')', pay(Math.round(v / n))); };
+		var learnDays = function () {
+			var skill = LEARN[job], d = s[job] ?? 0;
+			if ((npc.skills ?? []).includes(skill)) {
+				add('Days', d, 'Nights worked here (' + setup.skills[skill].title + ' already learned)', pay(4));
+			} else {
+				add('Days', d, 'Nights worked here; learns ' + setup.skills[skill].title + ' after 100', pay(Math.floor(d / 25)));
+			}
+		};
+		switch (job) {
+			case 'streets':
+				per('Beauty', npc.beauty ?? 0, 25);
+				per('Submission', npc.sub ?? 0, 25);
+				per('Pussy', npc.pussy ?? 0, 25);
+				per('Anal', npc.anal ?? 0, 25);
+				if (variables().characters?.dom?.quests?.accepted_deal) {
+					add('Strength', str, 'Dom\'s protection keeps the death risk at its lowest', 'lvl-good');
+				} else {
+					add('Strength', str, 'Death risk: 5% at 10 or less, 4% at 11-20, 3% above 20 (knife: -1%)', str > 20 ? 'lvl-good' : str > 10 ? 'lvl-poor' : 'lvl-bad');
+				}
+				break;
+			case 'nightclub':
+				per('Submission', npc.sub ?? 0, 25);
+				per('Pussy', npc.pussy ?? 0, 25);
+				break;
+			case 'strip_club':
+				per('Beauty', npc.beauty ?? 0, 40);
+				add('Days', s[job] ?? 0, 'Nights worked here');
+				break;
+			case 'forest':
+				add('Strength', str, 'Below 30: riskiest trips, more animal attacks, 1 wood. 30+: safer, +1 wood. 60+: safest', str >= 60 ? 'lvl-good' : str >= 30 ? 'lvl-fair' : 'lvl-bad');
+				learnDays();
+				break;
+			case 'quarry':
+				add('Strength', str, '50+: 50% chance of +1 coal/stone', str >= 50 ? pay(3) : pay(0));
+				add('Days', s[job] ?? 0, '20+: 35% chance of +1 coal/stone', (s[job] ?? 0) >= 20 ? pay(3) : pay(Math.floor((s[job] ?? 0) / 7)));
+				break;
+			case 'hunter':
+				add('Strength', str, 'Hunt success: 10%, 20% above 20, 35% above 50', str > 50 ? pay(4) : str > 20 ? pay(2) : pay(0));
+				break;
+			case 'scavenging':
+				add('Strength', str, 'Below 20: riskiest trips. Safer at 20, 40 and 60', risk(str, [20, 40, 60]));
+				add('Endurance', end, 'Adds to scavenging safety, up to 50', risk(end, [17, 34, 50]));
+				learnDays();
+				break;
+			case 'guard':
+			case 'companion':
+				add('Strength', str, 'Base fight damage is strength / 3', risk(str, [20, 40, 60]));
+				add('Endurance', end, 'Every 10 points soaks 1 damage per hit (now ' + Math.round(end / 10) + ')', risk(end, [10, 20, 30]));
+				break;
+			case 'garden':
+			case 'kitchen':
+				learnDays();
+				break;
+			case 'church':
+				add('Days', s[job] ?? 0, 'Nights worked here');
+				break;
+			case 'milk_barn':
+				if (typeof npc.pregnancy !== 'undefined') {
+					var lactating = npc.pregnancy >= 7 || (npc.traits ?? []).includes('milker');
+					add('Pregnancy', npc.pregnancy, 'Produces milk from month 7 (or with the Milker trait)', lactating ? 'lvl-good' : 'lvl-bad');
+				}
+				break;
+		}
+		if (setup.personality.has(npc, 'consistent') && OUTPUT.indexOf(job) >= 0) {
+			var streak = npc.jobStreak?.job === job ? npc.jobStreak.days : 0;
+			add('Streak', streak, '+10% output at 30 nights in a row', streak >= 30 ? pay(4) : pay(Math.floor(streak / 10)));
+		}
+		return out;
+	};
+
+	/* Inventory that changes output or risk in each job: { label, tip, cls } */
+	var itemName = function (id) { try { return Item.get(id).name; } catch (e) { return id; } };
+	var COAT_WORK = { coat_wolf: 'Can still work during a cold snap' };
+	var COAT_SICK = { coat_wolf: 'Won\'t catch a cold working in a cold snap' };
+	var COAT_BOTH = { coat_wolf: 'Can still work during a cold snap, and won\'t catch a cold' };
+	var STR_JOBS  = ['streets','forest','quarry','hunter','scavenging','guard','companion'];
+	var INV = {
+		streets:    Object.assign({ knife: '-1% death chance', condom: 'Prevents pregnancy from clients' }, COAT_WORK),
+		nightclub:  Object.assign({ condom: 'Prevents pregnancy from clients' }, COAT_WORK),
+		strip_club: COAT_WORK,
+		forest:     Object.assign({ axe: 'Doubles wood', knife: 'Safer trips; halves animal attacks', bow: 'Safer trips', crossbow: 'Safer trips' }, COAT_WORK),
+		hunter:     Object.assign({ bow: 'Required to hunt' }, COAT_WORK),
+		scavenging: Object.assign({ knife: 'Safer trips', sword: 'Safer trips', bow: 'Safer trips', crossbow: 'Safer trips', body_armor: 'Much safer trips' }, COAT_BOTH),
+		quarry:     COAT_SICK,
+		garden:     COAT_SICK,
+		guard:      { crossbow: '+20-30 damage (needs arrows)', sword: '+8-15 damage', knife: '+2-5 damage', body_armor: 'Halves damage taken' },
+		companion:  { crossbow: '+20-30 damage (needs arrows)', sword: '+8-15 damage', knife: '+2-5 damage', body_armor: 'Halves damage taken' }
+	};
+	var TRAINING = { dumbbell: 30, kettlebell: 50, dumbestbell: 60 };
+	setup.rosterInventory = function (npc, job) {
+		var out = [], has = function (id) { return setup.npcInventoryHas(npc, id); };
+		var add = function (id, tip, cls) {
+			out.push({ src: setup.ImagePath + 'game/inventory/' + id + '.png', tip: tip, cls: 'roster-item glyph ' + cls });
+		};
+		var map = INV[job] || {};
+		Object.keys(map).forEach(function (id) {
+			if (!has(id)) return;
+			if (id === 'crossbow' && FIGHT.indexOf(job) >= 0 && !has('arrow')) {
+				add(id, itemName(id) + ': no arrows, so it does nothing in fights', 'item-bad');
+			} else {
+				add(id, itemName(id) + ': ' + map[id], 'item-good');
+			}
+		});
+		if (job === 'hunter' && !has('bow')) {
+			add('bow', 'No bow: ' + (variables().automatization?.hunter ? 'cuts wood instead of hunting' : 'cannot hunt'), 'item-missing');
+		}
+		if (['garden','quarry','scavenging'].indexOf(job) >= 0 && !has('coat_wolf')) {
+			add('coat_wolf', 'No wolf coat: 10% chance of catching a cold each night of a cold snap' + (job === 'scavenging' ? ', and can\'t go scavenging' : ''), 'item-missing');
+		}
+		if (job === 'forest' && !has('axe')) {
+			add('axe', 'No axe: collects half the wood', 'item-missing');
+		}
+		if (FIGHT.indexOf(job) >= 0 && !has('knife') && !has('sword') && !has('crossbow')) {
+			add('knife', 'Unarmed: fights with fists only', 'item-missing');
+		}
+		if (STR_JOBS.indexOf(job) >= 0) {
+			Object.keys(TRAINING).forEach(function (id) {
+				if (has(id) && (npc.strength ?? 0) < TRAINING[id]) {
+					add(id, itemName(id) + ': training strength each night, up to ' + TRAINING[id], 'item-good');
+				}
+			});
+		}
+		return out;
+	};
+
+	var sv = variables();
+	var cg = new Set(), cs = new Set();
+	Object.keys(sv.player.companions || {}).forEach(function (k) {
+		var p = k.split(':');
+		if (p[0] === 'guest' && sv.guests[p[1]]) cg.add(sv.guests[p[1]].id);
+		else if (p[0] === 'slave' && sv.slaves[p[1]]) cs.add(sv.slaves[p[1]].id);
+	});
+
+	/* [capacity, location, gs, unhappy, label]
+	   capacity: 1=solo, N=max, 9999=unlimited
+	   location: 0=household 1=settlement 2=outside 3=city
+	   gs: 0=guest-only 1=mixed 2=slave-only
+	   unhappy: 0=no 1=either 2=yes */
+	var U = 9999;
+	var JM = {
+		kitchen:    [1, 0, 1, 0, 'Kitchen'],
+		maid:       [1, 0, 1, 0, 'Maid'],
+		mistress:   [1, 0, 0, 0, 'Mistress'],
+		milkwarden: [1, 1, 0, 0, 'Milk warden'],
+		shop:       [1, 1, 0, 0, 'Shopkeeper'],
+		school:     [1, 1, 0, 0, 'Teacher'],
+		garage:     [1, 1, 0, 0, 'Mechanic'],
+		attendant:  [2, 0, 1, 0, 'Attendant'],
+		hospital:   [sv.workersLimitHospital ?? 3, 1, 0, 0, 'Doctor'],
+		instructor: [5, 1, 0, 0, 'Instructor'], /* night school: one per class */
+		church:     [6, 1, 0, 0, 'Nun'],
+		companion:  [sv.companionsLimit ?? 8, 0, 1, 0, 'Companion'],
+		hunter:     [sv.workersLimitHunter ?? 8, 2, 0, 0, 'Hunter'],
+		garden:     [sv.workersLimitGarden ?? 10, 0, 1, 0, 'Garden'],
+		guard:      [U, 0, 0, 0, 'Guard'],
+		library:    [U, 1, 0, 0, 'Library'],
+		milk_barn:  [U, 1, 2, 2, 'Milk barn'],
+		scavenging: [U, 2, 0, 0, 'Scavenging'],
+		forest:     [U, 2, 1, 0, 'Forest'],
+		quarry:     [U, 2, 0, 2, 'Quarry'],
+		streets:    [U, 3, 1, 2, 'Streets'],
+		nightclub:  [U, 3, 1, 2, 'Nightclub'],
+		strip_club: [U, 3, 1, 1, 'Strip club'],
+		none:       [U, 9, 1, 0, 'Unassigned'],
+		child:      [U, 10, 1, 0, 'Children']
+	};
+	var LOC = ['Household', 'Settlement', 'Outside', 'City'];
+
+	var groups = {};
+	var add = function (npc, slave) {
+		var job = npc.assignedTo || null;
+		if (setup.eveningSchool.isInstructor(npc)) job = 'instructor'; /* one group for all night school classes */
+		if (!job) {
+			if ((slave ? cs : cg).has(npc.id)) job = 'companion';
+			else if (setup.getAge(npc) < 18)  job = 'child';
+			else                              job = 'none';
+		}
+		if (!groups[job]) {
+			var m = JM[job] || [U, 9, 1, 0, job];
+			var sub = m[1] < LOC.length ? LOC[m[1]] + ' · ' + (m[0] === 1 ? 'solo' : m[0] === U ? 'unlimited' : 'max ' + m[0]) : '';
+			groups[job] = { job: job, meta: m, label: m[4], sub: sub, mood: m[3], members: [] };
+		}
+		var chips = [];
+		var instrClass = setup.eveningSchool.instructorClass(npc);
+		/* Instructors: Teacher plus the skill of the class they teach are the relevant skills */
+		var instructorImpact = function (key) {
+			if (key === 'teacher') return { text: 'Required to instruct a night class', neg: false };
+			if (key === instrClass) return { text: 'Teaches the ' + instrClass + ' class', neg: false };
+			return null;
+		};
+		/* Instructor personalities, as applied to students in setup.eveningSchool.nightlyLearning */
+		var INSTRUCTOR_PERSONALITY = {
+			critical:      { text: 'Students: 25% chance of an extra skill point each night, but -3 happiness when it happens', neg: false },
+			efficient:     { text: 'Students: 20% chance of an extra skill point each night', neg: false },
+			organized:     { text: 'Students: 20% chance of an extra skill point each night', neg: false },
+			careless:      { text: 'Students on advanced study: bonus point chance drops from 35% to 20%', neg: true },
+			friendly:      { text: 'Students: 25% chance of +1 happiness each night', neg: false },
+			compassionate: { text: 'Students: 25% chance of +1 happiness each night', neg: false }
+		};
+		var push = function (key, type, title, desc) {
+			var impact = !instrClass ? setup.rosterGetImpact(key, type, job)
+				: type === 'skill' ? instructorImpact(key)
+				: type === 'personality' ? (INSTRUCTOR_PERSONALITY[key] ?? null)
+				: setup.rosterGetImpact(key, type, job);
+			chips.push({
+				cls: 'trait tooltip' + (type === 'personality' ? ' trait-personality' : '') +
+					(impact === null ? ' roster-chip-other' : ' trait-job-relevant' + (impact.neg ? ' trait-job-negative' : '')),
+				title: title, desc: desc, impact: impact ? impact.text : null
+			});
+		};
+		(npc.skills ?? []).forEach(function (k) { if (setup.skills[k]) push(k, 'skill', setup.skills[k].title, setup.skills[k].description); });
+		[].concat(npc.personality ?? []).forEach(function (k) { push(k, 'personality', k, setup.personality.info[k] ?? ''); });
+		(npc.traits ?? []).forEach(function (k) { if (setup.traits[k]) push(k, 'trait', setup.traits[k].title, setup.traits[k].description); });
+		groups[job].members.push({
+			npc: npc, slave: slave, chips: chips,
+			relevant: chips.filter(function (c) { return c.impact !== null; }).length,
+			stats: setup.rosterStats(npc, job),
+			items: setup.rosterInventory(npc, job)
+		});
+	};
+	(sv.guests || []).forEach(function (n) { add(n, false); });
+	(sv.slaves || []).forEach(function (n) { add(n, true); });
+
+	State.temporary.rosterList = Object.keys(groups).map(function (k) { return groups[k]; }).sort(function (a, b) {
+		for (var i = 0; i < 4; i++) { if (a.meta[i] !== b.meta[i]) return a.meta[i] - b.meta[i]; }
+		return 0;
+	});
+	setup.rosterPrefs ??= {};
+	setup.rosterPrefs.collapse ??= true;
+	setup.rosterPrefs.stats ??= true;
+	setup.rosterPrefs.inventory ??= true;
+})();
+<</script>>
+
+<<if _rosterList.length === 0>>
+	<p><em>No guests or slaves in the household yet.</em></p>
+<<else>>
+<div id="household-roster">
+	<div class="roster-toolbar">
+		<label><input type="checkbox" id="roster-toggle-collapse"> Collapse skills/traits</label>
+		<label><input type="checkbox" id="roster-toggle-stats"> Include stats</label>
+		<label><input type="checkbox" id="roster-toggle-inventory"> Include inventory</label>
+	</div>
+	<div class="roster-legend">Chips with a <span class="roster-legend-swatch"></span> gold outline help that person's output in their current assignment; <span class="roster-legend-swatch roster-legend-neg"></span> red outlines hurt it. Hover a chip, stat or item for details.</div>
+	<<for _hrGrp range _rosterList>>
+		<div class="roster-group">
+			<div class="roster-group-header">
+				<span class="roster-group-title"><<=_hrGrp.label>></span>
+				<<if _hrGrp.mood === 2>>
+					<span class="glyph roster-mood" aria-label="Unpleasant work: lowers happiness" data-balloon-pos="right">&#x1F614;</span>
+				<<elseif _hrGrp.mood === 1>>
+					<span class="glyph roster-mood" aria-label="Can raise or lower happiness" data-balloon-pos="right">&#x1F60A;&#x1F614;</span>
+				<</if>>
+				<<if _hrGrp.sub>><span class="roster-group-sub"><<=_hrGrp.sub>></span><</if>>
+				<span class="roster-count"><<=_hrGrp.members.length>></span>
+			</div>
+			<<for _hrM range _hrGrp.members>>
+				<div class="roster-npc-row">
+					<div class="roster-npc-name">
+						<<=setup.displayName(_hrM.npc) + setup.npcListInfo(_hrM.npc)>>
+						<<if _hrM.slave>><span class="roster-slave-tag">slave</span><</if>>
+					</div>
+					<div class="roster-chips">
+						<<for _hrC range _hrM.chips>>
+							<div @class="_hrC.cls"><<=_hrC.title>><span class="tooltiptext"><<=_hrC.desc>><<if _hrC.impact>><br><span class="roster-impact"><<=_hrC.impact>></span><</if>></span></div>
+						<</for>>
+						<<if _hrM.relevant === 0>><span @class="'roster-none' + (_hrM.chips.length ? ' roster-none-collapsed' : '')">&mdash;</span><</if>>
+					</div>
+					<div class="roster-stats">
+						<<for _hrS range _hrM.stats>>
+							<span @class="_hrS.cls" data-balloon-length="medium" @aria-label="_hrS.tip" data-balloon-pos="up"><span class="roster-stat-label"><<=_hrS.label>>:</span> <span class="roster-stat-value"><<=_hrS.value>></span></span>
+						<</for>>
+					</div>
+					<div class="roster-items">
+						<<for _hrI range _hrM.items>>
+							<span @class="_hrI.cls" data-balloon-length="medium" @aria-label="_hrI.tip" data-balloon-pos="up"><img @src="_hrI.src" alt=""></span>
+						<</for>>
+					</div>
+				</div>
+			<</for>>
+		</div>
+	<</for>>
+	<div class="roster-footer"><<link "Back">><<run Dialog.close()>><</link>></div>
+</div>
+<<done>>
+	<<script>>
+		var root = $('#household-roster');
+		var apply = function () {
+			root.toggleClass('roster-collapsed', setup.rosterPrefs.collapse);
+			root.toggleClass('roster-show-stats', setup.rosterPrefs.stats);
+			root.toggleClass('roster-show-inventory', setup.rosterPrefs.inventory);
+		};
+		[['collapse', '#roster-toggle-collapse'], ['stats', '#roster-toggle-stats'], ['inventory', '#roster-toggle-inventory']].forEach(function (t) {
+			$(t[1]).prop('checked', setup.rosterPrefs[t[0]]).on('change', function () {
+				setup.rosterPrefs[t[0]] = this.checked;
+				apply();
+			});
+		});
+		apply();
+	<</script>>
+<</done>>
+<</if>>

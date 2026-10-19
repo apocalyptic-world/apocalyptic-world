@@ -57,6 +57,7 @@ Then, it began.
 	<<if _isAdult>>
 		<<if typeof $childId !== 'undefined'>>
 			<<run setup.npc.addHistory($tmpGirl, 'grown_up')>>
+			<<run delete $tmpGirl.teach; delete $tmpGirl.teachAdvStudy>> /* child school fields; adults use teach for evening class */
 			<<run $guests.push($tmpGirl)>>
 			<<run $nursery.splice($childId, 1)>>
 			<<goto 'Nursery'>>

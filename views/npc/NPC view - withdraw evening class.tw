@@ -1,0 +1,9 @@
+:: NPC view - withdraw evening class
+/* "Withdraw from evening class" button for enrolled students, shared by NPC view (slaves) and NPC view - guest.
+   Skill points already earned are kept; any remaining advanced study (teachAdvStudy) resumes if they re-enroll. */
+<<if setup.eveningSchool.isEnrolled($tmpGirl)>>
+	<<link `'Withdraw from evening class (' + $tmpGirl.teach + ')'`>>
+		<<run delete $tmpGirl.teach>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>

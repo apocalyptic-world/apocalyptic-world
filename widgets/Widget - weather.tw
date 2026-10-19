@@ -42,5 +42,48 @@
 		<</if>>
 		<div class="weather-bg" @style="'background-image: url(\'' + setup.ImagePath+'game/misc/weather/' + _icon + '.png\')'">
 		</div>
+		<<if $weather.sandStorm>>
+			<<set _wxTitle = 'Sand storm'>>
+			<<set _wxLines = [
+				'Forest, hunting, scavenging, quarry, streets, nightclub and strip club work is halted',
+				'Solar panels produce no power',
+				'Wind turbines produce +1 power each',
+				'Leaving the cabin takes 5 hours',
+				'Fast travel is disabled',
+				'Driving damages your car'
+			]>>
+		<<elseif $weather.heatWave>>
+			<<set _wxTitle = 'Heat wave'>>
+			<<set _wxLines = [
+				'Crops will not grow and gardeners cannot work',
+				'Everyone needs a food ration every night',
+				'Dumbbell training is paused',
+				'Solar panels at full output'
+			]>>
+		<<elseif $weather.coldSnap>>
+			<<set _wxTitle = 'Cold snap'>>
+			<<set _wxLines = [
+				'Forest, hunting, streets, nightclub and strip club work is halted unless the worker has a wolf coat',
+				'Scavengers without a wolf coat usually stay home, but some brave the cold',
+				'Garden and quarry workers without a wolf coat, and scavengers who go out without one, have a 10% daily chance of catching a cold',
+				'Nightclub and strip club earnings -25%',
+				'Wind turbines produce +1 power each',
+				'The car will not start'
+			]>>
+		<<elseif $weather.weather === 'storm'>>
+			<<set _wxTitle = 'Storm'>>
+			<<set _wxLines = [
+				'Wind turbines produce +1 power each',
+				'Nightclub and strip club earnings -20%'
+			]>>
+		<<elseif $weather.weather === 'rain'>>
+			<<set _wxTitle = 'Rain'>>
+			<<set _wxLines = ['Solar panels at half output']>>
+		<<else>>
+			<<set _wxTitle = 'Sunny'>>
+			<<set _wxLines = ['Solar panels at full output']>>
+		<</if>>
+		<<set _wxLabel = _wxTitle + '\n' + _wxLines.map(l => '• ' + l).join('\n')>>
+		<span class="weather-hover" @aria-label="_wxLabel" data-balloon-pos="down-left" data-balloon-break></span>
 	<</if>>
 <</widget>>
