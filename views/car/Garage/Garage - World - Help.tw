@@ -36,6 +36,9 @@ A raider party. Not large, but enough to overwhelm them if no one stepped in.
 	<<set $fight.skipEndingLost = true>>
 <</link>>
 <<link 'This isn\'t your fight'>>
+	<<set _hlpS.callForHelp = false>>
+	<<set _hlpS.callForHelpNotified = false>>
+	<<run setup.settlements.save(setup.settlements.getAll())>>
 	<<goto 'Garage'>>
 <</link>>
 

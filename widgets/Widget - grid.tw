@@ -76,6 +76,7 @@
 	  		<span class="o-text"><<=_gridName>></span>
 		</div>
 	<<else>>
+	  <<capture _props>> /* later grid tiles overwrite _props before this tile's link is clicked */
 		<<set _charsHtml = '';>>
 		<<if typeof _charactersInLocation[$args[1]] !== 'undefined'>>
 			<div class="grid-chars">
@@ -218,6 +219,7 @@
 			<</if>>
 		<</if>>
 	  <</link>>
+	  <</capture>>
 	<</if>>
   </div>
 <</widget>>

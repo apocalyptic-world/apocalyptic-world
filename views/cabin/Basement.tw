@@ -507,6 +507,13 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<br />
 						<<link 'Yes' 'Basement'>>
 							<<assignedTo $slaves[_i] 'none'>>
+							<<for _killInvItem, _killInvCount range ($slaves[_i].inventory ?? {})>>
+								<<run setup.npcInventoryRemove($slaves[_i], _killInvItem, _killInvCount)>>
+								<<pickup $backpack _killInvItem _killInvCount>>
+							<</for>>
+							<<if $slaves[_i].buttplug>>
+								<<pickup $backpack 'buttplug' 1>>
+							<</if>>
 							<<slaveRemove _i>>
 							<<dialogclose>>
 							<<set $player.reputation++>>
