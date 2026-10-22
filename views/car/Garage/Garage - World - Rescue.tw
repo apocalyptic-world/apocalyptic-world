@@ -4,7 +4,6 @@
 	<<goto 'Garage - World - Settlement'>>
 <</if>>
 
-<<set _rscGuards = setup.getPersonsForLocation($guests, 'guard')>>
 <<set _rscEnemyCount = Math.min(2, Math.max(1, Math.floor((_rscS.defense ?? 100) / 80)))>>
 <<generateEnemies _rscEnemyCount 0 _rscEnemyCount>>
 <<for _rscei = 0; _rscei < $enemies.length; _rscei++>>
@@ -24,6 +23,6 @@ Their sentries spotted you at the wire before you got close. It went loud fast.
 <br /><br />
 
 <<link 'Fight your way through'>>
-	<<fight $enemies 'Garage - World - Rescue - Won' 'Garage - World - Rescue - Lost' false _rscGuards>>
+	<<fight $enemies 'Garage - World - Rescue - Won' 'Garage - World - Rescue - Lost'>>
 	<<set $fight.skipEndingLost = true>>
 <</link>>
