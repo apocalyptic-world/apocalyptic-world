@@ -206,7 +206,7 @@
 			goto: "Workbench"
 		},
 		guesthouse_cell: {
-			show: ($game.location.guesthouse ?? false) && ($guesthouseLimit ?? 3) < 45,
+			show: ($game.location.guesthouse ?? false) && !setup.guestRoom.isMaxed(),
 			title: 'Guest house bed',
 			description: 'Build additional bed in guest house',
 			required: {
@@ -215,10 +215,7 @@
 			},
 			energy: 60,
 			after: function() {
-				if (!Number.isInteger(variables().guesthouseLimit)) {
-					variables().guesthouseLimit = 3;
-				}
-				variables().guesthouseLimit = variables().guesthouseLimit += 1;
+				setup.guestRoom.addBeds();
 			},
 			multi: true,
 			goto: "Workbench"

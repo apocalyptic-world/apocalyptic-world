@@ -168,13 +168,13 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     buildings_workbench: {
         show: $game.location.workbench,
-        done: $game.location.greenhouse && $game.location.basement &&  $basementLimit >= 30 && $game.location.guesthouse && $guesthouseLimit >= 25 && $game.location.lab && $game.location.nursery && $game.location.shop && $game.location.bathhouse,
+        done: $game.location.greenhouse && $game.location.basement &&  $basementLimit >= 30 && $game.location.guesthouse && setup.guestRoom.limit() >= 25 && $game.location.lab && $game.location.nursery && $game.location.shop && $game.location.bathhouse,
         category: 'Gameplay',
         title: 'Home buildings',
         description: 'Buildings buildable in workbench: '  +
             (!$game.location.greenhouse ? 'Greenhouse' : '<span style="color: green">Greenhouse</span> done') + ', ' +
             (!$game.location.basement ? 'Basement' : $basementLimit < 30 ?  '+' + (30-$basementLimit) + ' <span style="color: yellow">Slave cells</span>' : '<span style="color: green">Basement fully built</span>') + ', ' +
-            (!$game.location.guesthouse ? 'Guesthouse' : $guesthouseLimit < 25 ? '+' + (25-$guesthouseLimit) + ' <span style="color: yellow">Guest beds</span>' : !$game.location.lab ? 'Laboratory in guesthouse' : '<span style="color: green">Guesthouse & lab fully built</span>') + ', ' +
+            (!$game.location.guesthouse ? 'Guesthouse' : setup.guestRoom.limit() < 25 ? '+' + (25-setup.guestRoom.limit()) + ' <span style="color: yellow">Guest beds</span>' : !$game.location.lab ? 'Laboratory in guesthouse' : '<span style="color: green">Guesthouse & lab fully built</span>') + ', ' +
             (!$game.location.nursery ? 'Nursery' : '<span style="color: green">Nursery</span> done' ) + ', ' +
             ($game.location.shop ? 'Shop' : '<span style="color: green">Shop</span> done') + ', ' +
             ($game.location.bathhouse ? 'Bathhouse' : '<span style="color: green">Bathhouse</span> done') + 

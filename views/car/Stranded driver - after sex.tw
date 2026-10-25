@@ -14,7 +14,7 @@ The engine hums. Neither of you says anything for a while. She pulls her jacket 
 You're not sure if that's a compliment.
 <br /><br />
 <<set _canCapture = $player.energy >= 30 && $slaves.length < $basementLimit>>
-<<set _canInvite = ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<<set _canInvite = setup.guestRoom.hasRoom()>>
 <div id="sd_capture">
     <<if _canCapture>>
         <<linkreplace 'Bring her back with you'>>

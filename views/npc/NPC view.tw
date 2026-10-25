@@ -278,11 +278,12 @@
 	<<link 'Customize'>>
 		<<goto 'NPC customize'>>
 	<</link>>
-	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<<if setup.guestRoom.hasRoom()>>
 		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
 		<<link `_linkName`>>
 			<<achievement 'slave_to_guest'>>
 			<<moveSlaveToGuest $tmpGirl $slaveId>>
+			<<unset $slaveId>>
 			<<goto 'Guest house'>>
 		<</link>>
 	<</if>>

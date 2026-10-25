@@ -41,7 +41,7 @@ It came from an old woman who was evicted from her home due to unpaid rent. She'
 			  <<set $player.money -=10>>
 		  <</link>>
 		<</if>>
-		<<if ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
+		<<if setup.guestRoom.hasRoom()>>
 			<<link 'Offer her place in your guest house'>>
 			  <<run $('#ug-event-old-lady-help-options-buttons').slideToggle()>>
 			  <<run $('#ug-event-old-lady-help-reward').slideToggle()>>

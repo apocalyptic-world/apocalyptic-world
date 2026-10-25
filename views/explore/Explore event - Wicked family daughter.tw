@@ -108,7 +108,7 @@ Old man notices you and rushes towards you.
                                 You take one last look at the old man and woman—they continue to ignore you completely, engrossed in their silent feast.
                                 <br /><br />
 
-				<<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit) && ($backpack.count('food') >= 20) && ($player.int > 50)>>
+				<<if (setup.guestRoom.hasRoom(1)) && ($backpack.count('food') >= 20) && ($player.int > 50)>>
 					<div id="option_invite">
 						<<linkreplace 'Sneak daughter away to safety (-20 food)'>>
 							<<run $('#option_capture').hide()>>

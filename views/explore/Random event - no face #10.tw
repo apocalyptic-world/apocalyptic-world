@@ -74,7 +74,7 @@ By the looks of it, the filthy girl is either eating something or searching for 
 						<<fuck $tmpGirl>>
 					<</link>>
 				</div>
-				<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20>>
+				<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int > 20>>
 				<div id="nf10_opt_lead">
 					<<linkreplace 'Lead her back home (-1 food)'>>
 						<<run $('#nf10_opt_sex, #nf10_opt_cap, #nf10_opt_leave').hide()>>
@@ -151,7 +151,7 @@ She comes down slowly, breathing ragged. You give her a moment. When you look ba
 <</if>>
 <br /><br />
 
-<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
+<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
 <div id="nf10as_opt_lead">
 	<<linkreplace 'Lead her back home (-1 food)'>>
 		<<run $('#nf10as_opt_cap, #nf10as_opt_leave').hide()>>

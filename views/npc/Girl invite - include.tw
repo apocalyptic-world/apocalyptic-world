@@ -14,7 +14,7 @@
     - do she know any of the companions?
   */
 
- <<if ($game.location.guesthouse ?? false) && ($tmpGirlInvite ?? false) && $guests.length < $guesthouseLimit>>
+ <<if ($tmpGirlInvite ?? false) && setup.guestRoom.hasRoom()>>
     <<set _linkName = 'Invite '  + setup.pronounceWho($tmpGirl) + ' as guest'>>
 	<<linkreplace _linkName>>
         <<set $tmpGirlInvite = false>>

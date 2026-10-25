@@ -283,7 +283,8 @@
 <<set $forestKidnapEvent = null>>
 <<set $forestTollEvent = null>>
 <<set _guestCount = $guests.length>>
-<<set _bedsFree = $guesthouseLimit - _guestCount>>
+<<set _guestBeds = setup.guestRoom.limit()>>
+<<set _bedsFree = _guestBeds - _guestCount>>
 <<if _guestCount >= 25>>
 	<<set _isOvercrowded = (_bedsFree < 3)>>
 <<elseif _guestCount >= 15>>
@@ -291,10 +292,10 @@
 <<else>>
 	<<set _isOvercrowded = false>>
 <</if>>
-<<if _guestCount >= $guesthouseLimit>>
-	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + _guestCount + '/' + $guesthouseLimit + '). No new guests can arrive.</span>')>>
+<<if _guestCount >= _guestBeds>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is full (' + _guestCount + '/' + _guestBeds + '). No new guests can arrive.</span>')>>
 <<elseif _isOvercrowded>>
-	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + _guestCount + '/' + $guesthouseLimit + '). Guests are getting unhappy.</span>')>>
+	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + _guestCount + '/' + _guestBeds + '). Guests are getting unhappy.</span>')>>
 <</if>>
 <<set _sleepGuestOpts = { type: 'guest', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false, scavengingDidntReturnId: null }>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
@@ -392,6 +393,11 @@
 <<for _remI = _sleepGuestOpts.pendingRemovals.length - 1; _remI >= 0; _remI-->>
 	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index _sleepGuestOpts.pendingRemovals[_remI].captured>>
 <</for>>
+/* Newborns without a bed: they get one once there is room again; otherwise their mothers get upset and guest mothers leave with them */
+<<set _bedlessLeaving = setup.guestRoom.nightlyBedless()>>
+<<for _blI = 0; _blI < _bedlessLeaving.length; _blI++>>
+	<<guestLeft _bedlessLeaving[_blI]>>
+<</for>>
 // Resolve scavenging-didn't-return to a post-removal index via guest id
 <<if _sleepGuestOpts.scavengingDidntReturnId>>
 	<<set $scavengingDidntReturn = $guests.findIndex(function(g) { return g.id === _sleepGuestOpts.scavengingDidntReturnId; })>>
@@ -425,7 +431,18 @@
 			<<set $nursery[_nurseryI].food -= 30>>
 		<</if>>
 		
+		/* Adults move to the guest house only when a bed is free; otherwise they wait in the nursery, upset, until they leave */
 		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
+			<<set _nurseryAdult = setup.guestRoom.nurseryAdultNight($nursery[_nurseryI], $game.day)>>
+		<<else>>
+			<<set _nurseryAdult = null>>
+		<</if>>
+		<<if _nurseryAdult === 'leave'>>
+			<<set $nursery.splice(_nurseryI, 1)>>
+			<<set _nurseryI-->>
+			<<continue>>
+		<</if>>
+		<<if _nurseryAdult === 'move'>>
 			<<run setup.npc.addHistory($nursery[_nurseryI], 'grown_up')>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
 			<<if (setup.percentageChance(75))>>
@@ -596,6 +613,8 @@
 
 
 <<shopMerchantUpdate>>
+/* NPCs left during the night: point pregnancy records at their mothers' current list positions before anyone gives birth */
+<<run setup.sleep.reindexBirths()>>
 <<if _hasWorkingHospital>>
 	<<sleepHospital>>
 <</if>>
