@@ -138,12 +138,18 @@ setup.guestRoom = {
         return leaving.filter(i => i > -1).sort((a, b) => b - a);
     },
 
+    /** True when a nursery kid who turned adult has to wait for a bed: the guest house is built but full. */
+    adultMustWait: function () {
+        return (variables().game.location.guesthouse ?? false) && this.freeBeds() < 1;
+    },
+
     /**
-     * Nightly for a nursery kid who is 18 or older: 'move' when a guest house bed is free, otherwise the kid
-     * stays in the nursery and gets upset ('wait') until LEAVE_AT, when they leave the settlement ('leave').
+     * Nightly for a nursery kid who is 18 or older: 'move' when a guest house bed is free (or there is no guest house
+     * yet, as before the bed limit), otherwise the kid stays in the nursery and gets upset ('wait') until LEAVE_AT,
+     * when they leave the settlement ('leave').
      */
     nurseryAdultNight: function (npc, day) {
-        if (this.hasRoom()) {
+        if (!this.adultMustWait()) {
             delete npc.waitingForBed;
             delete npc.noBed; // a bedless baby later moved into the nursery (Nursery - built) must not come back flagged
             return 'move';
