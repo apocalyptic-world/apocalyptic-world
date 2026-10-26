@@ -1,5 +1,5 @@
-:: Blair - date {"position":"451,2409","size":"100,100"}
-<h1 class="ptitle">KITCHEN</h1>
+:: Blair - date
+<h1 class="ptitle">DATE</h1>
 <br /><br />
 <<blair>>
 	So what should we do?
@@ -30,14 +30,34 @@
 	<</link>>
 <<else>>
 	<div class="link-internal disabled" style="background: #ccc">
-		Go scavenging together
+		How about just talk on the couch
 		<<notPatreonIcon>>
 	</div>
+<</if>>
+<<if ($game.location.school ?? false) && timeBetween('18:00', '23:59')>>
+	<<if recall($suppCode)>>
+		<<link 'Go to the school'>>
+			<<set $player.companionsHome = $player.companions>>
+			<<set $player.companions = {}>>
+			<<goto 'Blair - date [school]'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal disabled" style="background: #ccc">
+			Go to the school
+			<<notPatreonIcon>>
+		</div>
+	<</if>>
 <</if>>
 
 
 <<link 'Leave'>>
-	<<goto 'Kitchen-room'>>
+	<<if $blairDateBack>>
+		<<set _blairDateBack = $blairDateBack>>
+		<<unset $blairDateBack>>
+		<<goto _blairDateBack>>
+	<<else>>
+		<<goto 'Kitchen-room'>>
+	<</if>>
 <</link>>
 
 

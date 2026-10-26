@@ -72,7 +72,62 @@
 	<</link>>
 <</if>>
 <h3>Guests</h3>
-Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.guestRoom.limit()>>
+<div class="list-header">
+	<span>Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.guestRoom.limit()>></span>
+	<<if ($guests ?? []).length > 0>>
+		<<set $gSortSpouses   ??= false>>
+		<<set $gSortOffspring ??= false>>
+		<<set $gSortPanelOpen ??= false>>
+		<<set _ghSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Guest house'>>
+		<<if !_ghSelfReload>>
+			<<set $gSortPanelOpen = false>>
+		<</if>>
+		<details id="gh-sort-details">
+			<summary class="sort-summary"><small>Sort &amp; grouping options</small></summary>
+			<div class="sort-panel">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($sortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $sortBy = 'N'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy !== 'A')>>
+							<<link 'Assignment'>><<set $sortBy = 'A'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Assignment</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy !== 'P')>>
+							<<link 'Pregnancy'>><<set $sortBy = 'P'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Pregnancy</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($sortBy === 'N' || $sortBy === 'A' || $sortBy === 'PA' || $sortBy === 'P')>>
+							<<link 'Arrival (default)'>><<set $sortBy = 'D'>><<goto 'Guest house'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
+				<div id="gh-group-toggles" style="display: flex; flex-direction: column; gap: 0.25rem; white-space: nowrap;">
+					<label><small><<checkbox '$gSortSpouses'   false true autocheck>>&nbsp;Keep spouses together</small></label>
+					<label><small><<checkbox '$gSortOffspring' false true autocheck>>&nbsp;Keep offspring with parent</small></label>
+				</div>
+			</div>
+		</details>
+		<<done>>
+			<<run jQuery('#gh-group-toggles input[type="checkbox"]').on('change', function() { Engine.play('Guest house'); })>>
+			<<run document.getElementById('gh-sort-details').open = State.variables.gSortPanelOpen>>
+			<<run jQuery('#gh-sort-details').on('toggle', function() { State.variables.gSortPanelOpen = this.open; })>>
+		<</done>>
+	<</if>>
+</div>
 <<set _ghBedless = setup.guestRoom.bedless()>>
 <<if _ghBedless.length>>
 	<br />
@@ -105,13 +160,6 @@ Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.gue
 	</div>
 <<else>>
 
-	<<set $gSortSpouses   ??= false>>
-	<<set $gSortOffspring ??= false>>
-	<<set $gSortPanelOpen ??= false>>
-	<<set _ghSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Guest house'>>
-	<<if !_ghSelfReload>>
-		<<set $gSortPanelOpen = false>>
-	<</if>>
 	<<set _sortedIndices = setup.npcGroupedIndices($guests, $sortBy, $player.companions, 'guest:', $gSortSpouses, $gSortOffspring)>>
 	<<set _groupMap = setup.npcGroupMap($guests, $gSortSpouses, $gSortOffspring)>>
 	<<set _ghPalette = ['rgba(210,120,120,0.13)','rgba(120,160,210,0.13)','rgba(120,190,135,0.13)','rgba(200,175,110,0.13)','rgba(170,130,200,0.13)','rgba(110,195,190,0.13)']>>
@@ -126,56 +174,6 @@ Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.gue
 	<</for>>
 
 	<table id="slaves" class="npc-list">
-
-		<tr class="item">
-			<td colspan="2">
-				<details id="gh-sort-details">
-					<summary class="sort-summary"><small>Sort &amp; grouping options</small></summary>
-					<div style="display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
-						<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-							<span>
-								<<if ($sortBy !== 'N')>>
-									Sort by: <<link 'Name'>><<set $sortBy = 'N'>><<goto 'Guest house'>><</link>>
-								<<else>>
-									Sort by: <strong>Name</strong>
-								<</if>>
-							</span>
-							<span>
-								<<if ($sortBy !== 'A')>>
-									<<link 'Assignment'>><<set $sortBy = 'A'>><<goto 'Guest house'>><</link>>
-								<<else>>
-									<strong>Assignment</strong>
-								<</if>>
-							</span>
-							<span>
-								<<if ($sortBy !== 'P')>>
-									<<link 'Pregnancy'>><<set $sortBy = 'P'>><<goto 'Guest house'>><</link>>
-								<<else>>
-									<strong>Pregnancy</strong>
-								<</if>>
-							</span>
-							<span>
-								<<if ($sortBy === 'N' || $sortBy === 'A' || $sortBy === 'PA' || $sortBy === 'P')>>
-									<<link 'Arrival (default)'>><<set $sortBy = 'D'>><<goto 'Guest house'>><</link>>
-								<<else>>
-									<strong>Arrival (default)</strong>
-								<</if>>
-							</span>
-						</div>
-						<div id="gh-group-toggles" style="display: flex; flex-direction: column; gap: 0.25rem; white-space: nowrap;">
-							<label><small><<checkbox '$gSortSpouses'   false true autocheck>>&nbsp;Keep spouses together</small></label>
-							<label><small><<checkbox '$gSortOffspring' false true autocheck>>&nbsp;Keep offspring with parent</small></label>
-						</div>
-					</div>
-				</details>
-				<<done>>
-					<<run jQuery('#gh-group-toggles input[type="checkbox"]').on('change', function() { Engine.play('Guest house'); })>>
-					<<run document.getElementById('gh-sort-details').open = State.variables.gSortPanelOpen>>
-					<<run jQuery('#gh-sort-details').on('toggle', function() { State.variables.gSortPanelOpen = this.open; })>>
-				<</done>>
-			</td>
-		</tr>
-
 
 	<<set _ghAway = { 'At night school': [], 'At work': [], 'At the hospital': [] }>>
 	<<for _sortOrder, _realIdx range _sortedIndices>>
@@ -201,7 +199,7 @@ Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.gue
 			<<if ($game.location.hospital ?? false) && _isSick>>
 				<<run _ghAway['At the hospital'].push(setup.displayName(_guest))>>
 				<<continue>>
-			<</if>
+			<</if>>
 			<<if setup.percentageChance(_sleepingChance)>>
 				<<set _guest.sleeping = true>>
 			<</if>>
