@@ -40,12 +40,8 @@
                 <<newchild _childGender _mother>>
                 <<set _child = $newChild>>
                 <<run setup.npc.addHistory(_child, 'born', { mother: _mother.id })>>
-                <<if ($game.location.nursery ?? false)>>
-                    <<run $nursery.push(_child)>>
-                <<elseif ($game.location.guesthouse ?? false)>>
-                    <<run $guests.push(_child)>>
-                <<else>>
-                    <<run $slaves.push(_child)>>
+                <<if setup.guestRoom.placeNewborn(_child) === 'noBed'>>
+                    <<run setup.sleepMessages.addMain('<span class="warning">There is no free bed in the guest house for ' + setup.displayName(_child) + '. ' + setup.displayName(_mother) + ' will be upset every day until the baby has one.</span>')>>
                 <</if>>
                 <<run _childNames.push(setup.displayName(_child))>>
             <</for>>

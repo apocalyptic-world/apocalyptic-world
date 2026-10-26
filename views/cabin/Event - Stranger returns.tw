@@ -44,7 +44,7 @@
 <</if>>
 <<set _srReporter = (_srReporterPool.length ? _srReporterPool.random() : null)>>
 
-<<set _srHasGuestRoom = ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<<set _srHasGuestRoom = setup.guestRoom.hasRoom()>>
 <<set _srHasBasementRoom = ($game.location.basement ?? false) && $slaves.length < ($basementLimit ?? 3)>>
 <<set _srFood = setup.cabinInventory.count('food')>>
 <<set _srRope = setup.cabinInventory.count('rope')>>
@@ -653,13 +653,7 @@
 		<<if _srBabyKept>>
 			<<set _srBaby.name = (_srBabyName || _srBaby.name)>>
 			<<run setup.npc.addHistory(_srBaby, 'born', { mother: _sr.id })>>
-			<<if ($game.location.nursery ?? false)>>
-				<<run ($nursery ??= []).push(_srBaby)>>
-			<<elseif ($game.location.guesthouse ?? false)>>
-				<<run $guests.push(_srBaby)>>
-			<<else>>
-				<<run $slaves.push(_srBaby)>>
-			<</if>>
+			<<run setup.guestRoom.placeNewborn(_srBaby)>>
 		<</if>>
 		<<run $pregnantStrangers.splice(_srIndex, 1)>>
 		<<unset $strangerPregnancyHappening>>

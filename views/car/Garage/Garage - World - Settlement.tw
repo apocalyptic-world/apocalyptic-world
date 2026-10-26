@@ -120,9 +120,11 @@
 	<</link>>
 <</if>>
 <<if setup.settlements.isFriendly(_s) || setup.settlements.isAllied(_s)>>
-	<<link 'Recruit'>>
-		<<goto 'Garage - World - Recruit'>>
-	<</link>>
+	<<if setup.guestRoom.hasRoom()>>
+		<<link 'Recruit'>>
+			<<goto 'Garage - World - Recruit'>>
+		<</link>>
+	<</if>>
 	<<link 'Get Intel'>>
 		<<goto 'Garage - World - Intel'>>
 	<</link>>

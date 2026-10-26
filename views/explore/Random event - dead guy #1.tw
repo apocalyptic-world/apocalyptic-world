@@ -294,7 +294,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 			<</link>>
 		</div>
 		<</if>>
-		<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int >= 20>>
+		<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int >= 20>>
 		<div id="dg1t_lead">
 			<<set _leadName = 'Lead ' + ($dg1FeralGender != 1 ? 'her' : 'him') + ' home (−1 food)'>>
 			<<linkreplace `_leadName`>>
@@ -424,7 +424,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 		<</linkreplace>>
 	</div>
 	<</if>>
-	<<if $dg1Path == 'tame' && ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $player.int >= 20>>
+	<<if $dg1Path == 'tame' && setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int >= 20>>
 	<div id="dg1as_lead">
 		<<set _leadName = 'Lead ' + ($tmpGirl.gender == 0 ? 'her' : 'him') + ' home (−1 food)'>>
 		<<linkreplace `_leadName`>>

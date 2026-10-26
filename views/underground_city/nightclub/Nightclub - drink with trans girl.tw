@@ -17,7 +17,7 @@ She is a <strong class="iitem"><<=setup.getNpcAgeDescription($tmpGirl)>></strong
 		<<addmins 30>>
 		She presents herself as <<=setup.displayName($tmpGirl)>>, then tells you she is a <strong class="iitem">trans</strong> woman and is looking for a welcoming place to live.
 		<br /><br />
-		<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+		<<if (setup.guestRoom.hasRoom())>>
 			<<linkreplace 'Invite as guest'>>
 					<strong><<=$tmpGirl.name>> moved in your guesthouse</strong>
 					<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>

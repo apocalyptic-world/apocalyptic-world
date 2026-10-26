@@ -88,6 +88,10 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 		<<set _randomName = $newChild.name>>
 		What will be <<if !_childGender>>her<<else>>his<</if>> name: <<textbox "_childName" _randomName>>
 		<br /><br />
+		<<if !($game.location.nursery ?? false) && ($game.location.guesthouse ?? false) && setup.guestRoom.freeBeds() < 1>>
+			<span class="warning">There is no free bed in the guest house for the baby. <<=setup.displayName(_mother)>> will be upset every day until the baby has one.</span>
+			<br /><br />
+		<</if>>
 		<<link 'Continue'>>
 			<<set _mother.noPregnancyDays = randomInteger(180, 250)>>
 			<<if $pregnancyHappening.type === 'slave'>>
@@ -102,14 +106,8 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 			<<run setup.npc.addHistory(_child, 'born', { mother: _mother.id })>>
 			
 			
-			<<if ($game.location.nursery ?? false)>>
-				<<run $nursery.push(_child)>>
-			<<elseif ($game.location.guesthouse ?? false)>>
-				<<run $guests.push(_child)>>
-			<<else>>
-				<<run $slaves.push(_child)>>
-			<</if>>
-			
+			<<run setup.guestRoom.placeNewborn(_child)>>
+
 			<<run delete $pregnancyHappening>>
 			<<goto 'Bedroom'>>
 		<</link>>

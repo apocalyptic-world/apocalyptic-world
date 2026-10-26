@@ -40,6 +40,7 @@ The cries grow softer now, almost pleading, as if the child senses the weight of
 <br /><br />
 <<set _linkNameTake = 'Take ' + setup.pronounceWho(_child) + ' in'>>
 <<set _linkNameLeave = 'Leave ' + setup.pronounceWho(_child) + ' for someone else'>>
+<<if ($game.location.nursery ?? false) || setup.guestRoom.hasRoom()>>
 <div id="option_take">
     <<linkreplace _linkNameTake>>
         <<run $('#option_leave').hide()>>
@@ -58,6 +59,7 @@ The cries grow softer now, almost pleading, as if the child senses the weight of
         <</link>>
     <</linkreplace>>
 </div>
+<</if>>
 <div id="option_leave">
     <<linkreplace _linkNameLeave>>
         <<run $('#option_take').hide()>>

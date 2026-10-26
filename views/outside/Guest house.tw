@@ -72,11 +72,12 @@
 	<</link>>
 <</if>>
 <h3>Guests</h3>
-<<set _guestHouseLimitShow = (($guesthouseLimit ?? 3) - ($guests ?? []).length)>>
-<<if _guestHouseLimitShow < 0>>
-	<<set _guestHouseLimitShow = 0>>
+Free beds left: <strong><<=setup.guestRoom.freeBeds()>></strong> of <<=setup.guestRoom.limit()>>
+<<set _ghBedless = setup.guestRoom.bedless()>>
+<<if _ghBedless.length>>
+	<br />
+	<span class="warning">Without a bed: <<=_ghBedless.map(npc => setup.displayName(npc)).join(', ')>></span>
 <</if>>
-Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 
 <<set _isHeatWave = $weather?.heatWave ?? false>>
 <<set _isSandStorm = $weather?.sandStorm ?? false>>
@@ -176,6 +177,7 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		</tr>
 
 
+	<<set _ghAway = { 'At night school': [], 'At work': [], 'At the hospital': [] }>>
 	<<for _sortOrder, _realIdx range _sortedIndices>>
 		<<set _guest = $guests[_realIdx]>>
 		<<capture _realIdx, _guest>>
@@ -188,12 +190,18 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 				<<set _customColorStyle = ' npc-color color-' + _guest.color >>
 			<</if>>
 
-			<<if setup.isAtWork(_guest, $weather) || _guest.location === 'school'>>
+			<<if _guest.location === 'school'>>
+				<<run _ghAway['At night school'].push(setup.displayName(_guest))>>
+				<<continue>>
+			<</if>>
+			<<if setup.isAtWork(_guest, $weather)>>
+				<<run _ghAway['At work'].push(setup.displayName(_guest))>>
 				<<continue>>
 			<</if>>
 			<<if ($game.location.hospital ?? false) && _isSick>>
+				<<run _ghAway['At the hospital'].push(setup.displayName(_guest))>>
 				<<continue>>
-			<</if>>
+			<</if>
 			<<if setup.percentageChance(_sleepingChance)>>
 				<<set _guest.sleeping = true>>
 			<</if>>
@@ -314,6 +322,14 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 		<</capture>>
 	<</for>>
 	</table>
+	<<if Object.values(_ghAway).some(names => names.length)>>
+		<h3>Away</h3>
+		<<for _ghAwayWhere, _ghAwayNames range _ghAway>>
+			<<if _ghAwayNames.length>>
+				<div><<=_ghAwayWhere>>: <<=_ghAwayNames.join(', ')>></div>
+			<</if>>
+		<</for>>
+	<</if>>
 <</if>>
 
 <<if !($locationEvents.guesthouse ?? false)>>

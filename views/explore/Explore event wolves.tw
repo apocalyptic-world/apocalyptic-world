@@ -156,7 +156,7 @@ You notice <<=_identItem>>. The name reads: <strong><<=setup.displayName($wFeral
 <br /><br />
 
 <div id="wf_approach">
-<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit && $backpack.has('food') && $backpack.has('rope')>>
+<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $backpack.has('rope')>>
 	<<set _approachName = 'Approach ' + ($wFeralGender != 1 ? 'her' : 'him') + ' (−1 food, −1 rope)'>>
 	<<linkreplace `_approachName`>>
 		<<run $('#wf_approach_desc, #wf_claim, #wf_claim_desc, #wf_walk').hide()>>
@@ -189,7 +189,7 @@ You notice <<=_identItem>>. The name reads: <strong><<=setup.displayName($wFeral
 </div>
 
 <div id="wf_claim">
-<<if ($wFeralGender != 1 || settings.gaysEnabled) && $player.strength > 50 && ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+<<if ($wFeralGender != 1 || settings.gaysEnabled) && $player.strength > 50 && setup.guestRoom.hasRoom()>>
 	<<set _claimName = 'Claim ' + ($wFeralGender != 1 ? 'her' : 'him')>>
 	<<linkreplace `_claimName`>>
 		<<run $('#wf_approach, #wf_approach_desc, #wf_claim_desc, #wf_walk').hide()>>

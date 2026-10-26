@@ -206,7 +206,7 @@ She says, though her tone lacks the aggression of her husband’s.
 		_daughter.id,
 	]}>>
 
-	<<if (($game.location.guesthouse ?? false) && ($guests.length + 1) <= $guesthouseLimit)>>
+	<<if (setup.guestRoom.hasRoom(1))>>
 		<div id="option_invite1">
 			<<linkreplace 'Invite daughter to live with you'>>
 				<<run $('#option_invite2,#option_capture').hide()>>
@@ -290,7 +290,7 @@ She says, though her tone lacks the aggression of her husband’s.
 		</div>
 	<</if>>
 
-	<<if (($game.location.guesthouse ?? false) && ($guests.length + 2) <= $guesthouseLimit)>>
+	<<if (setup.guestRoom.hasRoom(2))>>
 		<div id="option_invite2">
 			<<linkreplace 'Invite them both to live with you'>>
 			    <<run $('#option_invite1, #option_capture, #option_capture2').hide()>>

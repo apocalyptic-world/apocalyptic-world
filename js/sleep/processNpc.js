@@ -17,7 +17,8 @@ setup.sleep.processNpc = function(npc, opts) {
             randomScavengingItems } = opts;
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
-    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational'))) && setup.getAge(npc) >= 18) {
+    // Mothers of a newborn without a bed leave by the guest room rule instead (setup.guestRoom.nightlyBedless)
+    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc))) && setup.getAge(npc) >= 18) {
         // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
         const betrayalKind = setup.betrayal.depart(npc);
         setup.sleepMessages.addMain(betrayalKind
@@ -493,7 +494,7 @@ setup.sleep.processNpc = function(npc, opts) {
             if (!isCharacter && npc.pregnancy_father !== 'mc') {
                 msg += ' <strong>You ARE NOT the father!</strong>';
                 if (!sv2.pregnancyStreetsHappening && npc.pregnancy_event === 'streets') {
-                    sv2.pregnancyStreetsHappening = { type, id: npcIndex };
+                    sv2.pregnancyStreetsHappening = { type, id: npcIndex, npcId: npc.id };
                 }
             }
             setup.sleepMessages.addMain(msg);
@@ -523,10 +524,28 @@ setup.sleep.processNpc = function(npc, opts) {
             npc.pregnancy > 260 &&
             (npc.pregnancy > 280 || window.randomInteger(1, 3) === 3)) {
             if (hasWorkingHospital) {
-                State.variables.pregnancysHappeningHospital.push({ type, id: npcIndex });
+                State.variables.pregnancysHappeningHospital.push({ type, id: npcIndex, npcId: npc.id });
             } else {
-                State.variables.pregnancyHappening = { type, id: npcIndex };
+                State.variables.pregnancyHappening = { type, id: npcIndex, npcId: npc.id };
             }
         }
     }
+};
+
+// Pregnancy records point at a $slaves/$guests index, which shifts when NPCs leave during the night.
+// Call after the night's removals: re-resolves each record by npcId and drops records whose NPC is gone.
+setup.sleep.reindexBirths = function() {
+    const sv = State.variables;
+    const resolve = function(record) {
+        if (!record || typeof record.npcId === 'undefined' || !['slave', 'guest'].includes(record.type)) return record;
+        const list = record.type === 'slave' ? (sv.slaves ?? []) : (sv.guests ?? []);
+        const index = list.findIndex(n => n.id === record.npcId);
+        if (index < 0) return null;
+        record.id = index;
+        return record;
+    };
+
+    if (sv.pregnancyHappening && !resolve(sv.pregnancyHappening)) delete sv.pregnancyHappening;
+    if (sv.pregnancyStreetsHappening && !resolve(sv.pregnancyStreetsHappening)) delete sv.pregnancyStreetsHappening;
+    sv.pregnancysHappeningHospital = (sv.pregnancysHappeningHospital ?? []).map(resolve).filter(Boolean);
 };

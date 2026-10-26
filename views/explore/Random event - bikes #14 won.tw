@@ -41,7 +41,7 @@ As you finish off the guys surrounding the girl, you're prepared to also fight t
 		<<goto 'Basement'>>
 	<</link>>
 <</if>>
-<<if (($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit)>>
+<<if (setup.guestRoom.hasRoom())>>
 	<<link 'Tell her that she can live at your place'>>
 		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 30, 100)>>
 		<<run $guests.push($tmpGirl)>>

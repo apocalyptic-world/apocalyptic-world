@@ -102,7 +102,7 @@ Inside: canned food, a box of rounds, and a fuel can.
         <</sayNpc>>
         <br />
         <div id="abw_invite">
-        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+        <<if setup.guestRoom.hasRoom()>>
             <<set _labelInvite = 'Take her with you'>>
             <<linkreplace _labelInvite>>
                 <<run $('#abw_letgo').hide()>>
