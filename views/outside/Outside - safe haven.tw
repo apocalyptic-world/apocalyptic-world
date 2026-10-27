@@ -30,6 +30,8 @@ You crouch down, your shadow falling over the child. His cries falter for a mome
 <<run _dateNow.setDate(_dateNow.getDate() - _randomDays)>>
 <<set _child.birthDate = _dateNow>>
 <<run delete _child.pregnancy>>
+<<set _child = setup.setToVirgin(_child)>>
+<<run delete _child.piercedBoobs>>
 <strong>
     That's a <<=(!_child.gender ? 'girl' : 'boy')>>.
 </strong>
@@ -38,6 +40,7 @@ The cries grow softer now, almost pleading, as if the child senses the weight of
 <br /><br />
 <<set _linkNameTake = 'Take ' + setup.pronounceWho(_child) + ' in'>>
 <<set _linkNameLeave = 'Leave ' + setup.pronounceWho(_child) + ' for someone else'>>
+<<if ($game.location.nursery ?? false) || setup.guestRoom.hasRoom()>>
 <div id="option_take">
     <<linkreplace _linkNameTake>>
         <<run $('#option_leave').hide()>>
@@ -56,6 +59,7 @@ The cries grow softer now, almost pleading, as if the child senses the weight of
         <</link>>
     <</linkreplace>>
 </div>
+<</if>>
 <div id="option_leave">
     <<linkreplace _linkNameLeave>>
         <<run $('#option_take').hide()>>

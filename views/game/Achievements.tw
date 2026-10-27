@@ -15,7 +15,7 @@
 	<div @class="'ach-card' + (_done ? ' ach-done' : ' ach-locked')">
 		<div class="ach-icon"><<=_ach.icon>></div>
 		<div class="ach-name"><<=_ach.name>></div>
-		<div class="ach-desc"><<if _done>><<=_ach.desc>><<else>>???<</if>></div>
+		<div class="ach-desc"><<if _done>><<=_ach.desc>><<else>>???<</if>></div><<if !_done && _ach.hint>><div class="ach-hint"><<=_ach.hint>></div><</if>>
 	</div>
 <</capture>><</for>>
 </div>
@@ -46,8 +46,16 @@
 	background: #1e2a1e;
 }
 .ach-locked {
-	opacity: 0.45;
+	border-color: #2a2a2a;
 	background: #1a1a1a;
+}
+/* fade the locked card element by element, so the hint under the ??? stays readable */
+.ach-locked .ach-icon,
+.ach-locked .ach-name {
+	opacity: 0.45;
+}
+.ach-locked .ach-desc {
+	opacity: 0.35;
 }
 .ach-icon {
 	font-size: 1.8em;
@@ -63,5 +71,12 @@
 	font-size: 0.72em;
 	opacity: 0.75;
 	line-height: 1.3;
+}
+.ach-hint {
+	font-size: 0.68em;
+	font-style: italic;
+	opacity: 0.6;
+	line-height: 1.3;
+	margin-top: 4px;
 }
 </style>

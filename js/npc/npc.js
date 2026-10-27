@@ -406,12 +406,8 @@ setup.getNpcHappyLevel = function(nns) {
 };
 
 setup.personalityTraits = function(count = 1) {
-	var c = setup.getRandomElement(['efficient','organized','extravagant','careless']);
-	var a = setup.getRandomElement(['friendly','compassionate','critical','rational']);
-	var n = setup.getRandomElement(['sensitive','nervous','resilient','confident']);
-	var o = setup.getRandomElement(['inventive','curious','consistent','cautious']);
-	var e = setup.getRandomElement(['outgoing','energetic','solitary','reserved']);
-	var traits = shuffle([c, a, n, o, e]);
+	/* One random trait from each axis (setup.personality.axes), then keep `count` of those, so no two share an axis. */
+	var traits = shuffle(setup.personality.axes.map(axis => setup.getRandomElement(axis.traits)));
 
 	return traits.slice(0, count).sort();
 };
@@ -1159,6 +1155,8 @@ setup.npc = {
 			case 'moved_to_slave':   return day + 'Moved to basement';
 			case 'grown_up':         return day + 'Grew up and joined settlement';
 			case 'released':         return day + 'Released';
+			case 'returned':         return day + 'Left, then came back';
+			case 'found_words':      return day + 'Found words again';
 			default:                 return day + entry.event;
 		}
 	},

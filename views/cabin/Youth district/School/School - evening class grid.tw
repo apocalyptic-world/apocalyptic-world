@@ -1,0 +1,47 @@
+:: School - evening class grid [nobr]
+/* Included by School (evening) inside #es-class-grid; re-rendered when a student changes class.
+   Expects _esPresent (instructor indices) and _esTextPick (keeps each card's text stable across refreshes). */
+<div class="es-grid">
+	<<for _esInstructorI range _esPresent>>
+		<<capture _esInstructorI>>
+			<<set _esInstructor = $guests[_esInstructorI]>>
+			<<set _esClass = setup.eveningSchool.instructorClass(_esInstructor)>>
+			<<set _esClassStudents = setup.eveningSchool.students(_esClass)>>
+			<<set _esTextMode = _esClassStudents.length ? 'teaching' : 'idle'>>
+			<<set _esTextKey = _esClass + ':' + _esTextMode>>
+			<<if !_esTextPick[_esTextKey]>>
+				<<set _esTextPick[_esTextKey] = setup.getRandomElement(setup.eveningSchool.texts[_esTextMode][_esClass])>>
+			<</if>>
+			<div @class="'es-card es-class-' + _esClass">
+				<div class="es-card-label"><span class="es-card-icon"><<=setup.eveningSchool.icons[_esClass]>></span> <<=ucfirst(_esClass)>></div>
+				<div class="es-card-text"><<=setup.displayName(_esInstructor)>> <<=_esTextPick[_esTextKey]>></div>
+				<<set _esApproachLink = 'Approach ' + _esInstructor.name>>
+				<<link `_esApproachLink`>>
+					<<set $tmpGirl = $guests[_esInstructorI]>>
+					<<set $tmpGirl.location = 'school'>>
+					<<set $tmpGirlViewBack = 'NPC view - guest'>>
+					<<set $tmpGirlBack = 'School'>>
+					<<set $tmpGirl.rape to false>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirlInvite to false>>
+					<<set $guestId = _esInstructorI>>
+					<<unset $slaveId, $charId, $childId>>
+					<<goto 'NPC view - guest'>>
+				<</link>>
+				<div class="es-card-students">
+					<<if _esClassStudents.length>>
+						<<for _esEntry range _esClassStudents>>
+							<<set _esStudent = _esEntry.npc>>
+							<span @class="'es-student gender-' + setup.genderClass(_esStudent)">
+								<<=setup.displayName(_esStudent)>>
+								<<if (_esStudent.teachAdvStudy ?? 0) > 0>> <span class="es-adv" title="Advanced Study active">&#x1F4D6;</span><</if>>
+							</span>
+						<</for>>
+					<<else>>
+						<span class="es-empty">No students</span>
+					<</if>>
+				</div>
+			</div>
+		<</capture>>
+	<</for>>
+</div>

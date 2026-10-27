@@ -1,0 +1,395 @@
+:: Garage - World - Leader Night [Place bg-garage settlement]
+<<set _lnS = setup.settlements.getById($tmpSettlement)>>
+<<if !_lnS>>
+	<<goto 'Garage - World'>>
+<<elseif !setup.settlements.canLeaderNight(_lnS, $game.day)>>
+	<<goto 'Garage - World - Settlement'>>
+<<elseif setup.settlements.leaderNightKind(_lnS) === 'male'>>
+	<<goto 'Garage - World - Leader Night - Male'>>
+<<else>>
+	<<goto 'Garage - World - Leader Night - Female'>>
+<</if>>
+
+
+:: Garage - World - Leader Night - Female [Place bg-garage settlement]
+<<set _lnS = setup.settlements.getById($tmpSettlement)>>
+<<if !_lnS || !setup.settlements.canLeaderNight(_lnS, $game.day) || setup.settlements.leaderNightKind(_lnS) !== 'female'>>
+	<<goto 'Garage - World - Settlement'>>
+<<else>>
+	<<set _lnLeader = _lnS.leader>>
+	<<set _lnName = setup.displayName(_lnLeader)>>
+	<<set _lnPlace = setup.settlements.leaderQuarters[_lnS.type] ?? 'her private quarters at the back of the settlement'>>
+	<<if $gameDate.getHours() >= 5 && $gameDate.getHours() < 21>>
+		<<run $gameDate.setHours(21, 0, 0, 0)>>
+	<</if>>
+
+	<h1 class="ptitle">ALLIED NIGHT</h1>
+	<br />
+
+	<center>
+		<<image 'places/world/leader_night_f1.jpg'>>
+	</center>
+	<br />
+
+	The talks ran long. By the time the last of the trade figures and watch rotations had been settled, <<= _lnS.name>> had gone quiet around you, lamps burning low behind shuttered windows.
+	<br /><br />
+
+	<<= _lnName>> sent her people away with a flick of her hand and waited until the door had closed behind the last of them. Then she came around the table, slowly, and stopped close enough that you could feel the heat coming off her.
+	<br /><br />
+
+	<<sayNpc _lnLeader>>
+		That's the business done. Now the part that actually holds an alliance together. Paper doesn't hold when winter comes and the food runs short. People do. Stay the night.
+	<</sayNpc>>
+	<br />
+
+	She said it like a decision, not an offer, but her eyes had already gone down the length of you and back up, and the corner of her mouth had curved.
+	<br /><br />
+
+	<div id="ln_go">
+	<<set _lnGoLabel = 'Follow ' + _lnLeader.name + ' to her quarters'>>
+	<<linkreplace _lnGoLabel>>
+		<<run $('#ln_leave').hide()>>
+		<<addmins 30>>
+		<<set _lnLeader.bj = Math.min((_lnLeader.bj ?? 0) + 5, 100)>>
+		<<set _lnLeader.statsSex ??= {}, _lnLeader.statsSex.bj = (_lnLeader.statsSex.bj ?? 0) + 1>>
+
+		She didn't wait for an answer. She walked out into the dark and you followed, past sentries who suddenly found something else to look at, all the way to <<= _lnPlace>>. She shut the door behind you and slid the bolt across.
+		<br /><br />
+
+		<center>
+			<<actionImage _lnLeader 'kissing' 'no-text'>>
+		</center>
+		<br />
+
+		She took hold of your jacket in both fists and walked you backwards until the backs of your knees hit the edge of the bed. Then her mouth was on yours, hot and hungry, her tongue pushing between your lips and her fingers already working at your belt. By the time she broke the kiss your cock was out and rock hard in her hand.
+		<br /><br />
+
+		<<sayNpc _lnLeader>>
+			I've wanted this since the first time you walked through my gate.
+		<</sayNpc>>
+		<br />
+
+		She sank to her knees between your legs and held your eyes while she dragged her tongue slowly up the underside of your cock. Then she closed her lips around the head and took you into her mouth. She sucked you with a slow, thorough hunger, cheeks hollowing, one hand pumping the base of your cock while the other pushed down the front of her trousers so she could rub her pussy while she worked.
+		<br /><br />
+
+		<<sayNpc _lnLeader>>
+			Don't you dare come yet. I want you inside me when you do.
+		<</sayNpc>>
+		<br />
+
+		<<set _lnFuckLabel = 'Pull her onto the bed and fuck her pussy'>>
+		<<linkreplace _lnFuckLabel>>
+			<<addmins 45>>
+			<<set _lnLeader.pussy = Math.min((_lnLeader.pussy ?? 0) + 5, 100)>>
+			<<set _lnLeader.statsSex ??= {}, _lnLeader.statsSex.pussy = (_lnLeader.statsSex.pussy ?? 0) + 1>>
+			<<set _lnWasVirgin = (_lnLeader.virgin ?? false)>>
+
+			You hauled her up by the arms and tipped her onto the mattress, and she was already stripping, shirt over her head, bra gone, trousers kicked off the end of the bed. Then she was straddling your hips, her bare pussy hot and wet against the underside of your cock.
+			<br /><br />
+
+			<center>
+				<<actionImage _lnLeader 'pussy' 'no-text'>>
+			</center>
+			<br />
+
+			<<if _lnWasVirgin>>
+				She reached down, lined you up and began to lower herself onto your cock, slowly. Halfway down she went rigid, a sharp breath hissing through her teeth, her nails biting into your chest. You felt the resistance give way around the head of your cock, and understood that the woman who ran <<= _lnS.name>> had never let anyone inside her before.
+				<br /><br />
+
+				<<sayNpc _lnLeader>>
+					Don't stop. I chose you. Don't make me regret it.
+				<</sayNpc>>
+				<br />
+
+				You held her hips still until her breathing steadied. Then she started to move, tight and slick around your cock, slowly at first and then not slowly at all.
+				<br /><br />
+			<<else>>
+				She reached down, lined you up and sank onto your cock in one long slide, taking all of it until her ass was flush against your thighs. She let out a shuddering breath. Then she started to move, rolling her hips, her pussy hot and tight and gripping your cock on every stroke.
+				<br /><br />
+			<</if>>
+
+			She rode you harder as she found her rhythm, her tits bouncing as she braced both hands on your chest and took what she wanted from you. The bed frame hammered against the wall. She didn't care who heard it.
+			<br /><br />
+
+			<<sayNpc _lnLeader>>
+				Don't hold back. Wherever you finish, finish it now.
+			<</sayNpc>>
+			<br />
+
+			<div id="ln_in">
+			<<set _lnInLabel = 'Cum deep inside her pussy'>>
+			<<linkreplace _lnInLabel>>
+				<<run $('#ln_out').hide()>>
+				<<horny_reset>>
+				<<addmins 15>>
+				<<set _lnResult = setup.settlements.completeLeaderNight(_lnS, $game.day)>>
+
+				<center>
+					<<image 'game/misc/creampie_cowgirl.webp'>>
+				</center>
+				<br />
+
+				You locked your hands on her hips, dragged her down and came, emptying your cock deep inside her pussy in thick pulses. She ground against you and shuddered through her own orgasm, her pussy clenching around you as if she wanted every last drop.
+				<br /><br />
+
+				<<if setup.pregnancyChance(_lnLeader)>>
+					<<set _lnLeader.pregnancy = 0>>
+					<<set _lnLeader.pregnancy_father = 'mc'>>
+					<<statsAdd 'girls_impregnated'>>
+				<</if>>
+				<<if _lnWasVirgin>><<run setup.npc.addHistory(_lnLeader, 'virgin_lost', { with: 'mc' })>><</if>>
+				<<set _lnLeader.virgin = false>>
+				<<run setup.npc.addHistory(_lnLeader, 'first_sex_mc', { with: 'mc' })>>
+
+				<<sayNpc _lnLeader>>
+					Mm. Now that's an alliance sealed.
+				<</sayNpc>>
+				<br />
+
+				<<run $('#ln_end').show()>>
+			<</linkreplace>>
+			</div>
+			<div id="ln_out">
+			<<set _lnOutLabel = 'Pull out and cum on her stomach'>>
+			<<linkreplace _lnOutLabel>>
+				<<run $('#ln_in').hide()>>
+				<<horny_reset>>
+				<<addmins 15>>
+				<<set _lnResult = setup.settlements.completeLeaderNight(_lnS, $game.day)>>
+
+				<center>
+					<<image 'game/misc/cum_on_stomach.webp'>>
+				</center>
+				<br />
+
+				You caught her by the hips and lifted her off at the last second. She wrapped her hand around your cock and stroked you through it, and you came across her stomach in hot, thick ropes while she watched every one of them land with a satisfied look on her face.
+				<br /><br />
+
+				<<if _lnWasVirgin>><<run setup.npc.addHistory(_lnLeader, 'virgin_lost', { with: 'mc' })>><</if>>
+				<<set _lnLeader.virgin = false>>
+				<<run setup.npc.addHistory(_lnLeader, 'first_sex_mc', { with: 'mc' })>>
+
+				<<sayNpc _lnLeader>>
+					Careful. I'm not ready to put you in the line of succession. Not yet.
+				<</sayNpc>>
+				<br />
+
+				<<run $('#ln_end').show()>>
+			<</linkreplace>>
+			</div>
+			<div id="ln_end" style="display: none">
+			<<set _lnEndLabel = 'Stay until she falls asleep'>>
+			<<linkreplace _lnEndLabel>>
+				<<addmins 90>>
+
+				She lay half across your chest afterwards, her breathing slowing, one hand idly tracing the scars on your ribs. Neither of you was in any hurry to move. The lamps burned lower, and somewhere outside a sentry's footsteps passed the door and moved on.
+				<br /><br />
+
+				<<sayNpc _lnLeader>>
+					If anyone asks, we were negotiating until the small hours. Which is true.
+				<</sayNpc>>
+				<br />
+
+				You stayed until she'd fallen asleep, then dressed in the dark and let yourself out. The sentry on the gate nodded to you without a word, the way you'd nod to someone who had just signed something important.
+				<br /><br />
+
+				<<if _lnResult.gain > 0>>
+					<span style="color: #55cc88;">Relationship +<<= _lnResult.gain>> with <<= _lnS.name>>.</span>
+					<br />
+				<</if>>
+				<span style="color: #5599e0;">Bond formed with <<= _lnLeader.name>> until day <<= _lnResult.bondUntil>>: <<= _lnS.name>>'s goodwill fades more slowly and your donations count for more.</span>
+				<br /><br />
+
+				<<link 'Leave'>>
+					<<goto 'Garage - World - Settlement'>>
+				<</link>>
+			<</linkreplace>>
+			</div>
+		<</linkreplace>>
+	<</linkreplace>>
+	</div>
+	<div id="ln_leave">
+	<<link 'Make an excuse and leave'>>
+		<<goto 'Garage - World - Settlement'>>
+	<</link>>
+	</div>
+<</if>>
+
+
+:: Garage - World - Leader Night - Male [Place bg-garage settlement]
+<<set _lnS = setup.settlements.getById($tmpSettlement)>>
+<<if !_lnS || !setup.settlements.canLeaderNight(_lnS, $game.day) || setup.settlements.leaderNightKind(_lnS) !== 'male'>>
+	<<goto 'Garage - World - Settlement'>>
+<<else>>
+	<<set _lnLeader = _lnS.leader>>
+	<<set _lnName = setup.displayName(_lnLeader)>>
+	<<set _lnPlace = setup.settlements.leaderQuarters[_lnS.type] ?? 'his private quarters at the back of the settlement'>>
+	<<if $gameDate.getHours() >= 5 && $gameDate.getHours() < 21>>
+		<<run $gameDate.setHours(21, 0, 0, 0)>>
+	<</if>>
+
+	<h1 class="ptitle">ALLIED NIGHT</h1>
+	<br />
+
+	<center>
+		<<image 'places/world/leader_night_m1.jpg'>>
+	</center>
+	<br />
+
+	The talks ran long. By the time the last of the trade figures and watch rotations had been settled, <<= _lnS.name>> had gone quiet around you, lamps burning low behind shuttered windows.
+	<br /><br />
+
+	<<= _lnName>> sent his people away with a jerk of the chin and waited until the door had closed behind the last of them. Then he came around the table, unhurried, his shoulders blocking out the lamp, and stopped close enough that you could smell woodsmoke and whetstone oil on him.
+	<br /><br />
+
+	<<sayNpc _lnLeader>>
+		That's the business done. Now the part that actually holds an alliance together. Paper doesn't hold when winter comes and the food runs short. People do. Stay the night.
+	<</sayNpc>>
+	<br />
+
+	He said it like an order, but his eyes had already gone down the length of you and back up, and there was no mistaking what kind of night he meant.
+	<br /><br />
+
+	<div id="ln_go">
+	<<set _lnGoLabel = 'Follow ' + _lnLeader.name + ' to his quarters'>>
+	<<linkreplace _lnGoLabel>>
+		<<run $('#ln_leave').hide()>>
+		<<addmins 30>>
+		<<set _lnLeader.bj = Math.min((_lnLeader.bj ?? 0) + 5, 100)>>
+		<<set _lnLeader.statsSex ??= {}, _lnLeader.statsSex.bj = (_lnLeader.statsSex.bj ?? 0) + 1>>
+
+		He didn't wait for an answer. He walked out into the dark and you followed, past sentries who suddenly found something else to look at, all the way to <<= _lnPlace>>. He shut the door behind you and slid the bolt across.
+		<br /><br />
+
+		<center>
+			<<actionImage _lnLeader 'kissing' 'no-text'>>
+		</center>
+		<br />
+
+		He stripped his shirt over his head in one motion, his chest and arms covered in old scars and faded tattoos. Then he took you by the jacket and kissed you, hard, his beard scraping your jaw, his tongue pushing into your mouth, his hands already working at your belt. By the time he pulled back your cock was out and rock hard in his fist.
+		<br /><br />
+
+		<<sayNpc _lnLeader>>
+			I've wanted this since the first time you walked through my gate.
+		<</sayNpc>>
+		<br />
+
+		He pushed you down to sit on the edge of the bed and dropped to his knees between your thighs. He held your eyes while he licked a slow, wet stripe up the underside of your cock, then closed his lips around the head and sucked. He took you deeper with every pass until his nose was against your stomach and his throat clenched around your cock when he swallowed. He sucked you hungrily, loud and wet, one hand working the base of your cock while the other opened his own trousers and pulled out his cock to stroke it.
+		<br /><br />
+
+		<<sayNpc _lnLeader>>
+			Don't you dare come yet. I want you in my ass when you do.
+		<</sayNpc>>
+		<br />
+
+		<<set _lnFuckLabel = 'Bend him over the bed and fuck his ass'>>
+		<<linkreplace _lnFuckLabel>>
+			<<addmins 45>>
+			<<set _lnLeader.anal = Math.min((_lnLeader.anal ?? 0) + 10, 100)>>
+			<<set _lnLeader.statsSex ??= {}, _lnLeader.statsSex.anal = (_lnLeader.statsSex.anal ?? 0) + 1>>
+
+			He stood up, spat into his palm and reached around to slick your cock, then shoved his trousers down to his knees and bent forward over the edge of the bed, bracing both hands on the blankets. His ass was hard muscle, and when you pressed the head of your cock against his asshole he pushed back against it, breathing out slowly to open up for you.
+			<br /><br />
+
+			<center>
+				<<actionImage _lnLeader 'anal' 'no-text'>>
+			</center>
+			<br />
+
+			You gripped his hips and pushed into his ass in one slow, steady stroke until your hips were flush against him. He was tight enough around your cock to make your head swim. You pulled almost all the way out, until only the head of your cock was stretching his asshole open, and then drove back into him to the hilt, long deep strokes that made his whole body rock forward with each one. He groaned into the mattress, his big hands knotting in the blankets.
+			<br /><br />
+
+			<<sayNpc _lnLeader>>
+				Harder. I'm not going to break. Wherever you finish, finish it now.
+			<</sayNpc>>
+			<br />
+
+			<div id="ln_in">
+			<<set _lnInLabel = 'Cum deep in his ass'>>
+			<<linkreplace _lnInLabel>>
+				<<run $('#ln_out').hide()>>
+				<<horny_reset>>
+				<<addmins 15>>
+				<<set _lnResult = setup.settlements.completeLeaderNight(_lnS, $game.day)>>
+
+				<center>
+					<<actionImage _lnLeader 'cum_in_ass' 'no-text'>>
+				</center>
+				<br />
+
+				You buried your cock to the hilt in his ass and came, pumping thick ropes of cum deep inside him while he groaned and clenched around you, jerking his own cock through it until he spilled across the sheets. Even afterwards he stayed tight around you, and when you finally pulled out his asshole closed almost at once.
+				<br /><br />
+
+				<<run setup.npc.addHistory(_lnLeader, 'first_sex_mc', { with: 'mc' })>>
+
+				<<sayNpc _lnLeader>>
+					Fuck. Now that's an alliance sealed.
+				<</sayNpc>>
+				<br />
+
+				<<run $('#ln_end').show()>>
+			<</linkreplace>>
+			</div>
+			<div id="ln_out">
+			<<set _lnOutLabel = 'Pull out and cum across his back'>>
+			<<linkreplace _lnOutLabel>>
+				<<run $('#ln_in').hide()>>
+				<<horny_reset>>
+				<<addmins 15>>
+				<<set _lnResult = setup.settlements.completeLeaderNight(_lnS, $game.day)>>
+
+				<center>
+					<<actionImage _lnLeader 'cum_on_back' 'no-text'>>
+				</center>
+				<br />
+
+				You pulled out at the last second, wrapped your fist around your cock and came across the small of his back in hot, thick ropes while he stroked himself off beneath you, grunting into the mattress as he spilled onto the sheets.
+				<br /><br />
+
+				<<run setup.npc.addHistory(_lnLeader, 'first_sex_mc', { with: 'mc' })>>
+
+				<<sayNpc _lnLeader>>
+					Hah. Considerate. I'll remember that.
+				<</sayNpc>>
+				<br />
+
+				<<run $('#ln_end').show()>>
+			<</linkreplace>>
+			</div>
+			<div id="ln_end" style="display: none">
+			<<set _lnEndLabel = 'Stay until he falls asleep'>>
+			<<linkreplace _lnEndLabel>>
+				<<addmins 90>>
+
+				He pulled you down beside him afterwards, one heavy arm thrown across your chest, and neither of you was in any hurry to move. The lamps burned lower, and somewhere outside a sentry's footsteps passed the door and moved on.
+				<br /><br />
+
+				<<sayNpc _lnLeader>>
+					If anyone asks, we were negotiating until the small hours. Which is true.
+				<</sayNpc>>
+				<br />
+
+				You stayed until his breathing had slowed into sleep, then dressed in the dark and let yourself out. The sentry on the gate nodded to you without a word, the way you'd nod to someone who had just signed something important.
+				<br /><br />
+
+				<<if _lnResult.gain > 0>>
+					<span style="color: #55cc88;">Relationship +<<= _lnResult.gain>> with <<= _lnS.name>>.</span>
+					<br />
+				<</if>>
+				<span style="color: #5599e0;">Bond formed with <<= _lnLeader.name>> until day <<= _lnResult.bondUntil>>: <<= _lnS.name>>'s goodwill fades more slowly and your donations count for more.</span>
+				<br /><br />
+
+				<<link 'Leave'>>
+					<<goto 'Garage - World - Settlement'>>
+				<</link>>
+			<</linkreplace>>
+			</div>
+		<</linkreplace>>
+	<</linkreplace>>
+	</div>
+	<div id="ln_leave">
+	<<link 'Make an excuse and leave'>>
+		<<goto 'Garage - World - Settlement'>>
+	<</link>>
+	</div>
+<</if>>

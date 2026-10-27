@@ -56,7 +56,8 @@ setup.relationshipBetween = {
     setLike: function() {
         let likeableGuests = [];
         for (let targetNpcId in this.npc.relationshipBetween.stats) {
-            let targetNpc = setup.getNpcById(targetNpcId);
+            // Guests only: likes feed the guest wedding matcher, and a like on a slave (possible via night school) would never be returned or cleared
+            let targetNpc = (variables().guests ?? []).find(g => String(g.id) === String(targetNpcId));
             if (targetNpc && this.npc.relationshipBetween.stats[targetNpcId] === 100 && (
                 (this.npc.likesGirls && targetNpc.gender === 0) || 
                 (this.npc.likesGuys && targetNpc.gender === 1) || 

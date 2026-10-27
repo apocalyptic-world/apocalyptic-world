@@ -48,11 +48,14 @@
 	<</link>>
 <</if>>
 
-<<if $tmpGirl.location !== 'gloryhole' && [0, 2].includes($tmpGirl.gender) && setup.NpcInHome($tmpGirl)>>
+/* Group sex at the night school: partners come from whoever is in evening class (see setup.eveningSchool.classmates) */
+<<set _atNightSchool = setup.eveningSchool.isAtNightSchool($tmpGirl)>>
+
+<<if $tmpGirl.location !== 'gloryhole' && [0, 2].includes($tmpGirl.gender) && (setup.NpcInHome($tmpGirl) || _atNightSchool)>>
 	<<link 'Threesome'>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<script>>
-			var _tscLocLabels = { church: 'Church', hospital: 'Hospital', bathhouse: 'Bathhouse' };
+			var _tscLocLabels = { church: 'Church', hospital: 'Hospital', bathhouse: 'Bathhouse', school: 'Night school' };
 			var _tscLabel = _tscLocLabels[State.variables.tmpGirl && State.variables.tmpGirl.location] || 'Guesthouse';
 			Dialog.setup(_tscLabel + " - Ask for threesome", "Guesthouse - Ask for threesome");
 			Dialog.wiki(Story.get("Guesthouse - Ask for threesome choose").processText());
@@ -61,8 +64,10 @@
 	<</link>>
 <</if>>
 
-<<if [0, 2].includes($tmpGirl.gender) && setup.NpcInHome($tmpGirl)>>
-	<<if ($tmpGirl.basementVoluntary ?? false)>>
+<<if [0, 2].includes($tmpGirl.gender) && (setup.NpcInHome($tmpGirl) || _atNightSchool)>>
+	<<if _atNightSchool>>
+		<<set _eligibleForFoursome = setup.eveningSchool.classmates($tmpGirl).filter(e => e.npc.gender === 0 && (e.npc.likesGuys ?? true) && (e.npc.horny ?? 0) >= 20)>>
+	<<elseif ($tmpGirl.basementVoluntary ?? false)>>
 		<<set _eligibleForFoursome = []>>
 		<<for _fsi, _fsnpc range $slaves>>
 			<<if _fsnpc.gender !== 0 || !(_fsnpc.likesGuys ?? true) || (_fsnpc.horny ?? 0) < 20 || setup.getAge(_fsnpc) < 18>><<continue>><</if>>

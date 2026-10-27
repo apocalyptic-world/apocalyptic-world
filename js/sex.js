@@ -56,5 +56,27 @@ setup.sex = {
     hasAfterglow: function(npc)
     {
         return typeof npc?.afterglow !== 'undefined' && npc.afterglow === variables().game.day - 1;
+    },
+
+    /**
+     * A virgin who trusts the MC (relationship) and has come with him a few times
+     * (npc.orgasms) is willing to go all the way, even if her corruption is still
+     * too low to pass the usual gate for pussy sex.
+     */
+    VIRGIN_WILLING_RELATIONSHIP: 70,
+    VIRGIN_WILLING_ORGASMS: 5,
+
+    virginWilling: function(npc)
+    {
+        return !!npc?.virgin
+            && (npc.likesGuys ?? true)
+            && (npc.relationship ?? 0) >= this.VIRGIN_WILLING_RELATIONSHIP
+            && (npc.orgasms ?? 0) >= this.VIRGIN_WILLING_ORGASMS;
+    },
+
+    /** True if the action penetrates anybody's pussy (stats, stats2 or stats3 holds 'pussy'). */
+    isPussyAction: function(action)
+    {
+        return ['stats', 'stats2', 'stats3'].some(key => [].concat(action?.[key] ?? []).includes('pussy'));
     }
 }

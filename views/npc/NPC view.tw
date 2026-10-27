@@ -85,9 +85,17 @@
 <<if typeof $slaveId !== 'undefined' && !$tmpGirl.assignedTo && !($player.companions['slave:' + $slaveId] ?? false)>>
 	<<link 'Assign to'>>
 		<<dialog 'Assign to'>>
-			<<include 'Slave view assign to'>>	
+			<<include 'Slave view assign to'>>
 		<</dialog>>
 	<</link>>
+<</if>>
+
+/* Evening school: adult slaves can enroll as students (instructors are guests only). */
+<<if typeof $slaveId !== 'undefined' && setup.eveningSchool.isBuilt() &&setup.getAge($tmpGirl) >= 18 && !($tmpGirl.traits ?? []).includes('feral') && !$tmpGirl.teach>>
+	<<include 'NPC view - enroll evening class'>>
+<</if>>
+<<if typeof $slaveId !== 'undefined'>>
+	<<include 'NPC view - withdraw evening class'>>
 <</if>>
 
 <<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
@@ -270,11 +278,12 @@
 	<<link 'Customize'>>
 		<<goto 'NPC customize'>>
 	<</link>>
-	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<<if setup.guestRoom.hasRoom()>>
 		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
 		<<link `_linkName`>>
 			<<achievement 'slave_to_guest'>>
 			<<moveSlaveToGuest $tmpGirl $slaveId>>
+			<<unset $slaveId>>
 			<<goto 'Guest house'>>
 		<</link>>
 	<</if>>

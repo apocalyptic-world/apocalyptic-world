@@ -10,7 +10,7 @@ setup.personality = {
     info: {
         efficient:     'Job output +20%',
         organized:     'Learns job skills 50% faster',
-        extravagant:   'Gifts are worth twice the relationship',
+        extravagant:   'Gifts are worth twice the relationship, and every gift that is not disliked adds 2 extra happiness',
         careless:      'Job output -10%, and sometimes gets hurt at work',
         friendly:      'Relationship does not drop when neglected',
         compassionate: 'At the church lifts everyone twice as much; as attendant comforts unhappy slaves',
@@ -30,11 +30,47 @@ setup.personality = {
         reserved:      'Submission does not drop when neglected'
     },
 
+    /**
+     * The five axes. An NPC never holds two traits from the same axis, which is what keeps
+     * opposites like confident/nervous apart. Used by setup.personalityTraits (random roll)
+     * and by the Edit NPC cheat menu.
+     */
+    axes: [
+        { key: 'conscientiousness', label: 'Conscientiousness', traits: ['efficient', 'organized', 'extravagant', 'careless'] },
+        { key: 'agreeableness',     label: 'Agreeableness',     traits: ['friendly', 'compassionate', 'critical', 'rational'] },
+        { key: 'neuroticism',       label: 'Neuroticism',       traits: ['sensitive', 'nervous', 'resilient', 'confident'] },
+        { key: 'openness',          label: 'Openness',          traits: ['inventive', 'curious', 'consistent', 'cautious'] },
+        { key: 'extraversion',      label: 'Extraversion',      traits: ['outgoing', 'energetic', 'solitary', 'reserved'] }
+    ],
+
     /** Jobs where a careless worker can hurt themselves. */
     ACCIDENT_JOBS: ['garden', 'kitchen', 'hunter', 'scavenging', 'forest', 'quarry', 'garage'],
 
+    /** Extra happiness an extravagant NPC gets from each gift that is not disliked (keep in sync with info.extravagant). */
+    EXTRAVAGANT_GIFT_HAPPY: 2,
+
     has: function (npc, trait) {
         return [].concat(npc?.personality ?? []).includes(trait);
+    },
+
+    /** The trait an NPC holds on one axis (an entry of setup.personality.axes), or null for none. */
+    axisTrait: function (npc, axis) {
+        return axis.traits.find(trait => this.has(npc, trait)) ?? null;
+    },
+
+    /**
+     * Builds a personality list from one pick per axis ({ axisKey: trait | 'none' }).
+     * A pick that does not belong to its axis is dropped, so one trait per axis is guaranteed.
+     */
+    fromPicks: function (picks) {
+        const chosen = [];
+        for (const axis of this.axes) {
+            const pick = picks?.[axis.key];
+            if (axis.traits.includes(pick)) {
+                chosen.push(pick);
+            }
+        }
+        return chosen.sort();
     },
 
     /** Randomised rounding, so +-10% still shows on small numbers (2.7 is 3 seven times in ten). */

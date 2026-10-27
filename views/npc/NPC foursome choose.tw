@@ -30,6 +30,15 @@
 		<<run _eligible.push({type: 'slave', id: _fci})>>
 	<</for>>
 
+<<elseif setup.eveningSchool.isAtNightSchool($tmpGirl)>>
+	/* Night school: instructors and students in class */
+	<<for _fcEntry range setup.eveningSchool.classmates($tmpGirl)>>
+		<<set _fcg = _fcEntry.npc>>
+		<<if _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>
+		<<if !setup.percentageChance(setup.sexChance(_fcg))>><<continue>><</if>>
+		<<run _eligible.push({type: _fcEntry.type, id: _fcEntry.index})>>
+	<</for>>
+
 <<elseif _foursomeLoc === 'bathhouse'>>
 	<<for _fci, _fcg range $guests>>
 		<<if _fcg.id === $tmpGirl.id || _fcg.gender !== 0 || !(_fcg.likesGuys ?? true) || (_fcg.horny ?? 0) < 20 || setup.getAge(_fcg) < 18>><<continue>><</if>>

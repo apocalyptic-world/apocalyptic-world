@@ -19,6 +19,9 @@
 <<if _rCount <= 0>>
 	<p style="color: #888;">Nobody here is ready to leave <<= _rS.name>> right now.</p>
 	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
+<<elseif !setup.guestRoom.hasRoom()>>
+	<p style="color: #888;">You have no free bed in the guest house for a recruit.</p>
+	<<link 'Back'>><<goto 'Garage - World - Settlement'>><</link>>
 <<else>>
 	<div id="recruit_approach">
 	<<linkreplace 'Talk to potential recruits'>>

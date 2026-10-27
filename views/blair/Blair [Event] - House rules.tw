@@ -1,0 +1,124 @@
+:: Blair \[Event\] - House rules [bg-kitchen]
+<h1 class="ptitle">KITCHEN</h1>
+<br />
+<<set _hrIdx = setup.blair.houseRulesFavorite()>>
+<<if _hrIdx < 0>>
+	<<goto 'Wood cabin'>>
+<<else>>
+	<<set $locationEvents.cabin = true>>
+	<<set $characters.blair.quests.house_rules_day = $game.day>>
+	<<set _hrGuest = $guests[_hrIdx]>>
+	<<set _hrName = setup.displayName(_hrGuest)>>
+	<<set _hrShe = setup.pronounceWhat(_hrGuest)>>
+	<<set _hrHer = setup.pronounceWho(_hrGuest)>>
+	<<set _hrHers = setup.pronounceWhos(_hrGuest)>>
+	<<set _hrYours = setup.blair.married() ? 'my husband' : 'you'>>
+	<<set _hrRoom = setup.blair.married() ? "my husband's room" : 'your room'>>
+	<<set _hrIntimate = setup.blair.guestIntimate(_hrGuest)>>
+	<<set _hrHasKids = setup.blair.kids().length > 0>>
+	<<set _hrCause = _hrIntimate ? either('chores', 'decency', 'bed') : either('chores', 'decency')>>
+
+	<center>
+		<<image 'places/cabin/house_rules.jpg'>>
+	</center>
+	<br />
+
+	You heard it from the yard: Blair's voice, level and quiet, which was always worse than shouting. When you reached the kitchen door she was standing at the stove with her arms crossed and <<=_hrName>> was on the other side of the table, chin up, and neither of them had touched the soup.
+	<br /><br />
+	<<if _hrCause === 'chores'>>
+		<<blair>>
+			Three days. That's how long her turn at the garden has been sitting there. And she's been <<if _hrIntimate>>in <<=_hrRoom>><<else>>sitting by the stove with her feet up<</if>> every evening, so don't tell me she's too tired.
+		<</blair>>
+	<<elseif _hrCause === 'decency'>>
+		<<blair>>
+			I told you the rule about the food storage. It was my rule. I asked you nicely. And I found you there again with your skirt up, and I had to <<if _hrHasKids>>explain to the children why the door was shut<<else>>pretend I could not hear it with half the house in the next room<</if>>.
+		<</blair>>
+	<<else>>
+		<<blair>>
+			She walks around this house like she owns it. Like she owns <<=_hrYours>>. I'm not going to fight her for that. I'm just asking who's meant to be in charge.
+		<</blair>>
+	<</if>>
+	<br />
+	<<sayNpc _hrGuest>>
+		<<if _hrCause === 'chores'>>I do my share. I do more than most. She just likes counting what other people do.<<elseif _hrCause === 'decency'>>It's not like anybody got hurt. It's a house, not a church.<<else>>Nobody said I couldn't. And nobody said I couldn't be happy here.<</if>>
+	<</sayNpc>>
+	<br />
+	They both turned to you. You had the feeling that whatever you said next would be remembered a lot longer than the soup.
+	<br /><br />
+
+	<div id="hr_blair">
+		<<set _hrBlairLabel = 'Back Blair'>>
+		<<linkreplace _hrBlairLabel>>
+			<<run $('#hr_guest, #hr_mediate').hide()>>
+			<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 8, 100)>>
+			<<set _hrGuest.happy = Math.max((_hrGuest.happy ?? 0) - 15, -100)>>
+			<<set _hrGuest.relationship = Math.max((_hrGuest.relationship ?? 0) - 5, -100)>>
+			<<you>>
+				Blair set the rules and Blair keeps them. If you've got a problem with them, you bring it to me.
+			<</you>>
+			<br />
+			<<=_hrName>> looked at you for a long moment, then at Blair, and put the spoon down very carefully. <<=ucfirst(_hrShe)>> left without a word. Blair did not smile, but her shoulders came down an inch.
+			<br /><br />
+			<strong>(Blair: Relationship +8. <<=_hrName>>: Happy −15, Relationship −5.)</strong>
+			<br /><br />
+			<<link 'Sit down at the table'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+
+	<div id="hr_guest">
+		<<set _hrGuestLabel = 'Back ' + _hrName>>
+		<<linkreplace _hrGuestLabel>>
+			<<run $('#hr_blair, #hr_mediate').hide()>>
+			<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 8, -100)>>
+			<<set $characters.blair.happy = Math.max(($characters.blair.happy ?? 0) - 15, -100)>>
+			<<set $characters.blair.livingLocation = 'guesthouse'>>
+			<<set _hrGuest.relationship = Math.min((_hrGuest.relationship ?? 0) + 6, 100)>>
+			<<you>>
+				She's right that nobody told her. We'll sort out the rules properly. But I'm not going to have this out in front of everyone.
+			<</you>>
+			<br />
+			Blair's face did not move. She turned off the stove, wiped her hands on a rag, and set the rag down very straight on the counter.
+			<br /><br />
+			<<blair>>
+				I see.
+			<</blair>>
+			<br />
+			She walked out. A little later you saw her carrying her pillow across the yard toward the guesthouse. She had not slammed any doors. That was how you knew how bad it was.
+			<br /><br />
+			<strong>(Blair: Relationship −8, Happy −15, and she moved to the guesthouse. You can ask her to come back from her room. <<=_hrName>>: Relationship +6.)</strong>
+			<br /><br />
+			<<link 'Sit down at the table'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+
+	<div id="hr_mediate">
+		<<set _hrMediateLabel = 'Make them both sit down and talk it through'>>
+		<<linkreplace _hrMediateLabel>>
+			<<run $('#hr_blair, #hr_guest').hide()>>
+			<<if $player.int >= 30 || setup.percentageChance(40)>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 4, 100)>>
+				<<set _hrGuest.relationship = Math.min((_hrGuest.relationship ?? 0) + 4, 100)>>
+				<<set $player.goodwill += 1>>
+				You pulled out two chairs and put a bowl in front of each of them, and told them nobody was leaving until they had each said what they actually wanted. It took an hour and one burnt loaf. By the end Blair had admitted she was frightened of being the only one in the house who was not allowed to lose her temper, and <<=_hrName>> had admitted that <<=_hrShe>> had never been told what the rules were for.
+				<br /><br />
+				They did not hug. But they split the last of the soup.
+				<br /><br />
+				<strong>(Blair: Relationship +4. <<=_hrName>>: Relationship +4. Goodwill +1.)</strong>
+			<<else>>
+				<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 3, -100)>>
+				<<set _hrGuest.relationship = Math.max((_hrGuest.relationship ?? 0) - 5, -100)>>
+				You tried to make them sit down and talk. It lasted about forty seconds, until each of them noticed that the other had not been listening. You ended up in the middle of a row about something that was not the thing it had begun about, with the two of them equally annoyed at you.
+				<br /><br />
+				<strong>(Blair: Relationship −3. <<=_hrName>>: Relationship −5.)</strong>
+			<</if>>
+			<br /><br />
+			<<link 'Leave them to it'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>

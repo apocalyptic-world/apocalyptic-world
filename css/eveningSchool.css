@@ -1,0 +1,202 @@
+/* Evening school class grid (School passage, 18:00-21:00) */
+.es-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media only screen and (max-width: 600px) {
+  .es-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.es-card {
+  --es-accent: #aaa;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 4px solid var(--es-accent);
+  border-radius: 8px;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.es-class-mechanic   { --es-accent: #5b8db8; }
+.es-class-shopkeeper { --es-accent: #d4a72c; }
+.es-class-doctor     { --es-accent: #d9534f; }
+.es-class-teacher    { --es-accent: #4caf7a; }
+.es-class-cook       { --es-accent: #e08a3c; }
+
+.es-card-label {
+  color: var(--es-accent);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 105%;
+}
+
+.es-card-icon {
+  font-size: 120%;
+  margin-right: 2px;
+}
+
+.es-card-text {
+  font-style: italic;
+  line-height: 1.35;
+  flex-grow: 1;
+}
+
+.es-card .link-internal {
+  margin: 0;
+}
+
+.es-card-students {
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.es-student {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.es-adv {
+  margin-left: 2px;
+}
+
+.es-empty {
+  color: #777;
+  font-style: italic;
+}
+
+.es-roster-label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* ── Night school notice board (School, outside class hours) ───────────── */
+.es-board {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.es-notice {
+  flex: 2 1 300px;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 4px solid #8a8a8a;
+  border-radius: 8px;
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.es-notice-card {
+  flex: 1 1 200px;
+  border-top-color: #4caf7a;
+}
+
+.es-notice p {
+  margin: 0;
+}
+
+.es-notice-title,
+.es-notice-heading {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 105%;
+}
+
+.es-notice-card .es-notice-heading {
+  color: #4caf7a;
+}
+
+.es-notice-sub {
+  color: #9a958e;
+  font-size: 92%;
+}
+
+.es-notice-status {
+  font-style: italic;
+  padding: 6px 10px;
+  border-left: 3px solid #8a8a8a;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.es-notice-classes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.es-notice-classes li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.es-notice-classes li:last-child {
+  border-bottom: none;
+}
+
+.es-notice-icon {
+  flex: 0 0 auto;
+  width: 1.4em;
+  text-align: center;
+}
+
+.es-notice-class {
+  flex: 1 1 auto;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 92%;
+  color: var(--es-accent);
+}
+
+.es-notice-teacher {
+  font-weight: bold;
+}
+
+.es-wanted {
+  font-size: 80%;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d9534f;
+  border: 1px solid rgba(217, 83, 79, 0.6);
+  border-radius: 999px;
+  padding: 0 8px;
+}
+
+.es-notice-foot {
+  font-size: 90%;
+  color: #9a958e;
+  font-style: italic;
+}
+
+.es-notice-count {
+  font-size: 90%;
+  color: #9a958e;
+}
+
+.es-notice-count[aria-label] {
+  cursor: help;
+  border-bottom: 1px dotted #9a958e;
+}

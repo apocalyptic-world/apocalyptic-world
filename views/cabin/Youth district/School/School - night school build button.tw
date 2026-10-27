@@ -1,0 +1,22 @@
+:: School - night school build button
+/* Build button for the night school extension, shared by the introduction event and School.
+   Greyed out without the materials (setup.eveningSchool.buildCost) or outside 9am-10pm.
+   Takes 2 hours; during the day school it waits until the children leave at 3pm. */
+<<set _nsCost = setup.eveningSchool.buildCost>>
+<<set _nsCostText = Object.keys(_nsCost).map(k => _nsCost[k] + ' ' + Item.get(k).name + ' (have ' + setup.cabinInventory.count(k) + ')').join(', ')>>
+<<if !setup.eveningSchool.canAffordBuild()>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Build the night school extension (not enough materials)
+	</div>
+<<elseif !setup.eveningSchool.canStartBuild()>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Build the night school extension (can only be started between 9am and 10pm)
+	</div>
+<<else>>
+	<<set _nsBuildLabel = 'Build the night school extension' + (setup.eveningSchool.buildWaitsForSchool() ? ' (will begin at the end of school day)' : '')>>
+	<<link `_nsBuildLabel`>>
+		<<run setup.eveningSchool.payBuild()>>
+		<<goto 'School - night school built'>>
+	<</link>>
+<</if>>
+<div class="link-desc">Requires: <<=_nsCostText>> &bull; 2 hours</div>

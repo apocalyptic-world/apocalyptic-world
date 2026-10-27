@@ -39,7 +39,7 @@ They came at dawn. <<= _refCount>> survivor<<= _refCount > 1 ? 's' : ''>> from <
 <</sayNpc>>
 <br />
 
-<<set _refRoomLeft = $guesthouseLimit - $guests.length>>
+<<set _refRoomLeft = setup.guestRoom.hasRoom() ? setup.guestRoom.freeBeds() : 0>>
 
 <div id="ref_open">
 <<if _refRoomLeft >= 1>>

@@ -77,6 +77,24 @@
 	<<elseif $game.foodSabotageDiscovery && $game.cabinName>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Kitchen Sabotage'>>
+	<<elseif $game.feverEvent && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Fever in the house'>>
+	<<elseif $game.betrayal && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Gone in the night'>>
+	<<elseif $game.loyaltyTrial && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Loyalty trial'>>
+	<<elseif $game.firstWords && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - First words'>>
+	<<elseif setup.blair.bountyReady() && setup.percentageChance(5)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Blair [Event] - Price on her head'>>
+	<<elseif setup.blair.houseRulesReady() && setup.percentageChance(5)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Blair [Event] - House rules'>>
 	<<elseif $characters?.elsa?.quests?.attack_day && !$characters?.elsa?.quests?.new_home>>
 		<<goto 'Elsa - new home'>>
 	<<elseif $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
@@ -107,7 +125,7 @@
 		<<else>>
 			<<goto 'Event: A lone survivor: gift'>>
 		<</if>> 
-	<<elseif !($game.location.nursery ?? false) && !($player.quests?.nursery_request ?? false) && !($characters.blair.quests?.nursery ?? false) && setup.filterNPCs($guests, {'pregnancy_gte': 1})[0]?.length && setup.percentageChance(40)>>
+	<<elseif !($game.location.nursery ?? false) && !($player.quests?.nursery_request ?? false) && !($characters.blair.quests?.nursery ?? false) && setup.filterNPCs($guests, {'pregnancy_gte': 8})[0]?.length && setup.percentageChance(40)>>
 		<<set $player.quests.nursery_request = true>>
 		<<goto 'Event: Nursery request'>>
 	<<elseif $guests.filter(function(g) { return setup.getAge(g) >= 18 && [0,2].includes(g.gender) && !(g.traits ?? []).includes('feral'); }).length >= 4 && setup.percentageChance(30) && !$player.quests.bathhouse_talk && $game.day > 80>>
@@ -150,10 +168,10 @@
 		<<set $tmpSettlement = _stPick.id>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - Settlement trader'>>
-	<<elseif $game.cabinName && setup.percentageChance(1) && (($player?.quests?.gateDoneDay ?? 0 + 60) < $game.day)>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && ((($player?.quests?.gateDoneDay ?? 0) + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Base attack'>>
-	<<elseif $game.cabinName && setup.percentageChance(1) && (($player?.quests?.gateDoneDay ?? 0 + 60) < $game.day)>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && ((($player?.quests?.gateDoneDay ?? 0) + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - Base attack with car'>>
 	<<elseif $game.cabinName && isMetChar('rodger') && ($characters.rodger.quests.horse ?? false) && !$player.horse && setup.percentageChance(1)>>
@@ -162,7 +180,7 @@
 	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
-	<<elseif ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance(3) && setup.baseIntruderChance()>>
+	<<elseif ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance($game.outbreak ? 6 : 3) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<if setup.percentageChance(50)>>
 			<<goto 'Event - Medicine mob'>>

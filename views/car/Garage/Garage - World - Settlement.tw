@@ -120,9 +120,11 @@
 	<</link>>
 <</if>>
 <<if setup.settlements.isFriendly(_s) || setup.settlements.isAllied(_s)>>
-	<<link 'Recruit'>>
-		<<goto 'Garage - World - Recruit'>>
-	<</link>>
+	<<if setup.guestRoom.hasRoom()>>
+		<<link 'Recruit'>>
+			<<goto 'Garage - World - Recruit'>>
+		<</link>>
+	<</if>>
 	<<link 'Get Intel'>>
 		<<goto 'Garage - World - Intel'>>
 	<</link>>
@@ -149,6 +151,12 @@
 		<</linkreplace>>
 		</div>
 	<</if>>
+<</if>>
+<<if _leader && setup.settlements.canLeaderNight(_s, $game.day)>>
+	<<set _lnLabel = 'Stay the night with ' + _leader.name>>
+	<<link _lnLabel>>
+		<<goto 'Garage - World - Leader Night'>>
+	<</link>>
 <</if>>
 <<if _leader && (setup.settlements.isFriendly(_s) || setup.settlements.isAllied(_s))>>
 	<<link 'Speak with Leader'>>

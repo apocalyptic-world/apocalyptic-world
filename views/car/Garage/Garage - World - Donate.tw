@@ -61,6 +61,10 @@ You haul out your supplies and spread them in front of <<= _dnS.name>>. No deal,
 	<<else>>
 		<span style="color: #e09855;">They have taken all the goodwill they will accept today (<<= _dnCap>> / <<= _dnCap>>).</span>
 	<</if>>
+	<<if setup.settlements.hasLeaderBond(_dnS, $game.day) && setup.settlements.isAllied(_dnS)>>
+		<br />
+		<span style="color: #5599e0;">Your bond with their leader is still fresh. Your gifts count for more.</span>
+	<</if>>
 </div>
 
 <<set _dnHasAny = false>>

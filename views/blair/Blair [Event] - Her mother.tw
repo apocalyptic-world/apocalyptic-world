@@ -1,0 +1,162 @@
+:: Blair \[Event\] - Her mother [bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br />
+<<if !setup.blair.motherTalkReady()>>
+	<<goto 'Bedroom'>>
+<<else>>
+	<<set $locationEvents.bedroom = true>>
+	<<set $characters.blair.quests.mother_talk_day = $game.day>>
+	<<set _hmReply = $characters.negan?.quests?.barter_reply ?? 'none'>>
+	<<set _hmGuest = $characters.negan?.quests?.barter_npc>>
+
+	<center>
+		<<image 'places/cabin/blair_mother.jpg'>>
+	</center>
+	<br />
+	She was awake when you came in, sitting on the edge of the bed with something small and faded balled in her hands. A scrap of blue cloth, frayed at every edge, the colour long since washed out of it.
+	<br /><br />
+	<<blair>>
+		Dad asked you if I'd told you how she died. I never have. I think I was waiting until I knew what I wanted you to do with it.
+	<</blair>>
+	<br />
+	You sat down beside her and said you were listening.
+	<br /><br />
+	<<blair>>
+		Her name was Marian. She had this laugh that made everybody in the room feel stupid for worrying.
+	<</blair>>
+	<br />
+	She smoothed the cloth against her knee with one thumb, again and again.
+	<br /><br />
+	<<blair>>
+		They came for the car. Dad was out in the field. She stood in front of it with a shovel, and she told me to go down to the cellar and count to a thousand, and not to come up until I'd done it twice. So I counted to a thousand. And then I counted to a thousand again.
+	<</blair>>
+	<br />
+	Her voice stayed even. It was the evenness of someone who had said these words to herself in the dark more times than she had ever said them aloud.
+	<br /><br />
+	<<blair>>
+		When I came up they were gone. So was the car. All I remember of the men is their jackets. Grey. With the same patch on the arm. I saw it again on the paper Dad gave you. And Dad told me where he sent you. The Sanctuary. He told me the men there wear it.
+	<</blair>>
+	<br />
+	She looked at you then, directly, for the first time since you had sat down.
+	<br /><br />
+	<<blair>>
+		Tell me what you saw there. I want to know what kind of man runs it.
+	<</blair>>
+	<br /><br />
+
+	<<if _hmReply === 'gave'>>
+		You told her. All of it: the office, the chains, the deck. And what Negan had asked you for, and what you had given him. <<if _hmGuest>>The name you had said out loud: <<=_hmGuest.name>>.<</if>>
+		<br /><br />
+		She did not move for a long time. The cloth stopped in her hands.
+		<br /><br />
+		<<blair>>
+			You gave him a person. Those people. The ones with the patch.
+		<</blair>>
+		<br />
+		It was not anger. It was worse: it was the voice of someone who has just had to decide whether she can keep loving something she hates the shape of.
+		<br /><br />
+		<<blair>>
+			I need you to promise me something.
+		<</blair>>
+		<br /><br />
+		<div id="hm_promise">
+			<<set _hmPromiseLabel = 'Promise her you will never give anyone to the Sanctuary again'>>
+			<<linkreplace _hmPromiseLabel>>
+				<<run $('#hm_refuse').hide()>>
+				<<set $characters.blair.quests.mother_talk_reply = 'promised'>>
+				<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 6, 100)>>
+				<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 5, 100)>>
+				<<you>>
+					Never again. Not for caps, not for anything. I swear it on her name.
+				<</you>>
+				<br />
+				She closed her hand around the cloth and held it against her chest for a long time, and finally let her forehead rest on your shoulder.
+				<br /><br />
+				<strong>(Blair: Relationship +6, Happy +5.)</strong>
+				<br /><br />
+				<<link 'Hold her'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+		<div id="hm_refuse">
+			<<set _hmRefuseLabel = 'Tell her you cannot promise that'>>
+			<<linkreplace _hmRefuseLabel>>
+				<<run $('#hm_promise').hide()>>
+				<<set $characters.blair.quests.mother_talk_reply = 'refused_promise'>>
+				<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 10, -100)>>
+				<<you>>
+					I can't promise what I don't know I'll be able to keep. I'm sorry.
+				<</you>>
+				<br />
+				She nodded slowly, the way people nod when they have confirmed a fear. She folded the cloth and put it away in the drawer, and when she lay down she lay facing the wall.
+				<br /><br />
+				<strong>(Blair: Relationship −10.)</strong>
+				<br /><br />
+				<<link 'Lie down'>>
+					<<goto 'Bedroom'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+
+	<<elseif _hmReply === 'refused'>>
+		You told her. The office, the chains, the deck, and what Negan had asked for, and that you had said no.
+		<br /><br />
+		<<blair>>
+			You said no to him. To his face.
+		<</blair>>
+		<br />
+		<<set $characters.blair.quests.mother_talk_reply = 'proud'>>
+		<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 10, 100)>>
+		<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+		Something in her face straightened, and for a moment you saw the girl who had counted to a thousand, twice, and had come up the cellar stairs anyway.
+		<br /><br />
+		<<blair>>
+			Mum would have liked you. She'd have said you were an idiot, and then she'd have liked you.
+		<</blair>>
+		<br />
+		<strong>(Blair: Relationship +10, Happy +10.)</strong>
+		<br /><br />
+		<<link 'Pull her against you'>>
+			<<goto 'Bedroom'>>
+		<</link>>
+
+	<<elseif _hmReply === 'negotiated'>>
+		You told her. The office, the chains, the deck, and that Negan had asked for a girl, and that you had paid him 200 caps instead.
+		<br /><br />
+		<<set $characters.blair.quests.mother_talk_reply = 'ambivalent'>>
+		<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 4, 100)>>
+		<<blair>>
+			You paid him. So he owns a little piece of us now. But you didn't give him a person. I don't know if that's better or just cleverer.
+		<</blair>>
+		<br />
+		She exhaled, long and unsteady, and set her head against your arm.
+		<br /><br />
+		<<blair>>
+			I think I'm glad. I think I'm also scared. I think both things can be true.
+		<</blair>>
+		<br />
+		<strong>(Blair: Relationship +4.)</strong>
+		<br /><br />
+		<<link 'Stay with her until she sleeps'>>
+			<<goto 'Bedroom'>>
+		<</link>>
+
+	<<else>>
+		You told her what you had seen: the deck full of chained workers, the guards on the rails, the man who sat in the middle of it all and smiled. You did not make it sound better than it was.
+		<br /><br />
+		<<set $characters.blair.quests.mother_talk_reply = 'warm'>>
+		<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 5, 100)>>
+		<<blair>>
+			Thank you. Nobody ever tells me the truth about that part. They tell me what I can handle.
+		<</blair>>
+		<br />
+		She leaned into you, and for a while neither of you said anything.
+		<br /><br />
+		<strong>(Blair: Relationship +5.)</strong>
+		<br /><br />
+		<<link 'Stay with her until she sleeps'>>
+			<<goto 'Bedroom'>>
+		<</link>>
+	<</if>>
+<</if>>

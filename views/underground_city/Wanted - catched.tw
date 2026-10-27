@@ -73,7 +73,7 @@ Once you have <<= _wantedPron>> secure, you check <<= setup.pronounceWhos($wante
 		<</link>>
 	<</if>>
 	<<set _rel = ($slaves.length < $basementLimit) ? 15 : 30>>
-	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+	<<if setup.guestRoom.hasRoom()>>
 		<<linkreplace 'Invite her home as a guest'>>
 			<<set $wanted[$wantedId].relationship += _rel>>
 

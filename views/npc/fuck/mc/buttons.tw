@@ -37,6 +37,28 @@
             <<horny_reset>>
             <<goto `passage()`>>
         <</link>>
+	<<elseif $sexAction == 'pussy' && _legLock>>
+        <<set _legLockIn = 'Let her legs pull you in and cum in her pussy'>>
+        <<link _legLockIn>>
+            <<horny_reset>>
+            <<set $sexLegLock = 'in'>>
+            <<set $sexAction = 'cum_in_pussy'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<set _legLockOutPussy = 'Pry her legs open, pull out and cum on her pussy'>>
+        <<link _legLockOutPussy>>
+            <<horny_reset>>
+            <<set $sexLegLock = 'out'>>
+            <<set $sexAction = 'cum_on_pussy'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<set _legLockOutStomach = 'Pry her legs open, pull out and cum on her stomach'>>
+        <<link _legLockOutStomach>>
+            <<horny_reset>>
+            <<set $sexLegLock = 'out'>>
+            <<set $sexAction = 'cum_on_stomach'>>
+            <<goto `passage()`>>
+        <</link>>
 	<<elseif $sexAction == 'pussy'>>
         <<link 'Cum in pussy'>>
             <<horny_reset>>
@@ -84,17 +106,19 @@
 	        <<goto `passage()`>>
 	    <</link>>
 	<</if>>
-    <<link 'Cum on face'>>
-        <<horny_reset>>
-	    <<set $sexAction = 'cum_on_face'>>
-	    <<goto `passage()`>>
-	<</link>>
-    <<link 'Cum in mouth'>>
-        <<horny_reset>>
-	    <<set $sexAction = 'cum_in_mouth'>>
-	    <<goto `passage()`>>
-	<</link>>
-		
+    <<if !(_legLock && $sexAction == 'pussy')>>
+        <<link 'Cum on face'>>
+            <<horny_reset>>
+            <<set $sexAction = 'cum_on_face'>>
+            <<goto `passage()`>>
+        <</link>>
+        <<link 'Cum in mouth'>>
+            <<horny_reset>>
+            <<set $sexAction = 'cum_in_mouth'>>
+            <<goto `passage()`>>
+        <</link>>
+    <</if>>
+
 <<else>>
         <<if $player.energy >= 5>>
             <div id="action-buttons">
@@ -125,7 +149,7 @@
      <</if>>
 
      <<link 'End'>>
-	<<unset $sexAction, $sexForced>>
+	<<unset $sexAction, $sexForced, $sexLegLock>>
         <<if $oldTmpGirlLocation>>
             <<set $tmpGirl.location = $oldTmpGirlLocation>>
             <<unset $oldTmpGirlLocation>>

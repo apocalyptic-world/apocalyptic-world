@@ -150,6 +150,13 @@
 		<</if>>
 	<</if>>
 <<else>>
+	<<for _killInvItem, _killInvCount range ($slaves[$slaveId].inventory ?? {})>>
+		<<run setup.npcInventoryRemove($slaves[$slaveId], _killInvItem, _killInvCount)>>
+		<<pickup $backpack _killInvItem _killInvCount>>
+	<</for>>
+	<<if $slaves[$slaveId].buttplug>>
+		<<pickup $backpack 'buttplug' 1>>
+	<</if>>
 	<<slaveRemove $slaveId>>
 <</if>>
 

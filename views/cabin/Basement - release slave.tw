@@ -24,7 +24,7 @@ You look at <strong><<=setup.displayName($tmpGirl)>></strong> and open <<=setup.
 <<set _linkMove = 'Move ' + setup.pronounceWho($tmpGirl) + ' to the guest house'>>
 <<set _linkLeave = 'Leave ' + setup.pronounceWho($tmpGirl) + ' in cell'>>
 <<set _linkRelease = 'Release ' + setup.pronounceWho($tmpGirl)>>
-<<if $tmpGirl.relationship >= 30 && ($game.location.guesthouse ?? false) && (($guesthouseLimit ?? 3) - ($guests ?? []).length) > 0>>
+<<if $tmpGirl.relationship >= 30 && setup.guestRoom.hasRoom()>>
 	<<link `_linkMove`>>
 		<<moveSlaveToGuest $tmpGirl $slaveId>>
 		<<unset $slaveId>>

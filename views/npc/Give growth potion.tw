@@ -49,14 +49,23 @@ Then, it began.
 <<if _ageStart < 18 && _ageEnd >= 18>>
 	<<set _isAdult = true>>
 	<<set $tmpGirl.grownByPotion = true>>
-	<strong><<=setup.displayName($tmpGirl)>> is now adult and moved into the guest house.</strong>
+	<<if typeof $childId !== 'undefined' && setup.guestRoom.adultMustWait()>>
+		<<set _waitsForBed = true>>
+		<strong><<=setup.displayName($tmpGirl)>> is now adult, but there is no free bed in the guest house. <<=setup.pronounceWhat($tmpGirl, true)>> has to stay in the nursery and will get upset every day until a bed is free.</strong>
+	<<else>>
+		<strong><<=setup.displayName($tmpGirl)>> is now adult and moved into the guest house.</strong>
+	<</if>>
 	<br /><br />
 <</if>>
 <<link 'Leave'>>
 	<<unset $yearsGrow>>
 	<<if _isAdult>>
-		<<if typeof $childId !== 'undefined'>>
+		<<if typeof $childId !== 'undefined' && _waitsForBed>>
+			<<set $nursery[$childId] = $tmpGirl>>
+			<<goto 'Nursery'>>
+		<<elseif typeof $childId !== 'undefined'>>
 			<<run setup.npc.addHistory($tmpGirl, 'grown_up')>>
+			<<run delete $tmpGirl.teach; delete $tmpGirl.teachAdvStudy>> /* child school fields; adults use teach for evening class */
 			<<run $guests.push($tmpGirl)>>
 			<<run $nursery.splice($childId, 1)>>
 			<<goto 'Nursery'>>

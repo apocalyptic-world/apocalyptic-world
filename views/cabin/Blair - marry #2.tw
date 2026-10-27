@@ -23,13 +23,16 @@ The father's eyes met yours as you entered, and he nodded with a mix of pride an
 As you sealed your vows with a gentle kiss and ring, the gathered witnesses erupted into a soft applause, your emotions released in a moment of shared joy. It was a fleeting respite from the hardships of your reality, but it was a reminder that even in the darkest of times, love and unity have the power to prevail.
 <br /><br />
 <<link 'Start small after ceremony'>>
-	<<set $characters.blair.family = {
-		father: 'vincent',
-		husband: 'mc'
-	}>>
+	<<set $characters.blair.family ??= {}>>
+	<<set $characters.blair.family.father ??= 'vincent'>>
+	<<set $characters.blair.family.husband = 'mc'>>
+	<<set $characters.blair.married = true>>
+	<<run setup.npc.addHistory($characters.blair, 'married', { with: 'mc' })>>
 	<<set $player.family ??= {}>>
 	<<set $player.family.wives ??= []>>
-	<<set $player.family.wives.push($characters.blair.id)>>
+	<<if !$player.family.wives.includes($characters.blair.id)>>
+		<<run $player.family.wives.push($characters.blair.id)>>
+	<</if>>
 	<<set $characters.blair.quests.married = true>>
 	<<drop $backpack 'wedding_ring'  1>>
 	<<goto 'Blair - marry #3'>>

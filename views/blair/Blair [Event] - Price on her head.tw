@@ -1,0 +1,310 @@
+:: Blair \[Event\] - Price on her head [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _bhKid = setup.blair.youngestKid()>>
+<<set _bhGuards = setup.getPersonsForLocation($guests, 'guard')>>
+<<set _bhBlairWord = setup.blair.married() ? 'my husband' : 'you'>>
+
+<center>
+	<<image 'places/cabin/bounty_hunters_gate.jpg'>>
+</center>
+<br />
+
+You were at the gate when the dust on the road turned into three men.
+<br /><br />
+They did not look like raiders. Raiders were loud. These walked like men who got paid by the day and had never once been late. One of them carried a folded paper in one hand and a crossbow in the other, a bolt already seated in the groove, and he did not bother to hide either.
+<br /><br />
+<<set _bhLeader = null>>
+<<newguy>>
+<<set _bhLeader = $tmpGuy>>
+<<unset $tmpGuy>>
+<<sayNpc _bhLeader>>
+	Evening. Or whatever it is. We're looking for a girl. Blonde, grey eyes, about this tall.
+<</sayNpc>>
+<br />
+He unfolded the paper. You knew it before you saw it: the same drawing you had seen on the wall in the underground city, the same number under it. <strong>400 caps.</strong>
+<br /><br />
+<<sayNpc _bhLeader>>
+	Mr. Soprano still pays. And he doesn't forget. We've been four towns and a river looking for this one.
+<</sayNpc>>
+<br />
+Behind you, you heard the gate latch.
+<br /><br />
+<<blair>>You don't have to do this.<</blair>>
+<br />
+It was barely a whisper. She had come up quietly, and she did not look at the men. She looked at you.
+<br /><br />
+<<if setup.blair.pregnant()>>
+	She stood very still with one hand on her stomach, the way a woman stands when she knows she cannot run.
+	<br /><br />
+<<elseif _bhKid>>
+	She had <<=_bhKid.name>> on her hip and her other hand pressed flat against the child's back, as though a hand could stop a bolt.
+	<br /><br />
+<</if>>
+<<if setup.blair.ashleyVisits()>>
+	<<sayNpc _bhLeader>>
+		Someone at a bar in the city said she'd been seen near here. A redhead who drinks too much and talks too much. Lovely girl. Terrible at secrets.
+	<</sayNpc>>
+	<br />
+	You thought of Ashley, and of who might have been listening.
+	<br /><br />
+<</if>>
+<<sayNpc _bhLeader>>
+	We can do this the easy way. Hand her over, you keep the rest of your people, nobody has to learn how fast I can reload this thing.
+<</sayNpc>>
+<br />
+
+<div id="bh_fight">
+	<<set _bhFightLabel = 'Tell them to leave, and fight if they refuse'>>
+	<<link _bhFightLabel>>
+		<<set $prevFight = {}>>
+		<<generateEnemies 3 0 3>>
+		<<fight $enemies 'Blair [Event] - Price on her head - won' 'Blair [Event] - Price on her head - lost' false _bhGuards>>
+		<<set $fight.skipEndingLost = true>>
+	<</link>>
+</div>
+
+<<if $player.money >= 400>>
+	<div id="bh_pay">
+		<<set _bhPayLabel = 'Pay the 400 caps'>>
+		<<linkreplace _bhPayLabel>>
+			<<run $('#bh_fight, #bh_bluff, #bh_decoy').hide()>>
+			<<set $player.money -= 400>>
+			<<set $characters.blair.quests.bounty_reply = 'paid'>>
+			<<addmins 20>>
+			You counted it out into the leader's palm, coin by coin, in front of everybody. He did not even count it twice. He tore the poster in half and then in half again, and dropped the pieces in the dirt.
+			<br /><br />
+			<<sayNpc _bhLeader>>
+				Pleasure doing business. This one's done. Just so you know, the paper isn't the only copy.
+			<</sayNpc>>
+			<br />
+			They left the way they had come. You stood at the gate until you could not see them anymore.
+			<br /><br />
+			<strong>(−400 caps.)</strong>
+			<br /><br />
+			<<link 'Go back inside'>>
+				<<goto 'Blair \[Event\] - Price on her head - night'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+
+<div id="bh_bluff">
+	<<set _bhBluffLabel = 'Bluff: tell them the poster is years out of date'>>
+	<<linkreplace _bhBluffLabel>>
+		<<run $('#bh_fight, #bh_pay, #bh_decoy').hide()>>
+		<<if $player.int >= 40>>
+			<<set $characters.blair.quests.bounty_reply = 'bluffed'>>
+			<<addmins 20>>
+			You told them calmly, the way you would explain something to a child, that the girl on that paper had been dead for three winters, that Mr. Soprano's own men had buried her, and that anyone who had been four towns and a river looking for her might want to ask who had told him to.
+			<br /><br />
+			The leader's eyes flickered. It was not much, but it was enough. He studied the poster, then you, then the walls behind you and the people on them.
+			<br /><br />
+			<<sayNpc _bhLeader>>
+				Hm. Funny. Nobody told us that.
+			<</sayNpc>>
+			<br />
+			They did not take the poster back. They left it hanging on the gate post, and by sundown the wind had taken it.
+			<br /><br />
+			<<link 'Go back inside'>>
+				<<goto 'Blair \[Event\] - Price on her head - night'>>
+			<</link>>
+		<<else>>
+			You started to tell them and halfway through you heard how it sounded. The leader grinned, slowly, like a man being offered a free drink.
+			<br /><br />
+			<<sayNpc _bhLeader>>
+				You're a terrible liar. I like that in a customer.
+			<</sayNpc>>
+			<br />
+			It was going to be a fight now.
+			<br /><br />
+			<<link 'Fight'>>
+				<<set $prevFight = {}>>
+				<<generateEnemies 3 0 3>>
+				<<fight $enemies 'Blair [Event] - Price on her head - won' 'Blair [Event] - Price on her head - lost' false _bhGuards>>
+				<<set $fight.skipEndingLost = true>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+</div>
+
+<<set _bhDecoys = []>>
+<<for _bhI, _bhS range $slaves>>
+	<<if _bhS.gender === 0 && setup.getAge(_bhS) >= 18>>
+		<<run _bhDecoys.push(_bhI)>>
+	<</if>>
+<</for>>
+<<if _bhDecoys.length>>
+	<div id="bh_decoy">
+		<<set _bhDecoyLabel = 'Hand them a basement girl who fits the description'>>
+		<<linkreplace _bhDecoyLabel>>
+			<<run $('#bh_fight, #bh_pay, #bh_bluff').hide()>>
+			You looked back at the house. A girl in the basement, blonde enough in poor light, close enough in height. A face nobody here would ask about.
+			<br /><br />
+			<<for _bhK, _bhIdx range _bhDecoys>>
+				<<capture _bhIdx>>
+					<<set _bhName = setup.displayName($slaves[_bhIdx])>>
+					<<set _bhHandLabel = 'Hand over ' + _bhName>>
+					<<link _bhHandLabel>>
+						<<set $characters.blair.quests.bounty_reply = 'decoy'>>
+						<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 30, -100)>>
+						<<set $characters.blair.happy = Math.max(($characters.blair.happy ?? 0) - 30, -100)>>
+						<<set $player.goodwill -= 15>>
+						<<slaveRemove _bhIdx>>
+						<<addmins 30>>
+						<<goto 'Blair \[Event\] - Price on her head - night'>>
+					<</link>><br />
+				<</capture>>
+			<</for>>
+		<</linkreplace>>
+	</div>
+<</if>>
+
+
+:: Blair \[Event\] - Price on her head - won [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set $characters.blair.quests.bounty_reply = 'fought'>>
+<<set _bhLoot = randomInteger(100, 250)>>
+<<set $player.money += _bhLoot>>
+They had come for money and found the one thing money could not move: a gate full of people who were not going to let them pass. The last of them ran, and the one who stayed down did not get up fast.
+<br /><br />
+You went through their pockets. <strong>+<<=_bhLoot>> caps.</strong> The folded poster was still in one of them, and you burned it on the spot.
+<br /><br />
+Behind you Blair stood in the open gate, shaking, still holding whatever she had grabbed on the way out the door. It turned out to be a ladle.
+<br /><br />
+<<link 'Go back inside'>>
+	<<goto 'Blair \[Event\] - Price on her head - night'>>
+<</link>>
+
+
+:: Blair \[Event\] - Price on her head - lost [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set $characters.blair.quests.bounty_reply = 'lost'>>
+<<set _bhTaken = Math.min($player.money, 300)>>
+<<set $player.money -= _bhTaken>>
+<<set $player.energy = Math.max(($player.energy ?? 0) - 30, 0)>>
+You woke up in the dirt with your ears ringing. They had not gone through the gate, because by the time they had reached it there had been too many shapes on the walls and too much noise. But they had taken <strong><<=_bhTaken>> caps</strong> out of your pockets for the trouble, and they had left the poster nailed to the post, like a promise.
+<br /><br />
+"Tell her we'll be back," one of them had said as they left, almost kindly. "Tell her it's nothing personal."
+<br /><br />
+Blair was already kneeling beside you when you opened your eyes, wiping blood out of your eyebrow with the hem of her dress.
+<br /><br />
+<<link 'Go back inside'>>
+	<<goto 'Blair \[Event\] - Price on her head - night'>>
+<</link>>
+
+
+:: Blair \[Event\] - Price on her head - night [bg-bedroom]
+<h1 class="ptitle">BEDROOM</h1>
+<br />
+<<set _bhReply = $characters.blair.quests.bounty_reply ?? 'paid'>>
+<<set $characters.blair.quests.bounty_day = $game.day>>
+<<set $locationEvents.cabin = true>>
+<center>
+	<<image 'places/cabin/blair_window_night.jpg'>>
+</center>
+<br />
+She did not say anything for a long time. She sat on the edge of the bed with her arms around herself and watched the yard through the window like it might be about to change its mind.
+<br /><br />
+<<if _bhReply === 'decoy'>>
+	She did not look at you. When she finally spoke, her voice was flat.
+	<br /><br />
+	<<blair>>
+		That girl in the basement. She had a name. And you gave her to them like a sack of grain.
+	<</blair>>
+	<br />
+	You had said it was necessary. You were not sure you had believed it either.
+	<br /><br />
+	<div id="bh_sorry">
+		<<set _bhSorryLabel = 'Tell her you are sorry, and that you meant it'>>
+		<<linkreplace _bhSorryLabel>>
+			<<run $('#bh_cold').hide()>>
+			<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 8, 100)>>
+			You said it plainly. She nodded once, slowly, still not looking, and let you sit down beside her anyway.
+			<br /><br />
+			<<blair>>
+				Don't ever make me part of that again.
+			<</blair>>
+			<br />
+			<strong>(Blair: Relationship +8.)</strong>
+			<br /><br />
+			<<link 'Lie down beside her'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="bh_cold">
+		<<set _bhColdLabel = 'Tell her it was her life or a stranger\'s'>>
+		<<linkreplace _bhColdLabel>>
+			<<run $('#bh_sorry').hide()>>
+			<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 10, -100)>>
+			<<blair>>
+				Then I wish you had asked me.
+			<</blair>>
+			<br />
+			She turned off the lamp and lay down with her back to you.
+			<br /><br />
+			<strong>(Blair: Relationship −10.)</strong>
+			<br /><br />
+			<<link 'Lie down'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<<else>>
+	<<blair>>
+		They'll keep coming, won't they. Not these three. Somebody. For the rest of my life.
+	<</blair>>
+	<br />
+	<<if setup.blair.married()>>
+		You sat down beside her. She leaned into your shoulder the way a wife does when she has finally stopped pretending to be brave.
+		<br /><br />
+	<</if>>
+	<<blair>>
+		If I left, they would stop looking here. I could go far away. I could.
+	<</blair>>
+	<br /><br />
+	<div id="bh_stay">
+		<<set _bhStayLabel = 'Tell her she is not going anywhere'>>
+		<<linkreplace _bhStayLabel>>
+			<<run $('#bh_promise').hide()>>
+			<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 10, 100)>>
+			<<set $characters.blair.happy = Math.min(($characters.blair.happy ?? 0) + 10, 100)>>
+			<<you>>
+				You live here. This is your home. If they come back, they come back to me.
+			<</you>>
+			<br />
+			She laughed, once, wetly, and pressed her forehead against your shoulder.
+			<br /><br />
+			<<blair>>
+				Dad said you were a fool. I think he meant it as a compliment.
+			<</blair>>
+			<br />
+			<strong>(Blair: Relationship +10, Happy +10.)</strong>
+			<br /><br />
+			<<link 'Hold her until she falls asleep'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="bh_promise">
+		<<set _bhPromiseLabel = 'Make her promise to tell you if anyone else comes'>>
+		<<linkreplace _bhPromiseLabel>>
+			<<run $('#bh_stay').hide()>>
+			<<set $characters.blair.relationship = Math.min(($characters.blair.relationship ?? 0) + 6, 100)>>
+			<<you>>
+				No more secrets. If anyone asks about you, anyone at all, you tell me the same day.
+			<</you>>
+			<br />
+			She hesitated, then nodded, and the way she looked at you said that nobody had ever asked her for that before. Everyone had only ever asked her to hide.
+			<br /><br />
+			<strong>(Blair: Relationship +6.)</strong>
+			<br /><br />
+			<<link 'Turn off the lamp'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>

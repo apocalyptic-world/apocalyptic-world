@@ -1,0 +1,83 @@
+:: Event - First words [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _fwNpc = $game.firstWords ? setup.npc.findById($game.firstWords.id) : null>>
+<<if !_fwNpc || !(_fwNpc.traits ?? []).includes('feral')>>
+	<<unset $game.firstWords>>
+	<<goto 'Wood cabin'>>
+<<else>>
+	<<set _fwShe = setup.pronounceWhat(_fwNpc)>>
+	<<set _fwHer = setup.pronounceWho(_fwNpc)>>
+	<<set _fwHers = setup.pronounceWhos(_fwNpc)>>
+	<<set _fwGender = 'gender-' + setup.genderClass(_fwNpc)>>
+	<<set _fwTeacher = setup.firstWords.hasTeacher()>>
+	/* the dialogue widget stays silent for feral NPCs, and she is still feral when she speaks: show her through a copy without the trait */
+	<<set _fwSpeaker = Object.assign({}, _fwNpc, { traits: (_fwNpc.traits ?? []).filter(function (t) { return t !== 'feral'; }) })>>
+	<<set _fwCall = setup.npc.mcName(_fwNpc, false) || $player.name || 'you'>>
+
+	<center>
+		<<image 'places/cabin/first_words.jpg'>>
+	</center>
+	<br />
+
+	It happened in the grey hour before the house was up. You came out of your room and found <span @class="''+_fwGender+''" style="font-weight:bold"><<=_fwNpc.name>></span> sitting on the floor by your door, the way <<=_fwShe>> sometimes did, knees drawn up, watching the handle.
+	<br /><br />
+	<<if _fwTeacher>>
+		The teacher had been sitting with <<=_fwHer>> in the afternoons for weeks, patiently, pointing at things and saying their names. You had thought it was a waste of an afternoon.
+		<br /><br />
+	<</if>>
+	<<=ucfirst(_fwShe)>> held something out to you in both hands. A bright scrap of metal, the kind <<=_fwShe>> had been bringing you for months. Then <<=_fwShe>> opened <<=_fwHers>> mouth, and for a long moment nothing came out but breath.
+	<br /><br />
+	<<sayNpc _fwSpeaker>>
+		<<=_fwCall>>.
+	<</sayNpc>>
+	<br />
+	It was rough and cracked, the sound of a door that had not been opened in years. <<=ucfirst(_fwShe)>> looked as startled by it as you were. Then <<=_fwShe>> said it again, carefully, as if to check it was still there.
+	<br /><br />
+	<<sayNpc _fwSpeaker>>
+		<<=_fwCall>>. Mine.
+	<</sayNpc>>
+	<br />
+	You crouched down in front of <<=_fwHer>>. <<=ucfirst(_fwShe)>> looked back at you with the wide, careful eyes of someone standing on the edge of something very far from where <<=_fwShe>> had started.
+	<br /><br />
+
+	<div id="fw_help">
+		<<set _fwHelpLabel = 'Say her name slowly, and teach her to say it back'>>
+		<<linkreplace _fwHelpLabel>>
+			<<run $('#fw_keep').hide()>>
+			<<run setup.firstWords.helpToSpeak(_fwNpc)>>
+			<<set $game.firstWordsDay = $game.day>>
+			<<unset $game.firstWords>>
+			<<addmins 60>>
+			You pointed at <<=_fwNpc.name>> and said <<=_fwHers>> name. Then again. You said it a dozen times, slowly, and each time <<=_fwShe>> tried to shape it, and failed, and tried again, until the kitchen was full of morning light and <<=_fwShe>> said it clearly, once, and burst into tears.
+			<br /><br />
+			<<sayNpc _fwSpeaker>>
+				<<=_fwNpc.name>>. I am <<=_fwNpc.name>>.
+			<</sayNpc>>
+			<br />
+			The wildness did not go out of <<=_fwHer>> all at once. It would take time. But the thing behind <<=_fwHers>> eyes had turned and looked at you, and it was a person.
+			<br /><br />
+			<strong>(<<=_fwNpc.name>> is no longer feral. Relationship +10, Happy +15. <<=ucfirst(_fwShe)>> can be given tasks now.)</strong>
+			<br /><br />
+			<<link 'Continue'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="fw_keep">
+		<<set _fwKeepLabel = 'Pat her head and leave it at that'>>
+		<<linkreplace _fwKeepLabel>>
+			<<run $('#fw_help').hide()>>
+			<<run setup.firstWords.leaveAsIs(_fwNpc)>>
+			<<set $game.firstWordsDay = $game.day>>
+			<<unset $game.firstWords>>
+			You put the scrap in your pocket, and rested a hand on <<=_fwHers>> head, and said <<=_fwHers>> name once. <<=ucfirst(_fwShe)>> leaned into your palm with a soft, satisfied sound and said nothing more. The word had gone back wherever it came from.
+			<br /><br />
+			Some things were better left as they were. Maybe. <<=ucfirst(_fwShe)>> did not seem to mind either way.
+			<br /><br />
+			<<link 'Continue'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>

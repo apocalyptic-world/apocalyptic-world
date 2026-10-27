@@ -92,7 +92,55 @@
 <<if _basementLimitShow < 0>>
 	<<set _basementLimitShow = 0>>
 <</if>>
-Free rooms left: <strong><<=_basementLimitShow>></strong>
+<div class="list-header">
+	<span>Free cells left: <strong><<=_basementLimitShow>></strong></span>
+	<<if $slaves.length > 0>>
+		<<set $bSortPanelOpen ??= false>>
+		<<set _bsSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Basement'>>
+		<<if !_bsSelfReload>>
+			<<set $bSortPanelOpen = false>>
+		<</if>>
+		<details id="bs-sort-details">
+			<summary class="sort-summary"><small>Sort options</small></summary>
+			<div class="sort-panel">
+				<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+					<span>
+						<<if ($bsortBy !== 'N')>>
+							Sort by: <<link 'Name'>><<set $bsortBy = 'N'>><<goto 'Basement'>><</link>>
+						<<else>>
+							Sort by: <strong>Name</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($bsortBy !== 'A')>>
+							<<link 'Assignment'>><<set $bsortBy = 'A'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Assignment</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if ($bsortBy !== 'P')>>
+							<<link 'Pregnancy'>><<set $bsortBy = 'P'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Pregnancy</strong>
+						<</if>>
+					</span>
+					<span>
+						<<if (!$bsortBy || $bsortBy !== 'D')>>
+							<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
+						<<else>>
+							<strong>Arrival (default)</strong>
+						<</if>>
+					</span>
+				</div>
+			</div>
+		</details>
+		<<done>>
+			<<run document.getElementById('bs-sort-details').open = State.variables.bSortPanelOpen>>
+			<<run jQuery('#bs-sort-details').on('toggle', function() { State.variables.bSortPanelOpen = this.open; })>>
+		<</done>>
+	<</if>>
+</div>
 
 <<set _isSlaveInBasement = false>>
 <<set _suicidalSlaves = []>>
@@ -107,6 +155,9 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
 	<<set _dayOff = _isSick || _isRest>>
 
+	<<if $slaves[_i].location === 'school'>> /* evening class */
+		<<continue>>
+	<</if>>
 	<<if setup.isAtWork($slaves[_i], $weather)>>
 		<<if $slaves[_i].assignedTo === 'garden'>><<set _workingInGarden++>><</if>>
 		<<if $slaves[_i].assignedTo === 'streets'>><<set _workingOnStreets++>><</if>>
@@ -323,56 +374,8 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<</if>>
 
 	<<set _slaveSorter = setup.npcSortedIndices($slaves, $bsortBy, $player.companions, 'slave:')>>
-	<<set $bSortPanelOpen ??= false>>
-	<<set _bsSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Basement'>>
-	<<if !_bsSelfReload>>
-		<<set $bSortPanelOpen = false>>
-	<</if>>
 
 	<table id="slaves" class="npc-list">
-
-		<tr class="item">
-			<td colspan="2">
-				<details id="bs-sort-details">
-					<summary class="sort-summary"><small>Sort options</small></summary>
-					<div class="sort-options" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
-						<span>
-							<<if ($bsortBy !== 'N')>>
-								Sort by: <<link 'Name'>><<set $bsortBy = 'N'>><<goto 'Basement'>><</link>>
-							<<else>>
-								Sort by: <strong>Name</strong>
-							<</if>>
-						</span>
-						<span>
-							<<if ($bsortBy !== 'A')>>
-								<<link 'Assignment'>><<set $bsortBy = 'A'>><<goto 'Basement'>><</link>>
-							<<else>>
-								<strong>Assignment</strong>
-							<</if>>
-						</span>
-						<span>
-							<<if ($bsortBy !== 'P')>>
-								<<link 'Pregnancy'>><<set $bsortBy = 'P'>><<goto 'Basement'>><</link>>
-							<<else>>
-								<strong>Pregnancy</strong>
-							<</if>>
-						</span>
-						<span>
-							<<if (!$bsortBy || $bsortBy !== 'D')>>
-								<<link 'Arrival (default)'>><<set $bsortBy = 'D'>><<goto 'Basement'>><</link>>
-							<<else>>
-								<strong>Arrival (default)</strong>
-							<</if>>
-						</span>
-					</div>
-				</details>
-				<<done>>
-					<<run document.getElementById('bs-sort-details').open = State.variables.bSortPanelOpen>>
-					<<run jQuery('#bs-sort-details').on('toggle', function() { State.variables.bSortPanelOpen = this.open; })>>
-				<</done>>
-			</td>
-		</tr>
-
 	<<for _sortOrder, _i range _slaveSorter>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
@@ -383,7 +386,7 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 		<<if typeof $slaves[_i].color !== 'undefined' >>
 			<<set _customColorStyle = ' npc-color color-' + $slaves[_i].color >>
 		<</if>>
-		<<if setup.isAtWork($slaves[_i], $weather)>>
+		<<if setup.isAtWork($slaves[_i], $weather) || $slaves[_i].location === 'school'>>
 			<<continue>>
 		<</if>>
 
@@ -504,6 +507,13 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 						<br />
 						<<link 'Yes' 'Basement'>>
 							<<assignedTo $slaves[_i] 'none'>>
+							<<for _killInvItem, _killInvCount range ($slaves[_i].inventory ?? {})>>
+								<<run setup.npcInventoryRemove($slaves[_i], _killInvItem, _killInvCount)>>
+								<<pickup $backpack _killInvItem _killInvCount>>
+							<</for>>
+							<<if $slaves[_i].buttplug>>
+								<<pickup $backpack 'buttplug' 1>>
+							<</if>>
 							<<slaveRemove _i>>
 							<<dialogclose>>
 							<<set $player.reputation++>>

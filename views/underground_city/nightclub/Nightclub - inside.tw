@@ -27,6 +27,13 @@
 	<</link>>
 <</if>>
 
+<<if ($game.location.gloryhole ?? false) && ($player?.quests?.gloryholeJobAsked ?? false) && !($player?.quests?.gloryholeJob ?? false)>>
+	<<link 'Talk to the manager'>>
+		<<addmins 5>>
+		<<goto 'Nightclub - bathroom job'>>
+	<</link>>
+<</if>>
+
 <<if isMetChar('dom') && $characters.dom.quests.quest3_done_day && ($characters.dom.quests.quest3_done_day + 10) < $game.day && !$characters.dom.quests.quest4>>
 	<<set $characters.dom.quests.quest4 = true>>
 	<<set $characters.dom.quests.quest4_done_day = $game.day>>

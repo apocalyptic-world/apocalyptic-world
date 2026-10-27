@@ -1,0 +1,173 @@
+:: Event - Gone in the night [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _gnB = $game.betrayal>>
+<<if !_gnB>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<set _gnNpc = _gnB.npc>>
+<<set _gnShe = setup.pronounceWhat(_gnNpc)>>
+<<set _gnHer = setup.pronounceWho(_gnNpc)>>
+<<set _gnHers = setup.pronounceWhos(_gnNpc)>>
+<<set _gnGender = 'gender-' + setup.genderClass(_gnNpc)>>
+
+<center>
+	<<image 'places/cabin/gone_in_the_night.jpg'>>
+</center>
+<br />
+
+<<set _gnWitnesses = $guests.filter(function (g) { return setup.getAge(g) >= 18 && g.id !== _gnNpc.id; })>>
+<<set _gnWitness = _gnWitnesses.length ? setup.getRandomElement(_gnWitnesses) : null>>
+
+<<if _gnB.kind === 'theft'>>
+	The back door was hanging open when you came down. The storeroom had been picked over in the dark, quickly and quietly, by someone who knew exactly where everything was. <strong><<=setup.betrayal.lootText(_gnB.loot)>></strong> were gone. <span @class="''+_gnGender+''" style="font-weight:bold"><<=_gnNpc.name>></span>'s bed hadn't been slept in.
+	<br /><br />
+	<<if _gnWitness>>
+		<<sayNpc _gnWitness>>
+			<<=_gnNpc.name>> was talking about leaving all week. I thought it was just talk. I should've said something.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	One set of prints led from the back door to the treeline, deep at the heel the way they are when someone carries more than <<=_gnShe>> came with. It was still early. <<=ucfirst(_gnShe)>> couldn't be far.
+<<elseif _gnB.kind === 'intel'>>
+	Nothing was missing, which was exactly what bothered you. The gate had been left unlatched before dawn, and <span @class="''+_gnGender+''" style="font-weight:bold"><<=_gnNpc.name>></span>'s bed was empty.
+	<br /><br />
+	<<if _gnWitness>>
+		<<sayNpc _gnWitness>>
+			I saw <<=_gnHer>> out by the road before it got light. <<=ucfirst(_gnShe)>> was heading toward <<=_gnB.leak.name>>'s land. I thought <<=_gnShe>> was just going for a walk.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<=ucfirst(_gnShe)>> had spent weeks inside your walls. <<=ucfirst(_gnShe)>> knew where the guards stood, how thin the night watch was, how many people slept in the house. And <<=_gnShe>> was taking all of it to <strong><<=_gnB.leak.name>></strong>.
+<<else>>
+	A folded piece of paper sat on the kitchen table, weighed down with a cup, your name on it in careful, uneven handwriting.
+	<br /><br />
+	<<if _gnNpc.relationship < 0>>
+		<em>I never wanted to be here. I did what I was told and I kept my mouth shut. Don't come looking for me.</em>
+	<<else>>
+		<em>I tried. I really did. But I can't keep living like this, and I'd rather go before I turn into someone I don't like. Thank you for the food. Please don't come after me.</em>
+	<</if>>
+	<br /><br />
+	<span @class="''+_gnGender+''" style="font-weight:bold"><<=_gnNpc.name>></span> was gone before sunrise. The bed was made.
+<</if>>
+<br /><br />
+
+<div id="gn_chase">
+	<<if _gnB.kind === 'note'>>
+		<<set _gnChaseLabel = 'Go after ' + _gnHer + ' and talk'>>
+		<<linkreplace _gnChaseLabel>>
+			<<run $('#gn_leave').hide()>>
+			<<addmins 90>>
+			<<set _gnChance = _gnNpc.relationship >= 0 ? 65 : 35>>
+			<<if setup.percentageChance(_gnChance)>>
+				You caught up with <<=_gnHer>> where the road bent away from the river, sitting on a rock with <<=_gnHers>> bag between <<=_gnHers>> feet, not even pretending to be surprised.
+				<br /><br />
+				<<sayNpc _gnNpc>>
+					I knew you'd come. Fine. One more chance. But things have to change.
+				<</sayNpc>>
+				<br />
+				<<set _gnNpc.happy = Math.max(_gnNpc.happy ?? 0, -30)>>
+				<<set _gnNpc.relationship = Math.max(_gnNpc.relationship ?? 0, 5)>>
+				<<run $guests.push(_gnNpc)>>
+				<<run setup.npc.addHistory(_gnNpc, 'returned')>>
+				<<unset $game.betrayal>>
+				<strong>(<<=_gnNpc.name>> came back. Happy −30 and Relationship at least 5. She will leave again if nothing changes.)</strong>
+			<<else>>
+				You found <<=_gnHers>> tracks, and then you lost them at the river. When you finally saw <<=_gnHer>> it was across the water, a small figure not looking back.
+				<br /><br />
+				<<unset $game.betrayal>>
+				<<=ucfirst(_gnShe)>> was gone.
+			<</if>>
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	<<else>>
+		<<set _gnChaseLabel = 'Go after ' + _gnHer>>
+		<<link _gnChaseLabel>>
+			<<addmins 90>>
+			<<set $enemies = [clone(_gnB.npc)]>>
+			<<fight $enemies 'Event - Gone in the night - won' 'Event - Gone in the night - lost'>>
+		<</link>>
+	<</if>>
+</div>
+<div id="gn_leave">
+	<<set _gnLeaveLabel = 'Let ' + _gnHer + ' go'>>
+	<<linkreplace _gnLeaveLabel>>
+		<<run $('#gn_chase').hide()>>
+		<<if _gnB.kind === 'theft'>>
+			You stood in the empty storeroom a while. Then you shut the door and told the others there was nothing to be done. Some of them nodded. Some of them looked at the locks.
+		<<elseif _gnB.kind === 'intel'>>
+			You told the guards to double the watch and left it at that. You'd never know how much <<=_gnNpc.name>> had already told, only that <strong><<=_gnB.leak.name>></strong> would be ready for you now.
+		<<else>>
+			You read the note twice, folded it and put it in your pocket. Some people just can't stay.
+		<</if>>
+		<<unset $game.betrayal>>
+		<br /><br />
+		<<link 'Continue'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+
+:: Event - Gone in the night - won [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _gnB = $game.betrayal>>
+<<if !_gnB>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<set _gnNpc = _gnB.npc>>
+<<set _gnShe = setup.pronounceWhat(_gnNpc)>>
+<<set _gnHer = setup.pronounceWho(_gnNpc)>>
+<<set _gnHers = setup.pronounceWhos(_gnNpc)>>
+<<set _gnCaptured = $slaves.some(function (s) { return s.id === _gnB.npc.id; })>>
+<<set _gnKilled = $prevFight?.defeatedEnemies?.[0]?.killed ?? false>>
+<<run setup.betrayal.returnLoot(_gnB.loot)>>
+<<run setup.settlements.undoLeakIntel(_gnB.leak)>>
+
+<<if _gnB.kind === 'theft'>>
+	Everything was still in <<=_gnHers>> pack. You went through it on the ground, item by item, and took back <strong><<=setup.betrayal.lootText(_gnB.loot)>></strong>.
+<<else>>
+	<<=ucfirst(_gnShe)>> hadn't reached <<=_gnB.leak.name>> yet. Whatever <<=_gnShe>> knew about your base, it went no further than <<=_gnHers>> own head.
+<</if>>
+<br /><br />
+<<if _gnCaptured>>
+	You walked <<=_gnHer>> home with <<=_gnHers>> hands tied. Nobody in the yard said a word as you took <<=_gnHer>> down to the basement.
+<<elseif _gnKilled>>
+	<<=ucfirst(_gnShe)>> didn't get up. You covered <<=_gnHer>> and went home.
+<<else>>
+	You left <<=_gnHer>> in the dirt, bleeding and cursing, and started back before <<=_gnShe>> could think of anything else to try.
+<</if>>
+<<unset $game.betrayal>>
+<br /><br />
+<<link 'Head back'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+
+
+:: Event - Gone in the night - lost [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _gnB = $game.betrayal>>
+<<if !_gnB>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<set _gnNpc = _gnB.npc>>
+<<set _gnShe = setup.pronounceWhat(_gnNpc)>>
+<<set _gnHers = setup.pronounceWhos(_gnNpc)>>
+
+<<=ucfirst(_gnShe)>> was faster than you thought, and meaner. By the time you could stand again, the treeline was empty and <<=_gnHers>> tracks had gone into the water.
+<br /><br />
+<<if _gnB.kind === 'theft'>>
+	<<=setup.betrayal.lootText(_gnB.loot)>> were gone for good.
+<<else>>
+	<<=_gnB.leak.name>> would know your base by tomorrow.
+<</if>>
+<<unset $game.betrayal>>
+<br /><br />
+<<link 'Limp home'>>
+	<<goto 'Wood cabin'>>
+<</link>>

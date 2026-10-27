@@ -76,6 +76,7 @@
 	  		<span class="o-text"><<=_gridName>></span>
 		</div>
 	<<else>>
+	  <<capture _props>> /* later grid tiles overwrite _props before this tile's link is clicked */
 		<<set _charsHtml = '';>>
 		<<if typeof _charactersInLocation[$args[1]] !== 'undefined'>>
 			<div class="grid-chars">
@@ -107,16 +108,17 @@
 		<</if>>
 		<<if _npcWorkerAssign && settings.npcLocationIcons !== 'Off'>>
 			<<set _npcWorkerAvatars = []>>
+			<<if $args[2] === 'School'>> /* evening class: instructors, guest students, slave students */
+				<<set _npcWorkerAvatars = setup.eveningSchool.gridAvatars()>>
+			<</if>>
 			<<for _nwNpc range $guests>>
 				<<if _npcWorkerAssign.includes(_nwNpc.assignedTo) && setup.isAtWork(_nwNpc, $weather)>>
-					<<set _nwPortraitVal = _nwNpc.portrait || setup.npcGetPackPortrait(_nwNpc)>>
-					<<run _npcWorkerAvatars.push({src: _nwPortraitVal || null, i: setup.getNpcInitials(_nwNpc.name), g: _nwNpc.gender ?? 0, c: _nwNpc.color || null, n: _nwNpc.name || ''})>>
+					<<run _npcWorkerAvatars.push(setup.gridWorkerAvatar(_nwNpc))>>
 				<</if>>
 			<</for>>
 			<<for _nwNpc range $slaves>>
 				<<if _npcWorkerAssign.includes(_nwNpc.assignedTo) && setup.isAtWork(_nwNpc, $weather)>>
-					<<set _nwPortraitVal = _nwNpc.portrait || setup.npcGetPackPortrait(_nwNpc)>>
-					<<run _npcWorkerAvatars.push({src: _nwPortraitVal || null, i: setup.getNpcInitials(_nwNpc.name), g: _nwNpc.gender ?? 0, c: _nwNpc.color || null, n: _nwNpc.name || ''})>>
+					<<run _npcWorkerAvatars.push(setup.gridWorkerAvatar(_nwNpc))>>
 				<</if>>
 			<</for>>
 			<<if _npcWorkerAvatars.length > 0>>
@@ -136,10 +138,10 @@
 									<<set _nwSrc = (_nwPortrait.src.includes('http') || _nwPortrait.src.includes('packs/')
 										? _nwPortrait.src
 										: setup.ImagePath + 'custom_portraits/' + _nwPortrait.src)>>
-									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"></span>
+									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"><<if _nwPortrait.b>><span @class="'npc-badge ' + _nwPortrait.bc"><<=_nwPortrait.b>></span><</if>></span>
 								<<else>>
 									<<set _nwGenderClass = (['girl','guy','tgirl','tguy'][_nwPortrait.g] ?? 'girl')>>
-									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>></div>
+									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>><<if _nwPortrait.b>><span @class="'npc-badge ' + _nwPortrait.bc"><<=_nwPortrait.b>></span><</if>></div>
 								<</if>>
 							<</capture>>
 						<</for>>
@@ -157,10 +159,10 @@
 									<<set _nwSrc = (_nwPortrait.src.includes('http') || _nwPortrait.src.includes('packs/')
 										? _nwPortrait.src
 										: setup.ImagePath + 'custom_portraits/' + _nwPortrait.src)>>
-									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"></span>
+									<span class="npc-circle" @aria-label="_nwPortrait.n" data-balloon-pos="up"><img @src="_nwSrc"><<if _nwPortrait.b>><span @class="'npc-badge ' + _nwPortrait.bc"><<=_nwPortrait.b>></span><</if>></span>
 								<<else>>
 									<<set _nwGenderClass = (['girl','guy','tgirl','tguy'][_nwPortrait.g] ?? 'girl')>>
-									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>></div>
+									<div @class="'npc-placeholder gender-' + _nwGenderClass" @style="(_nwPortrait.c ? 'color: ' + _nwPortrait.c : '')" @aria-label="_nwPortrait.n" data-balloon-pos="up"><<=_nwPortrait.i>><<if _nwPortrait.b>><span @class="'npc-badge ' + _nwPortrait.bc"><<=_nwPortrait.b>></span><</if>></div>
 								<</if>>
 							<</capture>>
 						<</for>>
@@ -217,6 +219,7 @@
 			<</if>>
 		<</if>>
 	  <</link>>
+	  <</capture>>
 	<</if>>
   </div>
 <</widget>>
@@ -260,6 +263,30 @@
     z-index: 40;
     flex-shrink: 0;
 }
+.menu-grid .menu-col .grid-npcs .npc-circle,
+.menu-grid .menu-col .grid-npcs .npc-placeholder {
+    position: relative;
+}
+/* Small bottom-left badge: evening-school class icon (border colour from es-class-*) or a job badge (setup.gridJobBadges) */
+.menu-grid .menu-col .grid-npcs .npc-badge {
+    position: absolute;
+    bottom: -5px;
+    left: -5px;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--badge-accent, var(--es-accent, white));
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1;
+    z-index: 41;
+    pointer-events: none;
+}
+.menu-grid .menu-col .grid-npcs .npc-badge.badge-mistress  { --badge-accent: #c0395a; }
+.menu-grid .menu-col .grid-npcs .npc-badge.badge-attendant { --badge-accent: #4fb3bf; }
 .menu-grid .menu-col .grid-npcs .npc-overflow {
     background-color: #555;
     display: flex;
@@ -333,6 +360,13 @@
     .menu-grid .menu-col .grid-npcs .npc-overflow {
         font-size: 8px !important;
     }
+    .menu-grid .menu-col .grid-npcs .npc-badge {
+        height: 10px;
+        width: 10px;
+        bottom: -3px;
+        left: -3px;
+        font-size: 6px;
+    }
     .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-circle,
     .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-placeholder,
     .menu-grid .menu-col .grid-npcs.grid-npcs-many .npc-overflow {
@@ -342,6 +376,26 @@
 
 
 :: Grid NPC Worker Scripts [script]
+
+/* Badges on worker avatars, by assignedTo: b = badge html, bc = class setting the badge border colour. */
+setup.gridJobBadges = {
+    mistress:  { b: '&#x1F460;', bc: 'badge-mistress' },
+    attendant: { b: '&#x1F9FC;', bc: 'badge-attendant' },
+};
+
+/* Worker avatar for the grid's location icons (badge and role in the tooltip when the job has one). */
+setup.gridWorkerAvatar = function (npc) {
+    const badge = setup.gridJobBadges[npc.assignedTo] ?? null;
+    return {
+        src: (npc.portrait || setup.npcGetPackPortrait(npc)) || null,
+        i: setup.getNpcInitials(npc.name),
+        g: npc.gender ?? 0,
+        c: npc.color || null,
+        n: (npc.name || '') + (badge ? ' (' + npc.assignedTo + ')' : ''),
+        b: badge?.b ?? null,
+        bc: badge?.bc ?? null,
+    };
+};
 
 setup.getNpcInitials = function(name) {
     if (!name || !name.trim()) return '?';

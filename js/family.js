@@ -22,25 +22,83 @@ setup.family = {
         return (npc.family?.hasOwnProperty('mother') && setup.getNpcById(npc.family.mother) && setup.family.isBloodToMC(setup.getNpcById(npc.family.mother))) || (npc.family?.hasOwnProperty('father') && setup.getNpcById(npc.family.father) && setup.family.isBloodToMC(setup.getNpcById(npc.family.father)));
     },
 
+    // For two family records already known to be siblings: 'half' when exactly one parent is shared
+    // and the other is known on both sides and differs, otherwise 'full' (a cheat-linked "lost"
+    // sibling with no parent records counts as full).
+    siblingKind: function(fa, fb) {
+        fa = fa ?? {};
+        fb = fb ?? {};
+        const sharesMother = !!fa.mother && fa.mother === fb.mother;
+        const sharesFather = !!fa.father && fa.father === fb.father;
+        if (sharesMother !== sharesFather) {
+            const other = sharesMother ? 'father' : 'mother';
+            if (fa[other] && fb[other] && fa[other] !== fb[other]) return 'half';
+        }
+        return 'full';
+    },
+
+    // 'full' | 'half' | null for person's sibling relation to the MC.
+    mcSiblingType: function(person) {
+        const pf = variables().player.family ?? {};
+        const f = person?.family ?? {};
+        if (!person?.id) return null;
+        const sharesParent = (!!pf.mother && f.mother === pf.mother) || (!!pf.father && f.father === pf.father);
+        if (!sharesParent && !(pf.siblings ?? []).includes(person.id)) return null;
+        return this.siblingKind(pf, f);
+    },
+
+    // Every relation npc has to the MC, closest first, joined with '/' (e.g. "son/grandson",
+    // "half-sister/niece") so tangled family lines show all of their ties.
     getRelationToMC: function(npc) {
-        const player = variables().player;
-        const isFemale = npc.gender === 0 || npc.gender === 2;
+        const pf = variables().player.family ?? {};
+        const f = npc.family ?? {};
+        const pick = (fem, male) => (npc.gender === 0 || npc.gender === 2) ? fem : male;
+        const rels = [];
 
-        if (npc.id) {
-            if (player.family?.mother === npc.id) return 'mother';
-            if (player.family?.father === npc.id) return 'father';
-            if ((player.family?.siblings ?? []).includes(npc.id)) return isFemale ? 'sister' : 'brother';
+        if (npc.id && pf.mother === npc.id) rels.push('mother');
+        if (npc.id && pf.father === npc.id) rels.push('father');
+
+        // Generations below the MC along every parent line, so one child can be both son and grandson.
+        const gens = new Set();
+        const walk = (person, depth, path) => {
+            const pfam = person.family ?? {};
+            if (pfam.father === 'mc' || pfam.mother === 'mc') gens.add(depth);
+            if (depth >= 4) return;
+            for (const pid of [pfam.mother, pfam.father]) {
+                if (!pid || pid === 'mc' || path.includes(pid)) continue;
+                const parent = setup.getNpcById(pid);
+                if (parent) walk(parent, depth + 1, path.concat(pid));
+            }
+        };
+        walk(npc, 1, [npc.id]);
+        for (const g of [...gens].sort()) {
+            rels.push(g === 1 ? pick('daughter', 'son') : 'great-'.repeat(g - 2) + pick('granddaughter', 'grandson'));
         }
-        if (!npc.hasOwnProperty('family')) return null;
 
-        if (npc.family.father === 'mc') return isFemale ? 'daughter' : 'son';
+        const siblingType = this.mcSiblingType(npc);
+        if (siblingType) rels.push((siblingType === 'half' ? 'half-' : '') + pick('sister', 'brother'));
 
-        const motherNpc = npc.family.mother ? setup.getNpcById(npc.family.mother) : null;
-        const fatherNpc = npc.family.father ? setup.getNpcById(npc.family.father) : null;
-        if ((motherNpc && setup.family.isBloodToMC(motherNpc)) || (fatherNpc && setup.family.isBloodToMC(fatherNpc))) {
-            return isFemale ? 'granddaughter' : 'grandson';
-        }
-        return null;
+        const parents = [f.mother, f.father].filter(id => id && id !== 'mc').map(id => setup.getNpcById(id)).filter(Boolean);
+        if (parents.some(p => this.mcSiblingType(p))) rels.push(pick('niece', 'nephew'));
+
+        if (!rels.length && parents.some(p => this.isBloodToMC(p))) rels.push('relative');
+        return rels.length ? rels.join('/') : null;
+    },
+
+    // The MC's role from npc's side, mirroring getRelationToMC part by part (e.g. "half-brother/uncle").
+    getMcRoleToNpc: function(npc) {
+        const rel = this.getRelationToMC(npc);
+        if (!rel) return null;
+        const flip = {
+            mother: 'son', father: 'son', daughter: 'father', son: 'father',
+            sister: 'brother', brother: 'brother', 'half-sister': 'half-brother', 'half-brother': 'half-brother',
+            niece: 'uncle', nephew: 'uncle', relative: 'relative'
+        };
+        return rel.split('/').map(r => {
+            if (flip[r]) return flip[r];
+            const m = r.match(/^((?:great-)*)grand(?:daughter|son)$/);
+            return m ? m[1] + 'grandfather' : r;
+        }).join('/');
     },
 
     isBlood: function (npc, npc2) {

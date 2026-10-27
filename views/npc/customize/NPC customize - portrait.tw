@@ -47,18 +47,36 @@
         <div class="custom_portrait_item_img">
             Use your custom image from pc
             <br />
-            File need to be under game/custom_portraits
+            File must be in the <code>images/custom_portraits</code> folder alongside index.html.
             <br />
             Ratio: [1:1]
-            <br /><br /><br />
-            <input type="file" name="_portraitPath" id="portraitPath">
-            <script>
-                $('#portraitPath').on('change', function () {
-                    SugarCube.State.variables.tmpPortraitPath = this.files[0].name || null;
-                });
-            </script>
+            <br /><br />
+            <input type="file" name="_portraitPath" id="portraitPath" accept="image/*">
+            <div id="portraitPathWarning" style="display:none; color:#f66; font-size:0.85em; margin-top:4px;"></div>
         </div>
-        <div class="custom_portrait_item_link">
+        <<done>>
+        <<script>>
+            $('#portraitPath').on('change', function () {
+                var name = this.files[0] ? this.files[0].name : null;
+                $('#portraitPathWarning').hide().text('');
+                $('#portraitPathChoose').hide();
+                SugarCube.State.variables.tmpPortraitPath = null;
+                if (!name) return;
+                var img = new Image();
+                img.onload = function () {
+                    SugarCube.State.variables.tmpPortraitPath = name;
+                    $('#portraitPathChoose').show();
+                };
+                img.onerror = function () {
+                    $('#portraitPathWarning')
+                        .text('File not found in images/custom_portraits/ -- please move it there and try again.')
+                        .show();
+                };
+                img.src = setup.ImagePath + 'custom_portraits/' + name;
+            });
+        <</script>>
+        <</done>>
+        <div id="portraitPathChoose" class="custom_portrait_item_link" style="display:none;">
             <<link 'Choose'>>
                 <<set $tmpGirl.portrait = $tmpPortraitPath>>
                 <<unset $tmpPortraitPath>>
@@ -120,7 +138,7 @@
 
     .custom_portrait_item_img {
         position: relative;
-        height: 200px;
+        min-height: 200px;
     }
 
     .custom_portrait_item_default {

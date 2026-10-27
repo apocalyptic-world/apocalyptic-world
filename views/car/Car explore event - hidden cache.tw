@@ -108,7 +108,7 @@ Whoever left this had somewhere to go, and a vehicle to get there.
                 <<pickup $backpack 'fuel' 1>>
                 <<set $player.goodwill += 2>>
                 <strong class="iitem">+<<=_extraFood>> food, +1 fuel, +2 goodwill</strong>.
-                <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+                <<if setup.guestRoom.hasRoom()>>
                     <br /><br />
                     <<set _labelInvite = 'Invite her to your settlement'>>
                     <<linkreplace _labelInvite>>

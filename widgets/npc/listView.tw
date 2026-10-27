@@ -50,7 +50,9 @@
     	<</if>>
     <</if>>
     <div class="item-strength">
-        &#x1F4AA; <<=_npc.strength>>
+        <span data-balloon-length="medium" @aria-label="'Str: ' + _npc.strength + ' | End: ' + (_npc.endurance ?? 0)" data-balloon-pos="up-left">
+            &#x1F4AA; <<=_npc.strength>>
+        </span>
     </div>
     <<if (_props.relationship ?? true)>>
         <div class="item-relationship">
@@ -63,7 +65,7 @@
     <<if (_props.assignedTo ?? true)>>
         <div class="item-assignedTo">
             <<if _npc.assignedTo>>
-                (<<=_npc.assignedTo>>)
+                (<<=setup.eveningSchool.isInstructor(_npc) ? 'instructor' : _npc.assignedTo>>)
             <<elseif typeof $player.companions[_npcType + ':' + _npcId] !== 'undefined'>>
                 (companion)
             <</if>>

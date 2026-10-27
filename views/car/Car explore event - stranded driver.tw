@@ -111,7 +111,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
         <br /><br />
         She's still watching the engine when you prepare to leave. Like she's memorizing it.
         <br /><br />
-        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+        <<if setup.guestRoom.hasRoom()>>
             <<set _labelInvite = "You could come with me, if you want.">>
             <<linkreplace _labelInvite>>
                 <<run $('#opt_look_leave').hide()>>
@@ -153,7 +153,7 @@ She glances at her own car. Dead for longer than yours has been alive, by the lo
             In that?
         <</sayNpc>>
         <br />
-        <<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+        <<if setup.guestRoom.hasRoom()>>
             You tell her where you're headed. She asks a few short questions — practical ones, the kind that tell you she's done this before, evaluating risk. Then she looks at her own car one last time.
             <br /><br />
             <<sayNpc $tmpGirl>>

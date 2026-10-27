@@ -157,8 +157,11 @@
   	<<goto `passage()`>>
   <</link>>
   <<link 'Increase guest house bed limit'>>
-  	<<set $guesthouseLimit++>>
-	<<goto `passage()`>>
+  	<<if setup.guestRoom.addBeds() === 0>>
+		<<run UI.alert('The guest house already has the maximum of ' + setup.guestRoom.MAX + ' beds.')>>
+	<<else>>
+		<<goto `passage()`>>
+	<</if>>
   <</link>>
   	<<link 'Increase basement cell limit'>>
 		<<set $basementLimit++>>
@@ -200,16 +203,24 @@
 		<<goto `passage()`>>
   	<</link>>
   <<if recall($suppCode)>>
-  	<<link 'Skip time (1 week)'>>
-		<<sleep>>
-		<<sleep>>
-		<<sleep>>
-		<<sleep>>
-		<<sleep>>
-		<<sleep>>
-		<<sleep>>
-		<<goto `passage()`>>
-	<</link>>
+  	<<set _cheatSkipLabel = 'Skip time (1 week)'>>
+	<<linkreplace _cheatSkipLabel>>
+		<<set _cheatSkipYes = 'Yes, skip a whole week (cannot be undone)'>>
+		<<link _cheatSkipYes>>
+			<<sleep>>
+			<<sleep>>
+			<<sleep>>
+			<<sleep>>
+			<<sleep>>
+			<<sleep>>
+			<<sleep>>
+			<<goto `passage()`>>
+		<</link>>
+		<<set _cheatSkipNo = 'Cancel'>>
+		<<link _cheatSkipNo>>
+			<<goto `passage()`>>
+		<</link>>
+	<</linkreplace>>
 	<<if typeof $tmpGirl !== 'undefined' && (typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined' || typeof $childId !== 'undefined')>>
 		<<link 'Edit NPC'>>
 			<<script>>
@@ -308,6 +319,108 @@
 			<</link>>
 			<<link 'Event: The Chain Road'>>
 				<<goto 'Car explore event - The Chain Road'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Fever in the house'>>
+				<<run setup.fever.start(setup.fever.pool(), $game.day)>>
+				<<goto 'Event - Fever in the house'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Gone in the night (theft)'>>
+				<<newgirl>>
+				<<set $tmpGirl.relationship = -20>>
+				<<set $game.betrayal = { npc: clone($tmpGirl), kind: 'theft', day: $game.day, loot: { type: 'caps', amount: 100 } }>>
+				<<set $player.money = Math.max($player.money - 100, 0)>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - Gone in the night'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Gone in the night (sold intel)'>>
+				<<newgirl>>
+				<<set $tmpGirl.relationship = -20>>
+				<<set $game.betrayal = { npc: clone($tmpGirl), kind: 'intel', day: $game.day, leak: { id: null, name: 'a hostile camp', prevRaidDay: 0 } }>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - Gone in the night'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Gone in the night (note)'>>
+				<<newgirl>>
+				<<set $tmpGirl.relationship = 10>>
+				<<set $game.betrayal = { npc: clone($tmpGirl), kind: 'note', day: $game.day }>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - Gone in the night'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Loyalty trial'>>
+				<<newgirl>>
+				<<set $tmpGirl.relationship = 20>>
+				<<set $tmpGirl.history = [{ event: 'recruited', day: $game.day, place: 'Test camp' }]>>
+				<<run $guests.push($tmpGirl)>>
+				<<set $game.loyaltyTrial = { guestId: $tmpGirl.id, settlementId: null }>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - Loyalty trial'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: First words (makes a feral guest)'>>
+				<<newgirl>>
+				<<run $tmpGirl.traits.push('feral')>>
+				<<set $tmpGirl.relationship = 60>>
+				<<run $guests.push($tmpGirl)>>
+				<<set $game.firstWords = { id: $tmpGirl.id }>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - First words'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Blair - Price on her head'>>
+				<<unset $characters.blair.quests.bounty_day>>
+				<<goto 'Blair [Event] - Price on her head'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Blair - The small hours (makes her pregnant)'>>
+				<<set $characters.blair.pregnancy ??= 150>>
+				<<unset $characters.blair.quests.small_hours_kick_day, $characters.blair.quests.small_hours_day>>
+				<<goto 'Blair [Event] - The small hours'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Blair - House rules (needs an adult woman guest)'>>
+				<<set _cheatHrIdx = $guests.findIndex(function (g) { return g.gender === 0 && setup.getAge(g) >= 18 && !(g.traits ?? []).includes('feral'); })>>
+				<<if _cheatHrIdx >= 0>>
+					<<set $guests[_cheatHrIdx].relationship = 80>>
+				<</if>>
+				<<unset $characters.blair.quests.house_rules_day>>
+				<<goto 'Blair [Event] - House rules'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Blair - Her mother'>>
+				<<set $characters.vincent.quests.sanctuary_done = true>>
+				<<set $characters.vincent.quests.sanctuary_done_day = $game.day - 20>>
+				<<set $characters.blair.relationship = Math.max($characters.blair.relationship ?? 0, 95)>>
+				<<unset $characters.blair.quests.mother_talk_day>>
+				<<goto 'Blair [Event] - Her mother'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Library - caught reading (needs an adult woman guest)'>>
+				<<set _cheatLibIdx = $guests.findIndex(function (g) { return g.gender === 0 && setup.getAge(g) >= 18 && !(g.traits ?? []).includes('feral'); })>>
+				<<if _cheatLibIdx >= 0>>
+					<<set $tmpEvent = { id: _cheatLibIdx }>>
+					<<set $guests[_cheatLibIdx].likesGuys = true>>
+					<<goto 'Library [Event] - caught reading'>>
+					<<script>>Dialog.close();<</script>>
+				<</if>>
+			<</link>>
+			<<link 'Event: Library - she followed you (needs an adult woman guest)'>>
+				<<set _cheatLibIdx = $guests.findIndex(function (g) { return g.gender === 0 && setup.getAge(g) >= 18 && !(g.traits ?? []).includes('feral'); })>>
+				<<if _cheatLibIdx >= 0>>
+					<<set $tmpEvent = { id: _cheatLibIdx }>>
+					<<set $guests[_cheatLibIdx].likesGuys = true>>
+					<<goto 'Library [Event] - she followed you'>>
+					<<script>>Dialog.close();<</script>>
+				<</if>>
+			<</link>>
+			<<link 'Event: Negan - She Remembers You'>>
+				<<set $characters.negan.quests.barter_day = $characters.negan.quests.barter_day ?? ($game.day - 10)>>
+				<<unset $characters.negan.quests.remembers_day>>
+				<<goto 'Negan - She Remembers You'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>
 

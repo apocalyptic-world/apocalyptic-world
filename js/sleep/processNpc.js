@@ -17,10 +17,13 @@ setup.sleep.processNpc = function(npc, opts) {
             randomScavengingItems } = opts;
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
-    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational'))) && setup.getAge(npc) >= 18) {
-        setup.sleepMessages.addMain(
-            npc.name + ' was missing in the morning, ' +
-            setup.pronounceWhat(npc) + ' probably decided to leave this place.'
+    // Mothers of a newborn without a bed leave by the guest room rule instead (setup.guestRoom.nightlyBedless)
+    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc))) && setup.getAge(npc) >= 18) {
+        // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
+        const betrayalKind = setup.betrayal.depart(npc);
+        setup.sleepMessages.addMain(betrayalKind
+            ? setup.betrayal.message(npc, betrayalKind)
+            : npc.name + ' was missing in the morning, ' + setup.pronounceWhat(npc) + ' probably decided to leave this place.'
         );
         opts.pendingRemovals.push({ index: npcIndex });
         opts.shouldSkip = true;
@@ -97,6 +100,9 @@ setup.sleep.processNpc = function(npc, opts) {
     const isDayOff  = isSick || (isCharacter ? false : typeof npc.rest !== 'undefined');
     opts.resultIsSick   = isSick;
     opts.resultIsDayOff = isDayOff;
+    // day has already advanced, so the day just worked is day - 1
+    const scavengerStayedHome = !isCharacter && isColdSnap && npc.assignedTo === 'scavenging' &&
+        !setup.coldSnapScavengerGoesOut(npc, day - 1);
 
     // ── Job logic ─────────────────────────────────────────────────────────────
     if (!isCharacter) {
@@ -138,7 +144,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (npc.gardenDay >= 3) {
                     npc.gardenDay = 0;
                     if ((npc.traits ?? []).includes('hoarder')) foodGive = Math.max(1, Math.floor(foodGive / 2));
-                    foodGive = setup.personality.output(npc, foodGive);
+                    foodGive = setup.eveningSchool.output(npc, setup.personality.output(npc, foodGive));
                     if (tmp.totals) tmp.totals.food = (tmp.totals.food ?? 0) + foodGive;
                     setup.cabinInventory.pickup('food', foodGive);
                     const period = isGuest ? '.' : '';
@@ -207,7 +213,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (setup.percentageChance(50)) setup.jobs.applyJobAct(npc, 'bj');
                 if (setup.percentageChance(20)) setup.jobs.applyJobAct(npc, 'anal');
 
-                const earned = setup.personality.output(npc, setup.jobs.getStreetsEarned(npc));
+                const earned = setup.eveningSchool.output(npc, setup.personality.output(npc, setup.jobs.getStreetsEarned(npc)));
                 sv.player.money += earned;
                 if (tmp.totals) tmp.totals.caps = (tmp.totals.caps ?? 0) + earned;
 
@@ -341,7 +347,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 count = window.randomInteger(1, 2);
             }
             if (setup.percentageChance(pct)) {
-                count = setup.personality.output(npc, count);
+                count = setup.eveningSchool.output(npc, setup.personality.output(npc, count));
                 if (tmp.totals) tmp.totals[item] = (tmp.totals[item] ?? 0) + count;
                 setup.cabinInventory.pickup(item, count);
                 setup.sleepMessages.addJob(npc.name + ' managed to get ' + count + ' ' + Item.get(item).name + ' while hunting.', 'hunting');
@@ -349,7 +355,7 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // Scavenging: stat tick + full return logic (guests only)
-        if (job === 'scavenging' && isGuest && !isSick && !isSandStorm && (!isColdSnap || setup.npcInventoryHas(npc, 'coat_wolf'))) {
+        if (job === 'scavenging' && isGuest && !isSick && !isSandStorm && !scavengerStayedHome) {
             npc.stats.scavenging = (npc.stats.scavenging ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.scavenging++;
             npc.stats.scavenging += setup.personality.learnBonus(npc);
@@ -440,7 +446,7 @@ setup.sleep.processNpc = function(npc, opts) {
     // ── Coldsnap sickness ─────────────────────────────────────────────────────
     if (!isCharacter) {
         const job2 = npc.assignedTo;
-        if (isColdSnap && !isSick && !isDayOff && job2 &&
+        if (isColdSnap && !isSick && !isDayOff && !scavengerStayedHome && job2 &&
             ['garden', 'quarry', 'scavenging'].includes(job2) &&
             !setup.npcInventoryHas(npc, 'coat_wolf') &&
             setup.percentageChance(10)) {
@@ -454,7 +460,7 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // ── Hard physical work slowly builds endurance ────────────────────────
-        if (!isDayOff && setup.fight.ENDURANCE_JOBS.includes(npc.assignedTo)) {
+        if (!isDayOff && !scavengerStayedHome && setup.fight.ENDURANCE_JOBS.includes(npc.assignedTo)) {
             npc.stats.enduranceDays = (npc.stats.enduranceDays ?? 0) + 1;
             if (npc.stats.enduranceDays % 10 === 0 && setup.fight.gainEndurance(npc, setup.fight.JOB_ENDURANCE_CAP)) {
                 setup.sleepMessages.addJob(npc.name + '\'s endurance improved from hard work <strong>(Endurance ' + npc.endurance + ')</strong>', npc.assignedTo);
@@ -488,7 +494,7 @@ setup.sleep.processNpc = function(npc, opts) {
             if (!isCharacter && npc.pregnancy_father !== 'mc') {
                 msg += ' <strong>You ARE NOT the father!</strong>';
                 if (!sv2.pregnancyStreetsHappening && npc.pregnancy_event === 'streets') {
-                    sv2.pregnancyStreetsHappening = { type, id: npcIndex };
+                    sv2.pregnancyStreetsHappening = { type, id: npcIndex, npcId: npc.id };
                 }
             }
             setup.sleepMessages.addMain(msg);
@@ -518,10 +524,28 @@ setup.sleep.processNpc = function(npc, opts) {
             npc.pregnancy > 260 &&
             (npc.pregnancy > 280 || window.randomInteger(1, 3) === 3)) {
             if (hasWorkingHospital) {
-                State.variables.pregnancysHappeningHospital.push({ type, id: npcIndex });
+                State.variables.pregnancysHappeningHospital.push({ type, id: npcIndex, npcId: npc.id });
             } else {
-                State.variables.pregnancyHappening = { type, id: npcIndex };
+                State.variables.pregnancyHappening = { type, id: npcIndex, npcId: npc.id };
             }
         }
     }
+};
+
+// Pregnancy records point at a $slaves/$guests index, which shifts when NPCs leave during the night.
+// Call after the night's removals: re-resolves each record by npcId and drops records whose NPC is gone.
+setup.sleep.reindexBirths = function() {
+    const sv = State.variables;
+    const resolve = function(record) {
+        if (!record || typeof record.npcId === 'undefined' || !['slave', 'guest'].includes(record.type)) return record;
+        const list = record.type === 'slave' ? (sv.slaves ?? []) : (sv.guests ?? []);
+        const index = list.findIndex(n => n.id === record.npcId);
+        if (index < 0) return null;
+        record.id = index;
+        return record;
+    };
+
+    if (sv.pregnancyHappening && !resolve(sv.pregnancyHappening)) delete sv.pregnancyHappening;
+    if (sv.pregnancyStreetsHappening && !resolve(sv.pregnancyStreetsHappening)) delete sv.pregnancyStreetsHappening;
+    sv.pregnancysHappeningHospital = (sv.pregnancysHappeningHospital ?? []).map(resolve).filter(Boolean);
 };

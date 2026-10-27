@@ -119,6 +119,16 @@
 			<<else>>
 				Increase relationship
 			<</if>>
+		<<elseif typeof $characters.blair.quests.bounty_day !== 'undefined' && setup.blair.bountyAlive() && typeof $characters.blair.quests.mother_talk_day === 'undefined' && !($characters.vincent?.quests?.sanctuary_done)>>
+			Mr. Soprano still pays for her. Be ready for the next visitor at the gate (or deal with the man himself)
+		<<elseif typeof $characters.blair.quests.bounty_day === 'undefined' && setup.blair.bountyAlive() && ($game.day >= 120)>>
+			Keep an eye on the gate. Someone is still looking for her
+		<<elseif $characters.vincent?.quests?.sanctuary_done && typeof $characters.blair.quests.mother_talk_day === 'undefined'>>
+			<<if $characters.blair.relationship >= 90>>
+				Talk with her in the bedroom at night. She has something to tell you about her mother
+			<<else>>
+				Increase relationship (90)
+			<</if>>
 		<<else>>
 			That's all for now
 		<</if>>
@@ -444,6 +454,12 @@
 				Wait a few days
 			<<else>>
 				Visit the Sanctuary. Negan had something on his mind last time — he may have a proposition.
+			<</if>>
+		<<elseif $characters.negan.quests.barter_day && !$characters.negan.quests.remembers_day>>
+			<<if $game.day < ($characters.negan.quests.barter_day + 4)>>
+				Wait a few days
+			<<else>>
+				Visit the Sanctuary. Someone there may remember you.
 			<</if>>
 		<<elseif $characters.negan.quests.barter_day>>
 			That's all for now

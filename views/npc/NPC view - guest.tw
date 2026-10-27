@@ -81,16 +81,69 @@
 	<</link>>
 <</if>>
 
-<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
-	<<link 'Assign to'>>
-		<<dialog 'Assign to'>>
-			<<include 'Guest view assign to'>>	
+/* Evening school: adults with the teacher skill can instruct any class they have the skill for; anyone else can enroll as a student. */
+<<set _eveningSchoolOpen = setup.eveningSchool.isBuilt() &&setup.getAge($tmpGirl) >= 18 && !($tmpGirl.traits ?? []).includes('feral')>>
+<<set _isInstructor = ($tmpGirl.assignedTo ?? '').startsWith('instructor-')>>
+<<set _instructorClasses = ['mechanic', 'shopkeeper', 'doctor', 'teacher', 'cook'].filter(s => ($tmpGirl.skills ?? []).includes(s))>>
+
+<<if _eveningSchoolOpen && !$tmpGirl.assignedTo && !$tmpGirl.teach && _instructorClasses.includes('teacher') &&!($player.companions['guest:' + $guestId] ?? false)>>
+	<<link 'Assign as Instructor'>>
+		/* One instructor per class: classes already taken by another guest are shown greyed out. */
+		<<set _takenBy = {}>> /* class -> current instructor */
+		<<for _takenI range setup.eveningSchool.instructorIndices()>>
+			<<set _takenBy[setup.eveningSchool.instructorClass($guests[_takenI])] = $guests[_takenI]>>
+		<</for>>
+		<<set _openClasses = _instructorClasses.filter(s => !_takenBy[s])>>
+		<<set _instructorClass = _openClasses[0]>>
+		<<dialog 'Add as Instructor'>>
+			Select the class for <<=_himOrHer>> to instruct:
+			<br /><br />
+			<<for _instructorOption range _instructorClasses>>
+				<<if _openClasses.includes(_instructorOption)>>
+					<label><<radiobutton "_instructorClass" _instructorOption autocheck>> <<=ucfirst(_instructorOption)>></label>
+				<<else>>
+					<label style="color: #888"><input type="radio" disabled> <<=ucfirst(_instructorOption)>> (taught by <<=setup.displayName(_takenBy[_instructorOption])>>)</label>
+				<</if>>
+				<br />
+			<</for>>
+			<br />
+			<<if _openClasses.length>>
+				<<link 'Assign'>>
+					<<assignedTo $tmpGirl `'instructor-' + _instructorClass`>>
+					<<dialogclose>>
+					<<goto `passage()`>>
+				<</link>>
+			<<else>>
+				<<if _instructorClasses.length === 1>>
+					The class <<=_heOrShe>> is qualified for already has an instructor.
+				<<else>>
+					The classes <<=_heOrShe>> is qualified for already have instructors.
+				<</if>>
+				<br /><br />
+				<<link 'Exit'>>
+					<<dialogclose>>
+				<</link>>
+			<</if>>
 		<</dialog>>
 	<</link>>
 <</if>>
 
+<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+	<<link 'Assign to'>>
+		<<dialog 'Assign to'>>
+			<<include 'Guest view assign to'>>
+		<</dialog>>
+	<</link>>
+<</if>>
+
+<<if _eveningSchoolOpen && !_isInstructor && !$tmpGirl.teach>>
+	<<include 'NPC view - enroll evening class'>>
+<</if>>
+<<include 'NPC view - withdraw evening class'>>
+
 <<if $tmpGirl.assignedTo>>
-	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+	<<set _jobLabel = setup.eveningSchool.isInstructor($tmpGirl) ? 'instructor (' + setup.eveningSchool.instructorClass($tmpGirl) + ')' : $tmpGirl.assignedTo>>
+	<<link `'Remove assigned job (' + _jobLabel + ')'`>>
 		<<assignedTo $tmpGirl 'none'>>
 		<<goto `passage()`>>
 	<</link>>
