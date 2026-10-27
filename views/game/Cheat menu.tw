@@ -157,11 +157,8 @@
   	<<goto `passage()`>>
   <</link>>
   <<link 'Increase guest house bed limit'>>
-  	<<if setup.guestRoom.addBeds() === 0>>
-		<<run UI.alert('The guest house already has the maximum of ' + setup.guestRoom.MAX + ' beds.')>>
-	<<else>>
-		<<goto `passage()`>>
-	<</if>>
+  	<<run setup.guestRoom.addBeds(1, true)>>
+	<<goto `passage()`>>
   <</link>>
   	<<link 'Increase basement cell limit'>>
 		<<set $basementLimit++>>
