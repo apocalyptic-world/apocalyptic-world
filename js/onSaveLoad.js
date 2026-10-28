@@ -170,10 +170,16 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
         delete variables.characters.blair.family.mother;
         save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
+        // Saves loaded on 0.90 before meeting Blair got a stub quests = { bi_since_day } below, which made isMetChar('blair')
+        // true and skipped her barn introduction. Her intro always sets a name, so a nameless stub is safe to drop.
+        if (!save.state.history[save.state.index].variables.characters.blair.name && save.state.history[save.state.index].variables.characters.blair.quests
+            && Object.keys(save.state.history[save.state.index].variables.characters.blair.quests).every(function (k) { return k === 'bi_since_day'; })) {
+            delete save.state.history[save.state.index].variables.characters.blair.quests;
+        }
         // Blair is bisexual (likes men and women). Older saves had her forced to likesGirls = false on every load; set it once.
-        if (typeof save.state.history[save.state.index].variables.characters.blair.quests?.bi_since_day === 'undefined') {
+        // Only for a Blair the player has met: creating quests here on the empty StoryInit stub marks her as met.
+        if (save.state.history[save.state.index].variables.characters.blair.quests && typeof save.state.history[save.state.index].variables.characters.blair.quests.bi_since_day === 'undefined') {
             save.state.history[save.state.index].variables.characters.blair.likesGirls = true;
-            save.state.history[save.state.index].variables.characters.blair.quests ??= {};
             save.state.history[save.state.index].variables.characters.blair.quests.bi_since_day = save.state.history[save.state.index].variables.game?.day ?? 0;
         }
         // Older saves: Blair married the player but never got a married flag or history entry (icon, anniversaries, divorce flows missed her)

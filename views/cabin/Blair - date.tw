@@ -5,22 +5,26 @@
 	So what should we do?
 <</blair>>
 <br /><br />
-<<link 'Go to skyscraper'>>
-	<<set $player.companionsHome = $player.companions>>
-	<<set $player.companions = {}>>
-	<<goto 'Blair - date [skyscraper]'>>
-<</link>>
-<<if recall($suppCode)>>
-	<<link 'Go scavenging together'>>
-	        <<set $player.companionsHome = $player.companions>>
+<<if timeBetween('06:00', '19:59')>>
+	<<link 'Go to skyscraper'>>
+		<<set $player.companionsHome = $player.companions>>
 		<<set $player.companions = {}>>
-		<<goto 'Blair - date [scavenging]'>>
+		<<goto 'Blair - date [skyscraper]'>>
 	<</link>>
-<<else>>
-	<div class="link-internal disabled" style="background: #ccc">
-		Go scavenging together
-		<<notPatreonIcon>>
-	</div>
+<</if>>
+<<if timeBetween('06:00', '15:59')>>
+	<<if recall($suppCode)>>
+		<<link 'Go scavenging together'>>
+			<<set $player.companionsHome = $player.companions>>
+			<<set $player.companions = {}>>
+			<<goto 'Blair - date [scavenging]'>>
+		<</link>>
+	<<else>>
+		<div class="link-internal disabled" style="background: #ccc">
+			Go scavenging together
+			<<notPatreonIcon>>
+		</div>
+	<</if>>
 <</if>>
 <<if recall($suppCode)>>
 	<<link 'How about just talk on the couch'>>
