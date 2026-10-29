@@ -170,10 +170,11 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
         delete variables.characters.blair.family.mother;
         save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
-        // Saves loaded on 0.90 before meeting Blair got a stub quests = { bi_since_day } below, which made isMetChar('blair')
-        // true and skipped her barn introduction. Her intro always sets a name, so a nameless stub is safe to drop.
+        // Saves loaded on 0.90 before meeting Blair got a stub quests object (bi_since_day below, then missing_friend_talked_day
+        // further down), which made isMetChar('blair') true: her barn introduction was skipped and, with no metOnDay, the streets
+        // (wanted poster) never unlocked. Her intro always sets a name and metOnDay, so a quests object without both is a stub.
         if (!save.state.history[save.state.index].variables.characters.blair.name && save.state.history[save.state.index].variables.characters.blair.quests
-            && Object.keys(save.state.history[save.state.index].variables.characters.blair.quests).every(function (k) { return k === 'bi_since_day'; })) {
+            && typeof save.state.history[save.state.index].variables.characters.blair.quests.metOnDay === 'undefined') {
             delete save.state.history[save.state.index].variables.characters.blair.quests;
         }
         // Blair is bisexual (likes men and women). Older saves had her forced to likesGirls = false on every load; set it once.
