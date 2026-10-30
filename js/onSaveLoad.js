@@ -170,10 +170,17 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
         delete variables.characters.blair.family.mother;
         save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
+        // Saves loaded on 0.90 before meeting Blair got a stub quests object (bi_since_day below, then missing_friend_talked_day
+        // further down), which made isMetChar('blair') true: her barn introduction was skipped and, with no metOnDay, the streets
+        // (wanted poster) never unlocked. Her intro always sets a name and metOnDay, so a quests object without both is a stub.
+        if (!save.state.history[save.state.index].variables.characters.blair.name && save.state.history[save.state.index].variables.characters.blair.quests
+            && typeof save.state.history[save.state.index].variables.characters.blair.quests.metOnDay === 'undefined') {
+            delete save.state.history[save.state.index].variables.characters.blair.quests;
+        }
         // Blair is bisexual (likes men and women). Older saves had her forced to likesGirls = false on every load; set it once.
-        if (typeof save.state.history[save.state.index].variables.characters.blair.quests?.bi_since_day === 'undefined') {
+        // Only for a Blair the player has met: creating quests here on the empty StoryInit stub marks her as met.
+        if (save.state.history[save.state.index].variables.characters.blair.quests && typeof save.state.history[save.state.index].variables.characters.blair.quests.bi_since_day === 'undefined') {
             save.state.history[save.state.index].variables.characters.blair.likesGirls = true;
-            save.state.history[save.state.index].variables.characters.blair.quests ??= {};
             save.state.history[save.state.index].variables.characters.blair.quests.bi_since_day = save.state.history[save.state.index].variables.game?.day ?? 0;
         }
         // Older saves: Blair married the player but never got a married flag or history entry (icon, anniversaries, divorce flows missed her)

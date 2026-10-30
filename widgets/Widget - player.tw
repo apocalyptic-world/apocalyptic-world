@@ -523,6 +523,8 @@
 			<<goto 'Scavenging - didnt came home'>>
 		<<elseif $forestKidnapEvent !== null>>
 			<<goto 'Forest - kidnapper event'>>
+		<<elseif $forestTollEvent !== null && $forestTollEvent.ambush>>
+			<<goto 'Forest - toll ambush'>>
 		<<elseif $forestTollEvent !== null>>
 			<<goto 'Forest - toll demand'>>
 		<<elseif (setup.getPersonsForLocation($guests, 'kitchen').length || setup.getPersonsForLocation($slaves, 'kitchen').length) && setup.percentageChance(20)>>

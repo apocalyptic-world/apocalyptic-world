@@ -13,24 +13,24 @@ setup.guestRoom = {
     UPSET_PER_DAY: 20,
     LEAVE_AT: -100,
 
-    /** Current bed count. Repairs undefined/NaN/out-of-range values (old saves, console edits). */
+    /** Current bed count. Repairs undefined/NaN/too-low values (old saves, console edits). MAX only caps building, so cheated counts above it are kept. */
     limit: function () {
         const v = variables();
         let beds = Number(v.guesthouseLimit);
         if (!Number.isInteger(beds)) {
             beds = this.DEFAULT;
         }
-        beds = Math.max(this.DEFAULT, Math.min(this.MAX, beds));
+        beds = Math.max(this.DEFAULT, beds);
         if (v.guesthouseLimit !== beds) {
             v.guesthouseLimit = beds;
         }
         return beds;
     },
 
-    /** Add beds, never past MAX. Returns how many were actually added (0 when already at MAX). */
-    addBeds: function (count = 1) {
+    /** Add beds, never past MAX unless ignoreMax (cheat menu). Returns how many were actually added (0 when already at MAX). */
+    addBeds: function (count = 1, ignoreMax = false) {
         const before = this.limit();
-        variables().guesthouseLimit = Math.min(this.MAX, before + count);
+        variables().guesthouseLimit = ignoreMax ? before + count : Math.max(before, Math.min(this.MAX, before + count));
         return variables().guesthouseLimit - before;
     },
 
@@ -40,7 +40,7 @@ setup.guestRoom = {
 
     /** Beds left to build before MAX. */
     bedsToBuild: function () {
-        return this.MAX - this.limit();
+        return Math.max(0, this.MAX - this.limit());
     },
 
     freeBeds: function () {

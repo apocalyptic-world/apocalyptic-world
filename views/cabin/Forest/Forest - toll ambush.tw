@@ -1,0 +1,40 @@
+:: Forest - toll ambush [bg-forest]
+<h1 class="ptitle">FOREST</h1>
+<br />
+
+<<set _tollNpc = $guests[$forestTollEvent.npcIndex]>>
+
+<!-- #### forest_toll_ambush.jpg | Post-apocalyptic forest edge at dawn, a beaten survivor limping out of the trees toward a worn wooden cabin, split lip, hand wrapped in a dirty rag, empty torn sack hanging from the shoulder, dusty patched clothes, cold grey morning light, grim quiet atmosphere, cinematic composition --ar 5:3 --p -->
+
+<<=setup.displayName(_tollNpc)>> came back out of the trees just before dawn, walking slowly, one hand held tight against <<=setup.pronounceWhos(_tollNpc)>> chest. Split lip. Two fingers bent the wrong way. The sack <<=setup.pronounceWhat(_tollNpc)>> had filled was gone.
+<br /><br />
+
+<<sayNpc _tollNpc>>
+	He didn't even say anything. Just took it and told me to tell you the price went up.
+<</sayNpc>>
+<br />
+
+You had refused to pay. The point had been made.
+<br /><br />
+
+<strong>(<<=setup.displayName(_tollNpc)>>: Happy −20, Relationship −10, sick <<=_tollNpc.sick.days>> days)</strong>
+<br /><br />
+
+<div id="fta_hunt">
+<<linkreplace 'Hunt them down'>>
+	<<run $('#fta_letgo').hide()>>
+	<<set $forestTollEvent = null>>
+	<<goto 'Forest - toll retaliation'>>
+<</linkreplace>>
+</div>
+<div id="fta_letgo">
+<<linkreplace 'Let it go'>>
+	<<run $('#fta_hunt').hide()>>
+	<<set $forestTollEvent = null>>
+	You swallow it. For now.
+	<br /><br />
+	<<link 'Continue'>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+<</linkreplace>>
+</div>

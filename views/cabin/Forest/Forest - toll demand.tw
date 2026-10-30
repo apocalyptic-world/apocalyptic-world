@@ -45,27 +45,12 @@ He didn't give a name. Just said he'd know if you paid.
 <div id="ftd_refuse">
 <<linkreplace 'Refuse'>>
     <<run $('#ftd_pay').hide()>>
-    You sent word back that you don't pay. Three days later, <<=setup.displayName(_tollNpc)>> came back from the forest with a split lip and two broken fingers. Her haul was gone. The point had been made.
+    You sent word back that you don't pay. No answer came. Your workers kept going out to the forest, but every one of them watched the trees a little longer than before.
     <br /><br />
-    <<set _tollNpc.sick = {days: randomInteger(4, 8), desc: 'Beaten up', id: 'bruised'}>>
-    <<set _tollNpc.happy = Math.max((_tollNpc.happy ?? 0) - 20, -100)>>
-    <<set _tollNpc.relationship = Math.max((_tollNpc.relationship ?? 0) - 10, -100)>>
-    <<set $forestTollEvent.refused = true>>
-    <strong>(<<=setup.displayName(_tollNpc)>>: Happy −20, Relationship −10, sick <<=_tollNpc.sick.days>> days)</strong>
-    <br /><br />
-    <div id="ftd_hunt"><<linkreplace 'Hunt them down'>>
-        <<run $('#ftd_letgo').hide()>>
-        <<set $forestTollEvent = null>>
-        <<goto 'Forest - toll retaliation'>>
-    <</linkreplace>></div>
-    <div id="ftd_letgo"><<linkreplace 'Let it go'>>
-        <<run $('#ftd_hunt').hide()>>
-        <<set $forestTollEvent = null>>
-        You swallow it. For now.
-        <br /><br />
-        <<link 'Continue'>>
-            <<goto 'Wood cabin'>>
-        <</link>>
-    <</linkreplace>></div>
+    <<set $forestTollEvent = null>>
+    <<set $game.forest_toll_ambush_day = $game.day + randomInteger(2, 3)>>
+    <<link 'Continue'>>
+        <<goto 'Wood cabin'>>
+    <</link>>
 <</linkreplace>>
 </div>
