@@ -1,4 +1,4 @@
-:: Guesthouse \[Event\] - transfemale on female {"position":"336,1079","size":"100,100"}
+:: Guesthouse \[Event\] - transfemale on female
 <h1 class="ptitle">GUEST HOUSE</h1>
 
 <<if typeof $randEvent === 'undefined'>>
@@ -46,7 +46,13 @@
 			_sexActions[5] = 'bj_cum'
 		>>
 	<</if>>
-
+	/* Breeder trait: she always finishes inside the girl's pussy when she can */
+	<<if !_isVirgin && ($guests[_guestIds[1]].traits ?? []).includes('breeder')>>
+		<<set
+			_sexActions[4] = 'pussy',
+			_sexActions[5] = 'cum_in_pussy'
+		>>
+	<</if>>
 
 	<<set $randEvent = [
 		_guestIds,
@@ -87,7 +93,7 @@
 		<<linkreplace 'Cum'>>
 			<<horny_reset>>
 			<center>
-				[img[setup.ImagePath+'game/misc/cum.webp']]
+				<<image 'game/misc/cum.webp'>>
 			</center>
 		<</linkreplace>>
 	<</if>>
@@ -201,6 +207,13 @@
 				$guests[_guestIds[_i]].horny = 0
 			>>
 		<</for>>
+		/* Pregnancy when the scene ended with a creampie (the interrupt branch rolls its own) */
+		<<if _orgasm && !_interrupted && _sexActions[_sexActions.length - 1] === 'cum_in_pussy'>>
+			<<if setup.pregnancyChance($guests[_guestIds[0]], $guests[_guestIds[1]])>>
+				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+				<<set $guests[_guestIds[0]].pregnancy = 0>>
+			<</if>>
+		<</if>>
 		<<for _ri = 0; _ri < _guestIds.length; _ri++>>
 			<<for _rj = _ri + 1; _rj < _guestIds.length; _rj++>>
 				<<set $guests[_guestIds[_ri]].relationship = Math.min(100, ($guests[_guestIds[_ri]].relationship ?? 0) + 5)>>

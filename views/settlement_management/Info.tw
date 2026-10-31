@@ -247,6 +247,9 @@
 	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
 	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td>(Max <<=($workersLimitHunter ?? 8)>>) <<=_avgWolf>></td></tr>
 	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
+	<<if $game.location.basement ?? false>>
+		<tr><td>Working as people hunter:</td><td><<=_settlementStatsData.work.people_hunter ?? 0>></td><td>(Max 1)</td></tr>
+	<</if>>
 	<tr><td>Working as companion (guests+slaves):</td>
 		<td><<=_settlementStatsData.work.companionGuest ?? 0>>+<<=_settlementStatsData.work.companionSlave ?? 0>></td>
 		<td>(Max <<=($companionsLimit ?? 8)>>)</td>
@@ -257,6 +260,12 @@
 	<tr><td>Working as attendant:</td><td><<=_settlementStatsData.work.attendant ?? 0>></td><td>(Max 2)</td></tr>
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.school ?? 0>></td><td>(Max 1)</td></tr>
+	<<if $game.location.nursery ?? false>>
+		<tr><td>Working as nursery caretaker:</td><td><<=_settlementStatsData.work.caretaker ?? 0>></td><td>(Max 1)</td></tr>
+	<</if>>
+	<<if $game.location.library ?? false>>
+		<tr><td>Working as librarian:</td><td><<=_settlementStatsData.work.librarian ?? 0>></td><td>(Max 1) skill learning +<<=setup.library.bonusPercent()>>%</td></tr>
+	<</if>>
 	<<if setup.eveningSchool.isBuilt()>>
 		<tr><td>Working as instructor:</td><td><<=setup.eveningSchool.instructorIndices().length>></td><td>(Max <<=setup.eveningSchool.classes.length>>)</td></tr>
 	<<elseif $player.quests.evening_school_talk ?? false>>

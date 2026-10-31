@@ -1,4 +1,4 @@
-:: Guest house [Place bg-guesthouse] {"position":"1219,769","size":"100,100"}
+:: Guest house [Place bg-guesthouse]
 <h1 class="ptitle">
 	<<backButton 'Wood cabin'>>
 	GUEST HOUSE
@@ -123,7 +123,7 @@
 		</details>
 		<<done>>
 			<<run jQuery('#gh-group-toggles input[type="checkbox"]').on('change', function() { Engine.play('Guest house'); })>>
-			<<run document.getElementById('gh-sort-details').open = State.variables.gSortPanelOpen>>
+			<<run jQuery('#gh-sort-details').prop('open', !!State.variables.gSortPanelOpen)>>
 			<<run jQuery('#gh-sort-details').on('toggle', function() { State.variables.gSortPanelOpen = this.open; })>>
 		<</done>>
 	<</if>>
@@ -337,6 +337,13 @@
 	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 	<<set _guestsLikesGuys = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guestsNoChastityBelt, _hornyGuests])>>
 	<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
+	/* Forced-event pool: horny men who like women, except a husband whose wife lives here and is available - he goes to her */
+	<<set _forcedMen = setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).filter(function (gi) {
+		return !($guests[gi].family?.wives ?? []).some(function (wid) {
+			const wife = $guests.find(function (g) { return g.id === wid; });
+			return wife && setup.getAge(wife) >= 18 && (wife.likesGuys ?? true) && !wife.chastityBelt;
+		});
+	})>>
 
 	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
 	<<set _ghCaughtCandidates = []>>
@@ -386,8 +393,8 @@
 			}>>
 			<<goto 'Guesthouse [Event] - take virginity'>>
 		<</if>>
-	<<elseif setup.commonValues([_guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).length > 0 && setup.percentageChance($player?.baseManagement?.noOutOfMarriageSex ? 3 : 5)>>
-		<<set $tmpEvent = [setup.commonValues([_guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen])]>>
+	<<elseif setup.commonValues([_guests18yoWomen]).length > 0 && _forcedMen.length > 0 && setup.percentageChance($player?.baseManagement?.noSex ? 1 : ($player?.baseManagement?.noOutOfMarriageSex ? 3 : 5))>>
+		<<set $tmpEvent = [setup.commonValues([_guests18yoWomen]), _forcedMen]>>
 		<<set $locationEvents.guesthouse = true>>
 		<<unset $randEvent>>
 		<<goto 'Guesthouse [Event] - male on female forced'>>

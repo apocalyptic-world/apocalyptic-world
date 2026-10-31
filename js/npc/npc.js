@@ -475,6 +475,9 @@ setup.npcListInfo = function(npc, isSick, isRest) {
 		if (npc.married && npc?.family?.husband === 'mc') {
 			output += '<span class="married-info" data-balloon-length="medium" aria-label="Married" data-balloon-pos="up-right"></span>';
 		}
+		if (setup.spouseRoom.livesHere(npc)) {
+			output += '<span class="glyph" data-balloon-length="medium" aria-label="Lives in your room" data-balloon-pos="up-right">&#x1F6CF;&#xFE0F;</span>';
+		}
 		if (npc.married || setup.npc.isMarried(npc)) {
 			const spouseIds = [];
 			if (npc?.family?.husband && npc.family.husband !== 'mc') {
@@ -1135,7 +1138,7 @@ setup.npc = {
 			case 'divorced':         return day + 'Divorced ' + (withName || 'someone');
 			case 'first_sex_mc':     return day + 'First intimate moment with ' + (withName || 'you');
 			case 'captured':         return day + 'Captured'
-				+ (entry.reason === 'bounty' ? ' for a bounty' : entry.reason === 'intruder' ? ' sneaking into the settlement' : '')
+				+ (entry.reason === 'bounty' ? ' for a bounty' : entry.reason === 'intruder' ? ' sneaking into the settlement' : entry.reason === 'hunted' ? ' by your people hunter' : '')
 				+ (entry.place ? ' at ' + entry.place : '');
 			case 'rescued':          return day + 'Rescued' + (entry.place ? ' from ' + entry.place : '');
 			case 'taken_in':         return day + 'Taken in' + (entry.place ? ' from ' + entry.place : '');

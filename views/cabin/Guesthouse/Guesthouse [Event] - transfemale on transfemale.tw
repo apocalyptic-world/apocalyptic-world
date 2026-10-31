@@ -1,4 +1,4 @@
-:: Guesthouse \[Event\] - transfemale on transfemale {"position":"336,1079","size":"100,100"}
+:: Guesthouse \[Event\] - transfemale on transfemale
 <h1 class="ptitle">GUEST HOUSE</h1>
 
 <<if typeof $randEvent === 'undefined'>>
@@ -39,6 +39,13 @@
 	<<elseif _nbAnalVirgins == 1 && _sexActions[3] == 'dd'>>
 		<<set _sexActions[3] = 'anal'>>
 	<</if>>
+	/* Breeder trait: finishes inside whenever possible */
+	<<if _nbAnalVirgins < 2 && _guestIds.some(function (gid) { return ($guests[gid].traits ?? []).includes('breeder'); })>>
+		<<set
+			_sexActions[4] = 'anal',
+			_sexActions[5] = 'cum_in_ass'
+		>>
+	<</if>>
 
 	<<set $randEvent = [
 		_guestIds,
@@ -76,7 +83,7 @@
 		<<linkreplace 'Cum'>>
 			<<horny_reset>>
 			<center>
-				[img[setup.ImagePath+'game/misc/cum.webp']]
+				<<image 'game/misc/cum.webp'>>
 			</center>
 		<</linkreplace>>
 	<</if>>

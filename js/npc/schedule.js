@@ -40,6 +40,9 @@ setup.outsideWorkHours = {
     garage:    { from: '10:00', to: '18:00', blockedBy: [] },
     school:    { from: '09:00', to: '15:00', blockedBy: [] },
     attendant: { from: '10:00', to: '20:00', blockedBy: ['sick'] },
+    librarian: { from: '09:00', to: '17:00', blockedBy: ['dayOff'] },
+    caretaker: { from: '08:00', to: '20:00', blockedBy: ['dayOff'] },
+    people_hunter: { from: '10:00', to: '18:00', blockedBy: ['dayOff', 'sandStorm', 'coldSnap'] },
 };
 
 // Returns true if npc is physically at their job location right now.
@@ -49,6 +52,7 @@ setup.isAtWork = function (npc, weather) {
     if (!schedule) return false;
     if (setup.eveningSchool.attends(npc)) return false; // night jobs start after evening class
     if (!timeBetween(schedule.from, schedule.to)) return false;
+    if (setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc)) return false; // stays home under the policy
 
     const isSick   = typeof npc.sick  !== 'undefined';
     const isDayOff = isSick || typeof npc.rest !== 'undefined';

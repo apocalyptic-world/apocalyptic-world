@@ -1,4 +1,4 @@
-:: Bedroom [Place bg-bedroom] {"position":"1084,512","size":"100,100"}
+:: Bedroom [Place bg-bedroom]
 <h1 class="ptitle">BEDROOM</h1>
 <br /><br />
 <center>
@@ -39,6 +39,36 @@
 		<<goto $tmpGirlViewBack>>
 	<</link>>
 	<br /><br />
+<</if>>
+
+<<set _roomWives = setup.spouseRoom.residents()>>
+<<if _roomWives.length>>
+	<<=_roomWives.length === 1 ? 'Your wife shares this room with you.' : 'Your wives share this room with you.'>>
+	<br /><br />
+	<div>
+		<<for _rwIdx = 0; _rwIdx < _roomWives.length; _rwIdx++>>
+			<<set _rwGuestIdx = $guests.indexOf(_roomWives[_rwIdx])>>
+			<<set _rwGenderClass = 'gender-' + setup.genderClass(_roomWives[_rwIdx])>>
+			<<set _rwName = _roomWives[_rwIdx].name>>
+			<<capture _rwGuestIdx>>
+				<span @class="_rwGenderClass">
+					<<set _rwName = 'Talk to ' + _rwName>>
+					<<link _rwName>>
+						<<unset $slaveId, $childId, $charId>>
+						<<set $guestId = _rwGuestIdx>>
+						<<set $tmpGirl = $guests[_rwGuestIdx]>>
+						<<set $tmpGirl.location = 'bedroom'>>
+						<<set $tmpGirlBack = 'Bedroom'>>
+						<<set $tmpGirlViewBack = 'NPC view - guest'>>
+						<<set $tmpGirl.rape to false>>
+						<<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
+						<<goto 'NPC view - guest'>>
+					<</link>>
+				</span>
+			<</capture>>
+		<</for>>
+	</div>
 <</if>>
 
 
@@ -109,13 +139,15 @@
 	<</link>>
 <</if>>
 
-[[Back|Wood cabin]]
+<<link 'Back'>>
+	<<goto 'Wood cabin'>>
+<</link>>
 </center>
 
 <<if !($locationEvents.bedroom ?? false)>>
 	<<if !$player?.quests?.policy_talk && $game?.cabinName && $game.day > 100 && _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 		<<goto 'Blair - policy talk'>>
-	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.motherTalkReady() && setup.percentageChance(5)>>
+	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.motherTalkReady() && setup.percentageChance(25)>>
 		<<goto 'Blair [Event] - Her mother'>>
 	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.smallHoursVariant() && setup.percentageChance(5)>>
 		<<goto 'Blair [Event] - The small hours'>>

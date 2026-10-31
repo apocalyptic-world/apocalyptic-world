@@ -1,0 +1,255 @@
+:: Event - Runaway tracks [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<if !setup.runaways.active()>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<set _rwNpc = $game.runaway.npc>>
+<<set _rwShe = setup.pronounceWhat(_rwNpc)>>
+<<set _rwHer = setup.pronounceWho(_rwNpc)>>
+<<set _rwHers = setup.pronounceWhos(_rwNpc)>>
+<<set _rwGender = 'gender-' + setup.genderClass(_rwNpc)>>
+<<set _rwDaysOld = $game.day - $game.runaway.day>>
+<<set _rwWitnesses = $guests.filter(function (g) { return setup.getAge(g) >= 18; })>>
+<<set _rwWitness = _rwWitnesses.length ? setup.getRandomElement(_rwWitnesses) : null>>
+
+<center>
+	<<image 'places/cabin/runaway_tracks.jpg'>>
+</center>
+<!-- #### places/cabin/runaway_tracks.jpg | early morning behind a patched wooden cabin settlement, a single line of fresh bare footprints in wet dirt and dew leading away from a sagging wire fence toward a dark pine treeline, a dropped scarf on the ground, mist, warm low sunlight, post-apocalyptic, worn and dusty, no people --ar 4:2 --p -->
+<br />
+<<if _rwDaysOld === 0>>
+	<span @class="''+_rwGender+''" style="font-weight:bold"><<=_rwNpc.name>></span>'s bed had been cold for hours. Out past the fence the prints were still sharp in the dew - one person, moving light and fast, heading straight for the treeline.
+<<else>>
+	A day had passed since <span @class="''+_rwGender+''" style="font-weight:bold"><<=_rwNpc.name>></span> walked out. The rain hadn't come, and if you knew what to look for, <<=_rwHers>> prints were still there behind the fence, softened and half trampled by animals.
+<</if>>
+<br /><br />
+<<if _rwWitness>>
+	<<sayNpc _rwWitness>>
+		<<=ucfirst(_rwShe)>> kept saying <<=_rwShe>> couldn't stand it here anymore. I didn't think <<=_rwShe>> would actually do it.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<=ucfirst(_rwShe)>> was on foot, with whatever <<=_rwShe>> could carry. <<=ucfirst(_rwShe)>> couldn't have gone far.
+<br /><br />
+
+<div id="rw_follow">
+	<<set _rwFollowLabel = 'Follow ' + _rwHers + ' tracks'>>
+	<<linkreplace _rwFollowLabel>>
+		<<run $('#rw_leave').hide()>>
+		<<addhours 2>>
+		<<energy -20>>
+		<<if !setup.percentageChance(setup.runaways.findChance())>>
+			You followed the prints for two hours. They wound through the pines and down to the river, and there they simply stopped. You walked the bank in both directions and found nothing.
+			<br /><br />
+			<<=ucfirst(_rwShe)>> was gone.
+			<<unset $game.runaway>>
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<<elseif setup.percentageChance(30)>>
+			<<if [0, 2].includes(_rwNpc.gender)>>
+				<center>
+					<<image 'places/cabin/runaway_scavengers.jpg'>>
+				</center>
+			<</if>>
+			<!-- #### places/cabin/runaway_scavengers.jpg | (rebuild091_jobs.json job runaway_scavengers) view from behind a woman sitting on the ground with a rope around her waist and wrists between two rough bearded scavenger men by a smoky campfire in a pine forest clearing, her face not visible, long-sleeved clothes, worn and dusty, cinematic --ar 4:2 --p -->
+			<br />
+			The tracks led to a clearing and a thin column of smoke. Someone had found <<=_rwHer>> before you did. Two scavengers sat by the fire with <<=_rwHers>> pack already emptied between them, and <<=_rwNpc.name>> sat between them with a rope wound tight around <<=_rwHers>> waist and wrists, a split lip and the look of someone who had just learned the world was worse than your house.
+			<br /><br />
+			<<link 'Fight them'>>
+				<<generateEnemies 2 0 1>>
+				<<fight $enemies 'Event - Runaway tracks - won' 'Event - Runaway tracks - lost'>>
+			<</link>>
+			<<set _rwAbandonLabel = 'Leave ' + _rwHer + ' to them'>>
+			<<link _rwAbandonLabel>>
+				<<unset $game.runaway>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<<else>>
+			<<if [0, 2].includes(_rwNpc.gender)>>
+				<center>
+					<<image 'places/cabin/runaway_camp.jpg'>>
+				</center>
+			<</if>>
+			<!-- #### places/cabin/runaway_camp.jpg | a tired young woman in worn travel clothes, braless thin top, sitting alone by a tiny campfire under pine trees in the late morning, a small bundle of belongings beside her, looking up startled toward the viewer, mud on her boots, post-apocalyptic, worn and dusty, warm cinematic light --ar 4:2 --p -->
+			<br />
+			You found <<=_rwHer>> in a hollow under the pines, crouched by a fire too small to keep anyone warm, <<=_rwHers>> bundle beside <<=_rwHer>>. <<=ucfirst(_rwShe)>> heard you coming and didn't bother to run.
+			<br /><br />
+			<<sayNpc _rwNpc>>
+				<<if (_rwNpc.relationship ?? 0) < 0>>
+					Of course it's you. What do you want? I'm not your property.
+				<<else>>
+					I didn't think anyone would come looking for me.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			<div id="rw_talk">
+				<<set _rwTalkLabel = 'Talk ' + _rwHer + ' into coming back'>>
+				<<linkreplace _rwTalkLabel>>
+					<<run $('#rw_drag').hide(); $('#rw_go').hide()>>
+					<<if !setup.guestRoom.hasRoom(1)>>
+						You started to talk and then stopped. There wasn't a free bed for <<=_rwHer>> in the guest house anymore. You both knew it.
+						<<unset $game.runaway>>
+					<<elseif setup.percentageChance(setup.runaways.talkChance(_rwNpc))>>
+						You sat down across the fire and talked. About the winter, about the food, about what was out here waiting for a woman alone. <<=ucfirst(_rwShe)>> listened longer than you expected.
+						<br /><br />
+						<<sayNpc _rwNpc>>
+							Fine. I'll come back. But things have to change.
+						<</sayNpc>>
+						<br />
+						<<set _rwNpc.happy = Math.max(_rwNpc.happy ?? 0, -30)>>
+						<<set _rwNpc.relationship = Math.max(_rwNpc.relationship ?? 0, 5)>>
+						<<run $guests.push(_rwNpc)>>
+						<<run setup.npc.addHistory(_rwNpc, 'returned')>>
+						<<unset $game.runaway>>
+						<strong>(<<=_rwNpc.name>> came back. Happy at least −30 and relationship at least 5. <<=ucfirst(_rwShe)>> will leave again if nothing changes.)</strong>
+					<<else>>
+						You talked. <<=ucfirst(_rwShe)>> shook <<=_rwHers>> head before you were done, kicked dirt over the fire and walked off between the trees. This time you let <<=_rwHer>> go.
+						<<unset $game.runaway>>
+					<</if>>
+					<br /><br />
+					<<link 'Head back'>>
+						<<goto 'Wood cabin'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+			<<if setup.runaways.canDragToBasement()>>
+				<div id="rw_drag">
+					<<set _rwDragLabel = 'Drag ' + _rwHer + ' back to the basement'>>
+					<<linkreplace _rwDragLabel>>
+						<<run $('#rw_talk').hide(); $('#rw_go').hide()>>
+						<<=ucfirst(_rwShe)>> fought, but not for long. You tied <<=_rwHers>> wrists with <<=_rwHers>> own scarf and walked <<=_rwHer>> home in front of you. Nobody in the yard said a word as you took <<=_rwHer>> down to the basement.
+						<<run $guests.push(_rwNpc)>>
+						<<npcEnslave _rwNpc>>
+						<<set _rwNpc.sub = Math.min((_rwNpc.sub ?? 0) + 10, 100)>>
+						<<set _rwNpc.happy = Math.max(-100, (_rwNpc.happy ?? 0) - 20)>>
+						<<set $player.goodwill-->>
+						<<unset $game.runaway>>
+						<br /><br />
+						<strong>(<<=_rwNpc.name>> is in the basement. Submission +10, happy −20, goodwill −1.)</strong>
+						<br /><br />
+						<<link 'Head back'>>
+							<<goto 'Wood cabin'>>
+						<</link>>
+					<</linkreplace>>
+				</div>
+			<</if>>
+			<div id="rw_go">
+				<<set _rwGoLabel = 'Let ' + _rwHer + ' go'>>
+				<<linkreplace _rwGoLabel>>
+					<<run $('#rw_talk').hide(); $('#rw_drag').hide()>>
+					You looked at <<=_rwHer>> a long moment, then turned around and walked home. Some people just can't stay.
+					<<unset $game.runaway>>
+					<br /><br />
+					<<link 'Head back'>>
+						<<goto 'Wood cabin'>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<</if>>
+	<</linkreplace>>
+</div>
+<div id="rw_leave">
+	<<set _rwLeaveLabel = 'Let ' + _rwHer + ' go'>>
+	<<linkreplace _rwLeaveLabel>>
+		<<run $('#rw_follow').hide()>>
+		You looked at the tracks a while, then went back inside. If <<=_rwShe>> wanted to be gone, <<=_rwShe>> could be gone.
+		<<unset $game.runaway>>
+		<br /><br />
+		<<link 'Continue'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+
+:: Event - Runaway tracks - won [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<if !$game.runaway>>
+	<<goto 'Wood cabin'>>
+<</if>>
+<<set _rwNpc = $game.runaway.npc>>
+<<set _rwShe = setup.pronounceWhat(_rwNpc)>>
+<<set _rwHer = setup.pronounceWho(_rwNpc)>>
+<<set _rwHers = setup.pronounceWhos(_rwNpc)>>
+
+When it was over you cut the rope from <<=_rwHers>> wrists. <<=_rwNpc.name>> rubbed them for a long time without saying anything, staring at the men on the ground.
+<br /><br />
+<<sayNpc _rwNpc>>
+	They were going to sell me. Or worse. I thought... I thought out here would be better.
+<</sayNpc>>
+<br />
+<div id="rw_won_home">
+	<<set _rwHomeLabel = 'Bring ' + _rwHer + ' home'>>
+	<<linkreplace _rwHomeLabel>>
+		<<run $('#rw_won_drag').hide(); $('#rw_won_go').hide()>>
+		<<if setup.guestRoom.hasRoom(1)>>
+			<<=ucfirst(_rwShe)>> walked beside you the whole way back, close enough that your shoulders almost touched.
+			<<set _rwNpc.relationship = Math.min(Math.max((_rwNpc.relationship ?? 0) + 20, 20), 100)>>
+			<<set _rwNpc.happy = Math.max(_rwNpc.happy ?? 0, 10)>>
+			<<run $guests.push(_rwNpc)>>
+			<<run setup.npc.addHistory(_rwNpc, 'returned')>>
+			<br /><br />
+			<strong>(<<=_rwNpc.name>> came back grateful. Relationship +20 (at least 20), happy at least 10.)</strong>
+		<<else>>
+			You walked <<=_rwHer>> as far as the road to the nearest camp. There wasn't a bed left for <<=_rwHer>> in your guest house, and <<=_rwShe>> knew it.
+		<</if>>
+		<<unset $game.runaway>>
+		<br /><br />
+		<<link 'Head back'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<<if setup.runaways.canDragToBasement()>>
+	<div id="rw_won_drag">
+		<<set _rwWonDragLabel = 'Keep ' + _rwHer + ' tied and take ' + _rwHer + ' to the basement'>>
+		<<linkreplace _rwWonDragLabel>>
+			<<run $('#rw_won_home').hide(); $('#rw_won_go').hide()>>
+			You checked the knots instead of cutting them. <<=ucfirst(_rwShe)>> understood before you said a word.
+			<<run $guests.push(_rwNpc)>>
+			<<npcEnslave _rwNpc>>
+			<<set _rwNpc.sub = Math.min((_rwNpc.sub ?? 0) + 10, 100)>>
+			<<set _rwNpc.happy = Math.max(-100, (_rwNpc.happy ?? 0) - 20)>>
+			<<set $player.goodwill-->>
+			<<unset $game.runaway>>
+			<br /><br />
+			<strong>(<<=_rwNpc.name>> is in the basement. Submission +10, happy −20, goodwill −1.)</strong>
+			<br /><br />
+			<<link 'Head back'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="rw_won_go">
+	<<set _rwWonGoLabel = 'Let ' + _rwHer + ' go'>>
+	<<linkreplace _rwWonGoLabel>>
+		<<run $('#rw_won_home').hide(); $('#rw_won_drag').hide()>>
+		You gave <<=_rwHer>> back <<=_rwHers>> pack and pointed at the road. <<=ucfirst(_rwShe)>> went without looking back.
+		<<unset $game.runaway>>
+		<br /><br />
+		<<link 'Head back'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+
+:: Event - Runaway tracks - lost [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<if $game.runaway>>
+	<<set _rwHer = setup.pronounceWho($game.runaway.npc)>>
+	You came to in the ashes of their fire. The scavengers were gone, and they had taken <<=$game.runaway.npc.name>> with them. All that was left of <<=_rwHer>> was a torn scarf in the dirt.
+	<<unset $game.runaway>>
+<<else>>
+	You came to in the ashes of their fire. The camp was empty.
+<</if>>
+<br /><br />
+<<link 'Limp home'>>
+	<<goto 'Wood cabin'>>
+<</link>>

@@ -282,7 +282,7 @@
 <<set $scavengingDidntReturn = null>>
 <<set $forestKidnapEvent = null>>
 <<set $forestTollEvent = null>>
-<<set _guestCount = $guests.length>>
+<<set _guestCount = setup.guestRoom.occupants().length>>
 <<set _guestBeds = setup.guestRoom.limit()>>
 <<set _bedsFree = _guestBeds - _guestCount>>
 <<if _guestCount >= 25>>
@@ -316,6 +316,9 @@
 		<</if>>
 		<<if _npc.assignedTo === 'garage' && !_dayOff>>
 			<<include 'sleepGarage'>>
+		<</if>>
+		<<if _npc.assignedTo === 'people_hunter' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
+			<<include 'sleepPeopleHunter'>>
 		<</if>>
 		<<if _npc.assignedTo === 'nightclub' && !_dayOff && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepNightClub'>>
@@ -407,6 +410,9 @@
 <<run setup.fever.nightly({ day: $game.day, isColdSnap: _isColdSnap, isOvercrowded: _isOvercrowded, hasWorkingHospital: _hasWorkingHospital })>>
 <<run setup.loyaltyTrial.nightly($game.day)>>
 <<run setup.firstWords.nightly($game.day)>>
+<<run setup.nurseryCare.nightly()>>
+<<run setup.tod.nightly()>>
+<<run setup.noticeBoard.nightly()>>
 
 <<for _nurseryI to 0; _nurseryI lt ($nursery ?? []).length; _nurseryI++>>
 		<<set _npc = $nursery[_nurseryI]>>
@@ -600,6 +606,13 @@
 	<<goto $args[0]>>
 <<else>>
 
+	/* A wife living in your room sometimes wakes you up (setup.spouseRoom) */
+	<<if !$sleepOver>>
+		<<set _wifeWakeUp = setup.spouseRoom.morningCandidate()>>
+		<<if _wifeWakeUp>>
+			<<set $sleepOver = { type: 'guest', id: _wifeWakeUp.id }>>
+		<</if>>
+	<</if>>
 	<<if $sleepOver && setup.percentageChance(100)>>
 		<<goto 'Bedroom - invite to sleep in bedroom morning'>>
 	<<else>>

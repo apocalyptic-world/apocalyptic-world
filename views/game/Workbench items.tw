@@ -205,6 +205,22 @@
 			},
 			goto: "Workbench"
 		},
+		binoculars: {
+			show: ($game.location.basement ?? false),
+			title: 'Binoculars',
+			description: 'Field glasses for your people hunter. At level 2 she sometimes spots a stunning catch',
+			required: {
+				glass: 2,
+				metal: 2,
+				duck_tape: 1
+			},
+			energy: 30,
+			after: function() {
+				variables().backpack.pickup('binoculars', 1);
+			},
+			multi: true,
+			goto: "Workbench"
+		},
 		guesthouse_cell: {
 			show: ($game.location.guesthouse ?? false) && !setup.guestRoom.isMaxed(),
 			title: 'Guest house bed',
@@ -337,6 +353,21 @@
 				variables().game.location.massage_table = true;
 			}
 		},
+		big_bed: {
+			show: setup.spouseRoom.anyWife() && !($game.location.big_bed ?? false),
+			title: 'Big bed',
+			description: "A wide bed for your room. Up to three of your wives can move in with you (one without it).",
+			required: {
+				wood: 25,
+				cloth: 12,
+				rope: 4,
+			},
+			goto: "Workbench",
+			energy: 40,
+			after: function() {
+				variables().game.location.big_bed = true;
+			}
+		},
 		lab: {
 			show: (isMetChar('laura') && $characters.laura.quests.lab_workbench && !$game.location.lab),
 			title: 'Lab',
@@ -401,7 +432,7 @@
 		},
 		dumbestbell: {
 			show: true,
-			title: "Dumbestbell",
+			title: "Barbell",
 			description: "Lets people workout on their own and increase strength",
 			required: {
 				wood: 7,

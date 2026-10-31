@@ -78,6 +78,24 @@
 		goto: "Settlement management",
         currentCount: true,
 	},
+    town_hall: {
+		show: ($noticeBoard ?? false) && !($player.baseManagement?.buildings?.town_hall ?? 0),
+		title: "Town hall",
+		description: "A hall where settlers bring their problems. The notice board moves inside: one more note slot, and settler problems start coming in.",
+		required: {
+			wood: 40,
+			stone: 30,
+			metal: 10,
+			glass: 5
+		},
+		energy: 90,
+		after: function() {
+            $player.baseManagement ??= {};
+            $player.baseManagement.buildings ??= {};
+            $player.baseManagement.buildings.town_hall = 1;
+		},
+		goto: "Settlement management",
+    },
     hospital: {
 		show: !($game.location.hospital ?? false),
 		title: "Hospital",

@@ -27,6 +27,21 @@
 	<</link>>
 <</if>>
 
+<<if setup.spouseRoom.livesHere($tmpGirl)>>
+	<<link 'Move back to the guest house'>>
+		<<run delete $tmpGirl.livesWithMc>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<goto 'NPC view - guest'>>
+	<</link>>
+<<elseif setup.spouseRoom.isMcWife($tmpGirl) && setup.spouseRoom.hasRoom()>>
+	<<link 'Move into your room'>>
+		<<set $tmpGirl.livesWithMc = true>>
+		<<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 5, 100)>>
+		<<set $guests[$guestId] = $tmpGirl>>
+		<<goto 'NPC view - guest'>>
+	<</link>>
+<</if>>
+
 <<if [0,2].includes($tmpGirl.gender) && !($tmpGirl.traits ?? []).includes('feral') && setup.getAge($tmpGirl) >= 18 && typeof $tmpGirl.sick === 'undefined' && timeBetween('18:00', '02:00') && setup.cabinInventory.has('playing_cards') && ($tmpGirl.pokerDay ?? -1) !== $game.day>>
 	<<link 'Play strip poker'>>
 		<<set $tmpGirl.pokerDay = $game.day>>
