@@ -7,7 +7,7 @@
 <<if (_npc.skills ?? []).includes('teacher') && setup.percentageChance(30)>>
 	<<set _npc.stats['forest']++>>
 <</if>>
-<<set _npc.stats['forest'] += setup.personality.learnBonus(_npc)>>
+<<set _npc.stats['forest'] += setup.personality.learnBonus(_npc) + setup.library.learnBonus()>>
 
 // Learn skill
 <<if _npc.stats['forest'] > 100 && !(_npc.skills ?? []).includes('woodcraft')>>

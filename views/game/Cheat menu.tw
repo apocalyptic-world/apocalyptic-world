@@ -355,6 +355,43 @@
 				<<goto 'Event - Gone in the night'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>
+			<<link 'Notice board: open it now'>>
+				<<if !$noticeBoard>><<run setup.noticeBoard.open()>><</if>>
+				<<goto 'Notice board'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Notice board: pin up new notes'>>
+				<<if $noticeBoard>>
+					<<set $noticeBoard.posted = []>>
+					<<run setup.noticeBoard.fill()>>
+					<<goto 'Notice board'>>
+				<</if>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Notice board: +50 reputation'>>
+				<<if $noticeBoard>>
+					<<set $noticeBoard.rep += 50>>
+					<<if setup.noticeBoard.tierIndex() >= 4 && !$noticeBoard.legendDone>><<set $noticeBoard.legendPending = true>><</if>>
+				<</if>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Truth or Dare (needs 2+ girls at home)'>>
+				<<if setup.tod.pool().length >= setup.tod.MIN_PLAYERS>>
+					<<set $game.todDay = -1>>
+					<<set $todWhere = 'party'>>
+					<<goto 'Truth or dare - setup'>>
+				<</if>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Runaway tracks'>>
+				<<newgirl>>
+				<<set $tmpGirl.relationship = -10>>
+				<<set $tmpGirl.happy = -75>>
+				<<set $game.runaway = { npc: clone($tmpGirl), day: $game.day }>>
+				<<unset $tmpGirl>>
+				<<goto 'Event - Runaway tracks'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
 			<<link 'Event: Loyalty trial'>>
 				<<newgirl>>
 				<<set $tmpGirl.relationship = 20>>

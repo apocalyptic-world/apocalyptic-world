@@ -3,7 +3,7 @@ sugarcube-2:
     npc_types:  '"guest"|"slave"'
     npcs_types: '"guests"|"slaves"'
     stat_types: '"happy"|"relationship"|"sub"|"anal"|"corruption"'
-    job_types:  '"strip_club"|"milkwarden"|"school"|"garage"|"quarry"|"companion"|"companion_slave"|"forest"|"garden"|"guard"|"hunter"|"kitchen"|"maid"|"mistress"|"none"|"scavenging"|"shop"|"streets"|"nightclub"|"hospital"|"milk_barn"|"church"|"attendant"'
+    job_types:  '"strip_club"|"milkwarden"|"school"|"garage"|"quarry"|"companion"|"companion_slave"|"forest"|"garden"|"guard"|"hunter"|"kitchen"|"maid"|"mistress"|"none"|"scavenging"|"shop"|"streets"|"nightclub"|"hospital"|"milk_barn"|"church"|"attendant"|"librarian"|"people_hunter"|"caretaker"'
     perk_types: '"beaten"|"bleeding"|"drunk"|"fertility"|"temp_impotence"'
     sites:      "'cabin'|'outside'|'sanctuary'|'settlement'|'underground'"
     shops:      "'farm'|'sanctuary'|'settlement'|'underground'|'cage_fight'|'race_stadium'"
@@ -176,8 +176,32 @@ sugarcube-2:
         *Syntax:* `<<strongerEnemies strength_factor>>`
     fuck:
       name: fuck
-      parameters: 
+      parameters:
       - var
+    threesome:
+      name: threesome
+      parameters:
+      - var &+ var
+      description: |-
+        *Syntax:* `<<threesome $tmpGirl $tmpGirl2>>`
+    foursome:
+      name: foursome
+      parameters:
+      - var &+ var &+ var
+      description: |-
+        *Syntax:* `<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>`
+    achievement:
+      name: achievement
+      parameters:
+      - string
+      description: |-
+        *Syntax:* `<<achievement 'key'>>` - unlocks setup.achievements[key] once and shows a notification
+    npcEnslave:
+      name: npcEnslave
+      parameters:
+      - var
+      description: |-
+        *Syntax:* `<<npcEnslave npc>>` - moves a guest to the basement (no-op for slaves)
     horny:
       name: horny
       parameters: 
@@ -281,12 +305,14 @@ sugarcube-2:
       container: false
       parameters: 
       - number |+ bool
+      - number &+ string
       description: |-
-        *Syntax:* `<<guestLeft index [captured]>>`
-        
+        *Syntax:* `<<guestLeft index [captured|'moved']>>`
+
         *Arguments:*
           * `index`: a index in the guest list
           * `captured`: (optional) true when she was captured - lighter happiness hit on friends
+          * `'moved'`: (optional) she moved into a settlement house - only close friends lose a little happiness
 
         Does guests.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of guest.splice

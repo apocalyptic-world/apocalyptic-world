@@ -30,6 +30,15 @@
     <<grid cabin shop 'Shop' 'Shop' false 1>>
   <</if>>
    <<grid cabin fireplace 'Fire place' 'Fire place'>>
+   <<if ($noticeBoard ?? false) && hasTime(0, 30)>>
+    <<set _nbCount = $noticeBoard.posted.length>>
+    <<set _nbTileLabel = (setup.noticeBoard.hasTownHall() ? 'Town hall' : 'Notice board') + (_nbCount ? ' (' + _nbCount + ')' : '')>>
+    <<if setup.noticeBoard.hasTownHall()>>
+      <<grid cabin town_hall 'Notice board' _nbTileLabel false 1>>
+    <<else>>
+      <<grid cabin notice_board 'Notice board' _nbTileLabel false 1>>
+    <</if>>
+   <</if>>
    <<set _isDisabled = ($weather?.sandStorm ? 30 : 0.5)>>
    <<set _disabledDescription = 'Sand storm outside'>>
    <<grid cabin outside Outside Outside 0 _isDisabled>>
@@ -89,6 +98,15 @@
 	<<elseif $game.firstWords && $game.cabinName>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - First words'>>
+	<<elseif setup.runaways.active() && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Runaway tracks'>>
+	<<elseif setup.noticeBoard.introReady()>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Notice board'>>
+	<<elseif setup.noticeBoard.legendReady() && (($noticeBoard.legendWaitDay ?? -10) + 3) <= $game.day && timeBetween('07:00', '12:00')>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Notice board legend'>>
 	<<elseif setup.blair.bountyReady() && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Blair [Event] - Price on her head'>>

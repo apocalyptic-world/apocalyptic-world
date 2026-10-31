@@ -43,8 +43,13 @@ setup.guestRoom = {
         return Math.max(0, this.MAX - this.limit());
     },
 
+    /** Guests who sleep in the guest house - wives living in the player's room (setup.spouseRoom) don't take a bed */
+    occupants: function () {
+        return (variables().guests ?? []).filter(g => !setup.spouseRoom.livesHere(g));
+    },
+
     freeBeds: function () {
-        return Math.max(0, this.limit() - (variables().guests ?? []).length);
+        return Math.max(0, this.limit() - this.occupants().length);
     },
 
     /** True when the guest house is built and has `count` free beds. Gate every guest-house offer with this. */

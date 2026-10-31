@@ -1,4 +1,4 @@
-:: Widget - player [widget] {"position":"141,639","size":"100,100"}
+:: Widget - player [widget]
 <<widget energy>>
   <<set $player.energy += $args[0]>>
   <<if $player.energy > $player.maxEnergy >>
@@ -189,13 +189,16 @@
 <<widget guestLeft>>
 	/* args[0] = index in guests list
 	   args[1] = true when she was captured (rescuable) - lighter hit, the rest lands via guestCaptureResolved
+	             'moved' when she only moved into a settlement house - she's still around, so only close friends miss her a little
 	   only NPCs she was on good terms with (relationship > 0) are upset */
 	<<for _npcId, _npcLike range $guests[_args[0]].relationshipBetween?.stats ?? {}>>
 		<<set _npc = setup.getNpcById(_npcId)>>
 		<<if !_npc || _npcLike <= 0>>
 			<<continue>>
 		<</if>>
-		<<if _args[1]>>
+		<<if _args[1] === 'moved'>>
+			<<set _glLoss = _npcLike > 50 ? 5 : 0>>
+		<<elseif _args[1]>>
 			<<set _glLoss = _npcLike > 50 ? 30 : 15>>
 		<<else>>
 			<<set _glLoss = _npcLike > 50 ? 80 : 50>>

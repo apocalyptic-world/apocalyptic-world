@@ -148,7 +148,7 @@ setup.personality = {
     /** Nightly happiness change from how full the guesthouse is. */
     crowdMood: function (npc) {
         const sv = variables();
-        const fill = (sv.guests?.length ?? 0) / Math.max(1, sv.guesthouseLimit ?? 3);
+        const fill = setup.guestRoom.occupants().length / Math.max(1, sv.guesthouseLimit ?? 3);
         if (this.has(npc, 'outgoing') && fill >= 0.6) return 1;
         if (this.has(npc, 'solitary')) {
             if (fill >= 0.8) return -1;

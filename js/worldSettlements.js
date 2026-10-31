@@ -463,11 +463,13 @@ setup.settlements = {
 
 	/** Price multiplier applied to all trades. Below 1 = discount, above 1 = markup. */
 	getTradeModifier: function (s) {
-		if (setup.settlements.isAllied(s))     return 0.70;
-		if (setup.settlements.isFriendly(s))   return 0.85;
-		if (setup.settlements.isNeutral(s))    return 1.00;
-		if (setup.settlements.isUnfriendly(s)) return 1.40;
-		return 2.00;
+		// a Renowned (or Legend) leader on the notice board trades 5% cheaper everywhere
+		const discount = setup.noticeBoard ? setup.noticeBoard.tradeDiscount() : 1;
+		if (setup.settlements.isAllied(s))     return 0.70 * discount;
+		if (setup.settlements.isFriendly(s))   return 0.85 * discount;
+		if (setup.settlements.isNeutral(s))    return 1.00 * discount;
+		if (setup.settlements.isUnfriendly(s)) return 1.40 * discount;
+		return 2.00 * discount;
 	},
 
 	/**

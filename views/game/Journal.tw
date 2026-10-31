@@ -15,6 +15,22 @@
 		You're on your own. Explore, survive, etc.<br />
 		Journal is only for unique characters.
 	<br /><br />
+	<<if $noticeBoard ?? false>>
+		<h2>Notice board</h2>
+		<div>Reputation: <<=setup.noticeBoard.tier().name>> (<<=$noticeBoard.rep>>)<<if $noticeBoard.streak>>, streak <<=$noticeBoard.streak>> <<=$noticeBoard.streak === 1 ? 'day' : 'days'>><</if>></div>
+		<<set _jnTaken = $noticeBoard.posted.filter(function (r) { return r.taken && setup.noticeBoard.mode(r) !== 'judge'; })>>
+		<<set _jnJudge = $noticeBoard.posted.filter(function (r) { return setup.noticeBoard.mode(r) === 'judge'; })>>
+		<<for _jnR range _jnTaken>>
+			<div>&bull; <<=_jnR.title>> (<<=setup.noticeBoard.statusText(_jnR)>>)</div>
+		<</for>>
+		<<if _jnJudge.length>>
+			<div>&bull; <<=_jnJudge.length>> <<=_jnJudge.length === 1 ? 'matter waits' : 'matters wait'>> for your decision on the board</div>
+		<</if>>
+		<<if !_jnTaken.length && !_jnJudge.length>>
+			<div>Nothing taken right now. Check the board at the cabin.</div>
+		<</if>>
+		<br />
+	<</if>>
 	<<if Object.keys($characters.vincent).length > 0>>
 		<h2>Vincent</h2>
 		<div>Relationship: <<=$characters.vincent.relationship>></div>

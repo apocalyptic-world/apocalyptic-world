@@ -138,6 +138,16 @@
 			case 'church':
 				add('Days', s[job] ?? 0, 'Nights worked here');
 				break;
+			case 'people_hunter':
+				add('Level', setup.peopleHunter.level(npc), 'Level 2 needs 80+ strength, 80+ relationship and the scavenger skill: ' + setup.peopleHunter.catchChance(npc) + '% a night to bring someone back', setup.peopleHunter.level(npc) === 2 ? pay(4) : pay(2));
+				add('Strength', str, 'Below 40 she can\'t hunt; 80+ for level 2', risk(str, [40, 60, 80]));
+				break;
+			case 'caretaker':
+				add('Days', s.caretaker ?? 0, 'Nights in the nursery. Children grow ' + setup.nurseryCare.growChance(npc) + '% faster' + (setup.personality.has(npc, 'compassionate') ? ' (compassionate)' : ''));
+				break;
+			case 'librarian':
+				add('Books', setup.library.size(), 'Skill learning +1% per 2 books, up to +25% (now +' + setup.library.bonusPercent() + '%)', setup.library.bonusPercent() >= 25 ? pay(4) : pay(Math.floor(setup.library.bonusPercent() / 7)));
+				break;
 			case 'milk_barn':
 				if (typeof npc.pregnancy !== 'undefined') {
 					var lactating = npc.pregnancy >= 7 || (npc.traits ?? []).includes('milker');
@@ -164,6 +174,7 @@
 		strip_club: COAT_WORK,
 		forest:     Object.assign({ axe: 'Doubles wood', knife: 'Safer trips; halves animal attacks', bow: 'Safer trips', crossbow: 'Safer trips' }, COAT_WORK),
 		hunter:     Object.assign({ bow: 'Required to hunt' }, COAT_WORK),
+		people_hunter: Object.assign({ knife: 'Required to hunt', rope: 'Used up for every catch', binoculars: 'Level 2: a small chance of a stunning catch' }, COAT_WORK),
 		scavenging: Object.assign({ knife: 'Safer trips', sword: 'Safer trips', bow: 'Safer trips', crossbow: 'Safer trips', body_armor: 'Much safer trips' }, COAT_BOTH),
 		quarry:     COAT_SICK,
 		garden:     COAT_SICK,
@@ -237,7 +248,9 @@
 		hunter:     [sv.workersLimitHunter ?? 8, 2, 0, 0, 'Hunter'],
 		garden:     [sv.workersLimitGarden ?? 10, 0, 1, 0, 'Garden'],
 		guard:      [U, 0, 0, 0, 'Guard'],
-		library:    [U, 1, 0, 0, 'Library'],
+		librarian:  [1, 1, 0, 0, 'Librarian'],
+		caretaker:  [1, 1, 0, 0, 'Nursery caretaker'],
+		people_hunter: [1, 2, 0, 0, 'People hunter'],
 		milk_barn:  [U, 1, 2, 2, 'Milk barn'],
 		scavenging: [U, 2, 0, 0, 'Scavenging'],
 		forest:     [U, 2, 1, 0, 'Forest'],

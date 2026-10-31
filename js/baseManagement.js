@@ -126,9 +126,35 @@ setup.baseManagement = {
         {
             return (variables().player?.baseManagement?.settlers ?? 0);
         },
-        hasFreeHouse: function() 
+        hasFreeHouse: function()
         {
             return (setup.baseManagement.population.livingHousesCount() * 3) - setup.baseManagement.population.settlersCount() > 0;
+        }
+    },
+    /**
+     * Policy "Pregnant privilege": from the 6th month pregnant inhabitants (guests and slaves) skip heavy
+     * and outside work and eat an extra ration. Read by setup.sleep.processNpc every night.
+     */
+    pregnantPrivilege: {
+        FROM_DAY: 150,
+        JOBS: ['quarry', 'forest', 'hunter', 'scavenging', 'guard', 'streets', 'nightclub', 'strip_club', 'people_hunter'],
+        isOn: function ()
+        {
+            return !!variables().player?.baseManagement?.pregnantPrivilege;
+        },
+        isLatePregnant: function (npc)
+        {
+            return typeof npc?.pregnancy !== 'undefined' && npc.pregnancy >= this.FROM_DAY;
+        },
+        /** True when the policy keeps this NPC home from her job tonight */
+        exemptsFromJob: function (npc)
+        {
+            return this.isOn() && this.isLatePregnant(npc) && this.JOBS.includes(npc.assignedTo);
+        },
+        /** True when this NPC gets the extra daily ration */
+        wantsRation: function (npc)
+        {
+            return this.isOn() && this.isLatePregnant(npc);
         }
     }
 }

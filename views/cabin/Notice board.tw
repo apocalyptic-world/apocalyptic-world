@@ -1,0 +1,345 @@
+:: Notice board [Place]
+<<set _nbTitle = setup.noticeBoard.hasTownHall() ? 'TOWN HALL' : 'NOTICE BOARD'>>
+<h1 class="ptitle"><<=_nbTitle>></h1>
+<<if !$noticeBoard>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<br />
+<center>
+	<<if setup.noticeBoard.hasTownHall()>>
+		<<image 'places/cabin/town_hall.jpg' sfw>>
+	<<else>>
+		<<image 'places/cabin/notice_board.jpg' sfw>>
+	<</if>>
+</center>
+<br />
+<<set _nbTier = setup.noticeBoard.tier()>>
+<<set _nbNext = setup.noticeBoard.nextTier()>>
+<div class="nb-status">
+	<div>Reputation: <strong @class="'nb-tier nb-tier-' + _nbTier.key"><<=_nbTier.name>></strong> <<=$noticeBoard.rep>><<if _nbNext>> / <<=_nbNext.from>> for <<=_nbNext.name>><</if>></div>
+	<div>Streak: <strong><<=$noticeBoard.streak>></strong> <<=$noticeBoard.streak === 1 ? 'day' : 'days'>> (a supply crate every <<=setup.noticeBoard.STREAK_DAYS>> days in a row)</div>
+	<div>Notes: <<=$noticeBoard.posted.length>> of <<=setup.noticeBoard.slots()>> slots</div>
+</div>
+<br />
+<<if $noticeBoard.posted.length === 0>>
+	The board was empty. New notes usually went up overnight.
+	<br /><br />
+<</if>>
+<<for _nbR range $noticeBoard.posted>>
+	<<set _nbId = _nbR.id>>
+	<<set _nbCat = setup.noticeBoard.CATS[_nbR.cat]>>
+	<<set _nbMode = setup.noticeBoard.mode(_nbR)>>
+	<<capture _nbId, _nbR, _nbMode>>
+		<div @class="'nb-card nb-cat-' + _nbR.cat + (_nbR.gold ? ' nb-gold' : '') + (_nbR.taken && _nbMode !== 'judge' ? ' nb-taken' : '')">
+			<div class="nb-card-head">
+				<span class="nb-cat"><<=_nbCat.icon>> <<=_nbCat.name>><<if _nbR.gold>> &middot; <strong>GOLD</strong><</if>><<if _nbR.taken && _nbMode !== 'judge'>> &middot; taken<</if>></span>
+				<span class="nb-when"><<=setup.noticeBoard.statusText(_nbR)>></span>
+			</div>
+			<div class="nb-card-title"><<=_nbR.title>></div>
+			<div class="nb-card-note">"<<=_nbR.note>>" <span class="nb-sign">- <<=setup.noticeBoard.signature(_nbR)>></span></div>
+			<<set _nbPreview = setup.noticeBoard.rewardPreview(_nbR)>>
+			<<if _nbPreview>>
+				<div class="nb-card-reward">Reward: <<=_nbPreview>></div>
+			<</if>>
+			<<if _nbR.need>>
+				<div class="nb-card-need">Needs: <<=setup.noticeBoard.needHtml(_nbR)>></div>
+			<</if>>
+			<div class="nb-card-actions">
+				<<if _nbMode === 'judge'>>
+					<<for _nbC range setup.noticeBoard.choices(_nbR)>>
+						<<set _nbCKey = _nbC.key>>
+						<<set _nbCLabel = _nbC.label>>
+						<<capture _nbCKey>>
+							<<link _nbCLabel>>
+								<<if _nbCKey === 'basement'>>
+									<<set _nbWho = setup.noticeBoard.judgeBasement(_nbId)>>
+									<<if _nbWho>>
+										<<npcEnslave _nbWho>>
+										<<set _nbWho.sub = Math.min((_nbWho.sub ?? 0) + 10, 100)>>
+									<</if>>
+									<<goto 'Notice board - result'>>
+								<<elseif setup.noticeBoard.choiceFight(_nbR, _nbCKey)>>
+									<<set $nbFight = { id: _nbId, kind: _nbCKey }>>
+									<<set _nbE = setup.noticeBoard.fightEnemies(_nbId, _nbCKey)>>
+									<<set _nbM = _nbE[0], _nbW = _nbE[1], _nbK = _nbE[2]>>
+									<<generateEnemies _nbM _nbW _nbK>>
+									<<fight $enemies 'Notice board - fight won' 'Notice board - fight lost'>>
+								<<elseif _nbR.key === 'backpack' && _nbCKey === 'a'>>
+									<<addhours 2>>
+									<<if setup.noticeBoard.backpackTip(_nbId) === 'trap'>>
+										<<set $nbFight = { id: _nbId, kind: 'trap' }>>
+										<<set _nbE = setup.noticeBoard.fightEnemies(_nbId, 'trap')>>
+										<<set _nbM = _nbE[0], _nbW = _nbE[1], _nbK = _nbE[2]>>
+										<<generateEnemies _nbM _nbW _nbK>>
+										<<fight $enemies 'Notice board - fight won' 'Notice board - fight lost'>>
+									<<else>>
+										<<goto 'Notice board - result'>>
+									<</if>>
+								<<else>>
+									<<run setup.noticeBoard.judge(_nbId, _nbCKey)>>
+									<<goto 'Notice board - result'>>
+								<</if>>
+							<</link>>
+						<</capture>>
+					<</for>>
+				<<elseif !_nbR.taken>>
+					<<link 'Take it'>>
+						<<run setup.noticeBoard.take(_nbId)>>
+						<<goto 'Notice board'>>
+					<</link>>
+					<<link 'Turn it down'>>
+						<<run setup.noticeBoard.turnDown(_nbId)>>
+						<<goto 'Notice board'>>
+					<</link>>
+				<<elseif _nbMode === 'give'>>
+					<<if setup.noticeBoard.hasNeed(_nbR.need)>>
+						<<set _nbGiveLabel = 'Hand over ' + setup.noticeBoard.needText(_nbR.need)>>
+						<<link _nbGiveLabel>>
+							<<run setup.noticeBoard.give(_nbId)>>
+							<<goto 'Notice board - result'>>
+						<</link>>
+					<<else>>
+						<div class="link-internal" style="background: #ccc">Not enough yet</div>
+					<</if>>
+				<<elseif _nbMode === 'scene'>>
+					<<set _nbTpl = setup.noticeBoard.TEMPLATES[_nbR.key]>>
+					<<set _nbCheck = setup.noticeBoard.sceneCheck(_nbR)>>
+					<<set _nbSceneLabel = setup.noticeBoard.fillText(_nbTpl.label, _nbR)>>
+					<<if _nbCheck.ok>>
+						<<link _nbSceneLabel>>
+							<<set _nbClickTpl = setup.noticeBoard.TEMPLATES[setup.noticeBoard.find(_nbId).key]>>
+							<<if _nbClickTpl.hours>><<addhours _nbClickTpl.hours>><</if>>
+							<<if _nbClickTpl.energy>><<energy `-_nbClickTpl.energy`>><</if>>
+							<<run setup.noticeBoard.doScene(_nbId)>>
+							<<goto 'Notice board - result'>>
+						<</link>>
+					<<else>>
+						<div class="link-internal" style="background: #ccc"><<=_nbSceneLabel>></div>
+						<<linkdesc>>
+							<<=_nbCheck.why>>
+						<</linkdesc>>
+					<</if>>
+				<<elseif _nbMode === 'fight'>>
+					<<set _nbTpl = setup.noticeBoard.TEMPLATES[_nbR.key]>>
+					<<set _nbFightLabel = setup.noticeBoard.fillText(_nbTpl.label, _nbR)>>
+					<<if hasTime(_nbTpl.hours ?? 1)>>
+						<<link _nbFightLabel>>
+							<<set _nbClickTpl = setup.noticeBoard.TEMPLATES[setup.noticeBoard.find(_nbId).key]>>
+							<<addhours `_nbClickTpl.hours ?? 1`>>
+							<<set $nbFight = { id: _nbId, kind: null }>>
+							<<set _nbE = setup.noticeBoard.fightEnemies(_nbId)>>
+							<<set _nbM = _nbE[0], _nbW = _nbE[1], _nbK = _nbE[2]>>
+							<<generateEnemies _nbM _nbW _nbK>>
+							<<fight $enemies 'Notice board - fight won' 'Notice board - fight lost'>>
+						<</link>>
+					<<else>>
+						<div class="link-internal" style="background: #ccc"><<=_nbFightLabel>></div>
+						<<linkdesc>>
+							not enough time left today
+						<</linkdesc>>
+					<</if>>
+				<</if>>
+			</div>
+		</div>
+	<</capture>>
+<</for>>
+<<link 'Ledger'>>
+	<<goto 'Notice board - ledger'>>
+<</link>>
+<<link 'Back'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+<</if>>
+
+
+:: Notice board - result [Place]
+<<set _nbTitle = setup.noticeBoard.hasTownHall() ? 'TOWN HALL' : 'NOTICE BOARD'>>
+<h1 class="ptitle"><<=_nbTitle>></h1>
+<br />
+<<set _nbRes = $noticeBoard?.lastResult ?? null>>
+<<if !_nbRes>>
+	<<goto 'Notice board'>>
+<<else>>
+	<<if ($noticeBoard.counts.total ?? 0) >= 1>><<achievement 'nb_first'>><</if>>
+	<<if ($noticeBoard.counts.total ?? 0) >= 50>><<achievement 'nb_fifty'>><</if>>
+	<<if ($player.stats.nb_disputes ?? 0) >= 10>><<achievement 'nb_judge'>><</if>>
+	<<if setup.noticeBoard.tierIndex() >= 4>><<achievement 'nb_legend'>><</if>>
+	<<set _nbImg = _nbRes.img ?? (_nbRes.gold ? 'places/cabin/nb_gold.jpg' : setup.noticeBoard.CATS[_nbRes.cat].img)>>
+	<center>
+		<<image _nbImg sfw>>
+	</center>
+	<br />
+	<h3><<=_nbRes.title>></h3>
+	<<=_nbRes.text>>
+	<<if _nbRes.reward>>
+		<br /><br />
+		<strong>(<<=_nbRes.reward>>)</strong>
+	<</if>>
+	<<=_nbRes.extra>>
+	<br /><br />
+	<<link 'Back to the board'>>
+		<<run delete $noticeBoard.lastResult>>
+		<<goto 'Notice board'>>
+	<</link>>
+<</if>>
+
+
+:: Notice board - fight won [Place]
+<<if $nbFight>>
+	<<run setup.noticeBoard.fightResult($nbFight.id, true, $nbFight.kind)>>
+	<<unset $nbFight>>
+<</if>>
+<<goto 'Notice board - result'>>
+
+
+:: Notice board - fight lost [Place]
+<<if $nbFight>>
+	<<run setup.noticeBoard.fightResult($nbFight.id, false, $nbFight.kind)>>
+	<<unset $nbFight>>
+<</if>>
+<<goto 'Notice board - result'>>
+
+
+:: Notice board - ledger [Place]
+<<set _nbTitle = setup.noticeBoard.hasTownHall() ? 'TOWN HALL' : 'NOTICE BOARD'>>
+<h1 class="ptitle"><<=_nbTitle>></h1>
+<br />
+<<if !$noticeBoard>>
+	<<goto 'Wood cabin'>>
+<<else>>
+	<h3>Ledger</h3>
+	<table class="mc-stats-table nb-ledger">
+		<tr><td>Reputation</td><td><strong><<=setup.noticeBoard.tier().name>></strong> (<<=$noticeBoard.rep>>)</td></tr>
+		<tr><td>Requests done</td><td><<=$noticeBoard.counts.total ?? 0>></td></tr>
+		<<for _nbCK, _nbCV range setup.noticeBoard.CATS>>
+			<tr><td>&nbsp;&nbsp;<<=_nbCV.icon>> <<=_nbCV.name>></td><td><<=$noticeBoard.counts[_nbCK] ?? 0>></td></tr>
+		<</for>>
+		<tr><td>&nbsp;&nbsp;Gold notices</td><td><<=$noticeBoard.counts.gold ?? 0>></td></tr>
+		<tr><td>Failed or missed</td><td><<=$noticeBoard.failed ?? 0>></td></tr>
+		<tr><td>Current streak</td><td><<=$noticeBoard.streak>> <<=$noticeBoard.streak === 1 ? 'day' : 'days'>></td></tr>
+	</table>
+	<h3>Reputation tiers</h3>
+	<table class="mc-stats-table nb-ledger">
+		<<for _nbT range setup.noticeBoard.TIERS>>
+			<tr @class="$noticeBoard.rep >= _nbT.from ? 'nb-reached' : ''"><td><<=_nbT.name>> (<<=_nbT.from>>)</td><td><<=_nbT.bonus>></td></tr>
+		<</for>>
+	</table>
+	<<if $noticeBoard.recent.length>>
+		<h3>Recently</h3>
+		<<for _nbH range $noticeBoard.recent>>
+			<div>Day <<=_nbH.day>>: <<=_nbH.title>><<if !_nbH.ok>> <span class="nb-missing">(failed)</span><</if>></div>
+		<</for>>
+	<</if>>
+	<br />
+	<<link 'Back to the board'>>
+		<<goto 'Notice board'>>
+	<</link>>
+<</if>>
+
+
+:: Event - Notice board [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<if $noticeBoard>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nbBlairHome = isMetChar('blair') && ($characters.blair.quests.cabinType ?? 0) > 0>>
+<center>
+	<<image 'places/cabin/notice_board_intro.jpg'>>
+</center>
+<!-- #### places/cabin/notice_board_intro.jpg | morning at the gate of a patched-together post-apocalyptic settlement, a small queue of tired settlers waiting with complaints: a woman pointing at a leaking roof, a man with an empty tool belt, two neighbors arguing over a goat on a rope, dusty worn clothes, braless thin tops on the women, warm low morning light, worn and dusty, warm cinematic --ar 4:2 --p -->
+<br />
+You stepped out of the cabin that morning and found a queue at the gate. Not raiders, not traders - settlers. Your settlers, a whole line of them, waiting for you.
+<br /><br />
+<<newgirl>>
+<<set _nbSettlerW = $tmpGirl>>
+<<sayNpc _nbSettlerW>>
+	The roof over our kids leaks every time it rains. I asked three times already. Three.
+<</sayNpc>>
+<br />
+<<newguy>>
+<<set _nbSettlerM = $tmpGuy>>
+<<sayNpc _nbSettlerM>>
+	Somebody walked off with my tools. A saw, a hammer and half a box of nails. Somebody here.
+<</sayNpc>>
+<br />
+Behind them two neighbors were shouting about a goat, and the goat was shouting back. Everyone had a problem, and every problem had been waiting for you.
+<br /><br />
+<<if _nbBlairHome>>
+	<<blair>>
+		They'll keep coming to the gate every morning unless you give them somewhere else to go. Write it down. Nail it to a board. Then you deal with it when you can.
+	<</blair>>
+<<else>>
+	<<sayNpc _nbSettlerW>>
+		Maybe if there was a board? Somewhere we could write it down, so we're not all standing here every morning?
+	<</sayNpc>>
+<</if>>
+<br />
+That afternoon you took a plank from the woodpile, planed one side smooth and nailed it to the post beside the gate. By evening the first notes were already pinned to it, on scraps of paper, cardboard and the backs of old labels.
+<br /><br />
+<div style="font-size: 17pt; color: white; font-weight: bold">
+	The notice board is up!
+</div>
+<br />
+Guests, settlers and later even other settlements will pin requests to it. Take the ones you can handle, finish them before they're due, and your reputation as a leader will grow.
+<br /><br />
+<<run setup.noticeBoard.open()>>
+<<link 'Read the notices'>>
+	<<goto 'Notice board'>>
+<</link>>
+<<link 'Later'>>
+	<<goto 'Wood cabin'>>
+<</link>>
+<</if>>
+
+
+:: Event - Notice board legend [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<if !setup.noticeBoard.legendReady()>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<center>
+	<<image 'places/cabin/nb_legend.jpg'>>
+</center>
+<!-- #### places/cabin/nb_legend.jpg | a confident striking woman in her late twenties standing at the gate of a post-apocalyptic settlement at sunrise, travel-worn leather jacket over a thin braless top, a medical satchel on one shoulder and a knife on her belt, dust on her boots, a crowd of curious settlers behind the fence, warm golden light, worn and dusty, warm cinematic --ar 4:2 --p -->
+<br />
+<<newgirl>>
+<<set _nbLegend = $tmpGirl>>
+<<set
+	_nbLegend.beauty = randomInteger(86, 93),
+	_nbLegend.strength = Math.max(_nbLegend.strength ?? 0, 55),
+	_nbLegend.relationship = 40,
+	_nbLegend.happy = 40,
+	_nbLegend.skills = ['doctor', 'teacher'],
+	_nbLegend.likesGuys = true
+>>
+A woman was waiting at the gate when you came out, sitting on her pack like she had been there since before sunrise. The settlers had gathered along the fence to stare at her.
+<br /><br />
+<<sayNpc _nbLegend>>
+	Three towns told me the same story. A man who keeps his word, out here. I wanted to see that for myself. I'm a doctor, and I teach. If you have a bed, I'd like to stay.
+<</sayNpc>>
+<br />
+<<if setup.guestRoom.hasRoom(1)>>
+	<<set _nbLegendLabel = 'Welcome ' + _nbLegend.name + ' to the guest house'>>
+	<<link _nbLegendLabel>>
+		<<run setup.npc.addHistory(_nbLegend, 'recruited', { place: 'your gate, drawn by your reputation' })>>
+		<<run $guests.push(_nbLegend)>>
+		<<set $noticeBoard.legendDone = true, $noticeBoard.legendPending = false>>
+		<<unset $tmpGirl>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+<<else>>
+	You had to tell her there wasn't a single free bed in the guest house.
+	<br /><br />
+	<<sayNpc _nbLegend>>
+		Then build one. I'll be back.
+	<</sayNpc>>
+	<br />
+	<<link 'Watch her go'>>
+		<<set $noticeBoard.legendWaitDay = $game.day>>
+		<<unset $tmpGirl>>
+		<<goto 'Wood cabin'>>
+	<</link>>
+<</if>>
+<</if>>

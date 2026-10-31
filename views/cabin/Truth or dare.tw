@@ -1,0 +1,401 @@
+:: Truth or dare - setup [Place]
+<h1 class="ptitle">TRUTH OR DARE</h1>
+<br />
+<<set _todWhere = $todWhere ?? 'fireplace'>>
+<<set _todPool = setup.tod.circle()>>
+<<if _todPool.length < setup.tod.MIN_PLAYERS>>
+	<<unset $todWhere>>
+	<<goto 'Fire place'>>
+<<else>>
+<center>
+	<<image 'places/cabin/truth_or_dare.jpg'>>
+</center>
+<!-- #### places/cabin/truth_or_dare.jpg | (rebuild091_jobs.json job truth_or_dare_two) four young adult women of mixed ethnicities sitting cross-legged in a circle on an old patched blanket at night, laughing and teasing each other, one slim empty dark green glass bottle standing alone in the middle of the blanket, threadbare faded tank tops, braless but opaque, frayed cut-off shorts, warm campfire glow, worn and dusty, warm cinematic --ar 4:2 --p -->
+<br />
+<<if _todWhere === 'party'>>
+	The champagne was half gone when somebody spread an old blanket by the fire, found an empty bottle and stood it in the middle.
+	<br /><br />
+	<<set _todHost = _todPool[0]>>
+	<<sayNpc _todHost>>
+		Truth or dare. Come on, everybody plays. Well... almost everybody.
+	<</sayNpc>>
+	<br />
+<<else>>
+	You brought the bottle out to the fire, spread an old blanket on the ground and set the bottle down in the middle of it. It didn't take long before a few of the girls drifted over, curious, and sat down around it.
+	<br /><br />
+	<<set _todHost = _todPool[0]>>
+	<<sayNpc _todHost>>
+		Is that for drinking or for spinning? Because I know a game.
+	<</sayNpc>>
+	<br />
+<</if>>
+Who's playing? Pick two to four.
+<br /><br />
+<<set $tmpTodPick = {}>>
+<div id="tod_list">
+<<for _tdI, _tdP range _todPool>>
+	<<set _tdPid = _tdP.id>>
+	<<set _tdGender = 'gender-' + setup.genderClass(_tdP)>>
+	<<capture _tdPid>>
+		<div class="tod-row">
+			<<checkbox `"$tmpTodPick[_tdPid]"` false true autocheck>> <span @class="''+_tdGender+''" style="font-weight:bold"><<=setup.displayName(_tdP)>></span>
+		</div>
+	<</capture>>
+<</for>>
+</div>
+<div id="tod_msg"></div>
+<<link 'Start the game'>>
+	<<set _todIds = _todPool.filter(function (p) { return $tmpTodPick[p.id]; }).map(function (p) { return p.id; })>>
+	<<if _todIds.length < setup.tod.MIN_PLAYERS || _todIds.length > setup.tod.MAX_PLAYERS>>
+		<<replace '#tod_msg'>><span class="warning">Pick between <<=setup.tod.MIN_PLAYERS>> and <<=setup.tod.MAX_PLAYERS>> players.</span><</replace>>
+	<<else>>
+		<<run setup.tod.start(_todIds, _todWhere)>>
+		<<achievement 'tod_first'>>
+		<<unset $tmpTodPick, $todWhere>>
+		<<goto 'Truth or dare'>>
+	<</if>>
+<</link>>
+<<link 'Not tonight'>>
+	<<unset $tmpTodPick>>
+	<<if _todWhere === 'party'>>
+		<<unset $todWhere>>
+		<<set $game.partyNight = true>>
+		<<goto 'Bedroom'>>
+	<<else>>
+		<<unset $todWhere>>
+		<<goto 'Fire place'>>
+	<</if>>
+<</link>>
+
+<<done>>
+	<<script>>
+		/* Clicking the text next to a checkbox toggles it, like a label */
+		$('#tod_list .tod-row').css('cursor', 'pointer').on('click', function (e) {
+			if ($(e.target).is('input')) { return; }
+			var box = $(this).find('input[type=checkbox]:not(:disabled)')[0];
+			if (box) { box.click(); }
+		});
+	<</script>>
+<</done>>
+<</if>>
+
+
+:: Truth or dare [Place]
+<h1 class="ptitle">TRUTH OR DARE</h1>
+<<if !$tod>>
+	<<goto 'Fire place'>>
+<<else>>
+<<set _todTier = setup.tod.tier()>>
+<<if _todTier.key === 'wild'>>
+	<<achievement 'tod_wild'>>
+<</if>>
+<div class="tod-heat">
+	<<for _tdT range setup.tod.TIERS>>
+		<span @class="'tod-tier tod-tier-' + _tdT.key + (_tdT.key === _todTier.key ? ' tod-tier-on' : '')"><<=_tdT.name>></span>
+	<</for>>
+	<span class="tod-round">Round <<=$tod.round>> of <<=setup.tod.ROUNDS>></span>
+</div>
+<<=setup.tod.circleHtml()>>
+<<set _todAnimate = $tod.animate ?? false>>
+<<set $tod.animate = false>>
+
+<div @class="_todAnimate ? 'tod-text tod-reveal' : 'tod-text'">
+<<if $tod.step === 'spin'>>
+	<<if setup.tod.over()>>
+		<<if setup.tod.active().length === 0>>
+			The last of the girls had passed out against the logs. The bottle lay forgotten in the ashes.
+		<<else>>
+			The fire had burned down to embers and the bottle was empty. It was time to call it.
+		<</if>>
+		<br /><br />
+		<<link 'End the game'>>
+			<<goto 'Truth or dare - end'>>
+		<</link>>
+	<<else>>
+		<<if _todTier.key === 'mild'>>
+			The bottle lay in the middle of the circle. The girls were still giggling at the easy stuff, nudging each other, daring each other to dare.
+		<<elseif _todTier.key === 'spicy'>>
+			The jokes were getting bolder with every round. Somebody had stopped bothering to fix her top.
+		<<elseif _todTier.key === 'hot'>>
+			Nobody was laughing as much anymore. The air around the fire was thick and warm, and everyone was watching everyone.
+		<<else>>
+			Clothes lay scattered around the logs. Nobody was pretending this was still just a game.
+		<</if>>
+		<br /><br />
+		<<set _todWilling = setup.tod.willing()>>
+		<<if _todWilling.length>>
+			<<set _todNames = _todWilling.map(function (n) { return n.name; }).join(' and ')>>
+			<<=_todNames>> had stopped looking at the bottle. <<=_todWilling.length === 1 ? 'She was' : 'They were'>> looking at you.
+			<br /><br />
+		<</if>>
+		<<link 'Spin the bottle'>>
+			<<addmins 10>>
+			<<run setup.tod.doSpin()>>
+			<<goto 'Truth or dare'>>
+		<</link>>
+		<<if _todWilling.length >= 3>>
+			<<set _todFourLabel = 'Take ' + _todWilling[0].name + ', ' + _todWilling[1].name + ' and ' + _todWilling[2].name + ' to your bedroom'>>
+			<<link _todFourLabel>>
+				<<achievement 'tod_finale'>>
+				<<set $guestId = $guests.indexOf(_todWilling[0]), $guestId2 = $guests.indexOf(_todWilling[1]), $guestId3 = $guests.indexOf(_todWilling[2])>>
+				<<set $tmpGirl = $guests[$guestId], $tmpGirl2 = $guests[$guestId2], $tmpGirl3 = $guests[$guestId3]>>
+				<<set $tmpGirl.location = 'bedroom', $tmpGirl2.location = 'bedroom', $tmpGirl3.location = 'bedroom'>>
+				<<unset $charId, $slaveId, $charId2, $slaveId2, $charId3, $slaveId3>>
+				<<set $tmpGirlViewBack = 'Bedroom', $tmpGirlBack = 'Bedroom'>>
+				<<run setup.tod.finish()>>
+				<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
+			<</link>>
+		<</if>>
+		<<if _todWilling.length >= 2>>
+			<<set _todThreeLabel = 'Take ' + _todWilling[0].name + ' and ' + _todWilling[1].name + ' to your bedroom'>>
+			<<link _todThreeLabel>>
+				<<achievement 'tod_finale'>>
+				<<set $guestId = $guests.indexOf(_todWilling[0]), $guestId2 = $guests.indexOf(_todWilling[1])>>
+				<<set $tmpGirl = $guests[$guestId], $tmpGirl2 = $guests[$guestId2]>>
+				<<set $tmpGirl.location = 'bedroom', $tmpGirl2.location = 'bedroom'>>
+				<<unset $charId, $slaveId, $charId2, $slaveId2>>
+				<<set $tmpGirlViewBack = 'Bedroom', $tmpGirlBack = 'Bedroom'>>
+				<<run setup.tod.finish()>>
+				<<threesome $tmpGirl $tmpGirl2>>
+			<</link>>
+		<</if>>
+		<<for _tdW range _todWilling>>
+			<<set _tdWIdx = $guests.indexOf(_tdW)>>
+			<<set _todOneLabel = 'Take ' + _tdW.name + ' to your bedroom'>>
+			<<capture _tdWIdx>>
+				<<link _todOneLabel>>
+					<<achievement 'tod_finale'>>
+					<<unset $charId, $slaveId>>
+					<<set $guestId = _tdWIdx>>
+					<<set $tmpGirl = $guests[_tdWIdx]>>
+					<<set $tmpGirl.location = 'bedroom'>>
+					<<set $tmpGirl.rape to false>>
+					<<set $tmpGirlCapture to false>>
+					<<set $tmpGirlInvite to false>>
+					<<set $tmpGirlViewBack = 'Bedroom', $tmpGirlBack = 'Bedroom'>>
+					<<run setup.tod.finish()>>
+					<<fuck $tmpGirl>>
+				<</link>>
+			<</capture>>
+		<</for>>
+		<<link 'Call it a night'>>
+			<<goto 'Truth or dare - end'>>
+		<</link>>
+	<</if>>
+
+<<elseif $tod.step === 'mc_asks'>>
+	<<set _tdTarget = setup.tod.npc($tod.turn.target)>>
+	The bottle spun, slowed and stopped, its neck pointing at <<=setup.displayName(_tdTarget)>>. Your turn to ask.
+	<br /><br />
+	<<sayNpc _tdTarget>>
+		<<if setup.tod.boldness(_tdTarget, true) >= 40>>
+			Dare. Obviously. Make it a good one.
+		<<else>>
+			Be nice to me...
+		<</if>>
+	<</sayNpc>>
+	<br />
+	<<link 'Ask her a truth'>>
+		<<run setup.tod.mcAsksTruth()>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+	<<for _tdO, _tdOffer range $tod.offer>>
+		<<set _tdOfferLabel = setup.tod.dareLabel(_tdOffer)>>
+		<<capture _tdO>>
+			<<link _tdOfferLabel>>
+				<<run setup.tod.mcAsksDare(_tdO)>>
+				<<goto 'Truth or dare'>>
+			<</link>>
+		<</capture>>
+	<</for>>
+
+<<elseif $tod.step === 'mc_target'>>
+	<<set _tdAsker = setup.tod.npc($tod.turn.asker)>>
+	The bottle spun, slowed and stopped, pointing straight at you. <<=setup.displayName(_tdAsker)>> leaned forward with a grin.
+	<br /><br />
+	<<sayNpc _tdAsker>>
+		Truth or dare?
+	<</sayNpc>>
+	<br />
+	<<link 'Truth'>>
+		<<run setup.tod.mcTargetTruth()>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+	<<link 'Dare'>>
+		<<run setup.tod.mcTargetDare()>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+
+<<elseif $tod.step === 'mc_truth'>>
+	<<set _tdAsker = setup.tod.npc($tod.turn.asker)>>
+	<<if $tod.mcQuestion === 'prettiest'>>
+		<<sayNpc _tdAsker>>
+			Truth, then. Who's the prettiest girl in this circle? And you have to pick one.
+		<</sayNpc>>
+		<br />
+		<<for _tdN range setup.tod.active()>>
+			<<set _tdNId = _tdN.id>>
+			<<set _tdPickLabel = 'Say ' + _tdN.name>>
+			<<capture _tdNId>>
+				<<link _tdPickLabel>>
+					<<run setup.tod.answerPrettiest(_tdNId)>>
+					<<goto 'Truth or dare'>>
+				<</link>>
+			<</capture>>
+		<</for>>
+	<<else>>
+		<<sayNpc _tdAsker>>
+			Truth, then. Have you ever thought about me... you know. That way?
+		<</sayNpc>>
+		<br />
+		<<link 'Yes'>>
+			<<run setup.tod.answerThink(true)>>
+			<<goto 'Truth or dare'>>
+		<</link>>
+		<<link 'No'>>
+			<<run setup.tod.answerThink(false)>>
+			<<goto 'Truth or dare'>>
+		<</link>>
+	<</if>>
+
+<<elseif $tod.step === 'mc_dare'>>
+	<<set _tdAsker = setup.tod.npc($tod.turn.asker)>>
+	<<set _tdDare = setup.tod.dareById($tod.mcDare)>>
+	<<=setup.tod.fill(_tdDare.ask, _tdAsker, 'mc', null)>>
+	<br /><br />
+	<<sayNpc _tdAsker>>
+		Well? A dare's a dare.
+	<</sayNpc>>
+	<br />
+	<<link 'Do it'>>
+		<<run setup.tod.mcDoesDare()>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+	<<link 'Take a shot instead'>>
+		<<run setup.tod.mcRefusesDare()>>
+		<<if $player.drunk > 75>>
+			<<perkAdd 'drunk'>>
+		<</if>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+
+<<elseif $tod.step === 'result'>>
+	<<if $tod.result.img>>
+		<<set _tdShow = setup.tod.showAs(setup.tod.npc($tod.result.imgNpcId), $tod.result.img[0])>>
+		<<set _tdAct = $tod.result.img[1]>>
+		<center>
+			<<actionImage _tdShow _tdAct 'no-text'>>
+		</center>
+		<br />
+	<</if>>
+	<<=$tod.result.text>>
+	<br /><br />
+	<<if $tod.result.cum && $player.horny >= 100 && !$tod.mcSpent>>
+		<<set _tdCumNpc = setup.tod.npc($tod.result.cumNpcId)>>
+		<<set _tdCumShow = setup.tod.showAs(_tdCumNpc, 'default')>>
+		<<if $tod.result.cum === 'pussy'>>
+			<div id="tod_cum_in">
+				<<linkreplace 'Cum inside her pussy'>>
+					<<horny_reset>>
+					<<run $('#tod_cum_out').hide()>>
+					<<if setup.pregnancyChance(_tdCumNpc)>>
+						<<set _tdCumNpc.pregnancy = 0>>
+						<<set _tdCumNpc.pregnancy_father = 'mc'>>
+					<</if>>
+					<<set $tod.mcSpent = true>>
+					<center>
+						<<actionImage _tdCumShow 'cum_in_pussy' 'no-text'>>
+					</center>
+					<br />
+					You grabbed <<=_tdCumNpc.name>>'s hips and came deep inside her pussy while the whole circle watched. Somebody started a slow clap.
+					<br /><br />
+				<</linkreplace>>
+			</div>
+			<div id="tod_cum_out">
+				<<linkreplace 'Pull out and cum on her stomach'>>
+					<<horny_reset>>
+					<<run $('#tod_cum_in').hide()>>
+					<<set $tod.mcSpent = true>>
+					<center>
+						<<actionImage _tdCumShow 'cum_on_stomach' 'no-text'>>
+					</center>
+					<br />
+					You pulled out at the last second and came all over <<=_tdCumNpc.name>>'s stomach. She laughed and drew a heart in it with one finger.
+					<br /><br />
+				<</linkreplace>>
+			</div>
+		<<elseif $tod.result.cum === 'mouth'>>
+			<<linkreplace 'Cum in her mouth'>>
+				<<horny_reset>>
+				<<set $tod.mcSpent = true>>
+				<center>
+					<<actionImage _tdCumShow 'cum_in_mouth' 'no-text'>>
+				</center>
+				<br />
+				You held <<=_tdCumNpc.name>>'s head and came in her mouth. She swallowed, wiped her lips and said the ten seconds were up.
+				<br /><br />
+			<</linkreplace>>
+		<<else>>
+			<<linkreplace 'Cum in her hand'>>
+				<<horny_reset>>
+				<<set $tod.mcSpent = true>>
+				<center>
+					<<actionImage _tdCumShow 'handjob_cum' 'no-text'>>
+				</center>
+				<br />
+				You came hard in <<=_tdCumNpc.name>>'s fist. She held up her sticky hand like a trophy and the circle cheered.
+				<br /><br />
+			<</linkreplace>>
+		<</if>>
+	<</if>>
+	<<link 'Next round'>>
+		<<run setup.tod.nextRound()>>
+		<<goto 'Truth or dare'>>
+	<</link>>
+	<<link 'Call it a night'>>
+		<<goto 'Truth or dare - end'>>
+	<</link>>
+<</if>>
+</div>
+
+<<done>>
+	<<script>>
+		/* The bottle turns from where it stopped last time to the player who has to answer */
+		var bottle = document.getElementById('tod-bottle');
+		if (bottle) {
+			setTimeout(function () {
+				bottle.style.transform = 'translate(-50%,-50%) rotate(' + bottle.dataset.angle + 'deg)';
+			}, 60);
+		}
+	<</script>>
+<</done>>
+<</if>>
+
+
+:: Truth or dare - end [Place]
+<h1 class="ptitle">TRUTH OR DARE</h1>
+<br />
+<<set _todEndWhere = $tod?.where ?? 'fireplace'>>
+<<if $tod>>
+	<<set _todOut = $tod.out.map(function (id) { return setup.tod.npc(id); }).filter(Boolean).map(function (n) { return n.name; })>>
+	<<set _todDares = $tod.dares>>
+	<<run setup.tod.finish()>>
+	The game broke up the way those games always do: one by one, with a lot of laughing and not much walking in straight lines. <<=_todDares>> <<=_todDares === 1 ? 'dare' : 'dares'>> done tonight, and nobody was going to forget all of them.
+	<<if _todOut.length>>
+		<br /><br />
+		You carried <<=_todOut.join(' and ')>> to bed. <<=_todOut.length === 1 ? 'She' : 'They'>> would have a headache in the morning.
+	<</if>>
+<<else>>
+	The fire had burned down. Whatever had happened tonight, it was over.
+<</if>>
+<br /><br />
+<<if _todEndWhere === 'party'>>
+	<<link 'Go to bed'>>
+		<<set $game.partyNight = true>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<<else>>
+	<<link 'Back to the fire'>>
+		<<goto 'Fire place'>>
+	<</link>>
+<</if>>

@@ -54,7 +54,7 @@
 		<</if>>
 		<<run _peopleInBathhouse[_bathGuest.gender]['guest:' + _bathGuestI] = true>>
 		<<set _genderClass = 'gender-' + setup.genderClass(_bathGuest)>>
-		<tr>
+		<tr class="item">
 			<td style="width: 300px">
            		 <span @class="''+_genderClass+''">
                       <<link _bathGuest.name>>
@@ -84,6 +84,8 @@
 						<</if>>
                       <</link>>
                   </span>
+			<<=setup.npcListInfo(_bathGuest)>>
+			<br />
 			<<set _jobDescMap = {
 				'garden': 'the garden', 'forest': 'the forest',
 				'milk_barn': 'the barn', 'hunter': 'the hunt',
@@ -129,17 +131,7 @@
 			<</if>>
 			</td>
 			<td>
-				<<if [0,2].includes(_bathGuest.gender) && setup.getAge(_bathGuest) >= 17>>
-					Beauty score: <<=_bathGuest.beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge(_bathGuest)>>
-			</td>
-			<td>
-				<<if _bathGuest.assignedTo>>
-					(<<=_bathGuest.assignedTo>>)
-				<</if>>
+				<<npcListView _bathGuest _bathGuestI 'guest'>>
 			</td>
 		</tr>
 		<</capture>>
