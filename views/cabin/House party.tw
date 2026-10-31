@@ -67,7 +67,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  <td>
 						<<if !_guest.chastityBelt>>
 				  			<<link 'Invite to the bedroom'>>
-								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
+								<<if !_guest.gender && setup.Tangle.eligible(_guest) && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 									<<set $tmpGirl to _guest>>
 									<<set $guestId = _guestI>>
 									<<unset $charId, $slaveId>>
@@ -141,8 +141,9 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<</for>>
 			<br /><br />
 			<<set  _randomPersons = setup.getAvailablePersons18yo($guests)>>
-			<<set _randomPersonsGirls = setup.commonValues([(_randomPersons[0] ?? []), _guestsNotPregnant])>>
-			<<if _randomPersonsGirls.length < 3>><<set _randomPersonsGirls = (_randomPersons[0] ?? [])>><</if>>
+			<<set _foursomeEligible = (_randomPersons[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
+			<<set _randomPersonsGirls = setup.commonValues([_foursomeEligible, _guestsNotPregnant])>>
+			<<if _randomPersonsGirls.length < 3>><<set _randomPersonsGirls = _foursomeEligible>><</if>>
 			<<if recall($suppCode) && setup.percentageChance(50) && _randomPersonsGirls.length >= 3>>
 				<<set _randomGirls = setup.getRandomPersons(_randomPersonsGirls, 3)>>
 				<<set _npc1 = $guests[_randomGirls[0]]>>
@@ -218,7 +219,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				  <td>
 						<<if !_guest.chastityBelt>>
 				  			<<link 'Invite to the bedroom'>>
-								<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
+								<<if !_guest.gender && setup.Tangle.eligible(_guest) && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 									<<set $tmpGirl to _guest>>
 									<<set $guestId = _guestI>>
 									<<unset $charId, $slaveId>>
@@ -246,7 +247,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<<set _guestsGirls = setup.propertyMatchIndexes($guests, 'gender', 0)>>
 	<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
 	<<set _guestsGay = setup.propertyMatchIndexes($guests, 'likesGuys', true, '!=')>>
-	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay, _guestsNotPregnant])>>
+	<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsGirls, _guestsNoChastityBelt, _guestsGay, _guestsNotPregnant]).filter(i => setup.Tangle.eligible($guests[i]))>>
 	
 	<<if _guestsLikesGirls.length && setup.percentageChance(40)>>
 		<<set _randomLesbianId = setup.getRandomElement(_guestsLikesGirls)>>

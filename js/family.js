@@ -85,6 +85,32 @@ setup.family = {
         return rels.length ? rels.join('/') : null;
     },
 
+    // Step ties to the MC through marriage, only for NPCs with no blood tie. Returns { npc, mc } role
+    // words (e.g. { npc: 'stepdaughter', mc: 'stepfather' }) or null. Kept apart from getRelationToMC
+    // so step-family isn't treated as incest by the noIncest policy or shown as a blood "Relative".
+    getStepRelationToMC: function(npc) {
+        if (!npc?.id || this.getRelationToMC(npc)) return null;
+        const pf = variables().player.family ?? {};
+        const f = npc.family ?? {};
+        const pick = (fem, male) => (npc.gender === 0 || npc.gender === 2) ? fem : male;
+        const spousesOf = id => {
+            const person = id ? setup.getNpcById(id) : null;
+            return person ? [person.family?.husband, ...(person.family?.wives ?? [])].filter(Boolean) : [];
+        };
+        const npcParents = [f.mother, f.father].filter(Boolean);
+
+        // Stepchild: one of npc's parents is married to the MC.
+        if (npcParents.some(id => spousesOf(id).includes('mc') || (pf.wives ?? []).includes(id))) {
+            return { npc: pick('stepdaughter', 'stepson'), mc: 'stepfather' };
+        }
+        // Step-parent: npc is married to one of the MC's parents.
+        const parentSpouses = [pf.mother, pf.father].flatMap(spousesOf);
+        if (parentSpouses.includes(npc.id)) return { npc: pick('stepmother', 'stepfather'), mc: 'stepson' };
+        // Step-sibling: npc is a child of one of the MC's step-parents.
+        if (npcParents.some(id => parentSpouses.includes(id))) return { npc: pick('stepsister', 'stepbrother'), mc: 'stepbrother' };
+        return null;
+    },
+
     // The MC's role from npc's side, mirroring getRelationToMC part by part (e.g. "half-brother/uncle").
     getMcRoleToNpc: function(npc) {
         const rel = this.getRelationToMC(npc);

@@ -80,15 +80,17 @@
 		</div>
 	</div>
 
-	<<if !($locationEvents.shop ?? false) && !setup.family.isBloodToMC(_shopKeeper)>>
-		<<if !_shopKeeper.gender && _shopKeeper.sub <= 50 && setup.percentageChance(5)>>
+	<<if !($locationEvents.shop ?? false) && setup.getAge(_shopKeeper) >= 18>>
+		/* Stealing and storeroom never involve relatives (storeroom is non-consensual); slow day follows the noIncest policy. */
+		<<set _shopKeeperRelated = setup.Tangle.isRelated(_shopKeeper)>>
+		<<if !_shopKeeper.gender && _shopKeeper.sub <= 50 && !_shopKeeperRelated && setup.percentageChance(5)>>
 			<<set $locationEvents.shop = true>>
 			<<goto 'Shop - stealing shopkeeper'>>
-		<<elseif !_shopKeeper.gender && (_shopKeeper.likesGuys ?? true) && _shopKeeper.relationship >= 40 && timeBetween('09:00', '18:00') && setup.percentageChance(10)>>
+		<<elseif !_shopKeeper.gender && (_shopKeeper.likesGuys ?? true) && _shopKeeper.relationship >= 40 && setup.Tangle.eligible(_shopKeeper) && timeBetween('09:00', '18:00') && setup.percentageChance(10)>>
 			<<set $tmpEvent = {id: _shopKeeperIds[0]}>>
 			<<set $locationEvents.shop = true>>
 			<<goto 'Shop [Event] - slow day'>>
-		<<elseif !_shopKeeper.gender && _shopKeeper.race !== 'black' && setup.percentageChance(8)>>
+		<<elseif !_shopKeeper.gender && _shopKeeper.race !== 'black' && !_shopKeeperRelated && setup.percentageChance(8)>>
 			<<set $tmpEvent = {id: _shopKeeperIds[0]}>>
 			<<set $locationEvents.shop = true>>
 			<<goto 'Shop [Event] - storeroom'>>

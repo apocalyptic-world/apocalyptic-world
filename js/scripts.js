@@ -565,6 +565,14 @@ setup.getAvailablePersons18yo = function (persons) {
     return output;
 };
 
+/** $guests indices who can be the Negan "drunk companion": adults who can talk (not feral) and don't dislike alcohol. */
+setup.drunkCompanionCandidates = function () {
+    const guests = variables().guests ?? [];
+    return [].concat(...Object.values(setup.getAvailablePersons18yo(guests))).filter(function (i) {
+        return !(guests[i].traits ?? []).includes('feral') && !(guests[i].dislikes ?? []).includes('alcohol');
+    });
+};
+
 setup.getAvailablePersons18yoVirgins = function (persons) {
     var output = {};
     for (var i = 0; i < persons.length; i++) {

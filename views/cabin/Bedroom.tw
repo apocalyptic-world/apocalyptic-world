@@ -80,7 +80,7 @@
 
 <<link "Sleep">>
 	<<if $game.partyNight>>
-		<<set _dnvCandidates = setup.filterNPCs($guests, {gender: 0, likesGuys: true, relationship_gte: 60, chastityBelt_not: [true], race_in: ['white', 'latina']})[0] ?? []>>
+		<<set _dnvCandidates = (setup.filterNPCs($guests, {gender: 0, likesGuys: true, relationship_gte: 60, chastityBelt_not: [true], race_in: ['white', 'latina']})[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
 		<<run console.log('[DNV] partyNight:', $game.partyNight, '| candidates:', _dnvCandidates, '| guests:', $guests.map(function(g){return {name:g.name,gender:g.gender,race:g.race,likesGuys:g.likesGuys,relationship:g.relationship,chastityBelt:g.chastityBelt}}))>>
 		<<if _dnvCandidates.length>>
 			<<set $tmpEvent = { id: _dnvCandidates[Math.floor(Math.random() * _dnvCandidates.length)] }>>
@@ -103,7 +103,7 @@
 		<<if _npc>>
 			<<energy 20>>
 		<</if>>
-		<<if _npc && setup.percentageChance(30) && _npc.likesGuys && !($locationEvents.bedroom ?? false)>>
+		<<if _npc && setup.percentageChance(30) && _npc.likesGuys && setup.Tangle.eligible(_npc) && !($locationEvents.bedroom ?? false)>>
 			<<set $tmpEvent = {
 				id: _isSlave ? _slaveId : _guestId,
 				isSlave: _isSlave
@@ -152,7 +152,7 @@
 	<<elseif _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && setup.blair.smallHoursVariant() && setup.percentageChance(5)>>
 		<<goto 'Blair [Event] - The small hours'>>
 	<<elseif timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
-		<<set _hornyGuests = setup.filterNPCs($guests, {gender: 0, horny_gte: 51, likesGuys: true, relationship_gte: 70, chastityBelt_not: [true]})[0] ?? []>>
+		<<set _hornyGuests = (setup.filterNPCs($guests, {gender: 0, horny_gte: 51, likesGuys: true, relationship_gte: 70, chastityBelt_not: [true]})[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
 		<<if _hornyGuests.length>>
 			<<set $guestId = _hornyGuests[Math.floor(Math.random()*_hornyGuests.length)]>>
 			<<unset $charId, $slaveId>>
@@ -161,7 +161,7 @@
 		<</if>>
 	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5) && recall($suppCode)>>
 		<<set _girls = setup.getAvailablePersons18yo($guests)>>
-		<<set _girls[0] = (_girls[0] ?? []).filter(id => !($guests[id]?.traits ?? []).includes('feral'))>>
+		<<set _girls[0] = (_girls[0] ?? []).filter(id => !($guests[id]?.traits ?? []).includes('feral') && setup.Tangle.eligible($guests[id]))>>
 		<<if (_girls[0] ?? []).length>>
 			<<set $tmpEvent = {
 				id: _girls[0][Math.floor(Math.random()*_girls[0].length)]

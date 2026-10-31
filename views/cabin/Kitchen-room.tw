@@ -77,16 +77,17 @@
 
 [[Back|Wood cabin]]
 
-<<set _guestsWomen = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+<<set _guestsWomen = (setup.getAvailablePersons18yo($guests)[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
 
 <<if !($locationEvents.kitchen ?? false)>>
 	<<set _npcsWomenLikesGuys = setup.filterNPCs($guests, {'virgin': false, race_in: ['white'], hair_in: ['blonde', 'brown'], gender: 0})>>
+	<<set _npcsWomenLikesGuys[0] = (_npcsWomenLikesGuys[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
 	<<if (_npcsWomenLikesGuys[0] ?? []).length >= 1 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && recall($suppCode)>>
 		<<set $tmpEvent = {
 			id: setup.getRandomElement(_npcsWomenLikesGuys[0])
 		}>>
 		<<goto 'Kitchen - morning coffee'>>
-	<<elseif _isKitchenGirlAssigned && !$tmpGirl.gender && setup.percentageChance(5)>>
+	<<elseif _isKitchenGirlAssigned && !$tmpGirl.gender && setup.Tangle.eligible($tmpGirl) && setup.percentageChance(5)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $tmpEvent = {
 			type: _isSlave ? 'slave' : 'guest',
@@ -96,7 +97,7 @@
 	<<elseif _guestsWomen.length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $tmpEvent = {
-			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
+			id: setup.getRandomElement(_guestsWomen)
 		}>>
 		<<goto 'Kitchen - wet shirt'>>
 	<<elseif _guestsWomen.length >= 1 && timeBetween('10:00', '12:00') && recall($suppCode) && setup.percentageChance(10)>>
