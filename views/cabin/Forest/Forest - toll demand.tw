@@ -3,7 +3,7 @@
 <br />
 
 
-<<set _tollNpc = $guests[$forestTollEvent.npcIndex]>>
+<<set _tollNpc = setup.getNpcById($forestTollEvent.npcId) ?? $guests[$forestTollEvent.npcIndex]>> /* npcIndex: events saved before the id was stored */
 <<set _amount = $forestTollEvent.amount>>
 <<newguy>>
 <<set $tmpGuy.name = 'Stranger'>>
