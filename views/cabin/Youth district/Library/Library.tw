@@ -3,7 +3,7 @@
 <<if !($locationEvents.library ?? false)>>
     <<set _libraryIdx = []>>
     <<for _lgI, _lg range $guests>>
-        <<if _lg && !_lg.gender && (_lg.likesGuys ?? true) && !_lg.chastityBelt && !(_lg.traits ?? []).includes('feral') && setup.getAge(_lg) >= 18 && !setup.isAtWork(_lg, $weather) && !setup.family.isBloodToMC(_lg)>>
+        <<if _lg && !_lg.gender && (_lg.likesGuys ?? true) && !_lg.chastityBelt && !(_lg.traits ?? []).includes('feral') && !setup.isAtWork(_lg, $weather) && setup.Tangle.eligible(_lg)>>
             <<run _libraryIdx.push(_lgI)>>
         <</if>>
     <</for>>

@@ -74,8 +74,20 @@ By the looks of it, the filthy girl is either eating something or searching for 
 						<<fuck $tmpGirl>>
 					<</link>>
 				</div>
-				<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int > 20>>
+				<<set _nf10LeadMissing = [
+					setup.guestRoom.hasRoom() ? null : 'a free guest room',
+					$backpack.has('food') ? null : 'food',
+					$player.int > 20 ? null : 'Intelligence 21+ (you have ' + $player.int + ')'
+				].filter(Boolean)>>
+				<<set _nf10HasBasement = $game.location.basement ?? false>>
+				<<set _nf10CapMissing = [
+					_nf10HasBasement ? null : 'a basement',
+					!_nf10HasBasement || $slaves.length < $basementLimit ? null : 'free basement space',
+					$backpack.has('rope') ? null : 'rope',
+					$player.strength > 20 ? null : 'Strength 21+ (you have ' + $player.strength + ')'
+				].filter(Boolean)>>
 				<div id="nf10_opt_lead">
+				<<if _nf10LeadMissing.length === 0>>
 					<<linkreplace 'Lead her back home (-1 food)'>>
 						<<run $('#nf10_opt_sex, #nf10_opt_cap, #nf10_opt_leave').hide()>>
 						<<drop $backpack 'food' 1>>
@@ -90,10 +102,14 @@ By the looks of it, the filthy girl is either eating something or searching for 
 						<br /><br />
 						<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 					<</linkreplace>>
-				</div>
+				<<else>>
+					<div class="link-internal disabled" style="background: #ccc">
+						Lead her back home (-1 food) <span style="font-size:0.8em">(needs <<=_nf10LeadMissing.join(', ')>>)</span>
+					</div>
 				<</if>>
-				<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $backpack.has('rope') && $player.strength > 20>>
+				</div>
 				<div id="nf10_opt_cap">
+				<<if _nf10CapMissing.length === 0>>
 					<<linkreplace 'Capture her as a pet (-1 rope)'>>
 						<<run $('#nf10_opt_sex, #nf10_opt_lead, #nf10_opt_leave').hide()>>
 						<<drop $backpack 'rope' 1>>
@@ -109,8 +125,12 @@ By the looks of it, the filthy girl is either eating something or searching for 
 						<br /><br />
 						<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 					<</linkreplace>>
-				</div>
+				<<else>>
+					<div class="link-internal disabled" style="background: #ccc">
+						Capture her as a pet (-1 rope) <span style="font-size:0.8em">(needs <<=_nf10CapMissing.join(', ')>>)</span>
+					</div>
 				<</if>>
+				</div>
 			</div>
 		<</linkreplace>>
 		</div>
@@ -151,8 +171,21 @@ She comes down slowly, breathing ragged. You give her a moment. When you look ba
 <</if>>
 <br /><br />
 
-<<if setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int > 20 && !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
+<<set _nf10LeadMissing = [
+	setup.guestRoom.hasRoom() ? null : 'a free guest room',
+	$backpack.has('food') ? null : 'food',
+	$player.int > 20 ? null : 'Intelligence 21+ (you have ' + $player.int + ')'
+].filter(Boolean)>>
+<<set _nf10HasBasement = $game.location.basement ?? false>>
+<<set _nf10CapMissing = [
+	_nf10HasBasement ? null : 'a basement',
+	!_nf10HasBasement || $slaves.length < $basementLimit ? null : 'free basement space',
+	$backpack.has('rope') ? null : 'rope',
+	$player.strength > 20 ? null : 'Strength 21+ (you have ' + $player.strength + ')'
+].filter(Boolean)>>
+<<if !($tmpGirl.sub > ($noFacePreSub ?? $tmpGirl.sub))>>
 <div id="nf10as_opt_lead">
+<<if _nf10LeadMissing.length === 0>>
 	<<linkreplace 'Lead her back home (-1 food)'>>
 		<<run $('#nf10as_opt_cap, #nf10as_opt_leave').hide()>>
 		<<drop $backpack 'food' 1>>
@@ -167,10 +200,15 @@ She comes down slowly, breathing ragged. You give her a moment. When you look ba
 		<br /><br />
 		<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 	<</linkreplace>>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Lead her back home (-1 food) <span style="font-size:0.8em">(needs <<=_nf10LeadMissing.join(', ')>>)</span>
+	</div>
+<</if>>
 </div>
 <</if>>
-<<if ($game.location.basement ?? false) && $slaves.length < $basementLimit && $backpack.has('rope') && $player.strength > 20>>
 <div id="nf10as_opt_cap">
+<<if _nf10CapMissing.length === 0>>
 	<<linkreplace 'Capture her as a pet (-1 rope)'>>
 		<<run $('#nf10as_opt_lead, #nf10as_opt_leave').hide()>>
 		<<drop $backpack 'rope' 1>>
@@ -186,8 +224,12 @@ She comes down slowly, breathing ragged. You give her a moment. When you look ba
 		<br /><br />
 		<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 	<</linkreplace>>
-</div>
+<<else>>
+	<div class="link-internal disabled" style="background: #ccc">
+		Capture her as a pet (-1 rope) <span style="font-size:0.8em">(needs <<=_nf10CapMissing.join(', ')>>)</span>
+	</div>
 <</if>>
+</div>
 <div id="nf10as_opt_leave">
 	<<link 'Leave'>><<goto 'Outside'>><</link>>
 </div>

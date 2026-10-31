@@ -5,7 +5,8 @@
     MILK BARN
 </h1>
 <br />
-<<set _guestsWomen = setup.getAvailablePersons18yo($guests)[0] ?? []>>
+/* She objects throughout, so relatives are never picked for this one, whatever the noIncest policy. */
+<<set _guestsWomen = (setup.getAvailablePersons18yo($guests)[0] ?? []).filter(i => !setup.Tangle.isRelated($guests[i]))>>
 <<set _id = setup.getRandomElement(_guestsWomen)>>
 <<set _npc = $guests[_id]>>
 As you stepped into the dimly lit milk barn, the scent of damp hay and old wood mingled with the faint aroma of clean laundry. 
@@ -21,7 +22,7 @@ Outside, rain pattered steadily against the corrugated roof, creating a calming 
     <<=setup.displayName(_npc)>> glanced back, a hint of surprise in her eyes quickly fading into a small smile.
     <br /><br />
     <<sayNpc _npc>>
-        Hey! Hope you don't mind. Had to find a place to dry out clothes.
+        Hey! Hope you don't mind. Had to find a place to dry out my clothes.
     <</sayNpc>>
     <br />
     <<linkreplace 'Lift her dress'>>
@@ -32,12 +33,12 @@ Outside, rain pattered steadily against the corrugated roof, creating a calming 
         <br /><br />
         <<if setup.sexChance(_npc)>>
             <<sayNpc _npc>>
-                Oh what you have in mind?
+                Oh, what do you have in mind?
             <</sayNpc>>
         <<else>>
             <<set _npc.happy -= 20>>
             <<sayNpc _npc>>
-                What are you doing? Not here. Not now
+                What are you doing? Not here. Not now.
             <</sayNpc>>
         <</if>>    
         <br />
@@ -56,13 +57,13 @@ Outside, rain pattered steadily against the corrugated roof, creating a calming 
             <<linkreplace 'Finger her ass'>>
                 <<video 'milk_barn/dry3'>>
                 <br /><br />
-                <<=setup.displayName(_npc)>> stands still as you spit on her ass and slowly slide finger inside it. 
-                She strains her asshole but slowly relaxes as as you slide your finger deper and deeper inside her.
+                <<=setup.displayName(_npc)>> stands still as you spit on her ass and slowly slide a finger inside it. 
+                She strains her asshole but slowly relaxes as you slide your finger deeper and deeper inside her.
                 <br /><br />
                 <<video 'milk_barn/dry4'>>
                 <br /><br />
                 <<sayNpc _npc>>
-                    Uh I kind of like that.
+                    Uh... I kind of like that.
                 <</sayNpc>>
                 <br />
                 <<if (_npc.traitsLocked ?? []).includes('analslut') && setup.percentageChance(30)>>
@@ -79,7 +80,7 @@ Outside, rain pattered steadily against the corrugated roof, creating a calming 
                 <br />
                 <<video 'milk_barn/dry6'>>
                 <br /><br />
-                You can feel her asshole getting more relaxed with each thrust. In few random moments although you feel that thrust has been too hard as she strains her asshole for a second, forcing you to slow down.
+                You can feel her asshole getting more relaxed with each thrust. A few times, a thrust goes in too hard, and she tenses for a second, forcing you to slow down.
                 <br /><br />
                 <<linkreplace 'Cum on her ass'>>
                     <<addmins 20>>
@@ -88,10 +89,10 @@ Outside, rain pattered steadily against the corrugated roof, creating a calming 
                     <<video 'milk_barn/dry7'>>
                     <br /><br />
                     With the last of your thrust, you pull your dick out of her ass as you cum all over it and her clean dress too. 
-                    She is leaning completely against the pile of hay with her stomach and waiting for you to finish..
+                    She is leaning completely against the pile of hay with her stomach and waiting for you to finish.
                     <br /><br />
                     <<sayNpc _npc>>
-                        Are you finished? Can I finish putting out clothes now?
+                        Are you finished? Can I finish putting out the clothes now?
                     <</sayNpc>>
                     <br /><br />
                 <</linkreplace>>

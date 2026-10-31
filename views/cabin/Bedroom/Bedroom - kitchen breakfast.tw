@@ -102,16 +102,16 @@ She ran a hand slowly up her own stomach, over her ribs, and cupped one breast â
                                     <center>
                                         <<image 'game/misc/creampie_on_back.webp'>>
                                     </center>
+                                    <<if _npc.virgin>><<run setup.npc.addHistory(_npc, 'virgin_lost', { with: 'mc' })>><</if>>
+                                    <<set _npc.virgin = false>>
                                     <<if setup.pregnancyChance(_npc)>>
                                         <<set _npc.pregnancy_father = 'mc'>>
                                         <<set _npc.pregnancy = 0>>
-                                        <<if _npc.virgin>><<run setup.npc.addHistory(_npc, 'virgin_lost', { with: 'mc' })>><</if>>
-                                        <<set _npc.virgin = false>>
                                     <</if>>
                                     <br />
                                     You slammed in one last time and held there, teeth clenched, cock pulsing as you erupted deep inside her. Thick ropes of cum flooded her pussy, each pulse drawing a ragged cry out of her as she felt it fill her up. Her walls spasmed around you, clenching hard, milking every last drop out of your cock.
                                     <br /><br />
-                                    She sat on you for a moment, trembling, your cum already leaking out around your cock and running down your balls. Then she climbed off, legs unsteady, reached for the breakfast tray, and set it in your lap like nothing happened.
+                                    She lay beneath you for a moment, trembling, your cum already leaking out around your cock and running down your balls. Then she climbed off, legs unsteady, reached for the breakfast tray, and set it in your lap like nothing happened.
                                     <br /><br />
                                     <<link 'Get up'>>
                                         <<goto 'Wood cabin'>>
@@ -123,6 +123,8 @@ She ran a hand slowly up her own stomach, over her ribs, and cupped one breast â
                                     <<run $('#option_creampie').hide()>>
                                     <<horny_reset>>
                                     <<set _npc.horny = 0>>
+                                    <<if _npc.virgin>><<run setup.npc.addHistory(_npc, 'virgin_lost', { with: 'mc' })>><</if>>
+                                    <<set _npc.virgin = false>>
                                     <<if $tmpEvent.isSlave>>
                                         <<setNpcStats 'slave' $tmpEvent.id 'happy' 10>>
                                         <<setNpcStats 'slave' $tmpEvent.id 'relationship' 5>>

@@ -77,7 +77,7 @@
 <</link>>
 
 <<if !($locationEvents.milk_barn ?? false)>>
-	<<if recall($suppCode) && setup.percentageChance(10) && timeBetween('08:00', '12:00') && $weather?.weather == 'rain'>>
+	<<if recall($suppCode) && setup.percentageChance(10) && timeBetween('08:00', '12:00') && $weather?.weather == 'rain' && (setup.getAvailablePersons18yo($guests)[0] ?? []).some(i => !setup.Tangle.isRelated($guests[i]))>>
 		<<set $locationEvents.milk_barn = true>>
 		<<goto 'Milk barn - dry clothes'>>
 	<</if>>

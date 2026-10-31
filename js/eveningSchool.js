@@ -457,4 +457,49 @@ setup.eveningSchool = {
         }
         return parts.length ? '. ' + parts.join(', and ') + '!' : '';
     },
+
+    /**
+     * Traits that change how npc learns, teaches or gets along at night school, worded for their role.
+     * Keep in sync with nightlyLearning above and setup.eveningSchoolSocial.
+     * Returns [{ trait, title, text, personality }] (personality: false for regular npc.traits).
+     */
+    traitEffects: function (npc, isInstructor, isSlave) {
+        const guestStudent = !isInstructor && !isSlave;
+        const learnExtra = 'Students have a 20% nightly chance to learn a little extra.';
+        const advStudy = 'Doubles the chance that Advanced Study pays off.';
+        const effects = {
+            organized:     isInstructor ? learnExtra : advStudy,
+            efficient:     isInstructor ? learnExtra : '',
+            careless:      isInstructor ? 'Advanced Study pays off less often for students (20% instead of 35%).' : '',
+            critical:      (isInstructor ? 'Students have a 25% nightly chance to learn a little extra, at a cost of 3 happiness. Adds friction with own students. ' : '')
+                           + 'Encounters lean negative, and grudges get more attention.',
+            friendly:      (isInstructor ? 'Students have a 25% nightly chance to gain 1 happiness. ' : '')
+                           + 'Encounters lean positive, and spends more time with people already liked.',
+            compassionate: (isInstructor ? 'Students have a 25% nightly chance to gain 1 happiness. ' : '')
+                           + 'Encounters with them lean positive for both sides, some of their bad moments turn kind, and slaves are drawn to them.',
+            curious:       (isInstructor ? '' : advStudy + ' ') + 'Meets new people more readily'
+                           + (guestStudent ? ', and mixes with other classes more.' : isSlave ? ', and is drawn to guest students.' : '.'),
+            confident:     'Meets new people more readily'
+                           + (guestStudent ? ', and seeks out instructors.' : isSlave ? ', and seeks out guests.' : '.'),
+            cautious:      'Slower to meet new people'
+                           + (guestStudent ? ', and keeps to their own class.' : isSlave ? ', and is wary of guests.' : '.'),
+            nervous:       'Interacts with others less often.',
+            outgoing:      'Meets new people far more readily.',
+            solitary:      'Misses the usual early push to befriend classmates.',
+            sensitive:     'Feels every encounter more strongly, good and bad.',
+            rational:      'Often shrugs off bad encounters.',
+        };
+        const result = [];
+        for (const trait of [].concat(npc.personality ?? [])) {
+            if (effects[trait]) result.push({ trait: trait, title: trait, text: effects[trait], personality: true });
+        }
+        const traits = npc.traits ?? [];
+        if (!isSlave && traits.includes('sadistic')) {
+            result.push({ trait: 'sadistic', title: setup.traits.sadistic?.title ?? 'Sadistic', text: 'Slaves in class tend to sour toward them, unless they are masochists.', personality: false });
+        }
+        if (isSlave && traits.includes('masochist')) {
+            result.push({ trait: 'masochist', title: setup.traits.masochist?.title ?? 'Masochist', text: 'Is not put off by sadistic classmates.', personality: false });
+        }
+        return result;
+    },
 };

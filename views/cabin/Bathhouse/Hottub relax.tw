@@ -28,9 +28,9 @@ The scent of cedar from nearby trees fills the air, mingling with the steam risi
     <br /><br />
 <</if>>
 <<if recall($suppCode)>>
-    <<set _guests = setup.getAvailablePersons18yo($guests)>>
-    <<if _guests[0].length>>
-        <<set _randomGuestId = setup.getRandomElement(_guests[0])>>
+    <<set _hotTubIds = (setup.getAvailablePersons18yo($guests)[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
+    <<if _hotTubIds.length>>
+        <<set _randomGuestId = setup.getRandomElement(_hotTubIds)>>
         <<set _randomGuest = $guests[_randomGuestId]>>
         <<if _randomGuest.horny > 50 && _randomGuest.relationship >= 60 && !(_randomGuest.traits ?? []).includes('feral')>>
             <<set _npc = _randomGuest>>
@@ -44,7 +44,7 @@ The scent of cedar from nearby trees fills the air, mingling with the steam risi
     Suddenly, one of your female guests, her eyes reflecting a mixture of desire and desperation, approaches you hesitantly.
     <br /><br />
     <<sayNpc _npc>>
-        Mind if I join you
+        Mind if I join you?
     <</sayNpc>>
     <br />
     <<set $tmpGirl = _npc>>

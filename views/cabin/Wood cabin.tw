@@ -203,7 +203,8 @@
 		<<goto 'Laura story - New home'>>
 	<<elseif !$locationEvents.cabin && (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 1 && setup.percentageChance(30) && recall($suppCode) && timeBetween('22:00', '00:00')>>
 		<<set _npcs = setup.filterNPCs($guests, { gender: 0, horny_gte: 50, 'virgin': false, chasityBelt: 0, race_in: ['white', 'latina']})>>
-		<<if _npcs[0] ?? [].length>>
+		<<set _npcs[0] = (_npcs[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
+		<<if _npcs[0].length>>
 			<<set $tmpEvent = {
 				id: setup.getRandomElement(_npcs[0])
 			}>>

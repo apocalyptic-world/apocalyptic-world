@@ -14,7 +14,7 @@
 			<</if>>
 			<div @class="'es-card es-class-' + _esClass">
 				<div class="es-card-label"><span class="es-card-icon"><<=setup.eveningSchool.icons[_esClass]>></span> <<=ucfirst(_esClass)>></div>
-				<div class="es-card-text"><<=setup.displayName(_esInstructor)>> <<=_esTextPick[_esTextKey]>></div>
+				<div class="es-card-text"><<esNameTip _esInstructor true false>> <<=_esTextPick[_esTextKey]>></div>
 				<<set _esApproachLink = 'Approach ' + _esInstructor.name>>
 				<<link `_esApproachLink`>>
 					<<set $tmpGirl = $guests[_esInstructorI]>>
@@ -32,8 +32,8 @@
 					<<if _esClassStudents.length>>
 						<<for _esEntry range _esClassStudents>>
 							<<set _esStudent = _esEntry.npc>>
-							<span @class="'es-student gender-' + setup.genderClass(_esStudent)">
-								<<=setup.displayName(_esStudent)>>
+							<span class="es-student">
+								<<esNameTip _esStudent false (_esEntry.type === 'slave')>>
 								<<if (_esStudent.teachAdvStudy ?? 0) > 0>> <span class="es-adv" title="Advanced Study active">&#x1F4D6;</span><</if>>
 							</span>
 						<</for>>
@@ -45,3 +45,24 @@
 		<</capture>>
 	<</for>>
 </div>
+
+
+:: School - evening class widgets [widget]
+/* Name with a hover panel of the traits that matter at night school; each chip shows its effect on hover.
+   Usage: <<esNameTip npc isInstructor isSlave>> */
+<<widget esNameTip>><<nobr>>
+	<<set _esTipNpc = _args[0]>>
+	<<set _esTipFx = setup.eveningSchool.traitEffects(_esTipNpc, _args[1], _args[2])>>
+	<span class="tooltip es-name">
+		<span class="tooltiptext es-name-tip">
+			<<if _esTipFx.length>>
+				<<for _esFx range _esTipFx>>
+					<div @class="'trait tooltip' + (_esFx.personality ? ' trait-personality' : '')"><<=_esFx.title>><span class="tooltiptext"><<=_esFx.text>></span></div>
+				<</for>>
+			<<else>>
+				<span class="es-name-tip-none">No traits that affect class</span>
+			<</if>>
+		</span>
+		<span @class="'gender-' + setup.genderClass(_esTipNpc)" @style="_esTipNpc.color ? 'color: ' + _esTipNpc.color : ''"><strong><<=_esTipNpc.name>></strong></span>
+	</span>
+<</nobr>><</widget>>

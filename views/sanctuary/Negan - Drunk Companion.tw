@@ -1,8 +1,9 @@
 :: Negan - Drunk Companion [bg-underground]
 <h1 class="ptitle">BAR</h1>
 <<set $characters.negan.quests.drunk_companion_day = $game.day>>
-<<set _npcKey = setup.getRandomElement([].concat(...Object.values(setup.getAvailablePersons18yo($guests))))>>
+<<set _npcKey = setup.getRandomElement(setup.drunkCompanionCandidates())>>
 <<set _npc = $guests[_npcKey]>>
+<<set _npc.drunk = Math.max(_npc.drunk ?? 0, randomInteger(70, 95))>>
 <<set _what = setup.pronounceWhat(_npc, true)>>
 <<set _who = setup.pronounceWhat(_npc)>>
 <<set _companionImg = 'people/negan/negan_drunk_companion1_' + (_npc.gender == 1 ? 'm' : 'f') + '.jpg'>>

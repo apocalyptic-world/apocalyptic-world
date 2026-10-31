@@ -339,20 +339,24 @@
 	<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
 
 	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
+	<<set _npcsWithDildos[0] = (_npcsWithDildos[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
+	/* The sleeping-beauty NPC can't consent, so relatives are never picked for it, whatever the noIncest policy. */
+	<<set _sleepingBeautyIds = _guests18yoWomen.filter(i => !setup.Tangle.isRelated($guests[i]))>>
 	<<set _ghCaughtCandidates = []>>
 	<<for _gci to 0; _gci lt $guests.length; _gci++>>
 		<<set _gcGuest = $guests[_gci]>>
-		<<if !_gcGuest.gender && (_gcGuest.likesGuys ?? true) && (['white', 'latina'].includes(_gcGuest.ethnicity ?? '')) && (_gcGuest.relationship ?? 0) >= 60 && !setup.isAtWork(_gcGuest, $weather) && _gcGuest.location !== 'school'>>
+		<<if !_gcGuest.gender && (_gcGuest.likesGuys ?? true) && (['white', 'latina'].includes(_gcGuest.ethnicity ?? '')) && (_gcGuest.relationship ?? 0) >= 60 && !setup.isAtWork(_gcGuest, $weather) && _gcGuest.location !== 'school' && setup.Tangle.eligible(_gcGuest)>>
 			<<set _ghCaughtCandidates.push(_gci)>>
 		<</if>>
 	<</for>>
-	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
+	<<set _morningViewIds = (setup.getAvailablePersons18yo($guests)[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
+	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && _morningViewIds.length && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
 		<<set $tmpEvent = {
-			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
+			id: setup.getRandomElement(_morningViewIds)
 		}>>
 		<<goto 'Guest house - morning view'>>
-	<<elseif timeBetween('23:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(10)>>
-		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
+	<<elseif timeBetween('23:00', '02:00') && _sleepingBeautyIds.length && setup.percentageChance(10)>>
+		<<set $tmpEvent = setup.getRandomElement(_sleepingBeautyIds)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
 	<<elseif timeBetween('20:00', '02:00') && _ghCaughtCandidates.length > 0 && $player.energy >= 20 && setup.percentageChance(2)>>
@@ -379,10 +383,10 @@
 		<<goto 'Guesthouse [Event] - Sextoy alone time'>>
 	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
 		<<set _npcId = setup.getRandomElement(_virginList[0])>>
-		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && !setup.family.isBloodToMC($guests[_npcId])>>
+		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && setup.Tangle.eligible($guests[_npcId])>>
 			<<set $locationEvents.guesthouse = true>>
 			<<set $tmpEvent = {
-				id: setup.getRandomElement(_virginList[0])
+				id: _npcId
 			}>>
 			<<goto 'Guesthouse [Event] - take virginity'>>
 		<</if>>

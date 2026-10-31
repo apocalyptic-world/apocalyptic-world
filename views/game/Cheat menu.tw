@@ -234,6 +234,13 @@
 			Dialog.open();
 		<</script>>
 	<</link>>
+	<<link 'Import NPCs from save file'>>
+		<<script>>
+			Dialog.setup("Import NPCs from save file", "Cheatmenu - import NPCs");
+			Dialog.wiki(Story.get("Cheatmenu - import NPCs").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
   <</if>>
 
 
@@ -373,9 +380,19 @@
 				<<goto 'Blair [Event] - Price on her head'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>
-			<<link 'Event: Blair - The small hours (makes her pregnant)'>>
-				<<set $characters.blair.pregnancy ??= 150>>
-				<<unset $characters.blair.quests.small_hours_kick_day, $characters.blair.quests.small_hours_day>>
+			<<set _cheatShKid = setup.blair.newbornInRange()>>
+			<<link `'Event: Blair - The small hours (newborn: ' + (_cheatShKid ? _cheatShKid.name : 'spawns baby') + ')'`>>
+				<<run setup.blair.smallHoursCheat.prepare('newborn')>>
+				<<goto 'Blair [Event] - The small hours'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link `'Event: Blair - The small hours (kick' + (setup.blair.kickInRange() ? '' : ', temporarily makes her pregnant') + ')'`>>
+				<<run setup.blair.smallHoursCheat.prepare('kick')>>
+				<<goto 'Blair [Event] - The small hours'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link `'Event: Blair - The small hours (try' + (setup.blair.pregnant() ? ', temporarily hides pregnancy' : '') + ')'`>>
+				<<run setup.blair.smallHoursCheat.prepare('try')>>
 				<<goto 'Blair [Event] - The small hours'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>

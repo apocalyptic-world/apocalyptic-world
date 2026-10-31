@@ -69,6 +69,65 @@
   margin-left: 2px;
 }
 
+/* Name hover: panel of school-relevant traits above the name, each chip with its own effect tooltip */
+.tooltip.es-name {
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+  cursor: help;
+}
+
+.tooltip.es-name > .es-name-tip {
+  top: auto;
+  bottom: 100%;
+  left: 0;
+  width: max-content;
+  max-width: 240px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+  background: #1d1d1d;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 1;
+  text-align: left;
+  font-weight: normal;
+  font-style: normal;
+  white-space: normal;
+  z-index: 20;
+  /* grace period so the cursor can travel from the name up into the panel */
+  transition: visibility 0s linear 0.2s;
+}
+
+.tooltip.es-name:hover > .es-name-tip,
+.tooltip.es-name > .es-name-tip:hover {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* The base .tooltip:hover rule would reveal every chip's effect at once; only show the hovered chip's */
+.es-name-tip .trait.tooltip .tooltiptext {
+  visibility: hidden;
+  pointer-events: none;
+  width: 200px;
+  padding: 5px 6px;
+  text-align: left;
+  text-transform: none;
+  z-index: 21;
+}
+
+.es-name-tip .trait.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.es-name-tip .trait-personality {
+  text-transform: capitalize;
+}
+
+.es-name-tip-none {
+  color: #9a958e;
+  font-style: italic;
+  font-size: 11px;
+}
+
 .es-empty {
   color: #777;
   font-style: italic;

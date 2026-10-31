@@ -17,7 +17,7 @@
 		<<if $slaves[_i].assignedTo !== 'garden' || !setup.isAtWork($slaves[_i], $weather)>>
 			<<continue>>
 		<</if>>
-		<<if !$slaves[_i].gender>>
+		<<if !$slaves[_i].gender && setup.Tangle.eligible($slaves[_i])>>
 			<<run _girlsCompetition.push('slave:' + _i)>>
 		<</if>>
 		<<set _assignedToGreenhouse = true>>
@@ -54,7 +54,7 @@
 			<<continue>>
 		<</if>>
 		<<set _assignedToGreenhouse = true>>
-		<<if !_gardenGuest.gender>>
+		<<if !_gardenGuest.gender && setup.Tangle.eligible(_gardenGuest)>>
 			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
 			<<run _guestGirlsInGreenhouse.push(_gardenGuestI)>>
 		<</if>>

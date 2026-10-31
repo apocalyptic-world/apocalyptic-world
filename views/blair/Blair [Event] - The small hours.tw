@@ -1,7 +1,7 @@
 :: Blair \[Event\] - The small hours [bg-bedroom]
 <h1 class="ptitle">BEDROOM</h1>
 <br />
-<<set _shVariant = setup.blair.smallHoursVariant()>>
+<<set _shVariant = $smallHoursCheat ? $smallHoursCheat.variant : setup.blair.smallHoursVariant()>>
 <<if !_shVariant>>
 	<<goto 'Bedroom'>>
 <<else>>
@@ -10,7 +10,7 @@
 
 	<<if _shVariant === 'newborn'>>
 		<<set $characters.blair.quests.small_hours_newborn_day = $game.day>>
-		<<set _shKid = setup.blair.youngestKid()>>
+		<<set _shKid = setup.blair.newbornInRange()>>
 		<<set _shKidShe = setup.pronounceWhat(_shKid)>>
 		<<set _shKidHer = setup.pronounceWho(_shKid)>>
 		<center>
@@ -39,9 +39,7 @@
 				<br /><br />
 				<strong>(Blair: Relationship +6, Happy +10. Energy −15.)</strong>
 				<br /><br />
-				<<link 'Go back to bed'>>
-					<<goto 'Bedroom'>>
-				<</link>>
+				<<smallHoursExit 'Go back to bed'>>
 			<</linkreplace>>
 		</div>
 		<div id="sh_sit">
@@ -55,9 +53,7 @@
 				<br /><br />
 				<strong>(Blair: Relationship +4, Happy +10.)</strong>
 				<br /><br />
-				<<link 'Go back to bed'>>
-					<<goto 'Bedroom'>>
-				<</link>>
+				<<smallHoursExit 'Go back to bed'>>
 			<</linkreplace>>
 		</div>
 		<<if $game.location.nursery ?? false>>
@@ -75,9 +71,7 @@
 					<br /><br />
 					<strong>(Blair: Relationship −6, Happy −10.)</strong>
 					<br /><br />
-					<<link 'Go back to bed'>>
-						<<goto 'Bedroom'>>
-					<</link>>
+					<<smallHoursExit 'Go back to bed'>>
 				<</linkreplace>>
 			</div>
 		<</if>>
@@ -120,9 +114,7 @@
 					<br /><br />
 					<strong>(Blair: Relationship +8, Happy +12. −5 wood.)</strong>
 					<br /><br />
-					<<link 'Fall asleep with your hand still there'>>
-						<<goto 'Bedroom'>>
-					<</link>>
+					<<smallHoursExit 'Fall asleep with your hand still there'>>
 				<</linkreplace>>
 			<<else>>
 				<span style="color:#888;">Build a cradle (needs 5 wood)</span>
@@ -139,9 +131,7 @@
 				<br /><br />
 				<strong>(Blair: Relationship +5, Happy +10.)</strong>
 				<br /><br />
-				<<link 'Fall asleep with your hand still there'>>
-					<<goto 'Bedroom'>>
-				<</link>>
+				<<smallHoursExit 'Fall asleep with your hand still there'>>
 			<</linkreplace>>
 		</div>
 
@@ -180,9 +170,7 @@
 				<br /><br />
 				<strong>(Blair: Relationship +6, Happy +15.)</strong>
 				<br /><br />
-				<<link 'Pull her close'>>
-					<<goto 'Bedroom'>>
-				<</link>>
+				<<smallHoursExit 'Pull her close'>>
 			<</linkreplace>>
 		</div>
 		<div id="sh_wait">
@@ -202,10 +190,20 @@
 				<br />
 				<strong>(Blair: Relationship +2.)</strong>
 				<br /><br />
-				<<link 'Go to sleep'>>
-					<<goto 'Bedroom'>>
-				<</link>>
+				<<smallHoursExit 'Go to sleep'>>
 			<</linkreplace>>
 		</div>
 	<</if>>
 <</if>>
+
+:: Blair - The small hours widgets [widget]
+<<widget "smallHoursExit">>
+	<<if $smallHoursCheat?.altered>>
+		<label><<checkbox "$smallHoursCheat.keep" false true>> Keep changes to reality</label>
+		<br /><br />
+	<</if>>
+	<<link _args[0]>>
+		<<run setup.blair.smallHoursCheat.finish()>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<</widget>>
