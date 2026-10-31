@@ -58,7 +58,7 @@
 	<<set _npc.sick = {days: randomInteger(4, 8), desc: 'Beaten up', id: 'bruised'}>>
 	<<set _npc.happy = Math.max((_npc.happy ?? 0) - 20, -100)>>
 	<<set _npc.relationship = Math.max((_npc.relationship ?? 0) - 10, -100)>>
-	<<set $forestTollEvent = {npcIndex: _guestI, ambush: true}>>
+	<<set $forestTollEvent = {npcId: _npc.id, ambush: true}>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' came back from the forest beaten and empty-handed. Someone took the whole haul.</span>', 'forest')>>
 <<elseif setup.percentageChance(_chanceOfNotComingHome) && $scavengingDidntReturn === null && !$pregnancyHappening && setup.percentageChance(30) && _isGuest>>
 	<<set $scavengingDidntReturn = _guestI>>
@@ -90,7 +90,7 @@
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' came back from the forest quiet and won\'t say much. Bruising visible. She needs space.</span>', 'forest')>>
 <<elseif typeof _npc.sick === 'undefined' && $forestTollEvent === null && !$game.forest_toll_ambush_day && (!$game.forest_toll_day || ($game.forest_toll_day + 7) <= $game.day) && setup.percentageChance(4) && _isGuest>>
 	/* Protection demand — stranger wants caps to let workers pass */
-	<<set $forestTollEvent = {npcIndex: _guestI, amount: randomInteger(20, 50)}>>
+	<<set $forestTollEvent = {npcId: _npc.id, amount: randomInteger(20, 50)}>>
 	<<set $game.forest_toll_day = $game.day>>
 	<<run setup.sleepMessages.addJob('<span class="warning">' + _npc.name + ' came back with a message from an armed stranger — pay ' + $forestTollEvent.amount + ' caps or expect trouble for your workers.</span>', 'forest')>>
 <<else>>

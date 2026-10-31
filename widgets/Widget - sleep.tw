@@ -628,6 +628,10 @@
 <<shopMerchantUpdate>>
 /* NPCs left during the night: point pregnancy records at their mothers' current list positions before anyone gives birth */
 <<run setup.sleep.reindexBirths()>>
+/* The forest toll worker may have left during the night: drop the morning event rather than show someone else */
+<<if $forestTollEvent && !setup.getNpcById($forestTollEvent.npcId)>>
+	<<set $forestTollEvent = null>>
+<</if>>
 <<if _hasWorkingHospital>>
 	<<sleepHospital>>
 <</if>>
