@@ -51,8 +51,8 @@ setup.automatization = {
     },
     dumbbell: {
       name: 'Dumbbell rotation',
-      description: 'Gives dumbbells/kettlebell/dumbestbells to settlers that benefit and removes from other.',
-      help: 'Dumbbell works for strength below 30, kettlebell 50 and dumbestbells 60',
+      description: 'Gives dumbbells/kettlebells/barbells to settlers that benefit and removes from other.',
+      help: 'Dumbbell works for strength below 30, kettlebell 50 and barbell 60',
     },
 
     /*
@@ -74,6 +74,7 @@ setup.automatization = {
     garden: [],
     guard: ['knife', 'body_armor', 'arrow', 'crossbow', 'sword'],
     hunter: ['bow', 'knife'],
+    people_hunter: ['knife', 'rope', 'binoculars'],
     kitchen: [],
     maid: [],
     attendant: ['towel'],
@@ -138,7 +139,7 @@ setup.automatization = {
    * Jobs where settlers must carry a weapon — see Sleep - forest.tw _isArmed check.
    * fixed_weapon_jobs have a preset loadout; the rest use the jobWeapons setting.
    */
-  armed_jobs: ['companion', 'forest', 'guard', 'hunter', 'scavenging', 'streets'],
+  armed_jobs: ['companion', 'forest', 'guard', 'hunter', 'people_hunter', 'scavenging', 'streets'],
 
   /**
    * Jobs with a fixed weapon loadout regardless of the jobWeapons setting.
@@ -151,6 +152,7 @@ setup.automatization = {
     forest:     ['knife', 'crossbow', 'arrow'],
     scavenging: ['knife', 'crossbow', 'arrow'],
     hunter:     ['knife'],
+    people_hunter: ['knife'],
   },
 
   /**

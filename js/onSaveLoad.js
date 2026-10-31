@@ -1,6 +1,10 @@
 
 function checkAndFixTraits(npc)
 {
+    /* a damaged save can hold an undefined trait, which breaks every trait list (Guest house) */
+    if (Array.isArray(npc.traits) && npc.traits.some(t => typeof t !== 'string')) {
+        npc.traits = npc.traits.filter(t => typeof t === 'string');
+    }
     if ((npc.traits ?? []).includes('breeder') && (npc.traits ?? []).includes('infertile')) {
         let indexOf = npc.traits.indexOf('infertile');
         npc.traits.splice(indexOf, 1);

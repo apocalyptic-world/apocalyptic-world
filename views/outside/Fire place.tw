@@ -53,6 +53,25 @@
 	<</if>>
 <</if>>
 
+<<if ($game.location.guesthouse ?? false) && $guests.length >= 2>>
+	<<if setup.tod.canStartAtFireplace()>>
+		<<link 'Play Truth or Dare'>>
+			<<set $todWhere = 'fireplace'>>
+			<<goto 'Truth or dare - setup'>>
+		<</link>>
+		<<linkdesc>>
+			-1 bottle (<<=Item.get(setup.tod.bottleItem()).name>>)
+		<</linkdesc>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc">
+			Play Truth or Dare
+		</div>
+		<<linkdesc>>
+			A bottle of alcohol or champagne, two girls at home, evening (19:00 - 01:00), once a night
+		<</linkdesc>>
+	<</if>>
+<</if>>
+
 <<if ($player.horse ?? false)>>
 	<<link 'Go to your horse'>>
 		<<goto 'Horse'>>

@@ -1,0 +1,48 @@
+:: sleepPeopleHunter [include]
+
+/* People hunter (js/peopleHunter.js): roams the area and now and then brings a woman back to the basement.
+   Included from the guest loop of the sleep widget with _npc = the hunter. */
+<<set _npc.stats ??= {}>>
+<<if !setup.npcInventoryHas(_npc, 'knife')>>
+	<<run setup.sleepMessages.addJob(_npc.name + ' stayed home: a people hunter needs a knife.', 'people_hunter')>>
+<<elseif !setup.peopleHunter.basementHasRoom()>>
+	<<run setup.sleepMessages.addJob(_npc.name + ' stayed home: there is no room left in the basement.', 'people_hunter')>>
+<<elseif !setup.peopleHunter.hasRope(_npc)>>
+	<<run setup.sleepMessages.addJob(_npc.name + ' stayed home: there is no rope to tie anyone up with.', 'people_hunter')>>
+<<else>>
+	<<set _npc.stats.people_hunter = (_npc.stats.people_hunter ?? 0) + 1>>
+	<<if setup.percentageChance(setup.peopleHunter.INJURY_CHANCE)>>
+		<<set _phDays = randomInteger(2, 4)>>
+		<<set _npc.sick = { days: _phDays, desc: 'hurt while hunting', id: 'hunting' }>>
+		<<run setup.sleepMessages.addMain('<span class="warning">' + _npc.name + ' came back from the hunt hurt and needs ' + _phDays + ' days to recover.</span>')>>
+	<<elseif setup.percentageChance(setup.peopleHunter.catchChance(_npc))>>
+		<<run setup.peopleHunter.useRope(_npc)>>
+		/* <<newgirl>> overwrites _npc (the sleep loop's current guest) and $tmpGirl - keep both */
+		<<set _phHunter = _npc>>
+		<<set _phSavedTmpGirl = $tmpGirl>>
+		<<newgirl>>
+		<<set _phCatch = $tmpGirl>>
+		<<set $tmpGirl = _phSavedTmpGirl>>
+		<<set _npc = _phHunter>>
+		<<set
+			_phCatch.beauty = setup.peopleHunter.rollBeauty(_npc),
+			_phCatch.hunted = true,
+			_phCatch.relationship = -100,
+			_phCatch.sub = 0,
+			_phCatch.happy = Math.min(_phCatch.happy ?? 0, -30)
+		>>
+		<<set _phSettlement = setup.peopleHunter.pickSettlement()>>
+		<<if _phSettlement>>
+			<<run setup.settlements.modifyRelationship(_phSettlement, setup.peopleHunter.SETTLEMENT_RELATIONSHIP, 'One of their women was taken by your people hunter')>>
+			<<run setup.settlements.save(setup.settlements.getAll())>>
+			<<run setup.npc.addHistory(_phCatch, 'captured', { reason: 'hunted', place: _phSettlement.name })>>
+		<<else>>
+			<<run setup.npc.addHistory(_phCatch, 'captured', { reason: 'hunted' })>>
+		<</if>>
+		<<run $slaves.push(_phCatch)>>
+		<<statsAdd 'people_captured'>>
+		<<run setup.sleepMessages.addJob(_npc.name + ' brought back <strong>' + _phCatch.name + '</strong> (beauty ' + _phCatch.beauty + ') and locked her in the basement.' + (_phSettlement ? ' She was taken near <strong>' + _phSettlement.name + '</strong> - they won\'t be happy about it.' : ''), 'people_hunter')>>
+	<<else>>
+		<<run setup.sleepMessages.addJob(_npc.name + ' roamed the area all day but came back empty-handed.', 'people_hunter')>>
+	<</if>>
+<</if>>

@@ -1,4 +1,4 @@
-:: Guesthouse \[Event\] - male on female {"position":"336,1079","size":"100,100"}
+:: Guesthouse \[Event\] - male on female
 <h1 class="ptitle">GUEST HOUSE</h1>
 
 <<if ($tmpEvent.wifeGuestIdxs ?? []).length > 0 && typeof $randEvent === 'undefined'>>
@@ -965,11 +965,18 @@
 <<link 'Leave'>>
 	<<if _orgasm || !_interrupted>>
 		<<for _i = 0; _i < _guestIds.length; _i++>>
-			<<set 
+			<<set
 				$guests[_guestIds[_i]].happy = Math.min(100, $guests[_guestIds[_i]].happy + 5),
 				$guests[_guestIds[_i]].horny = 0
 			>>
 		<</for>>
+		/* Pregnancy when the scene ended with a creampie (breeder); the interrupt branch rolls its own */
+		<<if _orgasm && !_interrupted && _sexActions[_sexActions.length - 1] === 'cum_in_pussy'>>
+			<<if setup.pregnancyChance($guests[_guestIds[0]], $guests[_guestIds[1]])>>
+				<<set $guests[_guestIds[0]].pregnancy_father = $guests[_guestIds[1]].id>>
+				<<set $guests[_guestIds[0]].pregnancy = 0>>
+			<</if>>
+		<</if>>
 		<<for _ri = 0; _ri < _guestIds.length; _ri++>>
 			<<for _rj = _ri + 1; _rj < _guestIds.length; _rj++>>
 				<<set $guests[_guestIds[_ri]].relationship = Math.min(100, ($guests[_guestIds[_ri]].relationship ?? 0) + 5)>>

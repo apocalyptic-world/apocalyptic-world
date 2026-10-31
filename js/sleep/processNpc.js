@@ -21,9 +21,12 @@ setup.sleep.processNpc = function(npc, opts) {
     if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc))) && setup.getAge(npc) >= 18) {
         // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
         const betrayalKind = setup.betrayal.depart(npc);
+        // A quiet leaver leaves fresh tracks (Event - Runaway tracks, js/sleep/runaways.js)
+        const tracks = !betrayalKind && setup.runaways.depart(npc);
         setup.sleepMessages.addMain(betrayalKind
             ? setup.betrayal.message(npc, betrayalKind)
             : npc.name + ' was missing in the morning, ' + setup.pronounceWhat(npc) + ' probably decided to leave this place.'
+                + (tracks ? ' <em>' + ucfirst(setup.pronounceWhos(npc)) + ' tracks were still fresh.</em>' : '')
         );
         opts.pendingRemovals.push({ index: npcIndex });
         opts.shouldSkip = true;
@@ -95,6 +98,13 @@ setup.sleep.processNpc = function(npc, opts) {
         setup.personality.tickJobStreak(npc);
     }
 
+    // Pregnant privilege policy: late-pregnant inhabitants rest instead of heavy/outside work
+    if (!isCharacter && typeof npc.rest === 'undefined' && typeof npc.sick === 'undefined'
+        && setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc)) {
+        npc.rest = { days: 1, reason: 'pregnant' };
+        setup.sleepMessages.addJob(npc.name + ' stayed home from work (pregnant privilege).', npc.assignedTo);
+    }
+
     // Pre-tick sick/rest — stored in opts so SC <<include>> jobs see morning values
     const isSick    = isCharacter ? false : typeof npc.sick !== 'undefined';
     const isDayOff  = isSick || (isCharacter ? false : typeof npc.rest !== 'undefined');
@@ -114,7 +124,7 @@ setup.sleep.processNpc = function(npc, opts) {
         if (job === 'kitchen' && !isSick) {
             npc.stats.kitchen = (npc.stats.kitchen ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.kitchen++;
-            npc.stats.kitchen += setup.personality.learnBonus(npc);
+            npc.stats.kitchen += setup.personality.learnBonus(npc) + setup.library.learnBonus();
             if (npc.stats.kitchen > 100 && !(npc.skills ?? []).includes('cook')) {
                 npc.skills = npc.skills || [];
                 npc.skills.push('cook');
@@ -131,7 +141,7 @@ setup.sleep.processNpc = function(npc, opts) {
             } else if (!isGuest || !isDayOff) {
                 npc.stats.garden = (npc.stats.garden ?? 0) + 1;
                 if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.garden++;
-                npc.stats.garden += setup.personality.learnBonus(npc);
+                npc.stats.garden += setup.personality.learnBonus(npc) + setup.library.learnBonus();
                 if (npc.stats.garden > 100 && !(npc.skills ?? []).includes('gardener')) {
                     npc.skills = npc.skills || [];
                     npc.skills.push('gardener');
@@ -247,6 +257,13 @@ setup.sleep.processNpc = function(npc, opts) {
             setup.sleepMessages.addJob(npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+' + lift + ' happy to all guests</strong>.', 'church');
         }
 
+        // Librarian: keeps the library in order - everyone learns skills a bit faster (setup.library)
+        if (job === 'librarian' && isGuest && !isDayOff) {
+            npc.stats.library = (npc.stats.library ?? 0) + 1;
+            const pct = setup.library.bonusPercent();
+            setup.sleepMessages.addJob(npc.name + ' kept the library in order (' + setup.library.size() + ' books). <strong>Skill learning +' + pct + '%</strong>' + (pct ? '' : ' - the shelves need more books.'), 'library');
+        }
+
         // Mistress: ticks sub/corruption/strength of all slaves per policy
         if (job === 'mistress' && isGuest && !isSick) {
             const bm = sv.player?.baseManagement ?? {};
@@ -355,10 +372,30 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // Scavenging: stat tick + full return logic (guests only)
+        // People hunter: roams the same land as the scavengers, so hostile settlements may take her (js/peopleHunter.js)
+        if (job === 'people_hunter' && isGuest && !isDayOff && !isSandStorm && npc.gender === 0 && !(sv.game.capturedGuest ?? false)) {
+            const phHostiles = setup.settlements.getAll().filter(function (s) {
+                return s.discovered && !s.destroyed && setup.settlements.isHostile(s);
+            });
+            if (phHostiles.length && setup.percentageChance(2)) {
+                const captor = phHostiles[window.randomInteger(0, phHostiles.length - 1)];
+                captor.captiveId   = npc.id;
+                captor.captiveName = npc.name;
+                sv.game.capturedGuest = { npc: clone(npc), settlementId: captor.id, settlementName: captor.name };
+                setup.settlements.modifyRelationship(captor, -5, 'Captured player\'s people hunter');
+                setup.settlements.logEvent(captor, 'Caught one of the player\'s people hunting women near their land.');
+                setup.settlements.save(setup.settlements.getAll());
+                setup.sleepMessages.addMain(npc.name + ' didn\'t come home from the hunt. She was taken by ' + captor.name + '.');
+                opts.pendingRemovals.push({ index: npcIndex, captured: true });
+                opts.shouldSkip = true;
+                return;
+            }
+        }
+
         if (job === 'scavenging' && isGuest && !isSick && !isSandStorm && !scavengerStayedHome) {
             npc.stats.scavenging = (npc.stats.scavenging ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.scavenging++;
-            npc.stats.scavenging += setup.personality.learnBonus(npc);
+            npc.stats.scavenging += setup.personality.learnBonus(npc) + setup.library.learnBonus();
             if (npc.stats.scavenging > 100 && !(npc.skills ?? []).includes('scavenger')) {
                 npc.skills = npc.skills || [];
                 npc.skills.push('scavenger');
@@ -480,6 +517,13 @@ setup.sleep.processNpc = function(npc, opts) {
             npc.rest.days--;
             if (setup.personality.has(npc, 'energetic')) npc.rest.days--;
             if (npc.rest.days <= 0) delete npc.rest;
+        }
+
+        // ── Pregnant privilege: extra daily ration ─────────────────────────────
+        if (setup.baseManagement.pregnantPrivilege.wantsRation(npc) && setup.cabinInventory.has('food')) {
+            setup.cabinInventory.drop('food', 1);
+            if (State.temporary.totals) State.temporary.totals.food = (State.temporary.totals.food ?? 0) - 1;
+            npc.happy = Math.min(100, (npc.happy ?? 0) + setup.personality.happyGain(npc, 2));
         }
     }
 

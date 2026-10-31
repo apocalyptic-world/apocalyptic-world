@@ -24,6 +24,26 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
+<<if ($game.location.library ?? false) && !_isFeral && !setup.assignedToCount('librarian') && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign as librarian'>>
+		  <<assignedTo $tmpGirl 'librarian'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Keeps the library in order: everyone learns skills faster, more books = bigger bonus)
+	</div>
+<</if>>
+
+<<if ($game.location.nursery ?? false) && !_isFeral && setup.getAge($tmpGirl) >= 18 && !setup.assignedToCount('caretaker') && !$tmpGirl.assignedTo>>
+	<div>
+	  <<link 'Assign as nursery caretaker'>>
+		  <<assignedTo $tmpGirl 'caretaker'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Looks after the children: they grow up faster and are happier)
+	</div>
+<</if>>
+
 <<if !_isFeral && !setup.assignedToCount('kitchen') && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign to kitchen'>>
@@ -136,6 +156,23 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
   	<</link>> (Provides you with food or wolf pelts)
 <<elseif !_isFeral>>
 	Assign as hunter [Need woodcraft skill and bow] (Provides you with food or wolf pelts)
+<</if>>
+
+<<if ($game.location.basement ?? false) && !_isFeral && !setup.assignedToCount('people_hunter') && !$tmpGirl.assignedTo>>
+	<div>
+		<<if setup.peopleHunter.meetsRequirements($tmpGirl) && (setup.npcInventoryHas($tmpGirl, 'knife') || setup.cabinInventory.has('knife'))>>
+			<<link 'Assign as people hunter'>>
+				<<if !setup.npcInventoryHas($tmpGirl, 'knife')>>
+					<<run setup.cabinInventory.to_npc($tmpGirl, 'knife', 1)>>
+				<</if>>
+				<<assignedTo $tmpGirl 'people_hunter'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Now and then brings a woman back to the basement. Uses a rope per catch)
+		<<else>>
+			Assign as people hunter [Needs 100 submission, 40 relationship, 40 strength and a knife] (Now and then brings a woman back to the basement)
+		<</if>>
+	</div>
 <</if>>
 
 <div>

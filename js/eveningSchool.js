@@ -423,6 +423,8 @@ setup.eveningSchool = {
                 setup.sleepMessages.addJob(name + ' partied a little too hard and forgot some of what ' + setup.pronounceWhat(npc) + ' learned in ' + cls + ' class.', 'school');
             }
 
+            if (gain > 0) gain += setup.library.learnBonus(); // librarian: books help the homework
+
             const stat = this.skillStats[cls];
             npc.stats ??= {};
             npc.stats[stat] = Math.max(0, (npc.stats[stat] ?? 0) + gain);

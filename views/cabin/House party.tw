@@ -275,6 +275,12 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 		<</if>>
 	<</if>>
 </div>
+<<if setup.tod.pool().length >= setup.tod.MIN_PLAYERS && ($game.todDay ?? -1) !== $game.day>>
+	<<link 'Play Truth or Dare with the girls'>>
+		<<set $todWhere = 'party'>>
+		<<goto 'Truth or dare - setup'>>
+	<</link>>
+<</if>>
 <<link 'Leave party'>>
 	<<set $game.partyNight = true>>
 	<<goto 'Bedroom'>>

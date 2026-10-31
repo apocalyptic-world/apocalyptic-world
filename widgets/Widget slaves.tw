@@ -20,6 +20,10 @@
 	<<if $args[0].gender>>
 		<<set _slaveValue = Math.round(_slaveValue / 2, 0)>>
 	<</if>>
+	/* untrained catches of the people hunter: no papers, no training - half price until submission 80 */
+	<<if setup.peopleHunter.isUntrainedCatch($args[0])>>
+		<<set _slaveValue = Math.round(_slaveValue / 2, 0)>>
+	<</if>>
 	<<set $args[0].value = (_slaveValue + 10)>>
 <</widget>>
 
