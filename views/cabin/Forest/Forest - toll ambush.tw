@@ -2,7 +2,7 @@
 <h1 class="ptitle">FOREST</h1>
 <br />
 
-<<set _tollNpc = setup.getNpcById($forestTollEvent.npcId) ?? $guests[$forestTollEvent.npcIndex]>> /* npcIndex: events saved before the id was stored */
+<<set _tollNpc = ($forestTollEvent.npcId && setup.getNpcById($forestTollEvent.npcId)) ?? $guests[$forestTollEvent.npcIndex]>> /* npcIndex: events saved before the id was stored (getNpcById(undefined) would match an id-less character like Vincent) */
 
 <!-- #### forest_toll_ambush.jpg | Post-apocalyptic forest edge at dawn, a beaten survivor limping out of the trees toward a worn wooden cabin, split lip, hand wrapped in a dirty rag, empty torn sack hanging from the shoulder, dusty patched clothes, cold grey morning light, grim quiet atmosphere, cinematic composition --ar 5:3 --p -->
 
