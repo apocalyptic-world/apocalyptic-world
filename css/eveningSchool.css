@@ -259,3 +259,38 @@
   cursor: help;
   border-bottom: 1px dotted #9a958e;
 }
+
+/* Phones: pin the name panel to the class card so it stays on screen, and show each trait's effect
+   right in the panel because there is no second hover on a touch screen */
+@media only screen and (max-width: 768px) {
+  .es-card {
+    position: relative;
+  }
+
+  .es-student,
+  .tooltip.es-name {
+    position: static;
+  }
+
+  .tooltip.es-name > .es-name-tip {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+  }
+
+  .es-name-tip .trait.tooltip {
+    position: static;
+    flex: 1 1 100%;
+  }
+
+  .es-name-tip .trait.tooltip .tooltiptext {
+    position: static;
+    display: block;
+    width: auto;
+    margin: 2px 0 0;
+    padding: 0;
+    background: none;
+    visibility: inherit;
+  }
+}
