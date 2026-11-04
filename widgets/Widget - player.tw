@@ -244,6 +244,7 @@
 <</widget>>
 
 <<widget slaveSell>>
+	<<if $slaves[_args[0]].washDays>><<achievement 'merchant_venice'>><</if>>
 	<<for _inventory, _inventoryCount range ($slaves[_args[0]].inventory ?? {})>>
 		<<run setup.npcInventoryRemove($slaves[_args[0]], _inventory, _inventoryCount)>>
 		<<pickup $backpack _inventory _inventoryCount>>

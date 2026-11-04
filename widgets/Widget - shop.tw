@@ -35,6 +35,7 @@
 							<<elseif ($shopMerchants[$args[0]]?.money ?? 0) < _totalMoney>>
 								<<replace `'#shop-error-'+_i`>>Merchant doesn't have enough money.<</replace>>
 							<<else>>
+								<<if $args[0] === 'farm' && _shopItem.name === 'wood' && _shopItem.qty >= 100 && $backpack.has('axe')>><<achievement 'paul_bunyon'>><</if>>
 								<<set $player.money += _totalMoney>>
 								<<drop $backpack _shopItem.name _shopItem.qty>>
 								<<set $shopMerchants??={}>>
@@ -51,6 +52,7 @@
 							<<set _linkName = "Sell max (" + _sellMax + ")">>
 							<<capture _sellMax>>
 								<<link _linkName>>
+									<<if $args[0] === 'farm' && _shopItem.name === 'wood' && _sellMax >= 100 && $backpack.has('axe')>><<achievement 'paul_bunyon'>><</if>>
 									<<set $player.money += _shopItem.price * _sellMax>>
 									<<drop $backpack _shopItem.name _sellMax>>
 									<<set $shopMerchants??={}>>
@@ -86,6 +88,7 @@
 								<<if $args[3]>>
 									<<run $.wiki($args[3])>>
 								<</if>>
+								<<if $args[0] === 'farm' && _shopItem.name === 'food' && _shopItem.qty >= 100>><<achievement 'feast_of_kings'>><</if>>
 								<<set $player.money -= _totalPrice>>
 								<<pickup $backpack _shopItem.name _shopItem.qty>>
 
