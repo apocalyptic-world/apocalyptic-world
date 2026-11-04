@@ -110,7 +110,7 @@ setup.noticeBoard = {
 
     /** A man from the guest house for a helping-hand note */
     pickHelper: function () {
-        const g = this.rand(this.adultGuests('men').filter(g => !this.busy(g.id) && typeof g.rest === 'undefined'));
+        const g = this.rand(this.adultGuests('men').filter(g => !this.busy(g.id) && typeof g.rest === 'undefined' && typeof g.sick === 'undefined'));
         return g ? { giver: g } : null;
     },
 
