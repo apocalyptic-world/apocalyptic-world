@@ -381,7 +381,7 @@ div#t3r {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: auto auto;
   gap: 2px 0;
-  margin-bottom: 10px;
+  padding-bottom: 10px;
   justify-content: stretch;
 }
 div#t3r span {
@@ -1908,5 +1908,14 @@ div.poker-doll.girl_info_picture {
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
+  }
+}
+
+/* Phones: a tooltip balloon stays in the layout while hidden, so one near the right edge stretched the whole page.
+   Only build it while it is showing */
+@media only screen and (max-width: 768px) {
+  [data-balloon-pos]:not(:hover)::before,
+  [data-balloon-pos]:not(:hover)::after {
+    display: none !important;
   }
 }
