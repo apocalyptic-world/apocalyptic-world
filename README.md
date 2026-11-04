@@ -25,7 +25,7 @@ Here is a example of the execution of those steps on a terminal running Bash, as
 ```bash
 fubar@myhost:~/Projects/apocalyptic-world$ python -m venv .venv
 fubar@myhost:~/Projects/apocalyptic-world$ . .venv/bin/activate
-(.venv) fubar@myhost:~/Projects/apocalyptic-world$ python -m pip install -U pip]
+(.venv) fubar@myhost:~/Projects/apocalyptic-world$ python -m pip install -U pip
 
 [notice] A new release of pip is available: 25.3 -> 26.3
 [notice] To update, run: pip install --upgrade pip
@@ -36,7 +36,7 @@ Collecting pip
 Downloading pip-26.3-py3-none-any.whl (2.0 MB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 4.9 MB/s  0:00:00
 Installing collected packages: pip
-  Atmyhostting uninstall: pip
+  Attempting uninstall: pip
     Found existing installation: pip 25.3
     Uninstalling pip-25.3:
       Successfully uninstalled pip-25.3
@@ -50,3 +50,9 @@ Notice that the prompt of the shell now has the prefix `(.venv)`. This indicates
 ### Installing additional stuff
 
 Run `python -m pip install -r requirements.txt`.
+
+## Security scanning
+
+Passages (`*.tw`) are scanned with [Semgrep](https://github.com/semgrep/semgrep) for signs of injected code, both
+locally and in GitHub Actions. See [`.semgrep/README.md`](.semgrep/README.md) for the rules and how to install and run
+it.

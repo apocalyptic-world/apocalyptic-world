@@ -1,0 +1,225 @@
+# Semgrep rules for Twine/SugarCube passages (*.tw, *.twee).
+#
+# Passages mix prose, HTML, SugarCube macros and JavaScript, so no Semgrep
+# language parser understands them. Every rule here uses the `regex` language.
+# The rules look for code that is unusual in this game and typical of injected
+# code; most findings are a prompt for a human to look, not proof of malice.
+#
+# Severity:
+#   ERROR   - almost never legitimate here; fails the CI check
+#   WARNING - legitimate uses exist; review every new occurrence
+#   INFO    - context for reviewers
+#
+# See .semgrep/README.md for how to run them.
+
+rules:
+  # ---------------------------------------------------------------- ERROR --
+
+  - id: tw-dynamic-code-execution
+    languages: [regex]
+    severity: ERROR
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Runs a string as JavaScript (eval, Function constructor, or
+      setTimeout/setInterval with a string). Injected code often hides behind
+      this. Check where the string comes from.
+    pattern-regex: '\beval\s*\(|(?<![\w$])Function\s*\(|\bset(?:Timeout|Interval)\s*\(\s*[''"`]'
+    metadata:
+      category: security
+      cwe: 'CWE-95: Eval Injection'
+
+  - id: tw-remote-code-loading
+    languages: [regex]
+    severity: ERROR
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Loads and runs code that is not in the repository (importScripts,
+      $.getScript, dynamic import, <script src>, a created <script> element,
+      a JavaScript/HTML data: URL, a web worker or service worker). Make sure
+      the source is one the project controls.
+    pattern-regex: '\bimportScripts\s*\(|\$\.getScript\s*\(|\bimport\s*\(\s*[''"`\w]|<script\b[^>]*\bsrc\s*=|\bcreateElement\s*\(\s*[''"]script[''"]|\bdata:(?:text|application)/(?:javascript|ecmascript|x-javascript|html)|\bnew\s+(?:Shared)?Worker\s*\(|\bserviceWorker\.register\s*\('
+    metadata:
+      category: security
+      cwe: 'CWE-829: Inclusion of Functionality from Untrusted Control Sphere'
+
+  - id: tw-obfuscated-code
+    languages: [regex]
+    severity: ERROR
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Decodes or hides text at runtime (atob, String.fromCharCode, unescape,
+      chains of \x / \u escapes, or JSFuck-style symbol runs). Game text has no
+      reason to be encoded; decode it and check what it does.
+    pattern-regex: '\batob\s*\(|\bString\.fromCharCode\s*\(|\bunescape\s*\(|(?:\\x[0-9a-fA-F]{2}){4,}|(?:\\u[0-9a-fA-F]{4}){4,}|[\[\]()!+]{30,}'
+    metadata:
+      category: security
+      cwe: 'CWE-506: Embedded Malicious Code'
+
+  - id: tw-crypto-miner
+    languages: [regex]
+    severity: ERROR
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Mentions a known browser crypto-miner or mining protocol.
+    pattern-regex: '(?i)\b(?:coin-?hive|cryptonight|crypto-?loot|xmrig|webminer|minero\.cc|stratum\+(?:tcp|ssl))\b'
+    metadata:
+      category: security
+      cwe: 'CWE-506: Embedded Malicious Code'
+
+  # -------------------------------------------------------------- WARNING --
+
+  - id: tw-external-url
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Links to a domain that is not on the project's allow list. If it is
+      legitimate, add it to the allow list in .semgrep/rules/passages.yml.
+    # Allow list: domains already used by the game (SVG namespaces, the
+    # project's own sites, Twine docs, analytics). Subdomains other than www.
+    # are not allowed implicitly.
+    pattern-regex: 'https?://(?!(?:www\.)?(?:w3\.org|inkscape\.org|sodipodi\.sourceforge\.net|apocalyptic-world\.com|patreon\.com|subscribestar\.adult|f95zone\.to|discord\.gg|twinery\.org|css\.gg|googletagmanager\.com)(?:[:/?#''"\s<>)]|$))[^\s''"<>)]+'
+    metadata:
+      category: security
+
+  - id: tw-network-request
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Sends or receives data over the network (fetch, XMLHttpRequest, jQuery
+      AJAX, WebSocket, EventSource, sendBeacon, WebRTC, or an Image used as a
+      beacon). Check the destination and what data is sent.
+    pattern-regex: '\bfetch\s*\(|\bXMLHttpRequest\b|\$\.(?:ajax|get|post|getJSON)\s*\(|\bnew\s+(?:WebSocket|EventSource|Image)\s*\(|\bsendBeacon\s*\(|\bRTCPeerConnection\b'
+    metadata:
+      category: security
+      cwe: 'CWE-200: Exposure of Sensitive Information'
+
+  - id: tw-sensitive-browser-data
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Reads browser storage or device data (cookies, local/session storage,
+      IndexedDB, clipboard, location, camera/microphone, credentials) or
+      reaches into another window. SugarCube manages saves itself; passages
+      rarely need these.
+    pattern-regex: '\bdocument\.cookie\b|\b(?:local|session)Storage\b|\bindexedDB\b|\bnavigator\.(?:clipboard|geolocation|credentials|mediaDevices)\b|\bwindow\.(?:opener|parent|top)\.'
+    metadata:
+      category: security
+      cwe: 'CWE-359: Exposure of Private Personal Information'
+
+  - id: tw-navigation-redirect
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Navigates the browser away from the game or opens a new window
+      (location assignment, location.assign/replace, window.open, meta
+      refresh). Check the target.
+    pattern-regex: '(?i)\b(?:window|document|top|parent|self)\.location(?:\.href)?\s*=(?!=)|\blocation\.(?:assign|replace)\s*\(|\bwindow\.open\s*\(|<meta\b[^>]*http-equiv\s*=\s*[''"]?refresh'
+    metadata:
+      category: security
+      cwe: 'CWE-601: Open Redirect'
+
+  - id: tw-html-injection-sink
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Writes raw HTML into the page (innerHTML/outerHTML, insertAdjacentHTML,
+      document.write). Make sure no player- or NPC-supplied text reaches it
+      unescaped.
+    pattern-regex: '\.(?:inner|outer)HTML\s*\+?=(?!=)|\binsertAdjacentHTML\s*\(|\bdocument\.write(?:ln)?\s*\('
+    metadata:
+      category: security
+      cwe: 'CWE-79: Cross-site Scripting'
+
+  - id: tw-embedded-frame
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Embeds another document or plugin (iframe, frame, object, embed,
+      applet). Check what it loads.
+    pattern-regex: '(?i)<(?:iframe|frame|object|embed|applet)\b'
+    metadata:
+      category: security
+
+  - id: tw-script-passage
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Declares a passage tagged [script]. Its code runs once when the game
+      starts, before any passage, so a new one deserves a careful read.
+    pattern-regex: '(?m)^::[^\[\n]*\[[^\]\n]*\bscript\b[^\]\n]*\]'
+    metadata:
+      category: security
+
+  - id: tw-long-base64-blob
+    languages: [regex]
+    severity: WARNING
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Long base64-like string outside a data: URL. Payloads are often hidden
+      this way; decode it and check what it is.
+    # Base64 that directly follows "base64," belongs to a data: URL (the game
+    # embeds PNGs in SVGs that way). Data URLs carrying code are caught by
+    # tw-remote-code-loading.
+    pattern-regex: '(?<![A-Za-z0-9+/])(?<!base64,)[A-Za-z0-9+/]{200,}={0,2}'
+    metadata:
+      category: security
+      cwe: 'CWE-506: Embedded Malicious Code'
+
+  # ----------------------------------------------------------------- INFO --
+
+  - id: tw-minified-code
+    languages: [regex]
+    severity: INFO
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Very long line with many statements, which looks like minified code.
+      Minified code can't be reviewed; ask for the source or a link to the
+      exact upstream release it was copied from.
+    pattern-regex: '(?m)^(?=.{1000,}$)(?:[^;\n]*;){30,}.*$'
+    metadata:
+      category: security
+
+  - id: tw-raw-script-tag
+    languages: [regex]
+    severity: INFO
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Raw HTML <script> element in a passage (not the <<script>> macro). It
+      runs every time the passage renders.
+    pattern-regex: '(?<!<)<script\b'
+    metadata:
+      category: security
+
+  - id: tw-inline-event-handler
+    languages: [regex]
+    severity: INFO
+    paths:
+      include: ['*.tw', '*.twee']
+    message: >-
+      Inline HTML event handler (onclick=, onerror=, ...) or javascript: URL.
+      The code in the attribute runs outside SugarCube's macros.
+    pattern-regex: '<[a-zA-Z][^>]*\son[a-z]+\s*=|\bhref\s*=\s*[''"]?\s*javascript:'
+    metadata:
+      category: security
+      cwe: 'CWE-79: Cross-site Scripting'

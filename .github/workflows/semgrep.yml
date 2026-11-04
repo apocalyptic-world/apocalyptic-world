@@ -1,0 +1,70 @@
+# Scans Twine/SugarCube passages for signs of injected code.
+# Rules: .semgrep/rules/passages.yml  Docs: .semgrep/README.md
+#
+# There is no maintained official Semgrep action (returntocorp/semgrep-action
+# is deprecated); Semgrep's docs recommend running the official container
+# image, which is what this job does. No Semgrep account or token is needed.
+name: Semgrep
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: semgrep-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  passages:
+    name: Scan passages
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      # Pin to a digest for reproducible runs, e.g. semgrep/semgrep@sha256:…
+      image: semgrep/semgrep:latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Pick the commit to compare against
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          base="${PR_BASE:-$PUSH_BEFORE}"
+          case "$base" in
+            ""|0000000000000000000000000000000000000000) base="" ;;
+          esac
+          # Manual runs (workflow_dispatch) scan everything.
+          echo "BASE_SHA=$base" >> "$GITHUB_ENV"
+
+      - name: Run Semgrep
+        run: |
+          set -- --config .semgrep/rules/ --metrics=off --json --output semgrep.json
+          if [ -n "$BASE_SHA" ]; then
+            # Only report findings that are not already in the base commit.
+            set -- "$@" --baseline-commit "$BASE_SHA"
+          fi
+          semgrep scan "$@"
+
+      - name: Report findings
+        # Report-only: findings appear as annotations and in the job summary,
+        # but the job stays green. Add --fail-on-error to fail on ERROR findings.
+        run: python3 .semgrep/report.py semgrep.json
+
+      - name: Flag new or changed binary files
+        if: ${{ !cancelled() && env.BASE_SHA != '' }}
+        run: |
+          git diff --numstat "$BASE_SHA" HEAD \
+            | awk -F '\t' '$1 == "-" && $2 == "-" { print $3 }' \
+            | while IFS= read -r file; do
+                echo "::warning file=$file,title=binary file::New or changed binary file. Text scanners can't read it; scan it (e.g. ClamAV) before merging."
+              done
