@@ -2,6 +2,7 @@
 
 <<set _canFuck = !setup.perkHas('temp_impotence')>>
 
+/* one branch per implemented partner combination; keep in sync with the table in js/sex.js (setup.sex.threesomeImplemented) */
 <<if $tmpGirl.gender === 0 && $tmpGirl2.gender === 0>>
     <<set _prefix = 'threesome_f_'>>
     <<set _sexActions = {
@@ -1290,4 +1291,9 @@
             minAction: 35
         }
     }>>
+<<else>>
+    /* partner combination without a scene yet: see the table in js/sex.js (setup.sex.threesomeImplemented) */
+    <<set _prefix = 'threesome_', _sexActions = {}>>
+    <strong>NOT YET IMPLEMENTED</strong>: threesome with <<= setup.genderPath($tmpGirl)>> + <<= setup.genderPath($tmpGirl2)>>
+    <br /><br />
 <</if>>
