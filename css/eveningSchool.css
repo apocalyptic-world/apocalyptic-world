@@ -259,3 +259,82 @@
   cursor: help;
   border-bottom: 1px dotted #9a958e;
 }
+
+/* Phones: pin the name panel to the class card so it stays on screen, and show each trait's effect
+   right in the panel because there is no second hover on a touch screen */
+@media only screen and (max-width: 768px) {
+  .es-card {
+    position: relative;
+  }
+
+  .es-student,
+  .tooltip.es-name {
+    position: static;
+  }
+
+  .tooltip.es-name > .es-name-tip {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+  }
+
+  .es-name-tip .trait.tooltip {
+    position: static;
+    flex: 1 1 100%;
+  }
+
+  .es-name-tip .trait.tooltip .tooltiptext {
+    position: static;
+    display: block;
+    width: auto;
+    margin: 2px 0 0;
+    padding: 0;
+    background: none;
+    visibility: inherit;
+  }
+}
+
+/* Phones: the roster's three table columns are too narrow, so stack each student:
+   name and age on one line, the class choices below, each radio kept with its label */
+@media only screen and (max-width: 600px) {
+  table#slaves.es-students,
+  table#slaves.es-students tbody {
+    display: block;
+    width: 100%;
+  }
+
+  table#slaves.es-students tr.item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  table#slaves.es-students tr.item td {
+    display: block;
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  table#slaves.es-students tr.item td:nth-child(2) {
+    white-space: nowrap;
+  }
+
+  table#slaves.es-students tr.item td:nth-child(3) {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  table#slaves.es-students tr.item td:nth-child(3) label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+}

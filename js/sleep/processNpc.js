@@ -367,7 +367,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 count = setup.eveningSchool.output(npc, setup.personality.output(npc, count));
                 if (tmp.totals) tmp.totals[item] = (tmp.totals[item] ?? 0) + count;
                 setup.cabinInventory.pickup(item, count);
-                setup.sleepMessages.addJob(npc.name + ' managed to get ' + count + ' ' + Item.get(item).name + ' while hunting.', 'hunting');
+                setup.sleepMessages.addJob(npc.name + ' managed to get ' + count + ' ' + Item.get(item).name + ' while hunting.', 'hunter');
             }
         }
 

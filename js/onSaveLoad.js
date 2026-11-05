@@ -660,6 +660,13 @@ Save.onLoad.add(function (save) {
         } 
     }
 
+    /* achievements only fire when the event happens: silently give what was earned before they existed or can't happen again */
+    if (variables.player) {
+        variables.player.achievements ??= {};
+        if (variables.game?.location?.workbench) variables.player.achievements.workbench_find = true;
+        if ((variables.player.strength ?? 0) >= 25) variables.player.achievements.strength_25 = true;
+        if (variables.backpack?.has('revolver') || variables.storage?.has('revolver')) variables.player.achievements.gun_find = true;
+    }
     if ((variables.locationEvents.bathhouse ?? false) && !variables.backpack.has('blueprint_hot_tub')) {
         /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
         variables.backpack.pickup('blueprint_hot_tub', 1);

@@ -58,10 +58,11 @@ She looks at you, her expression a mixture of exhaustion and something else.
             type: 'guest',
             id: $tmpGirl.id
     }>>
-    <<setNpcStats 'guest' $guestId 'happy' 6>>
-    <<setNpcStats 'guest' $guestId 'relationship' 5>>
+    <<set $tmpGirl.happy = Math.min(($tmpGirl.happy ?? 0) + 6, 100)>>
+    <<set $tmpGirl.relationship = Math.min(($tmpGirl.relationship ?? 0) + 5, 100)>>
 
     <<link 'Sleep'>>
+        <<set $guests[$guestId] = $tmpGirl>>
         <<goto 'Sleep eval'>>
     <</link>>
     <<if ['white','latina'].includes($tmpGirl.race)>>
