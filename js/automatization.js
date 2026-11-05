@@ -176,9 +176,10 @@ setup.automatization = {
 setup.automatization.formatNpcList = function (npcs) {
   const counts = new Map();
   for (const npc of npcs) {
-    const entry = counts.get(npc.id) ?? { name: npc.name, n: 0 };
+    const key = npc.id ?? npc.name;
+    const entry = counts.get(key) ?? { name: npc.name, n: 0 };
     entry.n++;
-    counts.set(npc.id, entry);
+    counts.set(key, entry);
   }
   return [...counts.values()]
     .map((e) => (e.n > 1 ? `${e.name} (x${e.n})` : e.name))
