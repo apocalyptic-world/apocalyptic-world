@@ -19,7 +19,7 @@ A cold snap—out of nowhere. No snowfall, no warning. Just a killing freeze wra
 <<set _weatherGenderPool = (_randomGuestIds[0] ?? _randomGuestIds[1] ?? [])>>
 <<set _weatherPool = _weatherGenderPool.filter(function(i) { return !($guests[i].traits ?? []).includes('feral'); })>>
 <<if !_weatherPool.length>><<set _weatherPool = _weatherGenderPool>><</if>>
-<<set _randomGuestId = setup.getRandomPersons(_weatherPool, 1)>>
+<<set _randomGuestId = setup.npcs.pick(_weatherPool, 1)>>
 <<set _npc = $guests[_randomGuestId[0]]>>
 
 <<if !$player.quests.coldSnap>>

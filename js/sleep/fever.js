@@ -73,9 +73,8 @@ setup.fever.start = function (pool, day) {
     const healthy = pool.filter(function (n) { return typeof n.sick === 'undefined'; });
     if (healthy.length < 2) return null;
 
-    const shuffled = healthy.slice().sort(function () { return Math.random() - 0.5; });
-    const count = Math.max(2, Math.round(shuffled.length * window.randomInteger(30, 50) / 100));
-    const victims = shuffled.slice(0, count);
+    const count = Math.max(2, Math.round(healthy.length * window.randomInteger(30, 50) / 100));
+    const victims = setup.npcs.pick(healthy, count);
 
     let anySevere = false;
     for (const npc of victims) {

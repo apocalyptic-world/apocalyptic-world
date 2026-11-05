@@ -184,7 +184,7 @@ setup.eveningSchool = {
         const focus = tradesOf(npc).length ? setup.getRandomElement(tradesOf(npc)) : null;
 
         // Prefer the skill that matches the job they actually work, so the anecdote fits.
-        const others = guests.filter(g => g.id !== npc.id && tradesOf(g).length).shuffle().slice(0, 2).map(g => {
+        const others = setup.npcs.pick(guests, 2, g => g.id !== npc.id && tradesOf(g).length).map(g => {
             const skills = tradesOf(g);
             return { npc: g, skill: skills.find(s => this.tradeJobs[s] === g.assignedTo) ?? setup.getRandomElement(skills) };
         });

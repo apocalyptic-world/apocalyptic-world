@@ -40,7 +40,7 @@ As the event draws to a close, the villagers gather around a makeshift bonfire. 
 <br /><br />
 <<set _randomNpcs = setup.filterNPCs($guests, {virgin:false, horny_gte: 50, race_not:['black'], gender: 0, likesGuys: true})>>
 <<if (_randomNpcs[0] ?? []).length >= 3 && setup.percentageChance(20)>>
-	<<set _getRandomNpcs = setup.getRandomElements(_randomNpcs[0], 3)>>
+	<<set _getRandomNpcs = setup.npcs.pick(_randomNpcs[0], 3)>>
 	<<set _npc1 = $guests[_getRandomNpcs[0]]>>
 	<<set _npc2 = $guests[_getRandomNpcs[1]]>>
 	<<set _npc3 = $guests[_getRandomNpcs[2]]>>

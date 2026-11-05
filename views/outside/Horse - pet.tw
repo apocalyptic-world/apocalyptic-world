@@ -10,9 +10,9 @@ You ensure that the horse is well-groomed by brushing him multiple times.
 As you do so, he lifts his head up and emits a gentle nicker, clearly expressing his enjoyment of the grooming session.
 <br /><br />
 <<if $guests.length > 0>>
-	<<set _randomPerson = setup.getRandomPersonIds($guests, 1)>>
-	<<if !$guests[_randomPerson[0]].gender && setup.getAge($guests[_randomPerson[0]]) >= 18>>
-		<<set $guestId = _randomPerson[0]>>
+	<<set _randomPerson = setup.npcs.pick($guests)[0]>>
+	<<if !_randomPerson.gender && setup.getAge(_randomPerson) >= 18>>
+		<<set $guestId = $guests.indexOf(_randomPerson)>>
 		<<unset $charId, $slaveId>>
 		<<video '/cabin/horse_fuck1'>>
 		<br /><br />

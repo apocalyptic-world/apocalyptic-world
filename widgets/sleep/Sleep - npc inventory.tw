@@ -80,7 +80,7 @@
 		if (pool.length && !partyAlreadyTonight && cooldownOk && setup.percentageChance(15)) {
 			const count = _isGuest ? randomInteger(1, Math.min(4, pool.length)) : 1;
 			const party = _isGuest
-				? pool.sort(() => 0.5 - Math.random()).slice(0, count)
+				? setup.npcs.pick(pool, count)
 				: [setup.getRandomElement(pool)];
 
 			let msg = _isGuest

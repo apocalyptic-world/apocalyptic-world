@@ -192,9 +192,7 @@ setup.getRandomGifts = function (count = 1, exclude) {
             delete _gifts[exclude[excludeGift]];
         }
     }
-    var shuffledGifts = Object.keys(_gifts).sort((a, b) => 0.5 - Math.random());
-
-    return shuffledGifts.slice(0, count);
+    return setup.npcs.pick(Object.keys(_gifts), count);
 };
 
 setup.inventoryNpc = [
@@ -411,24 +409,6 @@ setup.calculateDaysBetween = function (start, end) {
     return Math.round(adjustedDays,2);
 };
 
-setup.getRandomPersons = function(persons, limit = 2) {
-    return shuffle(persons).slice(0, limit);
-};
-
-setup.getRandomPersonIds = function(persons, limit = 2) {
-    var randomIds = [];
-    var randomPersonList = clone(persons);
-    while (randomIds.length < limit && randomPersonList.length) {
-        var randomIndex = Math.floor(Math.random() * randomPersonList.length);
-        if (!randomIds.includes(randomIndex)) {
-            randomIds.push(randomIndex);
-            randomPersonList.splice(randomIndex, 1);
-        }
-    }
-
-    return randomIds;
-};
-
 setup.generateUniqueKey = function(npc) {
     var timestamp = Date.now();
     var uniqueKey = npc.name + npc.beauty + timestamp.toString();
@@ -638,22 +618,6 @@ setup.sortObjectKeysDescending = function(obj) {
     return sortedObject;
 };
 
-setup.getRandomPersonIdsGirls = function(persons, limit = 2) {
-    var randomIds = [];
-    var randomPersonList = clone(persons);
-    while (randomIds.length < limit && randomPersonList.length) {
-        var randomIndex = Math.floor(Math.random() * randomPersonList.length);
-        if (!randomIds.includes(randomIndex)) {
-            if ((randomPersonList[randomIndex] ?? false) && !randomPersonList[randomIndex].gender && setup.getAge(randomPersonList[randomIndex])) {
-                randomIds.push(randomIndex);
-            }
-            randomPersonList.splice(randomIndex,1);
-        }
-    }
-
-    return randomIds;
-};
-
 setup.getHornyPersons = function (persons) {
     var hornyPersons = {};
     for (var i = 0; i < persons.length; i++) {
@@ -691,16 +655,7 @@ setup.getRandomElement = function(items) {
 };
 
 setup.getRandomElements = function(list, count) {
-    if (!Array.isArray(list)) return [];
-    const copy = [...list];
-    const result = [];
-
-    while (result.length < count && copy.length > 0) {
-        const index = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(index, 1)[0]);
-    }
-
-    return result;
+    return setup.npcs.pick(list, count);
 };
 
 setup.commonValues = function(allArrays) {
@@ -753,6 +708,8 @@ setup.propertyMatchIndexes = function(array, property, value = true, operator = 
     return array.filter(index => index !== -1);
 };
 
+/* Shuffles array in place. Kept for runtime-loaded scripts; game code uses setup.npcs.shuffled (a copy) or
+   setup.npcs.pick. */
 function shuffle(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
@@ -763,12 +720,7 @@ function shuffle(array) {
 };
 
 setup.shuffling = function(array) {
-	for (let i = array.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
-	}
-
-	return array;
+	return shuffle(array);
 };
 
 /* convert map.keys() to a regular list since sugarcube is stupid when it comess to Map */

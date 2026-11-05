@@ -69,9 +69,9 @@ Slaves who had once been strangers found themselves sharing stories and laughter
     <</if>>
     <<video 'basement/slave_party1'>>
     <br /><br />
-    <<set _girlSlaves = setup.getRandomPersonIdsGirls($slaves.filter(s => !s.chastityBelt), 2)>>
-    <<set _npc1 = $slaves[_girlSlaves[0]]>>
-    <<set _npc2 = $slaves[_girlSlaves[1]]>>
+    <<set _girlSlaves = setup.npcs.pick($slaves, 2, s => !s.chastityBelt && !s.gender && setup.getAge(s) >= 18)>>
+    <<set _npc1 = _girlSlaves[0]>>
+    <<set _npc2 = _girlSlaves[1]>>
     <<if _partyMistress>>
         With a commanding gesture, <<=setup.displayName(_partyMistress)>> presented the <<=setup.displayName(_npc1)>> before you, a silent offering in the midst of revelry.
         The air grew heavy with anticipation as the settlers around you fell silent, their whispers hushed in anticipation of what would unfold.
