@@ -320,7 +320,7 @@
 	<</if>>
 
 	<<if (!(typeof _mistressId === 'undefined') || _attendantIds.length > 0) && $player.quests.slave_party>>
-		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4>>
+		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4 && $slaves.filter(s => !s.chastityBelt && !s.gender && setup.getAge(s) >= 18).length >= 2>>
 			<<link 'Throw a party'>>
 				<<goto 'Basement - slave party'>>
 			<</link>>
