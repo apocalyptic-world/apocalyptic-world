@@ -78,5 +78,62 @@ setup.sex = {
     isPussyAction: function(action)
     {
         return ['stats', 'stats2', 'stats3'].some(key => [].concat(action?.[key] ?? []).includes('pussy'));
+    },
+
+    /*
+     * MC threesome partner combinations, by gender (0 female, 1 male, 2 transfemale, 3 transmale).
+     * "First" is $tmpGirl, "second" is $tmpGirl2. The actions, texts and images of each implemented
+     * combination live in `views/npc/fuck/mc_threesome/actions.tw` (prefix = image/action key prefix).
+     * The <<threesome>> widget swaps the partners when only the reversed order is implemented
+     * (e.g. male + female becomes female + male). Combinations that are still not implemented show
+     * "NOT YET IMPLEMENTED" instead of the scene.
+     *
+     * +-------------+-------------+---------------+---------------------------------------------+
+     * | first       | second      | prefix        | status                                      |
+     * +-------------+-------------+---------------+---------------------------------------------+
+     * | female      | female      | threesome_f_  | implemented                                 |
+     * | female      | male        | threesome_m_  | implemented                                 |
+     * | female      | transfemale | threesome_t_  | implemented                                 |
+     * | female      | transmale   | -             | not implemented                             |
+     * | male        | female      | threesome_m_  | implemented (swapped to female + male)      |
+     * | male        | male        | -             | not implemented                             |
+     * | male        | transfemale | -             | not implemented                             |
+     * | male        | transmale   | -             | not implemented                             |
+     * | transfemale | female      | threesome_f_  | implemented                                 |
+     * | transfemale | male        | -             | not implemented                             |
+     * | transfemale | transfemale | -             | not implemented                             |
+     * | transfemale | transmale   | -             | not implemented                             |
+     * | transmale   | female      | -             | not implemented                             |
+     * | transmale   | male        | -             | not implemented                             |
+     * | transmale   | transfemale | -             | not implemented                             |
+     * | transmale   | transmale   | -             | not implemented                             |
+     * +-------------+-------------+---------------+---------------------------------------------+
+     *
+     * Keep this table and `threesomeImplemented` in sync with the branches in actions.tw.
+     */
+    threesomeImplemented: [[0, 0], [0, 1], [0, 2], [2, 0]],
+
+    /* true when the threesome scene exists for these partners in this order */
+    isThreesomeImplemented: function(first, second)
+    {
+        return setup.sex.threesomeImplemented.some(([a, b]) => a === first?.gender && b === second?.gender);
+    },
+
+    /*
+     * Picks the first two items of the list that make an implemented threesome, in the order the scene
+     * expects them: [first, second]. Returns null when no pair of them is implemented.
+     * `toNpc` maps an item to its NPC, so callers can pass ids or list positions and get them back,
+     * e.g. setup.sex.threesomePair(_yesGuestIds, i => $guests[i]).
+     */
+    threesomePair: function(items, toNpc = item => item)
+    {
+        for (let i = 0; i < items.length; i++) {
+            for (let j = i + 1; j < items.length; j++) {
+                const a = toNpc(items[i]), b = toNpc(items[j]);
+                if (setup.sex.isThreesomeImplemented(a, b)) return [items[i], items[j]];
+                if (setup.sex.isThreesomeImplemented(b, a)) return [items[j], items[i]];
+            }
+        }
+        return null;
     }
 }

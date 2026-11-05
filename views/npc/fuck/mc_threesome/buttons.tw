@@ -136,28 +136,11 @@
         <br />
      <</if>>
 
-     <<if $tmpGirl.gender === $tmpGirl2.gender || ($tmpGirl.gender === 0 && $tmpGirl2.gender === 2) || ($tmpGirl.gender === 2 && $tmpGirl2.gender === 0) >>
+     /* only when the scene also exists with the partners swapped, see setup.sex.threesomeImplemented (js/sex.js) */
+     <<if setup.sex.isThreesomeImplemented($tmpGirl2, $tmpGirl)>>
         <<set _linkName = 'Focus on ' + $tmpGirl2.name>>
         <<link `_linkName`>>
-            /* save both back before swap */
-            <<if typeof $slaveId !== 'undefined'>><<set $slaves[$slaveId] = $tmpGirl>>
-            <<elseif typeof $guestId !== 'undefined'>><<set $guests[$guestId] = $tmpGirl>>
-            <<elseif typeof $charId !== 'undefined'>><<set $characters[$charId] = $tmpGirl>>
-            <</if>>
-            <<if typeof $slaveId2 !== 'undefined'>><<set $slaves[$slaveId2] = $tmpGirl2>>
-            <<elseif typeof $guestId2 !== 'undefined'>><<set $guests[$guestId2] = $tmpGirl2>>
-            <<elseif typeof $charId2 !== 'undefined'>><<set $characters[$charId2] = $tmpGirl2>>
-            <</if>>
-
-            /* remember which type/id each slot is, then swap */
-            <<set _type1 = typeof $slaveId !== 'undefined' ? 'slave' : typeof $guestId !== 'undefined' ? 'guest' : 'char'>>
-            <<set _id1   = $slaveId ?? $guestId ?? $charId>>
-            <<set _type2 = typeof $slaveId2 !== 'undefined' ? 'slave' : typeof $guestId2 !== 'undefined' ? 'guest' : 'char'>>
-            <<set _id2   = $slaveId2 ?? $guestId2 ?? $charId2>>
-            <<unset $slaveId, $guestId, $charId, $slaveId2, $guestId2, $charId2>>
-            <<if _type2 === 'slave'>><<set $slaveId = _id2>><<elseif _type2 === 'char'>><<set $charId = _id2>><<else>><<set $guestId = _id2>><</if>>
-            <<if _type1 === 'slave'>><<set $slaveId2 = _id1>><<elseif _type1 === 'char'>><<set $charId2 = _id1>><<else>><<set $guestId2 = _id1>><</if>>
-            <<set _tmpGirl0 = $tmpGirl, $tmpGirl = $tmpGirl2, $tmpGirl2 = _tmpGirl0>>
+            <<threesomeSwap>>
 
             <<unset $sexAction>>
             <<goto `passage()`>>

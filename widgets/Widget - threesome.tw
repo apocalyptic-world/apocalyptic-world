@@ -1,6 +1,10 @@
 :: Widget - threesome [widget]
 
 <<widget threesome>>
+        /* the scene only exists for some partner orders (see setup.sex.threesomeImplemented in js/sex.js), e.g. male + female plays as female + male */
+        <<if !setup.sex.isThreesomeImplemented($tmpGirl, $tmpGirl2) && setup.sex.isThreesomeImplemented($tmpGirl2, $tmpGirl)>>
+                <<threesomeSwap>>
+        <</if>>
         <<if $tmpGirl.horny > 79>>
                  <<set $tmpGirl.horny = 79>>
         <</if>>
@@ -9,4 +13,27 @@
         <</if>>
         <<set $sexStats = {}>>
         <<goto 'Mc threesome fuck'>>
+<</widget>>
+
+/* Swaps the two threesome partners: $tmpGirl <-> $tmpGirl2 and their slave/guest/char ids */
+<<widget threesomeSwap>>
+        /* save both back before swap */
+        <<if typeof $slaveId !== 'undefined'>><<set $slaves[$slaveId] = $tmpGirl>>
+        <<elseif typeof $guestId !== 'undefined'>><<set $guests[$guestId] = $tmpGirl>>
+        <<elseif typeof $charId !== 'undefined'>><<set $characters[$charId] = $tmpGirl>>
+        <</if>>
+        <<if typeof $slaveId2 !== 'undefined'>><<set $slaves[$slaveId2] = $tmpGirl2>>
+        <<elseif typeof $guestId2 !== 'undefined'>><<set $guests[$guestId2] = $tmpGirl2>>
+        <<elseif typeof $charId2 !== 'undefined'>><<set $characters[$charId2] = $tmpGirl2>>
+        <</if>>
+
+        /* remember which type/id each slot is, then swap */
+        <<set _type1 = typeof $slaveId !== 'undefined' ? 'slave' : typeof $guestId !== 'undefined' ? 'guest' : 'char'>>
+        <<set _id1   = $slaveId ?? $guestId ?? $charId>>
+        <<set _type2 = typeof $slaveId2 !== 'undefined' ? 'slave' : typeof $guestId2 !== 'undefined' ? 'guest' : 'char'>>
+        <<set _id2   = $slaveId2 ?? $guestId2 ?? $charId2>>
+        <<unset $slaveId, $guestId, $charId, $slaveId2, $guestId2, $charId2>>
+        <<if _type2 === 'slave'>><<set $slaveId = _id2>><<elseif _type2 === 'char'>><<set $charId = _id2>><<else>><<set $guestId = _id2>><</if>>
+        <<if _type1 === 'slave'>><<set $slaveId2 = _id1>><<elseif _type1 === 'char'>><<set $charId2 = _id1>><<else>><<set $guestId2 = _id1>><</if>>
+        <<set _tmpGirl0 = $tmpGirl, $tmpGirl = $tmpGirl2, $tmpGirl2 = _tmpGirl0>>
 <</widget>>

@@ -185,17 +185,25 @@
 							<<fuck $tmpGirl>>
 						<</linkreplace>>
 					<<else>>
-						<<=setup.displayName($guests[_yesGuestIds[0]], true)>> and <<=setup.displayName($guests[_yesGuestIds[1]], true)>> agree to have a threesome with you!
-						<<linkreplace 'Continue'>>
-							<<set $guestId = _yesGuestIds[0],
-							$tmpGirl = $guests[_yesGuestIds[0]],
-							$guestId2 = _yesGuestIds[1],
-							$tmpGirl2 = $guests[_yesGuestIds[1]]>>
-							<<unset $randEvent, $tmpEvent>>
-							<<set $tmpGirlViewBack = 'NPC view - guest'>>
-							<<unset $charId, $slaveId>>
-							<<threesome $tmpGirl $tmpGirl2>>
-						<</linkreplace>>					
+						/* only partner combinations that have a threesome scene, see setup.sex.threesomeImplemented (js/sex.js) */
+						<<set _pairIds = setup.sex.threesomePair(_yesGuestIds, i => $guests[i])>>
+						<<if _pairIds>>
+							<<=setup.displayName($guests[_pairIds[0]], true)>> and <<=setup.displayName($guests[_pairIds[1]], true)>> agree to have a threesome with you!
+							<<linkreplace 'Continue'>>
+								<<set $guestId = _pairIds[0],
+								$tmpGirl = $guests[_pairIds[0]],
+								$guestId2 = _pairIds[1],
+								$tmpGirl2 = $guests[_pairIds[1]]>>
+								<<unset $randEvent, $tmpEvent>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<unset $charId, $slaveId>>
+								<<threesome $tmpGirl $tmpGirl2>>
+							<</linkreplace>>
+						<<else>>
+							<<=setup.displayName($guests[_yesGuestIds[0]], true)>> and <<=setup.displayName($guests[_yesGuestIds[1]], true)>> agree to have a threesome with you!
+							<br /><br />
+							<strong>NOT YET IMPLEMENTED</strong>
+						<</if>>
 					<</if>>
 				<</if>>
 			<</linkreplace>>
