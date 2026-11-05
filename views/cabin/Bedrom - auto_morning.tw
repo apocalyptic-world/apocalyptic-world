@@ -216,17 +216,13 @@
         <<for _npcs.length > 0 && setup.cabinInventory.has(_item, _itemcount)>>
             <<set _npc = _npcs.pop()>>
             <<run setup.cabinInventory.to_npc(_npc, _item)>>
-            <<set _outItem.push(_npc.name)>>
+            <<set _outItem.push(_npc)>>
         <</for>>
         <<if _outItem.length > 0>>
-            <<set _outputAutoList.push('Added ' + _item + ' to: ' + _outItem.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Added ' + _item + ' to: ' + setup.automatization.formatNpcList(_outItem) + ';')>>
         <</if>>
         <<if _want[_item].length > 0>>
-            <<set _outNo = []>>
-            <<for _npc range _want[_item]>>
-                <<set _outNo.push(_npc.name)>>
-            <</for>>
-            <<set _outputAutoList.push('Add failed - no ' + _item + ' in storage for: ' + _outNo.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Add failed - no ' + _item + ' in storage for: ' + setup.automatization.formatNpcList(_want[_item]) + ';')>>
         <</if>>
     <</for>>
 
@@ -251,11 +247,7 @@
         <<set _outputAutoList.push('Added buttplug to: ' + _outItemAdd.sort().join(', ') + ';')>>
     <</if>>
     <<if _bp_plus.length > 0>>
-        <<set _outNo = []>>
-        <<for _npc range _bp_plus>>
-            <<set _outNo.push(_npc.name)>>
-        <</for>>
-        <<set _outputAutoList.push('Add failed - no buttplug in storage for: ' + _outNo.sort().join(', ') + ';')>>
+        <<set _outputAutoList.push('Add failed - no buttplug in storage for: ' + setup.automatization.formatNpcList(_bp_plus) + ';')>>
     <</if>>
 
     /* dumb-, dumber-, dumbest-bells, npc gets the next higher type */
@@ -290,17 +282,13 @@
         <<for _want.bow.length > 0 && setup.cabinInventory.has(_item, 2)>>
             <<set _npc = _want.bow.pop()>>
             <<run setup.cabinInventory.to_npc(_npc, _item)>>
-            <<set _outItem.push(_npc.name)>>
+            <<set _outItem.push(_npc)>>
         <</for>>
         <<if _outItem.length > 0>>
-            <<set _outputAutoList.push('Hunter ' + _item + ' npc ← cabin: ' + _outItem.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Hunter ' + _item + ' npc ← cabin: ' + setup.automatization.formatNpcList(_outItem) + ';')>>
         <</if>>
         <<if _want.bow.length > 0>>
-            <<set _outNo = []>>
-            <<for _npc range _want.bow>>
-                <<set _outNo.push(_npc.name)>>
-            <</for>>
-            <<set _outputAutoList.push('Hunter failed - no ' + _item + ': ' + _outNo.sort().join(', ') + ';')>>
+            <<set _outputAutoList.push('Hunter failed - no ' + _item + ': ' + setup.automatization.formatNpcList(_want.bow) + ';')>>
         <</if>>
     <</if>>
     <<unset _npc, _want, _outNo>>
