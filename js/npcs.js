@@ -25,3 +25,28 @@ setup.npcs.pick = function (list, n = 1, filter = null, rng = Math.random) {
     }
     return pool.slice(0, count);
 };
+
+/** A shuffled copy of list (the list itself is left alone). */
+setup.npcs.shuffled = function (list, rng = Math.random) {
+    return setup.npcs.pick(list, Array.isArray(list) ? list.length : 0, null, rng);
+};
+
+/* Older helpers, kept because runtime-loaded scripts (js/actions.js, packs/) may still call them. New code should
+   use setup.npcs.pick. They used to live in js/scripts.js; the versions there could loop forever, shuffled the
+   caller's list in place, and returned indices into a list that had shrunk while picking. */
+
+/** Up to limit random items of persons (shuffled, like before; persons itself is no longer shuffled in place). */
+setup.getRandomPersons = function (persons, limit = 2) {
+    return setup.npcs.pick(persons, limit);
+};
+
+/** Up to limit distinct random positions in persons. */
+setup.getRandomPersonIds = function (persons, limit = 2) {
+    return setup.npcs.pick(Array.isArray(persons) ? persons.map((_, i) => i) : [], limit);
+};
+
+/** Up to limit distinct random positions in persons of adult women. */
+setup.getRandomPersonIdsGirls = function (persons, limit = 2) {
+    const isAdultWoman = i => persons[i] && !persons[i].gender && setup.getAge(persons[i]) >= 18;
+    return setup.npcs.pick(Array.isArray(persons) ? persons.map((_, i) => i) : [], limit, isAdultWoman);
+};

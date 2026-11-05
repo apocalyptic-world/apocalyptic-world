@@ -5,9 +5,9 @@
 
 <<if typeof $randEvent === 'undefined'>>
 	<<set
-		_femaleGuestIds = setup.getRandomPersons($tmpEvent[0], 1),
-		_transfemaleGuestIds = setup.getRandomPersons($tmpEvent[1], 1),
-		_maleGuestIds = setup.getRandomPersons($tmpEvent[2], 1),
+		_femaleGuestIds = setup.npcs.pick($tmpEvent[0], 1),
+		_transfemaleGuestIds = setup.npcs.pick($tmpEvent[1], 1),
+		_maleGuestIds = setup.npcs.pick($tmpEvent[2], 1),
 		_guestIds = [_femaleGuestIds[0], _transfemaleGuestIds[0], _maleGuestIds[0]],
 		_minCorruption = Math.min($guests[_guestIds[0]].corruption, $guests[_guestIds[1]].corruption, $guests[_guestIds[2]].corruption),
 		_isVirgin = $guests[_guestIds[0]].virgin,

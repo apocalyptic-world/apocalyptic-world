@@ -145,7 +145,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			<<set _randomPersonsGirls = setup.commonValues([_foursomeEligible, _guestsNotPregnant])>>
 			<<if _randomPersonsGirls.length < 3>><<set _randomPersonsGirls = _foursomeEligible>><</if>>
 			<<if recall($suppCode) && setup.percentageChance(50) && _randomPersonsGirls.length >= 3>>
-				<<set _randomGirls = setup.getRandomPersons(_randomPersonsGirls, 3)>>
+				<<set _randomGirls = setup.npcs.pick(_randomPersonsGirls, 3)>>
 				<<set _npc1 = $guests[_randomGirls[0]]>>
 				<<set _npc2 = $guests[_randomGirls[1]]>>
 				<<set _npc3 = $guests[_randomGirls[2]]>>

@@ -1,5 +1,5 @@
 :: Blair - marry #3 {"position":"913,2294","size":"100,100"}
-<<set _randomGuest = setup.getRandomPersonIdsGirls($guests, 1)>>
+<<set _randomGuest = setup.npcs.pick($guests, 1, g => !g.gender && setup.getAge(g) >= 18)>>
 
 <h1 class="ptitle">KITCHEN</h1>
 <br /><br />
@@ -22,7 +22,7 @@ Blair left, and the girls bid her good night with giggles on their faces, knowin
 <div id="option1">
 <<if _randomGuest.length>>
 <<linkreplace 'Keep a company to the girls'>>
-	Just as Blair left the kitchen, some of the girls turned their gazes towards you. After a moment, <strong class="gender-girl"><<=$guests[_randomGuest[0]].name>></strong> approached you.
+	Just as Blair left the kitchen, some of the girls turned their gazes towards you. After a moment, <strong class="gender-girl"><<=_randomGuest[0].name>></strong> approached you.
 	<br /><br />
 	<<anongirl>>
 		How about we warm you up? You're gonna have a long night...
@@ -36,7 +36,7 @@ Blair left, and the girls bid her good night with giggles on their faces, knowin
 		<<linkreplace 'Agree'>>
 			<<horny 10>>
 			<<run $('#option2').hide()>>
-			<strong class="gender-girl"><<=$guests[_randomGuest[0]].name>></strong> drops on her knees and crawls under table, unzipping your pants and quickly taking a look around if Blair isn't coming back.
+			<strong class="gender-girl"><<=_randomGuest[0].name>></strong> drops on her knees and crawls under table, unzipping your pants and quickly taking a look around if Blair isn't coming back.
 			<br /><br />
 				<center>
 					[img[setup.ImagePath+'places/kitchen/wedding_bj.webp']]

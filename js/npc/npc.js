@@ -407,7 +407,7 @@ setup.getNpcHappyLevel = function(nns) {
 
 setup.personalityTraits = function(count = 1) {
 	/* One random trait from each axis (setup.personality.axes), then keep `count` of those, so no two share an axis. */
-	var traits = shuffle(setup.personality.axes.map(axis => setup.getRandomElement(axis.traits)));
+	var traits = setup.npcs.shuffled(setup.personality.axes.map(axis => setup.getRandomElement(axis.traits)));
 
 	return traits.slice(0, count).sort();
 };

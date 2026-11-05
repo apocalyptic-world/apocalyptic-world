@@ -23,6 +23,12 @@ function seededRng(seed = 42) {
     return () => (state = (state * 16807) % 2147483647) / 2147483647;
 }
 
+// Arrays created inside the sandbox have their own Array prototype, so deepStrictEqual(x, []) would fail on them
+function assertEmptyArray(value) {
+    assert.ok(Array.isArray(value), 'expected an array');
+    assert.strictEqual(value.length, 0);
+}
+
 const setup = loadGameScripts(['js/npcs.js']);
 const pick = setup.npcs.pick;
 
@@ -106,5 +112,49 @@ test('pick: every item is roughly equally likely', () => {
     const expected = runs / list.length;
     for (const item of list) {
         assert.ok(Math.abs(counts[item] - expected) < expected * 0.05, `${item} picked ${counts[item]} times, expected about ${expected}`);
+    }
+});
+
+test('shuffled: returns every item once and leaves the input alone', () => {
+    const list = [1, 2, 3, 4, 5];
+    const result = setup.npcs.shuffled(list, seededRng(5));
+    assert.deepStrictEqual([...result].sort(), [1, 2, 3, 4, 5]);
+    assert.deepStrictEqual(list, [1, 2, 3, 4, 5]);
+    assert.notStrictEqual(result, list);
+    assertEmptyArray(setup.npcs.shuffled(undefined));
+});
+
+// The old helpers in their new home (wrappers around pick)
+
+test('getRandomPersons: keeps its default of two and no longer shuffles the caller\'s list', () => {
+    const list = [1, 2, 3, 4, 5];
+    assert.strictEqual(setup.getRandomPersons(list).length, 2);
+    assert.deepStrictEqual(list, [1, 2, 3, 4, 5]);
+});
+
+test('getRandomPersonIds: returns distinct, valid positions and never loops forever', () => {
+    // The old version hung when asked for as many people as the list had (e.g. 6 guests, 6 asked for)
+    for (let run = 0; run < 200; run++) {
+        const list = ['a', 'b', 'c', 'd', 'e', 'f'].slice(0, 1 + (run % 6));
+        const ids = setup.getRandomPersonIds(list, 6);
+        assert.strictEqual(ids.length, list.length);
+        assert.strictEqual(new Set(ids).size, ids.length);
+        assert.ok(ids.every(i => Number.isInteger(i) && i >= 0 && i < list.length));
+    }
+    assertEmptyArray(setup.getRandomPersonIds(null, 2));
+});
+
+test('getRandomPersonIdsGirls: only positions of adult women, pointing into the list given', () => {
+    setup.getAge = npc => npc.age;
+    const people = [
+        { gender: 1, age: 30 },
+        { gender: 0, age: 25 },
+        { gender: 0, age: 12 },
+        { gender: 0, age: 40 },
+        null,
+    ];
+    for (let run = 0; run < 100; run++) {
+        const ids = setup.getRandomPersonIdsGirls(people, 3);
+        assert.deepStrictEqual([...ids].sort(), [1, 3]);
     }
 });

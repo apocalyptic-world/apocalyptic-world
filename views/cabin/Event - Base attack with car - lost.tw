@@ -31,18 +31,15 @@ The leader gestures to his men, and they start rounding up the survivors corrall
     <br />
 <</if>>
 <br />
-<<set _guestsCount = Math.min(1, $guests.length)>>
-<<set _slavesCount = Math.min(2, $guests.length)>>
-<<set _randomGuestIds = setup.getRandomPersonIds($guests, _guestsCount)>>
-<<set _randomSlaveIds = setup.getRandomPersonIds($slaves, _slavesCount)>>
 <<set _npcsTaken = []>>
-<<for _npcIndex, _npc range _randomGuestIds>>
-    <<set _npcsTaken.push(setup.displayName($guests[_randomGuestIds[_npcIndex]]))>>
-    <<guestRemove _randomGuestIds[_npcIndex]>>
+/* Look each one up again before removing: every removal shifts the positions of the people after it */
+<<for _takenNpc range setup.npcs.pick($guests, 1)>>
+    <<set _npcsTaken.push(setup.displayName(_takenNpc))>>
+    <<guestRemove $guests.indexOf(_takenNpc)>>
 <</for>>
-<<for _npcIndex, _npc range _randomSlaveIds>>
-    <<set _npcsTaken.push(setup.displayName($slaves[_randomSlaveIds[_npcIndex]]))>>
-    <<slaveRemove _randomSlaveIds[_npcIndex]>>
+<<for _takenNpc range setup.npcs.pick($slaves, 2)>>
+    <<set _npcsTaken.push(setup.displayName(_takenNpc))>>
+    <<slaveRemove $slaves.indexOf(_takenNpc)>>
 <</for>>
 
 The survivors are taken captive. The attackers impose harsh conditions, treating the inhabitants as forced labor. 

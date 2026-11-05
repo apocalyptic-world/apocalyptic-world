@@ -55,9 +55,7 @@ setup.getRandomSkills = function (npc, count = 1) {
         availableSkills = availableSkills.filter(skill => skill !== "fighter");
     }
 
-    const shuffledSkills = availableSkills.sort(() => 0.5 - Math.random());
-
-    return shuffledSkills.slice(0, count);
+    return setup.npcs.pick(availableSkills, count);
 };
 
 /** 

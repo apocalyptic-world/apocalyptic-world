@@ -14,17 +14,14 @@
 As you look outside your gates in the distance you see group of attackers walking away with <strong class="iitem"><<=_eventBaseAttackCapturedGirls>></strong> of your slaves.
 <br /><br />
 
-<<set _eventBaseAttackSlaveListIds = setup.getRandomPersonIds($slaves, _eventBaseAttackCapturedGirls).sort().reverse()>>
 They took: 
 <br />
-<<set _beforeSlaves = clone($slaves)>>
-<<for _eventBaseAttackSlaveListId, _eventBaseAttackSlaveList range _eventBaseAttackSlaveListIds>>
-	<<capture _eventBaseAttackSlaveListId>>
-		<div>
-			<strong><<=setup.displayName($slaves[_eventBaseAttackSlaveList])>></strong>
-		</div>
-		<<set $slaves.splice(_eventBaseAttackSlaveList, 1)>>
-	<</capture>>
+/* Look each one up again before removing: every removal shifts the positions of the people after it */
+<<for _eventBaseAttackSlave range setup.npcs.pick($slaves, _eventBaseAttackCapturedGirls)>>
+	<div>
+		<strong><<=setup.displayName(_eventBaseAttackSlave)>></strong>
+	</div>
+	<<slaveRemove $slaves.indexOf(_eventBaseAttackSlave)>>
 <</for>>
 	
 <br /><br />

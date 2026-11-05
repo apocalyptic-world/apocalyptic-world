@@ -93,7 +93,7 @@ setup.getRandomTraits = function (npc, count = 1, exclude) {
         }
     }
 
-    var shuffledTraits = Object.keys(_traits).sort(() => 0.5 - Math.random());
+    var shuffledTraits = setup.npcs.shuffled(Object.keys(_traits));
     if (!shuffledTraits.length) {
         return [];
     }

@@ -15,7 +15,7 @@
 	<<set _ltGender = 'gender-' + setup.genderClass(_ltNpc)>>
 	<<set _ltSpy = setup.percentageChance((_ltNpc.relationship ?? 0) < 30 ? 30 : 8)>>
 	<<set _ltMobPool = $guests.filter(function (g) { return setup.getAge(g) >= 18 && g.id !== _ltNpc.id && typeof g.sick === 'undefined'; })>>
-	<<set _ltMob = _ltMobPool.slice().sort(function () { return Math.random() - 0.5; }).slice(0, 3)>>
+	<<set _ltMob = setup.npcs.pick(_ltMobPool, 3)>>
 	<<set _ltLead = _ltMob.length ? _ltMob[0] : null>>
 	<<set _ltCanBasement = $slaves.length < $basementLimit>>
 
