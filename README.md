@@ -46,6 +46,11 @@ The unit tests only cover the JavaScript helpers. To check the story passages th
 [Tweego](https://www.motoslave.net/tweego/) command-line compiler. A successful build means every passage parses, and
 Tweego warns about problems such as two passages with the same name.
 
+A successful build does **not** mean the links work. Tweego doesn't look inside the passages, so a reference to a
+passage that doesn't exist (in a `[[link]]`, `<<goto>>`, `<<include>>`, …) still builds without errors or warnings.
+SugarCube only reports it when a player reaches that line in the game. Broken links currently have to be found by
+playing or by searching the passages by hand.
+
 #### Setting up Tweego
 
 1. Download the archive for your system from [motoslave.net/tweego](https://www.motoslave.net/tweego/) and extract
