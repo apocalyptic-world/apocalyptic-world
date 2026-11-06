@@ -88,9 +88,9 @@
 	<</link>>
 <</if>>
 
-<<if !($player.companions['guest:' + $guestId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
+<<if !setup.companions.has($guests[$guestId]) && setup.companions.count() < $companionsLimit>>
 	<<link 'Add as companion'>>
-		<<companionAdd 'guest' $guestId>>
+		<<companionAdd $guests[$guestId]>>
 		<<assignedTo $tmpGirl 'companion'>>
 		<<goto `passage()`>>
 	<</link>>
@@ -101,7 +101,7 @@
 <<set _isInstructor = ($tmpGirl.assignedTo ?? '').startsWith('instructor-')>>
 <<set _instructorClasses = ['mechanic', 'shopkeeper', 'doctor', 'teacher', 'cook'].filter(s => ($tmpGirl.skills ?? []).includes(s))>>
 
-<<if _eveningSchoolOpen && !$tmpGirl.assignedTo && !$tmpGirl.teach && _instructorClasses.includes('teacher') &&!($player.companions['guest:' + $guestId] ?? false)>>
+<<if _eveningSchoolOpen && !$tmpGirl.assignedTo && !$tmpGirl.teach && _instructorClasses.includes('teacher') &&!setup.companions.has($guests[$guestId])>>
 	<<link 'Assign as Instructor'>>
 		/* One instructor per class: classes already taken by another guest are shown greyed out. */
 		<<set _takenBy = {}>> /* class -> current instructor */
@@ -143,7 +143,7 @@
 	<</link>>
 <</if>>
 
-<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+<<if !$tmpGirl.assignedTo && !setup.companions.has($guests[$guestId])>>
 	<<link 'Assign to'>>
 		<<dialog 'Assign to'>>
 			<<include 'Guest view assign to'>>

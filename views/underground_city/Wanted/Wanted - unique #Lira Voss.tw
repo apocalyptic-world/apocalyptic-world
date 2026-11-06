@@ -143,9 +143,9 @@ The picture she painted of him was far different from the version her finder had
 		<<set $tmpGirlInvite = false>>
     	<<set _strongGirl = false>>
     	<<set _relation   = $wanted[$wantedId].relationship ?? 0>>
-    	<<set _countComp  = $player.companions.length ?? 0>>
+    	<<set _companionBonus = setup.npcs.companionInviteBonus($player.companions)>>
     	<<set _reputation = $player.reputation ?? 0>>
-    	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
+    	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_companionBonus) || setup.percentageChance(_reputation/4)>>
     	<<set _no = !_yes || (_fucked ?? false) || (_relation <= 0)>>
     	 <<if _no>>
 			<br />

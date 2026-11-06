@@ -6,7 +6,7 @@
 <</vincent>>
 <br />
 
-<<for _companionKey, _companion range $player.companions>>
+<<for _companionKey range setup.companions.ids()>>
     <<set _npc = setup.companionGet(_companionKey)>>
     <<if !_npc.gender>>
         <<set _girlCompanion = _npc>>
@@ -95,7 +95,7 @@
         </center>
         <br />
         Suddenly, in a surge of brutal violence, he raises his bat high and brings it down with a sickening thud. The impact echoes through the chamber, a grotesque punctuation mark to the silence. 
-        <<set _companionKeys = Object.keys($player.companions)>>
+        <<set _companionKeys = setup.companions.ids()>>
         <<set _firstCompanion = setup.companionGet(_companionKeys[0])>>
         <br />
         <strong><<=setup.displayName(_firstCompanion)>> crumples to the ground, a life extinguished in an instant.</strong>
@@ -109,7 +109,7 @@
         <br /><br />
         The sickening thud reverberates through the chamber, another life extinguished in a brutal act of violence. Another companion falls, their fate sealed in a horrifying instant.
         <br />
-        <<set _companionKeys = Object.keys($player.companions)>>
+        <<set _companionKeys = setup.companions.ids()>>
         <<set _lastCompanion = setup.companionGet(_companionKeys[_companionKeys.length - 1])>>
         <strong><<=setup.displayName(_lastCompanion)>> drops on the ground with <<=setup.pronounceWhos(_lastCompanion)>> skull crushed open.</strong>
         <br /><br />
@@ -168,8 +168,8 @@
             With a grateful glance, Vincent turns and begins to trudge towards his own abode, leaving you standing amidst the eerie silence of the settlement.
             <<set $game.location.garage = true>>
             <<set $characters.vincent.car_get_day = $game.day>>
-            <<for Object.keys($player.companions).length > 0>>
-                <<set _companionKeys = Object.keys($player.companions)>>
+            <<for setup.companions.count() > 0>>
+                <<set _companionKeys = setup.companions.ids()>>
                 <<set _lastCompanionKey = _companionKeys[_companionKeys.length -1]>>
                 <<companionRemove _lastCompanionKey>>
             <</for>>

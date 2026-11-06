@@ -1,9 +1,8 @@
 :: Rodger - horse get {"position":"3313,2445","size":"100,100"}
 <<if $characters.rodger.quests.horse_get === 'companions'>>
-	<<set _eventCompanions = setup.objectSortReverse(clone($player.companions ?? []))>>
-	<<for _eventCompanionI, _eventCompanion range _eventCompanions>>
-		<<set _eventCompanionId = _eventCompanionI.split(':')>>
-		<<guestRemove _eventCompanionId[1] >>
+	/* the companions stay with Harper: removed by id, so the order doesn't matter */
+	<<for _eventCompanionId range setup.companions.ids()>>
+		<<companionRemove _eventCompanionId>>
 	<</for>>
 <</if>>
 <<addhours 4>>

@@ -73,16 +73,16 @@
 	<</link>>
 <</if>>
 
-<<if $slaveId !== undefined && !($player.companions['slave:' + $slaveId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
+<<if $slaveId !== undefined && !setup.companions.has($slaves[$slaveId]) && setup.companions.count() < $companionsLimit>>
 	<<link 'Add as companion'>>
 		<<achievement 'slave_companion'>>
-		<<companionAdd 'slave' $slaveId>>
+		<<companionAdd $slaves[$slaveId]>>
 		<<assignedTo $tmpGirl 'companion_slave'>>
 		<<goto `passage()`>>
 	<</link>>
 <</if>>
 
-<<if typeof $slaveId !== 'undefined' && !$tmpGirl.assignedTo && !($player.companions['slave:' + $slaveId] ?? false)>>
+<<if typeof $slaveId !== 'undefined' && !$tmpGirl.assignedTo && !setup.companions.has($slaves[$slaveId])>>
 	<<link 'Assign to'>>
 		<<dialog 'Assign to'>>
 			<<include 'Slave view assign to'>>

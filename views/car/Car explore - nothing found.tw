@@ -7,7 +7,7 @@
 <br /><br />
 You found nothing while driving around.
 <br /><br />
-<<set _companionKeys = Object.keys($player.companions ?? {})>>
+<<set _companionKeys = setup.companions.ids()>>
 <<set _eligibleKeys = []>>
 <<for _ck range _companionKeys>>
     <<set _ckNpc = setup.companionGet(_ck)>>
@@ -24,14 +24,7 @@ You found nothing while driving around.
 <</for>>
 <<if _eligibleKeys.length > 0>>
     <<set _chosenKey = either(..._eligibleKeys)>>
-    <<set _splitCompanionKey = _chosenKey.split(':')>>
-    <<set $tmpGirl = setup.companionGet(_chosenKey)>>
-    <<unset $slaveId, $guestId, $charId, $childId>>
-    <<if _splitCompanionKey[0] === 'guest'>>
-        <<set $guestId = _splitCompanionKey[1]>>
-    <<else>>
-        <<set $slaveId = _splitCompanionKey[1]>>
-    <</if>>
+    <<run setup.companions.focus(_chosenKey)>>
     <<set $tmpGirl.location = 'car'>>
     <<set _pronHerHim = setup.pronounceWho($tmpGirl)>>
     <<set _pronHerHis = setup.pronounceWhos($tmpGirl)>>

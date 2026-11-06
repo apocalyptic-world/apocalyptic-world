@@ -31,6 +31,68 @@ setup.npcs.shuffled = function (list, rng = Math.random) {
     return setup.npcs.pick(list, Array.isArray(list) ? list.length : 0, null, rng);
 };
 
+/**
+ * Splits an old companion key, which pointed at a position ('guest:3', 'slave:0'), into { type, index }.
+ * Returns null for anything else, including NPC ids.
+ */
+setup.npcs.parseLegacyCompanionKey = function (key) {
+    const match = /^(guest|slave):(\d+)$/.exec(String(key));
+    return match ? { type: match[1], index: Number(match[2]) } : null;
+};
+
+/**
+ * The companion ids in companions, without duplicates or empty entries. $player.companions is a Set of NPC ids;
+ * an array of ids works the same. The old format, an object of position keys ({ 'guest:3': true }), is converted
+ * through lists ({ guest: $guests, slave: $slaves }); a key that points at nobody (or at an NPC without an id) is
+ * dropped. Object keys that aren't position keys are taken as ids. Anything else gives [].
+ */
+setup.npcs.companionIds = function (companions, lists = {}) {
+    let entries;
+    if (companions instanceof Set || Array.isArray(companions)) {
+        entries = Array.from(companions);
+    } else if (companions && typeof companions === 'object') {
+        entries = Object.keys(companions).filter(key => companions[key]).map(function (key) {
+            const legacy = setup.npcs.parseLegacyCompanionKey(key);
+            if (!legacy) {
+                return key;
+            }
+            const list = lists[legacy.type];
+            return Array.isArray(list) ? list[legacy.index]?.id : undefined;
+        });
+    } else {
+        return [];
+    }
+    return Array.from(new Set(entries.filter(id => typeof id === 'string' && id !== '')));
+};
+
+/**
+ * How many companions are with the MC (a Set or array of ids; old position-key objects count their keys).
+ * Anything else counts as 0.
+ */
+setup.npcs.companionCount = function (companions) {
+    if (companions instanceof Set) {
+        return setup.npcs.companionIds(companions).length;
+    }
+    if (Array.isArray(companions)) {
+        return companions.filter(Boolean).length;
+    }
+    if (companions && typeof companions === 'object') {
+        return Object.keys(companions).filter(key => companions[key]).length;
+    }
+    return 0;
+};
+
+/**
+ * Percent chance that the MC's companions talk someone into joining: the triangular number of the companion count
+ * (1 → 1%, 2 → 3%, 3 → 6%, 4 → 10%, …), capped at 100.
+ *
+ *   setup.percentageChance(setup.npcs.companionInviteBonus($player.companions))
+ */
+setup.npcs.companionInviteBonus = function (companions) {
+    const count = setup.npcs.companionCount(companions);
+    return Math.min(100, count * (count + 1) / 2);
+};
+
 /* Older helpers, kept because runtime-loaded scripts (js/actions.js, packs/) may still call them. New code should
    use setup.npcs.pick. They used to live in js/scripts.js; the versions there could loop forever, shuffled the
    caller's list in place, and returned indices into a list that had shrunk while picking. */

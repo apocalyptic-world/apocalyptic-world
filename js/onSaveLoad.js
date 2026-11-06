@@ -396,9 +396,6 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.player.reputation_bounty_hunter = 0;
     }
 
-    if (!(save.state.history[save.state.index].variables.player.companions ?? false)) {
-        save.state.history[save.state.index].variables.player.companions = {};
-    }
     if (!(save.state.history[save.state.index].variables.player.stats ?? false)) {
         save.state.history[save.state.index].variables.player.stats = {};
     }
@@ -642,6 +639,31 @@ Save.onLoad.add(function (save) {
             }
         }
     }
+
+    /* companions: { 'guest:3': true } (positions) → Set of NPC ids, in every history moment. Runs after the
+       missing NPC ids above are filled in (that only happens for the current moment; in older moments an NPC
+       without an id is dropped from the companions). */
+    save.state.history.forEach(function (moment) {
+        const v = moment.variables;
+        if (!v.player) {
+            return;
+        }
+        const lists = { guest: v.guests ?? [], slave: v.slaves ?? [] };
+        v.player.companions = new Set(setup.npcs.companionIds(v.player.companions, lists));
+        if (typeof v.player.companionsHome !== 'undefined') {
+            v.player.companionsHome = new Set(setup.npcs.companionIds(v.player.companionsHome, lists));
+        }
+        /* a trip companion event or a fight saved halfway still points at a position */
+        const legacyEvent = setup.npcs.parseLegacyCompanionKey(v.companionEvent?.npcKey);
+        if (legacyEvent) {
+            v.companionEvent.npcKey = v.companionEvent.npcId ?? lists[legacyEvent.type][legacyEvent.index]?.id;
+        }
+        for (const ally of (v.fight?.allies ?? []).concat(v.fight?.defeatedAllies ?? [])) {
+            if (ally && setup.npcs.parseLegacyCompanionKey(ally.key)) {
+                ally.key = ally.id;
+            }
+        }
+    });
 
     for(var saveWantedI = 0; saveWantedI < (save.state.history[save.state.index].variables.wanted ?? []).length; saveWantedI++) {
         if (typeof save.state.history[save.state.index].variables.wanted[saveWantedI].birthDate === 'undefined') {

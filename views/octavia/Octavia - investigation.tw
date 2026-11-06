@@ -93,16 +93,15 @@ She followed your gaze, and her eyes widened slightly.
     Octavia, similarly restrained, was tied to a nearby trunk, her face dark with barely contained fury. 
     The scene around you was eerily quiet, the forest alive with the faint rustle of leaves but devoid of any other sound.
     <br /><br />
-    <<if Object.keys($player.companions).length>>
+    <<if setup.companions.count()>>
         <<set $missingNpcs ??= []>>
-        <<for _companionI, _companion range $player.companions>>
-            <<set _npc = setup.companionGet(_companionI)>>
+        <<for _npc range setup.companions.list()>>
             <<run $missingNpcs.push({
                 event: 'octavia_investigation',
                 day: $game.day,
                 npc: _npc
             })>>
-            <<set $player.companions = {}>>
+            <<run setup.companions.clear()>>
             <<replace "#companions-list">><</replace>>
         <</for>>
         <strong>All of your companions where missing. Only you and Octavia were there.</strong>

@@ -120,9 +120,10 @@ setup.intercessionChance = function (npc, weather) {
 };
 
 // Returns an array of real indices into arr, sorted by sortBy.
-// 'N' = name, 'P' = pregnancy desc, 'A' = assignment (needs companions + prefix like 'guest:' or 'slave:')
+// 'N' = name, 'P' = pregnancy desc, 'A' = assignment (companions: the Set of companion ids, sorted as 'companion')
 // Any unrecognised sortBy returns indices in original order.
-setup.npcSortedIndices = function (arr, sortBy, companions, prefix) {
+setup.npcSortedIndices = function (arr, sortBy, companions) {
+    var companionIds = new Set(companions ? setup.companions.ids(companions) : []);
     var indices = arr.map(function (_, i) { return i; });
     if (sortBy === 'N') {
         indices.sort(function (a, b) {
@@ -131,9 +132,9 @@ setup.npcSortedIndices = function (arr, sortBy, companions, prefix) {
     } else if (sortBy === 'A') {
         indices.sort(function (a, b) {
             var ta = 'assignedTo' in arr[a] ? arr[a].assignedTo
-                   : (companions && typeof companions[prefix + a] !== 'undefined') ? 'companion' : 'zzz';
+                   : companionIds.has(arr[a].id) ? 'companion' : 'zzz';
             var tb = 'assignedTo' in arr[b] ? arr[b].assignedTo
-                   : (companions && typeof companions[prefix + b] !== 'undefined') ? 'companion' : 'zzz';
+                   : companionIds.has(arr[b].id) ? 'companion' : 'zzz';
             return ta < tb ? -1 : ta > tb ? 1 : 0;
         });
     } else if (sortBy === 'P') {
@@ -164,8 +165,8 @@ setup.npcSortedIndices = function (arr, sortBy, companions, prefix) {
  * Sort keys are built hierarchically by walking each entry's groupHeadId chain
  * to its root ancestor, so every generation sorts directly after its parent.
  */
-setup.npcGroupedIndices = function(arr, sortBy, companions, prefix, sortSpouses, sortOffspring) {
-    var base = setup.npcSortedIndices(arr, sortBy, companions, prefix);
+setup.npcGroupedIndices = function(arr, sortBy, companions, sortSpouses, sortOffspring) {
+    var base = setup.npcSortedIndices(arr, sortBy, companions);
     if (!sortSpouses && !sortOffspring) return base;
 
     var entries = base.map(function(idx, rank) {

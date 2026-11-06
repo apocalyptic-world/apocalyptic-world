@@ -4,13 +4,11 @@
 <<if _fullmoon>>
     <<set _bow = $backpack.has('bow')>>
     <<if !_bow>>
-        <<for _companionKey, _companion range $player.companions>>
-            <<if _companionKey.split(':')[0] !== 'guest'>>
+        <<for _npc range setup.companions.list()>>
+            <<if setup.companions.listOf(_npc) !== 'guest'>>
                 <<continue>>
             <</if>>
-            <<set _npcId = _companionKey.split(':')[1]>>
-            <<set _npc = $guests[_npcId]>>
-		    <<if !setup.npcInventoryHas(_npc, 'bow')>>
+		    <<if setup.npcInventoryHas(_npc, 'bow')>>
                 <<set _bow = true>>
                 <<break>>
             <</if>>  

@@ -1,6 +1,6 @@
 :: Explore event - Snake pit
 <h1 class="ptitle">FOREST</h1>
-<<set _randomCompanion = setup.getRandomElement(Object.keys($player.companions))>>
+<<set _randomCompanion = setup.getRandomElement(setup.companions.ids())>>
 <<set _npc = setup.companionGet(_randomCompanion)>>
 <br />
 You and your companions tread carefully through the dense, overgrown forest. 
@@ -61,12 +61,7 @@ It's deep enough that the fall alone must have hurt, but worse still, the pit is
         <br /><br />
         As you leave, the sound of your fallen comrade’s cries fades into the distance.
         <br /><br />
-        <<set _companionType = _randomCompanion.split(':')>>
-        <<if _companionType[0] === 'slave'>>
-            <<slaveRemove _companionType[1]>>
-        <<else>>
-            <<guestRemove _companionType[1]>>
-        <</if>>
+        <<companionRemove _randomCompanion>>
         <<link 'Leave'>>
             <<goto 'Outside'>>
         <</link>>

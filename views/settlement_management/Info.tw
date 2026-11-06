@@ -1,18 +1,7 @@
 :: Settlement management - info
 
-<<set _companionGuests = new Map(), _companionSlaves = new Map()>>
-<<for _companionKey, _companion range $player.companions>>
-	<<set _index = _companionKey.split(':')[1]>>
-	<<if _companionKey.split(':')[0] === 'guest'>>
-		<<set _guest = $guests[_index]>>
-		<<set _npcId = _guest.id>>
-		<<set _companionGuests.set(_npcId, true)>>
-	<<else>>
-		<<set _slave = $slaves[_index]>>
-		<<set _npcId = _slave.id>>
-		<<set _companionSlaves.set(_npcId, true)>>
-	<</if>>
-<</for>>
+<<set _companionGuests = new Set(setup.companions.ids().filter(id => setup.companions.listOf(id) === 'guest'))>>
+<<set _companionSlaves = new Set(setup.companions.ids().filter(id => setup.companions.listOf(id) === 'slave'))>>
 
 <<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
 <<set _garden =   ($game.location.greenhouse ?? false) ? 'greenhouse' : 'garden' >>

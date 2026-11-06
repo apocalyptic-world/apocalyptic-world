@@ -110,10 +110,10 @@ You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight a
 	<<if $fight.allies.length > 0>>
 		<<achievement 'companion_fight_win'>>
 		<<for _fightAllyI, _fightAlly range $fight.allies>>
-			<<set _guestKey = _fightAlly.key.split(':')[1]>>
-			<<if $guests[_guestKey].strength < 100>>
-				<<set $guests[_guestKey].strength++>>
-				<strong><<=$guests[_guestKey].name>> strength increased by 1</strong><br />
+			<<set _realAlly = setup.getNpcById(_fightAlly.key)>>
+			<<if _realAlly && _realAlly.strength < 100>>
+				<<set _realAlly.strength++>>
+				<strong><<=_realAlly.name>> strength increased by 1</strong><br />
 			<</if>>
 		<</for>>
 		<br />

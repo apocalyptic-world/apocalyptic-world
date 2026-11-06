@@ -5,7 +5,7 @@
 	[img[setup.ImagePath+'places/cabin/event_base_attack.jpg']]
 </center>
 <<set _guards = setup.getPersonsForLocation($guests, 'guard')>>
-<<set _allyCount = _guards.length + Object.keys($player.companions).length>>
+<<set _allyCount = _guards.length + setup.companions.count()>>
 <<set _enemyGuyCount  = Math.max(Math.floor(_allyCount / 3),   4)>>
 <<set _enemyGirlCount = Math.max(Math.floor(_allyCount / 2)-1, 1)>>
 <<if $player?.baseManagement?.buildings?.stone_wall >= 80>>

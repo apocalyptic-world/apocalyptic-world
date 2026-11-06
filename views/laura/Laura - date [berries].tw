@@ -34,7 +34,7 @@ She held one up to your lips.  You ate it from her fingers and she laughed, a re
 By the time the basket was full her fingertips were stained purple and there was a smear of juice at the corner of her mouth.
 <br /><br />
 <<set $player.companionsHome = $player.companions>>
-<<set $player.companions = {}>>
+<<run setup.companions.clear()>>
 <<pickup $backpack 'food' 3>>
 <<addmins 120>>
 <<set $characters.laura.happy = Math.min(($characters.laura.happy ?? 0) + 5, 100)>>
@@ -176,7 +176,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                 <<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 3, 100)>>
                 <<addmins 30>>
                 <<link 'Leave'>>
-                    <<set $player.companions = $player.companionsHome ?? {}>>
+                    <<set $player.companions = $player.companionsHome ?? new Set()>>
                     <<run delete $player.companionsHome>>
                     <<goto 'Laura - lab talk'>>
                 <</link>>
@@ -245,7 +245,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                             <<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 5, 100)>>
                             <<addmins 60>>
                             <<link 'Leave'>>
-                                <<set $player.companions = $player.companionsHome ?? {}>>
+                                <<set $player.companions = $player.companionsHome ?? new Set()>>
                                 <<run delete $player.companionsHome>>
                                 <<goto 'Laura - lab talk'>>
                             <</link>>
@@ -283,7 +283,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                             <<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 5, 100)>>
                             <<addmins 60>>
                             <<link 'Leave'>>
-                                <<set $player.companions = $player.companionsHome ?? {}>>
+                                <<set $player.companions = $player.companionsHome ?? new Set()>>
                                 <<run delete $player.companionsHome>>
                                 <<goto 'Laura - lab talk'>>
                             <</link>>
@@ -308,7 +308,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
         <</laura>>
         <br />
         <<link 'Leave'>>
-            <<set $player.companions = $player.companionsHome ?? {}>>
+            <<set $player.companions = $player.companionsHome ?? new Set()>>
             <<run delete $player.companionsHome>>
             <<goto 'Laura - lab talk'>>
         <</link>>
@@ -322,7 +322,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
     <</laura>>
     <br />
     <<link 'Leave'>>
-        <<set $player.companions = $player.companionsHome ?? {}>>
+        <<set $player.companions = $player.companionsHome ?? new Set()>>
         <<run delete $player.companionsHome>>
         <<goto 'Laura - lab talk'>>
     <</link>>

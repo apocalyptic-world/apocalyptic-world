@@ -73,11 +73,10 @@ setup.companionEvents = {
         const sv = variables();
         const day = sv.game.day;
         const candidates = [];
-        const soloTrip = Object.keys(sv.player.companions ?? {}).length === 1;
+        const soloTrip = setup.companions.count() === 1;
 
-        for (const key in (sv.player.companions ?? {})) {
-            const npc = setup.companionGet(key);
-            if (!npc || !npc.id) continue;
+        for (const npc of setup.companions.list()) {
+            if (!npc.id) continue;
             if (setup.getAge(npc) < 18) continue;
 
             const mem = setup.companionEvents.memoryFor(npc.id);
@@ -90,7 +89,7 @@ setup.companionEvents = {
                 const seen = mem.seen[def.id] ?? 0;
                 candidates.push({
                     weight: 1 / (1 + seen),
-                    npcKey: key,
+                    npcKey: npc.id,
                     npcId: npc.id,
                     event: def.id,
                     passage: def.passage

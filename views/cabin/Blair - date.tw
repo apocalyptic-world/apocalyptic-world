@@ -8,7 +8,7 @@
 <<if timeBetween('06:00', '19:59')>>
 	<<link 'Go to skyscraper'>>
 		<<set $player.companionsHome = $player.companions>>
-		<<set $player.companions = {}>>
+		<<run setup.companions.clear()>>
 		<<goto 'Blair - date [skyscraper]'>>
 	<</link>>
 <</if>>
@@ -16,7 +16,7 @@
 	<<if recall($suppCode)>>
 		<<link 'Go scavenging together'>>
 			<<set $player.companionsHome = $player.companions>>
-			<<set $player.companions = {}>>
+			<<run setup.companions.clear()>>
 			<<goto 'Blair - date [scavenging]'>>
 		<</link>>
 	<<else>>
@@ -29,7 +29,7 @@
 <<if recall($suppCode)>>
 	<<link 'How about just talk on the couch'>>
 	        <<set $player.companionsHome = $player.companions>>
-		<<set $player.companions = {}>>
+		<<run setup.companions.clear()>>
 		<<goto 'Blair - date [massage]'>>
 	<</link>>
 <<else>>
@@ -42,7 +42,7 @@
 	<<if recall($suppCode)>>
 		<<link 'Go to the school'>>
 			<<set $player.companionsHome = $player.companions>>
-			<<set $player.companions = {}>>
+			<<run setup.companions.clear()>>
 			<<goto 'Blair - date [school]'>>
 		<</link>>
 	<<else>>

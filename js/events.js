@@ -1,14 +1,10 @@
 setup.neganQuest2HaveGirls = function() 
 {
-    var girlIds = [];
-    for (var _companionId in (variables().player.companions ?? {})) {
-        var _npc = setup.companionGet(_companionId);
-        if (!_npc.gender && _npc.beauty >= 80 && _npc.hair === 'blonde') {
-            girlIds.push(_companionId)
-        }
-    }
-
-    return girlIds;
+    // ids of the companions Negan takes: blonde, beautiful women from your guests or slaves (never characters)
+    return setup.companions.list().filter(function (npc) {
+        return !npc.gender && npc.beauty >= 80 && npc.hair === 'blonde'
+            && ['guest', 'slave'].includes(setup.companions.listOf(npc));
+    }).map(npc => npc.id);
 }
 
 setup.baseIntruderChance = function ()

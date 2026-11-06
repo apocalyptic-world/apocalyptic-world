@@ -8,7 +8,7 @@
 <<if $player?.car?.fuel >= 20 && $player?.car?.health > 0>>
 	<<link 'Car ride'>>
 		<<set $player.companionsHome = $player.companions>>
-		<<set $player.companions = {}>>
+		<<run setup.companions.clear()>>
 		<<goto 'Isabel - date [car ride]'>>
 	<</link>>
 <<else>>
@@ -23,7 +23,7 @@
     <<if timeBetween('08:00', '16:00')>>
     <<link 'Lake visit'>>
 	    <<set $player.companionsHome = $player.companions>>
-		<<set $player.companions = {}>>
+		<<run setup.companions.clear()>>
 		<<goto 'Isabel - date [lake]'>>
 	<</link>>
     <<else>>
@@ -45,7 +45,7 @@
 		<<if timeBetween('20:00', '23:59')>>
 		<<link 'Nightclub'>>
 			<<set $player.companionsHome = $player.companions>>
-			<<set $player.companions = {}>>
+			<<run setup.companions.clear()>>
 			<<goto 'Isabel - date [nightclub]'>>
 		<</link>>
 		<<else>>
@@ -66,7 +66,7 @@
 	<<if recall($suppCode)>>
 		<<link 'Bend her over the table'>>
 			<<set $player.companionsHome = $player.companions>>
-			<<set $player.companions = {}>>
+			<<run setup.companions.clear()>>
 			<<goto 'Isabel - date [office]'>>
 		<</link>>
 	<<else>>
