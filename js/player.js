@@ -2,6 +2,20 @@
  * collection of tools for the $player in one "namespace"
  */
 setup.player = {
+    /**
+     * Percent chance that npc accepts the MC's invite to move in, from her relationship, the MC's reputation and
+     * companions (see setup.npcs.inviteChance). refused: true when she won't come whatever happens (e.g. raped).
+     */
+    inviteChance: function (npc, refused = false) {
+        const player = variables().player;
+        return setup.npcs.inviteChance({
+            relationship: npc?.relationship ?? 0,
+            reputation: player.reputation ?? 0,
+            companions: player.companions,
+            refused: Boolean(refused)
+        });
+    },
+
     isRecognized: function() {
         let recognitionPercentage;
         let recognitionPercentageReputation;

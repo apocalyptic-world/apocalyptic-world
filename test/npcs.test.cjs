@@ -274,3 +274,46 @@ test('companions: clear empties them and leaves a saved copy alone', () => {
     assert.strictEqual(game.setup.companions.count(), 0);
     assert.deepStrictEqual(Array.from(game.v.player.companionsHome), ['ana']);
 });
+
+const { inviteChance } = setup.npcs;
+const companionsOf = n => sandboxSet(Array.from({ length: n }, (_, i) => 'npc' + i));
+
+test('inviteChance: a stranger with no reputation and no companions always refuses', () => {
+    assert.strictEqual(inviteChance({ relationship: 0, reputation: 0, companions: sandboxSet([]) }), 0);
+    assert.strictEqual(inviteChance(), 0);
+});
+
+test('inviteChance: a stranger (relationship 0) can accept because of reputation', () => {
+    assert.strictEqual(inviteChance({ relationship: 0, reputation: 20 }), 10);
+    assert.strictEqual(inviteChance({ relationship: 0, reputation: 50 }), 25);
+    assert.strictEqual(inviteChance({ relationship: 0, reputation: 100 }), 50);
+});
+
+test('inviteChance: the reputation part is capped at 60%', () => {
+    assert.strictEqual(inviteChance({ reputation: 120 }), 60);
+    assert.strictEqual(inviteChance({ reputation: 500 }), 60);
+});
+
+test('inviteChance: relationship, reputation and companions combine like separate dice', () => {
+    // 1 - (1 - 0.03) * (1 - 0.5) = 51.5%
+    assert.strictEqual(inviteChance({ relationship: 3, reputation: 100 }), 52);
+    // 4 companions = 10%: 1 - 0.5 * 0.9 = 55%
+    assert.strictEqual(inviteChance({ reputation: 100, companions: companionsOf(4) }), 55);
+    // 1 - 0.5 * 0.4 * 0.9 = 82%
+    assert.strictEqual(inviteChance({ relationship: 60, reputation: 100, companions: companionsOf(4) }), 82);
+});
+
+test('inviteChance: never goes past 100 and reaches it with a full relationship', () => {
+    assert.strictEqual(inviteChance({ relationship: 100 }), 100);
+    assert.strictEqual(inviteChance({ relationship: 250, reputation: 900, companions: companionsOf(20) }), 100);
+});
+
+test('inviteChance: refused or a negative relationship always means no', () => {
+    assert.strictEqual(inviteChance({ relationship: 100, reputation: 200, refused: true }), 0);
+    assert.strictEqual(inviteChance({ relationship: -1, reputation: 200, companions: companionsOf(8) }), 0);
+});
+
+test('inviteChance: negative reputation and junk values count as 0', () => {
+    assert.strictEqual(inviteChance({ relationship: 0, reputation: -40 }), 0);
+    assert.strictEqual(inviteChance({ relationship: 'x', reputation: undefined, companions: 'guest:3' }), 0);
+});

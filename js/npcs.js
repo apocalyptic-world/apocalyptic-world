@@ -93,6 +93,36 @@ setup.npcs.companionInviteBonus = function (companions) {
     return Math.min(100, count * (count + 1) / 2);
 };
 
+/** Tuning for setup.npcs.inviteChance: reputation / reputationDivisor percent, at most reputationCap. */
+setup.npcs.INVITE = { reputationDivisor: 2, reputationCap: 60 };
+
+/**
+ * Percent chance (0–100, whole numbers) that someone accepts the MC's invite to move in. Three independent reasons
+ * to say yes, combined like separate dice (at least one succeeds):
+ *   - relationship: relationship %, so someone who already likes you comes along;
+ *   - reputation:   reputation / 2 %, at most 60% (100 reputation → 50%);
+ *   - companions:   setup.npcs.companionInviteBonus(companions).
+ * Nobody accepts when refused is true (e.g. after being raped) or when the relationship is negative. A stranger
+ * starts at relationship 0 and can still say yes because of reputation or companions.
+ *
+ *   setup.npcs.inviteChance({ relationship: 3, reputation: 100, companions: $player.companions })  // → 52
+ */
+setup.npcs.inviteChance = function ({ relationship = 0, reputation = 0, companions = null, refused = false } = {}) {
+    const rel = Number(relationship) || 0;
+    if (refused || rel < 0) {
+        return 0;
+    }
+    const clamp = value => Math.min(100, Math.max(0, value));
+    const { reputationDivisor, reputationCap } = setup.npcs.INVITE;
+    const chances = [
+        clamp(rel),
+        Math.min(reputationCap, clamp((Number(reputation) || 0) / reputationDivisor)),
+        clamp(setup.npcs.companionInviteBonus(companions))
+    ];
+    const allSayNo = chances.reduce((no, chance) => no * (1 - chance / 100), 1);
+    return Math.round((1 - allSayNo) * 100);
+};
+
 /* Older helpers, kept because runtime-loaded scripts (js/actions.js, packs/) may still call them. New code should
    use setup.npcs.pick. They used to live in js/scripts.js; the versions there could loop forever, shuffled the
    caller's list in place, and returned indices into a list that had shrunk while picking. */
