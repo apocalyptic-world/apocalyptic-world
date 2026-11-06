@@ -49,3 +49,16 @@ test('formatNpcList: does not modify its input', () => {
     formatNpcList(list);
     assert.deepStrictEqual(list.map((n) => n.name), ['Elijah', 'Ashley', 'Ashley']);
 });
+
+// Regression for dd8d93bb: counts were keyed on npc.id only, so every NPC without an id (undefined) was merged
+// into one entry named after the first of them.
+test('formatNpcList: NPCs without an id are not merged into one entry', () => {
+    const noIdAshley = { name: 'Ashley' };
+    const noIdElijah = { name: 'Elijah' };
+    assert.strictEqual(formatNpcList([noIdAshley, noIdElijah]), 'Ashley, Elijah');
+});
+
+test('formatNpcList: the same NPC without an id is still counted', () => {
+    const noIdAshley = { name: 'Ashley' };
+    assert.strictEqual(formatNpcList([noIdAshley, ashley, noIdAshley]), 'Ashley, Ashley (x2)');
+});
