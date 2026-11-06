@@ -51,7 +51,9 @@ test('formatNpcList: does not modify its input', () => {
 });
 
 // Regression for dd8d93bb: counts were keyed on npc.id only, so every NPC without an id (undefined) was merged
-// into one entry named after the first of them.
+// into one entry named after the first of them. The game's own code always gives guests and slaves an id
+// (<<newnpc>>, and js/onSaveLoad.js for old saves), so this guards against NPCs created without one, e.g. by
+// the runtime-loaded scripts (js/actions.js, packs/).
 test('formatNpcList: NPCs without an id are not merged into one entry', () => {
     const noIdAshley = { name: 'Ashley' };
     const noIdElijah = { name: 'Elijah' };
