@@ -1,0 +1,17 @@
+# Runs the unit tests in test/ on every push and pull request.
+# They only need Node: no npm install, no Tweego, nothing in the game build changes.
+name: Unit tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
