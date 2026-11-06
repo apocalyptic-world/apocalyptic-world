@@ -145,7 +145,7 @@ She leaned forward on the desk, chin resting on her hand, looking at you with th
         <<addmins 60>>
         <br /><br />
         <<link 'Leave'>>
-            <<set $player.companions = $player.companionsHome ?? {}>>
+            <<set $player.companions = $player.companionsHome ?? new Set()>>
             <<run delete $player.companionsHome>>
             <<goto 'Laura - lab talk'>>
         <</link>>
@@ -182,7 +182,7 @@ She leaned forward on the desk, chin resting on her hand, looking at you with th
         <<addmins 60>>
         <br /><br />
         <<link 'Leave'>>
-            <<set $player.companions = $player.companionsHome ?? {}>>
+            <<set $player.companions = $player.companionsHome ?? new Set()>>
             <<run delete $player.companionsHome>>
             <<goto 'Laura - lab talk'>>
         <</link>>
@@ -191,7 +191,7 @@ She leaned forward on the desk, chin resting on her hand, looking at you with th
 <</linkreplace>>
 <div id="ls_leave">
 <<link 'Leave'>>
-    <<set $player.companions = $player.companionsHome ?? {}>>
+    <<set $player.companions = $player.companionsHome ?? new Set()>>
     <<run delete $player.companionsHome>>
     <<addmins 30>>
     <<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 3, 100)>>

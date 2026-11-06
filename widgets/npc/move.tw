@@ -10,10 +10,8 @@
     <<if typeof $guests === 'undefined'>>
         <<set $guests = []>>
     <</if>>
-	<<set _companionKey = 'slave:' + _args[1]>>
-	<<if ($player.companions ?? {})[_companionKey]>>
-		<<companionRemoveItem _companionKey>>
-		<<companionAdd 'guest' $guests.length>>
+	/* companions are kept by id, so she stays a companion; only her job name changes */
+	<<if setup.companions.has($slaves[_args[1]])>>
 		<<assignedTo _args[0] 'companion'>>
 	<</if>>
 	/* guests can only have some jobs */
@@ -26,26 +24,21 @@
 		<<assignedTo _args[0] 'none'>>
 	<</if>>
 
-	<<companionRearange _companionKey>>
 	<<run setup.npc.addHistory(_args[0], 'moved_to_guest')>>
 	<<run $slaves.splice(_args[1], 1)>>
 	<<run $guests.push(_args[0])>>
 <</widget>>
 
 <<widget moveGuestToSlave>>
-	<<set _companionKey = 'guest:' + _args[1]>>
-	<<if ($player.companions ?? {})[_companionKey]>>
-		<<companionRemoveItem _companionKey>>
-		<<companionAdd 'slave' $slaves.length>>
+	/* companions are kept by id, so she stays a companion; only her job name changes */
+	<<if setup.companions.has($guests[_args[1]])>>
 		<<assignedTo _args[0] 'companion_slave'>>
-
 	<</if>>
 	/* slaves can only have some jobs */
 	<<if !['none', 'garden', 'streets'].includes(_args[0].assignedTo ?? 'none')>>
 		<<assignedTo _args[0] 'none'>>
 	<</if>>
 
-	<<companionRearange _companionKey>>
 	<<run setup.npc.addHistory(_args[0], 'moved_to_slave')>>
 	<<run $guests.splice(_args[1], 1)>>
 	<<run $slaves.push(_args[0])>>

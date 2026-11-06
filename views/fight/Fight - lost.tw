@@ -25,10 +25,12 @@ You feel dizzy and blood is all over your face and clothes. You were knocked out
 <<if $fight.defeatedAllies.length > 0>>
 	<<for _fightAllyI, _fightAlly range $fight.defeatedAllies>>
 		<<if setup.percentageChance(90) && !_fightAlly.gender && !_raped && !_fightAlly.died>>
-			<<set _npcKey = _fightAlly.key.split(':')>>
-			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'happy' -15>>
-			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'sub' -5>>
-			<<setNpcStats `_npcKey[0]` `_npcKey[1]` 'relationship' -10>>
+			<<set _realAlly = setup.getNpcById(_fightAlly.key)>>
+			<<if _realAlly>>
+				<<set _realAlly.happy = Math.max(-100, (_realAlly.happy ?? 0) - 15)>>
+				<<set _realAlly.sub = Math.max(-100, (_realAlly.sub ?? 0) - 5)>>
+				<<set _realAlly.relationship = Math.max(-100, (_realAlly.relationship ?? 0) - 10)>>
+			<</if>>
 			<<set _raped = true>>
 			<<video 'misc/fight_lost1'>>
 			<br /><br />

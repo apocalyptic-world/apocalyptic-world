@@ -20,9 +20,11 @@
 }>>
 <<set _fighters = {}>>
 <table id="slaves" class="npc-list">
-    <<for _companionKey, _companion range $player.companions ?? {}>>
-        <<set _companionKeySplit = _companionKey.split(':')>>
-        <<set _companionNpc = setup.companionGet(_companionKey)>>
+    <<for _companionNpc range setup.companions.list()>>
+        /* the fight cage passages still find fighters by [list, position]; fine within one fight */
+        <<set _companionPlace = setup.companions.where(_companionNpc)>>
+        <<if !['guest', 'slave'].includes(_companionPlace?.list)>><<continue>><</if>>
+        <<set _companionKeySplit = [_companionPlace.list, _companionPlace.index]>>
         <<capture _companionNpc, _companionKeySplit>>
             <tr class="item">
                 <td style="width: 5%">
@@ -51,7 +53,7 @@
     <<set _readyFighters = []>>
     <<for _fighter, _enabled range _fighters>>
         <<if _enabled>>
-            <<set _npc = setup.companionGet(_fighter.split(',').join(':'))>>
+            <<set _npc = (_fighter.startsWith('guest,') ? $guests : $slaves)[_fighter.split(',')[1]]>>
             <<set _npc.key = _fighter>>
             <<run _readyFighters.push(_npc)>>
         <</if>>

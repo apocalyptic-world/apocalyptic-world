@@ -231,14 +231,9 @@ setup.eveningSchool = {
         return 'Opening in ' + when + '.';
     },
 
-    // Companions are keyed by list index ('guest:3', 'slave:1'); match by id so copies like $tmpGirl work too.
+    // Matches by id, so copies like $tmpGirl work too.
     isCompanion: function (npc) {
-        const v = variables();
-        const lists = { guest: v.guests ?? [], slave: v.slaves ?? [] };
-        return Object.keys(v.player.companions ?? {}).some(function (key) {
-            const [type, index] = key.split(':');
-            return lists[type] !== undefined && lists[type][index]?.id === npc.id;
-        });
+        return setup.companions.has(npc);
     },
 
     // Students in class right now (guests first, then slaves), optionally only those taking cls.

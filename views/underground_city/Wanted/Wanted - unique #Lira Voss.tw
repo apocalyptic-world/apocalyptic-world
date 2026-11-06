@@ -142,11 +142,7 @@ The picture she painted of him was far different from the version her finder had
 		<<set $wanted[$wantedId].relationship += _rel>>
 		<<set $tmpGirlInvite = false>>
     	<<set _strongGirl = false>>
-    	<<set _relation   = $wanted[$wantedId].relationship ?? 0>>
-    	<<set _countComp  = $player.companions.length ?? 0>>
-    	<<set _reputation = $player.reputation ?? 0>>
-    	<<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-    	<<set _no = !_yes || (_fucked ?? false) || (_relation <= 0)>>
+    	<<set _no = !setup.percentageChance(setup.player.inviteChance($wanted[$wantedId], _fucked ?? false))>>
     	 <<if _no>>
 			<br />
 			<<sayNpc $wanted[$wantedId]>>

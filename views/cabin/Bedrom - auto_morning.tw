@@ -25,20 +25,8 @@
     <<set _npcs = $slaves.concat($guests)>> 
     <<set _want = {}>>
     <<set _want_weapon = []>>
-    <<set _companions = new Map(), _companionSlaves = new Map()>>
-    <<for _companionKey, _companion range $player.companions>>
-        <<set _guestType = _companionKey.split(':')[0]>>>
-        <<set _npcIndex = _companionKey.split(':')[1]>>
-        <<if _guestType !== 'guest'>>
-            <<set _slave = $slaves[_npcIndex]>>
-            <<set _npcId = _slave.id>>
-            <<set _companionSlaves.set(_npcId, true)>>
-        <<else>>
-            <<set _guest = $guests[_npcIndex]>>
-            <<set _npcId = _guest.id>>
-            <<set _companions.set(_npcId, true)>>
-        <</if>>
-    <</for>>
+    <<set _companions = new Set(setup.companions.ids().filter(id => setup.companions.listOf(id) === 'guest'))>>
+    <<set _companionSlaves = new Set(setup.companions.ids().filter(id => setup.companions.listOf(id) === 'slave'))>>
     <<set _outDupNpcs = []>>
     <<set _outMinusNpcs = []>>
     <<set _bp_plus  = [], _bp_minus = []>>

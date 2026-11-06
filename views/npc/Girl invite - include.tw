@@ -19,11 +19,7 @@
 	<<linkreplace _linkName>>
         <<set $tmpGirlInvite = false>>
         <<set _strongNpc = $player.strength <= $tmpGirl.strength>>
-        <<set _relation   = $tmpGirl.relationship ?? 0>>
-        <<set _countComp  = $player.companions.length ?? 0>>
-        <<set _reputation = $player.reputation ?? 0>>
-        <<set _yes =  setup.percentageChance(_relation) || setup.percentageChance(_countComp*(_countComp+1)/2) || setup.percentageChance(_reputation/4)>>
-        <<set _no = !_yes || ($wasRaped ?? false) || (_relation <= 0)>>
+        <<set _no = !setup.percentageChance(setup.player.inviteChance($tmpGirl, $wasRaped ?? false))>>
         <<unset $wasRaped>>
         <<if _no>>
             <<if _strongNpc>>

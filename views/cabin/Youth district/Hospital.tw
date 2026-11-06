@@ -90,7 +90,7 @@
 				<td>
 					<<if _guest.assignedTo>>
 						(<<=_guest.assignedTo>>)
-				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
+				 	 <<elseif setup.companions.has($guests[_guestI])>>
 						(companion)
 				 	 <</if>>
 				</td>
@@ -134,7 +134,7 @@
 				<td>
 					<<if _npc.assignedTo>>
 						(<<=_npc.assignedTo>>)
-				 	 <<elseif typeof $player.companions['slave:' + _npcI] !== 'undefined'>>
+				 	 <<elseif setup.companions.has($slaves[_npcI])>>
 						(companion)
 				 	 <</if>>
 				</td>

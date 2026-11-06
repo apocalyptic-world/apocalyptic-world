@@ -17,13 +17,6 @@
 
 <<set _newGuests = []>>
 <<set _newSlaves = []>>
-<<set _tempCompanions = []>>
-<<for _nursCompI, _nursComp range $player.companions ?? []>>
-	<<set _nursCompKey = _nursCompI.split(':')>>
-	<<if _nursCompKey[0] === 'guest'>>
-		<<run _tempCompanions.push($guests[_nursCompKey[1]].name + ':' + $guests[_nursCompKey[1]].birthDate.getTime())>>
-	<</if>>
-<</for>>
 
 <<set $nursery = []>>
 <<for _nurGuestI to 0; _nurGuestI lt ($guests ?? []).length; _nurGuestI++>>
@@ -45,16 +38,14 @@
 	<</capture>>
 <</for>>
 
-<<set _tempCompanionsNew = {}>>
-<<for _newGuestI, _newGuest range _newGuests>>
-	<<if _tempCompanions.includes(_newGuest.name + ':' + _newGuest.birthDate.getTime())>>
-		<<set _tempCompanionsNew['guest:' + _newGuestI] = true>>
-	<</if>>
-<</for>>
-
 <<set $guests = _newGuests>>
 <<set $slaves = _newSlaves>>
-<<set $player.companions = _tempCompanionsNew>>
+/* companions are kept by id; the children who moved to the nursery stay home */
+<<for _nursCompId range setup.companions.ids()>>
+	<<if setup.companions.listOf(_nursCompId) === 'nursery'>>
+		<<run setup.companions.remove(_nursCompId)>>
+	<</if>>
+<</for>>
 
 <<set $game.location.nursery = true>>
 <<set $game.location.youth_district = true>>

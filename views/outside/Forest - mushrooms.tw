@@ -8,7 +8,7 @@
 	You find a patch of perishable fruit and berries. 
 	Since they spoil easily (not storable) you decide to have a snack, eating your full. 
 	<<set $player.hunger = 100>>
-	<<for _companionKey, _companion range $player.companions>>
+	<<for _companionKey range setup.companions.ids()>>
 		<<set _npc = setup.companionGet(_companionKey)>>
 		<<set _npc.happy += _npc.food < 100 ? 1 : 0>>
 		<<set _npc.food to 100>>

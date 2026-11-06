@@ -103,8 +103,8 @@ You study the pack before committing. Most of them read right — low bodies, sh
 			<<perkAdd 'bleeding'>>
 		<</if>>
 
-		<<if setup.percentageChance(40) && Object.keys($player.companions ?? {}).length > 0>>
-			<<set _eventCompanionKey = Object.keys($player.companions)[0]>>
+		<<if setup.percentageChance(40) && setup.companions.count() > 0>>
+			<<set _eventCompanionKey = setup.companions.ids()[0]>>
 			<<set _npc = setup.companionGet(_eventCompanionKey)>>
 			As you bleed out you notice that few of the wolves have torn apart <<=setup.displayName(_npc)>> body and are dragging <<=setup.pronounceWhos(_npc)>> away while leaving a trail of blood behind them.
 			<<companionRemove _eventCompanionKey>>

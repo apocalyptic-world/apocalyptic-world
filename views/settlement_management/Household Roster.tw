@@ -219,12 +219,7 @@
 	};
 
 	var sv = variables();
-	var cg = new Set(), cs = new Set();
-	Object.keys(sv.player.companions || {}).forEach(function (k) {
-		var p = k.split(':');
-		if (p[0] === 'guest' && sv.guests[p[1]]) cg.add(sv.guests[p[1]].id);
-		else if (p[0] === 'slave' && sv.slaves[p[1]]) cs.add(sv.slaves[p[1]].id);
-	});
+	var companionIds = setup.companions.set();
 
 	/* [capacity, location, gs, unhappy, label]
 	   capacity: 1=solo, N=max, 9999=unlimited
@@ -268,7 +263,7 @@
 		var job = npc.assignedTo || null;
 		if (setup.eveningSchool.isInstructor(npc)) job = 'instructor'; /* one group for all night school classes */
 		if (!job) {
-			if ((slave ? cs : cg).has(npc.id)) job = 'companion';
+			if (companionIds.has(npc.id)) job = 'companion';
 			else if (setup.getAge(npc) < 18)  job = 'child';
 			else                              job = 'none';
 		}

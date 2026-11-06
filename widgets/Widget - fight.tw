@@ -26,21 +26,19 @@
 		<<run $fight.enemies.push($args[0][_i])>>
 	<</for>>
 	
-	<<for _ally, _allyId range $player.companions>>
-		<<set _tmpAlly = setup.companionGet(_ally)>>
-		<<set _allyKey = _ally.split(':')>>
-		<<if _allyKey[0] !== 'guest' || _tmpAlly.traits.includes('pacifist')>>
+	<<for _tmpAlly range setup.companions.list()>>
+		<<if setup.companions.listOf(_tmpAlly) !== 'guest' || (_tmpAlly.traits ?? []).includes('pacifist')>>
 			<<continue>>
 		<</if>>
-		<<set _tmpAlly.key = _ally>>
+		/* key = the NPC id: $fight.allies are copies after the next passage, the id finds the real NPC */
+		<<set _tmpAlly.key = _tmpAlly.id>>
 		<<set _tmpAlly.hp = 100>>
 		<<run $fight.allies.push(_tmpAlly)>>
 	<</for>>
 
 	<<for _i to 0; _i lt $fight.xtraAllies.length; _i++>>
-		<<set _allyKey = 'guest:'  + $fight.xtraAllies[_i]>>
 		<<set _tmpAlly = $guests[$fight.xtraAllies[_i]]>>
-		<<set _tmpAlly.key = _allyKey>>
+		<<set _tmpAlly.key = _tmpAlly.id>>
 		<<set _tmpAlly.hp = 100>>
 		<<set _tmpAlly.extra = true>>
 		<<run $fight.allies.push(_tmpAlly)>>

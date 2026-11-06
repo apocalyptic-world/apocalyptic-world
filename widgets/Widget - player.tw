@@ -82,107 +82,46 @@
 <</widget>>
 
 <<widget companionAdd>>
-	<<if typeof $player.companions === 'undefined'>>
-		<<set $player.companions = {}>>
-	<</if>>
-	<<set $player.companions[$args[0] + ':' + $args[1]] = true>>
+	/* args[0] = the NPC (or their id); the old form <<companionAdd 'guest' index>> still works */
+	<<run setup.companions.add($args[0], $args[1])>>
 <</widget>>
 
 <<widget companionRemoveItem>>
-	/* args[0] = list name:index in that array */
-	<<if (typeof $player.companions[$args[0]] !== "undefined" ) >>
-		<<run delete $player.companions[$args[0]]>>
-	<</if>>
+	/* sends a companion home: args[0] = the NPC or their id */
+	<<run setup.companions.remove($args[0])>>
 <</widget>>
 
 <<widget companionList>>
-	<<for _comp, _compI range $player.companions>>
-		<<set _compKey = _comp.split(':')>>
-		<<capture _comp, _compKey>>
-			<<set _girlVisual = setup.companionGet(_comp)>>
-			<<if !_girlVisual>>
-				<<run delete $player.companions[_comp]>>
-				<<continue>>
-			<</if>>
-			<<capture _girlVisual>>
-				<div class="companion tooltip" @data-id="_girlVisual.id" @title="'' + _girlVisual.name + ''">
-					<div class="girl_info_picture">
-						<<include 'NPC visual'>>
-					</div>
+	<<run setup.companions.prune()>>
+	<<for _girlVisual range setup.companions.list()>>
+		<<capture _girlVisual>>
+			<div class="companion tooltip" @data-id="_girlVisual.id" @title="'' + _girlVisual.name + ''">
+				<div class="girl_info_picture">
+					<<include 'NPC visual'>>
 				</div>
-				<<if !tags().includes('event')>>
-					<<link 'x'>>
-						<<dialog 'Remove companion'>>
-							Remove <<=_girlVisual.name>> from companions?
-							<br />
-							<<link 'Yes'>>
-								<<companionRemoveItem _comp>>
-								<<goto `passage()`>>
-								<<dialogclose>>
-							<</link>>	
-						<</dialog>>
-					<</link>>
-				<</if>>
-			<</capture>>
+			</div>
+			<<if !tags().includes('event')>>
+				<<link 'x'>>
+					<<dialog 'Remove companion'>>
+						Remove <<=_girlVisual.name>> from companions?
+						<br />
+						<<link 'Yes'>>
+							<<companionRemoveItem _girlVisual.id>>
+							<<goto `passage()`>>
+							<<dialogclose>>
+						<</link>>	
+					<</dialog>>
+				<</link>>
+			<</if>>
 		<</capture>>
 	<</for>>
 <</widget>>
 
-<<widget companionRearange>>
-	<<set _newCompanions = {}>>
-	<<set _splitOldNpcKey = $args[0].split(':')>>
-	<<for _compR, _compIR range $player.companions>>
-		<<set _compKeyR = _compR.split(':')>>
-		<<if _compKeyR[0] !== _splitOldNpcKey[0]>>
-			<<set _newCompanions[_compR] = true>>
-			<<continue>>
-		<</if>>
-
-		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
-			<<set _compKeyR[1]-->>
-			<<set _newCompanions[_compKeyR.join(':')] = true>>
-		<<else>>
-			<<set _newCompanions[_compKeyR.join(':')] = true>>
-		<</if>>
-	<</for>>
-
-	<<set $player.companions = _newCompanions>>
-<</widget>>
-
-<<widget sellSlavesRearange>>
-	<<set _newSellSlaves = {}>>
-	<<for _slaveSell, _slaveSellI range $sellSlaves>>
-		<<if _args[0] !== _splitOldNpcKey[0]>>
-			<<set _newCompanions[_compR] = true>>
-			<<continue>>
-		<</if>>
-
-		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
-			<<set _compKeyR[1]-->>
-			<<set _newCompanions[_compKeyR.join(':')] = true>>
-		<<else>>
-			<<set _newCompanions[_compKeyR.join(':')] = true>>
-		<</if>>
-	<</for>>
-
-	<<set $player.companions = _newCompanions>>
-<</widget>>
-
 <<widget guestRemove>>
-    /* does guests.splice and companion rearrange, must use at every guest.splice
+    /* does guests.splice and drops her from the companions, must use at every guest.splice
        args[0] = index in guests list */
     <<set _guestI = $args[0]>>
-    <<set _compI = 'guest:' + _guestI>>
-
-    /* I wanted  to do "companionRemove 'guest:' + _guestI" but it semms that
-       widgets can't call widgets - they share the same variables args[0]
-    */
-    <<if (typeof $player.companions[_compI] !== "undefined" ) >>
-		<<run delete $player.companions[_compI]>>
-    <</if>>
-
-    /* but companionRearange _guestI works because the arg[0] is the same */
-    <<companionRearange _compI>>
+    <<run setup.companions.remove($guests[_guestI])>>
     <<run $guests.splice(_guestI, 1)>>
 <</widget>>
 
@@ -226,20 +165,10 @@
 <</widget>>
 
 <<widget slaveRemove>>
-    /* does slaves.splice and companion rearrange, must use at every slave.splice
+    /* does slaves.splice and drops her from the companions, must use at every slave.splice
        args[0] = index in slaves list */
     <<set _slaveI = $args[0]>>
-    <<set _compI = 'slave:' + _slaveI>>
-
-    /* I wanted  to do "companionRemove 'slave:' + _slaveI" but it semms that
-       widgets can't call widgets - they share the same variables args[0]
-    */
-    <<if (typeof $player.companions[_compI] !== "undefined" ) >>
-		<<run delete $player.companions[_compI]>>
-    <</if>>
-
-    /* but companionRearange _guestI works because the arg[0] is the same */
-    <<companionRearange _compI>>
+    <<run setup.companions.remove($slaves[_slaveI])>>
     <<run $slaves.splice(_slaveI, 1)>>
 <</widget>>
 
@@ -260,11 +189,17 @@
 <</widget>>
 
 <<widget companionRemove>>
-	<<set _splitKey = $args[0].split(':')>>
-	<<if _splitKey[0] === 'guest'>>
-		<<guestRemove _splitKey[1]>>
+	/* the companion is gone for good (died, taken, handed over): removes them from the game.
+	   args[0] = the NPC or their id. Characters ($characters) only leave the companions. */
+	<<set _crId = setup.companions.idOf($args[0])>>
+	<<set _crGuestI = $guests.findIndex(n => n.id === _crId)>>
+	<<set _crSlaveI = $slaves.findIndex(n => n.id === _crId)>>
+	<<if _crGuestI !== -1>>
+		<<guestRemove _crGuestI>>
+	<<elseif _crSlaveI !== -1>>
+		<<slaveRemove _crSlaveI>>
 	<<else>>
-		<<slaveRemove _splitKey[1]>>
+		<<run setup.companions.remove(_crId)>>
 	<</if>>
 <</widget>>
 
