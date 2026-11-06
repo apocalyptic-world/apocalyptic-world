@@ -94,18 +94,18 @@ setup.npcs.companionInviteBonus = function (companions) {
 };
 
 /** Tuning for setup.npcs.inviteChance: reputation / reputationDivisor percent, at most reputationCap. */
-setup.npcs.INVITE = { reputationDivisor: 2, reputationCap: 60 };
+setup.npcs.INVITE = { reputationDivisor: 4, reputationCap: 100 };
 
 /**
  * Percent chance (0–100, whole numbers) that someone accepts the MC's invite to move in. Three independent reasons
  * to say yes, combined like separate dice (at least one succeeds):
  *   - relationship: relationship %, so someone who already likes you comes along;
- *   - reputation:   reputation / 2 %, at most 60% (100 reputation → 50%);
+ *   - reputation:   reputation / 4 % (100 reputation → 25%);
  *   - companions:   setup.npcs.companionInviteBonus(companions).
  * Nobody accepts when refused is true (e.g. after being raped) or when the relationship is negative. A stranger
  * starts at relationship 0 and can still say yes because of reputation or companions.
  *
- *   setup.npcs.inviteChance({ relationship: 3, reputation: 100, companions: $player.companions })  // → 52
+ *   setup.npcs.inviteChance({ relationship: 3, reputation: 100, companions: $player.companions })  // → 27 (no companions)
  */
 setup.npcs.inviteChance = function ({ relationship = 0, reputation = 0, companions = null, refused = false } = {}) {
     const rel = Number(relationship) || 0;
