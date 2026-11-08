@@ -93,32 +93,71 @@ setup.npcs.companionInviteBonus = function (companions) {
     return Math.min(100, count * (count + 1) / 2);
 };
 
-/** Tuning for setup.npcs.inviteChance: reputation / reputationDivisor percent, at most reputationCap. */
-setup.npcs.INVITE = { reputationDivisor: 4, reputationCap: 100 };
+/**
+ * Tuning for setup.npcs.inviteChance: reputation / reputationDivisor percent, at most reputationCap.
+ * gaveFoodBonus: extra percent when the MC gave a stranger food (Abandoned mall).
+ */
+setup.npcs.INVITE = { reputationDivisor: 4, reputationCap: 100, gaveFoodBonus: 20 };
 
 /**
- * Percent chance (0–100, whole numbers) that someone accepts the MC's invite to move in. Three independent reasons
- * to say yes, combined like separate dice (at least one succeeds):
+ * The separate percent chances (0–100) that make up setup.npcs.inviteChance:
+ *   { relationship, reputation, companions, bonus }
+ * bonus is any extra reason to say yes, such as setup.npcs.INVITE.gaveFoodBonus.
+ */
+setup.npcs.inviteParts = function ({ relationship = 0, reputation = 0, companions = null, bonus = 0 } = {}) {
+    const clamp = value => Math.min(100, Math.max(0, Number(value) || 0));
+    const { reputationDivisor, reputationCap } = setup.npcs.INVITE;
+    return {
+        relationship: clamp(relationship),
+        reputation: Math.min(reputationCap, clamp((Number(reputation) || 0) / reputationDivisor)),
+        companions: clamp(setup.npcs.companionInviteBonus(companions)),
+        bonus: clamp(bonus)
+    };
+};
+
+/**
+ * Rolls, when the MC meets a stranger, the reputation and companion parts of the invite chance:
+ *   { heardOfYou, companionVouched }
+ * heardOfYou: she has heard of the MC (reputation part); companionVouched: a companion spoke up for the MC.
+ * Pass the result to setup.npcs.inviteChance as meeting, so the same dice are not rolled twice. rng returns 0 ≤ x < 1.
+ */
+setup.npcs.rollStrangerMeeting = function ({ reputation = 0, companions = null, rng = Math.random } = {}) {
+    const parts = setup.npcs.inviteParts({ reputation, companions });
+    return {
+        heardOfYou: rng() * 100 < parts.reputation,
+        companionVouched: rng() * 100 < parts.companions
+    };
+};
+
+/**
+ * Percent chance (0–100, whole numbers) that someone accepts the MC's invite to move in. Independent reasons to say
+ * yes, combined like separate dice (at least one succeeds):
  *   - relationship: relationship %, so someone who already likes you comes along;
  *   - reputation:   reputation / 4 % (100 reputation → 25%);
- *   - companions:   setup.npcs.companionInviteBonus(companions).
+ *   - companions:   setup.npcs.companionInviteBonus(companions);
+ *   - bonus:        any extra reason, e.g. setup.npcs.INVITE.gaveFoodBonus.
  * Nobody accepts when refused is true (e.g. after being raped) or when the relationship is negative. A stranger
  * starts at relationship 0 and can still say yes because of reputation or companions.
  *
+ * meeting: the result of setup.npcs.rollStrangerMeeting for this NPC, when the reputation and companion dice were
+ * already rolled at the meeting. If either succeeded she says yes; if not, only relationship and bonus are left.
+ * Overall, the odds are the same as without meeting.
+ *
  *   setup.npcs.inviteChance({ relationship: 3, reputation: 100, companions: $player.companions })  // → 27 (no companions)
  */
-setup.npcs.inviteChance = function ({ relationship = 0, reputation = 0, companions = null, refused = false } = {}) {
+setup.npcs.inviteChance = function ({ relationship = 0, reputation = 0, companions = null, refused = false, bonus = 0, meeting = null } = {}) {
     const rel = Number(relationship) || 0;
     if (refused || rel < 0) {
         return 0;
     }
-    const clamp = value => Math.min(100, Math.max(0, value));
-    const { reputationDivisor, reputationCap } = setup.npcs.INVITE;
-    const chances = [
-        clamp(rel),
-        Math.min(reputationCap, clamp((Number(reputation) || 0) / reputationDivisor)),
-        clamp(setup.npcs.companionInviteBonus(companions))
-    ];
+    const parts = setup.npcs.inviteParts({ relationship: rel, reputation, companions, bonus });
+    let chances = [parts.relationship, parts.reputation, parts.companions, parts.bonus];
+    if (meeting) {
+        if (meeting.heardOfYou || meeting.companionVouched) {
+            return 100;
+        }
+        chances = [parts.relationship, parts.bonus];
+    }
     const allSayNo = chances.reduce((no, chance) => no * (1 - chance / 100), 1);
     return Math.round((1 - allSayNo) * 100);
 };

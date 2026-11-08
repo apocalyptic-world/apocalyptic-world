@@ -3,15 +3,19 @@
 /* An 'invite her'-button
     Random event - meet girl #3 → NPC view
         $wasRaped
+    Car explore - meet person → NPC view
     Explore event: Abandoned mall
-        _gaveFood
+        $strangerMeeting.gaveFood
+    The chance comes from setup.player.inviteChance: relationship, reputation, companions, and the dice rolled
+    when meeting a stranger (setup.player.meetStranger, shown by <<strangerMeetText>>). $strangerMeeting is
+    used up by the invite.
  */
  /*
     things to consider
     - current events
     - personal status: relationship, happpiness, sub ....
-    - have she heard (rumours) of the hero? Good or bad?
-    - do she know any of the companions?
+    - have she heard (rumours) of the hero? Good or bad? (done for good rumours: reputation, $strangerMeeting.heardOfYou)
+    - do she know any of the companions? (a companion vouching: $strangerMeeting.companionVouched)
   */
 
  <<if ($tmpGirlInvite ?? false) && setup.guestRoom.hasRoom()>>
@@ -20,7 +24,7 @@
         <<set $tmpGirlInvite = false>>
         <<set _strongNpc = $player.strength <= $tmpGirl.strength>>
         <<set _no = !setup.percentageChance(setup.player.inviteChance($tmpGirl, $wasRaped ?? false))>>
-        <<unset $wasRaped>>
+        <<unset $wasRaped, $strangerMeeting>>
         <<if _no>>
             <<if _strongNpc>>
                 <<set $escapeReason = setup.pronounceWhat($tmpGirl, true) + ' considers your invite for a few moments, says no and leaves.'>>

@@ -1,0 +1,29 @@
+:: Widget strangerMeetText [widget]
+/* Prints, once per stranger, the dice rolled by setup.player.meetStranger($tmpGirl): whether $tmpGirl has heard of
+   the MC (reputation) and whether a companion vouched for the MC. Either one means the invite will be accepted
+   (see setup.npcs.inviteChance). Prints nothing when neither happened or $tmpGirl has no meeting. */
+<<widget strangerMeetText>>
+<<set _meeting = setup.player.strangerMeeting($tmpGirl)>>
+<<if _meeting && !_meeting.shown>>
+<<set $strangerMeeting.shown = true>>
+<<set _sheOrHe = setup.pronounceWhat($tmpGirl)>>
+<<set _SheOrHe = setup.pronounceWhat($tmpGirl, true)>>
+<<set _herOrHim = setup.pronounceWho($tmpGirl)>>
+<<set _herOrHis = setup.pronounceWhos($tmpGirl)>>
+<<if _meeting.heardOfYou>>
+<em><<= either([
+	_SheOrHe + ' looks at you a second time, and you see recognition in ' + _herOrHis + ' eyes. People out here talk about you, and ' + _sheOrHe + ' has heard the stories.',
+	_SheOrHe + ' studies your face, then lets out a breath. "I know who you are. Everyone says you can be trusted."',
+	'Something changes in ' + _herOrHis + ' face. Your name travels further than you thought, and ' + _sheOrHe + ' seems to know it.'
+])>></em>
+<br /><br />
+<</if>>
+<<if _meeting.companionVouched>>
+<<set _voucher = setup.getRandomElement(setup.companions.list())>>
+<<if _voucher>>
+<em><<= _voucher.name>> steps up beside you and tells <<= _herOrHim>> you are someone to trust. <<= _SheOrHe>> relaxes a little.</em>
+<br /><br />
+<</if>>
+<</if>>
+<</if>>
+<</widget>>

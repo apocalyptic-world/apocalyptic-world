@@ -5,20 +5,43 @@ setup.player = {
     /**
      * Percent chance that npc accepts the MC's invite to move in, from her relationship, the MC's reputation and
      * companions (see setup.npcs.inviteChance). refused: true when she won't come whatever happens (e.g. raped).
+     * Uses the dice already rolled by meetStranger for this NPC, and the food bonus if the MC fed her.
      */
     inviteChance: function (npc, refused = false) {
         const player = variables().player;
+        const meeting = setup.player.strangerMeeting(npc);
         return setup.npcs.inviteChance({
             relationship: npc?.relationship ?? 0,
             reputation: player.reputation ?? 0,
             companions: player.companions,
-            refused: Boolean(refused)
+            refused: Boolean(refused),
+            bonus: meeting?.gaveFood ? setup.npcs.INVITE.gaveFoodBonus : 0,
+            meeting
         });
+    },
+
+    /**
+     * Call when the MC meets a stranger who can be invited (right after <<newgirl>> etc.). Rolls whether she has heard
+     * of the MC and whether a companion vouches for the MC, and keeps the result in $strangerMeeting:
+     *   { npcId, heardOfYou, companionVouched, gaveFood, shown }
+     * <<strangerMeetText>> prints it once; Girl invite - include uses it and unsets it.
+     */
+    meetStranger: function (npc) {
+        const player = variables().player;
+        const meeting = setup.npcs.rollStrangerMeeting({ reputation: player.reputation ?? 0, companions: player.companions });
+        variables().strangerMeeting = { npcId: npc?.id ?? null, ...meeting, gaveFood: false, shown: false };
+        return variables().strangerMeeting;
+    },
+
+    /** The $strangerMeeting of npc (compared by id, so $tmpGirl copies work), or null. */
+    strangerMeeting: function (npc) {
+        const meeting = variables().strangerMeeting;
+        return meeting && npc?.id != null && meeting.npcId === npc.id ? meeting : null;
     },
 
     isRecognized: function() {
         let recognitionPercentage;
-        let recognitionPercentageReputation;
+        let recognitionPercentageReputation = 0;
 
         const fighterRank = variables().player.fighter_rank ?? 0;
         if (fighterRank <= 40) {
