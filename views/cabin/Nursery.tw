@@ -1,4 +1,16 @@
 :: Nursery [Place bg-nursery] {"position":"1346,773","size":"100,100"}
+<<if previous() === 'Youth district'>>
+	<<if setup.nurseryCare.shouldTalk()>>
+		<<goto 'Event - Nursery - caretaker talk'>>
+	<<elseif setup.nurseryBirthday.start()>>
+		<<goto 'Nursery encounter - birthday'>>
+	<<else>>
+		<<set _ncEncounter = setup.nurseryEncounters.roll()>>
+		<<if _ncEncounter>>
+			<<goto _ncEncounter>>
+		<</if>>
+	<</if>>
+<</if>>
 <h1 class="ptitle">
 	<<backButton 'Youth district'>>		
 	NURSERY
@@ -15,22 +27,15 @@
 	<<set _sleepingChance = 100>>
 <</if>>
 
+<<include 'Nursery - care panel'>>
+
 <<if ($nursery ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		No one is living here...
 	</div>
 <<else>>
 
-	<<set _nurserySorter = setup.npcSortedIndices($nursery, $nsortBy)>>
-	<<if ($nsortBy === 'M')>>
-		<<run _nurserySorter.sort((a, b) => {
-			const mA = setup.getNpcById($nursery[a].family?.mother)?.name ?? 'zzz';
-			const mB = setup.getNpcById($nursery[b].family?.mother)?.name ?? 'zzz';
-			return mA < mB ? -1 : mA > mB ? 1 : 0;
-		})>>
-	<<elseif ($nsortBy === 'A')>>
-		<<run _nurserySorter.sort((a, b) => setup.getAge($nursery[b]) - setup.getAge($nursery[a]))>>
-	<</if>>
+	<<set _nurserySorter = setup.nurseryCare.sortedIndices()>>
 
 	<<set $nSortPanelOpen ??= false>>
 	<<set _nSelfReload = State.history.length > 1 && State.history[State.history.length - 2].title === 'Nursery'>>

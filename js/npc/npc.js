@@ -1204,6 +1204,17 @@ setup.npc = {
 	yearsMarried: function(npc) {
 		const wd = setup.npc.weddingDate(npc);
 		return wd ? variables().gameDate.getFullYear() - wd.getFullYear() : 0;
+	},
+
+	/* True if today is the NPC's birthday. Some Characters (Vincent, Dom, the horse) have no birthDate. */
+	isBirthday: function(npc) {
+		const today = variables().gameDate;
+		return !!npc?.birthDate && npc.birthDate.getDate() === today.getDate() && npc.birthDate.getMonth() === today.getMonth();
+	},
+
+	/* $characters holds placeholder entries before they are met, and dead Characters stay listed */
+	isLivingCharacter: function(character) {
+		return !!character?.name && !character.dead && !character.quests?.dead;
 	}
 }
 

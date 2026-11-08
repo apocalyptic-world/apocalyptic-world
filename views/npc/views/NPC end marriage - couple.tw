@@ -423,8 +423,9 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							They gather what little they have between them, and by morning, they're gone from the settlement for good.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcLeaveSettlement _husband>>
-								<<npcLeaveSettlement _wife>>
+								<<run setup.relationshipBetween.reactToCoupleDeparture(_husband, _wife, 'marriage_ended')>>
+								<<npcLeaveSettlement _husband 'already_counted'>>
+								<<npcLeaveSettlement _wife 'already_counted'>>
 								<<goto 'Guest house'>>
 							<</link>>
 						<</linkreplace>>
@@ -439,8 +440,9 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							They look at each other, and at you, with dawning dread. Neither one of them resists as you lead them both away.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcEnslave _husband>>
-								<<npcEnslave _wife>>
+								<<run setup.relationshipBetween.reactToCoupleDeparture(_husband, _wife, 'thrown_out')>>
+								<<npcEnslave _husband 'already_counted'>>
+								<<npcEnslave _wife 'already_counted'>>
 								<<goto 'Basement'>>
 							<</link>>
 						<</linkreplace>>
@@ -501,7 +503,7 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							<<=setup.displayName(_unhappyOne)>> doesn't waste any time. By the next morning, they're gone from the settlement for good.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcLeaveSettlement _unhappyOne>>
+								<<npcLeaveSettlement _unhappyOne 'marriage_ended'>>
 								<<goto 'Guest house'>>
 							<</link>>
 						<</linkreplace>>
@@ -566,7 +568,7 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							<<=setup.displayName(_happyOne)>> doesn't linger. Within a day, they're gone from the settlement for good.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcLeaveSettlement _happyOne>>
+								<<npcLeaveSettlement _happyOne 'marriage_ended'>>
 								<<goto 'Guest house'>>
 							<</link>>
 						<</linkreplace>>
@@ -659,8 +661,9 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							They don't wait around to see if you change your mind. By morning, they're gone from the settlement for good, together.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcLeaveSettlement _husband>>
-								<<npcLeaveSettlement _wife>>
+								<<run setup.relationshipBetween.reactToCoupleDeparture(_husband, _wife, 'marriage_ended')>>
+								<<npcLeaveSettlement _husband 'already_counted'>>
+								<<npcLeaveSettlement _wife 'already_counted'>>
 								<<goto 'Guest house'>>
 							<</link>>
 						<</linkreplace>>
@@ -675,8 +678,9 @@ You send word for <<=setup.displayName(_wife)>> and <<=setup.displayName(_husban
 							Whatever defiance they had a moment ago drains out of them fast. Neither one resists as you lead them both away.
 							<br /><br />
 							<<link 'Continue'>>
-								<<npcEnslave _husband>>
-								<<npcEnslave _wife>>
+								<<run setup.relationshipBetween.reactToCoupleDeparture(_husband, _wife, 'thrown_out')>>
+								<<npcEnslave _husband 'already_counted'>>
+								<<npcEnslave _wife 'already_counted'>>
 								<<goto 'Basement'>>
 							<</link>>
 						<</linkreplace>>

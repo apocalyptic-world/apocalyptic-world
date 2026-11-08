@@ -42,7 +42,7 @@ You find <<=setup.displayName(_victim)>> on the ground, wolves circling. One has
 		You rush in but the wolves turn on you. You take a bad bite to the arm before backing off. <<=setup.displayName(_victim)>> is dragged off screaming.
 		<br /><br />
 		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(10, 25))>>
-		<<guestRemove _victimIdx>>
+		<<guestLeft _victimIdx 'killed'>>
 		<span class="wolf-exit"><<link 'Retreat'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>
@@ -98,7 +98,7 @@ You find <<=setup.displayName(_victim)>> on the ground, wolves circling. One has
 		The wolves barely react. One lunges at your arm — you manage to beat it off but take a bad bite in the process. <<=setup.displayName(_victim)>> is dragged off screaming.
 		<br /><br />
 		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(15, 30))>>
-		<<guestRemove _victimIdx>>
+		<<guestLeft _victimIdx 'killed'>>
 		<span class="wolf-exit"><<link 'Retreat'>>
 			<<addmins 30>>
 			<<goto 'Wood cabin'>>

@@ -43,7 +43,7 @@ You didn't have a good answer for that.
 <<linkreplace _taHandoverLabel>>
 	<<run $('#ta_handover, #ta_fight').hide()>>
 	<<set _taGIdx2 = $guests.findIndex(function(g) { return g.id === _taData.guestId; })>>
-	<<if _taGIdx2 >= 0>><<guestLeft _taGIdx2>><</if>>
+	<<if _taGIdx2 >= 0>><<guestLeft _taGIdx2 'handed_over'>><</if>>
 	<<set _taH = setup.settlements.getById(_taData.settlementId)>>
 	<<run setup.settlements.resolveAbduction(_taH, true)>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>

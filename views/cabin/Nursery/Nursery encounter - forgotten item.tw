@@ -1,0 +1,112 @@
+:: Nursery encounter - forgotten item [bg-milk-barn]
+<h1 class="ptitle">SCHOOL</h1>
+<br /><br />
+/* A caretaker brings a student something they left behind. The player can stop and take an interest. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'School'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _teacher = _cast.teacher>>
+<<set _name = setup.displayName(_carer)>>
+<<set _teacherName = setup.displayName(_teacher)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _own = _enc.isOwnChild(_kid)>>
+<<set _item = setup.nurseryEncounterText.forgotten.random()>>
+<<set _parents = _enc.parents(_kid).filter(npc => npc !== _carer && npc !== _teacher)>>
+/* These happen whatever the player does */
+<<set _deliveryEffects = function () {
+	_enc.change(_kid, 'happy', 1, 3);
+	_enc.changeBetween(_carer, _teacher, 2, 4);
+	_parents.forEach(npc => _enc.changeBetween(_carer, npc, 1, 3));
+}>>
+<<set _walkLabel = 'Walk ' + _name + ' back to the nursery (Uses 15 minutes)'>>
+
+You are coming into the schoolroom when <<=_name>> slips past you, out of breath, holding a <<=_item>> over <<=setup.pronounceWhos(_carer)>> head so the class can see it. <<=_teacherName>> stops in the middle of a sentence and sighs.
+<br /><br />
+<<sayNpc _carer>>
+	Sorry, sorry. <<=_kid.name>> left this on the bench by the door, and I knew <<=_kidHe>> would need it. I'll be gone in a second.
+<</sayNpc>>
+<br />
+<<=_kid.name>> goes red in front of the whole class and hurries up to take it. <<=ucfirst(_kidHe)>> mumbles a thank you, and looks very glad to have it back.
+<br /><br />
+<<sayNpc _teacher>>
+	Thais isn't the first time you've run all the way over here. Don't think I haven't noticed. They're lucky to have you.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<link `'Ask ' + _teacherName + ' how ' + _kid.name + ' is getting on (Uses 15 minutes)'`>>
+		<<replace '#nce_choices'>>
+			<<run _deliveryEffects()>>
+			<<addmins 15>>
+			<<run [_carer, _teacher, _kid].forEach(npc => _enc.change(npc, 'relationship', 2, 3))>>
+			<<run _enc.change(_kid, 'happy', 1, 3)>>
+			You step over before <<=_name>> can leave, and ask <<=_teacherName>> how <<=_kid.name>> has been doing. The whole class is listening, and <<=_kid.name>> slides down in <<=_kidHis>> seat.
+			<br /><br />
+			<<sayNpc _teacher>>
+				Well, since you're asking. <<=ucfirst(_kidHe)>> has a good head on <<=_kidHis>> shoulders, when <<=_kidHe>> remembers to bring it to class. I've seen real improvement this term.
+			<</sayNpc>>
+			<br />
+			<<=_name>> adds a story of <<=setup.pronounceWhos(_carer)>> own about what <<=_kid.name>> has been working on back at the nursery, and the three of you talk it over for a few minutes. It isn't much, but it is plain that neither of them is often asked. When you turn to go, <<=_kid.name>> is sitting up straight again, trying hard not to look pleased.
+			<<if _own>>
+				<br /><br />
+				"Thanks, <<=setup.npc.mcName(_kid, true)>>," <<=_kidHe>> says, very quietly, as you pass <<=_kidHis>> desk.
+			<</if>>
+			<br /><br />
+			/* Walking back from here keeps the conversation on screen and adds the walk below it */
+			<div id="nce_walk">
+				<div>
+					<<link `_walkLabel`>>
+						<<set _talked = true>>
+						<<set _enc.logShown = 0>>
+						<<replace '#nce_walk'>><<include 'Nursery encounter - forgotten item walk'>><</replace>>
+					<</link>>
+				</div>
+				[[Continue|School]]
+				<<nurseryEffects>>
+			</div>
+		<</replace>>
+	<</link>>
+	<<link `_walkLabel`>>
+		<<run _deliveryEffects()>>
+		<<replace '#nce_choices'>><<include 'Nursery encounter - forgotten item walk'>><</replace>>
+	<</link>>
+	<<link 'Let them get back to it'>>
+		<<replace '#nce_choices'>>
+			<<run _deliveryEffects()>>
+			<<=_name>> waves to the class and heads back to the nursery, and <<=_teacherName>> picks up where <<=setup.pronounceWhat(_teacher)>> left off. <<=_kid.name>> tucks the <<=_item>> away and tries to look as though none of this happened.
+			<br /><br />
+			[[Continue|School]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+
+:: Nursery encounter - forgotten item walk
+/* Included by Nursery encounter - forgotten item, before or after talking to the teacher (_talked) */
+<<addmins 15>>
+<<run _enc.change(_carer, 'relationship', 2, 4)>>
+<<run _enc.change(_carer, 'happy', 1, 3)>>
+<<if _talked>>
+	You thank <<=_teacherName>> and leave <<=setup.pronounceWho(_teacher)>> to the lesson, then fall into step with <<=_name>> on the way out.
+<<else>>
+	You tell <<=_teacherName>> you won't keep <<=setup.pronounceWho(_teacher)>> from the class, and you fall into step with <<=_name>> on the way out.
+<</if>> <<=ucfirst(setup.pronounceWhat(_carer))>> looks surprised, then glad of the company.
+<br /><br />
+It isn't far, but it is the first time all day <<=setup.pronounceWhat(_carer)>> has walked anywhere without someone hanging off <<=setup.pronounceWhos(_carer)>> arm. You ask how things are going, and <<=setup.pronounceWhat(_carer)>> tells you, including a few things <<=setup.pronounceWhat(_carer)>> probably wouldn't have said in front of the children.
+<br /><br />
+<<sayNpc _carer>>
+	You didn't have to come all this way. It's nice, though, having somebody ask. All right, back into the noise. Thanks for the walk.
+<</sayNpc>>
+<br />
+You leave <<=setup.pronounceWho(_carer)>> at the nursery door and head back to what you were doing.
+<br /><br />
+[[Continue|School]]
+<<nurseryEffects>>

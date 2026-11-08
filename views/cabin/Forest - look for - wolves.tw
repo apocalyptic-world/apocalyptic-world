@@ -34,7 +34,7 @@ You break into a clearing and find <<=setup.displayName(_npc)>> backed against a
 		<br /><br />
 		<<set $player.health = Math.max(1, ($player.health ?? 100) - randomInteger(10, 25))>>
 		<<link 'Retreat'>>
-			<<guestRemove $scavengingDidntReturn>>
+			<<guestLeft $scavengingDidntReturn 'killed'>>
 			<<unset $scavengingDidntReturn>>
 			<<goto 'Wood cabin'>>
 		<</link>>
@@ -65,7 +65,7 @@ You break into a clearing and find <<=setup.displayName(_npc)>> backed against a
 <</if>>
 
 <<link 'Leave'>>
-	<<guestRemove $scavengingDidntReturn>>
+	<<guestLeft $scavengingDidntReturn 'killed'>>
 	<<unset $scavengingDidntReturn>>
 	<<goto 'Wood cabin'>>
 <</link>>

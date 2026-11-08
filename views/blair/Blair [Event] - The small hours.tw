@@ -56,9 +56,9 @@
 				<<smallHoursExit 'Go back to bed'>>
 			<</linkreplace>>
 		</div>
-		<<if ($game.location.nursery ?? false) && setup.nurseryCare.caretaker()>>
+		<<if ($game.location.nursery ?? false) && setup.nurseryCare.isActive() && setup.nurseryCare.caretakers().length>>
 			<div id="sh_nursery">
-				<<set _shNurseryLabel = 'Suggest the nursery caretaker takes ' + _shKidHer + ' tonight'>>
+				<<set _shNurseryLabel = 'Suggest calling ' + (setup.nurseryCare.caretakers().length === 1 ? 'the nursery caretaker' : 'one of the nursery caretakers') + ' to take care of ' + _shKidHer + ' tonight'>>
 				<<linkreplace _shNurseryLabel>>
 					<<run $('#sh_take, #sh_sit').hide()>>
 					<<set $characters.blair.relationship = Math.max(($characters.blair.relationship ?? 0) - 6, -100)>>

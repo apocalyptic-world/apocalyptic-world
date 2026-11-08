@@ -330,7 +330,11 @@
 	<</if>>
 <</if>>
 
-<<if !($locationEvents.guesthouse ?? false)>>
+/* Checked here, after the list, since the events below can also send the player somewhere */
+<<set _ncEncounter = previous() === 'Wood cabin' ? setup.nurseryEncounters.roll('guesthouse') : null>>
+<<if _ncEncounter>>
+	<<goto _ncEncounter>>
+<<elseif !($locationEvents.guesthouse ?? false)>>
 <<set _virginList = setup.getAvailablePersons18yoVirgins($guests)>>
 	<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
 	<<set _hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 25, '>=')>>

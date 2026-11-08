@@ -92,7 +92,7 @@
 					<<set _ltThrowLabel = 'Throw her out'>>
 					<<linkreplace _ltThrowLabel>>
 						<<run $('#lt_cell, #lt_forgive').hide()>>
-						<<npcLeaveSettlement _ltNpc>>
+						<<npcLeaveSettlement _ltNpc 'betrayed'>>
 						You walked <<=_ltHer>> to the gate yourself. Nobody spoke. The gate closed, and that was that.
 						<br /><br />
 						<<link 'Continue'>>
@@ -108,7 +108,7 @@
 							<<set _ltNpc.happy = Math.max((_ltNpc.happy ?? 0) - 30, -100)>>
 							<<set _ltNpc.relationship = Math.max((_ltNpc.relationship ?? 0) - 25, -100)>>
 							<<set _ltNpc.sub = Math.min((_ltNpc.sub ?? 0) + 20, 100)>>
-							<<npcEnslave _ltNpc>>
+							<<npcEnslave _ltNpc 'betrayed'>>
 							The house watched in silence as you took <<=_ltHer>> down to the basement. A traitor was better kept where you could see <<=_ltHer>>.
 							<br /><br />
 							<<link 'Continue'>>

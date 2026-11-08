@@ -1,0 +1,102 @@
+:: Nursery encounter - bedtime story [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A caretaker is trying to settle the kids and they want a story. The player can supply the book or read it himself. */
+<<set _cast = setup.nurseryEncounters.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _listeners = setup.nurseryEncounters.healthyKids(4, 12).shuffle().slice(0, random(5, 10))>>
+<<set _asker = _listeners[0]>>
+<<set _ownListeners = _listeners.filter(k => setup.nurseryEncounters.isOwnChild(k))>>
+
+The lamps are turned down in the nursery, which has done nothing to convince anyone that it's time to sleep. <<=_name>> moves from cot to cot, straightening blankets and steering kids back to bed, while the ones <<=_heOrShe>> has already settled climb out behind <<=_himOrHer>>.
+<br /><br />
+<<sayNpc _carer>>
+	Back in bed, please. I mean it this time. No, you've had your water. Back in bed.
+<</sayNpc>>
+<br />
+<<=_asker.name>> tugs at <<=_hisOrHer>> sleeve and points at you, standing in the doorway.
+<br /><br />
+"Can we have a story? A new one. We know all the old ones."
+<br /><br />
+Several small voices take up the cause at once. <<=_name>> gives you a tired smile over the top of their heads.
+<br /><br />
+<<sayNpc _carer>>
+	It's true. They've started correcting me when I get the words wrong. If you've got a book to spare, it would be a real help. It's the only thing that keeps them in one place.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<link `'Give ' + _himOrHer + ' a book to read to them (Uses 1 book)'`>>
+		<<replace '#nce_choices'>>
+			<<run setup.cabinInventory.drop('book')>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', 1, 2)>>
+			<<run setup.nurseryBehavior.change(3, 3)>>
+			<<for _listener range _listeners>>
+				<<run setup.nurseryEncounters.change(_listener, 'happy', 1, 2)>>
+			<</for>>
+			You hand over a book. <<=_name>> turns it over, reads the back, and laughs quietly with relief.
+			<br /><br />
+			<<sayNpc _carer>>
+				Oh, this will do nicely. Thank you. All right, everybody in bed, and then we'll start. I'm not reading a word until I see blankets.
+			<</sayNpc>>
+			<br />
+			You have never seen children move so fast. By the time you turn to leave, <<=_name>> has pulled a stool up between the cots, and the room has gone quiet for the first time all day.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Read them a story yourself (Uses 1 book and 30 minutes)'>>
+		<<replace '#nce_choices'>>
+			<<run setup.cabinInventory.drop('book')>>
+			<<addmins 30>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', 2, 3)>>
+			<<run setup.nurseryEncounters.change(_carer, 'relationship', 2, 3)>>
+			<<run setup.nurseryBehavior.change(5, 5)>>
+			<<for _listener range _listeners>>
+				<<run setup.nurseryEncounters.change(_listener, 'happy', 2, 4)>>
+				<<run setup.nurseryEncounters.changeBond(_listener, 2, 4)>>
+			<</for>>
+			You take a book and the stool, and the children scramble into their cots before you have the cover open. You start out reading it plain. <<=_asker.name>> informs you that the wolf needs a voice, so the wolf gets a voice, and after that so does everybody else.
+			<<if _ownListeners.length === 1>>
+				<<=_ownListeners[0].name>> has dragged <<=setup.pronounceWhos(_ownListeners[0])>> blanket to the cot nearest you and won't take <<=setup.pronounceWhos(_ownListeners[0])>> eyes off you.
+			<<elseif _ownListeners.length > 1>>
+				Your own children have dragged their blankets to the cots nearest you and won't take their eyes off you.
+			<</if>>
+			<br /><br />
+			By the last page, half of them are asleep and the rest are trying hard not to be. <<=_name>> has spent the whole half hour leaning in the doorway, and <<=_heOrShe>> walks you out with a hand on your arm.
+			<br /><br />
+			<<sayNpc _carer>>
+				You didn't have to do that. They'll be talking about it for a week. And I got to sit down for the first time since this morning, so thank you for that too.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Tell them it will have to wait'>>
+		<<replace '#nce_choices'>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', -2, -1)>>
+			<<for _listener range _listeners>>
+				<<run setup.nurseryEncounters.change(_listener, 'happy', -2, -1)>>
+				<<run setup.nurseryEncounters.changeBond(_listener, -2, -1)>>
+			<</for>>
+			You tell them you don't have one to spare tonight. A groan goes up from the cots. <<=_name>> looks disappointed, then puts <<=_hisOrHer>> smile back on for the kids.
+			<br /><br />
+			<<sayNpc _carer>>
+				Well. I suppose it's the one about the three goats again. Come on, everybody, back in bed.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

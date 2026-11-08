@@ -34,15 +34,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 	</div>
 <</if>>
 
-<<if ($game.location.nursery ?? false) && !_isFeral && setup.getAge($tmpGirl) >= 18 && !setup.assignedToCount('caretaker') && !$tmpGirl.assignedTo>>
-	<div>
-	  <<link 'Assign as nursery caretaker'>>
-		  <<assignedTo $tmpGirl 'caretaker'>>
-		  <<dialogclose>>
-		  <<goto `$tmpGirlViewBack`>>
-	  <</link>> (Looks after the children: they grow up faster and are happier)
-	</div>
-<</if>>
+<<include 'Assign to - nursery caretaker'>>
 
 <<if !_isFeral && !setup.assignedToCount('kitchen') && !$tmpGirl.assignedTo>>
 	<div>

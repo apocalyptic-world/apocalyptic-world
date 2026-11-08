@@ -1,0 +1,65 @@
+:: Nursery - lockdown [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* Behavior has collapsed and the player takes over. Opened from the care panel. */
+<<if !setup.nurseryBehavior.canLockdown()>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _crew = setup.nurseryCare.atWork($weather)>>
+<<set _carer = _crew.length ? _crew.random() : null>>
+<<set _name = _carer ? setup.displayName(_carer) : ''>>
+<<set _older = setup.nurseryCare.kidsAged(10, 17)>>
+<<set _kid = _older.length ? _older.random() : null>>
+
+You hear the nursery before you reach the door. Inside, a cot has been tipped on its side, somebody has thrown a bowl of food at the wall, and two boys are wrestling on the floor while a ring of children cheers them on. Nobody looks up when you walk in.
+<br /><br />
+<<if _carer>>
+	<<=_name>> is in the middle of it, trying to pull the boys apart and getting nowhere. <<=ucfirst(setup.pronounceWhat(_carer))>> finally sees you and comes over, out of breath, with a scratch across one cheek.
+	<br /><br />
+	<<sayNpc _carer>>
+		I can't hold them. None of us can. They stopped listening days ago, and now the little ones are copying the big ones. I don't know what else to try.
+	<</sayNpc>>
+	<br />
+<<else>>
+	There isn't a caretaker in sight. Whoever was meant to be keeping an eye on them gave up some time ago.
+	<br /><br />
+<</if>>
+You could shut this down right now, but it would be ugly. There would be no more second chances for anyone in this room, and the children wouldn't forgive it quickly. Neither would the adults who have to carry it out.
+<br /><br />
+
+<div id="ncl_choices">
+	<<link 'Lock the nursery down'>>
+		<<run setup.nurseryBehavior.lockdown()>>
+		<<replace '#ncl_choices'>>
+			You take the nearest cot frame and slam it against the floor. The crack stops the room, and every face turns to you.
+			<br /><br />
+			<<you>>
+				That's enough. All of it. Everyone goes to their bed and sits on it, right now, and the first one who opens their mouth scrubs floors for a month.
+			<</you>>
+			<br />
+			It takes a long, sullen minute, but they go. You walk the rows and lay it out in a voice that carries to the back wall. The doors stay barred outside of school and chores. Toys go up on the high shelf until they have been earned back. Meals are eaten in silence, lights go out early, and every child has a list of work to get through each day. Anyone who breaks a rule loses the next privilege on the list.
+			<br /><br />
+			<<if _kid>>
+				"You can't just lock us in here," <<=_kid.name>> says from one of the far beds, though it comes out smaller than <<=setup.pronounceWhat(_kid)>> meant it to.
+				<br /><br />
+				You look at <<=setup.pronounceWho(_kid)>> until <<=setup.pronounceWhat(_kid)>> looks away, and that is the end of the discussion.
+				<br /><br />
+			<</if>>
+			<<if _carer>>
+				Then you take the caretakers aside, and you aren't any gentler with them. They let this happen, and from now on they will run this room your way, with no exceptions and no soft hearts at bedtime. <<=_name>> takes it without arguing and nods when you finish. <<=ucfirst(setup.pronounceWhat(_carer))>> looks exhausted, and a little afraid of you.
+				<br /><br />
+				<<sayNpc _carer>>
+					Yes. I understand. It will be done the way you said.
+				<</sayNpc>>
+				<br />
+			<</if>>
+			By the time you leave, the nursery is quiet. It is the kind of quiet that makes the back of your neck itch, with every pair of eyes following you to the door, but it will hold.
+			<br /><br />
+			<strong>(Nursery behavior is now 0. All of the children lost 20 happiness. The caretakers gained 10 submission and lost 10 happiness.)</strong>
+			<br /><br />
+			<<link 'Continue' 'Nursery'>><</link>>
+		<</replace>>
+	<</link>>
+	<<link 'Not yet' 'Nursery'>><</link>>
+</div>
+<</if>>

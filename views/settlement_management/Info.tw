@@ -156,6 +156,17 @@
 	<</if>>
 <</for>>
 
+<<for _statsCharKey, _statsChar range $characters>>
+	<<if setup.npc.isLivingCharacter(_statsChar)>>
+		<<if setup.npc.isBirthday(_statsChar)>>
+			<<set _settlementStatsData.birthday.push(_statsChar.name)>>
+		<</if>>
+		<<if setup.npc.currentMarriage(_statsChar)?.with === 'mc' && setup.npc.isAnniversary(_statsChar)>>
+			<<set _settlementStatsData.anniversary.push('You & ' + _statsChar.name + ' (' + setup.npc.yearsMarried(_statsChar) + '-year)')>>
+		<</if>>
+	<</if>>
+<</for>>
+
 <<set _preglist = _preglist.replace(/,\s*$/, '')>>
 <<set _virglist = _virglist.replace(/,\s*$/, '')>>
 
@@ -249,8 +260,8 @@
 	<tr><td>Working as attendant:</td><td><<=_settlementStatsData.work.attendant ?? 0>></td><td>(Max 2)</td></tr>
 	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
 	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.school ?? 0>></td><td>(Max 1)</td></tr>
-	<<if $game.location.nursery ?? false>>
-		<tr><td>Working as nursery caretaker:</td><td><<=_settlementStatsData.work.caretaker ?? 0>></td><td>(Max 1)</td></tr>
+	<<if setup.nurseryCare.isActive()>>
+		<tr><td>Working as nursery caretaker:</td><td><<=_settlementStatsData.work.caretaker ?? 0>></td><td>(<<=setup.nurseryCare.maxLabel()>>)</td></tr>
 	<</if>>
 	<<if $game.location.library ?? false>>
 		<tr><td>Working as librarian:</td><td><<=_settlementStatsData.work.librarian ?? 0>></td><td>(Max 1) skill learning +<<=setup.library.bonusPercent()>>%</td></tr>

@@ -1,0 +1,248 @@
+:: Nursery encounter - birthday [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A caretaker suggests a small party for whoever has a birthday today. Set up by setup.nurseryBirthday.start. */
+<<set _party = setup.nurseryBirthday>>
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<set _kids = _party.people($tmpEvent?.birthdays)>>
+<<if !_cast || !_kids.length>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _invited = _party.people($tmpEvent.invited)>>
+<<set _guests = _party.people($tmpEvent.guests).concat(_invited)>>
+<<set _waiting = _party.people($tmpEvent.optional)>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _many = _kids.length > 1>>
+<<set _kidNames = _kids.map(kid => kid.name).join(' and ')>>
+<<set _needs = _party.supplies(_guests.length)>>
+<<set _short = _enc.missing(_needs)>>
+<<set _partyLabel = 'Have the party with treats (Uses ' + _needs.candy + ' candy, ' + _needs.soda + ' soda, and ' + _party.partyLength(_kids) + ')'>>
+<<set _anyOwn = _kids.some(kid => _enc.isOwnChild(kid))>>
+
+<<=_name>> catches you before you have made it past the door. <<=ucfirst(_heOrShe)>> has a list in <<=setup.pronounceWhos(_carer)>> hand, and the look of someone who has already decided what you are going to say.
+<br /><br />
+<<sayNpc _carer>>
+	You know what today is? <<=_many ? "It's a big day for birthdays." : "It's a birthday.">> <<=_party.agesLine(_kids)>>. I'd like to put together something to celebrate. 
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> doesn't propose anything fancy, just family and a few friends, and something sweet to pass around. With all of the challenges of survival, the kids don't get many days that are about them.
+<br /><br />
+<<if _anyOwn>>
+	<<=_many ? 'It does not go unnoticed that this includes your own offspring.' : _kids[0].name + ' is yours.'>> <<=_name>> doesn't mention it, but <<=_heOrShe>> doesn't need to tell you what you already know.
+	<br /><br />
+<</if>>
+<<if _waiting.length>>
+	<<sayNpc _carer>>
+		There are some parents who can't come unless you say so, due to their work or status. It's up to you.
+	<</sayNpc>>
+	<br />
+	<<for _parent range _waiting>>
+		<<capture _parent>>
+			<<if _invited.includes(_parent)>>
+				<<=setup.displayName(_parent)>> will attend.
+				<<link 'Change your mind'>>
+					<<run _party.toggleInvite(_party.personId(_parent))>>
+					<<goto 'Nursery encounter - birthday'>>
+				<</link>>
+			<<else>>
+				<<link `_party.inviteLabel(_parent)`>>
+					<<run _party.toggleInvite(_party.personId(_parent))>>
+					<<goto 'Nursery encounter - birthday'>>
+				<</link>>
+			<</if>>
+			<br />
+		<</capture>>
+	<</for>>
+	<br />
+<</if>>
+<br />
+After considering family and friends, you come up with a list of <<=_guests.length>> guests to invite.
+<br /><br />
+
+<div id="nce_choices">
+	<<if _short.length>>
+		<div><<=_partyLabel>> [Need <<=_short.join(', ')>>]</div>
+	<<else>>
+		<<link `_partyLabel`>>
+			<<set _treats = true>>
+			<<replace '#nce_choices'>><<include 'Nursery encounter - birthday party'>><</replace>>
+		<</link>>
+	<</if>>
+	<<link `'Have the party without treats (Uses ' + _party.partyLength(_kids) + ')'`>>
+		<<set _treats = false>>
+		<<replace '#nce_choices'>><<include 'Nursery encounter - birthday party'>><</replace>>
+	<</link>>
+	<<link 'Tell them there is no time for a party'>>
+		<<replace '#nce_choices'>>
+			<<run _party.refuseParty(_kids, _carer)>>
+			You tell <<=_himOrHer>> that the supplies are for keeping people alive, and there is too much to do for anyone to be spending an afternoon on this. <<=_name>> folds <<=setup.pronounceWhos(_carer)>> list in half, and then in half again.
+			<br /><br />
+			<<sayNpc _carer>>
+				I'll tell them, then. Somebody has to. I just hope you'll come and look at their faces sometime.
+			<</sayNpc>>
+			<br />
+			Word gets around. By the time you leave, <<=_kidNames>> <<=_many ? 'know' : 'knows'>>, and so does the rest of the family.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+
+:: Nursery encounter - birthday party
+/* Included by Nursery encounter - birthday once the player has picked a party. Expects _treats. */
+<<run _party.holdParty(_kids, _guests, _invited, _treats)>>
+<<set _partyMins = _party.partyHours(_kids) * 60>>
+<<addmins _partyMins>>
+<<set _forTheParty = _party.partyHours(_kids) === 1 ? 'For an hour' : 'For two hours'>>
+<<set _speakers = _party.partyParents(_kids, _guests)>>
+<<set _mom = _speakers[0] ?? null>>
+<<set _momKids = _mom ? _kids.filter(k => _enc.parents(k).includes(_mom)) : []>>
+<<set _arrivals = _party.arrivals(_kids, _guests, _carer)>>
+<<if _arrivals>>
+	<<=_arrivals>>
+<<else>>
+	It is a very small party, just <<=_kidNames>> and <<=_name>>.
+<</if>>
+<br /><br />
+By mid-party, the long table has been dragged into the middle of the room and covered with a sheet. Somebody has drawn a banner on the back of an old map. <<=_kidNames>> <<=_many ? 'sit' : 'sits'>> at the head of the table, wearing paper crowns and looking delighted to be the center of attention.
+<br /><br />
+<<if _treats>>
+	There is candy and there is soda, and there's more noise than the room was built for. Some of the parents are singing, badly. <<=_forTheParty>> nobody talks about the harsh weather, or the stores, or what is out past the gates.
+<<else>>
+	There's nothing sweet to pass around, and a few of the older kids notice. But there are games and a lot of noise, and some of the parents are singing, badly. <<=_forTheParty>> nobody talks about the harsh conditions, or the stores, or what is out past the gates.
+<</if>>
+<br /><br />
+<<if _mom>>
+	<<=setup.displayName(_mom)>> finds you at the edge of the crowd and stands beside you for a minute, watching the table.
+	<br /><br />
+	<<sayNpc _mom>>
+		Thank you for this. I mean it.
+		<<if _momKids.length > 1>>
+			Look at <<=_momKids.map(k => k.name).join(' and ')>>. They haven't stopped grinning since they sat down.
+		<<elseif setup.getAge(_momKids[0]) < 3>>
+			<<=_momKids[0].name>> has no idea what any of this is about, and <<=setup.pronounceWhat(_momKids[0])>> is having the time of <<=setup.pronounceWhos(_momKids[0])>> life anyway.
+		<<else>>
+			Look at <<=_momKids[0].name>>. <<=ucfirst(setup.pronounceWhat(_momKids[0]))>> hasn't stopped grinning since <<=setup.pronounceWhat(_momKids[0])>> sat down.
+		<</if>>
+		<<if _treats>>
+			I don't know where you found all that candy, and I'm not going to ask.
+		<<else>>
+			I wondered how it would go without any sweets, but I don't think they've even noticed.
+		<</if>>
+	<</sayNpc>>
+	<br />
+	<<if _speakers.length > 1>>
+		<<=_speakers.slice(1).map(n => setup.displayName(n)).join(' and ')>> <<=_speakers.length > 2 ? 'raise their cups' : 'raises a cup'>> to you from across the table.
+		<br /><br />
+	<</if>>
+<</if>>
+<<if _mom !== _carer>>
+	<<sayNpc _carer>>
+		Look at them. This is what I meant. It doesn't take much.
+	<</sayNpc>>
+	<br />
+<</if>>
+<div id="nce_party_next">
+	<<link 'Continue'>>
+		<<replace '#nce_party_next'>><<include 'Nursery encounter - birthday gift'>><</replace>>
+	<</link>>
+</div>
+
+
+:: Nursery encounter - birthday gift
+/* One step per birthday child. Each step replaces only the previous step's choices (_giftSlot), so the party reads as one
+   conversation and stays one passage (and one step of history). What happened to the last child is carried over in $tmpEvent.giftNote. */
+<<set _party = setup.nurseryBirthday>>
+<<set _giftSlot = 'nce_gift_' + ($tmpEvent?.giftIndex ?? 0)>>
+<<set _kids = _party.people($tmpEvent?.birthdays)>>
+<<set _kid = _kids[$tmpEvent?.giftIndex ?? 0]>>
+<<set _enc = setup.nurseryEncounters>>
+<<if $tmpEvent?.giftNote>>
+	<<=$tmpEvent.giftNote>>
+	<br /><br />
+<</if>>
+<<if !_kid>>
+	<<set _carer = setup.getNpcById($tmpEvent?.cast?.carer)>>
+	<<set _guests = _party.people($tmpEvent?.guests).concat(_party.people($tmpEvent?.invited))>>
+	<<set _speakers = _party.partyParents(_kids, _guests)>>
+	<<set _mom = _speakers[0] ?? null>>
+	<<set _gifted = $tmpEvent?.gifted ?? {}>>
+	<<set _thankers = _kids.filter(k => _gifted[k.id])>>
+	/* A mother whose child by the player went without a gift still says thank you, but she noticed */
+	<<set _slighted = !!_mom && _kids.some(k => _enc.parents(k).includes(_mom) && _enc.isOwnChild(k) && !_gifted[k.id])>>
+	The party winds down around you. The last of the crumbs are swept up, and the room slowly goes back to being a nursery.
+	<br /><br />
+	<<for _thanker range _thankers>>
+		<<set _prompter = _enc.parents(_thanker).find(n => _guests.includes(n)) ?? _carer>>
+		<<set _prompterName = _prompter ? setup.displayName(_prompter) : 'Someone'>>
+		<<set _thankerAge = setup.getAge(_thanker)>>
+		<<set _mcCalled = setup.npc.mcName(_thanker, true)>>
+		<<if _thankerAge < 3>>
+			<<=_prompterName>> brings <<=_thanker.name>> over with the <<=_gifted[_thanker.id]>> tucked under one arm, takes a small hand, and waves it at you. "Say thank you," <<=_prompter ? setup.pronounceWhat(_prompter) : 'they'>> says. <<=_thanker.name>> gives you a wide, wet smile, which seems to be the best on offer.
+		<<elseif _thankerAge < 13>>
+			"What do we say?" <<=_prompterName>> asks, steering <<=_thanker.name>> over by the shoulders. <<=_thanker.name>> holds up the <<=_gifted[_thanker.id]>> so you can see it. "Thank you, <<=_mcCalled>>!"
+		<<else>>
+			<<=_prompterName>> gives <<=_thanker.name>> a look, and <<=_thanker.name>> comes over with the <<=_gifted[_thanker.id]>> in <<=setup.pronounceWhos(_thanker)>> hand. "Thanks, <<=_mcCalled>>," <<=setup.pronounceWhat(_thanker)>> says, then adds, more quietly and with a real smile, "No, really. Thanks."
+		<</if>>
+		<br /><br />
+	<</for>>
+	<<if _mom>>
+		<<sayNpc _mom>>
+			<<if _slighted>>
+				Thank you for the party. It meant a lot to them. I only wish... well. Thank you for the party.
+			<<else>>
+				Thank you. I don't get many days like this one, and neither do they. I won't forget that you gave us this.
+			<</if>>
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<if _carer && _mom !== _carer>>
+		<<sayNpc _carer>>
+			Thank you for saying yes. I know <<=_party.partyHours(_kids) === 1 ? 'an hour' : 'two hours'>> is a lot to give up around here. They'll be talking about this for weeks, and you've made my job easier for a while.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	[[Continue|Nursery]]
+	<<nurseryEffects>>
+<<else>>
+	<<set _kidHe = setup.pronounceWhat(_kid)>>
+	<<set _kidHis = setup.pronounceWhos(_kid)>>
+	<<set _kidHim = setup.pronounceWho(_kid)>>
+	<<set _own = setup.nurseryEncounters.isOwnChild(_kid)>>
+	<<set _options = _party.giftOptions(_kid)>>
+	<<set _available = _options.filter(item => setup.cabinInventory.has(item))>>
+	It is <<=_kid.name>>'s turn to come up to the table. <<=ucfirst(_kidHe)>> looks at you<<=_own ? ', waiting to see what you brought' : ''>>.
+	<br /><br />
+	<<if _available.length < 1>>
+		<small>You have nothing suitable to give (<<=_options.map(item => Item.get(item).name.toLowerCase()).join(', ')>>).</small>
+		<br /><br />
+	<</if>>
+	<div @id="_giftSlot">
+	<<for _item range _available>>
+		<<capture _item>>
+			<<link `'Give ' + _kidHim + ' a ' + Item.get(_item).name.toLowerCase()`>>
+				<<run _party.giveGift(_kid, _item)>>
+				<<set $tmpEvent.gifted[_kid.id] = Item.get(_item).name.toLowerCase()>>
+				<<set $tmpEvent.giftNote = 'You give ' + _kid.name + ' the ' + Item.get(_item).name.toLowerCase() + '. ' + ucfirst(_kidHis) + ' whole face lights up, and ' + _kidHe + ' holds on to it for the rest of the party.'>>
+				<<set $tmpEvent.giftIndex++>>
+				<<replace `'#' + _giftSlot`>><<include 'Nursery encounter - birthday gift'>><</replace>>
+			<</link>>
+		<</capture>>
+	<</for>>
+	<<link `_own ? 'Give ' + _kidHim + ' nothing' : 'Wish ' + _kidHim + ' a happy birthday and move on'`>>
+		<<run _party.skipGift(_kid)>>
+		<<set $tmpEvent.giftNote = _own
+			? 'You have nothing for ' + _kid.name + '. ' + ucfirst(_kidHe) + ' waits a little longer, just in case, and then goes back to the table with ' + _kidHis + ' head down.'
+			: 'You wish ' + _kid.name + ' a happy birthday, and ' + _kidHe + ' runs back to the others.'>>
+		<<set $tmpEvent.giftIndex++>>
+		<<replace `'#' + _giftSlot`>><<include 'Nursery encounter - birthday gift'>><</replace>>
+	<</link>>
+	</div>
+<</if>>

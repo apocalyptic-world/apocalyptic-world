@@ -1,0 +1,64 @@
+:: Nursery encounter - wet nurse [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A nursing caretaker takes a moment to feed one of the babies. The player can bring her something to keep her strength up. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _ownBaby = _kid.family?.mother === _carer.id>>
+<<set _offers = [
+	{ item: 'food', label: 'Bring ' + _himOrHer + ' something to eat (Uses 1 food)', text: 'You find some food and set it within reach. ' + _name + ' eats it one-handed, faster than ' + _heOrShe + ' would probably like to admit.' },
+	{ item: 'soda', label: 'Bring ' + _himOrHer + ' a soda (Uses 1 soda)', text: 'You open a soda and put it in ' + _hisOrHer + ' free hand. ' + _name + ' drinks half of it in one go, and sighs.' },
+	{ item: 'energy_drink', label: 'Bring ' + _himOrHer + ' an energy drink (Uses 1 energy drink)', text: 'You open an energy drink and put it in ' + _hisOrHer + ' free hand. ' + _name + ' makes a face at the taste, then drinks all of it anyway.' }
+].filter(offer => setup.cabinInventory.has(offer.item))>>
+
+The nursery is quiet in the corner by the window. <<=_name>> is in the old chair with a shawl over <<=_hisOrHer>> shoulder, with <<=_kid.name>> in <<=_hisOrHer>> lap, latched on and nursing from her breast.  As she cradles the child, <<=_heOrShe>> rocks gently back and forth, humming a soft melody under her breath. <<=ucfirst(_heOrShe)>> looks up when your shadow crosses the floor, and gives you a tired smile.
+<br /><br />
+<<sayNpc _carer>>
+	<<if _ownBaby>>
+		This one's mine, so at least I know <<=setup.pronounceWhat(_kid)>> takes after somebody. Always hungry.
+	<<else>>
+		<<=_kid.name>> wouldn't settle, and <<=setup.pronounceWhos(_kid)>> mother isn't here, so I said I'd see to it. There's plenty to go around.
+	<</if>>
+	It does take it out of you, though. I keep forgetting to eat.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<for _offer range _offers>>
+		<<capture _offer>>
+			<<link _offer.label>>
+				<<replace '#nce_choices'>>
+					<<run setup.cabinInventory.drop(_offer.item)>>
+					<<run _enc.change(_carer, 'happy', 3, 5)>>
+					<<run _enc.change(_carer, 'relationship', 3, 5)>>
+					<<=_offer.text>>
+					<br /><br />
+					<<sayNpc _carer>>
+						Thank you. Most people walk right past this corner. It's nice to have someone notice.
+					<</sayNpc>>
+					<br />
+					[[Continue|Nursery]]
+					<<nurseryEffects>>
+				<</replace>>
+			<</link>>
+		<</capture>>
+	<</for>>
+	<<link `'Leave ' + _himOrHer + ' to it'`>>
+		<<replace '#nce_choices'>>
+			You nod and leave <<=_himOrHer>> to it. <<=_name>> goes back to looking out the window, and <<=_kid.name>> carries on, untroubled.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

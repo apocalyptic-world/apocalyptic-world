@@ -1,0 +1,138 @@
+:: Nursery - care panel
+/* Top of the Nursery: caretaker stats and who is doing what, or the button to set it up after the guest's talk. */
+<<if setup.nurseryCare.isActive()>>
+	<div class="nursery-care">
+		<<if setup.nurseryCare.onDuty()>>
+			<<set _ncCare = $player.nurseryCare>>
+			<div class="nc-stats">
+				<span>&#x1F607;/&#x1F608; Behavior: <span @class="'nc-behavior nc-behavior-' + setup.getNpcHappyLevel(_ncCare.behavior)"><<=_ncCare.behavior>></span></span>
+				<span>&#x1F9F8; Toys: <<=_ncCare.toys>></span>
+				<span>&#x1F36A; Snacks: <<=_ncCare.snacks>></span>
+			</div>
+			<<if setup.nurseryBehavior.canLockdown()>>
+				<div><<link 'Emergency lockdown' 'Nursery - lockdown'>><</link>></div>
+			<</if>>
+			<<set _ncAll = setup.nurseryCare.caretakers()>>
+			<<set _ncWorking = setup.nurseryCare.atWork($weather)>>
+			<<if _ncAll.length < 1>>
+				<div>No caretakers are assigned. The household is fitting the work in around its other duties.</div>
+			<<elseif _ncWorking.length < 1>>
+				<div>None of the caretakers are working today. The household is covering for them.</div>
+			<</if>>
+			<<set _ncUsed = []>>
+			<table id="slaves" class="nc-carers">
+			<<for _ncNpc range _ncWorking>>
+				<<set _ncAvatar = setup.gridWorkerAvatar(_ncNpc)>>
+				<<set _ncGuestId = $guests.indexOf(_ncNpc)>>
+				<<set _ncSlaveId = $slaves.indexOf(_ncNpc)>>
+				<<set _ncColor = ' npc-color color-' + _ncNpc.color>>
+				<<capture _ncNpc, _ncGuestId, _ncSlaveId>>
+				<tr>
+					<td class="nc-thumb-cell">
+					<div class="nc-thumb">
+						<<if _ncAvatar.src>>
+							<<set _ncSrc = (_ncAvatar.src.includes('http') || _ncAvatar.src.includes('packs/')) ? _ncAvatar.src : setup.ImagePath + 'custom_portraits/' + _ncAvatar.src>>
+							<img @src="_ncSrc" referrerpolicy="no-referrer">
+						<<else>>
+							<span @class="'gender-' + setup.genderClass(_ncNpc)"><<=_ncAvatar.i>></span>
+						<</if>>
+					</div>
+					</td>
+					<td>
+						<div>
+							&#128197; <<=setup.getAge(_ncNpc)>>
+							<<happyIcon _ncNpc>>
+							<<if setup.nurseryCare.wardOf(_ncNpc)>>
+								&nbsp;Ward: <<=setup.nurseryCare.wardOf(_ncNpc).name>>
+							<</if>>
+						</div>
+						<div>
+							<span @class="'gender-' + setup.genderClass(_ncNpc) + (typeof _ncNpc.color !== 'undefined' ? _ncColor : '')">
+								<<link _ncNpc.name>>
+									<<set $tmpGirl = _ncNpc>>
+									<<set $tmpGirl.location = 'nursery'>>
+									<<set $tmpGirl.rape = false>>
+									<<set $tmpGirlCapture = false>>
+									<<set $tmpGirlInvite = false>>
+									<<set $tmpGirlBack = 'Nursery'>>
+									<<if _ncGuestId >= 0>>
+										<<set $guestId = _ncGuestId>>
+										<<unset $slaveId, $charId, $childId>>
+										<<set $tmpGirlViewBack = 'NPC view - guest'>>
+									<<else>>
+										<<set $slaveId = _ncSlaveId>>
+										<<unset $guestId, $charId, $childId>>
+										<<set $tmpGirlViewBack = 'NPC view'>>
+									<</if>>
+									<<goto `$tmpGirlViewBack`>>
+								<</link>>
+							</span> <<=setup.nurseryCare.text(_ncNpc, _ncUsed)>>
+						</div>
+					</td>
+				</tr>
+				<</capture>>
+			<</for>>
+			</table>
+		<<else>>
+			No caretakers are on duty at this hour. The guards keep an eye on the nursery overnight.
+		<</if>>
+	</div>
+<<elseif $player.quests.nursery_care_talk ?? false>>
+	<div class="nursery-care">
+		<<set _ncMissing = setup.nurseryCare.missingSupplies()>>
+		<<if _ncMissing.length < 1>>
+			<<link 'Set up full-time caretakers'>>
+				<<run setup.nurseryCare.activate()>>
+				<<goto 'Nursery'>>
+			<</link>> (Uses 1 food, 1 glue, 1 wood and 1 plush as starting supplies)
+		<<else>>
+			Set up full-time caretakers [Need <<=_ncMissing.join(', ')>>] (Uses 1 food, 1 glue, 1 wood and 1 plush as starting supplies)
+		<</if>>
+	</div>
+<</if>>
+
+<style>
+	.nursery-care {
+		margin: 10px 0 20px;
+		padding: 10px;
+		background: rgba(0, 0, 0, 0.35);
+	}
+
+	.nursery-care .nc-stats {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.5rem;
+		margin-bottom: 8px;
+	}
+
+	/* Same scale and colors as the happiness icon */
+	.nursery-care .nc-behavior { font-weight: bold; }
+	.nursery-care .nc-behavior-very_sad { color: #ed1b24; }
+	.nursery-care .nc-behavior-sad { color: #f7921e; }
+	.nursery-care .nc-behavior-normal { color: #fdee21; }
+	.nursery-care .nc-behavior-happy { color: #8dc73f; }
+	.nursery-care .nc-behavior-very_happy { color: #019245; }
+
+	.nursery-care .nc-thumb-cell {
+		width: 48px;
+		padding-right: 10px;
+	}
+
+	.nursery-care .nc-thumb {
+		flex: 0 0 48px;
+		width: 48px;
+		height: 48px;
+		overflow: hidden;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.1);
+		line-height: 48px;
+		text-align: center;
+	}
+
+	.nursery-care .nc-thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+</style>

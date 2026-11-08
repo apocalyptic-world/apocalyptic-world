@@ -1,0 +1,69 @@
+:: Nursery encounter - helpful teen [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A teenager pitches in with the younger kids without being asked. The player can make a point of noticing. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _own = _enc.isOwnChild(_kid)>>
+/* These happen whatever the player does */
+<<set _helpEffects = function () {
+	setup.nurseryBehavior.change(2, 4);
+	_enc.changeBetween(_carer, _kid, 2, 4);
+}>>
+
+You stop in the doorway. <<=_kid.name>>, one of the teenagers, is sitting cross-legged on the floor with a ring of younger children around <<=_kidHim>>, showing them how to tie a knot, and going over it again for the one who keeps getting it wrong. Nobody seems to have asked <<=_kidHim>> to. On the far side of the room, <<=_name>> has taken the chance to finally get the washing folded.
+<br /><br />
+<<=_name>> comes over when <<=setup.pronounceWhat(_carer)>> sees you.
+<br /><br />
+<<sayNpc _carer>>
+	<<=ucfirst(_kidHe)>> has been at it for an hour. Just sat down and started helping, and the little ones have been better behaved than they've been all week. I'd say something, but I'm afraid <<=_kidHe>>'d stop.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<link `'Tell ' + _kid.name + ' you noticed'`>>
+		<<replace '#nce_choices'>>
+			<<run _helpEffects()>>
+			<<run _enc.change(_kid, 'relationship', 4, 6)>>
+			<<run _enc.change(_carer, 'happy', 2, 4)>>
+			<<run setup.nurseryBehavior.change(2, 4)>>
+			You wait for a break in the lesson, then crouch down and tell <<=_kid.name>>, loud enough for the room to hear, that you have seen what <<=_kidHe>> is doing and that it is the kind of thing this place runs on. You tell <<=_kidHim>> <<=_kidHe>> has earned some time to <<=_kidHim>>self.
+			<br /><br />
+			<<=_kid.name>> shrugs and says it was nothing, and goes pink to the tips of <<=_kidHis>> ears. The little ones, sensing that <<=_kidHe>> is important, sit up a bit straighter.
+			<<if _own>>
+				<br /><br />
+				"You really think so, <<=setup.npc.mcName(_kid, true)>>?" <<=_kidHe>> asks, when the others can't hear.
+			<</if>>
+			<<if [0, 2].includes(_kid.gender)>>
+				<br /><br />
+				"I like being with the little ones," <<=_kidHe>> adds, retying a knot for the child beside <<=_kidHim>>. "And it helps me feel prepared for when I have a few of my own some day."
+			<</if>>
+			<br /><br />
+			<<sayNpc _carer>>
+				That was good of you. <<=ucfirst(_kidHe)>> won't forget it, and neither will the rest of them.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to it'>>
+		<<replace '#nce_choices'>>
+			<<run _helpEffects()>>
+			You nod to <<=_name>> and back out quietly. Things seem to be going fine without you, and for once you don't want to get in the way of that.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

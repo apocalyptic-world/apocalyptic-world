@@ -1,0 +1,18 @@
+:: Assign to - nursery caretaker
+/* Shared by the guest and slave assign menus */
+<<if setup.nurseryCare.canAssign($tmpGirl)>>
+	<<if setup.npcInventoryHas($tmpGirl, 'towel') || (($automatization.job ?? false) && setup.cabinInventory.has('towel', 1))>>
+		<div>
+		  <<link 'Assign as nursery caretaker'>>
+			  <<if !setup.npcInventoryHas($tmpGirl, 'towel')>>
+				  <<run setup.cabinInventory.to_npc($tmpGirl, 'towel', 1)>>
+			  <</if>>
+			  <<assignedTo $tmpGirl 'caretaker'>>
+			  <<dialogclose>>
+			  <<goto `$tmpGirlViewBack`>>
+		  <</link>> (Looks after the children in the nursery)
+		</div>
+	<<else>>
+		<div>Assign as nursery caretaker [Need towel] (Looks after the children in the nursery)</div>
+	<</if>>
+<</if>>

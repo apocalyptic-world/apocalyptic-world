@@ -86,7 +86,7 @@ A rider from <<= _wdData.name >> arrived before noon. No pleasantries. He left a
 			<<run $slaves.splice(_wdSlaveIdx, 1)>>
 		<<elseif _wdGuestIdx >= 0>>
 			<<set _wdSentNpc = clone($guests[_wdGuestIdx])>>
-			<<guestLeft _wdGuestIdx>>
+			<<guestLeft _wdGuestIdx 'handed_over'>>
 		<</if>>
 		<<if _wdSentNpc>>
 			<<set _wdHandle = setup.settlements.getById($game.womanDemand.id)>>

@@ -1,0 +1,126 @@
+:: Nursery encounter - parental dispute [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A parent and a caretaker disagree about how a child is being raised. If it's the player's child, he has a stake in it. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _parent = _cast.parent>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _parentName = setup.displayName(_parent)>>
+<<set _own = _enc.isOwnChild(_kid)>>
+<<set _topic = _enc.disputeTopic(_kid)>>
+<<set _kidWord = [0, 2].includes(_kid.gender) ? 'daughter' : 'son'>>
+
+You can hear them from the doorway. <<=_parentName>> has <<=_name>> backed up against the supply shelf, and neither of them is troubling to keep their voice down. A few of the children have stopped playing to watch.
+<br /><br />
+<<sayNpc _parent>>
+	<<=_enc.fill(_topic.parent, _kid)>>
+<</sayNpc>>
+<br />
+<<sayNpc _carer>>
+	<<=_enc.fill(_topic.carer, _kid)>>
+<</sayNpc>>
+<br />
+<<if _own>>
+	<<=_kid.name>> is your <<=_kidWord>>, and both of them know it. <<=_parentName>> turns to you the moment <<=setup.pronounceWhat(_parent)>> sees you.
+	<br /><br />
+	<<sayNpc _parent>>
+		You tell <<=setup.pronounceWho(_carer)>>. <<=ucfirst(setup.pronounceWhat(_kid))>> is your child too.
+	<</sayNpc>>
+<<else>>
+	They both notice you at about the same moment and turn around, each of them plainly hoping you'll settle it.
+<</if>>
+<br />
+
+<div id="nce_choices">
+	<<link `'Side with ' + _parentName`>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_parent, 'relationship', 4, 6)>>
+				<<run _enc.change(_carer, 'relationship', -3, -1)>>
+			<<else>>
+				<<run _enc.change(_parent, 'relationship', 3, 5)>>
+				<<run _enc.change(_carer, 'relationship', -4, -2)>>
+			<</if>>
+			You tell <<=_name>> that a parent gets the last word on a thing like this, and <<=_kid.name>> will be handled the way <<=_parentName>> wants. <<=_parentName>> lets out a breath and thanks you. <<=_name>> presses <<=setup.pronounceWhos(_carer)>> lips together.
+			<br /><br />
+			<<sayNpc _carer>>
+				Fine. But I'm the one here with them every day, and I hope you'll both remember that.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Side with ' + _name`>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_parent, 'relationship', -6, -4)>>
+				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+			<<else>>
+				<<run _enc.change(_parent, 'relationship', -4, -2)>>
+				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+			<</if>>
+			You tell <<=_parentName>> that you trust <<=_name>> to run this room, and that means trusting <<=setup.pronounceWho(_carer)>> on the day-to-day. <<=_name>>'s shoulders come down an inch. <<=_parentName>> stares at you, then looks away.
+			<br /><br />
+			<<sayNpc _parent>>
+				<<if _own>>
+					I thought you of all people would back me up on this.
+				<<else>>
+					I see. Well, now I know where I stand.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Try to find a middle ground'>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_carer, 'relationship', 1, 3)>>
+				<<run _enc.change(_parent, 'relationship', -3, -1)>>
+			<<else>>
+				<<run _enc.change(_carer, 'relationship', 1, 3)>>
+				<<run _enc.change(_parent, 'relationship', 1, 3)>>
+			<</if>>
+			You get them both to lower their voices, then ask each of them what they actually need. It takes some patience, but you end up with something they can both live with.
+			<br /><br />
+			<<if _own>>
+				<<=_name>> nods, grateful to be out of it. <<=_parentName>> agrees too, without much warmth.
+				<br /><br />
+				<<sayNpc _parent>>
+					I suppose that's fair. I just thought that with your own child, you'd have an opinion.
+				<</sayNpc>>
+			<<else>>
+				They shake on it, a little sheepishly, and <<=_parentName>> even manages to thank <<=_name>> for looking out for <<=_kid.name>>.
+			<</if>>
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Stay out of it'>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_parent, 'relationship', -4, -2)>>
+				You tell them they are both adults and they can sort it out themselves. <<=_parentName>> looks at you as if you had slapped <<=setup.pronounceWho(_parent)>>.
+				<br /><br />
+				<<sayNpc _parent>>
+					<<=ucfirst(setup.pronounceWhat(_kid))>> is your <<=_kidWord>>. But sure. We'll sort it out ourselves.
+				<</sayNpc>>
+			<<else>>
+				You tell them they are both adults and they can sort it out themselves. They look at you for a moment, then pick the argument back up where they left it, a little more quietly.
+			<</if>>
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

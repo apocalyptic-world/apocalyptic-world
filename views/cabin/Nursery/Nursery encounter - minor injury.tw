@@ -1,0 +1,115 @@
+:: Nursery encounter - minor injury [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A caretaker is patching up a small child. The player can hand over a bandage or leave them to find one. */
+<<set _cast = setup.nurseryEncounters.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _own = setup.nurseryEncounters.isOwnChild(_kid)>>
+<<set _injury = either(
+	{ how: 'tripped over the doorstep and came down hard on one knee', wound: 'The skin is scraped raw', spot: 'knee' },
+	{ how: 'found the one rough board on the bench the hard way', wound: 'The splinter is out of one finger, but the spot is bleeding', spot: 'finger' },
+	{ how: 'took a corner too fast during a game of chase', wound: 'One elbow is skinned and starting to bleed', spot: 'elbow' },
+	{ how: 'grabbed a broken toy by the sharp end', wound: 'There is a small cut across one thumb', spot: 'thumb' },
+	{ how: 'has been running around in shoes a size too small', wound: 'A blister on one heel has burst', spot: 'heel' }
+)>>
+
+You hear the crying before you are through the door. <<=_name>> is crouched by the cots in front of <<=_kid.name>>, who <<=_injury.how>>. <<=_injury.wound>>, and <<=_kidHe>> is holding it out for inspection with a trembling lip.
+<br /><br />
+<<sayNpc _carer>>
+	I know, I know. It stings. Let me have a look. Oh, you're being very brave.
+<</sayNpc>>
+<br />
+<<=_name>> dabs at the <<=_injury.spot>> with a damp cloth, then looks around for something to cover it with and comes up short. <<=ucfirst(_hisOrHer)>> eyes land on you, and <<=_heOrShe>> brightens.
+<br /><br />
+<<sayNpc _carer>>
+	Good timing. You wouldn't happen to have a bandage on you, would you? I hate to leave <<=_kidHim>> like this while I go dig through storage.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<if setup.cabinInventory.has('bandage')>>
+		<<link `'Hand ' + _himOrHer + ' a bandage'`>>
+			<<replace '#nce_choices'>>
+				<<run setup.cabinInventory.drop('bandage')>>
+				<<run setup.nurseryEncounters.change(_carer, 'relationship', 2, 4)>>
+				You pass <<=_himOrHer>> a bandage. <<=_name>> smooths it down over the <<=_injury.spot>> and gives it a gentle pat, and <<=_kid.name>> studies the result with wet eyes. The crying winds down to sniffles and then to nothing.
+				<br /><br />
+				<<sayNpc _carer>>
+					There. All fixed. Go on, show your friends.
+				<</sayNpc>>
+				<br />
+				<<=_kid.name>> runs off with the <<=_injury.spot>> held out in front like a medal. <<=_name>> watches <<=_kidHim>> go, then stands and gives you a warm smile.
+				<br /><br />
+				<<sayNpc _carer>>
+					Thank you. I know it's only a bandage, but you stopped for us, and that means a lot on a day like this.
+				<</sayNpc>>
+				<br />
+				[[Continue|Nursery]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div>Hand <<=_himOrHer>> a bandage [Need bandage]</div>
+	<</if>>
+	<<link `'Leave ' + _himOrHer + ' to find one'`>>
+		<<replace '#nce_choices'>>
+			<<set _hasSpare = setup.nurseryEncounters.storageHas('bandage')>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', -2, -1)>>
+			<<run setup.nurseryEncounters.change(_kid, 'happy', -2, -1)>>
+			<<run setup.nurseryEncounters.changeBond(_kid, -4, -2)>>
+			You tell <<=_himOrHer>> there should be some in storage. <<=_name>> waits a moment in case there is more, and when there isn't, the brightness goes out of <<=_hisOrHer>> face.
+			<br /><br />
+			<<sayNpc _carer>>
+				Right. Of course. I'll manage.
+			<</sayNpc>>
+			<br />
+			<<=ucfirst(_heOrShe)>> sits <<=_kid.name>> on the nearest cot, promises to be right back, and hurries out. The crying starts up again before <<=_heOrShe>> reaches the door.
+			<<if _own>>
+				<<=_kid.name>> looks over at you with <<=_kidHis>> <<=_injury.spot>> still held out, waiting for <<=_kidHis>> father to do something. After a while, <<=_kidHe>> stops looking.
+			<</if>>
+			<br /><br />
+			<<if _hasSpare>>
+				<<run setup.cabinInventory.drop('bandage')>>
+				It is some time before <<=_name>> returns with a bandage and gets it on. <<=ucfirst(_heOrShe)>> doesn't look your way again.
+			<<else>>
+				<<run setup.nurseryEncounters.change(_kid, 'happy', -5, -3)>>
+				<<run setup.nurseryEncounters.change(_kid, 'endurance', -2, -1)>>
+				<<run setup.nurseryEncounters.change(_carer, 'happy', -2, -1)>>
+				<<set _parents = setup.nurseryEncounters.parents(_kid)>>
+				<<for _parent range _parents>>
+					<<run setup.nurseryEncounters.change(_parent, 'relationship', -4, -2)>>
+					<<run setup.nurseryEncounters.change(_parent, 'happy', -4, -2)>>
+				<</for>>
+				<<set _otherParents = _parents.filter(p => p.id !== _carer.id).map(p => setup.displayName(p))>>
+				<<=_name>> comes back empty handed, jaw set, and tears a strip off an old blanket to tie around the <<=_injury.spot>>. It is a poor substitute. <<=_kid.name>> cries until <<=_kidHe>> wears <<=_kidHim>>self out, and spends the rest of the day curled up and sore.
+				<br /><br />
+				<<sayNpc _carer>>
+					<<if _parents.some(p => p.id === _carer.id)>>
+						There isn't a single bandage in this whole place. This is my child, and a rag is the best I can do. I don't know what you expect me to do when it's something worse.
+					<<else>>
+						There isn't a single bandage in this whole place. A rag is the best I can do. I don't know what you expect me to do when it's something worse.
+					<</if>>
+				<</sayNpc>>
+				<<if _otherParents.length>>
+					<br />
+					By evening, word has reached <<=_otherParents.join(' and ')>>, and the next time you cross paths you get a cold look for it.
+				<</if>>
+			<</if>>
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

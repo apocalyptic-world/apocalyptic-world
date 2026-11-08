@@ -122,7 +122,7 @@
 						<<run $('#rw_talk').hide(); $('#rw_go').hide()>>
 						<<=ucfirst(_rwShe)>> fought, but not for long. You tied <<=_rwHers>> wrists with <<=_rwHers>> own scarf and walked <<=_rwHer>> home in front of you. Nobody in the yard said a word as you took <<=_rwHer>> down to the basement.
 						<<run $guests.push(_rwNpc)>>
-						<<npcEnslave _rwNpc>>
+						<<npcEnslave _rwNpc 'punished'>>
 						<<set _rwNpc.sub = Math.min((_rwNpc.sub ?? 0) + 10, 100)>>
 						<<set _rwNpc.happy = Math.max(-100, (_rwNpc.happy ?? 0) - 20)>>
 						<<set $player.goodwill-->>
@@ -211,7 +211,7 @@ When it was over you cut the rope from <<=_rwHers>> wrists. <<=_rwNpc.name>> rub
 			<<run $('#rw_won_home').hide(); $('#rw_won_go').hide()>>
 			You checked the knots instead of cutting them. <<=ucfirst(_rwShe)>> understood before you said a word.
 			<<run $guests.push(_rwNpc)>>
-			<<npcEnslave _rwNpc>>
+			<<npcEnslave _rwNpc 'punished'>>
 			<<set _rwNpc.sub = Math.min((_rwNpc.sub ?? 0) + 10, 100)>>
 			<<set _rwNpc.happy = Math.max(-100, (_rwNpc.happy ?? 0) - 20)>>
 			<<set $player.goodwill-->>

@@ -1,0 +1,171 @@
+:: NPC appoint ward [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* The player asks a caretaker to give one of his children special attention, or changes an arrangement already in place. Opened from the NPC view. */
+<<set _care = setup.nurseryCare>>
+/* The NPC view works on $tmpGirl and saves it over the real record on the way out, so both have to be the same object here */
+<<if typeof $slaveId !== 'undefined'>>
+	<<set $slaves[$slaveId] = $tmpGirl>>
+<<else>>
+	<<set $guests[$guestId] = $tmpGirl>>
+<</if>>
+<<set _carer = $tmpGirl>>
+<<set _backPassage = (typeof $slaveId !== 'undefined') ? 'NPC view' : 'NPC view - guest'>>
+<<if _care.wardBlockedBy(_carer)>>
+	<<goto _backPassage>>
+<<else>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _current = _care.wardOf(_carer)>>
+<<set _pickBlocked = _care.wardPickBlockedBy(_carer)>>
+/* A caretaker who likes the player says yes as a favor. One who only obeys him says yes because he asked. */
+<<set _warm = (_carer.relationship ?? 0) >= _care.WARD_RELATIONSHIP>>
+
+You wait until <<=_name>> has a moment to <<=_himOrHer>>self and ask for a quiet word.
+<br /><br />
+<<if _current>>
+	<<set _currentIsTheirs = _current.family?.mother === _carer.id || _current.family?.father === _carer.id>>
+	<<you>>
+		I asked you to keep a special eye on <<=_current.name>>. I'd like to make a change to that arrangement.
+	<</you>>
+	<br />
+	<<if _warm>>
+		<<=_name>> glances across the room at <<=_current.name>>, then turns back to you and waits to hear the rest.
+	<<else>>
+		<<=_name>> gives a small nod, and if <<=_heOrShe>> has an opinion on the matter, <<=_heOrShe>> keeps it to <<=_himOrHer>>self.
+	<</if>>
+	<br /><br />
+	<div id="ncw_choices">
+		<<link `'Remove ' + _current.name + ' as ' + _hisOrHer + ' ward'`>>
+			<<run _care.clearWard(_carer)>>
+			<<replace '#ncw_choices'>>
+				<<you>>
+					You can stop giving <<=_current.name>> the extra attention. From now on, look after <<=setup.pronounceWho(_current)>> the same as the others.
+				<</you>>
+				<br />
+				<<sayNpc _carer>>
+					<<if _currentIsTheirs>>
+						Of course. <<=ucfirst(setup.pronounceWhat(_current))>>'s still mine, so I won't stop looking out for <<=setup.pronounceWho(_current)>>. But I'll treat <<=setup.pronounceWho(_current)>> the same as the rest while I'm in here.
+					<<elseif _warm>>
+						All right. I've gotten used to having <<=setup.pronounceWho(_current)>> at my elbow, but I understand. Don't worry, I won't stop caring just because you moved me along.
+					<<else>>
+						Understood. No more extra attention.
+					<</if>>
+				<</sayNpc>>
+				<br />
+				<strong>(<<=_current.name>> is no longer <<=_name>>'s ward.)</strong>
+				<br /><br />
+				<<link 'Continue'>><<goto _backPassage>><</link>>
+			<</replace>>
+		<</link>>
+		<<if _pickBlocked>>
+			<div>Assign a different child [<<=_pickBlocked>>]</div>
+		<<else>>
+			<<link `'Assign ' + _himOrHer + ' a different child'`>>
+				<<replace '#ncw_choices'>>
+					<<you>>
+						There's a different child I'd like you to give that attention to now.
+					<</you>>
+					<br />
+					<<sayNpc _carer>>
+						<<if _warm>>
+							I've gotten used to having <<=setup.pronounceWho(_current)>> at my elbow. Don't worry, I won't stop caring just because you moved me along. Who do you have in mind?
+						<<else>>
+							Whatever you think is best. Who should it be?
+						<</if>>
+					<</sayNpc>>
+					<br />
+					<<include 'NPC appoint ward - pick'>>
+				<</replace>>
+			<</link>>
+		<</if>>
+		<<link 'Never mind'>>
+			<<replace '#ncw_choices'>>
+				You change your mind and tell <<=_himOrHer>> it can wait for another day. <<=_name>> looks at you for a moment, then goes back to the kids.
+				<br /><br />
+				<<link 'Continue'>><<goto _backPassage>><</link>>
+			<</replace>>
+		<</link>>
+	</div>
+<<else>>
+	<<you>>
+		You look after all of them, and I know how much work that is. But I have children of my own in here, and I'd like you to give one of them some special attention. How they're eating, how they're growing, whether they're happy. I want someone keeping a closer watch.
+	<</you>>
+	<br />
+	<<if _warm>>
+		<<=_name>>'s face softens, and <<=_heOrShe>> smiles at you.
+		<br /><br />
+		<<sayNpc _carer>>
+			You don't have to explain that to me. Anyone would want the same. I'd be glad to. Who do you have in mind?
+		<</sayNpc>>
+	<<else>>
+		<<=_name>> straightens up and nods before you've quite finished.
+		<br /><br />
+		<<sayNpc _carer>>
+			Yes, of course. Whichever one you want. Just tell me who.
+		<</sayNpc>>
+	<</if>>
+	<br />
+	<div id="ncw_choices">
+		<<include 'NPC appoint ward - pick'>>
+	</div>
+<</if>>
+<</if>>
+
+
+:: NPC appoint ward - pick
+/* The list of children to choose from, included inside #ncw_choices by NPC appoint ward. */
+<<set _options = _care.wardCandidates(_carer)>>
+<<set _wardPick = _options.find(k => _care.wardHasRoom(k)).id>>
+<<for _i, _kid range _options>>
+	<<set _kidMother = _kid.family?.mother ? setup.getNpcById(_kid.family.mother) : null>>
+	<<set _kidHolders = _care.wardHolders(_kid)>>
+	<<set _kidOpen = _care.wardHasRoom(_kid)>>
+	<label @style="_kidOpen ? '' : 'opacity: 0.6'">
+		<<if _kidOpen>>
+			<<radiobutton "_wardPick" _kid.id autocheck>>
+		<</if>>
+		<span @class="'gender-' + setup.genderClass(_kid)"><<=_kid.name>></span>, age <<=setup.getAge(_kid)>><<if _kidMother && _kidMother.name>>, mother: <<=setup.displayName(_kidMother)>><</if>>
+		<<if _kidHolders.length>>
+			<small>(<<=_kidOpen ? 'currently' : 'already'>> in <<=_kidHolders.map(n => setup.displayName(n)).join(' and ')>>'s care)</small>
+		<</if>>
+	</label>
+	<br />
+<</for>>
+<br />
+<<link `'Ask ' + _himOrHer + ' to look after this child'`>>
+	<<set _chosen = _options.find(k => k.id === _wardPick)>>
+	<<set _otherHolder = _care.wardHolders(_chosen)[0]>>
+	<<set _ownChild = _chosen.family?.mother === _carer.id || _chosen.family?.father === _carer.id>>
+	<<run _care.setWard(_carer, _chosen)>>
+	<<replace '#ncw_choices'>>
+		You tell <<=_himOrHer>> who you mean. <<=_name>> looks across the room and finds <<=_chosen.name>> almost at once.
+		<br /><br />
+		<<sayNpc _carer>>
+			<<if _ownChild>>
+				<<=_chosen.name>>? You know I would have done that anyway. But I've been careful not to fuss over my own in front of the others, so it means a lot to hear you ask. Thank you.
+			<<elseif _warm>>
+				I'll look after <<=setup.pronounceWho(_chosen)>>. Give it a little while and you'll see the difference.
+			<<else>>
+				Understood. I'll see that <<=setup.pronounceWhat(_chosen)>> gets everything <<=setup.pronounceWhat(_chosen)>> needs.
+			<</if>>
+		<</sayNpc>>
+		<br />
+		<<if _otherHolder>>
+			<<=setup.displayName(_otherHolder)>> is already keeping watch over <<=_chosen.name>>, so <<=_name>> says the two of them will work out how to share it.
+			<br /><br />
+		<</if>>
+		<strong>(<<=_name>> will give <<=_chosen.name>> extra care.)</strong>
+		<br /><br />
+		<<link 'Continue'>><<goto _backPassage>><</link>>
+	<</replace>>
+<</link>>
+<<link 'Never mind'>>
+	<<replace '#ncw_choices'>>
+		You change your mind and tell <<=_himOrHer>> it can wait for another day. <<=_name>> looks at you for a moment, then goes back to the kids.
+		<br /><br />
+		<<link 'Continue'>><<goto _backPassage>><</link>>
+	<</replace>>
+<</link>>

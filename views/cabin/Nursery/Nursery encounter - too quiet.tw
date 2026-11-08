@@ -1,0 +1,118 @@
+:: Nursery encounter - too quiet [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* The day after the Too quiet mishap (js/nurseryMishaps.js): a caretaker owns up to it and the player decides how to handle it */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<set _incident = $player.nurseryCare.quietIncident>>
+<<if !_cast || !_incident>>
+	<<goto 'Nursery'>>
+<<else>>
+<<run delete $player.nurseryCare.quietIncident>>
+<<set _carer = _cast.carer>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _care = $player.nurseryCare>>
+<<set _kid = _cast.kid ?? null>>
+<<if _kid>>
+	<<set _kidHe = setup.pronounceWhat(_kid)>>
+	<<set _kidHim = setup.pronounceWho(_kid)>>
+	<<set _kidHis = setup.pronounceWhos(_kid)>>
+	<<set _defiant = setup.personality.has(_kid, 'careless') || setup.personality.has(_kid, 'confident')>>
+	<<set _mcCalled = setup.npc.mcName(_kid, true)>>
+<</if>>
+
+<<=_name>> spots you as you come in and crosses the room before you can say anything. <<=ucfirst(_heOrShe)>> looks like <<=_heOrShe>> didn't sleep much.
+<br /><br />
+<<sayNpc _carer>>
+	<<if _incident.kind === 'teen'>>
+		You've probably heard by now. <<=_kid.name>> got out last night. We didn't notice until well past midnight, and then we were up half the night looking. <<=ucfirst(_kidHe)>> was fine, just sitting out behind the woodpile. But it shouldn't have happened. Things had been so calm lately that we stopped checking the beds. That's on us.
+	<<elseif _incident.kind === 'group'>>
+		I owe you an apology about last night. The older ones stayed up for hours, whispering and giggling, and none of us went in to check. Things had been going so well that it didn't seem necessary. Now half of them are cranky and the little ones are copying them.
+	<<else>>
+		Last night was a mess. One of them woke up crying and woke the rest, and it took forever to settle them all again. We'd gotten a bit lax with the bedtime routine because it's been so easy lately. I should have known better.
+	<</if>>
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<if _kid>>
+		<<link `'Have a word with ' + _kid.name`>>
+			<<replace '#nce_choices'>>
+				<<run setup.nurseryBehavior.change(3, 5)>>
+				<<run _enc.change(_carer, 'sub', 2, 4)>>
+				You find <<=_kid.name>> at the long table, pretending to be busy, and sit down across from <<=_kidHim>>. You don't raise your voice. You just ask where <<=_kidHe>> went, and why, and whether <<=_kidHe>> thought about who would be out looking for <<=_kidHim>> in the dark.
+				<br /><br />
+				<<if _defiant>>
+					<<run _enc.change(_kid, 'relationship', -2, -1)>>
+					<<=_kid.name>> crosses <<=_kidHis>> arms. "I wasn't going anywhere. I just wanted some air without twenty people breathing on me." <<=ucfirst(_kidHe)>> holds your eye for a moment longer than <<=_kidHe>> should, then looks away. "Fine. I won't do it again."
+					<br /><br />
+					It isn't much of an apology, but the rest of the room was listening, and nobody else will be trying it any time soon.
+				<<else>>
+					<<run _enc.change(_kid, 'relationship', 1, 2)>>
+					<<=_kid.name>> stares at the table for a long time. "I didn't think anyone would notice," <<=_kidHe>> says finally. "I just wanted to be somewhere quiet for a bit. I didn't mean for everyone to get in trouble. Sorry, <<=_mcCalled>>."
+					<br /><br />
+					You tell <<=_kidHim>> that next time, <<=_kidHe>> can ask. <<=ucfirst(_kidHe)>> nods, looking more relieved than anything, and the rest of the room settles once they see it's been dealt with.
+				<</if>>
+				<br /><br />
+				[[Continue|Nursery]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<elseif _incident.kind === 'group'>>
+		<<link 'Have a word with the older children'>>
+			<<replace '#nce_choices'>>
+				<<run setup.nurseryBehavior.change(2, 4)>>
+				<<run _enc.change(_carer, 'sub', 2, 4)>>
+				You gather the older children at one end of the room. They know what this is about before you start, and most of them find something interesting to look at on the floor. You keep it short: lights-out means lights-out, the little ones look up to them, and you'd like them to remember it.
+				<br /><br />
+				There is some shuffling and a few mumbled apologies. One of them says, "Sorry," loudly enough to count for the rest, and the group breaks up a good deal quieter than it was.
+				<br /><br />
+				[[Continue|Nursery]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<link `'Tell ' + _himOrHer + ' it could have happened to anyone'`>>
+		<<replace '#nce_choices'>>
+			<<run _enc.change(_carer, 'happy', 3, 5)>>
+			<<run _enc.change(_carer, 'relationship', 2, 3)>>
+			<<you>>
+				It's a good sign that things were calm enough for you to relax. Nobody got hurt, and you'll catch it next time. Don't be too hard on yourself.
+			<</you>>
+			<br />
+			<<=_name>>'s shoulders come down, and <<=_heOrShe>> lets out a breath <<=_heOrShe>> seems to have been holding since last night.
+			<br /><br />
+			<<sayNpc _carer>>
+				Thank you. I was sure you'd be angry. I'll keep a closer eye on them from now on, I promise.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Tighten up the bedtime checks'>>
+		<<replace '#nce_choices'>>
+			<<run setup.nurseryBehavior.change(4, 6)>>
+			<<run _enc.change(_carer, 'sub', 4, 8)>>
+			<<run _enc.change(_carer, 'happy', -2, -1)>>
+			<<you>>
+				From now on, somebody walks the beds after lights-out, and again before you turn in. Every night, however quiet it's been.
+			<</you>>
+			<br />
+			<<=_name>> nods. It means one more thing on a long list, and <<=_heOrShe>> can't quite hide that, but <<=_heOrShe>> doesn't argue.
+			<br /><br />
+			<<sayNpc _carer>>
+				You're right. I'll set up a rota with the others tonight.
+			<</sayNpc>>
+			<br />
+			Word gets around the room quickly that bedtime is about to get stricter, and the children are on their best behavior for the rest of the day.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
