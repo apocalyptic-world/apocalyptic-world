@@ -1,0 +1,135 @@
+:: Nursery encounter - visiting parent [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A caretaker brings a child to see their parents at the guest house. The player can join in, and it matters more if the child is his. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _mother = _cast.mother ?? null>>
+<<set _father = _cast.father ?? null>>
+<<set _parents = [_mother, _father].filter(Boolean)>>
+<<set _parent = _parents[0]>>
+<<set _name = setup.displayName(_carer)>>
+<<set _parentNames = _enc.names(_parents)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _age = setup.getAge(_kid)>>
+<<set _own = _enc.isOwnChild(_kid)>>
+<<set _parentWord = _mother && _father ? 'parents' : _mother ? 'mom' : 'dad'>>
+/* These happen whatever the player does */
+<<set _visitEffects = function () {
+	_parents.forEach(npc => {
+		_enc.change(npc, 'happy', 2, 5);
+		_enc.changeBetween(_carer, npc, 2, 4);
+	});
+	_enc.change(_kid, 'happy', 2, 5);
+}>>
+
+<<if _age < 2>>
+	You are crossing the guest house when <<=_name>> comes through the door with <<=_kid.name>> on one hip, looking for <<=_parentNames>>. <<=ucfirst(setup.pronounceWhat(_parent))>> is on <<=setup.pronounceWhos(_parent)>> feet with <<=setup.pronounceWhos(_parent)>> arms out before <<=_name>> has made it halfway across the room.
+	<br /><br />
+	<<sayNpc _carer>>
+		Somebody has been fussing for you all day, and I thought we could both use the walk. There you go. See? I told you <<=_parentWord === 'parents' ? 'they were' : (_parentWord === 'mom' ? 'she was' : 'he was')>> here.
+	<</sayNpc>>
+	<br />
+	<<=_kid.name>> grabs a fistful of <<=setup.displayName(_parent)>>'s shirt and goes quiet at once.
+<<elseif _age < 13>>
+	You are crossing the guest house when the door bangs open and <<=_kid.name>> runs in ahead of <<=_name>>, who is doing <<=setup.pronounceWhos(_carer)>> best to keep up.
+	<br /><br />
+	<<set _mom = _age < 13 ? 'mommy' : 'mom'>>
+	<<set _dad = _age < 13 ? 'daddy' : 'dad'>>
+	<<set _afterClass = _enc.currentSlot() === 'afterSchool' && _age >= 5 && ($player.quests.school_built ?? false)>>
+	"I found <<=_parentWord === 'parents' ? _mom + ' and ' + _dad : (_parentWord === 'mom' ? _mom : _dad)>>!" <<=_kidHe>> shouts, and throws <<=_kidHim>>self at <<=_parentNames>>.
+	<br /><br />
+	<<sayNpc _carer>>
+		<<=ucfirst(_kidHe)>> has been asking to come over since <<=_afterClass ? 'school let out' : 'breakfast'>>. We finished up early, so I said we could stop by for a little while.
+	<</sayNpc>>
+<<else>>
+	You are crossing the guest house when <<=_name>> comes in with <<=_kid.name>>, who is trying to look as though this wasn't <<=_kidHis>> idea. <<=_parentNames>> <<=_parents.length > 1 ? 'look up and break' : 'looks up and breaks'>> into a smile.
+	<br /><br />
+	<<sayNpc _carer>>
+		I had an errand this way, and this one offered to carry for me. I don't think it was the carrying <<=_kidHe>> had in mind.
+	<</sayNpc>>
+	<br />
+	<<=_kid.name>> rolls <<=_kidHis>> eyes and sits down anyway, close enough for <<=_parentNames>> to reach over and muss <<=_kidHis>> hair.
+<</if>>
+<br /><br />
+<<if _own>>
+	<<=_kid.name>> is your own <<=[0, 2].includes(_kid.gender) ? 'daughter' : 'son'>>. <<=setup.displayName(_parent)>> catches your eye across the room, and <<=setup.pronounceWhat(_parent)>> nods toward the empty place beside <<=setup.pronounceWho(_parent)>>.
+<<else>>
+	<<=_name>> notices you standing there and gives you a little wave, leaving room on the bench if you care to sit.
+<</if>>
+<br /><br />
+
+<div id="nce_choices">
+	<<link 'Sit down and join them (Uses 30 minutes)'>>
+		<<replace '#nce_choices'>>
+			<<run _visitEffects()>>
+			<<addmins 30>>
+			<<run [_carer, _kid].concat(_parents).forEach(npc => _enc.change(npc, 'relationship', 2, 3))>>
+			<<if _own>>
+				<<run _enc.change(_kid, 'relationship', 2, 4)>>
+				<<if _mother>><<run _enc.change(_mother, 'relationship', 2, 4)>><</if>>
+			<</if>>
+			You put aside what you came to do and sit down with them. For half an hour nobody needs a decision from you, and nobody is asking about food or fuel or who is on watch tonight.
+			<br /><br />
+			<<if _age < 2>>
+				<<=_kid.name>> is passed into your arms at some point, and studies your face with enormous suspicion before falling asleep on your chest.
+			<<elseif _age < 13>>
+				<<=_kid.name>> tells you a long story with several parts missing, and you ask all the right questions. By the end <<=_kidHe>> has climbed onto the bench beside you as if <<=_kidHe>> has always sat there.
+			<<else>>
+				<<=_kid.name>> doesn't say much at first, but you ask what <<=_kidHe>> has been up to and actually listen to the answer. By the end <<=_kidHe>> is arguing with you about it, and enjoying <<=_kidHim>>self.
+			<</if>>
+			<br /><br />
+			<<if _own>>
+				<<=setup.displayName(_parent)>> leans into your shoulder and doesn't say anything for a while.
+				<br /><br />
+				<<sayNpc _parent>>
+					This is the part I like to remember when this life gets difficult. Thank you for staying, and reminding me of the father you can be for <<=_kidHim>>.
+				<</sayNpc>>
+			<<else>>
+				<<=_parentNames>> and <<=_name>> both look a little surprised at how easily you fit in.
+				<br /><br />
+				<<sayNpc _carer>>
+					I'll have to get this one back soon. But I'm glad you sat down. People don't see this side of you often enough.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to it'>>
+		<<replace '#nce_choices'>>
+			<<run _visitEffects()>>
+			<<if _own>>
+				<<run _enc.change(_kid, 'relationship', -5, -5)>>
+				<<run _enc.change(_kid, 'happy', -5, -5)>>
+				<<if _mother>><<run _enc.change(_mother, 'relationship', -5, -5)>><</if>>
+				You tell them you have too much to do and head for the door. The smile on <<=setup.displayName(_parent)>>'s face goes away slowly.
+				<br /><br />
+				<<sayNpc _parent>>
+					Of course. You're busy. You always are.
+				<</sayNpc>>
+				<br />
+				<<if _age >= 2>>
+					<<=_kid.name>> watches you go and doesn't say anything. <<=_name>> pulls <<=_kidHim>> a little closer and starts talking about something else.
+				<<else>>
+					<<=_kid.name>> reaches a hand after you, then forgets about it. <<=setup.displayName(_parent)>> doesn't.
+				<</if>>
+			<<else>>
+				You nod to them and leave them to their visit. Behind you, <<=_name>> settles on the bench while <<=_parentNames>> <<=_parents.length > 1 ? 'fuss' : 'fusses'>> over <<=_kid.name>>, and the room feels a little warmer for it.
+			<</if>>
+			<br /><br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

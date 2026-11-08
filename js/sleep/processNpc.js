@@ -28,7 +28,7 @@ setup.sleep.processNpc = function(npc, opts) {
             : npc.name + ' was missing in the morning, ' + setup.pronounceWhat(npc) + ' probably decided to leave this place.'
                 + (tracks ? ' <em>' + ucfirst(setup.pronounceWhos(npc)) + ' tracks were still fresh.</em>' : '')
         );
-        opts.pendingRemovals.push({ index: npcIndex });
+        opts.pendingRemovals.push({ index: npcIndex, departure: betrayalKind && betrayalKind !== 'note' ? 'betrayed' : 'walked_out' });
         opts.shouldSkip = true;
         return;
     }
@@ -204,7 +204,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 if (!sv.game.streetsKilledNpc) {
                     sv.game.streetsKilledNpc = Object.assign(clone(npc), { _killedDay: sv.game.day });
                 }
-                opts.pendingRemovals.push({ index: npcIndex });
+                opts.pendingRemovals.push({ index: npcIndex, departure: 'killed' });
                 opts.shouldSkip = true;
                 return;
             }
@@ -386,7 +386,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.settlements.logEvent(captor, 'Caught one of the player\'s people hunting women near their land.');
                 setup.settlements.save(setup.settlements.getAll());
                 setup.sleepMessages.addMain(npc.name + ' didn\'t come home from the hunt. She was taken by ' + captor.name + '.');
-                opts.pendingRemovals.push({ index: npcIndex, captured: true });
+                opts.pendingRemovals.push({ index: npcIndex, departure: 'captured' });
                 opts.shouldSkip = true;
                 return;
             }
@@ -426,7 +426,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.settlements.logEvent(captor, 'Captured one of the player\'s people during scavenging.');
                 setup.settlements.save(setup.settlements.getAll());
                 setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging. She was taken by ' + captor.name + '.');
-                opts.pendingRemovals.push({ index: npcIndex, captured: true });
+                opts.pendingRemovals.push({ index: npcIndex, departure: 'captured' });
                 opts.shouldSkip = true;
                 return;
             }

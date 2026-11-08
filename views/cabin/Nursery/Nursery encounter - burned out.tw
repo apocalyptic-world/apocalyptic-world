@@ -1,0 +1,73 @@
+:: Nursery encounter - burned out [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A caretaker is losing the fight with the workload. Odds come from the same numbers as burning out overnight. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+
+The noise reaches you first. Two children are fighting over a blanket, one is crying for no reason anyone can find, and a bunch of toys are scattered on the floor. <<=_name>> is in the middle of the room with a basket of washing on one hip and a toddler on the other, turning from one problem to the next without getting to any of them.
+<br /><br />
+<<=ucfirst(_heOrShe)>> sees you and tries to pull <<=_himOrHer>>self together. It doesn't quite work. <<=ucfirst(_hisOrHer)>> eyes are red, and <<=_hisOrHer>> voice is thin.
+<br /><br />
+<<sayNpc _carer>>
+	I've got it. I'm fine. I just need a minute, and there aren't any, and every time I fix one thing... I'm sorry. It's fine. I've got it.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<link 'Roll up your sleeves and help (Uses 1 hour)'>>
+		<<replace '#nce_choices'>>
+			<<addmins 60>>
+			<<run _enc.change(_carer, 'relationship', 4, 6)>>
+			<<run setup.nurseryBehavior.change(5, 10)>>
+			You take the basket out of <<=_hisOrHer>> hands, gather up the scattered toys, and tell the blanket fighters that they now each have half a chore. For the next hour you do whatever is in front of you. It isn't glamorous, and you get kicked once, but the room slowly comes back under control.
+			<br /><br />
+			<<=_name>> eventually sits down on the edge of a cot and puts <<=_hisOrHer>> face in <<=_hisOrHer>> hands for a moment. When <<=_heOrShe>> looks up, <<=_heOrShe>> is almost smiling.
+			<br /><br />
+			<<sayNpc _carer>>
+				Nobody's ever done that before. Just come in and helped. I won't forget it.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Berate ' + _himOrHer + ' for letting things get out of control'`>>
+		<<replace '#nce_choices'>>
+			<<run _enc.change(_carer, 'sub', 5, 8)>>
+			<<run _enc.change(_carer, 'happy', -10, -5)>>
+			<<run setup.nurseryBehavior.change(3, 5)>>
+			You tell <<=_himOrHer>>, in front of everyone, that this is exactly what <<=_heOrShe>> is here to prevent, and that you expect better. The room goes quiet. The two children drop the blanket, and even the crying stops.
+			<br /><br />
+			<<=_name>> stands very still until you have finished, and then nods with <<=_hisOrHer>> eyes on the floor.
+			<br /><br />
+			<<sayNpc _carer>>
+				Yes. You're right. I'm sorry. It won't happen again.
+			<</sayNpc>>
+			<br />
+			The children give <<=_himOrHer>> no trouble for the rest of the shift. <<=ucfirst(_heOrShe)>> doesn't look at you again before you go.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Do nothing'>>
+		<<replace '#nce_choices'>>
+			<<run _enc.change(_carer, 'happy', -6, -4)>>
+			<<run setup.nurseryBehavior.change(-5, -3)>>
+			You tell yourself <<=_heOrShe>> said <<=_heOrShe>> has it, and you go on about your business. Behind you, the noise picks up again. You can hear <<=_name>>'s voice over the top of it for a while, and then you can't.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

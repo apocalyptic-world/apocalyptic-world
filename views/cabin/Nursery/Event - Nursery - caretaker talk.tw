@@ -1,0 +1,117 @@
+:: Event - Nursery - caretaker talk [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A guest suggests full-time caretakers. Triggered from Nursery; the player can set it up now or later from the Nursery. */
+<<set _cast = setup.nurseryCare.talkCast()>>
+<<if _cast.length < 1>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set $player.quests.nursery_care_talk = true>>
+<<addmins 15>>
+
+<<set _npc = _cast.random()>>
+<<set _role = setup.nurseryCare.talkRole(_npc)>>
+<<set _name = setup.displayName(_npc)>>
+<<set _heOrShe = setup.pronounceWhat(_npc)>>
+<<set _hisOrHer = setup.pronounceWhos(_npc)>>
+<<set _himOrHer = setup.pronounceWho(_npc)>>
+<<set _kid = setup.nurseryCare.kids().find(k => k.family?.[_role] === _npc.id)>>
+<<set _watching = _kid ? _kid.name : 'the children'>>
+<<set _count = setup.nurseryCare.kids().length>>
+
+You have barely stepped through the nursery door when <<=_name>> looks up from the far corner, where <<=_heOrShe>> is folding a blanket with one eye on <<=_watching>>. <<=ucfirst(_heOrShe)>> drops the blanket on a cot and comes to meet you.
+<br /><br />
+<<sayNpc _npc>>
+	Do you have a minute? It's about all of this.
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> tips <<=_hisOrHer>> head at the room behind <<=_himOrHer>>. There are <<=_count>> children under this roof now, and it sounds like every one of them has something to say.
+<br /><br />
+<<sayNpc _npc>>
+	<<if _role === 'mother' && _npc.assignedTo === 'church'>>
+		Up to now, we mothers have been sharing the load, and I'm grateful for all of the support my sisters in the church have provided.
+	<<elseif _role === 'mother'>>
+		Up to now, we mothers have been sharing the load.
+	<<elseif _role === 'father'>>
+		Up to now, the parents of the household have been sharing the load.
+	<<elseif _role === 'woman' && _npc.assignedTo === 'church'>>
+		Up to now, the women of the household have been sharing the load, and under Eve, the sisters have provided our support to care for the little lambs.
+	<<elseif _role === 'woman'>>
+		Up to now, the women of the household have been sharing the load. Even if they're not our own they're precious, so we all play our part.
+	<<else>>
+		Up to now, the adults of the household have been sharing the load. Even if they're not our own, the blankets won't fold themselves.
+	<</if>>
+	Whoever has a free hour between jobs comes by and pitches in. That worked when there were only a few of them. It's not working anymore.
+<</sayNpc>>
+<br />
+<<you>>
+	What do you need?
+<</you>>
+<br />
+<<=ucfirst(_heOrShe)>> has clearly been waiting for you to ask, and the words come out in a rush. What the nursery needs is someone here all day, as a real assignment, and not just another chore squeezed in between shifts.
+<br /><br />
+<<sayNpc _npc>>
+	<<if _count < 20>>
+		One or two people should be enough for now.
+	<<else>>
+		With this many children, it could take several people before long.
+	<</if>>
+	Someone who knows every child's name, and notices when one of them is struggling.
+<</sayNpc>>
+<br />
+Behind <<=_himOrHer>>, one of the children has claimed the abandoned blanket and is now wearing it. <<=_name>> glances back, and <<=_hisOrHer>> voice softens.
+<br /><br />
+<<sayNpc _npc>>
+	It would be good for them. They'd get real care, and an early start on things they'll need to know. Kids who grow up that way turn into people this settlement can count on. And the parents would get more out of the time they do have with them, instead of showing up tired and spending it putting out fires.
+<</sayNpc>>
+<br />
+You look around the room. It isn't only a matter of the kids. Half of the people you pass in the settlement have someone in here, and it would be one less thing pulling them apart.
+<br /><br />
+<<you>>
+	And what would they need, besides people?
+<</you>>
+<br />
+<<sayNpc _npc>>
+	Supplies. Toys to keep them busy, and snacks to keep them healthy and on their best behavior. It doesn't have to be much at first. A little food, some wood and glue to make and fix things, and a plush or something for the little ones to fight over.
+<</sayNpc>>
+<br />
+
+<<set _missing = setup.nurseryCare.missingSupplies()>>
+<div id="nc_talk_choices">
+	<<if _missing.length < 1>>
+		<div id="nc_talk_yes">
+			<<linkreplace 'Set it up (Uses 1 food, 1 glue, 1 wood and 1 plush)'>>
+				<<run $('#nc_talk_later').hide()>>
+				<<run setup.nurseryCare.activate()>>
+				You agree, and dig out the supplies to get them started. <<=_name>> lets out a long breath, and looks as if someone has lifted a heavy pack off <<=_hisOrHer>> shoulders.
+				<br /><br />
+				<<sayNpc _npc>>
+					Thank you. Really. Just give them a towel and tell them where to report. They'll work it out from there.
+				<</sayNpc>>
+				<br />
+				<strong>(You can now assign adult guests and slaves as nursery caretakers. Each one needs a towel.)</strong>
+				<br /><br />
+				[[Continue|Nursery]]
+			<</linkreplace>>
+		</div>
+	<<else>>
+		<div>Set it up [Need <<=_missing.join(', ')>>]</div>
+	<</if>>
+	<div id="nc_talk_later">
+		<<linkreplace `'Tell ' + _himOrHer + ' you will think about it'`>>
+			<<run $('#nc_talk_yes').hide()>>
+			You tell <<=_himOrHer>> it's a lot to take on right now, and that you need to think it over.
+			<br /><br />
+			<<sayNpc _npc>>
+				I understand. We'll keep managing, the way we have been. Just don't forget about us.
+			<</sayNpc>>
+			<br />
+			<<=ucfirst(_heOrShe)>> goes back to <<=_watching>> and the unfolded blanket.
+			<br /><br />
+			<strong>(You can set this up at any time from the nursery.)</strong>
+			<br /><br />
+			[[Continue|Nursery]]
+		<</linkreplace>>
+	</div>
+</div>
+<</if>>

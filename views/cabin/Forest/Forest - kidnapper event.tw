@@ -43,9 +43,9 @@ They had maybe a six-hour head start. If you move now, you might still find the 
         <<set _kidnapped.sick = {days: randomInteger(5, 10), desc: 'Exhausted and injured', id: 'exhaustion'}>>
         <<if _kidnapped.virgin>><<run setup.npc.addHistory(_kidnapped, 'virgin_lost')>><</if>>
         <<set _kidnapped.virgin = false>>
-        <<set _kidnapped.sexStats ??= {}>>
-        <<set _kidnapped.sexStats.pussy = (_kidnapped.sexStats.pussy ?? 0) + randomInteger(3, 8)>>
-        <<set _kidnapped.sexStats.bj = (_kidnapped.sexStats.bj ?? 0) + randomInteger(2, 5)>>
+        <<set _kidnapped.statsSex ??= {}>>
+        <<set _kidnapped.statsSex.pussy = (_kidnapped.statsSex.pussy ?? 0) + randomInteger(3, 8)>>
+        <<set _kidnapped.statsSex.bj = (_kidnapped.statsSex.bj ?? 0) + randomInteger(2, 5)>>
         <<if setup.pregnancyChance(_kidnapped)>>
             <<set _kidnapped.pregnancy = 0>>
             <<set _kidnapped.pregnancy_father = 'unknown'>>
@@ -53,7 +53,7 @@ They had maybe a six-hour head start. If you move now, you might still find the 
         <strong>(<<=setup.displayName(_kidnapped)>>: Happy −30, Relationship −25, sick <<=_kidnapped.sick.days>> days)</strong>
     <<else>>
         <<=setup.displayName(_kidnapped)>> never came back.
-        <<guestRemove $forestKidnapEvent>>
+        <<guestLeft $forestKidnapEvent 'lost'>>
     <</if>>
     <<set $forestKidnapEvent = null>>
     <br /><br />

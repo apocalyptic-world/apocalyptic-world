@@ -73,6 +73,7 @@ setup.npcImport = {
         delete copy.noBed;
         delete copy.waitingForBed;
         delete copy.coldSnapOuting;
+        delete copy.nurseryCare;
 
         // Fields older saves may lack (onSaveLoad.js only fixes up the save being loaded)
         copy.id ??= setup.generateUniqueKey(copy);

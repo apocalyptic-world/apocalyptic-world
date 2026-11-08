@@ -27,6 +27,7 @@ Let me take a look... I am ready to pay 20 caps for one.
 					  Are you sure you want to sell <<=(_nursery.gender ? 'him' : 'her')>>?
 					  <br />
 					  <<link 'Yes' 'Event: Baby merchant sell'>>
+						  <<run setup.relationshipBetween.reactToChildSold(_nursery)>>
 						  <<run $nursery.splice(_nurseryI, 1)>>
 						  <<dialogclose>>
 						  <<set $player.goodwill -= 2>>
@@ -60,6 +61,7 @@ Let me take a look... I am ready to pay 20 caps for one.
 					  Are you sure you want to sell <<=(_slave.gender ? 'him' : 'her')>>?
 					  <br />
 					  <<link 'Yes' 'Event: Baby merchant sell'>>
+						  <<run setup.relationshipBetween.reactToChildSold(_slave)>>
 						  <<run $slaves.splice(_slaveI, 1)>>
 						  <<dialogclose>>
 						  <<set $player.goodwill -= 2>>
@@ -94,6 +96,7 @@ Let me take a look... I am ready to pay 20 caps for one.
 					  <br />
 					  <<link 'Yes' 'Event: Baby merchant sell'>>
 						  <<assignedTo _guest 'none'>>
+						  <<run setup.relationshipBetween.reactToChildSold(_guest)>>
 						  <<guestRemove _guestI>>
 						  <<dialogclose>>
 						  <<set $player.goodwill -= 2>>

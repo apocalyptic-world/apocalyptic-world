@@ -44,12 +44,6 @@
 	                <<set _nursery.stats[_skillJob] += randomInteger(1,3) >>
                 <</if>>
 
-                <<if (_nursery.stats[_skillJob] ?? 0) >= 100 && !(_nursery.skills ?? []).includes(_learnWhat)>>
-                    <<run _nursery.skills.push(_learnWhat)>>
-                    /* proud parents (+5 happy) and the teacher's commendation (+3 happy) */
-                    <<set _proudText = setup.eveningSchool.proudParents(_nursery, _teacher)>>
-                    <<run setup.sleepMessages.addJob('<span class="skill">' + _nursery.name + ' learned the ' + _learnWhat + ' skill' + _proudText + '</span>', 'school')>>
-                <</if>>
             <</if>>
 
             <<if (_nursery.teachAdvStudy ?? 0) > 0 >>
@@ -58,6 +52,10 @@
 
         <</for>>
     <</if>>
+
+    /* Anyone at 100+ learns the skill, including children the player tutored past it today.
+       Proud parents get +5 happy and the teacher's commendation +3. */
+    <<run setup.nurseryHelp.graduate(_hasTeacher ? _teacher : null)>>
 
     /* Evening school: adult guests and slaves (see setup.eveningSchool.nightlyLearning) */
     <<run setup.eveningSchool.nightlyLearning()>>

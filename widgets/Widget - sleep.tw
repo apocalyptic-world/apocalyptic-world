@@ -192,6 +192,7 @@
 
 /* Capture tonight's evening class (attendance, drunk) before processNpc resets it; read by job output and sleepSchool */
 <<run setup.eveningSchool.beginNight()>>
+<<run setup.slumberParty.beginNight()>>
 <<set _sleepNpcOpts = { type: 'slave', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false }>>
 <<for _i to 0; _i lt $slaves.length; _i++>>
 		<<set _npc = $slaves[_i]>>
@@ -356,7 +357,7 @@
 
 				<<if $guests[_guestI].food <= -20>>
 					<<run setup.sleepMessages.addMain('<span class="left">' + _npc.name + ' left because you don\'t not enough food!</span>')>>
-					<<guestLeft _guestI>>
+					<<guestLeft _guestI 'neglected'>>
 					<<set _guestI-->>
 					<<continue>>
 				<<elseif $guests[_guestI].food <= 10>>
@@ -394,12 +395,12 @@
 
 // Deferred guest removals — reverse order preserves lower indices
 <<for _remI = _sleepGuestOpts.pendingRemovals.length - 1; _remI >= 0; _remI-->>
-	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index _sleepGuestOpts.pendingRemovals[_remI].captured>>
+	<<guestLeft _sleepGuestOpts.pendingRemovals[_remI].index _sleepGuestOpts.pendingRemovals[_remI].departure>>
 <</for>>
 /* Newborns without a bed: they get one once there is room again; otherwise their mothers get upset and guest mothers leave with them */
 <<set _bedlessLeaving = setup.guestRoom.nightlyBedless()>>
 <<for _blI = 0; _blI < _bedlessLeaving.length; _blI++>>
-	<<guestLeft _bedlessLeaving[_blI]>>
+	<<guestLeft _bedlessLeaving[_blI] 'neglected'>>
 <</for>>
 // Resolve scavenging-didn't-return to a post-removal index via guest id
 <<if _sleepGuestOpts.scavengingDidntReturnId>>
@@ -474,6 +475,16 @@
 <</for>>
 
 <<for _charI, _char range $characters>>
+	<<if setup.npc.isLivingCharacter($characters[_charI])>>
+		// Birthday
+		<<if setup.npc.isBirthday($characters[_charI])>>
+			<<run setup.sleepMessages.add('<strong>' + $characters[_charI].name + '</strong> has a birthday today (turning <strong>' + setup.getAge($characters[_charI]) + '</strong>)! Favorite gift(s): <strong>' + ($characters[_charI].likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
+		// Anniversary
+		<<if setup.npc.currentMarriage($characters[_charI])?.with === 'mc' && setup.npc.isAnniversary($characters[_charI])>>
+			<<run setup.sleepMessages.add('Today is the <strong>' + setup.npc.yearsMarried($characters[_charI]) + '-year</strong> wedding anniversary between <strong>you</strong> and <strong>' + $characters[_charI].name + '</strong>! Favorite gift(s): <strong>' + ($characters[_charI].likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
+	<</if>>
 	<<if typeof $characters[_charI].quests !== 'undefined'>>
 		<<set $characters[_charI].talked = false>>
 		<<set $characters[_charI].milked to false>>

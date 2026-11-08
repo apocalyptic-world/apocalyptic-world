@@ -19,7 +19,90 @@ setup.relationshipBetween = {
         return false;
     },
 
-    increaseByParty: function() 
+    /* A like above this makes someone a close friend */
+    CLOSE_FRIEND: 50,
+
+    /* What friends lose when a guest leaves, as [friend, close friend]. happy is their happiness, trust their relationship with the MC. */
+    departures: {
+        killed:         { happy: [50, 80] },
+        handed_over:    { happy: [50, 80], trust: [25, 50] },
+        lost:           { happy: [40, 65] },
+        thrown_out:     { happy: [25, 40] },
+        betrayed:       { happy: [20, 35] },
+        neglected:      { happy: [20, 35] },
+        captured:       { happy: [15, 30] },
+        marriage_ended: { happy: [15, 30] },
+        walked_out:     { happy: [10, 20] },
+        punished:       { happy: [10, 20] }, // a basement move her own actions earned
+        moved:          { happy: [0, 5] },
+        already_counted: { happy: [0, 0] }   // left with someone else, see reactToCoupleDeparture
+    },
+
+    /* Happiness change for friends when a captured guest's fate is settled, as [friend, close friend]. captured + abandoned adds up to killed. */
+    CAPTURE_RESCUED: [15, 30],
+    CAPTURE_ABANDONED: [35, 50],
+
+    /* What a mother loses when her child is sold */
+    CHILD_SOLD_HAPPY: 100,
+    CHILD_SOLD_RELATIONSHIP: 100,
+
+    /* Everyone on good terms with this NPC, as { npc, like }. Scores are per direction, so this reads what each of them thinks of her, not what she thinks of them. */
+    friendsOf: function(target) {
+        const sv = variables();
+        const people = [...(sv.slaves ?? []), ...(sv.guests ?? []), ...(sv.nursery ?? []), ...Object.values(sv.characters ?? {})];
+        return people
+            .filter(person => person.id !== target.id && (person.relationshipBetween?.stats?.[target.id] ?? 0) > 0)
+            .map(person => ({ npc: person, like: person.relationshipBetween.stats[target.id] }));
+    },
+
+    /* Friends react to one guest or several leaving; departure is a key of departures. Leaving together is one event: each friend reacts once, by her closer tie. */
+    reactToDeparture: function(targets, departure) {
+        const leaving = [].concat(targets).filter(Boolean);
+        const reaction = this.departures[departure] ?? this.departures.walked_out;
+        const closest = new Map();
+        for (const target of leaving) {
+            for (const friend of this.friendsOf(target)) {
+                if (!leaving.some(person => person.id === friend.npc.id)) {
+                    closest.set(friend.npc, Math.max(closest.get(friend.npc) ?? 0, friend.like));
+                }
+            }
+        }
+        for (const [npc, like] of closest) {
+            const tier = like > this.CLOSE_FRIEND ? 1 : 0;
+            npc.happy = Math.max(-100, (npc.happy ?? 0) - reaction.happy[tier]);
+            if (reaction.trust) {
+                npc.relationship = Math.max(-100, (npc.relationship ?? 0) - reaction.trust[tier]);
+            }
+        }
+    },
+
+    /* A couple leaving together. Slave spouses are left out, as slave removals have no impact. Remove each of them afterwards with 'already_counted'. */
+    reactToCoupleDeparture: function(husband, wife, departure) {
+        const guests = variables().guests ?? [];
+        this.reactToDeparture([husband, wife].filter(npc => guests.some(guest => guest.id === npc?.id)), departure);
+    },
+
+    /* Friends react once a captured guest's fate is settled */
+    reactToCaptureResolved: function(target, rescued) {
+        for (const friend of this.friendsOf(target)) {
+            const tier = friend.like > this.CLOSE_FRIEND ? 1 : 0;
+            const change = rescued ? this.CAPTURE_RESCUED[tier] : -this.CAPTURE_ABANDONED[tier];
+            friend.npc.happy = Math.max(-100, Math.min(100, (friend.npc.happy ?? 0) + change));
+        }
+    },
+
+    /* The mother of a child sold to the baby merchant, if she is still around */
+    reactToChildSold: function(child) {
+        const motherId = child?.family?.mother;
+        const mother = motherId && motherId !== 'mc' ? setup.getNpcById(motherId) : null;
+        if (!mother) {
+            return;
+        }
+        mother.happy = Math.max(-100, (mother.happy ?? 0) - this.CHILD_SOLD_HAPPY);
+        mother.relationship = Math.max(-100, (mother.relationship ?? 0) - this.CHILD_SOLD_RELATIONSHIP);
+    },
+
+    increaseByParty: function()
     {
         for (let _guestI in this.guests) {
             let _guest = this.guests[_guestI];

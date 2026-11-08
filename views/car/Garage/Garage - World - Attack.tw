@@ -173,7 +173,7 @@
 
 <<set _allCasualties = _killed.concat(_captured).sort(function(a, b) { return b.idx - a.idx; })>>
 <<for _ci = 0; _ci < _allCasualties.length; _ci++>>
-	<<guestLeft _allCasualties[_ci].idx>>
+	<<guestLeft _allCasualties[_ci].idx `_killed.includes(_allCasualties[_ci]) ? 'killed' : 'captured'`>>
 <</for>>
 
 <<if _captured.length > 0>>

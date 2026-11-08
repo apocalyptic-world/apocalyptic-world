@@ -125,43 +125,19 @@
     <<run $guests.splice(_guestI, 1)>>
 <</widget>>
 
-<<widget guestLeft>>
+<<widget guestLeft>>\
 	/* args[0] = index in guests list
-	   args[1] = true when she was captured (rescuable) - lighter hit, the rest lands via guestCaptureResolved
-	             'moved' when she only moved into a settlement house - she's still around, so only close friends miss her a little
-	   only NPCs she was on good terms with (relationship > 0) are upset */
-	<<for _npcId, _npcLike range $guests[_args[0]].relationshipBetween?.stats ?? {}>>
-		<<set _npc = setup.getNpcById(_npcId)>>
-		<<if !_npc || _npcLike <= 0>>
-			<<continue>>
-		<</if>>
-		<<if _args[1] === 'moved'>>
-			<<set _glLoss = _npcLike > 50 ? 5 : 0>>
-		<<elseif _args[1]>>
-			<<set _glLoss = _npcLike > 50 ? 30 : 15>>
-		<<else>>
-			<<set _glLoss = _npcLike > 50 ? 80 : 50>>
-		<</if>>
-		<<set _npc.happy = Math.max(-100, (_npc.happy ?? 0) - _glLoss)>>
-	<</for>>
-	<<guestRemove _args[0]>>
+	   args[1] = why she left, a key of setup.relationshipBetween.departures (the numbers live there)
+	   only NPCs on good terms with her (their relationship > 0) are upset. Use guestRemove when nobody should react. */\
+	<<run setup.relationshipBetween.reactToDeparture($guests[_args[0]], _args[1])>>\
+	<<guestRemove _args[0]>>\
 <</widget>>
 
-<<widget guestCaptureResolved>>
+<<widget guestCaptureResolved>>\
 	/* call when a captured guest's fate is settled
 	   args[0] = the captured npc object ($game.capturedGuest.npc)
-	   args[1] = true if she came back (rescue/ransom), false if she was abandoned */
-	<<for _gcrId, _gcrLike range _args[0].relationshipBetween?.stats ?? {}>>
-		<<set _gcrNpc = setup.getNpcById(_gcrId)>>
-		<<if !_gcrNpc || _gcrLike <= 0>>
-			<<continue>>
-		<</if>>
-		<<if _args[1]>>
-			<<set _gcrNpc.happy = Math.min(100, (_gcrNpc.happy ?? 0) + (_gcrLike > 50 ? 30 : 15))>>
-		<<else>>
-			<<set _gcrNpc.happy = Math.max(-100, (_gcrNpc.happy ?? 0) - (_gcrLike > 50 ? 50 : 35))>>
-		<</if>>
-	<</for>>
+	   args[1] = true if she came back (rescue/ransom), false if she was abandoned */\
+	<<run setup.relationshipBetween.reactToCaptureResolved(_args[0], _args[1])>>\
 <</widget>>
 
 <<widget slaveRemove>>
@@ -190,12 +166,13 @@
 
 <<widget companionRemove>>
 	/* the companion is gone for good (died, taken, handed over): removes them from the game.
-	   args[0] = the NPC or their id. Characters ($characters) only leave the companions. */
+	   args[0] = the NPC or their id. Characters ($characters) only leave the companions.
+	   args[1] = why a guest companion left, a key of setup.relationshipBetween.departures (default lost) */
 	<<set _crId = setup.companions.idOf($args[0])>>
 	<<set _crGuestI = $guests.findIndex(n => n.id === _crId)>>
 	<<set _crSlaveI = $slaves.findIndex(n => n.id === _crId)>>
 	<<if _crGuestI !== -1>>
-		<<guestRemove _crGuestI>>
+		<<guestLeft _crGuestI `_args[1] ?? 'lost'`>>
 	<<elseif _crSlaveI !== -1>>
 		<<slaveRemove _crSlaveI>>
 	<<else>>

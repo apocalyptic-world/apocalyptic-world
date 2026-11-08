@@ -1,0 +1,115 @@
+:: Nursery encounter - lost toy [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A young student won't leave for school without a favorite toy. */
+<<set _cast = setup.nurseryEncounters.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _heOrShe = setup.pronounceWhat(_carer)>>
+<<set _hisOrHer = setup.pronounceWhos(_carer)>>
+<<set _himOrHer = setup.pronounceWho(_carer)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _own = setup.nurseryEncounters.isOwnChild(_kid)>>
+<<set _toy = either('rag doll', 'wooden horse', 'knitted bear', 'stuffed rabbit', 'tin soldier')>>
+
+The school crowd is lining up at the nursery door with their coats half on. One of them isn't moving. <<=_kid.name>> stands in the middle of the room with <<=_kidHis>> arms folded and <<=_kidHis>> chin trembling, while <<=_name>> is down on hands and knees, peering under a cot.
+<br /><br />
+"I can't go without my <<=_toy>>," <<=_kid.name>> says. "I had it. I had it right here."
+<br /><br />
+<<sayNpc _carer>>
+	I know you did, sweetheart. We'll find it.
+<</sayNpc>>
+<br />
+<<=_name>> sits back on <<=_hisOrHer>> heels and sees you. <<=ucfirst(_heOrShe)>> blows a strand of hair out of <<=_hisOrHer>> face.
+<br /><br />
+<<sayNpc _carer>>
+	It sleeps with <<=_kidHim>> every night, so it can't have gone far, but I've checked all the usual spots. And they all need to be out the door soon.
+<</sayNpc>>
+<br />
+
+<div id="nce_choices">
+	<<link `'Help ' + _himOrHer + ' look for it (Uses some time)'`>>
+		<<replace '#nce_choices'>>
+			<<set _mins = random(3, 6) * 5>>
+			<<addmins _mins>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', 2, 4)>>
+			<<run setup.nurseryEncounters.change(_kid, 'happy', 3, 5)>>
+			<<run setup.nurseryEncounters.changeBond(_kid, 3, 5)>>
+			You take the far side of the room and start pulling back blankets. It takes <<=_mins>> minutes and a good deal of crawling before you find the <<=_toy>> wedged behind a cot against the wall. <<=_kid.name>> lets out a shriek when you hold it up, runs over, and clamps it to <<=_kidHis>> chest.
+			<<if _own>>
+				<br /><br />
+				"<<=setup.npc.mcName(_kid, true)>> found it!" <<=_kidHe>> announces to the whole room. "I told them you would!"
+			<</if>>
+			<br /><br />
+			<<=_name>> gets up off the floor, laughing, and brushes the dust from <<=_hisOrHer>> knees.
+			<br /><br />
+			<<sayNpc _carer>>
+				You're my hero, and I think you're <<=_kid.name>>'s too. Thank you. Not many people would get down on the floor for this.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<if setup.cabinInventory.has('plush')>>
+		<<link `'Give ' + _kid.name + ' a new plush (Uses 1 plush)'`>>
+			<<replace '#nce_choices'>>
+				<<run setup.cabinInventory.drop('plush')>>
+				<<set $player.nurseryCare.toys += 1>>
+				<<run setup.nurseryEncounters.record(null, 'toys', 1)>>
+				<<run setup.nurseryEncounters.change(_carer, 'happy', 2, 4)>>
+				<<run setup.nurseryEncounters.change(_kid, 'happy', 1, 3)>>
+				<<run setup.nurseryEncounters.changeBond(_kid, 1, 3)>>
+				You crouch down and hold out a new plush. <<=_kid.name>> takes it with some suspicion, turns it over, and tries a small hug. It isn't the <<=_toy>>, and <<=_kidHe>> makes sure you know it. Still, <<=_kidHe>> tucks it under <<=_kidHis>> arm and goes to join the line.
+				<br /><br />
+				<<sayNpc _carer>>
+					That was kind of you. Thank you. I'll keep looking while they're at school, and now there's one more for the shelf.
+				<</sayNpc>>
+				<br />
+				[[Continue|Nursery]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div>Give <<=_kid.name>> a new plush [Need plush]</div>
+	<</if>>
+	<<link `'Leave ' + _himOrHer + ' to find it'`>>
+		<<replace '#nce_choices'>>
+			<<run setup.nurseryEncounters.change(_carer, 'happy', -2, -1)>>
+			You tell <<=_name>> you're sure it will turn up. <<=ucfirst(_heOrShe)>> looks at the room full of cots, then at the line by the door, and <<=_hisOrHer>> shoulders sag a little.
+			<br /><br />
+			<<sayNpc _carer>>
+				Yes. I'm sure it will. I'll just do it myself, then.
+			<</sayNpc>>
+			<br />
+			<<=ucfirst(_heOrShe)>> ducks back under the cot.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Tell ' + _kid.name + ' to go to school without it'`>>
+		<<replace '#nce_choices'>>
+			<<run setup.nurseryEncounters.change(_carer, 'sub', 1, 2)>>
+			<<run setup.nurseryEncounters.change(_kid, 'happy', -5, -3)>>
+			<<run setup.nurseryEncounters.changeBond(_kid, -5, -3)>>
+			You tell <<=_kid.name>> that a toy is no reason to be late, and that <<=_kidHe>> can look for it after class. <<=_name>> opens <<=_hisOrHer>> mouth, catches your eye, and closes it again.
+			<br /><br />
+			<<sayNpc _carer>>
+				You heard. Come on, coat on. It'll still be here when you get back.
+			<</sayNpc>>
+			<br />
+			<<=_kid.name>> says nothing else. <<=ucfirst(_kidHe)>> joins the end of the line with tears running down <<=_kidHis>> face and doesn't look back at you on the way out the door.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

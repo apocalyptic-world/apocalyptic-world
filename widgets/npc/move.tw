@@ -30,6 +30,9 @@
 <</widget>>
 
 <<widget moveGuestToSlave>>
+	/* args[0] = npc object, args[1] = index in guests list
+	   args[2] = (optional) why, a key of setup.relationshipBetween.departures. Friends feel the dishonor, so default thrown_out. */
+	<<run setup.relationshipBetween.reactToDeparture(_args[0], _args[2] ?? 'thrown_out')>>
 	/* companions are kept by id, so she stays a companion; only her job name changes */
 	<<if setup.companions.has($guests[_args[1]])>>
 		<<assignedTo _args[0] 'companion_slave'>>
@@ -46,12 +49,14 @@
 
 <<widget npcLeaveSettlement>>
 	/* args[0] = npc object. Removes them from the settlement for good, whether they are
-	   currently a guest or a slave. */
+	   currently a guest or a slave.
+	   args[1] = why, a key of setup.relationshipBetween.departures */
 	<<set _npcLeaveTarget = _args[0]>>
+	<<set _npcLeaveDeparture = _args[1]>>
 	<<assignedTo _npcLeaveTarget 'none'>>
 	<<set _npcLeaveIdx = $guests.findIndex(g => g.id === _npcLeaveTarget.id)>>
 	<<if _npcLeaveIdx > -1>>
-		<<guestLeft _npcLeaveIdx>>
+		<<guestLeft _npcLeaveIdx _npcLeaveDeparture>>
 	<<else>>
 		<<set _npcLeaveIdx = $slaves.findIndex(s => s.id === _npcLeaveTarget.id)>>
 		<<if _npcLeaveIdx > -1>>
@@ -62,11 +67,13 @@
 
 <<widget npcEnslave>>
 	/* args[0] = npc object. Moves them to the basement if currently a guest; no-op if
-	   they're already a slave. */
+	   they're already a slave.
+	   args[1] = (optional) why, see moveGuestToSlave */
 	<<set _npcEnslaveTarget = _args[0]>>
+	<<set _npcEnslaveDeparture = _args[1]>>
 	<<set _npcEnslaveIdx = $guests.findIndex(g => g.id === _npcEnslaveTarget.id)>>
 	<<if _npcEnslaveIdx > -1>>
-		<<moveGuestToSlave _npcEnslaveTarget _npcEnslaveIdx>>
+		<<moveGuestToSlave _npcEnslaveTarget _npcEnslaveIdx _npcEnslaveDeparture>>
 	<</if>>
 <</widget>>
 

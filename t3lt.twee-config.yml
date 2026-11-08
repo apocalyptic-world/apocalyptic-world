@@ -199,9 +199,9 @@ sugarcube-2:
     npcEnslave:
       name: npcEnslave
       parameters:
-      - var
+      - var |+ string
       description: |-
-        *Syntax:* `<<npcEnslave npc>>` - moves a guest to the basement (no-op for slaves)
+        *Syntax:* `<<npcEnslave npc [departure]>>` - moves a guest to the basement (no-op for slaves). `departure` is a key of setup.relationshipBetween.departures, default thrown_out
     horny:
       name: horny
       parameters: 
@@ -304,15 +304,13 @@ sugarcube-2:
       name: guestLeft
       container: false
       parameters: 
-      - number |+ bool
       - number &+ string
       description: |-
-        *Syntax:* `<<guestLeft index [captured|'moved']>>`
+        *Syntax:* `<<guestLeft index departure>>`
 
         *Arguments:*
           * `index`: a index in the guest list
-          * `captured`: (optional) true when she was captured - lighter happiness hit on friends
-          * `'moved'`: (optional) she moved into a settlement house - only close friends lose a little happiness
+          * `departure`: why she left, a key of setup.relationshipBetween.departures (killed, handed_over, lost, thrown_out, betrayed, neglected, captured, marriage_ended, walked_out, punished, moved, already_counted) - sets how much her friends react
 
         Does guests.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of guest.splice

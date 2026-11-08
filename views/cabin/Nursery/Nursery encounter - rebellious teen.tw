@@ -1,0 +1,102 @@
+:: Nursery encounter - rebellious teen [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A caretaker and a defiant teenager are at odds. How fair each of them is being depends on their personalities. */
+<<set _enc = setup.nurseryEncounters>>
+<<set _cast = _enc.cast()>>
+<<if !_cast>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _carer = _cast.carer>>
+<<set _kid = _cast.kid>>
+<<set _name = setup.displayName(_carer)>>
+<<set _own = _enc.isOwnChild(_kid)>>
+<<set _kidHe = setup.pronounceWhat(_kid)>>
+<<set _kidHis = setup.pronounceWhos(_kid)>>
+<<set _kidHim = setup.pronounceWho(_kid)>>
+<<set _issue = _enc.teenIssue(_carer, _kid, _enc.currentSlot())>>
+
+You walk in on a standoff. <<=_enc.fill(_issue.scene, _kid)>> <<=_kid.name>> has <<=_kidHis>> arms folded and <<=_kidHis>> jaw set, and <<=_name>> is standing over <<=_kidHim>> with <<=setup.pronounceWhos(_carer)>> hands on <<=setup.pronounceWhos(_carer)>> hips.
+<br /><br />
+"<<=_enc.fill(_issue.teen, _kid)>>" <<=_kid.name>> says.
+<br /><br />
+<<sayNpc _carer>>
+	<<=_enc.fill(_issue.carer, _kid)>>
+<</sayNpc>>
+<br />
+<<if _own>>
+	<<=_kid.name>> sees you first. <<=ucfirst(_kidHis)>> chin comes up.
+	<br /><br />
+	"<<=setup.npc.mcName(_kid, true)>>, tell <<=setup.pronounceWho(_carer)>>."
+<<else>>
+	The younger children have gone quiet, and they keep looking from <<=_kid.name>> to <<=_name>> to you, waiting to see what happens.
+<</if>>
+<br /><br />
+
+<div id="nce_choices">
+	<<link `'Side with ' + _kid.name`>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_kid, 'relationship', 4, 6)>>
+				<<run _enc.change(_carer, 'relationship', -3, -1)>>
+			<<else>>
+				<<run _enc.change(_kid, 'relationship', 3, 5)>>
+				<<run _enc.change(_carer, 'relationship', -4, -2)>>
+			<</if>>
+			You tell <<=_name>> to let it go, this once, and that <<=_kid.name>> has a point. <<=_kid.name>> looks startled, then tries to hide it. <<=_name>> says nothing for a moment.
+			<br /><br />
+			<<sayNpc _carer>>
+				As you say. I'd just ask you to remember who has to keep order in here after you've gone.
+			<</sayNpc>>
+			<br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Side with ' + _name`>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_kid, 'relationship', -6, -4)>>
+				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+			<<else>>
+				<<run _enc.change(_kid, 'relationship', -4, -2)>>
+				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+			<</if>>
+			You tell <<=_kid.name>> that <<=_name>> runs this room, and that <<=_kidHe>> will do as <<=_kidHe>> is told. <<=_name>> gives you a small nod of thanks. <<=_kid.name>> glares at the floor.
+			<br /><br />
+			<<if _own>>
+				"Figures," <<=_kidHe>> mutters. "I don't know why I thought you'd listen."
+			<<else>>
+				"Whatever," <<=_kidHe>> mutters, and goes to do it anyway.
+			<</if>>
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Try to find a middle ground'>>
+		<<replace '#nce_choices'>>
+			<<run _enc.change(_carer, 'relationship', 1, 3)>>
+			<<run _enc.change(_kid, 'relationship', 1, 3)>>
+			You take the heat out of it, and get them both to say what they want without shouting. <<=_kid.name>> agrees to do <<=_kidHis>> part if <<=_name>> will ease up a little, and <<=_name>> agrees that this seems reasonable. Neither of them gets everything, and neither of them seems to mind as much as they did a minute ago.
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Stay out of it'>>
+		<<replace '#nce_choices'>>
+			<<if _own>>
+				<<run _enc.change(_kid, 'relationship', -4, -2)>>
+				<<run setup.nurseryBehavior.change(-2, -1)>>
+				You look at the two of them and decide this isn't your fight. <<=_kid.name>> stares at you as you turn away, then starts shouting again, louder. Behind you, some of the younger children have started to pick up on it.
+			<<else>>
+				You look at the two of them and decide this isn't your fight. By the time you reach the far side of the room, they are back at it.
+			<</if>>
+			<br /><br />
+			[[Continue|Nursery]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

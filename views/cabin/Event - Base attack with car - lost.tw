@@ -35,7 +35,7 @@ The leader gestures to his men, and they start rounding up the survivors corrall
 /* Look each one up again before removing: every removal shifts the positions of the people after it */
 <<for _takenNpc range setup.npcs.pick($guests, 1)>>
     <<set _npcsTaken.push(setup.displayName(_takenNpc))>>
-    <<guestRemove $guests.indexOf(_takenNpc)>>
+    <<guestLeft $guests.indexOf(_takenNpc) 'lost'>>
 <</for>>
 <<for _takenNpc range setup.npcs.pick($slaves, 2)>>
     <<set _npcsTaken.push(setup.displayName(_takenNpc))>>

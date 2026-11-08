@@ -143,7 +143,7 @@
 				add('Strength', str, 'Below 40 she can\'t hunt; 80+ for level 2', risk(str, [40, 60, 80]));
 				break;
 			case 'caretaker':
-				add('Days', s.caretaker ?? 0, 'Nights in the nursery. Children grow ' + setup.nurseryCare.growChance(npc) + '% faster' + (setup.personality.has(npc, 'compassionate') ? ' (compassionate)' : ''));
+				add('Days', s.caretaker ?? 0, 'Nights worked in the nursery');
 				break;
 			case 'librarian':
 				add('Books', setup.library.size(), 'Skill learning +1% per 2 books, up to +25% (now +' + setup.library.bonusPercent() + '%)', setup.library.bonusPercent() >= 25 ? pay(4) : pay(Math.floor(setup.library.bonusPercent() / 7)));
@@ -244,7 +244,7 @@
 		garden:     [sv.workersLimitGarden ?? 10, 0, 1, 0, 'Garden'],
 		guard:      [U, 0, 0, 0, 'Guard'],
 		librarian:  [1, 1, 0, 0, 'Librarian'],
-		caretaker:  [1, 1, 0, 0, 'Nursery caretaker'],
+		caretaker:  [Math.min(setup.nurseryCare.maxCaretakers(), U), 1, 1, 0, 'Nursery caretaker'],
 		people_hunter: [1, 2, 0, 0, 'People hunter'],
 		milk_barn:  [U, 1, 2, 2, 'Milk barn'],
 		scavenging: [U, 2, 0, 0, 'Scavenging'],

@@ -1,4 +1,10 @@
 :: School [bg-milk-barn]
+<<if previous() === 'Youth district'>>
+	<<set _ncEncounter = setup.nurseryEncounters.roll('school')>>
+	<<if _ncEncounter>>
+		<<goto _ncEncounter>>
+	<</if>>
+<</if>>
 <br />
 <h1 class="ptitle">
 	<<backButton 'Youth district' 'State.setVar("$teach", undefined)'>>

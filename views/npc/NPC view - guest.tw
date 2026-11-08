@@ -42,7 +42,7 @@
 	<</link>>
 <</if>>
 
-<<if [0,2].includes($tmpGirl.gender) && !($tmpGirl.traits ?? []).includes('feral') && setup.getAge($tmpGirl) >= 18 && typeof $tmpGirl.sick === 'undefined' && timeBetween('18:00', '02:00') && setup.cabinInventory.has('playing_cards') && ($tmpGirl.pokerDay ?? -1) !== $game.day>>
+<<if $tmpGirlBack !== 'Nursery' && [0,2].includes($tmpGirl.gender) && !($tmpGirl.traits ?? []).includes('feral') && setup.getAge($tmpGirl) >= 18 && typeof $tmpGirl.sick === 'undefined' && timeBetween('18:00', '02:00') && setup.cabinInventory.has('playing_cards') && ($tmpGirl.pokerDay ?? -1) !== $game.day>>
 	<<link 'Play strip poker'>>
 		<<set $tmpGirl.pokerDay = $game.day>>
 		<<set $guests[$guestId] = $tmpGirl>>
@@ -63,7 +63,7 @@
 	<</link>>
 <</if>>
 
-<<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden' && $tmpGirlBack !== 'Nursery'>>
 	<<set _linkName = 'Fuck ' + _himOrHer>>
 	<<link `_linkName`>>
 		<<if $tmpGirl.assignedTo === 'attendant' && ($tmpGirl.location === 'shower' || $tmpGirl.location === 'basement')>>
@@ -76,7 +76,7 @@
 	<</link>>
 <</if>>
 
-<<if setup.NpcInHome($tmpGirl) && !($tmpGirl.basementVoluntary ?? false) && !(($tmpGirl.assignedTo === 'attendant' || $tmpGirl.assignedTo === 'mistress') && setup.isAtWork($tmpGirl, $weather))>>
+<<if $tmpGirlBack !== 'Nursery' && setup.NpcInHome($tmpGirl) && !($tmpGirl.basementVoluntary ?? false) && !(($tmpGirl.assignedTo === 'attendant' || $tmpGirl.assignedTo === 'mistress') && setup.isAtWork($tmpGirl, $weather))>>
 	<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
 	<<link `_linkName`>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
@@ -190,7 +190,7 @@
 
 <<include 'NPC view - massage table invite'>>
 
-<<if setup.cabinInventory.has('champagne') && setup.NpcInHome($tmpGirl)>>
+<<if $tmpGirlBack !== 'Nursery' && setup.cabinInventory.has('champagne') && setup.NpcInHome($tmpGirl)>>
 	<<set _linkName = 'Offer ' + _himOrHer + ' a drink'>>
 	<<link _linkName>>
 		<<goto 'NPC offer drink'>>
@@ -207,6 +207,19 @@
 		<div class="link-internal" style="background: #ccc">
 			<<=_linkName>> (insufficient caps)
 		</div>
+	<</if>>
+<</if>>
+
+<<if setup.nurseryEncounters.canOfferHelp($tmpGirl)>>
+	<<link 'Offer to help with nursery care' 'NPC offer nursery help'>><</link>>
+<</if>>
+<<if setup.nurseryCare.wardOffered($tmpGirl)>>
+	<<set _wardLabel = setup.nurseryCare.wardLabel($tmpGirl)>>
+	<<set _wardBlocked = setup.nurseryCare.wardBlockedBy($tmpGirl)>>
+	<<if _wardBlocked>>
+		<div><<=_wardLabel>> [<<=_wardBlocked>>]</div>
+	<<else>>
+		<<link `_wardLabel` 'NPC appoint ward'>><</link>>
 	<</if>>
 <</if>>
 
@@ -386,7 +399,7 @@
 			<br />
 			<<link 'Yes' 'Guest house'>>
 				<<assignedTo $tmpGirl 'none'>>
-				<<guestLeft $guestId>>
+				<<guestLeft $guestId 'thrown_out'>>
 				<<dialogclose>>
 				<<set $player.reputation-->>
 				<<set $player.goodwill-->>

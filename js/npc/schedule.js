@@ -41,7 +41,7 @@ setup.outsideWorkHours = {
     school:    { from: '09:00', to: '15:00', blockedBy: [] },
     attendant: { from: '10:00', to: '20:00', blockedBy: ['sick'] },
     librarian: { from: '09:00', to: '17:00', blockedBy: ['dayOff'] },
-    caretaker: { from: '08:00', to: '20:00', blockedBy: ['dayOff'] },
+    caretaker: { from: '08:00', to: '21:00', blockedBy: ['dayOff'] },
     people_hunter: { from: '10:00', to: '18:00', blockedBy: ['dayOff', 'sandStorm', 'coldSnap'] },
 };
 
