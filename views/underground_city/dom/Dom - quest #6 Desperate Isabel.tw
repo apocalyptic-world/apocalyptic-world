@@ -6,7 +6,7 @@ As you approached the streets of the underground city, the howling winds masked 
 As you navigated the maze-like corridors of underground city, a group of Dom's men intercepted you. The tension in the air was palpable as the men delivered an urgent message.
 <br /><br />
 <center>
-	[img[setup.ImagePath+'people/dom/goons.jpg']]
+	<<image 'people/dom/goons.jpg'>>
 </center>
 <br />
 <<newguy>>
@@ -21,7 +21,7 @@ Curiosity mingled with caution as you followed the men to Dom's makeshift office
 <</isabel>>
 <br />
 <center>
-	[img[setup.ImagePath+'people/dom/isabel_beg1.jpg']]
+	<<image 'people/dom/isabel_beg1.jpg'>>
 </center>
 <br /><br />
 You studied Isabel, seeing beyond the facade of authority to the woman burdened with responsibilities she never asked for.
@@ -42,6 +42,10 @@ Isabel hesitated, glancing around to ensure no one was around pulled you behind 
     I am ready to give you what you want. You just need to help me one last time.
 <</isabel>>
 <br />
+<div id="ib_accept">
+<<linkreplace 'Let her'>>
+<<run $('#ib_decline').hide()>>
+<<set $characters.isabel.quests.hadSex = true>>
 She slides her hold hand inside your pants and grabs your soft dick. Desperation etched in her eyes as she strokes your dick. 
 Then she unbuttons your pants and pulls your dick out. Look like she really mean it this time.
 <br /><br />
@@ -78,3 +82,34 @@ With a final nod, Isabel exited the room, leaving you alone in an awkward silenc
     <<set $characters.dom.quests.isabel_beg_day = $game.day>>
     <<goto 'Streets'>>
 <</link>>
+<</linkreplace>>
+</div>
+<div id="ib_decline">
+<<linkreplace 'Pull her back up'>>
+<<run $('#ib_accept').hide()>>
+<<set $characters.isabel.quests.declinedSex = true>>
+You caught her hands before she could reach your belt and pulled her back to her feet.
+<br /><br />
+<<you>>
+    You don't have to do this. Tell me what you need and I'll see what I can do.
+<</you>>
+<br />
+Isabel looked at you, surprised, then smoothed her hair as if nothing had happened. Before she could answer, the door to Dom's office swung open and a Dom goon stood in the doorway.
+<br /><br />
+<<sayNpc _npc>>
+    There's been talk of a small riot brewing somewhere in the city. We need to squash before it gets out of hand.
+<</sayNpc>>
+<br />
+With a final nod, Isabel exited the room. Before she left she quietly whispered to you.
+<br /><br />
+<<isabel>>
+    We need 10 cans of fuel! Or we're screwed for real this time. Get it done... Please...
+<</isabel>>
+<br />
+<<link 'Leave'>>
+    <<set $characters.dom.quests.isabel_beg = true>>
+    <<set $characters.dom.quests.isabel_beg_day = $game.day>>
+    <<goto 'Streets'>>
+<</link>>
+<</linkreplace>>
+</div>

@@ -7,7 +7,7 @@ You pushed aside a rusted door.
 Dim, flickering lights illuminated the labyrinthine tunnels as you navigated your way toward the central hub where Isabel was said to be waiting.
 <br /><br />
 <center>
-    [img[setup.ImagePath+'/places/underground/isabel_basement.jpg']]
+    <<image 'places/underground/isabel_basement.jpg'>>
 </center>
 <br />
 Isabel's voice trembled with a mix of hope and anxiety as she spoke.
@@ -37,7 +37,9 @@ As Isabel leads you through the underground city basement, navigating the dark t
     Dom will be very happy when he wakes up...
 <</isabel>>
 <br /><br />
+<div id="fr_chamber">
 <<linkreplace 'Pull her aside into the chamber'>>
+    <<run $('#fr_walk').hide()>>
     In a moment of curiosity, you grasp her arm and pull her into the chamber, the dim light casting shadows across the walls.
     <br /><br />
     <<isabel>>
@@ -58,6 +60,7 @@ As Isabel leads you through the underground city basement, navigating the dark t
             <<linkreplace 'Force her and fuck her ass'>>
                 <<run $('#option_leave').hide()>>
                 <<set _force = true>>
+                <<set $characters.isabel.quests.hadSex = true>>
                 <<isabel>>
                     What are you doing?! Stop right now! Please!
                 <</isabel>>
@@ -115,3 +118,20 @@ As Isabel leads you through the underground city basement, navigating the dark t
 
     <</linkreplace>>
 <</linkreplace>>
+</div>
+<div id="fr_walk">
+<<linkreplace 'Walk on with her'>>
+    <<run $('#fr_chamber').hide()>>
+    You keep walking beside her past the chamber. At the end of the tunnel she stops and squeezes your hand.
+    <br /><br />
+    <<isabel>>
+        Thank you, <<=$player.name>>. I won't forget this.
+    <</isabel>>
+    <br />
+    <<link 'Leave'>>
+        <<set $characters.dom.quests.quest6 = true>>
+        <<set $characters.dom.quests.quest6_day = $game.day>>
+        <<goto 'Underground city'>>
+    <</link>>
+<</linkreplace>>
+</div>

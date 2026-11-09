@@ -114,7 +114,7 @@
 		<<elseif $characters.blair.quests.missing_friend_found_finished && !$characters.blair.quests.missing_friend_found_finished_thanked>>
 			Talk to Blair in the evening
 			<br />
-		<<elseif !$characters.blair.quests.bj>>
+		<<elseif !$characters.blair.quests.bj && !$characters.vincent?.quests?.new_settlement>>
 			Wait till she makes a move on you
 			<br />
 		<<elseif !($characters.rodger.quests.champagne ?? false) && !$characters?.rodger?.quests.dead>>
@@ -129,7 +129,7 @@
 			Build gate for your settlement
 		<<elseif !$characters.blair.quests.nursery && !($game.location.nursery ?? false)>>
 			Talk with Blair in the kitchen
-		<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement>>
+		<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement && !$characters.blair.quests.no_women_day>>
 			<<if $characters.blair.relationship >= 80>>
 				Talk with her in the bedroom
 			<<else>>
@@ -184,7 +184,7 @@
 				<</if>>
 			<<elseif !$characters.rodger.quests.cheat>>
 				Increase Eve corruption to 30 and visit talk to Rodger after 120 days
-			<<elseif !$characters.rodger.quests.eve_pregnant>>
+			<<elseif !$characters.rodger.quests.eve_pregnant && !$characters.rodger.quests.cheat_declined_day>>
 				Wait two weeks and then visit Settlement.
 			<<else>>
 				That's all for now
@@ -263,13 +263,13 @@
 			Visit Isabel in your guesthouse
 		<<elseif $characters.isabel.quests.temp_home & !$characters.isabel.quests.check_city>>
 			Wait two weeks and visit Isabel in her room
-		<<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant>>
+		<<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && !$characters.isabel.quests.dom_hunt_day>>
 			<<if typeof $characters.isabel.pregnancy === 'undefined' || $characters.isabel.pregnancy < 10>>
-				Get Isabel pregnant
+				Get Isabel pregnant, or a week after checking the city ask Isabel about Dom in her room
 			<<else>>
 				Go to Isabel's room
 			<</if>>
-		<<elseif $characters.isabel.quests.pregnant && !$characters.isabel.quests.dom_return>>
+		<<elseif ($characters.isabel.quests.pregnant || $characters.isabel.quests.dom_hunt_day) && !$characters.isabel.quests.dom_return>>
 			Wait few days
 		<<elseif $characters.isabel.quests.dom_return && !$characters.dom.quests.return_city1>>
 			Wait few days (15) and then visit underground city

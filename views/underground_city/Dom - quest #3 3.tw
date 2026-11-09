@@ -1,9 +1,9 @@
-:: Dom - quest #3 3 {"position":"3900,1677","size":"100,100"}
+:: Dom - quest #3 3
 <h1 class="ptitle">STREETS</h1>
 <br /><br />
 <<addhours 4>>
 <center>
-	[img[setup.ImagePath+'places/streets/dom_quest3_bed.jpg']]
+	<<image 'places/streets/dom_quest3_bed.jpg'>>
 </center>
 <br /><br />
 You hastily return to the underground city. When you arrive there, Dom is barely alive. Doctors were called in early, and they might be able to help him. They take him into a special room and close the door in front of you. An hour passes, then two...
@@ -37,6 +37,9 @@ She asks you to sit down, and she sits down next to you on the couch.
 		You can do with her mouth whatever you want.
 	<</isabel>>
 	<br />
+	<div id="dq3_accept">
+	<<linkreplace 'Let them take care of you'>>
+	<<run $('#dq3_refuse').hide()>>
 	When the girl approaches you, to your surprise, she is not the one who helps you get  your dick out, but it's Isabel as she giggles.
 	<br /><br />
 	<<video 'streets/dom_quest3_award2'>>
@@ -73,6 +76,28 @@ Isabel steps back and allows you to express yourself. You grab girls hair and pu
 			<<horny_reset>>
 		<</link>>
 	<</linkreplace>>
+	<</linkreplace>>
+	</div>
+	<div id="dq3_refuse">
+	<<linkreplace 'Turn the girl away'>>
+		<<run $('#dq3_accept').hide()>>
+		You raise a hand before the girl reaches you and shake your head. Isabel raises an eyebrow, more amused than offended, and waves the girl back out of the room.
+		<br /><br />
+		<<you>>
+			Keep your gifts. I'm here to help keep this city running, not for this.
+		<</you>>
+		<br />
+		<<isabel>>
+			Suit yourself. Just don't forget who's looking after you now. You should go. I hope you'll help us in this difficult time.
+		<</isabel>>
+		<br />
+		<<link 'Leave'>>
+			<<set $characters.dom.quests.quest3_done = true>>
+			<<set $characters.dom.quests.quest3_done_day = $game.day>>
+			<<goto 'Streets'>>
+		<</link>>
+	<</linkreplace>>
+	</div>
 <</linkreplace>>
 
 

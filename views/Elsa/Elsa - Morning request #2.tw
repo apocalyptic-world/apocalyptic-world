@@ -4,13 +4,19 @@
 
 The smell of something cooking reached you before the light did. The crackling of the small stove blended with the soft sound of a woman’s voice humming, low and almost playful.
 <br /><br />
-You blinked awake and saw her at the stove, her bare ass catching the firelight. 
-She moved with a quiet energy, every step light, as if the weight of the world had lifted from her shoulders for the first time in years.
-<br /><br />
-<center>
-    <<image 'people/elsa/mother_kitchen_morning.webp'>>
-</center>
-<br />
+<<if $elsaMotherDeclined>>
+    You blinked awake and saw her at the stove, already dressed, her hair tied back. 
+    She moved with a quiet energy, every step light, as if the weight of the world had lifted from her shoulders for the first time in years.
+    <br /><br />
+<<else>>
+    You blinked awake and saw her at the stove, her bare ass catching the firelight. 
+    She moved with a quiet energy, every step light, as if the weight of the world had lifted from her shoulders for the first time in years.
+    <br /><br />
+    <center>
+        <<image 'people/elsa/mother_kitchen_morning.webp'>>
+    </center>
+    <br />
+<</if>>
 Her voice carried through the small home as she hummed a tune — not quite a song, more like a memory of one. It was soft, almost absent-minded, but there was joy in it. A kind of joy you hadn’t heard since before the world fell apart.
 <br /><br />
 <<sayNpc $characters.elsa.mother>>
@@ -44,17 +50,23 @@ She hesitated, her eyes flicking toward the window
 <br />
 Her voice wavered on that last word, but her grip on your hand was steady.
 <br /><br />
-<center>
-    <<image 'people/elsa/mother_kiss.webp'>>
-</center>
-<br />
-Before you could answer, she leaned in and kissed you — soft, tender, and unhurried. It wasn’t the desperate closeness of the night before, but something quieter
-<br /><br />
+<<if $elsaMotherDeclined>>
+    Before you could answer, she leaned in and kissed your cheek — soft and grateful, a quiet thank you for the night before.
+    <br /><br />
+<<else>>
+    <center>
+        <<image 'people/elsa/mother_kiss.webp'>>
+    </center>
+    <br />
+    Before you could answer, she leaned in and kissed you — soft, tender, and unhurried. It wasn’t the desperate closeness of the night before, but something quieter
+    <br /><br />
+<</if>>
 Elsa had turned her eyes away, pretending to busy herself with her rabbit, though you noticed she sneaked a shy glance when she thought no one was looking.
 <br /><br />
 <<link 'Leave'>>
     <<addhours 4>>
     <<set $characters.elsa.quests.morning_request2 = true>>
+    <<unset $elsaMotherDeclined>>
     <<goto 'Garage'>>
 <</link>>
 

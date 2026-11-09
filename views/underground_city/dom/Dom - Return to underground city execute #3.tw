@@ -69,11 +69,17 @@ Isabel sat on a crate, her hands gripping the edge like she had been waiting for
     It’s done.
 <</you>>
 <br />
+<<if $characters.isabel.quests.hadSex || !$characters.isabel.quests.declinedSex>>
 She leaned back just enough to look at you, and your lips met. The kiss was slow, deep, like a moment stolen in the aftermath of chaos. For a few seconds, the world outside didn’t matter. The blood on your hands, the bodies left behind, Dom’s victory—it all faded into the background.
 <br /><br />
 <<video 'isabel/storage2'>>
 <br /><br />
 Then she pulled away, just enough to look you in the eyes.
+<<else>>
+She got up and held on to you for a long moment, her forehead resting against your shoulder. For a few seconds, the world outside didn’t matter. The blood on your hands, the bodies left behind, Dom’s victory—it all faded into the background.
+<br /><br />
+Then she stepped back, just enough to look you in the eyes.
+<</if>>
 
 And what she said next sent a chill down your spine.
 <br /><br />
@@ -88,14 +94,20 @@ And what she said next sent a chill down your spine.
 You had. You had seen Dom revel in the fight, not just for survival, but because he enjoyed it. 
 The way he had cut through his enemies with something more than necessity. The way he had grabbed Isabel before, rough, possessive, thinking she was his.
 <br /><br />
+<<if $characters.isabel.quests.return_no_child>>
+<<isabel>>
+    He knows I took his contacts. He’s just waiting until the city is settled to deal with me. And with you.
+<</isabel>>
+<<else>>
 <<isabel>>
     He thinks the child is his. But it’s yours.
 <</isabel>>
+<</if>>
 <br />
 She stepped closer, gripping your hand.
 <br /><br />
 <<isabel>>
-    If he finds out… we’re both dead. And if he stays in power, this place will be worse than before.
+    <<if $characters.isabel.quests.return_no_child>>If we wait…<<else>>If he finds out…<</if>> we’re both dead. And if he stays in power, this place will be worse than before.
 <</isabel>>
 <br />
 <<isabel>>
@@ -110,8 +122,9 @@ Thinking he had secured his city, his rule, his future.
 <br /><br />
 <div id="option_agree">
     <<linkreplace 'Agree with her'>>
-        <<run $('#option_think').hide()>>
+        <<run $('#option_think, #option_agree_words').hide()>>
         <<run $('#option_leave').show()>>
+        <<set $characters.isabel.quests.hadSex = true>>
         Then, without another word, she dropped to her knees in front of you.
         <br /><br />
         <<video 'isabel/storage3'>>
@@ -161,6 +174,29 @@ Thinking he had secured his city, his rule, his future.
         <</linkreplace>>
     <</linkreplace>>
 </div>
+<div id="option_agree_words">
+    <<linkreplace 'Agree, and leave it at that'>>
+        <<run $('#option_think, #option_agree').hide()>>
+        <<set $characters.isabel.quests.declinedSex = true>>
+        <<you>>
+            I’m with you. Dom goes.
+        <</you>>
+        <br />
+        She reached for your belt, but you caught her hand and held it.
+        <br /><br />
+        <<you>>
+            Not now. We have work to do.
+        <</you>>
+        <br />
+        For a moment she looked almost hurt, then she nodded and squeezed your hand back.
+        <br /><br />
+        <<isabel>>
+            Then we do this together. Go, before he wonders where you are.
+        <</isabel>>
+        <br />
+        <<run $('#option_leave').show()>>
+    <</linkreplace>>
+</div>
 <div id="option_think">
     <<linkreplace "I need to think about that">>
         <<you>>
@@ -182,12 +218,12 @@ Thinking he had secured his city, his rule, his future.
         <br />
         And then she walked out of the storage room, her footsteps echoing down the empty tunnel.
         <br /><br />
-        You stood there, still feeling the warmth where she had held your hand, the ghost of her lips on yours.
+        You stood there, still feeling the warmth where she had held your hand<<if $characters.isabel.quests.hadSex || !$characters.isabel.quests.declinedSex>>, the ghost of her lips on yours<</if>>.
         <br /><br />
         And for the first time since the fighting started, you weren’t sure what to do next.
         <br /><br />
         <<run $('#option_leave').show()>>
-        <<run $('#option_agree').hide()>>
+        <<run $('#option_agree, #option_agree_words').hide()>>
         <<set $characters.isabel.relationship -= 30>>
     <</linkreplace>>
 </div>
