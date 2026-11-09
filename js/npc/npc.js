@@ -819,7 +819,7 @@ setup.npc = {
 
 		const {
 			corruption, happy, drunk, food, horny, relationship,
-			traits, personality, location, skills, sexStats, statsSex
+			traits, personality, location, skills
 		} = npc;
 
 		traits ??= [];
@@ -867,12 +867,12 @@ setup.npc = {
 			}
 		}
 
-		// === Sex experience ===
-		// Acts are counted in statsSex (sex scenes and jobs); sexStats holds creampies (and a few acts from older events).
-		if (statsSex || sexStats) {
-			const acts = key => (Number(statsSex?.[key]) || 0) + (Number(sexStats?.[key]) || 0);
-			const bj = acts('bj'), pussy = acts('pussy'), anal = acts('anal'), dp = acts('dp');
-			const creampies = Number(sexStats?.creampies) || 0;
+		// === Sex experience (setup.sexActs: acts with anyone, the MC included) ===
+		if (setup.sexActs.hasAny(npc)) {
+			const count = metric => setup.sexActs.count(npc, metric);
+			const bj = count('givenBlowJob'), pussy = count('receivedPussyFucked'), anal = count('receivedAssFucked');
+			const dp = count('givenDeepThroatCock');   // deepthroat
+			const creampies = count('receivedVaginalCreampie');
 			const totalActs = bj + pussy + anal + dp;
 
 			if (totalActs <= 3) pool.push(...db.sex_innocent);
@@ -880,10 +880,10 @@ setup.npc = {
 
 			if (corruption >= 50) {
 				// by anatomy: vagina for women (0) and trans men (3); penis and anus for men (1) and trans women (2)
-				const hasVagina = [0, 3].includes(npc.gender);
+				const hasVagina = setup.sexActs.hasPussy(npc);
 				const lewd = hasVagina
 					? (creampies > 5 || bj >= 15 || pussy >= 10)
-					: (bj >= 15 || anal >= 10);
+					: (bj >= 15 || setup.sexActs.totalAss(npc) >= 10);
 				if (lewd) {
 					pool.push(...(hasVagina ? db.sex_lewd_female : db.sex_lewd_male_trans));
 					pool.push(...db.sex_lewd_generic);

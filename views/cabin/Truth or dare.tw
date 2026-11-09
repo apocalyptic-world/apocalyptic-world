@@ -296,6 +296,7 @@ Who's playing? Pick two to four.
 		<<if $tod.result.cum === 'pussy'>>
 			<div id="tod_cum_in">
 				<<linkreplace 'Cum inside her pussy'>>
+					<<run setup.sexActs.cumsInPussy($player, _tdCumNpc)>>
 					<<horny_reset>>
 					<<run $('#tod_cum_out').hide()>>
 					<<if setup.pregnancyChance(_tdCumNpc)>>
@@ -313,6 +314,7 @@ Who's playing? Pick two to four.
 			</div>
 			<div id="tod_cum_out">
 				<<linkreplace 'Pull out and cum on her stomach'>>
+					<<run setup.sexActs.cumsOnStomach($player, _tdCumNpc)>>
 					<<horny_reset>>
 					<<run $('#tod_cum_in').hide()>>
 					<<set $tod.mcSpent = true>>
@@ -326,6 +328,7 @@ Who's playing? Pick two to four.
 			</div>
 		<<elseif $tod.result.cum === 'mouth'>>
 			<<linkreplace 'Cum in her mouth'>>
+				<<run setup.sexActs.cumsInMouth($player, _tdCumNpc)>>
 				<<horny_reset>>
 				<<set $tod.mcSpent = true>>
 				<center>

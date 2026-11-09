@@ -665,6 +665,27 @@ Save.onLoad.add(function (save) {
         }
     });
 
+    /* sex act counters: statsSex (acts with anyone) → generalSexStats, sexStats (acts with the MC) → mainCharSexStats,
+       in every NPC of every history moment (best effort, see setup.sexActs.migrateLegacyCounters); the per-scene
+       $sexStats flags became $sexActsThisScene */
+    save.state.history.forEach(function (moment) {
+        const seen = new WeakSet();
+        (function walk(value, depth) {
+            if (!value || typeof value !== 'object' || seen.has(value) || depth > 6
+                || value instanceof Date || value instanceof Set || value instanceof Map) {
+                return;
+            }
+            seen.add(value);
+            if (typeof value.gender !== 'undefined') {
+                setup.sexActs.migrateLegacyCounters(value);
+            }
+            for (const key of Object.keys(value)) {
+                walk(value[key], depth + 1);
+            }
+        })(moment.variables, 0);
+        delete moment.variables.sexStats;
+    });
+
     for(var saveWantedI = 0; saveWantedI < (save.state.history[save.state.index].variables.wanted ?? []).length; saveWantedI++) {
         if (typeof save.state.history[save.state.index].variables.wanted[saveWantedI].birthDate === 'undefined') {
             save.state.history[save.state.index].variables.wanted[saveWantedI].birthDate = setup.getBirthDate(save.state.history[save.state.index].variables.wanted[saveWantedI].age);

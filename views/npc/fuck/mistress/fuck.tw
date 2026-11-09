@@ -169,6 +169,8 @@
     <<if _sexActions[$sexAction]?.stats>>
         <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
     <</if>>
+    /* counts the act between the mistress and the slave (not with the MC), once per scene (js/sexActs.js) */
+    <<run setup.sexActs.mistressSceneAction($sexAction, _npcMistress, $tmpGirl)>>
     <<if $sexAction === 'mistress_pussy'>>
         <<set $tmpGirl.virgin = false>>
     <</if>>

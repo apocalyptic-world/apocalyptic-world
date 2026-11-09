@@ -113,7 +113,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                     <</laura>>
                     <br />
                     <<set $characters.laura.bj = Math.min(($characters.laura.bj ?? 0) + 10, 100)>>
-                    <<set $characters.laura.statsSex ??= {}, $characters.laura.statsSex.bj = ($characters.laura.statsSex.bj ?? 0) + 1>>
+                    <<run setup.sexActs.blowsCock($characters.laura, $player)>>
                     <<run $('#ldb_bj').show()>>
                 <</linkreplace>>
             <</linkreplace>>
@@ -132,7 +132,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
             <</laura>>
             <br />
             <<set $characters.laura.bj = Math.min(($characters.laura.bj ?? 0) + 10, 100)>>
-            <<set $characters.laura.statsSex ??= {}, $characters.laura.statsSex.bj = ($characters.laura.statsSex.bj ?? 0) + 1>>
+            <<run setup.sexActs.blowsCock($characters.laura, $player)>>
             <<run $('#ldb_bj').show()>>
         <</linkreplace>>
         </div>
@@ -151,7 +151,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                 Fuck...  Again.
             <</laura>>
             <br />
-            <<set $characters.laura.statsSex.bj = ($characters.laura.statsSex.bj ?? 0) + 1>>
+            <<run setup.sexActs.blowsCock($characters.laura, $player)>>
             <div id="ldb_bj_cum">
             <<set _labelBjCum = 'Cum in her mouth'>>
             <<linkreplace _labelBjCum>>
@@ -171,7 +171,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                     Next time you're not getting off that easy.
                 <</laura>>
                 <br />
-                <<set $characters.laura.statsSex.bj = ($characters.laura.statsSex.bj ?? 0) + 1>>
+                <<run setup.sexActs.blowsCock($characters.laura, $player)>>
                 <<set $characters.laura.happy = Math.min(($characters.laura.happy ?? 0) + 5, 100)>>
                 <<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 3, 100)>>
                 <<addmins 30>>
@@ -187,7 +187,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
             <<linkreplace _labelFuck>>
                 <<run $('#ldb_bj_cum').hide()>>
                 <<set $characters.laura.pussy = Math.min(($characters.laura.pussy ?? 0) + 10, 100)>>
-                <<set $characters.laura.statsSex.pussy = ($characters.laura.statsSex.pussy ?? 0) + 1>>
+                <<run setup.sexActs.fucksPussy($player, $characters.laura)>>
                 <<if $characters.laura.virgin>><<run setup.npc.addHistory($characters.laura, 'virgin_lost', { with: 'mc' })>><</if>>
                 <<set $characters.laura.virgin = false>>
                 <<video 'laura/date_berries7'>>
@@ -208,7 +208,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                         Harder...  Fuck me harder...
                     <</laura>>
                     <br />
-                    <<set $characters.laura.statsSex.pussy = ($characters.laura.statsSex.pussy ?? 0) + 1>>
+                    <<run setup.sexActs.fucksPussy($player, $characters.laura)>>
                     <<set _labelBack = 'Lay her on the counter and pound her pussy'>>
                     <<linkreplace _labelBack>>
                         <<video 'laura/date_berries9'>>
@@ -221,7 +221,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                         <br />
                         Her pussy clenched around your cock as she came, her whole body shaking on the counter.  You kept fucking her through it and felt your own orgasm building fast.
                         <br /><br />
-                        <<set $characters.laura.statsSex.pussy = ($characters.laura.statsSex.pussy ?? 0) + 1>>
+                        <<run setup.sexActs.fucksPussy($player, $characters.laura)>>
                         <div id="ldb_cum_mouth">
                         <<set _labelMouth = 'Pull out and cum in her mouth'>>
                         <<linkreplace _labelMouth>>
@@ -237,7 +237,7 @@ In the kitchen she set the basket down on the table and stretched, rolling her s
                             <br />
                             She swallowed, wiped her lips with her thumb and got up, completely naked in the middle of the kitchen.  She looked around for her dress and found it hanging off the back of a chair.
                             <br /><br />
-                            <<set $characters.laura.statsSex.bj = ($characters.laura.statsSex.bj ?? 0) + 1>>
+                            <<run setup.sexActs.blowsCock($characters.laura, $player)>>
                             <<set $characters.laura.horny = 0>>
                             <<set $characters.laura.orgasms ??= 0>>
                             <<set $characters.laura.orgasms++>>
