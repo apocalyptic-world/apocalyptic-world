@@ -11,7 +11,7 @@
 	<<if ($tmpGirl.skills ?? []).length>>
 		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> has <<=setup.skills[setup.getRandomElement($tmpGirl.skills)].title>> skill!</strong>
 	<<else>>
-		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> don't have any skills!</strong>
+		<strong>You learned that <<=setup.pronounceWhat($tmpGirl)>> doesn't have any skills!</strong>
 	<</if>>
 	<br /><br />
 <</if>>
@@ -19,6 +19,9 @@
 <<sayNpc $tmpGirl>>
 	<<if $charId>>
 		<<=setup.npc.getCharDialog($tmpGirl, $charId)>>
+	<<elseif setup.player.strangerMeeting($tmpGirl)>>
+		/* a stranger met while exploring: lines by the MC's reputation (js/strangerDialog.js) */
+		<<=setup.strangerDialog.talk($tmpGirl)>>
 	<<else>>
 		<<=setup.npc.getSayDialog($tmpGirl)>>
 	<</if>>

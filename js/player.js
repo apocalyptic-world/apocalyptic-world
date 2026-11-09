@@ -24,7 +24,7 @@ setup.player = {
      * Call when the MC meets a stranger who can be invited (right after <<newgirl>> etc.). Rolls whether she has heard
      * of the MC and whether a companion vouches for the MC, and keeps the result in $strangerMeeting:
      *   { npcId, heardOfYou, companionVouched, gaveFood, shown }
-     * <<strangerMeetText>> prints it once; Girl invite - include uses it and unsets it.
+     * <<strangerMeetText>> prints it once; rollInvite uses it up when the invite is accepted.
      */
     meetStranger: function (npc) {
         const player = variables().player;
@@ -37,6 +37,24 @@ setup.player = {
     strangerMeeting: function (npc) {
         const meeting = variables().strangerMeeting;
         return meeting && npc?.id != null && meeting.npcId === npc.id ? meeting : null;
+    },
+
+    /**
+     * Rolls whether npc accepts the invite to move in (inviteChance). Returns true for yes, and then $strangerMeeting
+     * is used up; after a no it stays, so Talk keeps the stranger lines (the invite link doesn't come back).
+     * Used by <<inviteAccept>> / <<inviteRefusal>> callers.
+     */
+    rollInvite: function (npc, refused = false, rng = Math.random) {
+        const yes = rng() * 100 < setup.player.inviteChance(npc, refused);
+        if (yes) {
+            delete variables().strangerMeeting;
+        }
+        return yes;
+    },
+
+    /** The MC's reputation tier: 'unknown', 'rumoured', 'known', 'renowned' or 'legend' (setup.strangerDialog.TIERS). */
+    reputationTier: function () {
+        return setup.strangerDialog.tierOf(variables().player?.reputation ?? 0);
     },
 
     isRecognized: function() {

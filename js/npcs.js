@@ -162,6 +162,54 @@ setup.npcs.inviteChance = function ({ relationship = 0, reputation = 0, companio
     return Math.round((1 - allSayNo) * 100);
 };
 
+/** Tuning for setup.npcs.mcAttraction: from this submission on, someone not attracted to the MC still goes along. */
+setup.npcs.ATTRACTION = { submissionThreshold: 80 };
+
+/**
+ * How npc relates sexually to a partner of partnerGender (0 female, 1 male, 2 trans female, 3 trans male; the MC is
+ * male, so the default 1 means the MC). The same rules as setup.sexChance, which uses this:
+ *   { attracted, blocker, reason, willing }
+ *   blocker: null, or why the answer is no whatever they feel:
+ *     'incest'      the MC's family while the settlement forbids incest (only checked against the MC);
+ *     'married'     married to someone else whose spouse is alive;
+ *     'orientation' not attracted to partnerGender.
+ *   reason: 'nymphomaniac' (always yes) or 'ex' (an ex of the MC); null otherwise.
+ *   attracted: true when blocker is null.
+ *   willing: 'desire' (attracted), 'submission' (blocked, but sub ≥ ATTRACTION.submissionThreshold, so they comply)
+ *            or 'no'. Dialogue where the NPC wants the MC needs 'desire'.
+ *
+ *   setup.npcs.mcAttraction($tmpGirl).willing === 'desire'
+ */
+setup.npcs.mcAttraction = function (npc, partnerGender = 1) {
+    const likesList = ['likesGirls', 'likesGuys', 'likesTGirls', 'likesTGuys'];
+    const result = (blocker, reason = null) => ({
+        attracted: blocker === null,
+        blocker,
+        reason,
+        willing: blocker === null ? 'desire'
+            : (Number(npc?.sub) || 0) >= setup.npcs.ATTRACTION.submissionThreshold ? 'submission' : 'no'
+    });
+    if (!npc) {
+        return result('orientation');
+    }
+    if (variables().player?.baseManagement?.noIncest && setup.family.isBloodToMC(npc)) {
+        return result('incest');
+    }
+    if (npc.married && (!npc.family || npc.family.husband !== 'mc') && !setup.npc.isSpouseLost(npc.family?.husband)) {
+        return result('married');
+    }
+    if ((npc.traits ?? []).includes('nymphomaniac')) {
+        return result(null, 'nymphomaniac');
+    }
+    if (setup.npc.isExOfMc(npc)) {
+        return result(null, 'ex');
+    }
+    if (!npc[likesList[partnerGender]]) {
+        return result('orientation');
+    }
+    return result(null);
+};
+
 /* Older helpers, kept because runtime-loaded scripts (js/actions.js, packs/) may still call them. New code should
    use setup.npcs.pick. They used to live in js/scripts.js; the versions there could loop forever, shuffled the
    caller's list in place, and returned indices into a list that had shrunk while picking. */

@@ -7,8 +7,9 @@
     Explore event: Abandoned mall
         $strangerMeeting.gaveFood
     The chance comes from setup.player.inviteChance: relationship, reputation, companions, and the dice rolled
-    when meeting a stranger (setup.player.meetStranger, shown by <<strangerMeetText>>). $strangerMeeting is
-    used up by the invite.
+    when meeting a stranger (setup.player.meetStranger, shown by <<strangerMeetText>>). setup.player.rollInvite
+    rolls it (a yes uses up $strangerMeeting); <<inviteAccept>> / <<inviteRefusal>> (widgets/npc/strangerMeet.tw)
+    do the rest.
  */
  /*
     things to consider
@@ -22,24 +23,12 @@
     <<set _linkName = 'Invite '  + setup.pronounceWho($tmpGirl) + ' as guest'>>
 	<<linkreplace _linkName>>
         <<set $tmpGirlInvite = false>>
-        <<set _strongNpc = $player.strength <= $tmpGirl.strength>>
-        <<set _no = !setup.percentageChance(setup.player.inviteChance($tmpGirl, $wasRaped ?? false))>>
-        <<unset $wasRaped, $strangerMeeting>>
-        <<if _no>>
-            <<if _strongNpc>>
-                <<set $escapeReason = setup.pronounceWhat($tmpGirl, true) + ' considers your invite for a few moments, says no and leaves.'>>
-			    <<goto 'NPC found escape'>>
-            <<else>>
-                <<sayNpc $tmpGirl>>
-                    No, I don't want to come to live with you. Please let me go!
-                <</sayNpc>>
-            <</if>>
+        <<set _yes = setup.player.rollInvite($tmpGirl, $wasRaped ?? false)>>
+        <<unset $wasRaped>>
+        <<if _yes>>
+            <<inviteAccept $tmpGirl>>
         <<else>>
-            <<set $tmpGirl.capture = false>>
-			<<run setup.npc.addHistory($tmpGirl, 'invited')>>
-			<<set $guests.push($tmpGirl)>>
-			<<addhours 1>>
-			<<goto 'Guest house'>>
+            <<inviteRefusal $tmpGirl `$player.strength <= $tmpGirl.strength`>>
         <</if>>
 	<</linkreplace>>
 <</if>>

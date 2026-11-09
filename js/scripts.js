@@ -751,25 +751,22 @@ setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
 
+/** Percent chance that person agrees to sex with a partner of gender (default 1: the MC); rules in setup.npcs.mcAttraction. */
 setup.sexChance = function (person, gender = 1, beauty) {
-    var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
-    var appeal = (beauty ?? person.relationship);
-    var spouseId = person.family?.husband;
-    var spouseDead = setup.npc.isSpouseLost(spouseId);
+    const appeal = (beauty ?? person.relationship);
+    const { blocker, reason } = setup.npcs.mcAttraction(person, gender);
 
-    if (variables().player?.baseManagement?.noIncest && setup.family.isBloodToMC(person)) {
+    if (blocker === 'incest' || blocker === 'married') {
         return Math.floor(Math.max(person.sub, person.drunk ?? 0) / 2);
-    } else if (person.married && (!person.family || person.family.husband !== 'mc') && !spouseDead) {
-        return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
-    } else if ((person.traits ?? []).includes('nymphomaniac')) {
-		return 100;
-	} else if (setup.npc.isExOfMc(person)) {
-		return Math.floor(Math.max(person.relationship, person.horny ?? 0, person.drunk ?? 0));
-	} else if (!person[likesList[gender]]) {
-		return Math.floor(Math.max(person.sub, person.drunk ?? 0, person.horny ?? 0) / 2);
-	} else {
-		return Math.max(appeal, person.horny, person.sub, person.drunk ?? 0);
-	}
+    } else if (reason === 'nymphomaniac') {
+        return 100;
+    } else if (reason === 'ex') {
+        return Math.floor(Math.max(person.relationship, person.horny ?? 0, person.drunk ?? 0));
+    } else if (blocker === 'orientation') {
+        return Math.floor(Math.max(person.sub, person.drunk ?? 0, person.horny ?? 0) / 2);
+    } else {
+        return Math.max(appeal, person.horny, person.sub, person.drunk ?? 0);
+    }
 };
 
 setup.suicideChance = function (person) {

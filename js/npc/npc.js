@@ -47,7 +47,7 @@ setup.hairRoll = function(_race, _age, _gender) {
 	}
 	if (_gender == 1 && setup.percentageChance(_age - 10)) {
 		_hair = 'bald';
-	}	
+	}
 	return _hair;
 };
 
@@ -66,7 +66,7 @@ setup.eyesRoll = function(_race, _hair) {
     var _eyesRoll = window.randomInteger(1, 100);
     var _metisRoll = window.randomInteger(1, 100);
     var _eyes = 'brown';
-    
+
     var eyeColorChances = {
         blonde_ginger: [
             { color: 'gray', chance: 10 },
@@ -94,7 +94,7 @@ setup.eyesRoll = function(_race, _hair) {
             }
         }
     }
-    
+
     return _eyes;
 };
 
@@ -145,17 +145,17 @@ setup.displayOrientation = function(person) {
 	}
 	else if ((person.gender == 1 || person.gender == 3) && person.likesGirls == true) {
 		return 'straight';
-	}	
+	}
 	else if ((person.gender == 0 || person.gender == 2) && person.likesGuys == true) {
 		return 'straight';
 	}
 	else if ((person.gender == 1 || person.gender == 3) && person.likesGuys == true) {
 		return 'gay';
-	}	
+	}
 	else if ((person.gender == 0 || person.gender == 2) && person.likesGirls == true) {
 		return 'lesbian';
 	}
-	
+
 	return 'straight';
 };
 
@@ -197,7 +197,7 @@ setup.setSexuality = function(person, orientation) {
 
 	if (person.gender == 0 || person.gender == 3 ) {
 		person.pussy = 0;
-	}	
+	}
 
 	if (_orientation == 'bisexual') {
 		person.likesGuys = true;
@@ -234,7 +234,7 @@ setup.setSexuality = function(person, orientation) {
 		person.likesTGuys = false;
 		person.likesTGirls = false;
 	}
-	
+
 	if (person.likesGuys) {
 		person.guys = window.randomInteger(2, 20);
 	}
@@ -255,7 +255,7 @@ setup.setSexuality = function(person, orientation) {
 		person.bj = window.randomInteger(10, 30);
 		person.dp = window.randomInteger(0, 20);
 	}
-	
+
 	if (person.likesTGirls && setup.percentageChance(25)) {
 		person.bj = window.randomInteger(10, 30);
 		person.dp = window.randomInteger(0, 20);
@@ -275,8 +275,8 @@ setup.setSexuality = function(person, orientation) {
 
 	if (person.gender == 1 && _orientation == 'straight' && setup.percentageChance(10)) {
 		person.anal = window.randomInteger(5, 20);
-	}	
-	
+	}
+
 	return person;
 };
 
@@ -376,7 +376,7 @@ setup.beautyDescription = function(beauty) {
 
 /**
  * Gives happy level from either a npc, a number or a string
- * @param   {npc|number|string}   nns 
+ * @param   {npc|number|string}   nns
  * @returns {string}              happy level
  */
 setup.getNpcHappyLevel = function(nns) {
@@ -388,7 +388,7 @@ setup.getNpcHappyLevel = function(nns) {
 	} else { /* npc */
 		happy = nns.happy ?? 0;
 	}
-	
+
 	const emotions = {
         very_sad: happy < -50,
         sad: happy < 0,
@@ -665,20 +665,20 @@ setup.npc = {
 				"Food. Water. Ammo. That's all that matters now."
 			],
 			emotional_positive: [
-				"You give me hope... and that’s rare.",
-				"I didn’t think I could smile again until I met you."
+				"You give me hope... and that's rare.",
+				"I didn't think I could smile again until I met you."
 			],
 			emotional_negative: [
-				"Don’t ask me how I’m doing. You already know the answer.",
-				"It’s easier not to feel anything at all."
+				"Don't ask me how I'm doing. You already know the answer.",
+				"It's easier not to feel anything at all."
 			],
 			philosophical: [
-				"What even is ‘humanity’ anymore? Is it worth saving?",
+				"What even is 'humanity' anymore? Is it worth saving?",
 				"I wonder if we were always doomed. The end just came quicker than expected."
 			],
 			sadistic: [
 				"You should see their faces when they realize I'm not here to help.",
-				"Screams echo beautifully, don’t they?"
+				"Screams echo beautifully, don't they?"
 			],
 			masochist: [
 				"Hurt me again. Make me feel like I still exist.",
@@ -689,54 +689,69 @@ setup.npc = {
 				"You don't know how much I needed this… us."
 			],
 			hungry: [
-				"I’m so damn hungry I could eat a dead rad-dog.",
-				"I’d kill for a sandwich. Literally."
+				"I'm so damn hungry I could eat a dead rad-dog.",
+				"I'd kill for a sandwich. Literally."
 			],
 			horny_low: [
-				"It’s been a while… I could use a distraction.",
-				"I’ve got urges I can’t just ignore, you know?"
+				"It's been a while… I could use a distraction.",
+				"I've got urges I can't just ignore, you know?"
 			],
 			horny_high: [
 				"If you don't take me right now, I might explode.",
-				"Let’s not pretend this tension doesn’t exist."
+				"Let's not pretend this tension doesn't exist."
 			],
 			drunk: [
-				"The world’s a blur. Makes it easier to forget.",
-				"Another drink? Sure. What’s the worst that can happen?"
+				"The world's a blur. Makes it easier to forget.",
+				"Another drink? Sure. What's the worst that can happen?"
 			],
 			corrupted: [
-				"I stopped pretending to care about ‘good’ a long time ago.",
+				"I stopped pretending to care about ‘good' a long time ago.",
 				"Morality is for the dead. The rest of us just adapt."
 			],
 			mechanical: [
-				"Fixed the generator again. I swear, it’s held together with duct tape and hope.",
+				"Fixed the generator again. I swear, it's held together with duct tape and hope.",
 				"If I had proper tools, I could do wonders..."
 			],
 			fighter: [
-				"The best part of a fight? That split-second when you know you’ve won.",
+				"The best part of a fight? That split-second when you know you've won.",
 				"Violence is a language everyone understands."
 			],
 			cook: [
 				"I made stew out of god knows what. But it tastes... edible.",
 				"I miss real food. You know, not rat jerky and canned beans."
 			],
+			// not attracted to the MC (or not free to be), but submissive enough to go along
+			submissive: [
+				"You're not who I'd choose. But if you want me, I won't say no.",
+				"Tell me what you want, %mcName%. I'll do it."
+			],
 
 			// SEX STATS-BASED DIALOG
 			sex_innocent: [
-				"I’ve only done it a few times... is that bad?",
-				"Sometimes I wonder if I’m still the same person after my first time."
+				"I've only done it a few times... is that bad?",
+				"Sometimes I wonder if I'm still the same person after my first time."
 			],
 			sex_experienced: [
 				"I've done more than I care to admit... but it kept me alive.",
 				"Sex isn't new to me, it's just part of the game now."
 			],
-			sex_lewd: [
+			// lewd lines by anatomy: vagina (women, trans men) or penis and anus (men, trans women); line [1] is aimed at the MC
+			sex_lewd_female: [
+				"I'm dripping just thinking about it again...",
+				"My pussy still remembers you, %mcName%. Don't keep me waiting too long."
+			],
+			sex_lewd_male_trans: [
+				"I get hard just thinking about last time...",
+				"I can't stop thinking about you filling my ass again, %mcName%."
+			],
+			// added with either lewd category above; all aimed at the MC
+			sex_lewd_generic: [
 				"Use me %mcName%. Ruin me. I live for that.",
-				"I'm dripping just thinking about it again..."
+				"Whenever you want me, %mcName%, however you want me. Just say the word."
 			],
 			sex_jaded: [
-				"It doesn’t mean anything to me anymore. Just another motion.",
-				"I’ve stopped pretending I feel anything from it now."
+				"It doesn't mean anything to me anymore. Just another motion.",
+				"I've stopped pretending I feel anything from it now."
 			],
 			family_child: [
 				"I still remember when I used to fall asleep on your lap...",
@@ -744,59 +759,59 @@ setup.npc = {
 				"Sometimes I wonder if things would be different if we never left home.",
 
 				"You say you protected me, but look where we are now.",
-				"I didn’t ask to be born into this. You made choices, and I live with them.",
+				"I didn't ask to be born into this. You made choices, and I live with them.",
 				"Do you even remember what it means to be a parent anymore?",
 
 				"What were you like before everything fell apart? Were you different?",
-				"Do you think I’d still be me if the world had stayed normal?",
-				"Do you ever wish I hadn’t been born into all this chaos?",
+				"Do you think I'd still be me if the world had stayed normal?",
+				"Do you ever wish I hadn't been born into all this chaos?",
 
-				"No matter what happens, I’m glad I have you. Really.",
-				"I feel safe when you’re nearby. I know I shouldn’t admit it, but I do.",
-				"You’re not perfect, but you’re all I have. And I need you.",
+				"No matter what happens, I'm glad I have you. Really.",
+				"I feel safe when you're nearby. I know I shouldn't admit it, but I do.",
+				"You're not perfect, but you're all I have. And I need you.",
 
 				"I learned to fight because I had to. Not because I wanted to.",
 				"Softness gets you killed. You taught me that, remember?",
-				"I don’t have time to be a kid anymore, we both know that.",
+				"I don't have time to be a kid anymore, we both know that.",
 
-				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
+				"Sometimes I feel like I've lost who I was. Do you even see me the same?",
 				"Things have changed between us... and not always for the better.",
-				"The choices we made... some lines can’t be uncrossed, right?",
+				"The choices we made... some lines can't be uncrossed, right?",
 
-				"People underestimate me because I smile. That’s their mistake.",
-				"I’m not just your child. I’m my own person too, even if the world forgets that.",
-				"I act confident so no one sees the cracks. But you see them, don’t you?",
+				"People underestimate me because I smile. That's their mistake.",
+				"I'm not just your child. I'm my own person too, even if the world forgets that.",
+				"I act confident so no one sees the cracks. But you see them, don't you?",
 
 				"%mcNameUC%, remember when you tried to teach me how to fix that old generator? You were terrible at it.",
-				"You always said I’d be stronger than you someday. I think that day came."
+				"You always said I'd be stronger than you someday. I think that day came."
 			],
 			family_child_potion: [
 				"You say you protected me, but look where we are now.",
-				"I didn’t ask to be born into this. You made choices, and I live with them.",
+				"I didn't ask to be born into this. You made choices, and I live with them.",
 				"Do you even remember what it means to be a parent anymore?",
 
-				"Do you ever wish I hadn’t been born into all this chaos?",
+				"Do you ever wish I hadn't been born into all this chaos?",
 
-				"No matter what happens, I’m glad I have you. Really.",
-				"I feel safe when you’re nearby. I know I shouldn’t admit it, but I do.",
-				"You’re not perfect, but you’re all I have. And I need you.",
+				"No matter what happens, I'm glad I have you. Really.",
+				"I feel safe when you're nearby. I know I shouldn't admit it, but I do.",
+				"You're not perfect, but you're all I have. And I need you.",
 
 				"I learned to fight because I had to. Not because I wanted to.",
-				"I don’t have time to be a kid anymore, we both know that.",
+				"I don't have time to be a kid anymore, we both know that.",
 
-				"Sometimes I feel like I’ve lost who I was. Do you even see me the same?",
+				"Sometimes I feel like I've lost who I was. Do you even see me the same?",
 				"Things have changed between us... and not always for the better.",
-				"The choices we made... some lines can’t be uncrossed, right?",
+				"The choices we made... some lines can't be uncrossed, right?",
 
-				"People underestimate me because I smile. That’s their mistake.",
-				"I’m not just your child. I’m my own person too, even if the world forgets that.",
-				"I act confident so no one sees the cracks. But you see them, don’t you?",
+				"People underestimate me because I smile. That's their mistake.",
+				"I'm not just your child. I'm my own person too, even if the world forgets that.",
+				"I act confident so no one sees the cracks. But you see them, don't you?",
 
-				"It’s strange, existing like this. One moment nothing, the next... all of this.",
-				"I have your eyes, apparently. I noticed that in the mirror. I don’t know how to feel about it.",
-				"I know what I am. But I don’t know who I am yet. Give me time.",
-				"Don’t expect me to pretend I have memories I don’t. We both know how this happened.",
-				"I don’t have a past. Just this. Whatever this is."
+				"It's strange, existing like this. One moment nothing, the next... all of this.",
+				"I have your eyes, apparently. I noticed that in the mirror. I don't know how to feel about it.",
+				"I know what I am. But I don't know who I am yet. Give me time.",
+				"Don't expect me to pretend I have memories I don't. We both know how this happened.",
+				"I don't have a past. Just this. Whatever this is."
 			]
 		}
 
@@ -804,14 +819,17 @@ setup.npc = {
 
 		const {
 			corruption, happy, drunk, food, horny, relationship,
-			traits, personality, location, skills, sexStats
+			traits, personality, location, skills, sexStats, statsSex
 		} = npc;
 
 		traits ??= [];
 		skills ??= [];
 
-		if (happy > 40) pool.push(...db.emotional_positive);
-		else if (happy < -20) pool.push(...db.emotional_negative);
+		// "You give me hope…" / "Don't ask me how I'm doing…" are said to the MC by someone living with him by choice:
+		// only guests (not slaves, nursery children, characters or strangers)
+		const isGuest = npc.id != null && (variables().guests ?? []).some(guest => guest.id === npc.id);
+		if (isGuest && happy > 40) pool.push(...db.emotional_positive);
+		else if (isGuest && happy < -20) pool.push(...db.emotional_negative);
 
 		if (corruption > 80) pool.push(...db.corrupted);
 		if (drunk > 70) pool.push(...db.drunk);
@@ -849,19 +867,47 @@ setup.npc = {
 			}
 		}
 
-		// === SexStats logic ===
-		if (sexStats) {
-			const { bj = 0, pussy = 0, anal = 0, dp = 0, creampies = 0 } = sexStats;
+		// === Sex experience ===
+		// Acts are counted in statsSex (sex scenes and jobs); sexStats holds creampies (and a few acts from older events).
+		if (statsSex || sexStats) {
+			const acts = key => (Number(statsSex?.[key]) || 0) + (Number(sexStats?.[key]) || 0);
+			const bj = acts('bj'), pussy = acts('pussy'), anal = acts('anal'), dp = acts('dp');
+			const creampies = Number(sexStats?.creampies) || 0;
 			const totalActs = bj + pussy + anal + dp;
 
 			if (totalActs <= 3) pool.push(...db.sex_innocent);
 			else if (totalActs >= 10 && totalActs <= 30) pool.push(...db.sex_experienced);
 
-			if ((creampies > 5 || bj >= 15 || pussy >= 10) && corruption >= 50)
-				pool.push(...db.sex_lewd);
+			if (corruption >= 50) {
+				// by anatomy: vagina for women (0) and trans men (3); penis and anus for men (1) and trans women (2)
+				const hasVagina = [0, 3].includes(npc.gender);
+				const lewd = hasVagina
+					? (creampies > 5 || bj >= 15 || pussy >= 10)
+					: (bj >= 15 || anal >= 10);
+				if (lewd) {
+					pool.push(...(hasVagina ? db.sex_lewd_female : db.sex_lewd_male_trans));
+					pool.push(...db.sex_lewd_generic);
+				}
+			}
 
 			if (totalActs >= 30 && happy < -10)
 				pool.push(...db.sex_jaded);
+		}
+
+		// Lines where the NPC wants the MC only make sense if they would actually agree (setup.npcs.mcAttraction).
+		// Someone not attracted but submissive enough gets lines of compliance instead.
+		const toMc = new Set([
+			...db.horny_high,
+			db.affectionate[1], // "You don't know how much I needed this… us."
+			db.masochist[0],    // "Hurt me again. Make me feel like I still exist."
+			db.sex_lewd_female[1],
+			db.sex_lewd_male_trans[1],
+			...db.sex_lewd_generic
+		]);
+		const willing = setup.getAge(npc) < 18 ? 'no' : setup.npcs.mcAttraction(npc).willing;
+		if (willing !== 'desire' && pool.some(line => toMc.has(line))) {
+			pool = pool.filter(line => !toMc.has(line));
+			if (willing === 'submission') pool.push(...db.submissive);
 		}
 
 		if (pool.length < 3) pool.push(...db.philosophical);

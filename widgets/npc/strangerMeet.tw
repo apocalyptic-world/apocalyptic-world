@@ -1,29 +1,86 @@
 :: Widget strangerMeetText [widget]
-/* Prints, once per stranger, the dice rolled by setup.player.meetStranger($tmpGirl): whether $tmpGirl has heard of
+/* Lines come from setup.strangerDialog (js/strangerDialog.js), by the MC's reputation tier.
+   Prints, once per stranger, the dice rolled by setup.player.meetStranger($tmpGirl): whether $tmpGirl has heard of
    the MC (reputation) and whether a companion vouched for the MC. Either one means the invite will be accepted
    (see setup.npcs.inviteChance). Prints nothing when neither happened or $tmpGirl has no meeting. */
 <<widget strangerMeetText>>
 <<set _meeting = setup.player.strangerMeeting($tmpGirl)>>
 <<if _meeting && !_meeting.shown>>
 <<set $strangerMeeting.shown = true>>
-<<set _sheOrHe = setup.pronounceWhat($tmpGirl)>>
-<<set _SheOrHe = setup.pronounceWhat($tmpGirl, true)>>
-<<set _herOrHim = setup.pronounceWho($tmpGirl)>>
-<<set _herOrHis = setup.pronounceWhos($tmpGirl)>>
 <<if _meeting.heardOfYou>>
-<em><<= either([
-	_SheOrHe + ' looks at you a second time, and you see recognition in ' + _herOrHis + ' eyes. People out here talk about you, and ' + _sheOrHe + ' has heard the stories.',
-	_SheOrHe + ' studies your face, then lets out a breath. "I know who you are. Everyone says you can be trusted."',
-	'Something changes in ' + _herOrHis + ' face. Your name travels further than you thought, and ' + _sheOrHe + ' seems to know it.'
-])>></em>
+<em><<= setup.strangerDialog.line('heardOfYou', $tmpGirl)>></em>
 <br /><br />
 <</if>>
 <<if _meeting.companionVouched>>
 <<set _voucher = setup.getRandomElement(setup.companions.list())>>
 <<if _voucher>>
-<em><<= _voucher.name>> steps up beside you and tells <<= _herOrHim>> you are someone to trust. <<= _SheOrHe>> relaxes a little.</em>
+<em><<= setup.strangerDialog.line('companionVouch', $tmpGirl, { vars: { name: _voucher.name } })>></em>
 <br /><br />
 <</if>>
 <</if>>
+<</if>>
+<</widget>>
+
+:: Widget newStranger [widget]
+/* Creates a random stranger in $tmpGirl: a girl, a guy, or (with trans content on) a trans girl.
+   _args[0]: where they were met, stored as $tmpGirl.location ('forest', 'car', …). */
+<<widget newStranger>>
+<<set _strangerGenders = [0, 1]>>
+<<if settings.transEnabled>>
+	<<set _strangerGenders.push(2)>>
+<</if>>
+<<set _strangerGender = setup.getRandomElement(_strangerGenders)>>
+<<if _strangerGender === 0>>
+	<<newgirl>>
+<<elseif _strangerGender === 1>>
+	<<newguy>>
+	<<set $tmpGirl = $tmpGuy>>
+<<else>>
+	<<newtransgirl>>
+<</if>>
+<<set $tmpGirl.location = _args[0]>>
+<</widget>>
+
+:: Widget approachStranger [widget]
+/* Goes to the NPC view of the stranger in $tmpGirl, who can then be invited (and rolls setup.player.meetStranger).
+   Use inside a link.
+   _args[0]: the passage to return to ('Outside', 'Garage', …).
+   _args[1]: true when the meeting is friendly: no rape or capture options. */
+<<widget approachStranger>>
+<<if !_args[1]>>
+	<<set $tmpGirl.rape to true>>
+	<<set $tmpGirlCapture = true>>
+<</if>>
+<<set $tmpGirlInvite = true>>
+<<run setup.player.meetStranger($tmpGirl)>>
+<<unset $tmpGirlViewBack>>
+<<unset $slaveId, $guestId, $charId, $childId>>
+<<set $tmpGirlBack = _args[0]>>
+<<goto [[NPC view]]>>
+<</widget>>
+
+:: Widget inviteAccept [widget]
+/* The NPC in _args[0] accepted the invite to move in (see setup.player.rollInvite): joins the guests, then goes to
+   the Guest house. Do any scene-specific changes (e.g. removing them from $wanted) before calling it. */
+<<widget inviteAccept>>
+<<set _args[0].capture = false>>
+<<run setup.npc.addHistory(_args[0], 'invited')>>
+<<set $guests.push(_args[0])>>
+<<addhours 1>>
+<<goto 'Guest house'>>
+<</widget>>
+
+:: Widget inviteRefusal [widget]
+/* The NPC in _args[0] refused the invite to move in (see setup.player.rollInvite). Lines from setup.strangerDialog.
+   _args[1]: true when the NPC can just leave (stronger than the MC): goes to 'NPC found escape'.
+   Otherwise the NPC asks to be let go. */
+<<widget inviteRefusal>>
+<<if _args[1]>>
+	<<set $escapeReason = setup.strangerDialog.line('refusedLeaves', _args[0])>>
+	<<goto 'NPC found escape'>>
+<<else>>
+	<<sayNpc _args[0]>>
+		<<= setup.strangerDialog.line('inviteRefused', _args[0])>>
+	<</sayNpc>>
 <</if>>
 <</widget>>
