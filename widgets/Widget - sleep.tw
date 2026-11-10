@@ -69,6 +69,14 @@
   <<for _sdi = 0; _sdi < (_settleDaily.destroyed ?? []).length; _sdi++>>
     <<run setup.sleepMessages.addMain(_settleDaily.destroyed[_sdi] + ' has gone quiet. Word is, they didn\'t make it.')>>
   <</for>>
+  <<for _wsli = 0; _wsli < (_settleDaily.childrenLost ?? []).length; _wsli++>>
+    <<set _wsLost = _settleDaily.childrenLost[_wsli]>>
+    <<run setup.sleepMessages.addMain((_wsLost.count === 1 ? 'Your child at ' + _wsLost.name + ' was' : 'Your ' + _wsLost.count + ' children at ' + _wsLost.name + ' were') + ' lost with them.')>>
+  <</for>>
+  <<for _wsbi = 0; _wsbi < (_settleDaily.births ?? []).length; _wsbi++>>
+    <<set _wsBirth = _settleDaily.births[_wsbi]>>
+    <<run setup.sleepMessages.addMain('Word reached you from ' + _wsBirth.name + ': ' + _wsBirth.mother + ' gave birth to your ' + (_wsBirth.gender === 1 ? 'son' : 'daughter') + ', ' + _wsBirth.child + '. You can bring ' + (_wsBirth.gender === 1 ? 'him' : 'her') + ' home from there.')>>
+  <</for>>
   <<for _shi = 0; _shi < (_settleDaily.needsHelp ?? []).length; _shi++>>
     <<run setup.sleepMessages.addMain(_settleDaily.needsHelp[_shi].name + ' is under attack. They\'ve sent word asking for help.')>>
   <</for>>

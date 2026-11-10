@@ -1,0 +1,83 @@
+:: Garage - World - Children - Take [Place bg-garage settlement]
+<<set _tS = setup.settlements.getById($tmpSettlement)>>
+<<set _tKid = (_tS?.children ?? []).find(k => k.id === $tmpSettlementChild)>>
+<<if !_tKid || setup.settlements.isHostile(_tS)>>
+	<<unset $tmpSettlementChild>>
+	<<goto 'Garage - World - Settlement'>>
+<<else>>
+	<<set _tSon = _tKid.gender === 1>>
+	<<set _tHim = _tSon ? 'him' : 'her'>>
+	<<set _tHe = _tSon ? 'He' : 'She'>>
+	<<set _tHeLow = _tSon ? 'he' : 'she'>>
+	<<set _tAge = setup.getAge(_tKid)>>
+	<<set _tName = _tKid.name>>
+
+	<h1 class="ptitle"><<= _tSon ? 'YOUR SON' : 'YOUR DAUGHTER'>></h1>
+	<br />
+
+	<<if _tAge < 2>>
+		You took the baby in your arms. <<= _tHe>> was small and warm, and stared up at you for a long moment before grabbing a fistful of your shirt.
+	<<elseif _tAge < 10>>
+		<<= _tKid.name>> hid behind the woman who had brought <<= _tHim>> out, then peeked at you. Someone had told <<= _tHim>> who you were.
+	<<else>>
+		<<= _tKid.name>> looked you over without a word. <<= _tHe>> had heard about you, and wasn't sure yet what to make of you.
+	<</if>>
+	<br /><br />
+
+	<<if _tS.leader>>
+		<<sayNpc _tS.leader>>
+			<<if _tKid.family?.mother === _tS.leader.id>>
+				Look after <<= _tHim>>. I want to hear that <<= _tHeLow>>'s doing well.
+			<<else>>
+				<<= _tHe>>'s yours now. Look after <<= _tHim>>.
+			<</if>>
+		<</sayNpc>>
+		<br />
+	<</if>>
+
+	<div id="take_child_name">
+		Name: <<textbox "_tName" _tName>>
+		<br /><br />
+		<<if !($game.location.nursery ?? false) && ($game.location.guesthouse ?? false) && setup.guestRoom.freeBeds() < 1>>
+			<span class="warning">There is no free bed in the guest house for <<= _tHim>>.</span>
+			<br /><br />
+		<</if>>
+	</div>
+	<div id="take_child_go">
+	<<set _tTakeLabel = 'Take ' + _tHim + ' home'>>
+	<<linkreplace _tTakeLabel>>
+		<<run $('#take_child_back').hide()>>
+		<<run $('#take_child_name').hide()>>
+		<<set _tKid.name = String(_tName ?? '').trim() || _tKid.name>>
+		<<set _tResult = setup.settlements.takeChild(_tS, _tKid.id)>>
+		<<unset $tmpSettlementChild>>
+		<<addmins 30>>
+		<<= _tKid.name>> was coming home with you.
+		<<if _tResult.place === 'nursery'>>
+			<<= _tHe>> would live in the nursery.
+		<<elseif _tResult.place === 'basement'>>
+			With no nursery or guest house, <<= _tHeLow>> would have to stay in the basement.
+		<<elseif _tResult.place === 'noBed'>>
+			<<= _tHe>> would stay in the guest house, though there was no free bed for <<= _tHim>> yet.
+		<<else>>
+			<<= _tHe>> would stay in the guest house.
+		<</if>>
+		<br /><br />
+		<<if (_tS.children ?? []).length>>
+			<<link 'Continue'>>
+				<<goto 'Garage - World - Children'>>
+			<</link>>
+		<<else>>
+			<<link 'Continue'>>
+				<<goto 'Garage - World - Settlement'>>
+			<</link>>
+		<</if>>
+	<</linkreplace>>
+	</div>
+	<div id="take_child_back">
+	<<link 'Back'>>
+		<<unset $tmpSettlementChild>>
+		<<goto 'Garage - World - Children'>>
+	<</link>>
+	</div>
+<</if>>

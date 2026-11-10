@@ -1143,8 +1143,9 @@ setup.npc = {
 			case 'rescued':          return day + 'Rescued' + (entry.place ? ' from ' + entry.place : '');
 			case 'taken_in':         return day + 'Taken in' + (entry.place ? ' from ' + entry.place : '');
 			case 'born': {
-				const mother = entry.mother ? setup.npc.findById(entry.mother)?.name : null;
-				return day + 'Born' + (mother ? ' to ' + mother : '');
+				// motherName/place: mothers who live elsewhere (settlement leaders) can't be looked up by id
+				const mother = (entry.mother ? setup.npc.findById(entry.mother)?.name : null) ?? entry.motherName;
+				return day + 'Born' + (mother ? ' to ' + mother : '') + (entry.place ? ' in ' + entry.place : '');
 			}
 			case 'tribute_accepted': return day + 'Accepted as tribute from ' + (entry.place ?? 'a settlement');
 			case 'tribute_slave':    return day + 'Taken as tribute from ' + (entry.place ?? 'a settlement') + ', made a slave';

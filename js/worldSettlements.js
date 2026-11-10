@@ -1028,6 +1028,58 @@ setup.settlements = {
 		return { gain: +(s.relationship - before).toFixed(1), bondUntil: s.leaderBondUntil };
 	},
 
+	/**
+	 * The leader gives birth to the player's child. The baby is a full NPC made by <<newchild>> and stays in
+	 * s.children until the player takes it home. This runs during sleep, so the temporaries and the
+	 * $tmpGirl/$tmpGuy/$newChild that the widget overwrites are put back afterwards. Returns the child or null.
+	 */
+	leaderGiveBirth: function (s) {
+		const v = variables();
+		const temp = State.temporary;
+		const savedTemp = Object.assign({}, temp);
+		const storyKeys = ['tmpGirl', 'tmpGuy', 'newChild'];
+		const savedStory = {};
+		storyKeys.forEach(function (k) { if (k in v) savedStory[k] = v[k]; });
+
+		temp.wsBirthMother = s.leader;
+		$.wiki('<<newchild ' + window.randomInteger(0, 1) + ' _wsBirthMother>>');
+		const kid = v.newChild;
+
+		Object.keys(temp).forEach(function (k) { if (!(k in savedTemp)) delete temp[k]; });
+		Object.assign(temp, savedTemp);
+		storyKeys.forEach(function (k) {
+			if (k in savedStory) v[k] = savedStory[k];
+			else delete v[k];
+		});
+		if (!kid) return null;
+
+		// <<newchild>> stores $gameDate itself; copy it so the clock moving later doesn't change the birthday
+		kid.birthDate = new Date(v.gameDate.getTime());
+		// Leaders aren't in $guests/$characters, so setup.getNpcById can't find the mother; keep her name
+		kid.family.motherName = s.leader.name;
+		setup.npc.addHistory(kid, 'born', { mother: s.leader.id, motherName: s.leader.name, place: s.name });
+		(s.children ??= []).push(kid);
+		return kid;
+	},
+
+	/** Bring one of the player's children kept at s home. Returns { kid, place } (place from placeNewborn) or null. */
+	takeChild: function (s, childId) {
+		const i = (s.children ?? []).findIndex(function (k) { return k.id === childId; });
+		if (i < 0) return null;
+		const kid = s.children.splice(i, 1)[0];
+		if (!s.children.length) delete s.children;
+		setup.npc.addHistory(kid, 'taken_in', { place: s.name });
+		setup.settlements.logEvent(s, 'You took ' + kid.name + ' home.');
+		return { kid: kid, place: setup.guestRoom.placeNewborn(kid) };
+	},
+
+	/** Bring every child of the player's kept at s home (after a won raid). Returns the list of { kid, place }. */
+	takeAllChildren: function (s) {
+		return (s.children ?? []).map(function (k) { return k.id; }).map(function (id) {
+			return setup.settlements.takeChild(s, id);
+		}).filter(Boolean);
+	},
+
 	// -------------------------------------------------------------------------
 	// SIMULATION
 	// -------------------------------------------------------------------------
@@ -1060,12 +1112,17 @@ setup.settlements = {
 		}
 
 		// A leader carrying the player's child (Leader Night): leaders are not guests/slaves, so the sleep
-		// system never ticks their pregnancy. Count the days here; after 270 the child is born (logged)
-		// and the flags are cleared so she can conceive again.
+		// system never ticks their pregnancy. Count the days here; after 270 the child is born and stays
+		// in s.children until the player takes it home. The flags are cleared so she can conceive again.
 		if (s.leader && typeof s.leader.pregnancy !== 'undefined') {
 			s.leader.pregnancy++;
 			if (s.leader.pregnancy > 270) {
-				setup.settlements.logEvent(s, s.leader.name + ' gave birth to your child.');
+				const kid = s.leader.pregnancy_father === 'mc' ? setup.settlements.leaderGiveBirth(s) : null;
+				if (kid) {
+					setup.settlements.logEvent(s, s.leader.name + ' gave birth to your ' + (kid.gender === 1 ? 'son' : 'daughter') + ', ' + kid.name + '.');
+				} else {
+					setup.settlements.logEvent(s, s.leader.name + ' gave birth.');
+				}
 				delete s.leader.pregnancy;
 				delete s.leader.pregnancy_father;
 			}
@@ -1252,17 +1309,31 @@ setup.settlements = {
 		const abductionCandidates = [];
 		const desperateDeals      = [];
 		const tributeOffers       = [];
+		const births              = [];
+		const childrenLost        = [];
 
 		for (let i = 0; i < list.length; i++) {
 			const s = list[i];
 			const prevPop    = s.population;
 			const wasDestroyed = !!s.destroyed;
+			const kidsBefore = (s.children || []).length;
 			setup.settlements.dailyUpdate(s, day);
+
+			if ((s.children || []).length > kidsBefore) {
+				const kid = s.children[s.children.length - 1];
+				births.push({ id: s.id, name: s.name, mother: kid.family.motherName, child: kid.name, gender: kid.gender });
+			}
 
 			if (!wasDestroyed && s.destroyed && s.discovered) {
 				newlyDestroyed.push(s.name);
 				const survivors = Math.max(1, Math.min(4, Math.floor(prevPop * 0.1)));
 				refugees.push({ id: s.id, name: s.name, count: survivors, type: s.type });
+			}
+
+			// The player's children are lost with a settlement that falls (a won raid brings them home first)
+			if (s.destroyed && (s.children || []).length) {
+				childrenLost.push({ id: s.id, name: s.name, count: s.children.length });
+				delete s.children;
 			}
 
 			if (s.callForHelp && !s.callForHelpNotified) {
@@ -1360,7 +1431,7 @@ setup.settlements = {
 		setup.settlements.save(list);
 		return { destroyed: newlyDestroyed, needsHelp, refugees, newUltimatums, expiredUltimatums,
 		         starving, womanDemands, expiredWomanDemands, newBlackmails, expiredBlackmails,
-		         abductionCandidates, desperateDeals, tributeOffers };
+		         abductionCandidates, desperateDeals, tributeOffers, births, childrenLost };
 	},
 
 	/** Pay an active ultimatum demand. */
