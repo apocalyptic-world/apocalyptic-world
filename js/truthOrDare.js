@@ -30,7 +30,7 @@ setup.tod = {
     },
 
     canPlay: function (g) {
-        if (!g || setup.getAge(g) < 18 || g.gender === 1 || (g.gender === 2 && !settings.transEnabled)) return false;
+        if (!g || setup.getAge(g) < 18 || [1, 3].includes(g.gender) || (g.gender === 2 && !settings.transEnabled)) return false;
         if ((g.traits ?? []).includes('feral') || typeof g.sick !== 'undefined' || g.basementVoluntary) return false;
         if (setup.family.isBloodToMC(g)) return false;
         return !setup.isAtWork(g, variables().weather);

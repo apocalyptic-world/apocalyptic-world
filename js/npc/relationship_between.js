@@ -144,7 +144,8 @@ setup.relationshipBetween = {
             if (targetNpc && this.npc.relationshipBetween.stats[targetNpcId] === 100 && (
                 (this.npc.likesGirls && targetNpc.gender === 0) || 
                 (this.npc.likesGuys && targetNpc.gender === 1) || 
-                (this.npc.likesTGirls && targetNpc.gender === 2)
+                (this.npc.likesTGirls && targetNpc.gender === 2) ||
+                (this.npc.likesTGuys && targetNpc.gender === 3)
             )) {
                 likeableGuests.push(targetNpcId);
             }
