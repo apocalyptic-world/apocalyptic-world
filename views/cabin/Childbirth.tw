@@ -94,6 +94,7 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 		<</if>>
 		<<link 'Continue'>>
 			<<set _mother.noPregnancyDays = randomInteger(180, 250)>>
+			<<run setup.humans.endPregnancy(_mother)>>
 			<<if $pregnancyHappening.type === 'slave'>>
 				<<set $slaves[$pregnancyHappening.id] = _mother>>
 			<<elseif $pregnancyHappening.type === 'character'>>
@@ -102,11 +103,10 @@ Her contractions grew stronger, <<=setup.displayName(_mother)>> knew that she di
 				<<set $guests[$pregnancyHappening.id] = _mother>>
 			<</if>>
 
-			<<set _child.name = _childName>>
-			<<run setup.npc.addHistory(_child, 'born', { mother: _mother.id })>>
-			
-			
-			<<run setup.guestRoom.placeNewborn(_child)>>
+			<<set $newChild.name = _childName>>
+			<<run setup.npc.addHistory($newChild, 'born', { mother: _mother.id })>>
+			<<run setup.guestRoom.placeNewborn($newChild)>>
+			<<unset $newChild>>
 
 			<<run delete $pregnancyHappening>>
 			<<goto 'Bedroom'>>

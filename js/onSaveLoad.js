@@ -680,7 +680,9 @@ Save.onLoad.add(function (save) {
 
     /* sex act counters: statsSex (acts with anyone) → generalSexStats, sexStats (acts with the MC) → mainCharSexStats,
        in every NPC of every history moment (best effort, see setup.sexActs.migrateLegacyCounters); the per-scene
-       $sexStats flags became $sexActsThisScene */
+       $sexStats flags became $sexActsThisScene.
+       Also: men and trans women lose a `pussy` field (boys born before setup.humans.newBorn got pussy = 0, and the
+       sex change surgery kept it); scenes take it as "has a pussy". */
     save.state.history.forEach(function (moment) {
         const seen = new WeakSet();
         (function walk(value, depth) {
@@ -691,6 +693,9 @@ Save.onLoad.add(function (save) {
             seen.add(value);
             if (typeof value.gender !== 'undefined') {
                 setup.sexActs.migrateLegacyCounters(value);
+                if (!setup.humans.has(Number(value.gender), 'pussy')) {
+                    delete value.pussy;
+                }
             }
             for (const key of Object.keys(value)) {
                 walk(value[key], depth + 1);

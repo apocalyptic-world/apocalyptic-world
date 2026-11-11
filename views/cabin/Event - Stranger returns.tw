@@ -60,6 +60,7 @@
 	<<else>>
 		<<set _sr.pregnancy_father = 'mc'>>
 		<<newchild _srBabyGender _sr>>
+		<<run setup.humans.endPregnancy(_sr)>>
 		<<set _srBaby = $newChild>>
 		<<unset $newChild>>
 		<<set _srBaby.birthDate = new Date($gameDate.getTime() - _srBabyDays * 86400000)>>

@@ -460,14 +460,8 @@
 		<<if _nurseryAdult === 'move'>>
 			<<run setup.npc.addHistory($nursery[_nurseryI], 'grown_up')>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
-			<<if (setup.percentageChance(75))>>
-				<<set _orientation = 'straight'>>
-			<<else>>	
-				<<set _orientation = 'bisexual'>>
-			<</if>>
-			<<run $nursery[_nurseryI] = setup.setSexuality($nursery[_nurseryI], _orientation)>>
-			<<run delete $nursery[_nurseryI].teach; delete $nursery[_nurseryI].teachAdvStudy>> /* child school fields; adults use teach for evening class */
-			<<run $guests.push($nursery[_nurseryI])>>
+			/* orientation (75% straight), still a virgin, dick size, no child-only fields (setup.humans.newAdult) */
+			<<run $guests.push(setup.humans.newAdult({ now: $gameDate }, $nursery[_nurseryI]))>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
 		<</if>>

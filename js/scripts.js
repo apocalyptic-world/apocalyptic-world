@@ -409,10 +409,10 @@ setup.calculateDaysBetween = function (start, end) {
     return Math.round(adjustedDays,2);
 };
 
+/* A new NPC id (a UUID, see setup.humans.newId). `npc` is unused; kept for runtime-loaded scripts (js/actions.js,
+   packs/) that pass it. Ids made before this were name + beauty + timestamp; both formats work side by side. */
 setup.generateUniqueKey = function(npc) {
-    var timestamp = Date.now();
-    var uniqueKey = npc.name + npc.beauty + timestamp.toString();
-    return uniqueKey;
+    return setup.humans.newId();
 };
 
 setup.getNpcAgeDescription = function(npc) {
