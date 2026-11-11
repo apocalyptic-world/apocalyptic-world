@@ -1159,6 +1159,19 @@ setup.npc = {
 		return !npc.married && (npc.family?.exes ?? []).includes('mc');
 	},
 
+	/* True when the MC has had sex with npc: an act with the MC in her counters (setup.sexActs.hadSexWithMc), or proof
+	   kept elsewhere: her history (first intimate moment, virginity lost to the MC), a marriage to the MC (current or
+	   past), a pregnancy by him or a child by him. Old saves converted their mixed sex counter to "with others" (it
+	   can't be split), so for them the history and family are what show it. findNpc resolves the kids' ids. */
+	sleptWithMc: function(npc, findNpc = setup.getNpcById) {
+		if (!npc) return false;
+		if (setup.sexActs.hadSexWithMc(npc)) return true;
+		if ((npc.history ?? []).some(h => h.event === 'first_sex_mc' || (h.event === 'virgin_lost' && h.with === 'mc'))) return true;
+		if (npc.family?.husband === 'mc' || (npc.family?.exes ?? []).includes('mc')) return true;
+		if (npc.pregnancy_father === 'mc') return true;
+		return (npc.family?.kids ?? []).some(id => findNpc(id)?.family?.father === 'mc');
+	},
+
 	/* Add a life-event entry to npc.history */
 	addHistory: function(npc, event, extra) {
 		if (!npc) return;

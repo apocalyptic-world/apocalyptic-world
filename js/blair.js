@@ -252,9 +252,9 @@ setup.blair.houseRulesFavorite = function () {
     return best;
 };
 
-/** True when this guest has been intimate with the player (any recorded sex act). Blair only resents what she can plausibly see. */
+/** True when this guest has been intimate with the player (setup.npc.sleptWithMc). Blair only resents what she can plausibly see. */
 setup.blair.guestIntimate = function (npc) {
-    return setup.sexActs.hadSexWithMc(npc);
+    return setup.npc.sleptWithMc(npc);
 };
 
 /** House rules: she has policy talk done, likes you, and there is somebody to clash with. */

@@ -233,10 +233,9 @@ setup.slumberParty = {
         return this.drunkOf(partner) > 0 ? this.drunkOf(partner) : (partner.relationshipBetween?.stats?.[npc.id] ?? 0);
     },
 
-    /** The MC has slept with her, by her history or her acts with the MC. */
+    /** The MC has slept with her (setup.npc.sleptWithMc). */
     isMcPartner: function (npc) {
-        const inHistory = (npc.history ?? []).some(h => h.event === 'first_sex_mc' || (h.event === 'virgin_lost' && h.with === 'mc'));
-        return inHistory || setup.sexActs.hadSexWithMc(npc);
+        return setup.npc.sleptWithMc(npc);
     },
 
     /** Boasts with no number behind them. */

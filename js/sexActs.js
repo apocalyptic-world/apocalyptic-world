@@ -269,6 +269,13 @@ setup.sexActs = (function () {
         cum_on_back: (mc, npc) => acts.cumsOnBack(mc, npc)
     };
 
+    /** Finishes: each one is its own event (the MC has to get back to full arousal first), so unlike the ongoing acts,
+        which the scene re-renders on every click, they count every time, not once per scene. */
+    const FINISHES = new Set([
+        'cum_in_pussy', 'cum_in_ass', 'cum_in_mouth', 'cum_in_throat', 'cum_throat', 'cum_on_face', 'cum_on_tits',
+        'cum_on_stomach', 'grind_cum', 'cum_on_pussy', 'cum_on_ass', 'assjob_cum', 'cum_on_back'
+    ]);
+
     /** Group scene stat categories (the stats / stats2 / stats3 of the threesome and foursome actions). */
     const MC_SCENE_CATEGORIES = {
         bj: (mc, npc) => acts.blowsCock(npc, mc),
@@ -381,10 +388,16 @@ setup.sexActs = (function () {
             variables().sexActsThisScene = {};
         },
 
-        /** Records a one-on-one scene action ($sexAction) between the MC and npc, once per scene. */
+        /** Records a one-on-one scene action ($sexAction) between the MC and npc: once per scene, except finishes
+            (FINISHES), which count every time. */
         mcSceneAction: function (actionKey, npc) {
             const recordIt = MC_SCENE_ACTIONS[actionKey];
-            if (recordIt) {
+            if (!recordIt) {
+                return;
+            }
+            if (FINISHES.has(actionKey)) {
+                recordIt(variables().player, npc);
+            } else {
                 onceThisScene(npc, actionKey, () => recordIt(variables().player, npc));
             }
         },
