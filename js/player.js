@@ -33,15 +33,25 @@ setup.player = {
         return variables().strangerMeeting;
     },
 
-    /** The $strangerMeeting of npc (compared by id, so $tmpGirl copies work), or null. */
+    /**
+     * The $strangerMeeting of npc (compared by id, so $tmpGirl copies work), or null. Also null once npc lives in the
+     * settlement ($guests, $slaves, $nursery): a stranger who refused the invite keeps the meeting (see rollInvite), and
+     * without this a capture or a later invite would keep the stranger lines in Talk until the next stranger is met.
+     */
     strangerMeeting: function (npc) {
-        const meeting = variables().strangerMeeting;
-        return meeting && npc?.id != null && meeting.npcId === npc.id ? meeting : null;
+        const v = variables();
+        const meeting = v.strangerMeeting;
+        if (!meeting || npc?.id == null || meeting.npcId !== npc.id) {
+            return null;
+        }
+        const settled = [v.guests, v.slaves, v.nursery].some(list => (list ?? []).some(n => n?.id === npc.id));
+        return settled ? null : meeting;
     },
 
     /**
      * Rolls whether npc accepts the invite to move in (inviteChance). Returns true for yes, and then $strangerMeeting
-     * is used up; after a no it stays, so Talk keeps the stranger lines (the invite link doesn't come back).
+     * is used up; after a no it stays, so Talk keeps the stranger lines (the invite link doesn't come back) until
+     * she joins the settlement some other way (strangerMeeting) or the next stranger is met.
      * Used by <<inviteAccept>> / <<inviteRefusal>> callers.
      */
     rollInvite: function (npc, refused = false, rng = Math.random) {
