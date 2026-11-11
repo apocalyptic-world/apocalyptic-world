@@ -63,6 +63,15 @@
 		<br /><br />
 		<span style="color: #e0a055; font-size: 0.82em;">📦 Active mission: <<= _s.activeMission.quantity>>× <<= _s.activeMission.item.replace(/_/g, ' ')>> · <<= _s.activeMission.reward>> caps</span>
 	<</if>>
+	<<if (_s.children ?? []).length>>
+		<<set _kidsHere = _s.children.map(k => k.name + ' (age ' + setup.getAge(k) + ')').join(', ')>>
+		<br /><br />
+		<span style="color: #55cc88; font-size: 0.82em;">Your <<= _s.children.length === 1 ? 'child' : 'children'>> here: <<= _kidsHere>></span>
+		<<if setup.settlements.isHostile(_s)>>
+			<br />
+			<span style="color: #e09855; font-size: 0.82em;">They won't let you near <<= _s.children.length === 1 ? 'your child' : 'your children'>> while you're enemies.</span>
+		<</if>>
+	<</if>>
 	<<if (_s.production.food ?? 0) > 0 && (_s.resources.food ?? 0) < 5>>
 		<br /><br />
 		<span style="color: #e05555; font-size: 0.85em;">⚠ Food supply critical — people are going hungry</span>
@@ -151,6 +160,12 @@
 		<</linkreplace>>
 		</div>
 	<</if>>
+<</if>>
+<<if (_s.children ?? []).length && !setup.settlements.isHostile(_s)>>
+	<<set _takeChildLabel = 'Take child' + (_s.children.length > 1 ? ' (' + _s.children.length + ')' : '')>>
+	<<link _takeChildLabel>>
+		<<goto 'Garage - World - Children'>>
+	<</link>>
 <</if>>
 <<if _leader && setup.settlements.canLeaderNight(_s, $game.day)>>
 	<<set _lnLabel = 'Stay the night with ' + _leader.name>>

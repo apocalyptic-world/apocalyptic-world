@@ -158,8 +158,9 @@ setup.nurseryCare = {
         const sorter = setup.npcSortedIndices(nursery, v.nsortBy);
         if (v.nsortBy === 'M') {
             sorter.sort((a, b) => {
-                const mA = setup.getNpcById(nursery[a].family?.mother)?.name ?? 'zzz';
-                const mB = setup.getNpcById(nursery[b].family?.mother)?.name ?? 'zzz';
+                // motherName: mothers who live elsewhere (settlement leaders) can't be looked up by id
+                const mA = setup.getNpcById(nursery[a].family?.mother)?.name ?? nursery[a].family?.motherName ?? 'zzz';
+                const mB = setup.getNpcById(nursery[b].family?.mother)?.name ?? nursery[b].family?.motherName ?? 'zzz';
                 return mA < mB ? -1 : mA > mB ? 1 : 0;
             });
         } else if (v.nsortBy === 'A') {

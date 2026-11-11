@@ -2,13 +2,16 @@
 <h1 class="ptitle">ISABEL</h1>
 <br /><br />
 
+<<set _isabelDomWaitOver = !$characters.dom.quests.alt_route && $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && !$characters.isabel.quests.dom_hunt_day && (($characters.isabel.quests.check_city_day ?? 0) + 7) < $game.day && (typeof $characters.isabel.pregnancy === 'undefined' || $characters.isabel.pregnancy_father !== 'mc')>>
 <<if !$characters.dom.quests.alt_route>>
     <<if !$characters.isabel.quests.temp_home>>
         <<goto 'Isabel - new home'>>
     <<elseif (($characters.isabel.quests.temp_home_day ?? 0) + 14) < $game.day && !$characters.isabel.quests.check_city>>
         <<goto 'Isabel - Check underground city'>>
-    <<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && $characters.isabel.pregnancy >= 10>>
+    <<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && !$characters.isabel.quests.dom_hunt_day && $characters.isabel.pregnancy >= 10>>
         <<goto 'Isabel - pregnant'>>
+    <<elseif _isabelDomWaitOver && $characters.isabel.quests.declinedSex && !$characters.isabel.quests.hadSex>>
+        <<goto 'Isabel - Dom is coming'>>
     <</if>>
 <</if>>
 
@@ -28,6 +31,11 @@
 <<link 'Date'>>
     <<goto 'Isabel - date'>>
 <</link>>
+<<if _isabelDomWaitOver>>
+    <<link 'Ask her about Dom'>>
+        <<goto 'Isabel - Dom is coming'>>
+    <</link>>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Guest house'>>
 <</link>>

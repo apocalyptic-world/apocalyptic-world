@@ -111,25 +111,30 @@
 			<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
 				<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
 			<</if>>
+			/* Mothers who live elsewhere (settlement leaders) can't be looked up, so the child keeps her name */
+			<<set _motherAway = _motherNpc ? '' : (_nursery.family?.motherName ?? '')>>
+			<<set _momKey = _motherAway || _motherNpc>>
 			<<if $nsortBy === 'M'>>
-				<<if _motherNpc !== _currentMom>>
+				<<if _momKey !== _currentMom>>
 					<tr class="item">
 						<td colspan="3">
 							<<if (_motherNpc?.name ?? false)>>
 								Kid(s) of <<=setup.displayName(_motherNpc)>>:
+							<<elseif _motherAway>>
+								Kid(s) of <<= _motherAway>>:
 							<<else>>
 								Orphan(s):
 							<</if>>
 						</td>
 					</tr>
-					<<set _currentMom = _motherNpc>>
+					<<set _currentMom = _momKey>>
 				<</if>>
 			<</if>>
 
 			<tr class="item">
 				<td class="min25">
 					<span @class="_genderClass + _customColorStyle">
-						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
+						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name : (_motherAway || '????')) + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
 								<<unset $guestId, $charId, $slaveId>>
 								<<set $childId = _realIdx>>

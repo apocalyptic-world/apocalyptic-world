@@ -4,10 +4,10 @@
 <<if $characters.blair.quests.missing_friend_found_finished && !$characters.blair.quests.missing_friend_found_finished_thanked>>
 	<<set $characters.blair.quests.missing_friend_found_finished_thanked = true>>
 	<<goto 'Blair - quest missing friend thanks'>>
-<<elseif ($game.location.settlement ?? false) && !$characters.blair.quests.sex>>
+<<elseif ($game.location.settlement ?? false) && !$characters.blair.quests.sex && !$characters.blair.quests.no_women_day && (($characters.blair.quests.first_sex_declined_day ?? -100) + 14) < $game.day>>
 	<<set $characters.blair.quests.sex = true>>
 	<<goto 'Blair quest - first sex'>>
-<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement && $characters.blair.relationship >= 80>>
+<<elseif ($game.cabinName ?? false) && !$characters.blair.quests.basement && !$characters.blair.quests.no_women_day && $characters.blair.relationship >= 80>>
 	<<set $characters.blair.quests.basement =  true>>
 	<<goto 'Blair event - basement'>>
 <</if>>

@@ -146,6 +146,19 @@ Save.onLoad.add(function (save) {
             variables.characters.isabel.canTalk = true;
         }
 
+        /* Saves from before the non-sex story paths: Desperate Isabel, her move-in, the Dom dinner and secret meeting 3
+           were forced sex scenes, so reaching any of them means the MC already slept with her. Only when neither
+           new flag exists yet, so later saves (where the player chose) are never touched. */
+        const _isabelQuests = variables.characters.isabel.quests;
+        if (_isabelQuests && typeof _isabelQuests.hadSex === 'undefined' && typeof _isabelQuests.declinedSex === 'undefined' && (
+            variables.characters.dom?.quests?.isabel_beg ||
+            variables.characters.dom?.quests?.dinner ||
+            _isabelQuests.temp_home ||
+            typeof _isabelQuests.secret_meeting3_day !== 'undefined'
+        )) {
+            _isabelQuests.hadSex = true;
+        }
+
         if (
             typeof save.state.history[save.state.index].variables.charId !== 'undefined' && 
             save.state.history[save.state.index].variables.charId === 'isabel' && 

@@ -40,6 +40,9 @@ You offered her a reassuring smile, your hand reaching out to gently brush again
     Yes, I do.
 <</isabel>>
 <br />
+<div id="nh_accept">
+<<linkreplace 'Let her repay you'>>
+<<run $('#nh_decline').hide()>>
 <center>
     <<image 'people/isabel/drop_blanket.webp'>>
 </center>
@@ -111,8 +114,33 @@ She wrapped her legs around you and hold you close to her as you fucked her wet 
     <br />
     <<addmins 60>>
     <<horny_reset>>
+    <<set $characters.isabel.quests.hadSex = true>>
     <<link 'Leave'>>
         <<set $characters.isabel.corruption += 25>>
         <<goto 'Guest house'>>
     <</link>>
 <</linkreplace>>
+<</linkreplace>>
+</div>
+<div id="nh_decline">
+<<linkreplace 'Stop her'>>
+<<run $('#nh_accept').hide()>>
+As she reached for her blanket, you gently caught her hand and shook your head.
+<br /><br />
+<<you>>
+    You owe me nothing, Isabel. Get some rest. You're safe here.
+<</you>>
+<br />
+For a moment she looked surprised, then she pulled the blanket tighter around her shoulders and gave you a small, tired smile.
+<br /><br />
+<<isabel>>
+    Not many men would say that. Thank you.
+<</isabel>>
+<br />
+<<addmins 30>>
+<<link 'Leave'>>
+    <<set $characters.isabel.quests.declinedSex = true>>
+    <<goto 'Guest house'>>
+<</link>>
+<</linkreplace>>
+</div>

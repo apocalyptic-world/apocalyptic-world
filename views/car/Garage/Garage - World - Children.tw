@@ -1,0 +1,56 @@
+:: Garage - World - Children [Place bg-garage settlement]
+<h1 class="ptitle">YOUR CHILDREN</h1>
+<br />
+
+<<set _cS = setup.settlements.getById($tmpSettlement)>>
+<<if !_cS || _cS.destroyed || !(_cS.children ?? []).length || setup.settlements.isHostile(_cS)>>
+	<<goto 'Garage - World - Settlement'>>
+<<else>>
+	<<set _cKids = _cS.children>>
+	<<set _cOne = _cKids.length === 1>>
+	<<set _cThem = _cOne ? (_cKids[0].gender === 1 ? 'him' : 'her') : 'them'>>
+	<<set _cLeader = _cS.leader>>
+	<<set _cIsMother = !!_cLeader && _cKids.some(k => k.family?.mother === _cLeader.id)>>
+
+	<<if _cLeader>>
+		<<= _cLeader.name>> sent someone to fetch <<= _cOne ? 'your child' : 'your children'>>, and a few minutes later <<= _cOne ? 'the little one was' : 'they were'>> brought out to you.
+		<br /><br />
+		<<sayNpc _cLeader>>
+			<<if _cIsMother>>
+				<<= _cOne ? (_cKids[0].gender === 1 ? 'He\'s' : 'She\'s') : 'They\'re'>> yours as much as mine. If you can keep <<= _cThem>> safer than we can, take <<= _cThem>>.
+			<<else>>
+				Their mother isn't around anymore. We kept <<= _cThem>> fed, but <<= _cOne ? (_cKids[0].gender === 1 ? 'he\'s' : 'she\'s') : 'they\'re'>> yours. Take <<= _cThem>> if you want.
+			<</if>>
+		<</sayNpc>>
+		<br />
+	<<else>>
+		One of the women who looked after <<= _cOne ? 'your child' : 'your children'>> brought <<= _cThem>> out to the gate.
+		<br /><br />
+	<</if>>
+
+	<table class="npc-list">
+		<<for _ci = 0; _ci < _cKids.length; _ci++>>
+			<<capture _ci>>
+				<tr class="item">
+					<td>
+						<<= setup.displayName(_cKids[_ci])>>
+						<<= setup.npcListInfo(_cKids[_ci])>>
+					</td>
+					<td>
+						Age: <<= setup.getAge(_cKids[_ci])>>
+					</td>
+					<td>
+						<<link 'Take home'>>
+							<<set $tmpSettlementChild = _cKids[_ci].id>>
+							<<goto 'Garage - World - Children - Take'>>
+						<</link>>
+					</td>
+				</tr>
+			<</capture>>
+		<</for>>
+	</table>
+	<br />
+	<<link 'Back'>>
+		<<goto 'Garage - World - Settlement'>>
+	<</link>>
+<</if>>

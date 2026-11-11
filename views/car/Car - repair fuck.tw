@@ -8,6 +8,7 @@
 <<set _eligibleGuests = setup.getAvailablePersons18yo($guests)[0]?.filter(i => !$player?.baseManagement?.noIncest || !setup.family.isBloodToMC($guests[i])) ?? []>>
 <<set _npcId = setup.getRandomElement(_eligibleGuests)>>
 <<run _npc = $guests[_npcId]>>
+<<if _eligibleGuests.length > 0>>
 <br /><br />
 As you focus on the car, your hands deftly maneuvering through the engine, you become engrossed in the task at hand. The rhythmic clinking of tools and the hum of your concentration fill the air.
 <br /><br />
@@ -66,4 +67,12 @@ She smiles and eyes you with intent. You get the feeling she's offering more tha
 <<link 'Decline'>>
     <<goto 'Garage'>>
 <</link>>
+<<else>>
+<br /><br />
+You spend a while bent over the engine, sorting out what is broken and what can still be saved. With no one around to distract you, the work goes faster than you expected.
+<br /><br />
+<<link 'Leave'>>
+    <<goto 'Garage'>>
+<</link>>
+<</if>>
 <<set $locationEvents.garage = true>>

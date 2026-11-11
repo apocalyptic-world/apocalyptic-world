@@ -103,6 +103,18 @@
 <</if>>
 <br /><br />
 
+<<if _outcome.victory && (_s.children ?? []).length>>
+	<<set _atkKids = setup.settlements.takeAllChildren(_s).map(r => r.kid)>>
+	<<set _atkKidNames = _atkKids.map(k => k.name).join(', ')>>
+	<div style="border-left: 3px solid #55cc88; padding: 8px 14px; margin-bottom: 14px; background: rgba(85,204,136,0.08);">
+		<<if _atkKids.length === 1>>
+			In the chaos your people found your <<= _atkKids[0].gender === 1 ? 'son' : 'daughter'>>, <<= _atkKids[0].name>>, and brought <<= _atkKids[0].gender === 1 ? 'him' : 'her'>> home with them.
+		<<else>>
+			In the chaos your people found your children, <<= _atkKidNames>>, and brought them home with them.
+		<</if>>
+	</div>
+<</if>>
+
 <<set _killed = []>>
 <<set _injured = []>>
 <<set _captured = []>>

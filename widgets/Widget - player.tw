@@ -456,7 +456,7 @@
 			<<if !_kitchenNpc.gender && (_kitchenNpc.likesGuys ?? true) && (_kitchenNpc.horny ?? 0) >= 30 && setup.Tangle.eligible(_kitchenNpc)>>
 				<<goto 'Bedroom - breakfast in bed'>>
 			<</if>>
-		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.livingLocation !== 'guesthouse' && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
+		<<elseif setup.getPersonsForLocation($guests, 'maid').length && ($characters.blair.quests ?? false) && $characters.blair.livingLocation !== 'guesthouse' && $characters.blair.quests.sex && !$characters.blair.quests.no_women_day && $characters.blair.relationship > 70 && setup.percentageChance(5) && !setup.player.hasFlaccidDick()>>
 			<<goto 'Blair - morning surprise'>>
 		<<elseif isMetChar('blair') && $characters.blair.quests.pregnancy && !$characters.blair.quests.pregnancy_talk>>
 			<<goto 'Blair - pregnant'>>

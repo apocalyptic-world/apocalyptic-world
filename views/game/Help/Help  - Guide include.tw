@@ -482,7 +482,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
 
     happy_eve: {
         show: $characters.rodger.quests?.champagne,
-        done: $characters.rodger.quests?.eve_pregnant,
+        done: $characters.rodger.quests?.eve_pregnant || $characters.rodger.quests?.cheat_declined_day,
         category: 'Story',
         title: 'Eve and <s>Snake in paradise</s> ' + $player.name,
         description: 
@@ -501,6 +501,7 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
                     '<span style="color: green"><s>Found something!</s></span><br/>') : 
                  '<span style="color: yellow">Do all the things above before the ruined library</span><br/>') +
             ( $characters.rodger.quests?.cheat ? 
+                $characters.rodger.quests.cheat_declined_day ? '<span style="color: green"><s>You turned Eve down.</s></span>' :
                 (!$characters.rodger.quests.eve_pregnant ?
                     ($characters.rodger.quests.cheat_day + 14 >= $game.day ? 
                         'Wait for ' + ($characters.rodger.quests.cheat_day+14-$game.day+1) + ' more days' : 'Visit settlement. Eve have news!' ) : 
@@ -610,10 +611,10 @@ Most importantly, it's a sexual game. (-; So gather your harem and shag everyone
             (!_closed.dom ? 
                 ($characters.isabel.quests?.temp_home_day ?? 0) + 14 >= $game.day ? 'Wait two weeks for Isabel to settle in her new home.' : 
                 !$characters.isabel.quests?.check_city ? 'Visit Isabel who wants you to check the situation in Underground city' : 
-                !$characters.isabel.quests?.pregnant ?              
-                    (!$characters.isabel?.pregnancy ? 'Go on dates with Isabel and shag her until pregnancy' : 
+                (!$characters.isabel.quests?.pregnant && !$characters.isabel.quests?.dom_hunt_day) ?
+                    (!$characters.isabel?.pregnancy ? 'Go on dates with Isabel and shag her until pregnancy, or a week after checking the city ask her about Dom in her room' :
                      $characters.isabel?.pregnancy < 10 ? 'Wait for it!' : 'Visit Isabel and talk about her pregnancy' ) :
-                ($characters.isabel.quests?.pregnant_day + 5) >= $game.day ? 'Wait a couple of days' :
+                (($characters.isabel.quests?.pregnant ? $characters.isabel.quests.pregnant_day : $characters.isabel.quests?.dom_hunt_day) + 5) >= $game.day ? 'Wait a couple of days' :
                 !$characters.isabel.quests?.dom_return ? 'Dom shows up outside your place and takes back Isabel to the Underground' : 'To be continued...' : '')
     },
 
