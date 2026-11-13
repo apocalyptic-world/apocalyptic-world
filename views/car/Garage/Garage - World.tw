@@ -5,7 +5,11 @@
 <<set _discovered = setup.settlements.getAll().filter(function(s) { return s.discovered && !s.destroyed; })>>
 
 <<if _discovered.length === 0>>
-	You haven't discovered any settlements yet. Explore the roads to find them.
+	<<if setup.settlements.getAll().some(function(s) { return s.discovered; })>>
+		There are no settlements left on your map - the ones you found are gone. Explore the roads to find new ones.
+	<<else>>
+		You haven't discovered any settlements yet. Explore the roads to find them.
+	<</if>>
 	<br /><br />
 	<<link 'Back'>>
 		<<goto 'Garage'>>
