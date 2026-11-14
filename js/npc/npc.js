@@ -817,13 +817,11 @@ setup.npc = {
 
 		let pool = [];
 
-		const {
-			corruption, happy, drunk, food, horny, relationship,
-			traits, personality, location, skills
-		} = npc;
-
-		traits ??= [];
-		skills ??= [];
+		const { corruption, happy, drunk, food, horny, relationship, location } = npc;
+		// NPCs built by hand (runtime scripts, packs) can lack these; defaults are local, npc is not changed
+		const traits = npc.traits ?? [];
+		const skills = npc.skills ?? [];
+		const personality = npc.personality ?? [];
 
 		// "You give me hope…" / "Don't ask me how I'm doing…" are said to the MC by someone living with him by choice:
 		// only guests (not slaves, nursery children, characters or strangers)
