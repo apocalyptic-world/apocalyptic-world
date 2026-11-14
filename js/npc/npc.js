@@ -735,14 +735,13 @@ setup.npc = {
 				"I've done more than I care to admit... but it kept me alive.",
 				"Sex isn't new to me, it's just part of the game now."
 			],
-			// lewd lines by anatomy: vagina (women, trans men) or penis and anus (men, trans women); line [1] is aimed at the MC
+			// lewd lines by anatomy: vagina (women, trans men) or penis and anus (men, trans women); not about the MC
+			// (lines about sex with the MC are in MC_MEMORIES below)
 			sex_lewd_female: [
-				"I'm dripping just thinking about it again...",
-				"My pussy still remembers you, %mcName%. Don't keep me waiting too long."
+				"I'm dripping just thinking about it again..."
 			],
 			sex_lewd_male_trans: [
-				"I get hard just thinking about last time...",
-				"I can't stop thinking about you filling my ass again, %mcName%."
+				"I get hard just thinking about last time..."
 			],
 			// added with either lewd category above; all aimed at the MC
 			sex_lewd_generic: [
@@ -815,6 +814,20 @@ setup.npc = {
 			]
 		}
 
+		// Lines about sex the NPC had with the MC, by the part used. A memory is active when any of its metrics has at
+		// least one act with the MC (setup.sexActs.countWithMc); acts with anyone else never count. To add lines about
+		// another part, add a memory with its metrics (setup.sexActs metric names).
+		const MC_MEMORIES = {
+			pussy: {
+				metrics: ['receivedPussyFucked', 'receivedDoublePenetrationVagina', 'receivedDoublePenetrationAssVagina'],
+				lines: ["My pussy still remembers you, %mcName%. Don't keep me waiting too long."]
+			},
+			ass: {
+				metrics: ['receivedAssFucked', 'receivedDoublePenetrationAss', 'receivedDoublePenetrationAssVagina'],
+				lines: ["I can't stop thinking about you filling my ass again, %mcName%."]
+			}
+		};
+
 		let pool = [];
 
 		const { corruption, happy, drunk, food, horny, relationship, location } = npc;
@@ -879,9 +892,11 @@ setup.npc = {
 			if (corruption >= 50) {
 				// by anatomy: vagina for women (0) and trans men (3); penis and anus for men (1) and trans women (2)
 				const hasVagina = setup.sexActs.hasPussy(npc);
+				// penis and anus: penetrative sex in either direction (fucked in the ass, fucked an ass or a pussy)
+				const penetrations = anal + count('givenFuckAss') + count('givenFuckPussy');
 				const lewd = hasVagina
 					? (creampies > 5 || bj >= 15 || pussy >= 10)
-					: (bj >= 15 || setup.sexActs.totalAss(npc) >= 10);
+					: (bj >= 15 || penetrations >= 10);
 				if (lewd) {
 					pool.push(...(hasVagina ? db.sex_lewd_female : db.sex_lewd_male_trans));
 					pool.push(...db.sex_lewd_generic);
@@ -892,14 +907,23 @@ setup.npc = {
 				pool.push(...db.sex_jaded);
 		}
 
+		// One line from one active memory, so an NPC who did many things with the MC doesn't only talk about sex
+		if (corruption >= 50) {
+			const memories = Object.values(MC_MEMORIES)
+				.filter(memory => memory.metrics.some(metric => setup.sexActs.countWithMc(npc, metric) >= 1));
+			if (memories.length > 0) {
+				const memory = memories[Math.floor(Math.random() * memories.length)];
+				pool.push(memory.lines[Math.floor(Math.random() * memory.lines.length)]);
+			}
+		}
+
 		// Lines where the NPC wants the MC only make sense if they would actually agree (setup.npcs.mcAttraction).
 		// Someone not attracted but submissive enough gets lines of compliance instead.
 		const toMc = new Set([
 			...db.horny_high,
 			db.affectionate[1], // "You don't know how much I needed this… us."
 			db.masochist[0],    // "Hurt me again. Make me feel like I still exist."
-			db.sex_lewd_female[1],
-			db.sex_lewd_male_trans[1],
+			...Object.values(MC_MEMORIES).flatMap(memory => memory.lines),
 			...db.sex_lewd_generic
 		]);
 		const willing = setup.getAge(npc) < 18 ? 'no' : setup.npcs.mcAttraction(npc).willing;
