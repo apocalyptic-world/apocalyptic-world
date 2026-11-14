@@ -99,11 +99,13 @@ setup.sleep.processNpc = function(npc, opts) {
     }
 
     // Pregnant privilege policy: late-pregnant inhabitants rest instead of heavy/outside work
-    if (!isCharacter && typeof npc.rest === 'undefined' && typeof npc.sick === 'undefined'
-        && setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc)) {
+    const privilegeExempt = !isCharacter && setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc);
+    if (privilegeExempt && typeof npc.rest === 'undefined' && typeof npc.sick === 'undefined') {
         npc.rest = { days: 1, reason: 'pregnant' };
         setup.sleepMessages.addJob(npc.name + ' stayed home from work (pregnant privilege).', npc.assignedTo);
     }
+    // Hunter, forest and scavenging only stop for sickness, so they check the policy separately (forest: Widget - sleep)
+    opts.resultPrivilegeExempt = privilegeExempt;
 
     // Pre-tick sick/rest — stored in opts so SC <<include>> jobs see morning values
     const isSick    = isCharacter ? false : typeof npc.sick !== 'undefined';
@@ -352,7 +354,7 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // Hunter (guests only, bow required)
-        if (job === 'hunter' && isGuest && !isSick && setup.npcInventoryHas(npc, 'bow') &&
+        if (job === 'hunter' && isGuest && !isSick && !privilegeExempt && setup.npcInventoryHas(npc, 'bow') &&
             !isSandStorm && (!isColdSnap || setup.npcInventoryHas(npc, 'coat_wolf'))) {
             let pct = 10;
             if (npc.strength > 50) pct += 25;
@@ -392,7 +394,7 @@ setup.sleep.processNpc = function(npc, opts) {
             }
         }
 
-        if (job === 'scavenging' && isGuest && !isSick && !isSandStorm && !scavengerStayedHome) {
+        if (job === 'scavenging' && isGuest && !isSick && !privilegeExempt && !isSandStorm && !scavengerStayedHome) {
             npc.stats.scavenging = (npc.stats.scavenging ?? 0) + 1;
             if ((npc.skills ?? []).includes('teacher') && setup.percentageChance(30)) npc.stats.scavenging++;
             npc.stats.scavenging += setup.personality.learnBonus(npc) + setup.library.learnBonus();

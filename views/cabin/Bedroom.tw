@@ -41,7 +41,8 @@
 	<br /><br />
 <</if>>
 
-<<set _roomWives = setup.spouseRoom.residents()>>
+/* Only wives who are home right now (guest house rules: not at work, night school or the hospital); a maid wife cleaning here already has her link above */
+<<set _roomWives = setup.spouseRoom.residents().filter(g => g.location !== 'school' && !setup.isAtWork(g, $weather) && !(($game.location.hospital ?? false) && typeof g.sick !== 'undefined') && !(_npc && timeBetween('09:00', '15:00') && g.id === _npc.id))>>
 <<if _roomWives.length>>
 	<<=_roomWives.length === 1 ? 'Your wife shares this room with you.' : 'Your wives share this room with you.'>>
 	<br /><br />

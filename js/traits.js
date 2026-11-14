@@ -93,6 +93,11 @@ setup.getRandomTraits = function (npc, count = 1, exclude) {
         }
     }
 
+    /* a fighter is never a pacifist (skills roll before traits in humans.js) */
+    if ((npc.skills ?? []).includes('fighter')) {
+        delete _traits.pacifist;
+    }
+
     var shuffledTraits = setup.npcs.shuffled(Object.keys(_traits));
     if (!shuffledTraits.length) {
         return [];

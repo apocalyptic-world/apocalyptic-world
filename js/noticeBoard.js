@@ -382,7 +382,7 @@ setup.noticeBoard = {
         raiders: {
             cat: 'contract', weight: 2, mode: 'fight', label: 'Clear out the raider camp (3 hours)', hours: 3, enemies: [3, 0, 2],
             pick: nb => { const s = nb.rand(nb.friendlySettlements()); return s ? { settlement: s } : null; },
-            build: (nb, d) => ({ title: d.settlement.name + ' wants a raider camp cleared', note: 'A raider camp moved in near our water. We are not fighters. You are.', deadline: 5, caps: 80 }),
+            build: (nb, d) => ({ title: d.settlement.name + ' wants a raider camp cleared', note: 'A raider camp moved in near our water. We cannot spare the people to clear it. You can.', deadline: 5, caps: 80 }),
             reward: { settlementRel: 12, rep: 5 },
             img: 'places/cabin/nb_ambush.jpg',
             wonText: 'You hit the raider camp at dawn. When the shouting stopped there were no more raiders near the water. %S% sent you their thanks and a sack of caps.',

@@ -218,7 +218,7 @@
 			<<include 'sleepStripClub'>>
 		<</if>>
 		<<set _hunter_no_bow = ( $automatization.hunter ?? false) && _npc.assignedTo === 'hunter' && !setup.npcInventoryHas(_npc, 'bow') >>
-		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
+		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_sleepNpcOpts.resultPrivilegeExempt && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepForest'>>
 		<</if>>
 		<<unset _hunter_no_bow>>
@@ -337,7 +337,7 @@
 		<</if>>
 		<<set _hunter_no_bow = ( $automatization.hunter ?? false) &&
 			_npc.assignedTo === 'hunter' && !setup.npcInventoryHas(_npc, 'bow') >>
-		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
+		<<if (_hunter_no_bow || _npc.assignedTo === 'forest')  && !_isSick && !_sleepGuestOpts.resultPrivilegeExempt && !_isSandStorm && (!_isColdSnap || setup.npcInventoryHas(_npc, 'coat_wolf'))>>
 			<<include 'sleepForest'>>
 		<</if>>
 		<<unset _hunter_no_bow>>
