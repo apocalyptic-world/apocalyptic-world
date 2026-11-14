@@ -38,16 +38,20 @@ setup.sexActs = (function () {
     /* ---------- anatomy (gender: 0 female, 1 male, 2 trans female, 3 trans male; the MC is male) ---------- */
 
     const isMc = person => person != null && (person.id === 'mc' || person === variables().player);
-    /** Women and trans men with a strap-on: sadistic ones, and whoever works as the basement mistress. The game has no
-        strap-on item, so by game mechanics the strap-on is a penis for them (they penetrate and get blowjobs). */
-    const usesStrapOn = person => !isMc(person) && [0, 3].includes(person?.gender)
+    /** The body parts of person's gender, from setup.humans.ANATOMY (the one list of who has what); the functions below
+        add only the MC, strap-ons and breasts from surgery. Called when an act runs, so the load order doesn't matter. */
+    const bodyHas = (person, part) => setup.humans.has(person?.gender, part);
+    /** Women and trans men (no dick) with a strap-on: sadistic ones, and whoever works as the basement mistress. The
+        game has no strap-on item, so by game mechanics the strap-on is a penis for them (they penetrate and get
+        blowjobs). */
+    const usesStrapOn = person => !isMc(person) && !bodyHas(person, 'dick')
         && ((person?.traits ?? []).includes('sadistic') || person?.assignedTo === 'mistress');
-    const hasCock = person => isMc(person) || [1, 2].includes(person?.gender) || usesStrapOn(person);
-    const hasPussy = person => !isMc(person) && [0, 3].includes(person?.gender);
+    const hasCock = person => isMc(person) || bodyHas(person, 'dick') || usesStrapOn(person);
+    const hasPussy = person => !isMc(person) && bodyHas(person, 'pussy');
     /** Women and trans women, and anyone else with a breasts field (a trans man after breast surgery, a woman who
         became a man and kept hers). */
     const hasBreasts = person => !isMc(person)
-        && ([0, 2].includes(person?.gender) || (typeof person?.breasts === 'string' && person.breasts !== ''));
+        && (bodyHas(person, 'breasts') || (typeof person?.breasts === 'string' && person.breasts !== ''));
     const canPenetrate = hasCock;
 
     const who = person => (isMc(person) ? 'the MC' : (person?.name ?? 'someone') + ' (gender ' + person?.gender + ')');
