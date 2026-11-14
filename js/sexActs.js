@@ -522,6 +522,9 @@ setup.sexActs = (function () {
         /**
          * Converts an NPC from an old save: statsSex → generalSexStats, sexStats → mainCharSexStats (best effort, see
          * LEGACY), then deletes the old counters. Returns true if anything was converted.
+         * statsSex mixed acts with the MC and with anyone else, so when it held any act, npc.legacySexUnknown is set:
+         * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour;
+         * setup.npc.sleptWithMc stays precise.
          */
         migrateLegacyCounters: function (npc) {
             let changed = false;
@@ -529,6 +532,9 @@ setup.sexActs = (function () {
                 const old = npc?.[oldKey];
                 if (!old || typeof old !== 'object') {
                     continue;
+                }
+                if (oldKey === 'statsSex' && Object.values(old).some(value => Number(value) > 0)) {
+                    npc.legacySexUnknown = true;
                 }
                 for (const [oldMetric, newMetric] of Object.entries(metrics)) {
                     const value = Number(old[oldMetric]) || 0;
