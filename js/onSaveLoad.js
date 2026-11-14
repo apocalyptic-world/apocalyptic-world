@@ -681,6 +681,7 @@ Save.onLoad.add(function (save) {
     /* sex act counters: statsSex (acts with anyone) → generalSexStats, sexStats (acts with the MC) → mainCharSexStats,
        in every NPC of every history moment (best effort, see setup.sexActs.migrateLegacyCounters); the per-scene
        $sexStats flags became $sexActsThisScene.
+       Then the counters are made sparse (setup.sexActs.compactCounters): older saves held all 39 metrics at 0.
        Also: men and trans women lose a `pussy` field (boys born before setup.humans.newBorn got pussy = 0, and the
        sex change surgery kept it); scenes take it as "has a pussy". */
     save.state.history.forEach(function (moment) {
@@ -693,6 +694,7 @@ Save.onLoad.add(function (save) {
             seen.add(value);
             if (typeof value.gender !== 'undefined') {
                 setup.sexActs.migrateLegacyCounters(value);
+                setup.sexActs.compactCounters(value);
                 if (!setup.humans.has(Number(value.gender), 'pussy')) {
                     delete value.pussy;
                 }

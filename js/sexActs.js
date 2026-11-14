@@ -79,14 +79,13 @@ setup.sexActs = (function () {
 
     /* ---------- counters ---------- */
 
-    function counter(npc, withMc) {
-        for (const key of Object.values(COUNTERS)) {
-            npc[key] ??= {};
-            for (const metric of METRICS) {
-                npc[key][metric] ??= 0;
-            }
-        }
-        return npc[withMc ? COUNTERS.mc : COUNTERS.others];
+    /* Counters are sparse: a counter object and a metric exist only once something was counted in them, and every read
+       (countIn) takes a missing metric as 0. That keeps NPCs small in every history moment and save. */
+
+    /** Adds amount to metric in the counter at key (COUNTERS.mc or COUNTERS.others), creating what's missing. */
+    function add(npc, key, metric, amount) {
+        npc[key] ??= {};
+        npc[key][metric] = (Number(npc[key][metric]) || 0) + amount;
     }
 
     /** Adds 1 to metric for person (unless it's the MC or an anonymous partner, who have no counters). */
@@ -94,7 +93,7 @@ setup.sexActs = (function () {
         if (!metric || isMc(person) || person?.anonymous) {
             return;
         }
-        counter(person, withMc)[metric]++;
+        add(person, withMc ? COUNTERS.mc : COUNTERS.others, metric, 1);
     }
 
     /** Records an act: givenMetric for active, receivedMetric for passive. withMc: the MC took part (by default:
@@ -527,15 +526,45 @@ setup.sexActs = (function () {
                 if (!old || typeof old !== 'object') {
                     continue;
                 }
-                counter(npc, false);
                 for (const [oldMetric, newMetric] of Object.entries(metrics)) {
                     const value = Number(old[oldMetric]) || 0;
                     if (value > 0 && legacyAllowed(npc, newMetric)) {
-                        npc[newKey][newMetric] += value;
+                        add(npc, newKey, newMetric, value);
                     }
                 }
                 delete npc[oldKey];
                 changed = true;
+            }
+            return changed;
+        },
+
+        /**
+         * Makes npc's counters sparse: removes metrics at 0 (and anything that isn't a positive number), then counter
+         * objects left empty. For saves from before the counters were sparse (they held all 39 metrics at 0). Returns
+         * true if anything was removed.
+         */
+        compactCounters: function (npc) {
+            let changed = false;
+            for (const key of Object.values(COUNTERS)) {
+                const stats = npc?.[key];
+                if (stats === undefined || stats === null) {
+                    continue;
+                }
+                if (typeof stats !== 'object') {
+                    delete npc[key];
+                    changed = true;
+                    continue;
+                }
+                for (const metric of Object.keys(stats)) {
+                    if (!(Number(stats[metric]) > 0)) {
+                        delete stats[metric];
+                        changed = true;
+                    }
+                }
+                if (Object.keys(stats).length === 0) {
+                    delete npc[key];
+                    changed = true;
+                }
             }
             return changed;
         }
