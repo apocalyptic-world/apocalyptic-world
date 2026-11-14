@@ -78,23 +78,17 @@ Once you have <<= _wantedPron>> secure, you check <<= setup.pronounceWhos($wante
 			<<set $wanted[$wantedId].relationship += _rel>>
 
 			<<set $tmpGirlInvite = false>>
-        	<<set _strongGirl = false>>
-        	<<set _no = !setup.percentageChance(setup.player.inviteChance($wanted[$wantedId], $wasRaped ?? false))>>
+			<<set _npc = $wanted[$wantedId]>>
+			<<set _yes = setup.player.rollInvite(_npc, $wasRaped ?? false)>>
 			<<unset $wasRaped>>
-       		 <<if _no>>
-				<br />
-				<<sayNpc $wanted[$wantedId]>>
-                	No, I don't want to come to live with you. Please let me go!
-				<</sayNpc>>
-        	<<else>>
-				<<set $guests.push($wanted[$wantedId])>>
-				<<run setup.npc.addHistory($wanted[$wantedId], 'invited')>>
-				<<set $wanted[$wantedId].capture = false>>
+			<<if _yes>>
 				<<set $wanted.splice($wantedId, 1)>>
 				<<set $player.reputation_bounty_hunter-->>
 				<<set $player.goodwill++>>
-				<<addhours 1>>
-				<<goto 'Guest house'>>
+				<<inviteAccept _npc>>
+			<<else>>
+				<br />
+				<<inviteRefusal _npc>>
 			<</if>>
 		<</linkreplace>>
 	<</if>>

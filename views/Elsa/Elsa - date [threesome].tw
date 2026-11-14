@@ -108,7 +108,7 @@ She talked for a while about nothing much — the wood store, the crossbow she s
 			<<linkreplace 'Pull your pants down'>>
 				<<addmins 10>>
 				<<set $characters.elsa.bj = Math.min(($characters.elsa.bj ?? 0) + 5, 100)>>
-				<<set $characters.elsa.statsSex ??= {}, $characters.elsa.statsSex.bj = ($characters.elsa.statsSex.bj ?? 0) + 1>>
+				<<run setup.sexActs.blowsCock($characters.elsa, $player)>>
 
 				You worked your pants down past your hips and Elsa slid off the couch onto her knees between your legs before you'd even got them clear. <<=_tsName>> stayed where she was, one hand flat on Elsa's back, and watched her take your cock in her mouth.
 				<br /><br />
@@ -133,7 +133,7 @@ She talked for a while about nothing much — the wood store, the crossbow she s
 					<<addmins 10>>
 					<<set _tsElsaFucked = true>>
 					<<set $characters.elsa.pussy = Math.min(($characters.elsa.pussy ?? 0) + 5, 100)>>
-					<<set $characters.elsa.statsSex ??= {}, $characters.elsa.statsSex.pussy = ($characters.elsa.statsSex.pussy ?? 0) + 1>>
+					<<run setup.sexActs.fucksPussy($player, $characters.elsa)>>
 
 					Elsa put herself over the arm of the couch and you pushed your cock into her pussy from behind, one hand in the small of her back. <<=_tsName>> stretched out alongside her with two fingers working her own clit, watching Elsa's face the whole time.
 					<br /><br />
@@ -179,7 +179,7 @@ She talked for a while about nothing much — the wood store, the crossbow she s
 									<<if !_tsGuestFucked>>
 										<<set _tsGuestFucked = true>>
 										<<set _tsNpc.pussy = Math.min((_tsNpc.pussy ?? 0) + 5, 100)>>
-										<<set _tsNpc.statsSex ??= {}, _tsNpc.statsSex.pussy = (_tsNpc.statsSex.pussy ?? 0) + 1>>
+										<<run setup.sexActs.fucksPussy($player, _tsNpc)>>
 									<</if>>
 									<<replace '#ts_scene'>>
 										<<=_tsName>> rolled onto her back underneath Elsa and hooked one leg up over your shoulder, holding it there herself, and you pushed your cock into her pussy instead.

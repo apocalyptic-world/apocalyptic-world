@@ -30,7 +30,7 @@ setup.tod = {
     },
 
     canPlay: function (g) {
-        if (!g || setup.getAge(g) < 18 || g.gender === 1 || (g.gender === 2 && !settings.transEnabled)) return false;
+        if (!g || setup.getAge(g) < 18 || [1, 3].includes(g.gender) || (g.gender === 2 && !settings.transEnabled)) return false;
         if ((g.traits ?? []).includes('feral') || typeof g.sick !== 'undefined' || g.basementVoluntary) return false;
         if (setup.family.isBloodToMC(g)) return false;
         return !setup.isAtWork(g, variables().weather);
@@ -333,6 +333,13 @@ setup.tod = {
         return target.name + ' shook her head, grabbed the bottle and took a long swallow instead. Everyone booed.';
     },
 
+    /** Counts a dare's sex act (dare.stat) between the MC and npc: every dare with a stat is with the MC. */
+    recordDareAct: function (stat, npc) {
+        const mc = variables().player;
+        if (stat === 'bj') setup.sexActs.blowsCock(npc, mc);
+        else if (stat === 'pussy') setup.sexActs.fucksPussy(mc, npc);
+    },
+
     /** Applies a completed dare to the target (and partner). Returns a short summary for the log. */
     applyDare: function (dare, target, partner) {
         const t = variables().tod;
@@ -343,8 +350,7 @@ setup.tod = {
         if (dare.partner === 'mc' || !dare.partner) target.relationship = Math.min((target.relationship ?? 0) + 1, 100);
         if (dare.stat) {
             target[dare.stat] = Math.min((target[dare.stat] ?? 0) + 5, 100);
-            target.statsSex ??= {};
-            target.statsSex[dare.stat] = (target.statsSex[dare.stat] ?? 0) + 1;
+            this.recordDareAct(dare.stat, target);
         }
         if (partner && dare.bond) {
             partner.corruption = Math.min((partner.corruption ?? 0) + 1, 100);
@@ -454,7 +460,7 @@ setup.tod = {
         if (target.virgin) {
             return head + target.name + ' held up zero fingers and stared at the fire. ' + ucfirst(she) + ' is still a virgin.';
         }
-        const count = (target.statsSex?.pussy ?? 0) + (target.statsSex?.anal ?? 0);
+        const count = setup.sexActs.count(target, 'receivedPussyFucked') + setup.sexActs.count(target, 'receivedAssFucked');
         return head + target.name + (count > 20 ? ' laughed and said she lost count a long time ago.' : ' counted on her fingers, gave up and said "enough."');
     },
 
@@ -668,8 +674,7 @@ Object.assign(setup.tod, {
         }
         if (dare.stat) {
             asker[dare.stat] = Math.min((asker[dare.stat] ?? 0) + 5, 100);
-            asker.statsSex ??= {};
-            asker.statsSex[dare.stat] = (asker.statsSex[dare.stat] ?? 0) + 1;
+            this.recordDareAct(dare.stat, asker);
         }
         t.result = { text: this.fill(dare.ask, asker, 'mc', null) + ' ' + this.fill(dare.done, asker, 'mc', null),
             imgNpcId: dare.img ? asker.id : null, img: dare.img, cum: dare.cum ?? null, cumNpcId: asker.id };

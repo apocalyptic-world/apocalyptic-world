@@ -143,9 +143,9 @@
 						Orgasms: <<= ($tmpGirl.orgasms ?? 0)>>
 					</div>
 				<</if>>
-				<<if !$tmpGirl.gender>>
+				<<if setup.sexActs.hasPussy($tmpGirl)>>
 					<div>
-						Creampies: <<=$tmpGirl?.sexStats?.creampies ?? 0;>>
+						Creampies: <<= setup.sexActs.count($tmpGirl, 'receivedVaginalCreampie')>>
 					</div>
 				<</if>>
 				<div>
@@ -277,45 +277,27 @@
 						</table>
 					</div>
 				<</if>>
-				<<if ($tmpGirl.statsSex ?? false)>>
-					<div id="npc-sex-stats">
-						<h4 style="display:block; margin-bottom: 0px;">Sex stats</h4>
-						<table style="margin-top: 0px;">
-						<tr>
-							<td>
-								Gave blowjobs:
-							</td>
-							<td>
-								<<=$tmpGirl.statsSex.bj ?? 0>>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Deepthroated:
-							</td>
-							<td>
-								<<=$tmpGirl.statsSex.dp ?? 0>>
-							</td>
-						</tr>
-						<<if !$tmpGirl.gender>>
-							<tr>
-								<td>
-									Fucked in pussy:
-								</td>
-								<td>
-									<<=$tmpGirl.statsSex.pussy ?? 0>>
-								</td>
-							</tr>
-						<</if>>
-						<tr>
-							<td>
-								Fucked in ass:
-							</td>
-							<td>
-								<<=$tmpGirl.statsSex.anal ?? 0>>
-							</td>
-						</tr>
-						</table>
+				<<if setup.sexActs.hasAny($tmpGirl)>>
+					/* every metric above 0: acts with the MC and with anyone else (js/sexActs.js) */
+					<div id="npc-sex-metrics">
+						<<linkreplace 'Sex history'>>
+							<<set _sexMetrics = setup.sexActs.metricsTable($tmpGirl)>>
+							<h4>NPC sex metrics</h4>
+							<div class="npc-sex-metrics-summary">
+								All metrics: <<= _sexMetrics.total>> · Ass-related: <<= _sexMetrics.ass>> · Slept with you: <<= _sexMetrics.sleptWithMc ? 'yes' : 'no'>>
+							</div>
+							<table>
+								<tr><th>Metric</th><th>With you</th><th>Others</th></tr>
+								<<for _sexMetricsGroup range [['Received', _sexMetrics.received], ['Given', _sexMetrics.given], ['Mutual', _sexMetrics.mutual]]>>
+									<<if _sexMetricsGroup[1].length>>
+										<tr class="npc-sex-metrics-group"><th colspan="3"><<= _sexMetricsGroup[0]>></th></tr>
+										<<for _sexMetricsRow range _sexMetricsGroup[1]>>
+											<tr><td><<= _sexMetricsRow.metric>></td><td><<= _sexMetricsRow.withMc>></td><td><<= _sexMetricsRow.others>></td></tr>
+										<</for>>
+									<</if>>
+								<</for>>
+							</table>
+						<</linkreplace>>
 					</div>
 				<</if>>
 			</div>

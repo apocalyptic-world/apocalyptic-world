@@ -65,8 +65,8 @@ Then, it began.
 			<<goto 'Nursery'>>
 		<<elseif typeof $childId !== 'undefined'>>
 			<<run setup.npc.addHistory($tmpGirl, 'grown_up')>>
-			<<run delete $tmpGirl.teach; delete $tmpGirl.teachAdvStudy>> /* child school fields; adults use teach for evening class */
-			<<run $guests.push($tmpGirl)>>
+			/* orientation, still a virgin, dick size, no child-only fields (setup.humans.newAdult) */
+			<<run $guests.push(setup.humans.newAdult({ now: $gameDate }, $tmpGirl))>>
 			<<run $nursery.splice($childId, 1)>>
 			<<goto 'Nursery'>>
 		<<elseif typeof $slaveId !== 'undefined'>>

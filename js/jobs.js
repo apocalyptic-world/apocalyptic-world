@@ -41,13 +41,15 @@ setup.jobs = {
         return _moneyEarned;
     },
 
+    /** A sex act with a client (an anonymous man) during a job: 'pussy', 'bj' or 'anal'. */
     applyJobAct(npc, actType, jobCategory = 'streets') {
-        npc.statsSex ??= {};
-        npc.statsSex[actType] ??= 0;
-        npc.statsSex[actType]++;
+        const client = setup.sexActs.someone();
+        if (actType === 'pussy') setup.sexActs.fucksPussy(client, npc);
+        else if (actType === 'bj') setup.sexActs.blowsCock(npc, client);
+        else if (actType === 'anal') setup.sexActs.fucksAss(client, npc);
 
         const traits = npc.traits ?? [];
-        if (actType === 'pussy' && traits.includes('tight_vagina') && npc.statsSex.pussy >= 100) {
+        if (actType === 'pussy' && traits.includes('tight_vagina') && setup.sexActs.count(npc, 'receivedPussyFucked') >= 100) {
             npc.traits.splice(traits.indexOf('tight_vagina'), 1);
             setup.sleepMessages.addJob(npc.name + ' lost the <strong>tight vagina</strong> trait after extensive work.', jobCategory);
         }

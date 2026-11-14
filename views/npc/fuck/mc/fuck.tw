@@ -126,15 +126,9 @@
         <<if setup.percentageChance(70)>>
             <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
         <</if>>
-        <<if typeof $sexStats[$sexAction] === 'undefined'>>
-            <<set 
-                $tmpGirl.statsSex ??= {},
-                $tmpGirl.statsSex[$sexAction] ??= 0,
-                $tmpGirl.statsSex[$sexAction]++,
-                $sexStats[$sexAction] = true
-            >>
-        <</if>>
     <</if>>
+    /* counts the act between the MC and her, once per scene (js/sexActs.js) */
+    <<run setup.sexActs.mcSceneAction($sexAction, $tmpGirl)>>
     <<if $sexAction === 'pussy' || $sexAction === 'pussy_fisting'>>
         <<if $tmpGirl.virgin>>
             <<run setup.npc.addHistory($tmpGirl, 'virgin_lost', { with: 'mc' })>>

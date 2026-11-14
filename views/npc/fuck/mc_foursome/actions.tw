@@ -32,7 +32,7 @@
         minAction: 5,
         horny: 5,
         maxCorruption: 25,
-        show: !$tmpGirl.chastityBelt,
+        show: !$tmpGirl.chastityBelt && setup.sexActs.hasPussy($tmpGirl),
         positive: true,
         hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 5 : 20,
         positive2: true,
@@ -90,6 +90,7 @@
     pussy_lick: {
         title: 'Lick pussy',
         minAction: 30,
+        show: setup.sexActs.hasPussy($tmpGirl),
         horny: 3,
         maxCorruption: 40,
         positive: true,
@@ -110,8 +111,7 @@
         hornyGive2: ($tmpGirl2.traits ?? []).includes('analslut') ? 5 : 20,
         positive3: true,
         hornyGive3: ($tmpGirl3.traits ?? []).includes('analslut') ? 5 : 15,
-        orConditionTrue: ($tmpGirl2.traits ?? []).includes('cumslut'),
-        stats2: 'bj'
+        orConditionTrue: ($tmpGirl2.traits ?? []).includes('cumslut')
     },
     anal_fingering: {
         title: 'Finger ass',
@@ -129,7 +129,7 @@
         minAction: 40,
         horny: 20,
         maxCorruption: 60,
-        show: _canFuck,
+        show: _canFuck && setup.sexActs.hasPussy($tmpGirl),
         positive: !$tmpGirl.virgin,
         hornyGive: ($tmpGirl.traits ?? []).includes('analslut') ? 5 : 20,
         positive2: true,

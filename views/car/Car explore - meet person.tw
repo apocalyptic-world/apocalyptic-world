@@ -2,21 +2,7 @@
 <h1 class="ptitle">OUTSIDE</h1>
 <br /><br />
 
-<<set _npcGenderOptions = [0, 1]>>
-<<if settings.transEnabled>>
-	<<set _npcGenderOptions.push(2)>>
-<</if>>
-
-<<set _npcGender = setup.getRandomElement(_npcGenderOptions)>>
-<<if _npcGender === 0>>
-	<<newgirl>>
-<<elseif _npcGender === 1>>
-	<<newguy>>
-	<<set $tmpGirl = $tmpGuy>>
-<<elseif _npcGender === 2>>
-	<<newtransgirl>>
-<</if>>
-<<set $tmpGirl.location = 'car'>>
+<<newStranger 'car'>>
 
 <<set _npcDataMapped = [
     {
@@ -55,13 +41,7 @@
 <br /><br />
 
 <<link 'Go closer'>>
-	<<set $tmpGirl.rape to true>>
-	<<set $tmpGirlCapture = true>>
-	<<set $tmpGirlInvite = true>>
-	<<unset $tmpGirlViewBack>>
-	<<unset $slaveId, $guestId, $charId, $childId>>
-	<<set $tmpGirlBack = 'Garage'>>
-	<<goto [[NPC view]]>>
+	<<approachStranger 'Garage'>>
 <</link>>
 
 <<link 'Leave'>>

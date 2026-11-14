@@ -2,21 +2,7 @@
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
 
-<<set _npcGenderOptions = [0, 1]>>
-<<if settings.transEnabled>>
-	<<set _npcGenderOptions.push(2)>>
-<</if>>
-
-<<set _npcGender = setup.getRandomElement(_npcGenderOptions)>>
-<<if _npcGender === 0>>
-	<<newgirl>>
-<<elseif _npcGender === 1>>
-	<<newguy>>
-	<<set $tmpGirl = $tmpGuy>>
-<<elseif _npcGender === 2>>
-	<<newtransgirl>>
-<</if>>
-<<set $tmpGirl.location = 'forest'>>
+<<newStranger 'forest'>>
 
 <<set _npcDataMapped = [
 	{
@@ -43,7 +29,7 @@
 	}
 ]>>
 
-<<set _type = (!_npcGender && setup.percentageChance(15) ? 'masturbate' : 'default')>>
+<<set _type = ($tmpGirl.gender === 0 && setup.percentageChance(15) ? 'masturbate' : 'default')>>
 <<if _type === 'masturbate'>>
 	<<set $tmpGirl.horny = 100>>
 <</if>>
@@ -78,41 +64,38 @@
         Long enough. You want company?
     <</you>>
     <br />
-    She held your gaze for a long moment. Then her hands dropped.
-    <br /><br />
-    <<sayNpc $tmpGirl>>
-        <<=either(['...come here.', "Lock you out of my head for two minutes and look what happens.", "You'd better be worth the interruption."])>>
-    <</sayNpc>>
-    <br />
-    <<link 'Go to her'>>
-        <<set $tmpGirlInvite = true>>
-        <<unset $tmpGirlViewBack>>
-        <<unset $slaveId, $guestId, $charId, $childId>>
-        <<set $tmpGirlBack = 'Outside'>>
-        <<goto [[NPC view]]>>
-    <</link>>
+    <<if setup.npcs.mcAttraction($tmpGirl).willing === 'desire'>>
+        She held your gaze for a long moment. Then her hands dropped.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            <<=either(['...come here.', "Lock you out of my head for two minutes and look what happens.", "You'd better be worth the interruption."])>>
+        <</sayNpc>>
+        <br />
+        <<link 'Go to her'>>
+            <<approachStranger 'Outside' true>>
+        <</link>>
+    <<else>>
+        /* not attracted to the MC (setup.npcs.mcAttraction): no invitation */
+        She snatched her clothes back into place, cheeks burning.
+        <br /><br />
+        <<sayNpc $tmpGirl>>
+            <<=either(["Back off. Whatever you think this was, it wasn't for you.", "Not a chance. You're not what I'm looking for.", "Turn around and keep walking. I'm not interested."])>>
+        <</sayNpc>>
+        <br />
+        <<link 'Go closer'>>
+            <<approachStranger 'Outside'>>
+        <</link>>
+    <</if>>
 <</linkreplace>>
 </div>
 <div id="fml_hide">
 <<link 'Watch from the treeline'>>
-    <<set $tmpGirl.rape to true>>
-    <<set $tmpGirlCapture = true>>
-    <<set $tmpGirlInvite = true>>
-    <<unset $tmpGirlViewBack>>
-    <<unset $slaveId, $guestId, $charId, $childId>>
-    <<set $tmpGirlBack = 'Outside'>>
-    <<goto [[NPC view]]>>
+    <<approachStranger 'Outside'>>
 <</link>>
 </div>
 <<else>>
 <<link 'Go closer'>>
-    <<set $tmpGirl.rape to true>>
-    <<set $tmpGirlCapture = true>>
-    <<set $tmpGirlInvite = true>>
-    <<unset $tmpGirlViewBack>>
-    <<unset $slaveId, $guestId, $charId, $childId>>
-    <<set $tmpGirlBack = 'Outside'>>
-    <<goto [[NPC view]]>>
+    <<approachStranger 'Outside'>>
 <</link>>
 <</if>>
 
