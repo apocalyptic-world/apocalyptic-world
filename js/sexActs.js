@@ -11,8 +11,9 @@
  *   setup.sexActs.fucksAss($tmpGirl, $player)       // a sadistic woman pegs the MC (strap-on)
  *   setup.sexActs.fucksPussy(setup.sexActs.someone(), npc)   // an anonymous man (client, kidnapper)
  * Each call adds 1 to the metrics of the NPCs involved. The anatomy is checked first: an act someone can't do or
- * receive (a man getting his pussy licked) throws an Error. A strap-on (sadistic women and trans men, the basement
- * mistress) counts as a cock.
+ * receive (a man getting his pussy licked) is not counted and logs a console warning, so a scene button shown by
+ * mistake never breaks the game. In strict mode (setStrict(true), the tests, or SugarCube's Config.debug) it throws
+ * an Error instead. A strap-on (sadistic women and trans men, the basement mistress) counts as a cock.
  *
  * Read with count(npc, metric), countWithMc(npc, metric), totalAss(npc) and hadSexWithMc(npc). Don't read or write
  * the counter objects directly.
@@ -43,16 +44,38 @@ setup.sexActs = (function () {
         && ((person?.traits ?? []).includes('sadistic') || person?.assignedTo === 'mistress');
     const hasCock = person => isMc(person) || [1, 2].includes(person?.gender) || usesStrapOn(person);
     const hasPussy = person => !isMc(person) && [0, 3].includes(person?.gender);
-    const hasBreasts = person => !isMc(person) && [0, 2].includes(person?.gender);
+    /** Women and trans women, and anyone else with a breasts field (a trans man after breast surgery, a woman who
+        became a man and kept hers). */
+    const hasBreasts = person => !isMc(person)
+        && ([0, 2].includes(person?.gender) || (typeof person?.breasts === 'string' && person.breasts !== ''));
     const canPenetrate = hasCock;
 
     const who = person => (isMc(person) ? 'the MC' : (person?.name ?? 'someone') + ' (gender ' + person?.gender + ')');
 
+    /** A wrong body for an act. Outside strict mode the act functions catch it (guarded), warn and count nothing. */
+    class AnatomyError extends Error {}
+    AnatomyError.prototype.name = 'AnatomyError';
+
+    let strict = false;
+    const isStrict = () => strict === true || (typeof Config !== 'undefined' && Config?.debug === true);
+
     function check(act, ok, person, what) {
         if (!ok) {
-            throw new Error('setup.sexActs.' + act + ': ' + who(person) + ' ' + what);
+            throw new AnatomyError('setup.sexActs.' + act + ': ' + who(person) + ' ' + what);
         }
     }
+
+    /** Wraps an act: every check runs before anything is recorded, so a failed check counts nothing. */
+    const guarded = fn => function (...args) {
+        try {
+            return fn.apply(this, args);
+        } catch (error) {
+            if (!(error instanceof AnatomyError) || isStrict()) {
+                throw error;
+            }
+            console.warn(error.message + ' (not counted)');
+        }
+    };
 
     /* ---------- counters ---------- */
 
@@ -83,7 +106,7 @@ setup.sexActs = (function () {
 
     /* ---------- acts ---------- */
 
-    const acts = {
+    const unguardedActs = {
         /* penetration */
         fucksPussy: function (active, passive) {
             check('fucksPussy', canPenetrate(active), active, 'has no cock or strap-on');
@@ -229,6 +252,8 @@ setup.sexActs = (function () {
             record(active, passive, null, 'receivedCumBack');
         }
     };
+    /* the scene helpers below use these too, so one wrong act in a scene skips only that act */
+    const acts = Object.fromEntries(Object.entries(unguardedActs).map(([name, fn]) => [name, guarded(fn)]));
 
     /* ---------- sex scenes (one-on-one, threesome, foursome): each act counts once per scene ---------- */
 
@@ -377,6 +402,11 @@ setup.sexActs = (function () {
         hasPussy,
         hasBreasts,
         canPenetrate,
+
+        /** Strict mode: a wrong body for an act throws instead of warning (tests; also on with Config.debug). */
+        setStrict: function (on) {
+            strict = on === true;
+        },
 
         /** An anonymous partner with no counters (a street client, a kidnapper). */
         someone: function (gender = 1) {

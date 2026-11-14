@@ -11,7 +11,8 @@
  */
 setup.humans = (function () {
     /** Body parts by gender (0 woman, 1 man, 2 trans woman, 3 trans man). Keep in sync with hasPussy / hasBreasts in
-        js/sexActs.js (which adds the MC and strap-ons); test/humans.test.cjs checks they agree. */
+        js/sexActs.js (which adds the MC, strap-ons, and breasts from surgery: anyone with a breasts field);
+        test/humans.test.cjs checks they agree for a new NPC. */
     const ANATOMY = Object.freeze({
         pussy: Object.freeze([0, 3]),
         breasts: Object.freeze([0, 2]),
