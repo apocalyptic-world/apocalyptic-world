@@ -1,33 +1,7 @@
 :: Widget newgirl [widget]
 <<widget newgirl>>
-	<<include 'Girl names'>>
-	<<set _gender = 0>>	
-	<<include 'newnpc'>>
-
-	<<set
-		_npc.breasts = either('small', 'medium', 'big'),
-		_npc.virgin = false,
-		_npc.orgasms = 0,
-		_npc.clothes = setup.getRandomNpcClothes(_npc)
-	>>
-
-	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
-		<<set _npc = setup.setToVirgin(_npc)>>
-	<</if>>
-
-	<<if setup.percentageChance(50)>>
-		<<set _npcTraits = 1>>
-		<<if setup.percentageChance(30)>>
-			<<set _npcTraits = 2>>
-		<</if>>
-		<<set _npc.traits = setup.getRandomTraits(_npc, _npcTraits, (_npc.traitsLocked ?? []).concat(['feral']))>>
-	<</if>>
-
-	<<if !_npc.virgin && setup.percentageChance(5)>>
-		<<set _npc.piercedBoobs = true>>
-	<</if>>
-
+	/* A random adult (setup.humans.newAdult). _npc, _gender and _names are still set because some passages read them. */
+	<<set _gender = 0, _names = setup.npcFemaleNames>>
+	<<set _npc = setup.humans.newAdult({ gender: 0, now: $gameDate })>>
 	<<set $tmpGirl = _npc>>
 <</widget>>
-
-

@@ -20,7 +20,7 @@
     mistress_titjob: {
         title: 'Titjob',
         minAction: 30,
-        show: [1,2].includes($guests[_girlGuest[0]].gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && !_npcMistress.chastityBelt,
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && setup.sexActs.hasBreasts($tmpGirl) && ['medium', 'big'].includes($tmpGirl.breasts ?? '') && !_npcMistress.chastityBelt,
         maxCorruption: 40
     },
     mistress_face_strapon: {
@@ -67,7 +67,7 @@
     mistress_pussy: {
         title: 'Fuck pussy',
         minAction: 50,
-        show: typeof $tmpGirl.pussy !== 'undefined' && (!_npcMistress.gender || !_npcMistress.chastityBelt),
+        show: setup.sexActs.hasPussy($tmpGirl) && (!_npcMistress.gender || !_npcMistress.chastityBelt),
         maxCorruption: 60,
         positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
         stats: 'pussy'
@@ -169,6 +169,8 @@
     <<if _sexActions[$sexAction]?.stats>>
         <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
     <</if>>
+    /* counts the act between the mistress and the slave (not with the MC), once per scene (js/sexActs.js) */
+    <<run setup.sexActs.mistressSceneAction($sexAction, _npcMistress, $tmpGirl)>>
     <<if $sexAction === 'mistress_pussy'>>
         <<set $tmpGirl.virgin = false>>
     <</if>>

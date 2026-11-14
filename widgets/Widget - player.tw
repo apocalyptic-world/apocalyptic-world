@@ -100,7 +100,8 @@
 					<<include 'NPC visual'>>
 				</div>
 			</div>
-			<<if !tags().includes('event')>>
+			/* not in events, nor in sex scenes: <<goto passage()>> would render the scene again and repeat its effects */
+			<<if !tags().includes('event') && !tags().includes('sex')>>
 				<<link 'x'>>
 					<<dialog 'Remove companion'>>
 						Remove <<=_girlVisual.name>> from companions?

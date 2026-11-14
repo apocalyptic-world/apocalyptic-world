@@ -80,7 +80,7 @@ She looked back at you over her shoulder and held the pose a little longer than 
 					<<set _npc.virgin = false>>
 				<</if>>
 				<<set _npc.pussy = Math.min((_npc.pussy ?? 0) + 5, 100)>>
-				<<set _npc.statsSex ??= {}, _npc.statsSex.pussy = (_npc.statsSex.pussy ?? 0) + 1>>
+				<<run setup.sexActs.fucksPussy($player, _npc)>>
 				<<run setup.npc.addHistory(_npc, 'first_sex_mc', { with: 'mc' })>>
 
 				You opened your pants and freed your cock, took her by the hips and pulled her backwards onto your lap with a knee on either side of yours. She reached down between her legs, wrapped her fingers around your cock and guided it against her pussy.
@@ -120,7 +120,7 @@ She looked back at you over her shoulder and held the pose a little longer than 
 				<br />
 				<<linkreplace _lblBend>>
 					<<addmins 15>>
-					<<set _npc.statsSex ??= {}, _npc.statsSex.pussy = (_npc.statsSex.pussy ?? 0) + 1>>
+					<<run setup.sexActs.fucksPussy($player, _npc)>>
 
 					<center>
 						<<actionImage _npc 'pussy' 'no-text'>>
@@ -156,7 +156,7 @@ She looked back at you over her shoulder and held the pose a little longer than 
 							<<set _npc.horny = 0>>
 							<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 5, 100)>>
 							<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
-							<<set _npc.statsSex ??= {}, _npc.statsSex.pussy = (_npc.statsSex.pussy ?? 0) + 1>>
+							<<run setup.sexActs.fucksPussy($player, _npc)>>
 							<<if setup.pregnancyChance(_npc)>>
 								<<set _npc.pregnancy = 0>>
 								<<set _npc.pregnancy_father = 'mc'>>

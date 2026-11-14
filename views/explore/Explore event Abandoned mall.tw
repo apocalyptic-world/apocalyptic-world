@@ -29,22 +29,27 @@ Exploring through the city you stumble upon a burnt out shopping center. While n
 			You take a moment to observe before diving into the decrepit building. At the edge fo your hearing you only just barely make out a sniffling sound to your side in the old parking garage. Check out the noise tucked away in the corner hiding you spot a girl
 			<br /><br />
 			<<newgirl>>
+			<<run setup.player.meetStranger($tmpGirl)>>
 			<<include 'NPC info'>>
 			<br /><br />
 			<<say 'Unknown girl' setup.ImagePath+'/people/anongirl.png'>>
 				Please leave me alone! I am just looking for food
 			<</say>>
 			<br /><br />
+			<<strangerMeetText>>
 			<<if $backpack.count('food') >= 5>>
 				<<linkreplace 'Offer her food'>>
 					<<set _gaveFood = true>>
 					<<run $('#option_food').hide()>>
 					<<set $player.goodwill++>>
 					<<set $player.reputation++>>
+					<<set $strangerMeeting.gaveFood = true>>
 					<<drop $backpack 'food' 5>>
 					<<say 'Unknown girl' setup.ImagePath+'/people/anongirl.png'>>
 						Thank you so much sir!
 					<</say>>
+					<br /><br />
+					<em>She looks at you differently now. She might accept if you offered her a place to stay.</em>
 					<br /><br />
 				<</linkreplace>>
 				<<linkdesc 'option_food'>>

@@ -372,10 +372,11 @@ You pull the whippit kit — canister and balloon — out where <<=_heOrShe>> ca
 				<</if>>
 				<<set _noIncestSetting = $player?.baseManagement?.noIncest ?? false>>
 				<<set _lingerEligible = _joiningEntries.filter(function (entry) { return !(_noIncestSetting && setup.family.isIncest($player, entry.npc)); })>>
-				<<set _femaleJoiners = _lingerEligible.filter(function (entry) { return [0, 2].includes(entry.npc.gender); })>>
+				<<set _femaleJoiners = _lingerEligible.filter(function (entry) { return entry.npc.gender === 0; })>>
 				<<set _didFoursome = false>>
 				<<set _didThreesome = false>>
-				<<if !_incestBlocked && _femaleJoiners.length >= 2 && setup.percentageChance(50)>>
+				/* The foursome scene is written for women only (foursome_ff_ texts and images); otherwise this falls through to the threesome */
+				<<if !_incestBlocked && $tmpGirl.gender === 0 && _femaleJoiners.length >= 2 && setup.percentageChance(50)>>
 					<<set _picked = setup.weightedSampleWithoutReplacement(_femaleJoiners, function (entry) { return setup.getWhippitParticipantWeight(entry.npc); }, 2)>>
 					<<set _p2 = _picked[0]>>
 					<<set _p3 = _picked[1]>>

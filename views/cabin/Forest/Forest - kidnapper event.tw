@@ -43,9 +43,14 @@ They had maybe a six-hour head start. If you move now, you might still find the 
         <<set _kidnapped.sick = {days: randomInteger(5, 10), desc: 'Exhausted and injured', id: 'exhaustion'}>>
         <<if _kidnapped.virgin>><<run setup.npc.addHistory(_kidnapped, 'virgin_lost')>><</if>>
         <<set _kidnapped.virgin = false>>
-        <<set _kidnapped.statsSex ??= {}>>
-        <<set _kidnapped.statsSex.pussy = (_kidnapped.statsSex.pussy ?? 0) + randomInteger(3, 8)>>
-        <<set _kidnapped.statsSex.bj = (_kidnapped.statsSex.bj ?? 0) + randomInteger(2, 5)>>
+        /* the kidnappers (anonymous men) used her for days: counted as acts with someone other than the MC */
+        <<run
+            for (let i = randomInteger(3, 8); i > 0; i--) {
+                if (setup.sexActs.hasPussy(_kidnapped)) setup.sexActs.fucksPussy(setup.sexActs.someone(), _kidnapped);
+                else setup.sexActs.fucksAss(setup.sexActs.someone(), _kidnapped);
+            }
+            for (let i = randomInteger(2, 5); i > 0; i--) setup.sexActs.blowsCock(_kidnapped, setup.sexActs.someone());
+        >>
         <<if setup.pregnancyChance(_kidnapped)>>
             <<set _kidnapped.pregnancy = 0>>
             <<set _kidnapped.pregnancy_father = 'unknown'>>

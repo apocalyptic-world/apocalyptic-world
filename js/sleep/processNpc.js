@@ -218,7 +218,7 @@ setup.sleep.processNpc = function(npc, opts) {
             if (window.randomInteger(0, 1) === 0) {
                 if (!npc.chastityBelt) {
                     npc.virgin = false;
-                    if (setup.percentageChance(50)) setup.jobs.applyJobAct(npc, 'pussy');
+                    if (setup.sexActs.hasPussy(npc) && setup.percentageChance(50)) setup.jobs.applyJobAct(npc, 'pussy');
                 }
                 if (setup.percentageChance(50)) setup.jobs.applyJobAct(npc, 'bj');
                 if (setup.percentageChance(20)) setup.jobs.applyJobAct(npc, 'anal');

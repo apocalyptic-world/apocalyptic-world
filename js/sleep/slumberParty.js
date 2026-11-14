@@ -233,10 +233,9 @@ setup.slumberParty = {
         return this.drunkOf(partner) > 0 ? this.drunkOf(partner) : (partner.relationshipBetween?.stats?.[npc.id] ?? 0);
     },
 
-    /** The MC has slept with her, by her history or sexStats. */
+    /** The MC has slept with her (setup.npc.sleptWithMc). */
     isMcPartner: function (npc) {
-        const inHistory = (npc.history ?? []).some(h => h.event === 'first_sex_mc' || (h.event === 'virgin_lost' && h.with === 'mc'));
-        return inHistory || Object.values(npc.sexStats ?? {}).some(n => typeof n === 'number' && n > 0);
+        return setup.npc.sleptWithMc(npc);
     },
 
     /** Boasts with no number behind them. */
@@ -258,14 +257,14 @@ setup.slumberParty = {
             top: "{a} got the others comparing how often you've made them cum, and no one came close. They listened in awe as she described it."
         },
         times: {
-            value: npc => (npc.sexStats?.pussy ?? 0) + (npc.sexStats?.anal ?? 0),
+            value: npc => setup.sexActs.countWithMc(npc, 'receivedPussyFucked') + setup.sexActs.countWithMc(npc, 'receivedAssFucked'),
             least: "{a} boasted drunkenly about how often you take her to bed, only to find that everyone else has been there more.",
             lower: "{a} started a tally of how many times you've had each of them, and was ribbed by the leaders for landing near the bottom.",
             higher: "{a} started a tally of how many times you've had each of them, and happily ribbed those at the bottom from her place near the top.",
             top: "{a} got a tally going of how many times you've had each of them, and won by a distance. The others were suitably impressed."
         },
         creampies: {
-            value: npc => npc.sexStats?.creampies ?? 0,
+            value: npc => setup.sexActs.countWithMc(npc, 'receivedVaginalCreampie'),
             least: "{a} giggled about how often you finish inside her, then sobered a little on hearing how much more often the others get the same.",
             lower: "{a} asked who you finish inside most often, and the answer wasn't her. The front-runners teased her and the others lagging behind.",
             higher: "{a} asked who you finish inside most often, and was happy to help the other front-runners tease those who get it less.",

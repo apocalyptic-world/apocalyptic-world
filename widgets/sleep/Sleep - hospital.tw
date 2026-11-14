@@ -46,6 +46,8 @@
                 <<run _childNames.push(setup.displayName(_child))>>
             <</for>>
 
+            <<run setup.humans.endPregnancy(_mother)>>
+            <<unset $newChild>>
             <<set _textDesc = _childNames.length > 1 ? '<strong>twins</strong>. ' : ''>>
         
             <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. She went to the hospital and gave birth to ' + _textDesc + _childNames.join(', ') + '.', 'hospital')>>

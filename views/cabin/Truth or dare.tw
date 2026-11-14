@@ -133,11 +133,13 @@ Who's playing? Pick two to four.
 			<<run setup.tod.doSpin()>>
 			<<goto 'Truth or dare'>>
 		<</link>>
-		<<if _todWilling.length >= 3>>
-			<<set _todFourLabel = 'Take ' + _todWilling[0].name + ', ' + _todWilling[1].name + ' and ' + _todWilling[2].name + ' to your bedroom'>>
+		/* The foursome scene is written for women only (foursome_ff_ texts and images) */
+		<<set _todFour = _todWilling.filter(function (n) { return n.gender === 0; })>>
+		<<if _todFour.length >= 3>>
+			<<set _todFourLabel = 'Take ' + _todFour[0].name + ', ' + _todFour[1].name + ' and ' + _todFour[2].name + ' to your bedroom'>>
 			<<link _todFourLabel>>
 				<<achievement 'tod_finale'>>
-				<<set $guestId = $guests.indexOf(_todWilling[0]), $guestId2 = $guests.indexOf(_todWilling[1]), $guestId3 = $guests.indexOf(_todWilling[2])>>
+				<<set $guestId = $guests.indexOf(_todFour[0]), $guestId2 = $guests.indexOf(_todFour[1]), $guestId3 = $guests.indexOf(_todFour[2])>>
 				<<set $tmpGirl = $guests[$guestId], $tmpGirl2 = $guests[$guestId2], $tmpGirl3 = $guests[$guestId3]>>
 				<<set $tmpGirl.location = 'bedroom', $tmpGirl2.location = 'bedroom', $tmpGirl3.location = 'bedroom'>>
 				<<unset $charId, $slaveId, $charId2, $slaveId2, $charId3, $slaveId3>>
@@ -296,6 +298,7 @@ Who's playing? Pick two to four.
 		<<if $tod.result.cum === 'pussy'>>
 			<div id="tod_cum_in">
 				<<linkreplace 'Cum inside her pussy'>>
+					<<run setup.sexActs.cumsInPussy($player, _tdCumNpc)>>
 					<<horny_reset>>
 					<<run $('#tod_cum_out').hide()>>
 					<<if setup.pregnancyChance(_tdCumNpc)>>
@@ -313,6 +316,7 @@ Who's playing? Pick two to four.
 			</div>
 			<div id="tod_cum_out">
 				<<linkreplace 'Pull out and cum on her stomach'>>
+					<<run setup.sexActs.cumsOnStomach($player, _tdCumNpc)>>
 					<<horny_reset>>
 					<<run $('#tod_cum_in').hide()>>
 					<<set $tod.mcSpent = true>>
@@ -326,6 +330,7 @@ Who's playing? Pick two to four.
 			</div>
 		<<elseif $tod.result.cum === 'mouth'>>
 			<<linkreplace 'Cum in her mouth'>>
+				<<run setup.sexActs.cumsInMouth($player, _tdCumNpc)>>
 				<<horny_reset>>
 				<<set $tod.mcSpent = true>>
 				<center>

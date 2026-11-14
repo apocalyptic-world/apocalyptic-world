@@ -52,6 +52,12 @@
                     <<run $('#done').show()>>
                     
                     <<set _npc.gender = _gender>>
+                    /* the pussy field follows the new body (setup.humans.ANATOMY): scenes take it as "has a pussy" */
+                    <<if setup.humans.has(_gender, 'pussy')>>
+                        <<set _npc.pussy ??= 0>>
+                    <<else>>
+                        <<run delete _npc.pussy>>
+                    <</if>>
                     <<if !_npc.breasts>>
                         <<set _npc.breasts = 'small'>>
                     <</if>>

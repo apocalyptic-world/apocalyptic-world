@@ -1,25 +1,7 @@
 :: Widget newguy [widget]
 <<widget newguy>>
-	<<include 'Guy names'>>
-	<<set _gender = 1>>	
-	<<include 'newnpc'>>
-
-	<<set
-		_npc.dick = either('small', 'medium', 'big'),
-		_npc.strength = random(20, 40),
-   		_npc.sub = random(5, 13),
-		_npc.clothes = setup.getRandomNpcClothes(_npc)
-	>>
-
-	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
-		<<set _npc = setup.setToVirgin(_npc)>>
-	<</if>>
-
-	<<if (_npc.likesGuys || _npc.likesTGirls) && setup.percentageChance(25)>>
-		<<set _npc.traits = [either('analslut', 'cumslut', 'deepthroat')]>>
-	<<else>>
-		<<set _npc.hair = _npc.naturalHair>>
-	<</if>>
-	
+	/* A random adult (setup.humans.newAdult). _npc, _gender and _names are still set because some passages read them. */
+	<<set _gender = 1, _names = setup.npcMaleNames>>
+	<<set _npc = setup.humans.newAdult({ gender: 1, now: $gameDate })>>
 	<<set $tmpGuy = _npc>>
 <</widget>>
