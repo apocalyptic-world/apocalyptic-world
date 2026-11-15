@@ -735,7 +735,7 @@ setup.npc = {
 				"Don't let me near the stairs tonight, %mcName%. I mean it."
 			],
 			corrupted: [
-				"I stopped pretending to care about ‘good' a long time ago.",
+				"I stopped pretending to care about 'good' a long time ago.",
 				"Morality is for the dead. The rest of us just adapt."
 			],
 			mechanical: [
