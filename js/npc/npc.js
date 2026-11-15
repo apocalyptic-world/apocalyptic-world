@@ -788,7 +788,8 @@ setup.npc = {
 				"Bend me over anything you like, %mcName%. I won't complain.",
 				"Mark me as yours, %mcName%, so everyone knows who I belong to.",
 				"I don't care who hears us, %mcName%. Let them listen.",
-				"Whatever you have in mind tonight, %mcName%, the answer is yes."
+				"Whatever you have in mind tonight, %mcName%, the answer is yes.",
+				"Breed me again %mcName%... I need it."
 			],
 			sex_jaded: [
 				"It doesn't mean anything to me anymore. Just another motion.",
