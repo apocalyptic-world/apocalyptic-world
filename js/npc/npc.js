@@ -704,7 +704,11 @@ setup.npc = {
 			],
 			hungry: [
 				"I'm so damn hungry I could eat a dead rad-dog.",
-				"I'd kill for a sandwich. Literally."
+				"I'd kill for a sandwich. Literally.",
+				"My stomach's been growling so loud I thought it was the wolves.",
+				"I caught myself eyeing the boot leather earlier. That's where I'm at.",
+				"If someone doesn't feed me soon, %mcName%, I'm going to start chewing the furniture.",
+				"I dreamed about bread last night. Just bread. I woke up angry."
 			],
 			horny_low: [
 				"It's been a while… I could use a distraction.",
@@ -724,7 +728,11 @@ setup.npc = {
 			],
 			drunk: [
 				"The world's a blur. Makes it easier to forget.",
-				"Another drink? Sure. What's the worst that can happen?"
+				"Another drink? Sure. What's the worst that can happen?",
+				"Is the floor moving, or is it just me? ...It's just me, isn't it.",
+				"I love everyone right now. Even you, %mcName%. Especially you. Wait, what was I saying?",
+				"This stuff tastes like gasoline. Pour me another.",
+				"Don't let me near the stairs tonight, %mcName%. I mean it."
 			],
 			corrupted: [
 				"I stopped pretending to care about ‘good' a long time ago.",
