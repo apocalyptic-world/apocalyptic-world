@@ -681,12 +681,26 @@ setup.npc = {
 				"Screams echo beautifully, don't they?"
 			],
 			masochist: [
+				"Pain is my therapy now.",
+				"Bruises fade too fast. I almost miss them when they're gone.",
+				"The sting is the only thing that reminds me I'm still here."
+			],
+			// added with masochist; aimed at the MC
+			masochist_mc: [
 				"Hurt me again. Make me feel like I still exist.",
-				"Pain is my therapy now."
+				"Leave marks this time, %mcName%. I want to see them in the morning.",
+				"Don't be gentle with me, %mcName%. Gentle never did anything for me."
 			],
 			affectionate: [
 				"I feel safest when you're near. Don't go, %mcName%",
-				"You don't know how much I needed this… us."
+				"I saved you the last of the coffee, %mcName%. Don't tell the others.",
+				"When you're out scavenging, I can't sleep until I hear you come back."
+			],
+			// added with affectionate; aimed at the MC
+			affectionate_mc: [
+				"You don't know how much I needed this… us.",
+				"Stay with me tonight, %mcName%. Just... stay.",
+				"I keep thinking about your hands on me. I hope that's not too much to admit."
 			],
 			hungry: [
 				"I'm so damn hungry I could eat a dead rad-dog.",
@@ -694,11 +708,19 @@ setup.npc = {
 			],
 			horny_low: [
 				"It's been a while… I could use a distraction.",
-				"I've got urges I can't just ignore, you know?"
+				"I've got urges I can't just ignore, you know?",
+				"Nights out here are long. Too long to spend alone.",
+				"I keep catching myself staring at people. It's getting embarrassing.",
+				"Cold water doesn't help with this one. Believe me, I've tried.",
+				"Funny how the end of the world didn't take the itch away."
 			],
 			horny_high: [
 				"If you don't take me right now, I might explode.",
-				"Let's not pretend this tension doesn't exist."
+				"Let's not pretend this tension doesn't exist.",
+				"Every time you walk past me, %mcName%, I forget what I was doing.",
+				"Find us a door that locks, %mcName%. I'll take care of the rest.",
+				"I can't think straight around you today, %mcName%. Do something about it.",
+				"Skip the small talk, %mcName%. You know exactly what I need."
 			],
 			drunk: [
 				"The world's a blur. Makes it easier to forget.",
@@ -723,7 +745,11 @@ setup.npc = {
 			// not attracted to the MC (or not free to be), but submissive enough to go along
 			submissive: [
 				"You're not who I'd choose. But if you want me, I won't say no.",
-				"Tell me what you want, %mcName%. I'll do it."
+				"Tell me what you want, %mcName%. I'll do it.",
+				"You don't have to ask nicely, %mcName%. Just tell me.",
+				"I don't need to want it. You want it, and that's enough.",
+				"If that's what you want from me tonight, %mcName%, then fine.",
+				"I'll do as I'm told, %mcName%. That's how it works between us."
 			],
 
 			// SEX STATS-BASED DIALOG
@@ -738,15 +764,23 @@ setup.npc = {
 			// lewd lines by anatomy: vagina (women, trans men) or penis and anus (men, trans women); not about the MC
 			// (lines about sex with the MC are in MC_MEMORIES below)
 			sex_lewd_female: [
-				"I'm dripping just thinking about it again..."
+				"I'm dripping just thinking about it again...",
+				"I used to blush at this stuff. Now I lose count of how many times I come in a week.",
+				"Still sore from last night, and I'd go again right now if someone asked."
 			],
 			sex_lewd_male_trans: [
-				"I get hard just thinking about last time..."
+				"I get hard just thinking about last time...",
+				"Last night left me sore in all the right places. I'd do it again.",
+				"I've stopped pretending I don't want it. I want it all the time now."
 			],
 			// added with either lewd category above; all aimed at the MC
 			sex_lewd_generic: [
 				"Use me %mcName%. Ruin me. I live for that.",
-				"Whenever you want me, %mcName%, however you want me. Just say the word."
+				"Whenever you want me, %mcName%, however you want me. Just say the word.",
+				"Bend me over anything you like, %mcName%. I won't complain.",
+				"Mark me as yours, %mcName%, so everyone knows who I belong to.",
+				"I don't care who hears us, %mcName%. Let them listen.",
+				"Whatever you have in mind tonight, %mcName%, the answer is yes."
 			],
 			sex_jaded: [
 				"It doesn't mean anything to me anymore. Just another motion.",
@@ -820,11 +854,19 @@ setup.npc = {
 		const MC_MEMORIES = {
 			pussy: {
 				metrics: ['receivedPussyFucked', 'receivedDoublePenetrationVagina', 'receivedDoublePenetrationAssVagina'],
-				lines: ["My pussy still remembers you, %mcName%. Don't keep me waiting too long."]
+				lines: [
+					"My pussy still remembers you, %mcName%. Don't keep me waiting too long.",
+					"I touch myself thinking about the way you fucked me, %mcName%.",
+					"I've been empty since last time, %mcName%. Come fill me up again."
+				]
 			},
 			ass: {
 				metrics: ['receivedAssFucked', 'receivedDoublePenetrationAss', 'receivedDoublePenetrationAssVagina'],
-				lines: ["I can't stop thinking about you filling my ass again, %mcName%."]
+				lines: [
+					"I can't stop thinking about you filling my ass again, %mcName%.",
+					"My ass is yours whenever you want it, %mcName%.",
+					"I was still walking funny the day after, %mcName%. Do it again."
+				]
 			}
 		};
 
@@ -850,11 +892,11 @@ setup.npc = {
 		else if (horny >= 20) pool.push(...db.horny_low);
 
 		if (traits.includes("sadistic")) pool.push(...db.sadistic);
-		if (traits.includes("masochist")) pool.push(...db.masochist);
+		if (traits.includes("masochist")) pool.push(...db.masochist, ...db.masochist_mc);
 		if (relationship > 70 || traits.includes("breeder") || personality.includes("extravagant"))
-			pool.push(...db.affectionate);
+			pool.push(...db.affectionate, ...db.affectionate_mc);
 
-		if (location === "bedroom" && relationship > 60) pool.push(...db.affectionate);
+		if (location === "bedroom" && relationship > 60) pool.push(...db.affectionate, ...db.affectionate_mc);
 
 		if (skills.includes("mechanic")) pool.push(...db.mechanical);
 		if (skills.includes("fighter")) pool.push(...db.fighter);
@@ -921,8 +963,8 @@ setup.npc = {
 		// Someone not attracted but submissive enough gets lines of compliance instead.
 		const toMc = new Set([
 			...db.horny_high,
-			db.affectionate[1], // "You don't know how much I needed this… us."
-			db.masochist[0],    // "Hurt me again. Make me feel like I still exist."
+			...db.affectionate_mc,
+			...db.masochist_mc,
 			...Object.values(MC_MEMORIES).flatMap(memory => memory.lines),
 			...db.sex_lewd_generic
 		]);
