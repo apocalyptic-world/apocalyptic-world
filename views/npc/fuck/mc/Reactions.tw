@@ -75,14 +75,15 @@
 		<</if>>
 
 	<<else>>
-		<<set _reactionPassage = 'Reactions - ' + $sexAction>>
 		<<set _charPass = 'Reactions - char - ' + ($charId ?? '') + ' - ' + $sexAction>>
 		<<if $charId && Story.has(_charPass) && setup.percentageChance(60)>>
 			<<include _charPass>>
-		<<elseif Story.has(_reactionPassage)>>
-			<<include _reactionPassage>>
 		<<else>>
-			<<include 'Reactions - generic'>>
+			/* lines by action and situation: setup.sexReactions (js/sexReactions.js) */
+			<<set _reaction = setup.sexReactions.line($tmpGirl, $sexAction)>>
+			<<if _reaction !== ''>>
+				<<sayNpc $tmpGirl>><<= _reaction>><</sayNpc>>
+			<</if>>
 		<</if>>
 
 	<</if>>
