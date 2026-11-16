@@ -95,7 +95,9 @@
             <<set _newFemales = randomInteger(0, _newSettlers)>>
             <<set $player.baseManagement.settlers = ($player.baseManagement.settlers ?? 0) + _newSettlers>>
             <<set $player.baseManagement.settlersFemales += _newFemales>>
-            <<run setup.sleepMessages.addMain(_newSettlers + ' new settler' + (_newSettlers > 1 ? 's' : '') + ' arrived, drawn by your settlement\'s reputation. <strong>(Settlement reputation: ' + _rep + ')</strong>')>>
+            /* Hover the number to see how many of them are women */
+            <<set _newSettlersTip = '<span style="border-bottom: 1px dotted currentColor" data-balloon-pos="up" aria-label="' + (_newSettlers === 1 ? (_newFemales ? 'Female' : 'Male') : _newFemales + ' of them ' + (_newFemales === 1 ? 'is' : 'are') + ' female') + '">' + _newSettlers + '</span>'>>
+            <<run setup.sleepMessages.addMain(_newSettlersTip + ' new settler' + (_newSettlers > 1 ? 's' : '') + ' arrived, drawn by your settlement\'s reputation. <strong>(Settlement reputation: ' + _rep + ')</strong>')>>
         <</if>>
     <</if>>
 <</if>>

@@ -12,8 +12,17 @@ setup.nurseryHelp = {
     TUTOR_MAX_STUDENTS: 2,
     /* Extra skill points when the player brings a book along */
     BOOK_BONUS: 2,
-    /* Extra relationship for the player's own children */
-    OWN_CHILD_BOND: 2,
+    /* Extra skill points when the caretaker is a teacher, or a teacher who also has the skill being taught */
+    TEACHER_BONUS: 1,
+    TEACHER_SKILL_BONUS: 2,
+    /* Where a caretaker who has the skill would have learned it, for the tutoring scene */
+    SKILL_EXPERIENCE: {
+        gardener: 'working the garden',
+        cook: 'cooking',
+        doctor: 'tending the sick',
+        woodcraft: 'working in the woods',
+        shopkeeper: 'running a shop'
+    },
 
     /* Day school subjects and the stat each one trains, same as Sleep - school. 'random' students study all of them. */
     SUBJECTS: {
@@ -72,22 +81,34 @@ setup.nurseryHelp = {
     },
 
     /**
+     * What a caretaker brings to a tutoring session: 'skill' for a teacher who also has the skill being taught,
+     * 'teacher' for a teacher, or '' for anyone else. Teaching the teacher skill itself counts once.
+     */
+    teacherHelp: function (carer, subject) {
+        if (!carer || !this.hasSkill(carer, 'teacher')) {
+            return '';
+        }
+        return subject !== 'teacher' && this.hasSkill(carer, subject) ? 'skill' : 'teacher';
+    },
+
+    /**
      * One hour of tutoring. Skill points can go past 100, but the skill itself is only learned overnight (graduate).
      * Returns { points: { kid: points gained }, relationship: { kid: relationship gained } }.
      */
-    tutor: function (kids, subject, useBook) {
+    tutor: function (kids, subject, useBook, carer) {
         const encounters = setup.nurseryEncounters;
         const stat = this.SUBJECTS[subject];
         const gained = { points: {}, relationship: {} };
+        const help = this.teacherHelp(carer, subject);
+        const teacherBonus = help === 'skill' ? this.TEACHER_SKILL_BONUS : help ? this.TEACHER_BONUS : 0;
         if (useBook) {
             setup.cabinInventory.drop('book');
         }
         for (const kid of kids) {
-            const points = random(1, 2) + (useBook ? this.BOOK_BONUS : 0);
+            const points = random(1, 2) + (useBook ? this.BOOK_BONUS : 0) + teacherBonus;
             kid.stats ??= {};
             kid.stats[stat] = (kid.stats[stat] ?? 0) + points;
-            const bond = encounters.isOwnChild(kid) ? this.OWN_CHILD_BOND : 0;
-            gained.relationship[kid.id] = encounters.change(kid, 'relationship', 1 + bond, 2 + bond);
+            gained.relationship[kid.id] = encounters.changeKin(kid, 1, 2);
             gained.points[kid.id] = points;
         }
         return gained;

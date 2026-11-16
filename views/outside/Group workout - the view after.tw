@@ -29,7 +29,7 @@ She turned her head.
     Her eyes sparkle with mischief.
     <br /><br />
     <<sayNpc _npc>>
-        The workout was so intense. And honestly? I'm horny right now.
+        The workout was so intense, <<=setup.npc.mcName(_npc)>>. And honestly? I'm horny right now.
     <</sayNpc>>
     <br />
     Her voice was breathy, and the playful giggle that followed sent a jolt straight to your groin.
@@ -79,7 +79,7 @@ She turned her head.
             </div>
         <<else>>
             <<sayNpc _npc>>
-                Fuck, yes!
+                Fuck, yes, <<=setup.npc.mcName(_npc)>>!
             <</sayNpc>>
         <</if>>
         <br />
@@ -117,6 +117,25 @@ She turned her head.
                 <br /><br />
                 With a final, brutal push, you buried deep and unloaded, flooding her pussy once more with hot spurts of cum.
                 <br /><br />
+                <<set _girlVisual = _npc>>
+                <<if (_npc.traits ?? []).includes('feral')>>
+                    <div class="say npcsay">
+                        <div class="npc-say-visual" @data-id="_npc.id">
+                            <div class="girl_info_picture">
+                                <<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+                            </div>
+                        </div>
+                        <div class="npc-say-container">
+                            <div class="npc-say-name"><strong><<=setup.displayName(_npc)>></strong></div>
+                            <div class="npc-say-text"><em>*shudders and sags against the fence, holding you deep inside her until the last pulse fades*</em></div>
+                        </div>
+                    </div>
+                <<else>>
+                    <<sayNpc _npc>>
+                        *panting* Fuck, <<=setup.npc.mcName(_npc)>>... Now that's how you finish a workout.
+                    <</sayNpc>>
+                <</if>>
+                <br /><br />
                 <<run $('#option_on_back').hide()>>
             <</linkreplace>>
         </div>
@@ -146,7 +165,7 @@ She turned her head.
                     </div>
                 <<else>>
                     <<sayNpc _npc>>
-                        Oh fuck, yes!
+                        Oh fuck, yes, <<=setup.npc.mcName(_npc)>>!
                     <</sayNpc>>
                 <</if>>
                 <br />

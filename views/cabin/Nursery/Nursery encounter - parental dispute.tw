@@ -41,11 +41,11 @@ You can hear them from the doorway. <<=_parentName>> has <<=_name>> backed up ag
 	<<link `'Side with ' + _parentName`>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_parent, 'relationship', 4, 6)>>
-				<<run _enc.change(_carer, 'relationship', -3, -1)>>
+				<<run _enc.changeKin(_parent, 4, 6)>>
+				<<run _enc.changeKin(_carer, -3, -1)>>
 			<<else>>
-				<<run _enc.change(_parent, 'relationship', 3, 5)>>
-				<<run _enc.change(_carer, 'relationship', -4, -2)>>
+				<<run _enc.changeKin(_parent, 3, 5)>>
+				<<run _enc.changeKin(_carer, -4, -2)>>
 			<</if>>
 			You tell <<=_name>> that a parent gets the last word on a thing like this, and <<=_kid.name>> will be handled the way <<=_parentName>> wants. <<=_parentName>> lets out a breath and thanks you. <<=_name>> presses <<=setup.pronounceWhos(_carer)>> lips together.
 			<br /><br />
@@ -60,11 +60,11 @@ You can hear them from the doorway. <<=_parentName>> has <<=_name>> backed up ag
 	<<link `'Side with ' + _name`>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_parent, 'relationship', -6, -4)>>
-				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+				<<run _enc.changeKin(_parent, -6, -4)>>
+				<<run _enc.changeKin(_carer, 3, 5)>>
 			<<else>>
-				<<run _enc.change(_parent, 'relationship', -4, -2)>>
-				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+				<<run _enc.changeKin(_parent, -4, -2)>>
+				<<run _enc.changeKin(_carer, 3, 5)>>
 			<</if>>
 			You tell <<=_parentName>> that you trust <<=_name>> to run this room, and that means trusting <<=setup.pronounceWho(_carer)>> on the day-to-day. <<=_name>>'s shoulders come down an inch. <<=_parentName>> stares at you, then looks away.
 			<br /><br />
@@ -83,11 +83,11 @@ You can hear them from the doorway. <<=_parentName>> has <<=_name>> backed up ag
 	<<link 'Try to find a middle ground'>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_carer, 'relationship', 1, 3)>>
-				<<run _enc.change(_parent, 'relationship', -3, -1)>>
+				<<run _enc.changeKin(_carer, 1, 3)>>
+				<<run _enc.changeKin(_parent, -3, -1)>>
 			<<else>>
-				<<run _enc.change(_carer, 'relationship', 1, 3)>>
-				<<run _enc.change(_parent, 'relationship', 1, 3)>>
+				<<run _enc.changeKin(_carer, 1, 3)>>
+				<<run _enc.changeKin(_parent, 1, 3)>>
 			<</if>>
 			You get them both to lower their voices, then ask each of them what they actually need. It takes some patience, but you end up with something they can both live with.
 			<br /><br />
@@ -108,7 +108,7 @@ You can hear them from the doorway. <<=_parentName>> has <<=_name>> backed up ag
 	<<link 'Stay out of it'>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_parent, 'relationship', -4, -2)>>
+				<<run _enc.changeKin(_parent, -4, -2)>>
 				You tell them they are both adults and they can sort it out themselves. <<=_parentName>> looks at you as if you had slapped <<=setup.pronounceWho(_parent)>>.
 				<br /><br />
 				<<sayNpc _parent>>

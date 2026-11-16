@@ -20,7 +20,7 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
     <<=setup.displayName(_npc)>> paces the room, her eyes scanning it. After a brief moment she turns to face you, a subtle blush coloring her cheeks.
     <br /><br />
     <<sayNpc _npc>>
-        I've been thinking... Life is so uncertain, and we've seen our fair share of it. I don't want to carry regrets, especially when there's so much we can't control.
+        I've been thinking, <<=setup.npc.mcName(_npc)>>... Life is so uncertain, and we've seen our fair share of it. I don't want to carry regrets, especially when there's so much we can't control.
     <</sayNpc>>
     <br />
     As she speaks, you can sense the vulnerability in her words, a reflection of the uncertainties that have shaped your lives in this new world.
@@ -28,7 +28,7 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
     <<=setup.displayName(_npc)>> takes a deep breath, her gaze meeting yours.
     <br /><br />
     <<sayNpc _npc>>
-        I'm still a virgin, and I've been thinking that maybe... maybe we could change that together.
+        I'm still a virgin, and I've been thinking that maybe... maybe we could change that together, <<=setup.npc.mcName(_npc)>>.
     <</sayNpc>>
     <br />
     The words hang in the air, and the room seems to hold its breath along with you. In the midst of survival and camaraderie, the rawness of human connection becomes more profound, and the desire for intimacy becomes a delicate dance in a world on the brink of collapse.
@@ -85,13 +85,15 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
                 Oh it's getting better! Pain is almost gone.
             <</sayNpc>>
             <br />
+            <div id="option_cum">
             <<linkreplace 'Cum'>>
+                <<run $('#option_cum_inside').hide()>>
                 <<video 'guesthouse/take_virginity5'>>
                 <br /><br />
                 Few more thrusts and you pull out and cum on her ass. She lets out load moan as pushes her head into pillows to silence the noise as your cum drips all over her ass.
                 <br /><br />
                 <<sayNpc _npc>>
-                    Oh my.. It's finally done. Can I just lay down for few minutes? Just to relax..
+                    Oh my.. It's finally done, <<=setup.npc.mcName(_npc)>>. Can I just lay down for few minutes? Just to relax..
                 <</sayNpc>>
                 <br />
                 The room holds a different kind of energy—a mixture of vulnerability, intimacy, and shared moments.
@@ -104,6 +106,34 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
                     <<goto 'Guest house'>>
                 <</link>>
             <</linkreplace>>
+            </div>
+            <div id="option_cum_inside">
+            <<linkreplace 'Cum inside her'>>
+                <<run $('#option_cum').hide()>>
+                <<if setup.pregnancyChance(_npc)>>
+                    <<set _npc.pregnancy_father = 'mc'>>
+                    <<set _npc.pregnancy = 0>>
+                    <<statsAdd 'girls_impregnated'>>
+                <</if>>
+                <<actionImage _npc 'cum_in_pussy'>>
+                <br />
+                She lets out load moan as pushes her head into pillows to silence the noise as your cum fills her pussy.
+                <br /><br />
+                <<sayNpc _npc>>
+                    Oh my.. I guess my first time is... everything. You don't waste time leaving your mark, <<=setup.npc.mcName(_npc)>>. Can I just lay down for few minutes? Just to relax..
+                <</sayNpc>>
+                <br />
+                The room holds a different kind of energy—a mixture of vulnerability, intimacy, and shared moments.
+                As <<=setup.displayName(_npc)>> requests to lay in the bed for a few minutes to gather her thoughts and calm down, you understand the need
+                for a brief moment of reflection and respite.
+                <br /><br />
+                <<link 'Leave'>>
+                    <<addmins 30>>
+                    <<horny_reset>>
+                    <<goto 'Guest house'>>
+                <</link>>
+            <</linkreplace>>
+            </div>
         <</linkreplace>>
     </div>
     <div id="option_no">

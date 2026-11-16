@@ -46,12 +46,12 @@
 				You find <<=_kid.name>> at the long table, pretending to be busy, and sit down across from <<=_kidHim>>. You don't raise your voice. You just ask where <<=_kidHe>> went, and why, and whether <<=_kidHe>> thought about who would be out looking for <<=_kidHim>> in the dark.
 				<br /><br />
 				<<if _defiant>>
-					<<run _enc.change(_kid, 'relationship', -2, -1)>>
+					<<run _enc.changeKin(_kid, -2, -1)>>
 					<<=_kid.name>> crosses <<=_kidHis>> arms. "I wasn't going anywhere. I just wanted some air without twenty people breathing on me." <<=ucfirst(_kidHe)>> holds your eye for a moment longer than <<=_kidHe>> should, then looks away. "Fine. I won't do it again."
 					<br /><br />
 					It isn't much of an apology, but the rest of the room was listening, and nobody else will be trying it any time soon.
 				<<else>>
-					<<run _enc.change(_kid, 'relationship', 1, 2)>>
+					<<run _enc.changeKin(_kid, 1, 2)>>
 					<<=_kid.name>> stares at the table for a long time. "I didn't think anyone would notice," <<=_kidHe>> says finally. "I just wanted to be somewhere quiet for a bit. I didn't mean for everyone to get in trouble. Sorry, <<=_mcCalled>>."
 					<br /><br />
 					You tell <<=_kidHim>> that next time, <<=_kidHe>> can ask. <<=ucfirst(_kidHe)>> nods, looking more relieved than anything, and the rest of the room settles once they see it's been dealt with.
@@ -78,7 +78,7 @@
 	<<link `'Tell ' + _himOrHer + ' it could have happened to anyone'`>>
 		<<replace '#nce_choices'>>
 			<<run _enc.change(_carer, 'happy', 3, 5)>>
-			<<run _enc.change(_carer, 'relationship', 2, 3)>>
+			<<run _enc.changeKin(_carer, 2, 3)>>
 			<<you>>
 				It's a good sign that things were calm enough for you to relax. Nobody got hurt, and you'll catch it next time. Don't be too hard on yourself.
 			<</you>>

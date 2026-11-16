@@ -310,7 +310,7 @@ sugarcube-2:
 
         *Arguments:*
           * `index`: a index in the guest list
-          * `departure`: why she left, a key of setup.relationshipBetween.departures (killed, handed_over, lost, thrown_out, betrayed, neglected, captured, marriage_ended, walked_out, punished, moved, already_counted) - sets how much her friends react
+          * `departure`: why she left, a key of setup.relationshipBetween.departures (killed, handed_over, lost, thrown_out, betrayed, neglected, captured, marriage_ended, walked_out, punished, freed, moved, already_counted) - sets how much her friends react
 
         Does guests.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of guest.splice
@@ -353,6 +353,26 @@ sugarcube-2:
 
         Does slave.splice. Since the guests array is intertwined with companion list also does companion rearrange
         Must use this widget instead of slave.splice
+    slaveLeft:
+      name: slaveLeft
+      container: false
+      parameters:
+      - number &+ string
+      description: |-
+        *Syntax:* `<<slaveLeft index departure>>`
+
+        *Arguments:*
+          * `index`: a index in the slave list
+          * `departure`: why she left, a key of setup.relationshipBetween.departures (same keys as guestLeft, plus sold for a regulated sale and freed for an escape or release) - sets how much her friends react
+
+        Her friends react, then slaveRemove
+    departureWarnings:
+      name: departureWarnings
+      container: false
+      description: |-
+        *Syntax:* `<<departureWarnings>>`
+
+        Shows and clears the warnings queued by setup.relationshipBetween.warnFlightRisk (in the 'Departure warning' interstitial)
     companionList:
       name: companionList
     companionAdd:

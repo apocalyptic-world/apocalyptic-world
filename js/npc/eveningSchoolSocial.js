@@ -7,7 +7,8 @@
  * so A can warm to B while B is annoyed. Values live in the existing per-direction
  * npc.relationshipBetween.stats, clamped to -100..100, alongside:
  *   relationshipBetween.last[otherId]   sign of the last night-school shift (-1 / 1)
- *   relationshipBetween.esTier[otherId] milestone tiers already announced { pos, neg }
+ *   relationshipBetween.esTier[otherId] milestone tiers already announced { pos, neg }, shared with the other
+ *                                       overnight sources (see setup.relationshipBetween.milestones)
  *
  * Every number lives in TUNING. Personality traits come from setup.personality.has;
  * 'sadistic' and 'masochist' are regular npc.traits.
@@ -84,6 +85,9 @@ setup.eveningSchoolSocial = {
         // where its compatibility puts it instead of everyone drifting to 100 (and into the wedding matcher)
         RESIST_FROM: 30,
         RESIST: 0.45,
+        // ...and past TOP_FROM a further TOP_RESIST at 100, so the very top is for best friends (they skip both)
+        TOP_FROM: 90,
+        TOP_RESIST: 0.45,
 
         // Size of a shift
         BIG_SHIFT: 0.898,          // chance the base size is 2 instead of 1
@@ -129,14 +133,15 @@ setup.eveningSchoolSocial = {
                 // Both sides judge the same encounter from the values they had going in
                 const deltaA = this.shift(a, b);
                 const deltaB = this.shift(b, a);
+                const before = setup.relationshipBetween.pairBefore(a.npc, b.npc);
                 if (this._apply(a, b, deltaA)) run.shifts[a.id] = (run.shifts[a.id] ?? 0) + 1;
                 if (this._apply(b, a, deltaB)) run.shifts[b.id] = (run.shifts[b.id] ?? 0) + 1;
-                if (deltaA || deltaB) changed.push([a, b]);
+                if (deltaA || deltaB) changed.push([a, b, before]);
             }
         }
 
-        for (const [a, b] of changed) {
-            for (const msg of this._milestones(a, b)) {
+        for (const [a, b, before] of changed) {
+            for (const msg of setup.relationshipBetween.milestones(a.npc, b.npc, ' at night school', before, 'night school')) {
                 run.messages.push(msg);
                 if (!quiet) setup.sleepMessages.addJob(msg, 'school');
             }
@@ -156,9 +161,10 @@ setup.eveningSchoolSocial = {
         return npc.relationshipBetween;
     },
 
-    /** Per-night facts about one attendee: age, ties in the school, best friend, nemesis, family. */
+    /** Per-night facts about one attendee: age, ties in the school, best friend, nemesis, family. Also refreshes her stored best friends. */
     _prepare: function (p, people) {
         const stats = this._stats(p.npc).stats;
+        setup.relationshipBetween.refreshBest(p.npc);
         p.age = setup.getAge(p.npc);
         p.ties = 0;
         p.friends = []; // [{ id, units }] people in the school p counts as friends
@@ -282,7 +288,11 @@ setup.eveningSchoolSocial = {
         if (this._has(x.npc, 'friendly')) pos += T.FRIENDLY;
         const circle = this._circle(x, y);
         pos += T.ALLY_POSITIVE * circle.ally - T.FOE_NEGATIVE * circle.foe;
-        if (value > T.RESIST_FROM) pos -= T.RESIST * (value - T.RESIST_FROM) / (100 - T.RESIST_FROM);
+        // Best friends (setup.relationshipBetween.best) are exempt, so they can stay at the top
+        if (value > T.RESIST_FROM && !setup.relationshipBetween.isBest(x.npc, y.id)) {
+            pos -= T.RESIST * (value - T.RESIST_FROM) / (100 - T.RESIST_FROM);
+            if (value > T.TOP_FROM) pos -= T.TOP_RESIST * (value - T.TOP_FROM) / (100 - T.TOP_FROM);
+        }
         if (this._has(x.npc, 'compassionate') || this._has(y.npc, 'compassionate')) pos += T.COMPASSIONATE;
         if (x.type === 'slave') {
             if (this._has(y.npc, 'compassionate')) pos += T.SLAVE_COMPASSIONATE;
@@ -315,54 +325,5 @@ setup.eveningSchoolSocial = {
         rb.stats[y.id] = Math.max(-100, Math.min(100, (rb.stats[y.id] ?? 0) + delta));
         (rb.last ??= {})[y.id] = Math.sign(delta);
         return true;
-    },
-
-    _tier: function (value) {
-        const T = this.TUNING;
-        if (value >= T.CLOSE_FRIENDS) return 2;
-        if (value >= T.FRIENDS) return 1;
-        if (value <= T.ENEMIES) return -2;
-        if (value <= T.RIVALS) return -1;
-        return 0;
-    },
-
-    /**
-     * New milestones for the pair, announced once per tier:
-     * friendship when both sides reach it, a grudge when either side does.
-     */
-    _milestones: function (a, b) {
-        const messages = [];
-        const rbA = this._stats(a.npc);
-        const rbB = this._stats(b.npc);
-        const memA = ((rbA.esTier ??= {})[b.id] ??= { pos: 0, neg: 0 });
-        const memB = ((rbB.esTier ??= {})[a.id] ??= { pos: 0, neg: 0 });
-        const tierA = this._tier(rbA.stats[b.id] ?? 0);
-        const tierB = this._tier(rbB.stats[a.id] ?? 0);
-        const nameA = setup.displayName(a.npc);
-        const nameB = setup.displayName(b.npc);
-
-        const mutual = Math.min(tierA, tierB);
-        if (mutual > memA.pos) {
-            memA.pos = memB.pos = mutual;
-            messages.push(nameA + ' and ' + nameB + (mutual === 2 ? ' have become close friends' : ' have become friends') + ' at night school.');
-        }
-
-        const newA = tierA < 0 && tierA < memA.neg;
-        const newB = tierB < 0 && tierB < memB.neg;
-        if (newA) memA.neg = tierA;
-        if (newB) memB.neg = tierB;
-        if (newA && newB && tierA === tierB) {
-            messages.push(nameA + ' and ' + nameB + (tierA === -2 ? ' have become bitter enemies' : ' have become rivals') + ' at night school.');
-        } else {
-            if (newA) messages.push(this._grudge(nameA, nameB, tierA));
-            if (newB) messages.push(this._grudge(nameB, nameA, tierB));
-        }
-        return messages;
-    },
-
-    _grudge: function (who, whom, tier) {
-        return tier === -2
-            ? who + ' now considers ' + whom + ' an enemy.'
-            : who + ' has come to resent ' + whom + '.';
     },
 };

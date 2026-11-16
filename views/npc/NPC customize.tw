@@ -125,9 +125,12 @@
 <</link>>
 <<link 'Notes'>>
 	<<dialog 'Notes'>>	
-		Notes:<<textbox "_notes" `$tmpGirl.notes ?? ''`>>
+		Notes:
+		<span class="npc-notes"><<textarea "_notes" `$tmpGirl.notes ?? ''`>></span>
+		/* Notes are saved as one line: Enter does nothing, pasted line breaks become spaces on save */
+		<<run $(document).off('keydown.npcNotes').on('keydown.npcNotes', '.npc-notes textarea', ev => { if (ev.key === 'Enter') ev.preventDefault(); })>>
 		<<link 'OK'>>
-			<<set $tmpGirl.notes = _notes>>
+			<<set $tmpGirl.notes = String(_notes ?? '').replace(/\s*[\r\n]+\s*/g, ' ').trim()>>
 			<<dialogclose>>	
 			<<goto 'NPC customize'>>
 		<</link>>

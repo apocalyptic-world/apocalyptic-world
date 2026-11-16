@@ -6,8 +6,12 @@
 			<<set _ncCare = $player.nurseryCare>>
 			<div class="nc-stats">
 				<span>&#x1F607;/&#x1F608; Behavior: <span @class="'nc-behavior nc-behavior-' + setup.getNpcHappyLevel(_ncCare.behavior)"><<=_ncCare.behavior>></span></span>
-				<span>&#x1F9F8; Toys: <<=_ncCare.toys>></span>
-				<span>&#x1F36A; Snacks: <<=_ncCare.snacks>></span>
+				<span class="tooltip nc-tip">&#x1F9F8; Toys: <<=_ncCare.toys>>
+					<span class="tooltiptext">Caretakers make toys overnight with glue plus cloth, plastic or wood from storage. Mechanics and scavengers do crafts more often, and inventive caretakers make extra. You can also make them with a caretaker through Offer help, where a mechanic or inventive caretaker makes a lot more. Toys wear out over time, faster when the children behave badly.</span>
+				</span>
+				<span class="tooltip nc-tip">&#x1F36A; Snacks: <<=_ncCare.snacks>>
+					<span class="tooltiptext">Caretakers make snacks overnight from food in storage. Cooks and doctors focus on healthy eating more often, and a cook makes several snacks at a time, where others only sometimes make one. You can also make them with a caretaker through Offer help, where a cook makes a lot more. Every Monday the nursery uses up a week's supply.</span>
+				</span>
 			</div>
 			<<if setup.nurseryBehavior.canLockdown()>>
 				<div><<link 'Emergency lockdown' 'Nursery - lockdown'>><</link>></div>
@@ -104,6 +108,25 @@
 		justify-content: center;
 		gap: 1.5rem;
 		margin-bottom: 8px;
+	}
+
+	/* How toys and snacks are restocked, on hover */
+	.nursery-care .nc-tip {
+		border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+		cursor: help;
+	}
+
+	.nursery-care .nc-tip .tooltiptext {
+		width: 260px;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		margin-top: 4px;
+		padding: 6px 8px;
+		text-align: left;
+		font-size: 0.85em;
+		opacity: 0.95;
+		z-index: 10;
 	}
 
 	/* Same scale and colors as the happiness icon */

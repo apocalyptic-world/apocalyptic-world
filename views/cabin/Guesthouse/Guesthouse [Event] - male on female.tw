@@ -561,8 +561,9 @@
 	<<else>>
 		<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 5)>>
 		<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 5)>>
-		<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + 5)>>
-		<<set $guests[$tmpEvent.maleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].relationship ?? 0) + 5)>>
+		/* They warm to the MC's interest in them as a couple; watching adds no more ('Leave' skips it via wasCouple), privacy adds the usual 1-3 (afterGuestSex in 'Give them privacy') */
+		<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + random(2, 4))>>
+		<<set $guests[$tmpEvent.maleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].relationship ?? 0) + random(2, 4))>>
 		<br />
 		<<=setup.displayName(_husband)>> and <<=setup.displayName(_wife)>> both look up when you arrive, and there's none of the tension you'd expect. <<=setup.displayName(_wife)>> moves a little closer to <<=setup.displayName(_husband)>> — an automatic thing — and he puts a hand on her waist without thinking about it. They're easy together. The structure around them is what it is and they've accepted your hand in it; what they feel about each other is real and it's clearly not a performance. She looks at you once, then back at him, and the two of them start moving toward each other.
 		<br /><br />
@@ -572,9 +573,10 @@
 			<<set $guests[$tmpEvent.femaleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].corruption ?? 0) + 3)>>
 			<<set $guests[$tmpEvent.maleGuestIds[0]].corruption = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].corruption ?? 0) + 3)>>
 			<<run delete $tmpEvent.isCouple>>
+			<<set $tmpEvent.wasCouple = true>>
 			<<goto 'Guesthouse [Event] - male on female'>>
 		<</link>>
-		<<linkdesc>>+5 happy, +5 relationship, +3 sub, +3 corruption to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>><</linkdesc>>
+		<<linkdesc>>+5 happy, +2-4 relationship, +3 sub, +3 corruption to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>><</linkdesc>>
 		<<link 'Give them privacy'>>
 			<<if $guests[$tmpEvent.femaleGuestIds[0]].virgin>>
 				<<run setup.npc.addHistory($guests[$tmpEvent.femaleGuestIds[0]], 'virgin_lost', { with: $guests[$tmpEvent.maleGuestIds[0]].id })>>
@@ -594,12 +596,13 @@
 			<<set $guests[$tmpEvent.maleGuestIds[0]].orgasms++>>
 			<<set $guests[$tmpEvent.femaleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].happy ?? 50) + 3)>>
 			<<set $guests[$tmpEvent.maleGuestIds[0]].happy = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].happy ?? 50) + 3)>>
-			<<set $guests[$tmpEvent.femaleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.femaleGuestIds[0]].relationship ?? 0) + 3)>>
-			<<set $guests[$tmpEvent.maleGuestIds[0]].relationship = Math.min(100, ($guests[$tmpEvent.maleGuestIds[0]].relationship ?? 0) + 3)>>
+			/* Both of them climax (orgasms above), each giving it to the other */
+			<<set _coupleIds = [$tmpEvent.femaleGuestIds[0], $tmpEvent.maleGuestIds[0]]>>
+			<<run setup.relationshipBetween.afterGuestSex(_coupleIds, [[_coupleIds[0], [_coupleIds[1]]], [_coupleIds[1], [_coupleIds[0]]]])>>
 			<<unset $tmpEvent>>
 			<<goto 'Guest house'>>
 		<</link>>
-		<<linkdesc>>+8 happy, +8 relationship to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>><</linkdesc>>
+		<<linkdesc>>+8 happy, +3-7 relationship to <<=setup.displayName(_wife)>> and <<=setup.displayName(_husband)>>; they grow closer to each other<</linkdesc>>
 	<</if>>
 <<elseif $tmpEvent.isEx && typeof $randEvent === 'undefined'>>
 	<<set _protestorIdx = $tmpEvent.exProtestorIdx>>
@@ -977,12 +980,8 @@
 				<<set $guests[_guestIds[0]].pregnancy = 0>>
 			<</if>>
 		<</if>>
-		<<for _ri = 0; _ri < _guestIds.length; _ri++>>
-			<<for _rj = _ri + 1; _rj < _guestIds.length; _rj++>>
-				<<set $guests[_guestIds[_ri]].relationship = Math.min(100, ($guests[_guestIds[_ri]].relationship ?? 0) + 5)>>
-				<<set $guests[_guestIds[_rj]].relationship = Math.min(100, ($guests[_guestIds[_rj]].relationship ?? 0) + 5)>>
-			<</for>>
-		<</for>>
+		/* Bond with each other (+3 more toward whoever made them climax) and a little with the MC (setup.relationshipBetween.afterGuestSex) */
+		<<run setup.relationshipBetween.afterGuestSex(_guestIds, _orgasm ? [[_guestIds[1], [_guestIds[0]]]] : [], !($tmpEvent?.wasCouple ?? false))>>
 	<</if>>
 	<<unset $randEvent, $tmpEvent>>
 	<<goto 'Guest house'>>

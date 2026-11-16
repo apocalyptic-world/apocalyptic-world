@@ -120,10 +120,61 @@ setup.player = {
         }
     },
     /**
+     * Family who live away from home, where setup.getNpcById can't find them: the player's children kept at a
+     * world settlement (born to its leader) and Octavia's warriors. For family displays only.
+     * @param {*} id
+     * @returns         { npc, place } or null
+     */
+    findElsewhere: function(id) {
+        if (!id || id === 'mc') {
+            return null;
+        }
+        for (const s of setup.settlements.getAll()) {
+            const kid = (s.children ?? []).find(k => k.id === id);
+            if (kid) {
+                return { npc: kid, place: s.name };
+            }
+        }
+        const warrior = (variables().characters?.octavia?.quests?.warriors ?? []).find(w => w?.id === id);
+        if (warrior) {
+            return { npc: warrior, place: "Octavia's camp" };
+        }
+        return null;
+    },
+    /**
+     * As setup.getNpcById, but also finds family who live elsewhere (see findElsewhere). For family displays only.
+     * @param {*} id
+     * @returns         npc or null
+     */
+    findRelative: function(id) {
+        return setup.getNpcById(id) ?? setup.player.findElsewhere(id)?.npc ?? null;
+    },
+    /**
+     * As npcNameColor, followed by where they live if that's away from home, e.g. " (at Octavia's camp)"
+     * @param {*} npc
+     * @returns         string
+     */
+    relativeName: function(npc) {
+        if (!npc) {
+            return '';
+        }
+        // placeLabel: set on display copies of people findElsewhere doesn't know, e.g. settlement leaders
+        return setup.player.npcNameColor(npc) + (npc.placeLabel ? ' (' + npc.placeLabel + ')' : setup.player.placeSuffix(npc.id));
+    },
+    /**
+     * Where someone lives if that's away from home, e.g. " (at Octavia's camp)"; '' for everyone at home
+     * @param {*} id
+     * @returns         string
+     */
+    placeSuffix: function(id) {
+        const away = setup.getNpcById(id) ? null : setup.player.findElsewhere(id);
+        return away ? ' (at ' + away.place + ')' : '';
+    },
+    /**
      * Pretty print a relation to a person with all its other relatives
-     * @param {*} npcID 
-     * @param {*} pregCheck 
-     * @param {*} showMC 
+     * @param {*} npcID
+     * @param {*} pregCheck
+     * @param {*} showMC
      * @returns         string
      */
     npcRelationText: function(npcID, pregCheck = true, showMC = false, hideRel = '', context = '') {
@@ -131,7 +182,7 @@ setup.player = {
         {
             return '';
         }
-        const npc = setup.getNpcById(npcID);
+        const npc = setup.player.findRelative(npcID);
         if(!npc) {
             return '';
         }
@@ -164,18 +215,21 @@ setup.player = {
 		charDead = true;
 	}
 
-        let npcText = '<div style="' + family_container + '"><div style="' + npc_name + '"><span style="' + name_display + '">' + setup.player.npcNameColor(npc) + (charDead ? ' (deceased)' : '') + ': </span></div><div style="' + family_details + '">';
+        let npcText = '<div style="' + family_container + '"><div style="' + npc_name + '"><span style="' + name_display + '">' + setup.player.relativeName(npc) + (charDead ? ' (deceased)' : '') + ': </span></div><div style="' + family_details + '">';
         const family = npc.family ?? {};
 
         const renderSingleRelation = function(relation, id) {
             if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
-                const rel = setup.getNpcById(id);
+                const rel = setup.player.findRelative(id);
                 if(rel) {
                     let relDead = false;
                     if ((variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false)) {
                         relDead = true;
                     }
-                    npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.npcNameColor(rel) + (relDead ? ' (deceased)' : '') + '</span></div> ';
+                    npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.relativeName(rel) + (relDead ? ' (deceased)' : '') + '</span></div> ';
+                } else if (relation === 'mother' && family.motherName) {
+                    // mothers who live elsewhere (settlement leaders) can't be looked up, so the child keeps her name
+                    npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '"><span class="gender-girl">' + family.motherName + '</span></span></div> ';
                 }
             }
         };
@@ -187,7 +241,7 @@ setup.player = {
         if (family.hasOwnProperty('father')) {
             renderSingleRelation('father', family.father);
         }
-        const motherNpc = family.mother ? setup.getNpcById(family.mother) : null;
+        const motherNpc = family.mother ? setup.player.findRelative(family.mother) : null;
         const stepFatherID = motherNpc?.family?.husband ?? null;
         if (stepFatherID && stepFatherID !== (family.father ?? null) && stepFatherID !== npcID) {
             renderSingleRelation('step-father', stepFatherID);
@@ -197,17 +251,17 @@ setup.player = {
         // parents show up as grandparents of the MC's kids.
         const grandIDs = [];
         for (const parentID of [family.mother, family.father]) {
-            const parent = parentID ? setup.getNpcById(parentID) : null;
+            const parent = parentID ? setup.player.findRelative(parentID) : null;
             for (const grandID of [parent?.family?.mother, parent?.family?.father]) {
                 if (grandID && grandID !== npcID && !grandIDs.includes(grandID)) grandIDs.push(grandID);
             }
         }
         const grandNames = grandIDs.map(id => {
             if (id === 'mc') return 'You';
-            const grand = setup.getNpcById(id);
+            const grand = setup.player.findRelative(id);
             if (!grand) return null;
             const grandDead = (variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false);
-            return setup.player.npcNameColor(grand) + (grandDead ? ' (deceased)' : '');
+            return setup.player.relativeName(grand) + (grandDead ? ' (deceased)' : '');
         }).filter(Boolean);
         if (grandNames.length) {
             npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">grandparents: </span><span style="' + relation_names + '">' + grandNames.join(', ') + '</span></div> ';
@@ -220,9 +274,9 @@ setup.player = {
                 const out = [];
                 for(const id of (family.exes ?? [])) {
                     if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
-                        const rel = setup.getNpcById(id);
+                        const rel = setup.player.findRelative(id);
                         if(rel) {
-                            out.push(setup.player.npcNameColor(rel));
+                            out.push(setup.player.relativeName(rel));
                         }
                     }
                 }
@@ -238,7 +292,7 @@ setup.player = {
                 for(const id of (family[relation] ?? [])) {
                     if(id === 'mc' && (context === 'parent' || context === 'sibling')) continue;
                     if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
-                        const rel = setup.getNpcById(id);
+                        const rel = setup.player.findRelative(id);
                         if(rel) {
 				if (relation == 'kids') {
 					let fullKidLabel;
@@ -247,8 +301,8 @@ setup.player = {
 						else if (context === 'sibling') fullKidLabel = '\u200BYour kids/niblings';
 						else if (npc.family['father'] == 'mc') fullKidLabel = '\u200BYour kids/grandkids';
 						else fullKidLabel = 'Your kids';
-					} else if ((rel.family['father'] ?? false) && (setup.getNpcById(rel.family['father']) ?? false)) {
-						let kidDad = setup.getNpcById(rel.family['father']);
+					} else if ((rel.family['father'] ?? false) && (setup.player.findRelative(rel.family['father']) ?? false)) {
+						let kidDad = setup.player.findRelative(rel.family['father']);
 						fullKidLabel = setup.player.npcNameColor(kidDad) + "'s kids";
 					} else {
 						if (hideRel == 'husband') fullKidLabel = 'Your step-kids';
@@ -256,14 +310,14 @@ setup.player = {
 						else if (context === 'sibling') fullKidLabel = 'Your niblings';
 						else fullKidLabel = 'Other kids';
 					}
-					out.push(fullKidLabel + '|' + setup.player.npcNameColor(rel));
+					out.push(fullKidLabel + '|' + setup.player.relativeName(rel));
 					for (const kidID of (rel.family['kids'] ?? [])) {
-						const gkid = setup.getNpcById(kidID);
+						const gkid = setup.player.findRelative(kidID);
 						if (!gkid || id === 'mc') continue;
-						out.push("\u200B​Grand-kids|" + setup.player.npcNameColor(gkid) + " (" + rel.name + ")");
+						out.push("\u200B​Grand-kids|" + setup.player.relativeName(gkid) + " (" + rel.name + ")");
 					}
 				} else {
-                            		out.push(setup.player.npcNameColor(rel));
+                            		out.push(setup.player.relativeName(rel));
 				}
                         }
                     }
@@ -302,20 +356,20 @@ setup.player = {
             } else {
                 const id = family[relation];
                 if((id ?? 'unknown') !== 'mc' || showMC || relation !== hideRel) {
-                    const rel = setup.getNpcById(id);
+                    const rel = setup.player.findRelative(id);
                     if(rel) {
 			let charDead = false;
 			if ((variables().characters[id]?.dead ?? false) || (variables().characters[id]?.quests?.dead ?? false)) {
 				charDead = true;
 			}
-                        npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.npcNameColor(rel) + (charDead ? ' (deceased)' : '') + '</span></div> ';
+                        npcText += '<div style="' + relation_group + '"><span style="' + relation_label + '">' + relation + ': </span><span style="' + relation_names + '">' + setup.player.relativeName(rel) + (charDead ? ' (deceased)' : '') + '</span></div> ';
                     }
                 }
             }
         }
         if(pregCheck && typeof npc.pregnancy !== 'undefined') {
             const fatherId = npc.pregnancy_father ?? 'unknown';
-            const father = setup.getNpcById(fatherId);
+            const father = setup.player.findRelative(fatherId);
             if(fatherId === 'mc') {
                 npcText += '<div style="' + relation_group + '">Pregnant with your child</div>';
             } else if (father) {

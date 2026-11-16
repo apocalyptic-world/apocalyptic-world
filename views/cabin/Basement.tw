@@ -136,8 +136,8 @@
 			</div>
 		</details>
 		<<done>>
-			<<run document.getElementById('bs-sort-details').open = State.variables.bSortPanelOpen>>
-			<<run jQuery('#bs-sort-details').on('toggle', function() { State.variables.bSortPanelOpen = this.open; })>>
+			/* gone when an event at the top <<goto>>'d away before this ran */
+			<<run jQuery('#bs-sort-details').prop('open', State.variables.bSortPanelOpen).on('toggle', function() { State.variables.bSortPanelOpen = this.open; })>>
 		<</done>>
 	<</if>>
 </div>
@@ -397,7 +397,9 @@
 		<<if $slaves[_i].happy < -70>>
 			<<run _suicidalSlaves.push(_i)>>
 		<</if>>
-		<<if $slaves[_i].sub < 50>>
+		/* Escape candidates (Basement event - try escape): low submission, and neither attached to you (relationship 30+, she asks to stay
+		   when released) nor content (happiness 50+, the top tier: the basement beats the wasteland) */
+		<<if $slaves[_i].sub < 50 && ($slaves[_i].relationship ?? 0) < 30 && ($slaves[_i].happy ?? 0) < 50>>
 			<<run _lowSubmissionSlaves.push(_i)>>
 		<</if>>
 		<<run _slavesInBasement.push(_i)>>
@@ -514,7 +516,7 @@
 							<<if $slaves[_i].buttplug>>
 								<<pickup $backpack 'buttplug' 1>>
 							<</if>>
-							<<slaveRemove _i>>
+							<<slaveLeft _i 'killed'>>
 							<<dialogclose>>
 							<<set $player.reputation++>>
 							<<set $player.goodwill-->>
@@ -541,7 +543,7 @@
 <<set _guestFuckChance = (_preGuestIdx !== null && (($guests[_preGuestIdx]?.family?.wives ?? []).length > 0 || $player?.baseManagement?.noOutOfMarriageSex)) ? 3 : 5>>
 
 <<if _showSlavesCount &&  !$locationEvents.basement>>
-	<<set _randomNumber = randomInteger(1, 10)>>
+	<<set _randomNumber = randomInteger(0, 10)>>
 	<<if _randomNumber === 0 && _lowSubmissionSlaves.length>>
 		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
 		<<if setup.getAge($slaves[$eventSlaveId]) >= 18 && !$slaves[$eventSlaveId].gender>>

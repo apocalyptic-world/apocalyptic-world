@@ -533,7 +533,10 @@ setup.sleep.processNpc = function(npc, opts) {
         if ((npc.traits ?? []).includes('breeder')) npc.pregnancy++;
 
         if (npc.pregnancy === 8) {
-            let msg = npc.name + ' told you that <strong>she is pregnant</strong>.';
+            // Ferals can't tell you, so they show it
+            let msg = (npc.traits ?? []).includes('feral')
+                ? npc.name + ' has started showing nesting behaviors, letting you know <strong>she is pregnant</strong>.'
+                : npc.name + ' told you that <strong>she is pregnant</strong>.';
             const sv2 = State.variables;
             if (!isCharacter && npc.pregnancy_father !== 'mc') {
                 msg += ' <strong>You ARE NOT the father!</strong>';

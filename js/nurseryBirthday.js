@@ -262,16 +262,23 @@ setup.nurseryBirthday = {
         setup.nurseryBehavior.change(treats ? 5 : 3, treats ? 10 : 5);
     },
 
-    /** The player says no. Hits harder when it's his own child. */
+    /** The player says no. Hits harder when it's his own child, and a little harder for other kin. */
     refuseParty: function (kids, carer) {
         const encounters = setup.nurseryEncounters;
         kids.forEach(kid => {
-            const scale = encounters.isOwnChild(kid) ? 2 : 1;
+            const own = encounters.isOwnChild(kid);
+            const scale = own ? 2 : 1;
             const mother = kid.family?.mother && kid.family.mother !== 'mc' ? setup.getNpcById(kid.family.mother) : null;
-            [kid, mother].filter(Boolean).forEach(npc => {
-                encounters.change(npc, 'happy', -5 * scale, -3 * scale);
-                encounters.change(npc, 'relationship', -5 * scale, -3 * scale);
-            });
+            encounters.change(kid, 'happy', -5 * scale, -3 * scale);
+            if (own || !setup.family.isBloodToMC(kid)) {
+                encounters.change(kid, 'relationship', -5 * scale, -3 * scale);
+            } else {
+                encounters.change(kid, 'relationship', -8, -5);
+            }
+            if (mother) {
+                encounters.change(mother, 'happy', -5 * scale, -3 * scale);
+                encounters.changeKin(mother, -5 * scale, -3 * scale);
+            }
         });
         encounters.change(carer, 'happy', -6, -3);
     },
@@ -288,18 +295,23 @@ setup.nurseryBirthday = {
         const encounters = setup.nurseryEncounters;
         setup.cabinInventory.drop(item);
         encounters.change(kid, 'happy', 5, 7);
+        encounters.changeKin(kid, 2, 4);
         const parents = encounters.parents(kid);
         const singleMom = !encounters.isOwnChild(kid) && parents.length === 1 && parents[0] === setup.getNpcById(kid.family?.mother);
-        parents.forEach(npc => encounters.change(npc, 'relationship', 3 + (singleMom ? this.SINGLE_MOM_BONUS : 0), 5 + (singleMom ? this.SINGLE_MOM_BONUS : 0)));
+        parents.forEach(npc => encounters.changeKin(npc, 3 + (singleMom ? this.SINGLE_MOM_BONUS : 0), 5 + (singleMom ? this.SINGLE_MOM_BONUS : 0)));
     },
 
-    /** Only matters when the child is his own */
+    /** Hurts his own child and that child's parents. Other kin are a little let down. Nobody else expected anything. */
     skipGift: function (kid) {
         const encounters = setup.nurseryEncounters;
         if (!encounters.isOwnChild(kid)) {
+            if (setup.family.isBloodToMC(kid)) {
+                encounters.change(kid, 'happy', -4, -2);
+            }
             return;
         }
         encounters.change(kid, 'happy', -7, -5);
-        encounters.parents(kid).forEach(npc => encounters.change(npc, 'relationship', -5, -3));
+        encounters.change(kid, 'relationship', -4, -2);
+        encounters.parents(kid).forEach(npc => encounters.changeKin(npc, -5, -3));
     }
 };

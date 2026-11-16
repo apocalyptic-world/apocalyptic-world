@@ -87,8 +87,8 @@
 					</div>
 				</details>
 				<<done>>
-					<<run document.getElementById('nursery-sort-details').open = State.variables.nSortPanelOpen>>
-					<<run jQuery('#nursery-sort-details').on('toggle', function() { State.variables.nSortPanelOpen = this.open; })>>
+					/* gone when an event at the top <<goto>>'d away before this ran */
+					<<run jQuery('#nursery-sort-details').prop('open', State.variables.nSortPanelOpen).on('toggle', function() { State.variables.nSortPanelOpen = this.open; })>>
 				<</done>>
 			</td>
 		</tr>
@@ -109,7 +109,7 @@
 
 			<<set _motherNpc = ''>>
 			<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
-				<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
+				<<set _motherNpc = setup.player.findRelative(_nursery.family.mother)>>
 			<</if>>
 			/* Mothers who live elsewhere (settlement leaders) can't be looked up, so the child keeps her name */
 			<<set _motherAway = _motherNpc ? '' : (_nursery.family?.motherName ?? '')>>
@@ -119,7 +119,7 @@
 					<tr class="item">
 						<td colspan="3">
 							<<if (_motherNpc?.name ?? false)>>
-								Kid(s) of <<=setup.displayName(_motherNpc)>>:
+								Kid(s) of <<=setup.displayName(_motherNpc) + setup.player.placeSuffix(_motherNpc.id)>>:
 							<<elseif _motherAway>>
 								Kid(s) of <<= _motherAway>>:
 							<<else>>
@@ -134,7 +134,7 @@
 			<tr class="item">
 				<td class="min25">
 					<span @class="_genderClass + _customColorStyle">
-						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name : (_motherAway || '????')) + ''" data-balloon-pos="up-left">
+						<span data-balloon-length="medium" @aria-label="'Mother: ' + (_motherNpc ? _motherNpc.name + setup.player.placeSuffix(_motherNpc.id) : (_motherAway || '????')) + ''" data-balloon-pos="up-left">
 							<<link _nursery.name>>
 								<<unset $guestId, $charId, $slaveId>>
 								<<set $childId = _realIdx>>

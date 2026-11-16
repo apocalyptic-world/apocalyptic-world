@@ -1,4 +1,4 @@
-:: Settlement management - Test
+:: Settlement management - Family tree
 
 /* TODO -- perhaps coordinate this with family.js
  */
@@ -38,7 +38,7 @@
 	<</if>>
 
 	<<set _exWivesTexts = []>>
-	<<for _exWifeNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {}))>>
+	<<for _exWifeNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {})).concat(($characters.octavia?.quests?.warriors ?? []))>>
 		<<if (_exWifeNpc.family?.exes ?? []).includes('mc')>>
 			<<set _shown[_exWifeNpc.id] = true>>
 			<<set _exWifeText = setup.player.npcRelationText(_exWifeNpc.id, true, false, 'exes') + (_number.get(_exWifeNpc.id) ?? '')>>
@@ -57,13 +57,22 @@
 		<tr><td>&nbsp;</td></tr>
 	<</if>>
 
+	/* world settlement leaders (Leader Night) are not in the NPC lists, so they are listed from their settlements */
+	<<set _leaderMothers = setup.settlements.getAll().filter(s => s.leader && (s.leader.family?.kids ?? []).some(id => setup.player.findRelative(id)?.family?.father === 'mc'))>>
 	<<set _childmothersTexts = []>>
 	<<for _childmotherId range $player.family?.childmothers ?? []>>
+		<<if _leaderMothers.some(s => s.leader.id === _childmotherId)>>
+			<<continue>>
+		<</if>>
 		<<set _shown[_childmotherId] = true>>
 		<<set _childmotherText = setup.player.npcRelationText(_childmotherId) + (_number.get(_childmotherid) ?? '')>>
 		<<if _childmotherText>>
 			<<set _childmothersTexts.push(_childmotherText)>>
+			<<set _motherCount++>>
 		<</if>>
+	<</for>>
+	<<for _lmS range _leaderMothers>>
+		<<set _childmothersTexts.push(setup.player.npcRelationText2(Object.assign({}, _lmS.leader, { placeLabel: _lmS.name })))>>
 		<<set _motherCount++>>
 	<</for>>
 	<<if _childmothersTexts.length>>
@@ -81,8 +90,8 @@
 		<<set _kidText = setup.player.npcRelationText(_kidId, true, false, 'father') + (_number.get(_kidid) ?? '')>>
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
+			<<set _childCount++>>
 		<</if>>
-		<<set _childCount++>>
 	<</for>>
 	<<if _kidsTexts.length>>
 		<tr><td colspan ="2"><strong>Children you fathered (<<= _childCount>>)</strong></td></tr>
@@ -115,7 +124,7 @@
 			<</if>>
 		<</if>>
 	<</for>>
-	<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+	<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(($characters.octavia?.quests?.warriors ?? []))>>
 		<<if (typeof _npc.pregnancy !== 'undefined')>>
 			<<set _fatherId = _npc.pregnancy_father ?? 'unknown'>>
 			<<if _fatherId === 'unknown' && typeof _npc.pregnancy_event !== 'undefined'>>
@@ -128,6 +137,10 @@
 			<</if>>
 		<</if>>
 	<</for>>
+	<<for _lpS range setup.settlements.getAll().filter(s => !s.destroyed && s.leader && typeof s.leader.pregnancy !== 'undefined' && s.leader.pregnancy_father === 'mc')>>
+		<<set _pregTexts.push(setup.player.npcRelationText2(Object.assign({}, _lpS.leader, { placeLabel: _lpS.name }), false))>>
+		<<set _pregCount++>>
+	<</for>>
 	<<if _pregTexts.length>>
 		<tr><td colspan ="2"><strong>Pregnant carrying your child (<<= _pregCount>>)</strong></td></tr>
 		<tr>
@@ -139,7 +152,7 @@
 
 	<<set _parentTexts = []>>
 	<<if $player.family?.mother>>
-		<<set _parentNpc = setup.getNpcById($player.family.mother)>>
+		<<set _parentNpc = setup.player.findRelative($player.family.mother)>>
 		<<if _parentNpc>>
 			<<set _shown[$player.family.mother] = true>>
 			<<set _parentText = setup.player.npcRelationText($player.family.mother, false, false, '', 'parent')>>
@@ -147,7 +160,7 @@
 		<</if>>
 	<</if>>
 	<<if $player.family?.father>>
-		<<set _parentNpc = setup.getNpcById($player.family.father)>>
+		<<set _parentNpc = setup.player.findRelative($player.family.father)>>
 		<<if _parentNpc>>
 			<<set _shown[$player.family.father] = true>>
 			<<set _parentText = setup.player.npcRelationText($player.family.father, false, false, '', 'parent')>>
@@ -213,7 +226,7 @@
 <<for _npcID, _npc range $characters>>
 	<<set _npc.id ??= _npcID>>
 <</for>>
-<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {}))>>
+<<for _npcIndex, _npc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? []).concat(Object.values($characters ?? {})).concat(($characters.octavia?.quests?.warriors ?? []))>>
 	<<if typeof _npc.id === 'undefined'>>
 		 DBG undefined id <<=_npc.name>>?<br/>
 		<<continue>>
@@ -456,7 +469,7 @@
 			<<if _npcID === 'horse'>>
 				<<set _horse = setup.player.npcNameColor(_npcs.get(_npcID)) + ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong> ' + (_number.get(_npcID) ?? '')>>
 			<<else>>
-				<<set _outs[_reltype].push(setup.player.npcNameColor(_npcs.get(_npcID)) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :'') + ' ' + (_number.get(_npcID) ?? ''))>>
+				<<set _outs[_reltype].push(setup.player.relativeName(_npcs.get(_npcID)) + (_npcID === 'horse' ? ' <strong style="color:yellow">[</strong>Yeah! Yeah! It\'s a horse, but it counts anyway...<strong style="color:yellow">]</strong>' :'') + ' ' + (_number.get(_npcID) ?? ''))>>
 			<</if>>
 			<<set _shown[_npcID] = true>>
 		<</if>>
@@ -473,7 +486,7 @@
 	<<if Object.keys(_outs.marriage).length>>
 		<tr><td><strong>Husband</strong></td> <td><strong>Wives</strong></td></tr>
 		<<for _id, _text range _outs.marriage>>
-			<<set _name = setup.getNpcById(_id)?.name ?? '-'>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? '-') + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -485,7 +498,7 @@
 	<<if Object.keys(_outs.parent).length>>
 		<tr><td><strong>Father</strong></td> <td><strong>Mother</strong></td></tr>
 		<<for _id, _text range _outs.parent>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -497,7 +510,7 @@
 	<<if Object.keys(_outs.father).length>>
 		<tr><td><strong>Father</strong></td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.father>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -515,7 +528,7 @@
 	<<if Object.keys(_outs.mother).length>>
 		<tr><td><strong>Single mother</strong></td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.mother>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -527,7 +540,7 @@
 	<<if Object.keys(_outs.child).length>>
 		<tr><td><strong>Parent</strong><br/>(this shouldn't happen)</td> <td><strong>Children</strong></td></tr>
 		<<for _id, _text range _outs.child>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -539,7 +552,7 @@
 	<<if Object.keys( _outs.pregnancy).length>>
 		<tr><td><strong>"Spermdonor"</strong></td> <td><strong>Pregnant</strong></td></tr>
 		<<for _id, _text range _outs.pregnancy>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr>
 				<td style='vertical-align:text-top'>_name</td>
 				<td colspan ="2"><<=_text.sort().join('<br/>')>></td>
@@ -551,7 +564,7 @@
 	<<if Object.keys(_outs.siblings).length>>
 		<tr><td><strong>Siblings without Parents:</strong></td> <td></td></tr>
 		<<for _id range Object.keys(_outs.siblings)>>
-			<<set _name = setup.getNpcById(_id)?.name ?? _id>>
+			<<set _name = (setup.player.findRelative(_id)?.name ?? _id) + setup.player.placeSuffix(_id)>>
 			<tr style='border-bottom: 1px inset gray'>
 				<td colspan ="2"><<=_outs.siblings[_id].sort().join('<br/>')>></td>
 			</tr>
