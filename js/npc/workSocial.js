@@ -74,22 +74,10 @@ setup.workSocial = {
         return this._tangents.get([a, b].sort().join('|')) ?? null;
     },
 
-    /** Did this NPC work today? Illness, a day off, the pregnancy policy and the weather keep people home (setup.outsideWorkHours, without the hours). */
+    /** Did this NPC work today? Illness, a day off, the pregnancy policy and the weather keep people home (setup.workBlocked, the rules of setup.isAtWork without the hours). */
     worked: function (npc, job) {
-        if (setup.baseManagement?.pregnantPrivilege?.exemptsFromJob(npc)) return false;
         const blocked = setup.outsideWorkHours?.[job]?.blockedBy ?? this.DEFAULT_BLOCKED;
-        const isSick = typeof npc.sick !== 'undefined';
-        if (blocked.includes('sick') && isSick) return false;
-        if (blocked.includes('dayOff') && (isSick || typeof npc.rest !== 'undefined')) return false;
-        const weather = variables().weather;
-        if (weather) {
-            if (blocked.includes('heatWave') && weather.heatWave) return false;
-            if (blocked.includes('sandStorm') && weather.sandStorm) return false;
-            if (blocked.includes('coldSnap') && weather.coldSnap && !setup.npcInventoryHas(npc, 'coat_wolf')) {
-                if (job !== 'scavenging' || !setup.coldSnapScavengerGoesOut(npc, variables().game.day)) return false;
-            }
-        }
-        return true;
+        return !setup.workBlocked(npc, job, variables().weather, blocked);
     },
 
     /** The group an NPC worked in today, or null (no job, or stayed home) */
@@ -162,11 +150,16 @@ setup.workSocial = {
         this.lastRun = run;
         if (people.length < 2) return run;
 
-        // The night school rules, with "same class" read as this pair sharing a group
+        // The night school rules, with "same class" read as this pair sharing a group. personal() and shift() ask up to
+        // four times per encounter, so the pair being judged answers from its link, worked out once in the loop below.
         const self = this;
         const rules = Object.create(es);
         rules._people = new Map(people.map(p => [p.id, p]));
-        rules._sameClass = (x, y) => !!self.link(x, y)?.same;
+        let current = null; // { a, b, link }
+        rules._sameClass = (x, y) => {
+            if (current && ((x === current.a && y === current.b) || (x === current.b && y === current.a))) return current.link.same;
+            return !!self.link(x, y)?.same;
+        };
         for (const p of people) rules._prepare(p, people);
 
         const changed = [];
@@ -176,6 +169,7 @@ setup.workSocial = {
                 const b = people[j];
                 const link = this.link(a, b);
                 if (!link) continue;
+                current = { a, b, link };
 
                 let context = link.mult;
                 context *= 1 + es.TUNING.AGE_BONUS * Math.max(0, 1 - Math.abs(a.age - b.age) / es.TUNING.AGE_SPAN);

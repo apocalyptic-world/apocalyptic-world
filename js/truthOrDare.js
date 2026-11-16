@@ -354,11 +354,7 @@ setup.tod = {
         }
         if (partner && dare.bond) {
             partner.corruption = Math.min((partner.corruption ?? 0) + 1, 100);
-            for (const [a, b] of [[target, partner], [partner, target]]) {
-                a.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
-                a.relationshipBetween.stats ??= {};
-                a.relationshipBetween.stats[b.id] = Math.max(-100, Math.min(100, (a.relationshipBetween.stats[b.id] ?? 0) + dare.bond));
-            }
+            this.bond(target, partner, dare.bond);
             if (!t.pairs.some(p => p.includes(target.id) && p.includes(partner.id))) t.pairs.push([target.id, partner.id]);
         }
     },
@@ -465,11 +461,13 @@ setup.tod = {
     },
 
     bond: function (a, b, amount) {
+        const pairs = setup.relationshipBetween.pairsBefore([a, b]);
         for (const [x, y] of [[a, b], [b, a]]) {
             x.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
             x.relationshipBetween.stats ??= {};
             x.relationshipBetween.stats[y.id] = Math.max(-100, Math.min(100, (x.relationshipBetween.stats[y.id] ?? 0) + amount));
         }
+        setup.relationshipBetween.queueMilestones(pairs, ' over truth or dare', 'truth or dare');
     },
 
     /* ── finale & end ────────────────────────────────────────────────────── */

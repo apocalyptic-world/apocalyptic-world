@@ -102,6 +102,7 @@ setup.relationshipBetween = {
         const guests = variables().guests ?? [];
         const at = i => guests[Array.isArray(i) ? i[0] : i];
         const npcs = ids.map(at).filter(Boolean);
+        const pairs = this.pairsBefore(npcs);
         const like = (from, to, amount) => {
             from.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
             from.relationshipBetween.stats ??= {};
@@ -121,6 +122,7 @@ setup.relationshipBetween = {
         if (mcGain) {
             for (const npc of npcs) npc.relationship = Math.min(100, (npc.relationship ?? 0) + randomInteger(...this.SEX_MC));
         }
+        this.queueMilestones(pairs, ' in the guest house', 'the guest house');
     },
 
     /* Milestone tier of one side's value: 2 close friends, 1 friends, -1 rivals, -2 enemies (thresholds from night school) */
@@ -199,6 +201,31 @@ setup.relationshipBetween = {
         return messages;
     },
 
+    /* Every pair among npcs with its values going in (pairBefore), for queueMilestones */
+    pairsBefore: function(npcs) {
+        const pairs = [];
+        npcs.forEach((a, i) => npcs.slice(i + 1).forEach(b => pairs.push({ a, b, before: this.pairBefore(a, b) })));
+        return pairs;
+    },
+
+    /* Milestones for daytime changes (guest house sex, house parties, truth or dare). The scene has moved on by the time
+       they are known, so they wait in $game.socialMilestones for tonight's report (postQueuedMilestones). */
+    queueMilestones: function(pairs, place, via) {
+        const game = variables().game;
+        if (!game) return;
+        for (const { a, b, before } of pairs) {
+            for (const msg of this.milestones(a, b, place, before, via)) (game.socialMilestones ??= []).push(msg);
+        }
+    },
+
+    /* Posts the queued daytime milestones with the night's own. Called from run(), after the sleep messages are reset. */
+    postQueuedMilestones: function() {
+        const game = variables().game;
+        if (!game?.socialMilestones) return;
+        for (const msg of game.socialMilestones) setup.sleepMessages.addJob(msg, 'household');
+        delete game.socialMilestones;
+    },
+
     grudge: function(who, whom, tier) {
         return tier === -2
             ? who + ' now considers ' + whom + ' an enemy.'
@@ -271,26 +298,19 @@ setup.relationshipBetween = {
         const flightRisk = [[], []]; // [friends, close friends]
         for (const [npc, like] of closest) {
             const tier = like > this.CLOSE_FRIEND ? 1 : 0;
-            const wasLeaving = this.wouldWalkOut(npc);
+            const wasLeaving = setup.sleep.guestWouldLeave(npc);
             npc.happy = Math.max(-100, (npc.happy ?? 0) - reaction.happy[tier]);
             if (reaction.trust) {
                 npc.relationship = Math.max(-100, (npc.relationship ?? 0) - reaction.trust[tier]);
             }
-            // Pushed over the overnight walk-out line (processNpc): warn the player while there is time to talk her round
-            if (!wasLeaving && this.wouldWalkOut(npc) && guests.some(g => g.id === npc.id)) {
+            // Pushed over the overnight walk-out line (setup.sleep.guestWouldLeave): warn the player while there is time to talk her round
+            if (!wasLeaving && setup.sleep.guestWouldLeave(npc) && guests.some(g => g.id === npc.id)) {
                 flightRisk[tier].push(npc);
             }
         }
         for (const tier of [1, 0]) {
             if (flightRisk[tier].length) this.warnFlightRisk(flightRisk[tier], tier, !!reaction.trust);
         }
-    },
-
-    /* The guest leave check in processNpc: an adult whose relationship is below 0, or who is past -70 happiness and not rational (unless waiting for a nursery bed) */
-    wouldWalkOut: function(npc) {
-        if (setup.getAge(npc) < 18) return false;
-        return (npc.relationship ?? 0) < 0
-            || ((npc.happy ?? 0) < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc));
     },
 
     /* Queues a "looking at the gate" warning, shown in the 'Departure warning' interstitial once the player leaves the passage that told them of the departure.
@@ -318,6 +338,8 @@ setup.relationshipBetween = {
             return;
         }
         game.departureWarningNext = destination;
+        // Where the player really came from, for setup.previousPassage (the override runs before the move, so this is still the origin)
+        game.departureWarningFrom = passage();
         return 'Departure warning';
     },
 
@@ -442,6 +464,9 @@ setup.relationshipBetween = {
         let start = Date.now();
         const household = this.household();
 
+        // Friendships and grudges reached today in scenes (queueMilestones)
+        this.postQueuedMilestones();
+
         // Work relationships (js/npc/workSocial.js), before the likes so a tie that reached LIKE_FROM tonight counts
         setup.workSocial.sweep();
 
@@ -471,7 +496,9 @@ setup.relationshipBetween = {
         let start = Date.now();
         this.guests = variables().guests;
         let guestsCount = this.guests.length;
-    
+        // Announced from the age the work sweep counts friendships (young kids get the party bonus quietly)
+        const pairs = this.pairsBefore(this.guests.filter(g => setup.getAge(g) >= setup.workSocial.TUNING.MIN_AGE));
+
         for (let i = 0; i < guestsCount; i++) {
             this.npc = this.guests[i];
             this._init();
@@ -488,6 +515,7 @@ setup.relationshipBetween = {
                 this.setDislike();
             }
         }
+        this.queueMilestones(pairs, ' at the house party', 'a house party');
 
         let end = Date.now() - start;
     },
@@ -541,6 +569,13 @@ setup.relationshipBetween = {
         return _matchesBetween;
     }
 
+};
+
+/* previous(), looking past the 'Departure warning' interstitial: checks like previous() === 'Wood cabin' (entry encounters)
+   still see the passage the player left, not the warning shown on the way */
+setup.previousPassage = function() {
+    const prev = previous();
+    return prev === 'Departure warning' ? (variables().game?.departureWarningFrom ?? prev) : prev;
 };
 
 /* Chain the departure warning interstitial onto the existing navigation override (Story JavaScript), whichever loaded first */

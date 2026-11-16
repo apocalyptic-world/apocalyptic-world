@@ -22,7 +22,7 @@
 	<<set _wivesTexts = []>>
 	<<for _wifeId range $player.family?.wives ?? []>>
 		<<set _shown[_wifeId] = true>>
-		<<set _wifeText = setup.player.npcRelationText(_wifeId, true, false, 'husband') + (_number.get(_wifeid) ?? '')>>
+		<<set _wifeText = setup.player.npcRelationText(_wifeId, true, false, 'husband') + (_number.get(_wifeId) ?? '')>>
 		<<if _wifeText>>
 			<<set _wivesTexts.push(_wifeText)>>
 		<</if>>
@@ -65,7 +65,7 @@
 			<<continue>>
 		<</if>>
 		<<set _shown[_childmotherId] = true>>
-		<<set _childmotherText = setup.player.npcRelationText(_childmotherId) + (_number.get(_childmotherid) ?? '')>>
+		<<set _childmotherText = setup.player.npcRelationText(_childmotherId) + (_number.get(_childmotherId) ?? '')>>
 		<<if _childmotherText>>
 			<<set _childmothersTexts.push(_childmotherText)>>
 			<<set _motherCount++>>
@@ -87,7 +87,7 @@
 	<<set _kidsTexts = []>>
 	<<for _kidId range $player.family?.kids ?? []>>
 		<<set _shown[_kidId] = true>>
-		<<set _kidText = setup.player.npcRelationText(_kidId, true, false, 'father') + (_number.get(_kidid) ?? '')>>
+		<<set _kidText = setup.player.npcRelationText(_kidId, true, false, 'father') + (_number.get(_kidId) ?? '')>>
 		<<if _kidText>>
 			<<set _kidsTexts.push(_kidText)>>
 			<<set _childCount++>>

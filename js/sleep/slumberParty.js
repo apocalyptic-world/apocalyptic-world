@@ -161,6 +161,7 @@ setup.slumberParty = {
         const everyone = [host].concat(invited);
         for (const npcA of everyone) {
             npcA.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+            npcA.relationshipBetween.stats ??= {};
             for (const npcB of everyone) {
                 if (npcA === npcB) continue;
                 let gain = typeof npcA.relationshipBetween.stats[npcB.id] === 'undefined' ? 10 : randomInteger(1, 5);
@@ -222,6 +223,7 @@ setup.slumberParty = {
 
     loseRelationship: function (npc, other) {
         npc.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+        npc.relationshipBetween.stats ??= {};
         npc.relationshipBetween.stats[other.id] = Math.max(-100, (npc.relationshipBetween.stats[other.id] ?? 0) - randomInteger(3, 6));
     },
 

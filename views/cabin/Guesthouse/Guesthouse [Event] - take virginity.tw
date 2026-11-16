@@ -58,6 +58,7 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
             With a silent agreement, you climb onto her finding a position that reflects the unspoken connection between you and <<=setup.displayName(_npc)>>.
             <br />
             You spread her ass, grab your dick and slowly slide your hard cock inside her untouched pussy.
+            <<run setup.sexActs.fucksPussy($player, _npc)>>
             <br /><br />
             <<video 'guesthouse/take_virginity2'>>
             <br /><br />
@@ -88,6 +89,8 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
             <div id="option_cum">
             <<linkreplace 'Cum'>>
                 <<run $('#option_cum_inside').hide()>>
+                <<horny_reset>>
+                <<run setup.sexActs.cumsOnAss($player, _npc)>>
                 <<video 'guesthouse/take_virginity5'>>
                 <br /><br />
                 Few more thrusts and you pull out and cum on her ass. She lets out load moan as pushes her head into pillows to silence the noise as your cum drips all over her ass.
@@ -102,7 +105,6 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
                 <br /><br />
                 <<link 'Leave'>>
                     <<addmins 30>>
-                    <<horny_reset>>
                     <<goto 'Guest house'>>
                 <</link>>
             <</linkreplace>>
@@ -110,6 +112,8 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
             <div id="option_cum_inside">
             <<linkreplace 'Cum inside her'>>
                 <<run $('#option_cum').hide()>>
+                <<horny_reset>>
+                <<run setup.sexActs.cumsInPussy($player, _npc)>>
                 <<if setup.pregnancyChance(_npc)>>
                     <<set _npc.pregnancy_father = 'mc'>>
                     <<set _npc.pregnancy = 0>>
@@ -129,7 +133,6 @@ The creaking door swings open, and there stands <<=setup.displayName(_npc)>>, fr
                 <br /><br />
                 <<link 'Leave'>>
                     <<addmins 30>>
-                    <<horny_reset>>
                     <<goto 'Guest house'>>
                 <</link>>
             <</linkreplace>>

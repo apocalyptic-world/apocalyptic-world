@@ -295,7 +295,8 @@ setup.nurseryBirthday = {
         const encounters = setup.nurseryEncounters;
         setup.cabinInventory.drop(item);
         encounters.change(kid, 'happy', 5, 7);
-        encounters.changeKin(kid, 2, 4);
+        // Kin only: his own child 4-6, other kin 3-5, nobody else expected a gift to mean more than a happy day
+        encounters.changeBond(kid, 4, 6);
         const parents = encounters.parents(kid);
         const singleMom = !encounters.isOwnChild(kid) && parents.length === 1 && parents[0] === setup.getNpcById(kid.family?.mother);
         parents.forEach(npc => encounters.changeKin(npc, 3 + (singleMom ? this.SINGLE_MOM_BONUS : 0), 5 + (singleMom ? this.SINGLE_MOM_BONUS : 0)));
