@@ -122,15 +122,23 @@ setup.slumberParty = {
             : host.name + ' and her neighbor ' + invited[0].name + ' gave each other makeovers through the bars.\n';
 
         const everyone = [host].concat(invited);
+        // Every pair's values going in, for the friend / rival milestones
+        const pairs = [];
+        everyone.forEach((a, i) => everyone.slice(i + 1).forEach(b => pairs.push({ a, b, before: setup.relationshipBetween.pairBefore(a, b) })));
         this.applyHappiness(host, invited);
-        if (isGuest) this.applyRelationships(host, invited);
-        const passedOut = this.drunkEvents(everyone, isGuest);
+        this.applyRelationships(host, invited);
+        const passedOut = this.drunkEvents(everyone);
         msg += passedOut.lines;
         msg += this.makeovers(everyone, passedOut.npcs);
 
         setup.npcInventoryRemove(host, 'cosmetics', 1);
         host.slumberPartyDay = day;
         setup.sleepMessages.addJob(msg, 'slumber_party');
+        for (const { a, b, before } of pairs) {
+            for (const line of setup.relationshipBetween.milestones(a, b, ' at a slumber party', before, 'a slumber party')) {
+                setup.sleepMessages.addJob(line, 'slumber_party');
+            }
+        }
         return true;
     },
 
@@ -153,6 +161,7 @@ setup.slumberParty = {
         const everyone = [host].concat(invited);
         for (const npcA of everyone) {
             npcA.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+            npcA.relationshipBetween.stats ??= {};
             for (const npcB of everyone) {
                 if (npcA === npcB) continue;
                 let gain = typeof npcA.relationshipBetween.stats[npcB.id] === 'undefined' ? 10 : randomInteger(1, 5);
@@ -165,7 +174,7 @@ setup.slumberParty = {
     },
 
     /** Drunk events, in order. Returns their message lines and who passed out (always last, and skips her makeover). */
-    drunkEvents: function (everyone, isGuest) {
+    drunkEvents: function (everyone) {
         const result = { lines: '', npcs: [] };
         const madeOut = new Set();
 
@@ -196,10 +205,8 @@ setup.slumberParty = {
                 for (const fighter of [npc, rival]) {
                     fighter.beauty = Math.max(1, fighter.beauty - randomInteger(1, 2));
                 }
-                if (isGuest) {
-                    this.loseRelationship(npc, rival);
-                    this.loseRelationship(rival, npc);
-                }
+                this.loseRelationship(npc, rival);
+                this.loseRelationship(rival, npc);
                 result.lines += setup.displayName(npc) + ' got drunk and started a fight with ' + setup.displayName(rival) + '. Neither of them looks better for it.\n';
             }
         }
@@ -216,6 +223,7 @@ setup.slumberParty = {
 
     loseRelationship: function (npc, other) {
         npc.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+        npc.relationshipBetween.stats ??= {};
         npc.relationshipBetween.stats[other.id] = Math.max(-100, (npc.relationshipBetween.stats[other.id] ?? 0) - randomInteger(3, 6));
     },
 

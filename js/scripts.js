@@ -812,6 +812,12 @@ setup.suicideChance = function (person) {
         return 0;
     }
 
+    // Octavia's warriors skip the overnight pregnancy tick, so they can't conceive (matches copies like $tmpGirl by id)
+    const warriors = variables().characters?.octavia?.quests?.warriors ?? [];
+    if (person.id && warriors.some(w => w && w.id === person.id)) {
+        return 0;
+    }
+
     if(age < 18) {
         return 0;
     } else if(age < 25) {

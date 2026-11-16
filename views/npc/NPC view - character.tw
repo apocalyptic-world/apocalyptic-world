@@ -70,7 +70,14 @@
 <</link>>
 	
  <<link 'Go back'>>
-	<<set $characters[$charId] = $tmpGirl>>
+	/* Save back to wherever she came from: a write under an unset $charId creates $characters["undefined"] */
+	<<if typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<</if>>
 	<<unset $slaveId, $guestId, $charId>>
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>

@@ -37,11 +37,11 @@ You walk in on a standoff. <<=_enc.fill(_issue.scene, _kid)>> <<=_kid.name>> has
 	<<link `'Side with ' + _kid.name`>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_kid, 'relationship', 4, 6)>>
-				<<run _enc.change(_carer, 'relationship', -3, -1)>>
+				<<run _enc.changeKin(_kid, 3, 5)>>
+				<<run _enc.changeKin(_carer, -3, -1)>>
 			<<else>>
-				<<run _enc.change(_kid, 'relationship', 3, 5)>>
-				<<run _enc.change(_carer, 'relationship', -4, -2)>>
+				<<run _enc.changeKin(_kid, 3, 5)>>
+				<<run _enc.changeKin(_carer, -4, -2)>>
 			<</if>>
 			You tell <<=_name>> to let it go, this once, and that <<=_kid.name>> has a point. <<=_kid.name>> looks startled, then tries to hide it. <<=_name>> says nothing for a moment.
 			<br /><br />
@@ -56,11 +56,11 @@ You walk in on a standoff. <<=_enc.fill(_issue.scene, _kid)>> <<=_kid.name>> has
 	<<link `'Side with ' + _name`>>
 		<<replace '#nce_choices'>>
 			<<if _own>>
-				<<run _enc.change(_kid, 'relationship', -6, -4)>>
-				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+				<<run _enc.changeKin(_kid, -4, -2)>>
+				<<run _enc.changeKin(_carer, 3, 5)>>
 			<<else>>
-				<<run _enc.change(_kid, 'relationship', -4, -2)>>
-				<<run _enc.change(_carer, 'relationship', 3, 5)>>
+				<<run _enc.changeKin(_kid, -4, -2)>>
+				<<run _enc.changeKin(_carer, 3, 5)>>
 			<</if>>
 			You tell <<=_kid.name>> that <<=_name>> runs this room, and that <<=_kidHe>> will do as <<=_kidHe>> is told. <<=_name>> gives you a small nod of thanks. <<=_kid.name>> glares at the floor.
 			<br /><br />
@@ -76,8 +76,8 @@ You walk in on a standoff. <<=_enc.fill(_issue.scene, _kid)>> <<=_kid.name>> has
 	<</link>>
 	<<link 'Try to find a middle ground'>>
 		<<replace '#nce_choices'>>
-			<<run _enc.change(_carer, 'relationship', 1, 3)>>
-			<<run _enc.change(_kid, 'relationship', 1, 3)>>
+			<<run _enc.changeKin(_carer, 1, 3)>>
+			<<run _enc.changeKin(_kid, 1, 3)>>
 			You take the heat out of it, and get them both to say what they want without shouting. <<=_kid.name>> agrees to do <<=_kidHis>> part if <<=_name>> will ease up a little, and <<=_name>> agrees that this seems reasonable. Neither of them gets everything, and neither of them seems to mind as much as they did a minute ago.
 			<br /><br />
 			[[Continue|Nursery]]
@@ -86,8 +86,8 @@ You walk in on a standoff. <<=_enc.fill(_issue.scene, _kid)>> <<=_kid.name>> has
 	<</link>>
 	<<link 'Stay out of it'>>
 		<<replace '#nce_choices'>>
+			<<run _enc.changeBond(_kid, -4, -2)>>
 			<<if _own>>
-				<<run _enc.change(_kid, 'relationship', -4, -2)>>
 				<<run setup.nurseryBehavior.change(-2, -1)>>
 				You look at the two of them and decide this isn't your fight. <<=_kid.name>> stares at you as you turn away, then starts shouting again, louder. Behind you, some of the younger children have started to pick up on it.
 			<<else>>

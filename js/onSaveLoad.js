@@ -56,6 +56,13 @@ Save.onLoad.add(function (save) {
         delete variables.worldSettlements;
     }
 
+    // The family tree tab was renamed from 'Test' (passage 'Settlement management - Test'); fix every moment so going back works too
+    for (const moment of save.state.history) {
+        if (moment.variables.game && moment.variables.game.managementTab === 'Test') {
+            moment.variables.game.managementTab = 'Family tree';
+        }
+    }
+
     // Cleanup old variables
     var _oldVariables = [
         'cellSlaveIds',
@@ -111,6 +118,13 @@ Save.onLoad.add(function (save) {
     if (variables.workersLimitGarden < 10) {
         variables.workersLimitGarden = 10;
         variables.workersLimitHunter = 10;
+    }
+
+    // An NPC saved back under an unset $charId lands in $characters["undefined"]. If it's a stale copy of a guest or slave
+    // who still lives here, drop it: the nightly character loop would otherwise keep running birthdays and pregnancy on the copy
+    const _strayCharacter = variables.characters?.undefined;
+    if (_strayCharacter && [...(variables.guests ?? []), ...(variables.slaves ?? [])].some(npc => npc?.id === _strayCharacter.id)) {
+        delete variables.characters.undefined;
     }
 
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
@@ -224,6 +238,12 @@ Save.onLoad.add(function (save) {
         const _warriors = save.state.history[save.state.index].variables.characters.octavia?.quests?.warriors;
         if (_warriors !== undefined && Array.isArray(_warriors)) {
             save.state.history[save.state.index].variables.characters.octavia.quests.warriors = _warriors.filter(w => typeof w === 'object' && w !== null);
+            // The warrior view used to block conception by setting pregnancy = 0 (no father); that read as a pregnancy elsewhere
+            for (const w of save.state.history[save.state.index].variables.characters.octavia.quests.warriors) {
+                if (w.pregnancy === 0 && typeof w.pregnancy_father === 'undefined' && typeof w.pregnancy_event === 'undefined') {
+                    delete w.pregnancy;
+                }
+            }
         }
     }
 

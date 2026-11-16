@@ -301,8 +301,29 @@
 					</div>
 				<</if>>
 			</div>
+			<<set _standing = setup.relationshipBetween.standingWith($tmpGirl)>><<if _standing.length>>
+				<div id="npc-guest-relationships">
+					<h4 style="display:block; margin-bottom: 0px;">Relationships in the household</h4>
+					<<for _standingType range ['guest', 'slave']>>
+						<<set _standingOfType = _standing.filter(e => e.type === _standingType)>>
+						<<if _standingOfType.length>>
+							<div class="guest-standing-type"><strong><<=_standingType === 'guest' ? 'Guests' : 'Slaves'>></strong></div>
+							<<for _standingTier range [2, 1, -1, -2]>>
+								<<set _standingGroup = _standingOfType.filter(e => e.tier === _standingTier)>>
+								<<if _standingGroup.length>>
+									<div style="margin-left: 1em;">
+										<<=setup.relationshipBetween.TIER_GROUP[_standingTier]>>:
+										<<for _standingI, _standingEntry range _standingGroup>><<if _standingI > 0>>, <</if>><span @class="'guest-standing gender-' + setup.genderClass(_standingEntry.npc)" @style="_standingEntry.npc.color ? 'color: ' + _standingEntry.npc.color : ''" data-balloon-pos="up" data-balloon-break data-balloon-length="large" @aria-label="setup.relationshipBetween.standingTip($tmpGirl, _standingEntry)"><<=_standingEntry.npc.name>></span><</for>>
+									</div>
+								<</if>>
+							<</for>>
+						<</if>>
+					<</for>>
+				</div>
+				<br />
+			<</if>>
 		</div>
-	
+
 	<</linkreplace>>
 <</if>>
 

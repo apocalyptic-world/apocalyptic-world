@@ -52,24 +52,29 @@ setup.isAtWork = function (npc, weather) {
     if (!schedule) return false;
     if (setup.eveningSchool.attends(npc)) return false; // night jobs start after evening class
     if (!timeBetween(schedule.from, schedule.to)) return false;
-    if (setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc)) return false; // stays home under the policy
+    return !setup.workBlocked(npc, npc.assignedTo, weather, schedule.blockedBy);
+};
+
+// True if something keeps npc from working job today, whatever the hour: the pregnancy policy, or a blockedBy
+// condition (see outsideWorkHours). Shared by isAtWork and the nightly work social sweep (setup.workSocial.worked).
+setup.workBlocked = function (npc, job, weather, blocked) {
+    if (setup.baseManagement.pregnantPrivilege.exemptsFromJob(npc)) return true; // stays home under the policy
 
     const isSick   = typeof npc.sick  !== 'undefined';
     const isDayOff = isSick || typeof npc.rest !== 'undefined';
-    const blocked  = schedule.blockedBy;
 
-    if (blocked.includes('sick')   && isSick)   return false;
-    if (blocked.includes('dayOff') && isDayOff) return false;
+    if (blocked.includes('sick')   && isSick)   return true;
+    if (blocked.includes('dayOff') && isDayOff) return true;
 
     if (weather) {
-        if (blocked.includes('heatWave')  && (weather.heatWave  ?? false)) return false;
-        if (blocked.includes('sandStorm') && (weather.sandStorm ?? false)) return false;
+        if (blocked.includes('heatWave')  && (weather.heatWave  ?? false)) return true;
+        if (blocked.includes('sandStorm') && (weather.sandStorm ?? false)) return true;
         if (blocked.includes('coldSnap')  && (weather.coldSnap  ?? false) && !setup.npcInventoryHas(npc, 'coat_wolf')) {
-            if (npc.assignedTo !== 'scavenging' || !setup.coldSnapScavengerGoesOut(npc, State.variables.game.day)) return false;
+            if (job !== 'scavenging' || !setup.coldSnapScavengerGoesOut(npc, State.variables.game.day)) return true;
         }
     }
 
-    return true;
+    return false;
 };
 
 // Uncoated scavengers have a 20% chance to go out in a cold snap. Rolled once per work day and

@@ -128,7 +128,7 @@ The back room smelled like old metal and sweat. <<= _st.name >>'s people didn't 
 			<<if $slaves[_stSIdx].buttplug>>
 				<<pickup $backpack 'buttplug' 1>>
 			<</if>>
-			<<slaveRemove _stSIdx>>
+			<<slaveLeft _stSIdx 'sold'>>
 			<<set $player.money += _stSoldPrice>>
 			<<run setup.settlements.modifyRelationship(_st, 2, 'Slave sale')>>
 			<<run setup.settlements.save(setup.settlements.getAll())>>

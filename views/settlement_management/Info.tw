@@ -149,8 +149,8 @@
 			<<set _annivKey = [_statsNpc.id, _annivEntry.with].sort().join('|')>>
 			<<if !_seenAnnivPairs.has(_annivKey)>>
 				<<run _seenAnnivPairs.add(_annivKey)>>
-				<<set _spouseNpc = setup.getNpcById(_annivEntry.with)>>
-				<<set _settlementStatsData.anniversary.push(_statsNpc.name + ' & ' + (_spouseNpc?.name ?? 'someone') + ' (' + _annivYears + '-year)')>>
+				<<set _spouseNpc = setup.player.findRelative(_annivEntry.with)>>
+				<<set _settlementStatsData.anniversary.push(_statsNpc.name + ' & ' + (_spouseNpc ? _spouseNpc.name + setup.player.placeSuffix(_spouseNpc.id) : 'someone') + ' (' + _annivYears + '-year)')>>
 			<</if>>
 		<</if>>
 	<</if>>
@@ -265,6 +265,8 @@
 	<</if>>
 	<<if $game.location.library ?? false>>
 		<tr><td>Working as librarian:</td><td><<=_settlementStatsData.work.librarian ?? 0>></td><td>(Max 1) skill learning +<<=setup.library.bonusPercent()>>%</td></tr>
+	<<else>>
+		<tr><td>Working as librarian:</td><td>0</td><td><<=$backpack.has('blueprint_library') ? '(Build the library)' : '(Explore to find blueprint → build)'>></td></tr>
 	<</if>>
 	<<if setup.eveningSchool.isBuilt()>>
 		<tr><td>Working as instructor:</td><td><<=setup.eveningSchool.instructorIndices().length>></td><td>(Max <<=setup.eveningSchool.classes.length>>)</td></tr>
@@ -273,10 +275,6 @@
 	<</if>>
 	<tr><td>Working as a nun:</td><td><<=_settlementStatsData.work.church ?? 0>></td><td>(Max 6)</td></tr>
 	<tr><td>Mechanic in garage:</td><td><<=_settlementStatsData.work.garage ?? 0>></td><td>(Max 1)</td></tr>
-
-	<<set _text = !$backpack.has('blueprint_library') ? '(Explore to find blueprint → build)' : 
-			!$game.location.library ? '(Build the library)' : '(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span>' >>
-	<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
 
 	<<set   _text = !$game.location.quarry ?  '(Explore to find quarry)' : 'Average mining/day <<=_settlementStatsData.mining>> coal/stone'>>
 	<tr><td>Working in quarry:</td><td><<=_settlementStatsData.work.quarry ?? 0>></td><td><<=_text>></td></tr>

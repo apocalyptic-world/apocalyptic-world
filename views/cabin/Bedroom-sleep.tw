@@ -15,7 +15,8 @@
 		You wake up fully rested and ready to conquer the world.
 	<</if>>
 	<center>
-		<<set _messagesCount = setup.sleepMessages.count()>>
+		/* Count what is shown below ($morningMessages is saved state; setup.sleepMessages is empty after a page reload) */
+		<<set _messagesCount = Object.values($morningMessages ?? {}).reduce((n, group) => n + Object.keys(group ?? {}).length, 0)>>
 		<<if _messagesCount >= 8>>
 			<br /><br />
 			<<link 'Wake up'>>

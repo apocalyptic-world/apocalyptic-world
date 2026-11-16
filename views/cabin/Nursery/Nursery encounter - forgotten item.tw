@@ -35,7 +35,7 @@ You are coming into the schoolroom when <<=_name>> slips past you, out of breath
 <<=_kid.name>> goes red in front of the whole class and hurries up to take it. <<=ucfirst(_kidHe)>> mumbles a thank you, and looks very glad to have it back.
 <br /><br />
 <<sayNpc _teacher>>
-	Thais isn't the first time you've run all the way over here. Don't think I haven't noticed. They're lucky to have you.
+	This isn't the first time you've run all the way over here. Don't think I haven't noticed. They're lucky to have you.
 <</sayNpc>>
 <br />
 
@@ -44,7 +44,8 @@ You are coming into the schoolroom when <<=_name>> slips past you, out of breath
 		<<replace '#nce_choices'>>
 			<<run _deliveryEffects()>>
 			<<addmins 15>>
-			<<run [_carer, _teacher, _kid].forEach(npc => _enc.change(npc, 'relationship', 2, 3))>>
+			<<run [_carer, _teacher].forEach(npc => _enc.changeKin(npc, 2, 3))>>
+			<<run _enc.changeKin(_kid, 2, 3)>>
 			<<run _enc.change(_kid, 'happy', 1, 3)>>
 			You step over before <<=_name>> can leave, and ask <<=_teacherName>> how <<=_kid.name>> has been doing. The whole class is listening, and <<=_kid.name>> slides down in <<=_kidHis>> seat.
 			<br /><br />
@@ -92,7 +93,7 @@ You are coming into the schoolroom when <<=_name>> slips past you, out of breath
 :: Nursery encounter - forgotten item walk
 /* Included by Nursery encounter - forgotten item, before or after talking to the teacher (_talked) */
 <<addmins 15>>
-<<run _enc.change(_carer, 'relationship', 2, 4)>>
+<<run _enc.changeKin(_carer, 2, 4)>>
 <<run _enc.change(_carer, 'happy', 1, 3)>>
 <<if _talked>>
 	You thank <<=_teacherName>> and leave <<=setup.pronounceWho(_teacher)>> to the lesson, then fall into step with <<=_name>> on the way out.
@@ -106,7 +107,7 @@ It isn't far, but it is the first time all day <<=setup.pronounceWhat(_carer)>> 
 	You didn't have to come all this way. It's nice, though, having somebody ask. All right, back into the noise. Thanks for the walk.
 <</sayNpc>>
 <br />
-You leave <<=setup.pronounceWho(_carer)>> at the nursery door and head back to what you were doing.
+You hold the nursery door for <<=setup.pronounceWho(_carer)>> and follow <<=setup.pronounceWho(_carer)>> inside.
 <br /><br />
-[[Continue|School]]
+[[Continue|Nursery]]
 <<nurseryEffects>>

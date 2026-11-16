@@ -57,17 +57,19 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 		<<link 'Help with school prep (Uses the time until 9am)'>>
 			<<replace '#nce_choices'>>
 				<<run _help.markHelped(_carer)>>
+				<<run _help.startLog()>>
 				<<set _mins = 60 - $gameDate.getMinutes()>>
 				<<set _low = _mins >= 30 ? 2 : 1>>
 				<<set _high = _mins >= 30 ? 4 : 2>>
-				<<set _ownStudents = setup.nurseryCare.kidsAged(5, 17).filter(k => _help.isOwnChild(k))>>
+				<<set _students = setup.nurseryCare.kidsAged(5, 17)>>
+				<<set _ownStudents = _students.filter(k => _help.isOwnChild(k))>>
 				<<addmins _mins>>
-				<<set _dBehavior = _help.change(_care, 'behavior', 3, 5)>>
-				<<set _dHappy = _help.change(_carer, 'happy', _low, _high)>>
-				<<set _dRel = _help.change(_carer, 'relationship', _low, _high)>>
-				<<set _bonds = []>>
-				<<for _student range _ownStudents>>
-					<<run _bonds.push([_student.name, _help.changeBond(_student, _low, _high)])>>
+				<<run setup.nurseryBehavior.change(3, 5)>>
+				<<run _help.change(_carer, 'happy', _low, _high)>>
+				<<run _help.changeKin(_carer, _low, _high)>>
+				/* Every student gets the base gain. His own children get +2 on top, and other kin +1. */
+				<<for _student range _students>>
+					<<run _help.changeKin(_student, _low, _high)>>
 				<</for>>
 				<<if _mins >= 30>>
 					You roll up your sleeves and work your way down the line with <<=_name>>: faces to wash, shoes on the wrong feet, a shirt on inside out, and one argument about whose coat is whose that takes both of you to settle. By the time the last of them is out the door, the room is quiet and nobody has left anything behind.
@@ -89,10 +91,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 				<</sayNpc>>
 				<br />
 				<<link 'Continue'>><<goto _backPassage>><</link>>
-				<<linkdesc>><<=_extra.effects([['Happiness', _dHappy], ['Relationship', _dRel], ['Behavior', _dBehavior]])>><</linkdesc>>
-				<<for _bond range _bonds>>
-					<<linkdesc>><<=_extra.effects([['Relationship', _bond[1]]], _bond[0])>><</linkdesc>>
-				<</for>>
+				<<nurseryEffects>>
 			<</replace>>
 		<</link>>
 	<</if>>
@@ -109,7 +108,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 				<<addmins _mins>>
 				<<run setup.nurseryBehavior.change(3, 5)>>
 				<<run _help.change(_carer, 'happy', _low, _high)>>
-				<<run _help.change(_carer, 'relationship', _low, _high)>>
+				<<run _help.changeKin(_carer, _low, _high)>>
 				<<for _sleeper range _sleepers>>
 					<<run _help.change(_sleeper, 'happy', 2, 4)>>
 					<<run _help.changeBond(_sleeper, 2, 4)>>
@@ -145,7 +144,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 			<<run _help.markHelped(_carer)>>
 			<<addmins 60>>
 			<<set _dHappy = _help.change(_carer, 'happy', 3, 5)>>
-			<<set _dRel = _help.change(_carer, 'relationship', 3, 5)>>
+			<<set _dRel = _help.changeKin(_carer, 3, 5)>>
 			<<set _dBehavior = _help.change(_care, 'behavior', 4, 8)>>
 			<<set _standout = _extra.rollExemplary()>>
 			<<set _inRoom = _extra.kidsPresent()>>
@@ -180,7 +179,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 						<<link `'Reward ' + _standoutHim + ' with a snack (Uses 1 nursery snack)'`>>
 							<<set _care.snacks-->>
 							<<set _dKidHappy = _help.change(_standout, 'happy', 3, 5)>>
-							<<set _dKidRel = _help.change(_standout, 'relationship', 3, 5)>>
+							<<set _dKidRel = _help.changeKin(_standout, 3, 5)>>
 							<<set _dBehavior += _help.change(_care, 'behavior', 1, 3)>>
 							<<replace '#nce_standout'>>
 								You call <<=_standout.name>> over and, in front of everyone, tell <<=_standoutHim>> that you noticed how well <<=_standoutHe>> behaved today. Then you hand <<=_standoutHim>> a snack from the nursery stores. <<=_standout.name>> lights up and holds it in both hands like a trophy.
@@ -222,7 +221,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 				<<replace '#nce_choices'>>
 					<<run _help.markHelped(_carer)>>
 					<<run setup.cabinInventory.drop('energy_drink')>>
-					<<set _dRel = _help.change(_carer, 'relationship', 1, 2)>>
+					<<set _dRel = _help.changeKin(_carer, 1, 2)>>
 					<<set _dHappy = _help.change(_carer, 'happy', 2, 4)>>
 					<<set _dBehavior = _help.change(_care, 'behavior', 1, 3)>>
 					You hand <<=_himOrHer>> a can. <<=_name>> cracks it open, drinks half of it in one go, and closes <<=_hisOrHer>> eyes for a moment.
@@ -248,8 +247,8 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 					<<run _help.consume({ energy_drink: 2 })>>
 					<<addmins 30>>
 					<<energy 10>>
-					<<set _dRel = _help.change(_carer, 'relationship', 1, 2)>>
-					<<set _dRel += _help.change(_carer, 'relationship', 1, 3)>>
+					<<set _dRel = _help.changeKin(_carer, 1, 2)>>
+					<<set _dRel += _help.changeKin(_carer, 1, 3)>>
 					<<set _dHappy = _help.change(_carer, 'happy', 2, 4)>>
 					<<set _dBehavior = _help.change(_care, 'behavior', 1, 3)>>
 					You hand <<=_himOrHer>> a can and open one for yourself. The two of you sit on the low bench by the window, knees up around your ears on furniture built for much smaller people, and <<=_name>> tells you about the kids: who has started reading, who isn't speaking to whom, and who has decided that peas are poison.
@@ -282,7 +281,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 				<<set _made = random(1, 3) + _smarts + (_isMechanic || _isInventive ? 5 : 0)>>
 				<<set _care.toys += _made>>
 				<<set _dHappy = _help.change(_carer, 'happy', 1, 2)>>
-				<<set _dRel = _help.change(_carer, 'relationship', 2, 4)>>
+				<<set _dRel = _help.changeKin(_carer, 2, 4)>>
 				<<set _dBehavior = 0>>
 				You spread the materials out on the long table and settle in with <<=_name>>. <<=ucfirst(_heOrShe)>> stitches while you cut and glue, and the two of you turn out handmade toys: a block set, a jointed doll, a rattle that rattles more than it should. A few of the kids drift over to supervise and offer strong opinions.
 				<<if _isMechanic || _isInventive>>
@@ -324,7 +323,7 @@ It takes a second to land. Then <<=_hisOrHer>> shoulders come down and <<=_heOrS
 				<<set _made = random(5, 10) + _smarts + (_isCook ? 5 : 0)>>
 				<<set _care.snacks += _made>>
 				<<set _dHappy = _help.change(_carer, 'happy', 1, 2)>>
-				<<set _dRel = _help.change(_carer, 'relationship', 2, 4)>>
+				<<set _dRel = _help.changeKin(_carer, 2, 4)>>
 				<<set _dBehavior = 0>>
 				<<set _learnedCook = _help.addCookExperience(_carer)>>
 				You bring over some fruit and dried meat from the kitchen, and the two of you set up at the long table, slicing and portioning it out into small wrapped packets.
@@ -430,10 +429,11 @@ Who would you like to sit down with for <strong><<=_tutorSubject>></strong>? You
 	<<else>>
 		<<run _help.markHelped(_carer)>>
 		<<addmins 60>>
-		<<set _gained = _extra.tutor(_chosen, _tutorSubject, _useBook)>>
+		<<set _teacherHelp = _extra.teacherHelp(_carer, _tutorSubject)>>
+		<<set _gained = _extra.tutor(_chosen, _tutorSubject, _useBook, _carer)>>
 		<<set _dBehavior = _help.change(_care, 'behavior', 3, 5)>>
 		<<set _dHappy = _help.change(_carer, 'happy', 2, 4)>>
-		<<set _dRel = _help.change(_carer, 'relationship', 2, 4)>>
+		<<set _dRel = _help.changeKin(_carer, 2, 4)>>
 		<<set _chosenNames = _chosen.map(k => k.name).join(' and ')>>
 		<<replace '#nce_choices'>>
 			You clear a corner of the long table and sit down with <<=_chosenNames>>.
@@ -447,11 +447,19 @@ Who would you like to sit down with for <strong><<=_tutorSubject>></strong>? You
 			<<else>>
 				By the end of the hour, <<=_chosen[0].name>> is answering before you finish asking.
 			<</if>>
+			<<if _teacherHelp>>
+				<br /><br />
+				Partway through, <<=_name>> pulls up a stool and starts adding what <<=_heOrShe>> learned from teaching: a quicker way to remember a list, a better question to ask when someone is stuck<<if _teacherHelp === 'skill'>>, and a few things from <<=_hisOrHer>> own experience <<=_extra.SKILL_EXPERIENCE[_tutorSubject]>> that no lesson plan would cover<</if>>.
+			<</if>>
 			<br /><br />
 			Around the room the other kids have been quieter than usual, as if school had followed them home.
 			<br /><br />
 			<<sayNpc _carer>>
-				Thank you. That's an hour of teaching I didn't have to find time for. And did you see their faces when they got it right?
+				<<if _teacherHelp>>
+					Thank you. It's been a long time since I got to do some real teaching instead of just keeping order. And did you see their faces when they got it right?
+				<<else>>
+					Thank you. That's an hour of teaching I didn't have to find time for. And did you see their faces when they got it right?
+				<</if>>
 			<</sayNpc>>
 			<br />
 			<<for _student range _chosen>>

@@ -159,8 +159,8 @@ setup.nurseryCare = {
         if (v.nsortBy === 'M') {
             sorter.sort((a, b) => {
                 // motherName: mothers who live elsewhere (settlement leaders) can't be looked up by id
-                const mA = setup.getNpcById(nursery[a].family?.mother)?.name ?? nursery[a].family?.motherName ?? 'zzz';
-                const mB = setup.getNpcById(nursery[b].family?.mother)?.name ?? nursery[b].family?.motherName ?? 'zzz';
+                const mA = setup.player.findRelative(nursery[a].family?.mother)?.name ?? nursery[a].family?.motherName ?? 'zzz';
+                const mB = setup.player.findRelative(nursery[b].family?.mother)?.name ?? nursery[b].family?.motherName ?? 'zzz';
                 return mA < mB ? -1 : mA > mB ? 1 : 0;
             });
         } else if (v.nsortBy === 'A') {
@@ -191,7 +191,7 @@ setup.nurseryCare = {
         const nursery = variables().nursery ?? [];
         return this.sortedIndices()
             .map(index => nursery[index])
-            .filter(kid => kid.id && setup.getAge(kid) < 18 && setup.nurseryEncounters.isOwnChild(kid) && kid !== current);
+            .filter(kid => kid.id && setup.getAge(kid) < 18 && setup.family.isBloodToMC(kid) && kid !== current);
     },
 
     /** Whether to show the button at all */

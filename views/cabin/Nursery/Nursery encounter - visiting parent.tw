@@ -72,9 +72,10 @@
 		<<replace '#nce_choices'>>
 			<<run _visitEffects()>>
 			<<addmins 30>>
-			<<run [_carer, _kid].concat(_parents).forEach(npc => _enc.change(npc, 'relationship', 2, 3))>>
+			<<run _enc.change(_kid, 'relationship', 2, 3)>>
+			<<run [_carer].concat(_parents).forEach(npc => _enc.changeKin(npc, 2, 3))>>
+			<<run _enc.changeBond(_kid, 2, 4)>>
 			<<if _own>>
-				<<run _enc.change(_kid, 'relationship', 2, 4)>>
 				<<if _mother>><<run _enc.change(_mother, 'relationship', 2, 4)>><</if>>
 			<</if>>
 			You put aside what you came to do and sit down with them. For half an hour nobody needs a decision from you, and nobody is asking about food or fuel or who is on watch tonight.
@@ -108,8 +109,8 @@
 	<<link 'Leave them to it'>>
 		<<replace '#nce_choices'>>
 			<<run _visitEffects()>>
+			<<run _enc.changeBond(_kid, -5, -5)>>
 			<<if _own>>
-				<<run _enc.change(_kid, 'relationship', -5, -5)>>
 				<<run _enc.change(_kid, 'happy', -5, -5)>>
 				<<if _mother>><<run _enc.change(_mother, 'relationship', -5, -5)>><</if>>
 				You tell them you have too much to do and head for the door. The smile on <<=setup.displayName(_parent)>>'s face goes away slowly.

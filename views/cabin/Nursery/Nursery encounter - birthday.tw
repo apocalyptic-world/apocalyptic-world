@@ -240,7 +240,9 @@ By mid-party, the long table has been dragged into the middle of the room and co
 		<<run _party.skipGift(_kid)>>
 		<<set $tmpEvent.giftNote = _own
 			? 'You have nothing for ' + _kid.name + '. ' + ucfirst(_kidHe) + ' waits a little longer, just in case, and then goes back to the table with ' + _kidHis + ' head down.'
-			: 'You wish ' + _kid.name + ' a happy birthday, and ' + _kidHe + ' runs back to the others.'>>
+			: setup.family.isBloodToMC(_kid)
+				? 'You wish ' + _kid.name + ' a happy birthday. ' + ucfirst(_kidHe) + ' glances at your empty hands for a moment, then runs back to the others.'
+				: 'You wish ' + _kid.name + ' a happy birthday, and ' + _kidHe + ' runs back to the others.'>>
 		<<set $tmpEvent.giftIndex++>>
 		<<replace `'#' + _giftSlot`>><<include 'Nursery encounter - birthday gift'>><</replace>>
 	<</link>>

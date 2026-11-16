@@ -1,5 +1,12 @@
 setup.sleep = setup.sleep || {};
 
+// The overnight guest leave rule: an adult whose relationship is below 0, or who is past -70 happiness and not
+// rational (unless waiting for a nursery bed). Also read by the departure warnings (setup.relationshipBetween.reactToDeparture).
+setup.sleep.guestWouldLeave = function(npc) {
+    return (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc)))
+        && setup.getAge(npc) >= 18;
+};
+
 // Per-NPC daily tick. All pure-data work that doesn't need <<include>> passages,
 // $storage/.drop(), or <<guestLeft>>. Removals are deferred into opts.pendingRemovals
 // so the caller can splice/guestLeft in reverse-index order after the loop ends.
@@ -18,7 +25,7 @@ setup.sleep.processNpc = function(npc, opts) {
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
     // Mothers of a newborn without a bed leave by the guest room rule instead (setup.guestRoom.nightlyBedless)
-    if (isGuest && (npc.relationship < 0 || (npc.happy < -70 && !setup.personality.has(npc, 'rational') && !setup.guestRoom.waitsForBed(npc))) && setup.getAge(npc) >= 18) {
+    if (isGuest && setup.sleep.guestWouldLeave(npc)) {
         // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
         const betrayalKind = setup.betrayal.depart(npc);
         // A quiet leaver leaves fresh tracks (Event - Runaway tracks, js/sleep/runaways.js)
@@ -535,7 +542,10 @@ setup.sleep.processNpc = function(npc, opts) {
         if ((npc.traits ?? []).includes('breeder')) npc.pregnancy++;
 
         if (npc.pregnancy === 8) {
-            let msg = npc.name + ' told you that <strong>she is pregnant</strong>.';
+            // Ferals can't tell you, so they show it
+            let msg = (npc.traits ?? []).includes('feral')
+                ? npc.name + ' has started showing nesting behaviors, letting you know <strong>she is pregnant</strong>.'
+                : npc.name + ' told you that <strong>she is pregnant</strong>.';
             const sv2 = State.variables;
             if (!isCharacter && npc.pregnancy_father !== 'mc') {
                 msg += ' <strong>You ARE NOT the father!</strong>';

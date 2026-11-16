@@ -375,7 +375,9 @@ setup.nurseryEncounters = {
         const min = stat === 'endurance' ? 0 : -100;
         const before = npc[stat] ?? 0;
         const rolled = random(low, high);
-        npc[stat] = Math.clamp(before + rolled, min, 100);
+        /* A gain stops at 100 and a loss at the minimum, but a stat already past either limit isn't pulled back to it */
+        npc[stat] = rolled > 0 ? Math.min(before + rolled, Math.max(before, 100))
+            : Math.max(before + rolled, Math.min(before, min));
         if (npc.id) {
             this.record(npc, stat, npc[stat] - before, rolled);
         }
@@ -476,9 +478,30 @@ setup.nurseryEncounters = {
         return lines.filter(Boolean);
     },
 
-    /** Relationship change that only applies between the player and his own child */
+    /** How much more strongly someone feels a relationship shift with the player: his own children (of any age) by 2, other blood kin by 1 */
+    kinBonus: function (npc) {
+        return this.isOwnChild(npc) ? 2 : setup.family.isBloodToMC(npc) ? 1 : 0;
+    },
+
+    /** Relationship change with the player, made bigger for his kin. A negative shift gets more negative. */
+    changeKin: function (npc, low, high) {
+        const bonus = this.kinBonus(npc) * (low + high < 0 ? -1 : 1);
+        return this.change(npc, 'relationship', low + bonus, high + bonus);
+    },
+
+    /**
+     * Relationship change that only applies between the player and his kin: his own children get the full amount,
+     * other blood kin 1 less at each end, and anyone else nothing.
+     */
     changeBond: function (kid, low, high) {
-        return this.isOwnChild(kid) ? this.change(kid, 'relationship', low, high) : 0;
+        if (this.isOwnChild(kid)) {
+            return this.change(kid, 'relationship', low, high);
+        }
+        if (!setup.family.isBloodToMC(kid)) {
+            return 0;
+        }
+        const less = n => n > 0 ? n - 1 : n < 0 ? n + 1 : 0;
+        return this.change(kid, 'relationship', less(low), less(high));
     },
 
     /** "Offer to help with nursery care": once per time slot for each caretaker */

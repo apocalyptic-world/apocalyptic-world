@@ -42,7 +42,7 @@ You hear the crying before you are through the door. <<=_name>> is crouched by t
 		<<link `'Hand ' + _himOrHer + ' a bandage'`>>
 			<<replace '#nce_choices'>>
 				<<run setup.cabinInventory.drop('bandage')>>
-				<<run setup.nurseryEncounters.change(_carer, 'relationship', 2, 4)>>
+				<<run setup.nurseryEncounters.changeKin(_carer, 2, 4)>>
 				You pass <<=_himOrHer>> a bandage. <<=_name>> smooths it down over the <<=_injury.spot>> and gives it a gentle pat, and <<=_kid.name>> studies the result with wet eyes. The crying winds down to sniffles and then to nothing.
 				<br /><br />
 				<<sayNpc _carer>>
@@ -88,7 +88,7 @@ You hear the crying before you are through the door. <<=_name>> is crouched by t
 				<<run setup.nurseryEncounters.change(_carer, 'happy', -2, -1)>>
 				<<set _parents = setup.nurseryEncounters.parents(_kid)>>
 				<<for _parent range _parents>>
-					<<run setup.nurseryEncounters.change(_parent, 'relationship', -4, -2)>>
+					<<run setup.nurseryEncounters.changeKin(_parent, -4, -2)>>
 					<<run setup.nurseryEncounters.change(_parent, 'happy', -4, -2)>>
 				<</for>>
 				<<set _otherParents = _parents.filter(p => p.id !== _carer.id).map(p => setup.displayName(p))>>

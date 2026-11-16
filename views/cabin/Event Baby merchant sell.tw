@@ -62,7 +62,7 @@ Let me take a look... I am ready to pay 20 caps for one.
 					  <br />
 					  <<link 'Yes' 'Event: Baby merchant sell'>>
 						  <<run setup.relationshipBetween.reactToChildSold(_slave)>>
-						  <<run $slaves.splice(_slaveI, 1)>>
+						  <<slaveLeft _slaveI 'handed_over'>>
 						  <<dialogclose>>
 						  <<set $player.goodwill -= 2>>
 						  <<set $player.money += 20>>
@@ -97,7 +97,7 @@ Let me take a look... I am ready to pay 20 caps for one.
 					  <<link 'Yes' 'Event: Baby merchant sell'>>
 						  <<assignedTo _guest 'none'>>
 						  <<run setup.relationshipBetween.reactToChildSold(_guest)>>
-						  <<guestRemove _guestI>>
+						  <<guestLeft _guestI 'handed_over'>>
 						  <<dialogclose>>
 						  <<set $player.goodwill -= 2>>
 						  <<set $player.money += 20>>
