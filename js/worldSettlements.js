@@ -1029,32 +1029,15 @@ setup.settlements = {
 	},
 
 	/**
-	 * The leader gives birth to the player's child. The baby is a full NPC made by <<newchild>> and stays in
-	 * s.children until the player takes it home. This runs during sleep, so the temporaries and the
-	 * $tmpGirl/$tmpGuy/$newChild that the widget overwrites are put back afterwards. Returns the child or null.
+	 * The leader gives birth to the player's child (setup.humans.newBorn). The baby stays in s.children until the
+	 * player takes it home. Returns the child or null.
 	 */
 	leaderGiveBirth: function (s) {
 		const v = variables();
-		const temp = State.temporary;
-		const savedTemp = Object.assign({}, temp);
-		const storyKeys = ['tmpGirl', 'tmpGuy', 'newChild'];
-		const savedStory = {};
-		storyKeys.forEach(function (k) { if (k in v) savedStory[k] = v[k]; });
-
-		temp.wsBirthMother = s.leader;
-		$.wiki('<<newchild ' + window.randomInteger(0, 1) + ' _wsBirthMother>>');
-		const kid = v.newChild;
-
-		Object.keys(temp).forEach(function (k) { if (!(k in savedTemp)) delete temp[k]; });
-		Object.assign(temp, savedTemp);
-		storyKeys.forEach(function (k) {
-			if (k in savedStory) v[k] = savedStory[k];
-			else delete v[k];
-		});
-		if (!kid) return null;
-
-		// <<newchild>> stores $gameDate itself; copy it so the clock moving later doesn't change the birthday
-		kid.birthDate = new Date(v.gameDate.getTime());
+		if (!s?.leader) return null;
+		const father = v.player ?? null;
+		const kid = setup.humans.newBorn({ gender: window.randomInteger(0, 1), mother: s.leader, father: father, now: v.gameDate });
+		setup.humans.linkFamily(kid, s.leader, father);
 		// Leaders aren't in $guests/$characters, so setup.getNpcById can't find the mother; keep her name
 		kid.family.motherName = s.leader.name;
 		setup.npc.addHistory(kid, 'born', { mother: s.leader.id, motherName: s.leader.name, place: s.name });
@@ -1123,8 +1106,7 @@ setup.settlements = {
 				} else {
 					setup.settlements.logEvent(s, s.leader.name + ' gave birth.');
 				}
-				delete s.leader.pregnancy;
-				delete s.leader.pregnancy_father;
+				setup.humans.endPregnancy(s.leader);
 			}
 		}
 

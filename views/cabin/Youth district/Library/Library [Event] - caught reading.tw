@@ -59,7 +59,7 @@ She turned the page, and her thighs pressed together.
 		<<linkreplace _lblSuck>>
 			<<addmins 10>>
 			<<set _npc.bj = Math.min((_npc.bj ?? 0) + 5, 100)>>
-			<<set _npc.statsSex ??= {}, _npc.statsSex.bj = (_npc.statsSex.bj ?? 0) + 1>>
+			<<run setup.sexActs.blowsCock(_npc, $player)>>
 			<<run setup.npc.addHistory(_npc, 'first_sex_mc', { with: 'mc' })>>
 
 			She knelt between your knees on the dusty boards, worked your belt open and then your fly, and pulled your cock out into the lantern light. It was already hard. She studied it for a second like it was an interesting passage, then looked up at you and dragged her tongue in one slow line from the base to the tip.
@@ -105,7 +105,7 @@ She turned the page, and her thighs pressed together.
 						<<set _npc.virgin = false>>
 					<</if>>
 					<<set _npc.pussy = Math.min((_npc.pussy ?? 0) + 5, 100)>>
-					<<set _npc.statsSex ??= {}, _npc.statsSex.pussy = (_npc.statsSex.pussy ?? 0) + 1>>
+					<<run setup.sexActs.fucksPussy($player, _npc)>>
 
 					You pulled her up by the wrists, turned her around so her back was to you, and hooked your thumbs into the waistband of her denim shorts. She wriggled while you dragged them down over her ass, stepped out of one leg, and you pulled her down onto your lap with a knee on either side of yours, her back against your chest, and held your cock upright for her.
 					<br /><br />
@@ -157,7 +157,7 @@ She turned the page, and her thighs pressed together.
 							<<set _npc.horny = 0>>
 							<<set _npc.relationship = Math.min((_npc.relationship ?? 0) + 5, 100)>>
 							<<set _npc.happy = Math.min((_npc.happy ?? 0) + 10, 100)>>
-							<<set _npc.statsSex ??= {}, _npc.statsSex.pussy = (_npc.statsSex.pussy ?? 0) + 1>>
+							<<run setup.sexActs.fucksPussy($player, _npc)>>
 							<<if setup.pregnancyChance(_npc)>>
 								<<set _npc.pregnancy = 0>>
 								<<set _npc.pregnancy_father = 'mc'>>

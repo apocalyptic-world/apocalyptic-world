@@ -208,7 +208,7 @@ He drops into a fighting crouch and starts closing the distance. Not running —
 				<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 				<<run $slaves.push($tmpGirl)>>
 				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-				You haul <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> to <<if $tmpGirl.gender == 0>>her<<else>>his<</if>> feet and use what's left of the rope as a lead. <<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't fight it — not anymore.
+				You haul <<=setup.pronounceWho($tmpGirl)>> to <<=setup.pronounceWhos($tmpGirl)>> feet and use what's left of the rope as a lead. <<=setup.pronounceWhat($tmpGirl, true)>> doesn't fight it — not anymore.
 				<br /><br />
 				<strong>Taken as a slave.</strong>
 				<br /><br />
@@ -309,7 +309,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 				<<run setup.npc.addHistory($tmpGirl, 'invited')>>
 				<<run $guests.push($tmpGirl)>>
 				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-				<strong><<if $tmpGirl.gender == 0>>She<<else>>He<</if>> follows you home.</strong>
+				<strong><<=setup.pronounceWhat($tmpGirl, true)>> follows you home.</strong>
 				<br /><br />
 				<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 			<</linkreplace>>
@@ -355,7 +355,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 	<<set $tmpGirl.relationship = Math.max($tmpGirl.relationship - 30, -100)>>
 	<<set $tmpGirl.sub = Math.min($tmpGirl.sub + 20, 100)>>
 
-	<<if $tmpGirl.gender == 0>>
+	<<if [0, 2].includes($tmpGirl.gender)>>
 	She's on the ground, breathing hard, the fight gone out of her. Not unconscious — watching you from under her hair with a wary stillness that wasn't there before. The aggression has collapsed into something quieter and less certain.
 	<<else>>
 	He's down, chest heaving, not moving to get up. The attack is finished. He watches you from the ground with flat eyes, waiting to see what comes next.
@@ -375,7 +375,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 				<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 				<<run $slaves.push($tmpGirl)>>
 				<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-				<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't have much left to resist with. You bind <<if $tmpGirl.gender == 0>>her<<else>>him<</if>> and get moving before that changes.
+				<<=setup.pronounceWhat($tmpGirl, true)>> doesn't have much left to resist with. You bind <<=setup.pronounceWho($tmpGirl)>> and get moving before that changes.
 				<br /><br />
 				<strong>Taken as a slave.</strong>
 				<br /><br />
@@ -397,9 +397,9 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 <h1 class="ptitle">OUTSIDE</h1>
 <br /><br />
 <<if $dg1Path == 'subdue'>>
-	<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> comes down slowly, chest still moving fast, body loose in a way it wasn't before. The bound wrists haven't changed. Neither has whatever calculation is running behind those eyes — but it looks different now, less sharp-edged.
+	<<=setup.pronounceWhat($tmpGirl, true)>> comes down slowly, chest still moving fast, body loose in a way it wasn't before. The bound wrists haven't changed. Neither has whatever calculation is running behind those eyes — but it looks different now, less sharp-edged.
 <<else>>
-	When it's over <<if $tmpGirl.gender == 0>>she<<else>>he<</if>> pulls back and watches you with that same patient stillness — but quieter, settled. Not running. The same thought you had before still applies: if you start walking, <<if $tmpGirl.gender == 0>>she<<else>>he<</if>> might just follow.
+	When it's over <<=setup.pronounceWhat($tmpGirl)>> pulls back and watches you with that same patient stillness — but quieter, settled. Not running. The same thought you had before still applies: if you start walking, <<=setup.pronounceWhat($tmpGirl)>> might just follow.
 <</if>>
 <br /><br />
 
@@ -416,7 +416,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 			<<run setup.npc.addHistory($tmpGirl, 'captured')>>
 			<<run $slaves.push($tmpGirl)>>
 			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-			<<if $tmpGirl.gender == 0>>She<<else>>He<</if>> doesn't fight the lead. You get moving before either of you has time to reconsider.
+			<<=setup.pronounceWhat($tmpGirl, true)>> doesn't fight the lead. You get moving before either of you has time to reconsider.
 			<br /><br />
 			<strong>Taken as a slave.</strong>
 			<br /><br />
@@ -426,7 +426,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 	<</if>>
 	<<if $dg1Path == 'tame' && setup.guestRoom.hasRoom() && $backpack.has('food') && $player.int >= 20>>
 	<div id="dg1as_lead">
-		<<set _leadName = 'Lead ' + ($tmpGirl.gender == 0 ? 'her' : 'him') + ' home (−1 food)'>>
+		<<set _leadName = 'Lead ' + setup.pronounceWho($tmpGirl) + ' home (−1 food)'>>
 		<<linkreplace `_leadName`>>
 			<<run $('#dg1as_leave').hide()>>
 			<<drop $backpack 'food' 1>>
@@ -438,7 +438,7 @@ He's crouched at the treeline, patient and still. Not approaching. Not leaving e
 			<<run setup.npc.addHistory($tmpGirl, 'invited')>>
 			<<run $guests.push($tmpGirl)>>
 			<<unset $dg1Feral, $dg1FeralGender, $dg1Found, $dg1Chopped, $dg1Path>>
-			<strong><<if $tmpGirl.gender == 0>>She<<else>>He<</if>> follows you home.</strong>
+			<strong><<=setup.pronounceWhat($tmpGirl, true)>> follows you home.</strong>
 			<br /><br />
 			<<link 'Head home'>><<goto 'Wood cabin'>><</link>>
 		<</linkreplace>>

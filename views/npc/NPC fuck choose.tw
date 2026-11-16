@@ -64,7 +64,8 @@
 	<</link>>
 <</if>>
 
-<<if [0, 2].includes($tmpGirl.gender) && (setup.NpcInHome($tmpGirl) || _atNightSchool)>>
+/* The foursome scene is written for women only (foursome_ff_ texts and images), so the lead must be a cis woman too */
+<<if $tmpGirl.gender === 0 && (setup.NpcInHome($tmpGirl) || _atNightSchool)>>
 	<<if _atNightSchool>>
 		<<set _eligibleForFoursome = setup.eveningSchool.classmates($tmpGirl).filter(e => e.npc.gender === 0 && (e.npc.likesGuys ?? true) && (e.npc.horny ?? 0) >= 20)>>
 	<<elseif ($tmpGirl.basementVoluntary ?? false)>>

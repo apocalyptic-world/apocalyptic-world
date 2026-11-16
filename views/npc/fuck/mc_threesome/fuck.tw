@@ -129,28 +129,15 @@
             
             <<for _sexStat range _sexStats>>
                 <<set $tmpGirl[_sexStat]++>>
-                <<if typeof $sexStats[_sexStat] === 'undefined'>>
-                    <<set 
-                        $tmpGirl.statsSex ??= {},
-                        $tmpGirl.statsSex[_sexStat] ??= 0,
-                        $tmpGirl.statsSex[_sexStat]++,
-                        $sexStats[_sexStat] = true
-                    >>
-                <</if>>
+                <<run setup.sexActs.mcSceneCategory(_sexStat, $tmpGirl)>>
             <</for>>
         <</if>>
 
         <<if _sexActions[$sexAction]?.stats2>>
             <<set $tmpGirl2[_sexActions[$sexAction].stats2]++>>
-            <<if typeof $sexStats[_sexActions[$sexAction].stats2] === 'undefined'>>
-                <<set 
-                    $tmpGirl2.statsSex ??= {},
-                    $tmpGirl2.statsSex[_sexActions[$sexAction].stats2] ??= 0,
-                    $tmpGirl2.statsSex[_sexActions[$sexAction].stats2]++,
-                    $sexStats[_sexActions[$sexAction].stats2] = true
-                >>
-            <</if>>
+            <<run setup.sexActs.mcSceneCategory(_sexActions[$sexAction].stats2, $tmpGirl2)>>
         <</if>>
+        <<run setup.sexActs.groupSceneAction($sexAction, $tmpGirl, $tmpGirl2)>>
 
 	<<if (SugarCube?.settings?.sexReactions ?? true) && !$sexForced &&  $tmpGirl.relationship >= 40 && setup.percentageChance(35)>>
 	    <br />
@@ -161,6 +148,7 @@
 
         <<include 'Mc fuck traits'>>
         <<if ['cum_in_pussy', 'double_cum'].includes($sexAction)>>
+            <<run setup.sexActs.mcSceneAction('cum_in_pussy', $tmpGirl)>>
             <<include 'Mc fuck cum in pussy'>>
         <</if>>
 

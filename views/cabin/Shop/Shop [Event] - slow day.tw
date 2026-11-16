@@ -187,9 +187,8 @@ You came around the counter. She was still leaning against the shelving, arms cr
 							<br />
 							She walked back around the counter and set her clipboard on the surface like nothing had happened.
 							<br /><br />
-							<<set _npc.sexStats ??= {}>>
-							<<set _npc.sexStats.pussy = (_npc.sexStats.pussy ?? 0) + 1>>
-							<<set _npc.sexStats.bj = (_npc.sexStats.bj ?? 0) + 1>>
+							<<run setup.sexActs.fucksPussy($player, _npc)>>
+							<<run setup.sexActs.blowsCock(_npc, $player)>>
 							<<if setup.pregnancyChance(_npc)>>
 								<<set _npc.pregnancy = 0>>
 								<<set _npc.pregnancy_father = 'mc'>>
@@ -240,9 +239,8 @@ You came around the counter. She was still leaning against the shelving, arms cr
 
 							She pulled her dress back on and smoothed it down. Walked back around to her side of the counter without a word, picked up her clipboard, and was a shopkeeper again.
 							<br /><br />
-							<<set _npc.sexStats ??= {}>>
-							<<set _npc.sexStats.pussy = (_npc.sexStats.pussy ?? 0) + 1>>
-							<<set _npc.sexStats.bj = (_npc.sexStats.bj ?? 0) + 1>>
+							<<run setup.sexActs.fucksPussy($player, _npc)>>
+							<<run setup.sexActs.blowsCock(_npc, $player)>>
 							<<setNpcStats 'guest' $guestId 'relationship' 8>>
 							<<setNpcStats 'guest' $guestId 'happy' 10>>
 							<strong>(<<=setup.displayName(_npc)>>: Relationship +8, Happy +10)</strong>

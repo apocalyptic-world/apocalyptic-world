@@ -1,7 +1,8 @@
 :: Date - pick
 
 <<set _npc = $tmpGirl>>
-<<set _d = either(0, 1, 2, 3)>>
+/* The ruins date is written for a cis woman (pussy, clit) and calls setup.sexActs.fucksPussy, which throws for a trans woman (gender 2). */
+<<set _d = _npc.gender === 0 ? either(0, 1, 2, 3) : either(0, 1, 2)>>
 <<if _d === 0>>
 	<<goto 'Date - lake'>>
 <<elseif _d === 1>>

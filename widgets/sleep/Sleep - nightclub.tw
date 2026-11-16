@@ -6,7 +6,7 @@
     <<setNpcStats 'slave' _i 'happy' -5>>
 <</if>>
 
-<<if !_npc.chastityBelt>>
+<<if !_npc.chastityBelt && setup.sexActs.hasPussy(_npc)>>
     <<if setup.percentageChance(50)>>
         <<run setup.jobs.applyJobAct(_npc, 'pussy', 'nightclub')>>
     <</if>>

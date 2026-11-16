@@ -5,20 +5,71 @@ setup.player = {
     /**
      * Percent chance that npc accepts the MC's invite to move in, from her relationship, the MC's reputation and
      * companions (see setup.npcs.inviteChance). refused: true when she won't come whatever happens (e.g. raped).
+     * Uses the dice already rolled by meetStranger for this NPC, and the food bonus if the MC fed her.
      */
     inviteChance: function (npc, refused = false) {
         const player = variables().player;
+        const meeting = setup.player.strangerMeeting(npc);
         return setup.npcs.inviteChance({
             relationship: npc?.relationship ?? 0,
             reputation: player.reputation ?? 0,
             companions: player.companions,
-            refused: Boolean(refused)
+            refused: Boolean(refused),
+            bonus: meeting?.gaveFood ? setup.npcs.INVITE.gaveFoodBonus : 0,
+            meeting
         });
+    },
+
+    /**
+     * Call when the MC meets a stranger who can be invited (right after <<newgirl>> etc.). Rolls whether she has heard
+     * of the MC and whether a companion vouches for the MC, and keeps the result in $strangerMeeting:
+     *   { npcId, heardOfYou, companionVouched, gaveFood, shown }
+     * <<strangerMeetText>> prints it once; rollInvite uses it up when the invite is accepted.
+     */
+    meetStranger: function (npc) {
+        const player = variables().player;
+        const meeting = setup.npcs.rollStrangerMeeting({ reputation: player.reputation ?? 0, companions: player.companions });
+        variables().strangerMeeting = { npcId: npc?.id ?? null, ...meeting, gaveFood: false, shown: false };
+        return variables().strangerMeeting;
+    },
+
+    /**
+     * The $strangerMeeting of npc (compared by id, so $tmpGirl copies work), or null. Also null once npc lives in the
+     * settlement ($guests, $slaves, $nursery): a stranger who refused the invite keeps the meeting (see rollInvite), and
+     * without this a capture or a later invite would keep the stranger lines in Talk until the next stranger is met.
+     */
+    strangerMeeting: function (npc) {
+        const v = variables();
+        const meeting = v.strangerMeeting;
+        if (!meeting || npc?.id == null || meeting.npcId !== npc.id) {
+            return null;
+        }
+        const settled = [v.guests, v.slaves, v.nursery].some(list => (list ?? []).some(n => n?.id === npc.id));
+        return settled ? null : meeting;
+    },
+
+    /**
+     * Rolls whether npc accepts the invite to move in (inviteChance). Returns true for yes, and then $strangerMeeting
+     * is used up; after a no it stays, so Talk keeps the stranger lines (the invite link doesn't come back) until
+     * she joins the settlement some other way (strangerMeeting) or the next stranger is met.
+     * Used by <<inviteAccept>> / <<inviteRefusal>> callers.
+     */
+    rollInvite: function (npc, refused = false, rng = Math.random) {
+        const yes = rng() * 100 < setup.player.inviteChance(npc, refused);
+        if (yes) {
+            delete variables().strangerMeeting;
+        }
+        return yes;
+    },
+
+    /** The MC's reputation tier: 'unknown', 'rumoured', 'known', 'renowned' or 'legend' (setup.strangerDialog.TIERS). */
+    reputationTier: function () {
+        return setup.strangerDialog.tierOf(variables().player?.reputation ?? 0);
     },
 
     isRecognized: function() {
         let recognitionPercentage;
-        let recognitionPercentageReputation;
+        let recognitionPercentageReputation = 0;
 
         const fighterRank = variables().player.fighter_rank ?? 0;
         if (fighterRank <= 40) {

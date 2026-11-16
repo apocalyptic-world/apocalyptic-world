@@ -252,9 +252,12 @@ setup.blair.houseRulesFavorite = function () {
     return best;
 };
 
-/** True when this guest has been intimate with the player (any recorded sex act). Blair only resents what she can plausibly see. */
+/** True when this guest has been intimate with the player (setup.npc.sleptWithMc). Blair only resents what she can plausibly see.
+    Saves from before setup.sexActs can't tell: their mixed counter (statsSex) held acts with the MC and with anyone else,
+    and moved to "with others". For those, any old act counts, as it did before (legacySexUnknown, set by
+    setup.sexActs.migrateLegacyCounters). */
 setup.blair.guestIntimate = function (npc) {
-    return Object.values(npc?.statsSex ?? {}).some(function (n) { return typeof n === 'number' && n > 0; });
+    return setup.npc.sleptWithMc(npc) || npc?.legacySexUnknown === true;
 };
 
 /** House rules: she has policy talk done, likes you, and there is somebody to clash with. */
