@@ -7,18 +7,51 @@
  *   chance        percent roll, only made when `when` is true
  *   lines         one is picked at random; %mcName% / %McName% become setup.npc.mcName(npc) (capitalised)
  *   branches      a nested list, same rules (nothing applies: no reaction)
- *   use           the branches of another action ('_fisting', '_cum_oral', … are shared by several actions)
+ *   use           the branches of another action (sn: half bj, half pussy_lick)
+ * Actions that say the same as another one are in ALIASES ('_fisting', '_cum_oral', … are shared by several actions).
  * A branch without when/chance always applies (the "else").
  */
 setup.sexReactions = {
-	/** True when there are reactions for action. */
+	/** Actions that say the same as another one: action -> REACTIONS key. */
+	ALIASES: {
+		pussy_fisting: '_fisting', anal_fisting: '_fisting',
+		anal_fingering: '_ass_play', assjob: '_ass_play',
+		cum_on_face: '_cum_on_body', cum_on_back: '_cum_on_body', cum_on_stomach: '_cum_on_body',
+		cum_in_mouth: '_cum_oral', cum_throat: '_cum_oral', cum_in_throat: '_cum_oral'
+	},
+
+	/** True when there are reactions for action. (hasOwnProperty, not Object.hasOwn: that needs iOS Safari 15.4+) */
 	has(action) {
-		return Object.hasOwn(this.REACTIONS, action);
+		const own = obj => Object.prototype.hasOwnProperty.call(obj, action);
+		return own(this.ALIASES) || own(this.REACTIONS);
+	},
+
+	/**
+	 * How npc is related to the MC for the family lines: 'daughter', 'sister', 'mother' or null (also null under the
+	 * noIncest policy). Used here and in the threesome reactions (Threeactions.tw).
+	 */
+	relation(npc, V = variables()) {
+		if (!npc || V.player?.baseManagement?.noIncest) return null;
+		const pf = V.player?.family ?? {};
+		const f = npc.family ?? {};
+		if (f.father === 'mc') return 'daughter';
+		const hasId = npc.id != null;
+		// also a sister who shares a parent with the MC but is in neither siblings list
+		if ((f.siblings ?? []).includes('mc') || (hasId && (pf.siblings ?? []).includes(npc.id)) || setup.family.mcSiblingType(npc)) return 'sister';
+		// the MC's mother; 'mc' in kids alone counts only for a woman, so his father never speaks as his mother
+		if (hasId && npc.id !== pf.father && (npc.id === pf.mother || ((f.kids ?? []).includes('mc') && (npc.gender === 0 || npc.gender === 2)))) return 'mother';
+		return null;
+	},
+
+	/** The MC's wife, on a chance roll (percent), or anyone at a wedding (80%). */
+	wife(npc, chance) {
+		return (npc.family?.husband === 'mc' && setup.percentageChance(chance)) || (npc.location === 'wedding' && setup.percentageChance(80));
 	},
 
 	/** A reaction line for npc after action ('generic' when the action has none), or '' when no branch applies. */
 	line(npc, action, V = variables()) {
-		const branches = this.REACTIONS[this.has(action) ? action : 'generic'];
+		const key = this.has(action) ? (this.ALIASES[action] ?? action) : 'generic';
+		const branches = this.REACTIONS[key];
 		const lines = this.resolve(branches, npc, V);
 		if (!lines) return '';
 		return lines[Math.floor(Math.random() * lines.length)]
@@ -47,7 +80,7 @@ setup.sexReactions = {
 				"Mmmhh, My body is so warm and full right now, %mcName%...   In every possible way...",
 				"*sigh* %mcName%...  I feel you so deeply...  Everything's heightened when I'm carrying like this."
 			] },
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 				"Mmmmh, %mcName%...  My husband, inside me, this is everything.",
 				"*sigh* You feel so right inside me, %mcName%...  Like you were made for me.",
 				"Ahh, %mcName%...  I belong to you, and you belong inside me...",
@@ -139,7 +172,7 @@ setup.sexReactions = {
 				"*gasping* If anyone walked in right now, %mcName%...  Don't stop, I don't care!",
 				"Ahh, %mcName%!  The teacher is receiving a very hands-on lesson today..."
 			] },
-			{ when: (npc, V) => npc.location === 'basement' && typeof V.guestId !== 'undefined', chance: 40, lines: [
+			{ when: npc => npc.location === 'basement' && npc.type === 'guest', chance: 40, lines: [
 				"Ahh, yes, %mcName%!  Bind me, claim me, show me who I belong to...",
 				"Mmmhh, I love being taken down here, %mcName%...  This feels so dangerous and incredible.",
 				"*gasping* The darkness, the ropes, and your cock.. Mmm, %mcName%...  Such a perfect combination...",
@@ -202,8 +235,8 @@ setup.sexReactions = {
 				"Mmmhh, %mcName%...  *trembling*  ...I'm going to fall apart right here...  *exhaling*  ...and I don't mind at all.",
 				"*softly* The whole barn disappears when you're inside me...  *gasping*  ...all I feel is you..."
 			] },
-			{ when: (npc, V) => !V.player?.baseManagement?.noIncest && (npc.family?.father === 'mc' || (npc.family?.siblings ?? []).includes('mc') || V.player.family?.mother === npc.id || (V.player.family?.siblings ?? []).includes(npc.id)), chance: 45, branches: [
-				{ when: npc => npc.family?.father === 'mc', lines: [
+			{ when: (npc, V) => setup.sexReactions.relation(npc, V) !== null, chance: 45, branches: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'daughter', lines: [
 					"I know it's wrong, %mcName%... but it feels so right...",
 					"Mmmh, %mcName%... doesn't family feel just perfect...",
 					"The fact that it's you, %mcName%, makes it feel even better...",
@@ -212,7 +245,7 @@ setup.sexReactions = {
 					"Ahhh, yes, %mcName%, forbidden fruit really is the best...",
 					"I was made for you, %mcName%..."
 				] },
-				{ when: (npc, V) => (npc.family?.siblings ?? []).includes('mc') || (V.player.family?.siblings ?? []).includes(npc.id), lines: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'sister', lines: [
 					"We grew up together, %mcName%, but who could have predicted we would be this close...",
 					"I know we shouldn't, %mcName%...  but you feel better than anyone I've ever been with...",
 					"My own brother, inside me...  *breathless*  ...the best secret we've ever kept...",
@@ -249,7 +282,7 @@ setup.sexReactions = {
 
 		anal: [
 			{ when: npc => (npc.anal ?? 0) >= 20, branches: [
-				{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+				{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 					"Mmmhh, %mcName%...  My husband can have all of me, every part of me...",
 					"*exhaling slowly* I love sharing this with you, %mcName%...  I belong to you.",
 					"Ahh, %mcName%...  I love giving my husband everything...  Take it, it's yours.",
@@ -394,8 +427,8 @@ setup.sexReactions = {
 					"Ahh, %mcName%...  *shaking*  ...please tell me this is what you wanted...  *softly*  ...I want so much to be what you want...",
 					"*exhaling slowly* Right here, just like this...  *barely audible*  ...don't stop...  please don't stop..."
 				] },
-				{ when: (npc, V) => !V.player?.baseManagement?.noIncest && (npc.family?.father === 'mc' || (npc.family?.siblings ?? []).includes('mc') || V.player.family?.mother === npc.id || (V.player.family?.siblings ?? []).includes(npc.id)), chance: 45, branches: [
-					{ when: npc => npc.family?.father === 'mc', lines: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) !== null, chance: 45, branches: [
+					{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'daughter', lines: [
 						"It's so naughty %mcName%.. but it feels so right....",
 						"Mmmm, %mcName%.. doesn't forbidden ass feel the best...?",
 						"Yes, %mcName%, let me feel that special cock deep inside me..",
@@ -404,7 +437,7 @@ setup.sexReactions = {
 						"All of my holes belong to you, %mcName%.  You know why...",
 						"I was made for you, %mcName%..."
 					] },
-					{ when: (npc, V) => (npc.family?.siblings ?? []).includes('mc') || (V.player.family?.siblings ?? []).includes(npc.id), lines: [
+					{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'sister', lines: [
 						"We share so many things, %mcName%...  *gasping*  ...but this has to be the most forbidden one...",
 						"Mmmm, %mcName%...  siblings who share everything...  I mean everything...",
 						"I let nobody else back here...  *breathless*  ...but you're not just anyone, %mcName%...",
@@ -477,7 +510,7 @@ setup.sexReactions = {
 				"Mmmhh, yes, cum inside me, %mcName%...  I'm already round with you, what's a little more?",
 				"*shivering* %McName%...  Even with a baby inside me, your warmth makes me feel complete..."
 			] },
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 				"*sigh* %McName%...  My husband filling me up, it's exactly where you belong.",
 				"Mmmmhh, I love feeling you inside me like this, %mcName%...  all of you.",
 				"Ohh, %mcName%...  I love feeling your essence filling me, reminding me that I belong to you...",
@@ -496,8 +529,8 @@ setup.sexReactions = {
 				"*catching breath* I love when you claim me like this, %mcName%.  It makes me feel like a true Companion.",
 				"*exhaling* Yes, %mcName%...  I love feeling the heat of your power filling me..."
 			] },
-			{ when: (npc, V) => !V.player?.baseManagement?.noIncest && (npc.family?.father === 'mc' || (npc.family?.siblings ?? []).includes('mc') || V.player.family?.mother === npc.id || (V.player.family?.siblings ?? []).includes(npc.id)), chance: 45, branches: [
-				{ when: npc => npc.family?.father === 'mc', lines: [
+			{ when: (npc, V) => setup.sexReactions.relation(npc, V) !== null, chance: 45, branches: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'daughter', lines: [
 					"*gasps* You came inside me, %mcName%!  You're so naughty..",
 					"%McName%!  You're gonna make me a mommy if you keep doin' that...",
 					"Oh, %mcName%, I can feel how much you love your forbidden fruit...",
@@ -506,7 +539,7 @@ setup.sexReactions = {
 					"Mmmh, %mcName%, I love when you fill me with what made me...",
 					"Ohhh, %mcName%, I was made for your seed..."
 				] },
-				{ when: (npc, V) => (npc.family?.siblings ?? []).includes('mc') || (V.player.family?.siblings ?? []).includes(npc.id), lines: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'sister', lines: [
 					"*shivering* You came inside me, %mcName%...  your own sister...  we are absolutely terrible...",
 					"Mmmh...  siblings who share everything...  *gasping*  ...and I mean everything...",
 					"What would people say...  *softly*  ...I honestly don't care right now, %mcName%...",
@@ -642,7 +675,7 @@ setup.sexReactions = {
 		],
 
 		bj: [
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 				"Mmmh.. %mcName%...  Your wife loves doing this for you...",
 				"Mmm, %mcName%.  My husband deserves this treatment.",
 				"*kissing up and down* I love you, %mcName%...  Every part of you...",
@@ -772,7 +805,7 @@ setup.sexReactions = {
 		],
 
 		dp: [
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 				"*muffled* Nng, %mcName%...  My husband knows exactly how to use every inch of me...",
 				"Mmmmhh, I love giving you everything, %mcName%!"
 			] },
@@ -793,7 +826,7 @@ setup.sexReactions = {
 		],
 
 		kissing: [
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(40)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 40), lines: [
 				"*sigh* %McName%...  My husband kisses me like I'm the only thing in the world.",
 				"Mmmm, %mcName%...  I love you, every time we kiss I'm reminded of that.",
 				"*moaning softly* %McName%...  I love belonging to you...",
@@ -860,15 +893,15 @@ setup.sexReactions = {
 				"*softly* Everything else keeps going...  *leaning into you*  ...but this...  this makes it all feel like something else entirely...",
 				"Mmmhh...  *unable to reach back*  ...it's cruel, not being able to hold you...  *pressing closer*  ...just stay right here, %mcName%..."
 			] },
-			{ when: (npc, V) => !V.player?.baseManagement?.noIncest && (npc.family?.father === 'mc' || (npc.family?.siblings ?? []).includes('mc') || V.player.family?.mother === npc.id || (V.player.family?.siblings ?? []).includes(npc.id)), chance: 45, branches: [
-				{ when: npc => npc.family?.father === 'mc', lines: [
+			{ when: (npc, V) => setup.sexReactions.relation(npc, V) !== null, chance: 45, branches: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'daughter', lines: [
 					"*softly* Only you kiss me like this, %mcName%...  *against your lips*  ...the best goodnight kisses ever...",
 					"Mmmm...  You feel like home, %mcName%...  *pulling you closer*  ...the only place I ever want to be...",
 					"*breathing softly* You shouldn't make me feel like this, %mcName%...  *kissing you again*  ...I keep coming back anyway...",
 					"There's love in this kiss...  *whispering*  ...the kind I'm not supposed to have for you...  *softly*  ...and I always want more of it...",
 					"*against your lips* My own father...  *sigh*  ...and nobody else will ever make me feel the way you do, %mcName%..."
 				] },
-				{ when: (npc, V) => (npc.family?.siblings ?? []).includes('mc') || (V.player.family?.siblings ?? []).includes(npc.id), lines: [
+				{ when: (npc, V) => setup.sexReactions.relation(npc, V) === 'sister', lines: [
 					"*quietly* Nobody knows me the way you do, %mcName%...  *against your lips*  ...and nobody kisses me the way you do either...",
 					"Mmmm...  It's still love, %mcName%...  *kissing you slowly*  ...just more than it used to be...",
 					"*softly* We share everything...  *whispering*  ...and I mean everything, %mcName%...",
@@ -948,14 +981,6 @@ setup.sexReactions = {
 			{ use: "pussy_lick" }
 		],
 
-		pussy_fisting: [
-			{ use: "_fisting" }
-		],
-
-		anal_fisting: [
-			{ use: "_fisting" }
-		],
-
 		_fisting: [
 			{ lines: [
 				"Nnngh!  I can't believe you fit the whole thing, %mcName%!",
@@ -1011,14 +1036,6 @@ setup.sexReactions = {
 			] }
 		],
 
-		anal_fingering: [
-			{ use: "_ass_play" }
-		],
-
-		assjob: [
-			{ use: "_ass_play" }
-		],
-
 		_ass_play: [
 			{ when: npc => npc.location === 'gloryhole', chance: 35, lines: [
 				"*wiggle* I can feel your hand reaching through to me, or is it me pushing back to you, either way...",
@@ -1036,18 +1053,6 @@ setup.sexReactions = {
 				"Mmmm, I like when you play with my ass, %mcName%.",
 				"*ass wiggle* You like how that feels, %mcName%? Are you looking for more..?"
 			] }
-		],
-
-		cum_on_face: [
-			{ use: "_cum_on_body" }
-		],
-
-		cum_on_back: [
-			{ use: "_cum_on_body" }
-		],
-
-		cum_on_stomach: [
-			{ use: "_cum_on_body" }
 		],
 
 		_cum_on_body: [
@@ -1087,18 +1092,6 @@ setup.sexReactions = {
 				"Mmm, I hear this is very good for the skin, %mcName%.",
 				"You've marked me %mcName%... I'm all yours..."
 			] }
-		],
-
-		cum_in_mouth: [
-			{ use: "_cum_oral" }
-		],
-
-		cum_throat: [
-			{ use: "_cum_oral" }
-		],
-
-		cum_in_throat: [
-			{ use: "_cum_oral" }
 		],
 
 		_cum_oral: [
@@ -1174,7 +1167,7 @@ setup.sexReactions = {
 				"Mmmm, %mcName%...  You're so hard against me...  this feels amazing without...  you know.",
 				"*whispering* You could just...  *gasping*  ...no, like this is perfect, %mcName%..."
 			] },
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(30)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 30), lines: [
 				"Mmmhh, %mcName%...  I love when you tease me like this...  my husband knows exactly what he's doing.",
 				"*sighing* You're so hard against my pussy, %mcName%...  Just slide in, you know I want you to...",
 				"Ahh, %mcName%...  My husband torturing me with his cock...  I love it...",
@@ -1209,7 +1202,7 @@ setup.sexReactions = {
 				"*softly* Mmmm, %mcName%...  That's so warm...  thank you for stopping here.",
 				"*catching her breath* Ohh, %mcName%...  You're so hot against me...  *quietly*  ...this was enough."
 			] },
-			{ when: npc => (npc.family?.husband === 'mc' && setup.percentageChance(35)) || (npc.location === 'wedding' && setup.percentageChance(80)), lines: [
+			{ when: npc => setup.sexReactions.wife(npc, 35), lines: [
 				"*gasping* Mmmhh, %mcName%...  All that teasing and then this...  you drive me crazy.",
 				"Ahh, %mcName%!  *looking down*  Look what you did to me, my husband...",
 				"*sighing happily* Mmmm, %mcName%...  So warm on my skin...  I love every bit of you."

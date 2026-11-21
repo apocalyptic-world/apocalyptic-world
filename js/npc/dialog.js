@@ -131,8 +131,7 @@ Object.assign(setup.npc ??= {}, {
 				"Bend me over anything you like, %mcName%. I won't complain.",
 				"Mark me as yours, %mcName%, so everyone knows who I belong to.",
 				"I don't care who hears us, %mcName%. Let them listen.",
-				"Whatever you have in mind tonight, %mcName%, the answer is yes.",
-				"Breed me again %mcName%... I need it."
+				"Whatever you have in mind tonight, %mcName%, the answer is yes."
 			],
 			sex_jaded: [
 				"It doesn't mean anything to me anymore. Just another motion.",
@@ -218,6 +217,12 @@ Object.assign(setup.npc ??= {}, {
 					"I can't stop thinking about you filling my ass again, %mcName%.",
 					"My ass is yours whenever you want it, %mcName%.",
 					"I was still walking funny the day after, %mcName%. Do it again."
+				]
+			},
+			creampie: {
+				metrics: ['receivedVaginalCreampie'],
+				lines: [
+					"Breed me again, %mcName%... I need it."
 				]
 			}
 		};
