@@ -28,6 +28,8 @@
 	<<goto 'Settlement - [Event] The Testing of Faith'>>
 <<elseif isMetChar('rodger') && $characters.rodger.quests.cheat && !$characters.rodger.quests.eve_pregnant && !$characters.rodger.quests.cheat_declined_day && (!$characters.rodger.quests.cheat_day || ($characters.rodger.quests.cheat_day + 14) < $game.day)>>
 	<<goto 'Eve - pregnant talk'>>
+<<elseif isMetChar('rodger') && $characters.rodger.quests.eve_pregnant && !$characters.rodger.quests.dead && !($characters.eve?.quests?.confession_day) && !($characters.eve?.quests?.new_home) && (!$characters.rodger.quests.cheat_day || ($characters.rodger.quests.cheat_day + 28) < $game.day)>>
+	<<goto 'Eve - Confession'>>
 <<else>>
 	<<if !$locationEvents.settlement>>
 	  <<if randomInteger(0, 100) <= 5>>

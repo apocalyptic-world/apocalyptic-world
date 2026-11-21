@@ -1,0 +1,75 @@
+:: Himari - Heat Sick [bg-sanctuary]
+<h1 class="ptitle">THE CONTAINER</h1>
+<<run setup.himari.mark('heat')>>
+<<run setup.himari.learn('okaasan')>>
+<<addmins 30>>
+<br />
+The sun had been on the yard since dawn, and the container had been in the sun. When the guard swung the door open, the air that came out was like an oven.
+<br /><br />
+She was on the floor, on her side, curled around herself. Her shirt was soaked through. Her braid was stuck to her neck. When you knelt and touched her forehead she was so hot that you pulled your hand back.
+<br /><br />
+<center>
+	<<image 'people/himari/heat_sick.jpg'>>
+</center>
+<br />
+Her eyes were half open but she was not looking at anything. Her lips were moving.
+<br /><br />
+<<himari>>
+	<<jp 'お母さん…お母さん…' 'Okaasan… okaasan…'>>
+<</himari>>
+<br />
+You did not need to speak her language to know what that word was. It is the same word in every language. It is the word people say at the end.
+<br /><br />
+The doc came, because the guard ran for him, and Negan came, because the guard ran for him too. The doc knelt, looked in her eyes and her mouth, and pressed two fingers to her neck.
+<br /><br />
+<<say 'Doc' setup.ImagePath+'/people/anonguy.png'>>
+	Infection. Cut on her foot from the container floor, probably. She needs antibiotics. Real ones, not the chalk they sell in the city.
+<</say>>
+<br />
+<<negan>>
+	I'm not wasting good medicine on a maybe. Doc says she'll live or she won't.
+<</negan>>
+<br />
+Then, slowly, he remembered what she was worth, and to whom.
+<br /><br />
+<<negan>>
+	...Fine. You're the handler. Handle it. You've got three days. You know what happens if she's not breathing when her ride shows up? I don't either, and I'm not gonna find out.
+<</negan>>
+<br />
+He walked out. The doc followed him without looking back.
+<br /><br />
+<<if $backpack.count('antibiotics') >= 1>>
+	You had antibiotics in your pack.
+	<br /><br />
+	<div id="hm8_give">
+		<<set _hmGiveLabel = 'Give her the antibiotics now'>>
+		<<linkreplace _hmGiveLabel>>
+			<<run $('#hm8_later').hide()>>
+			<<include 'Himari - Heat Sick cure'>>
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="hm8_later">
+		<<set _hmLaterLabel = 'Keep them for now'>>
+		<<linkreplace _hmLaterLabel>>
+			<<run $('#hm8_give').hide()>>
+			You left her on the floor with a wet cloth on her forehead and a can of water by her hand. You had three days.
+			<br /><br />
+			<strong>(Bring antibiotics and give them to her at the container within 3 days.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<<else>>
+	You did not have any antibiotics with you. You left her on the floor with a wet cloth on her forehead and a can of water by her hand, and you hoped three days was enough.
+	<br /><br />
+	<strong>(Bring antibiotics and give them to her at the container within 3 days.)</strong>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Sanctuary'>>
+	<</link>>
+<</if>>

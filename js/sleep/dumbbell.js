@@ -33,7 +33,7 @@ setup.sleep.processDumbbell = function(npc, isHeatWave) {
                 'trips and has a bad fall landing on ' + side + ' arm',
                 ((npc.pregnancy ?? 0) > 180 ? 'falls backwards surprised when her unborn baby kicks' : 'got back-pain'),
             ];
-            setup.sleepMessages.add('While working out with ' + item + ', ' + npc.name + ' ' + either(reasons) + '. Takes a sickday', 'main', '');
+            setup.sleepMessages.add('While working out with ' + setup.automatization.itemName(item) + ', ' + npc.name + ' ' + either(reasons) + '. Takes a sickday', 'main', '');
             npc.sick = { days: sickdays, desc: 'injured when working out', id: 'workout' };
         }
     } else {

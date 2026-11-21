@@ -1,0 +1,159 @@
+:: Laura - What the Lab Left [bg-underground]
+<h1 class="ptitle">UNDERGROUND CITY</h1>
+<br />
+<<set $characters.laura.quests.lab_left_day = $game.day>>
+<<newguy>>
+<<set _llTrader = $tmpGuy>>
+<<unset $tmpGuy>>
+<<addmins 20>>
+Halfway down the old platform a man had spread a tarp over the tiles and laid out the usual junk: bent cutlery, batteries that might or might not hold a charge, a stack of mouldy paperbacks. You would have walked past him if the light had not caught something brass.
+<br /><br />
+<center>
+	<<image 'places/underground/laura_stall.jpg'>>
+</center>
+<br />
+It was a microscope, a heavy old one, and somebody had scratched letters into its base with a nail: <strong>L. FINCH</strong>. Next to it lay a bundle of notebooks tied with string. You knew the handwriting on the covers. It was the same tight, slanted hand that labelled every jar in Laura's lab.
+<br /><br />
+<<sayNpc _llTrader>>
+	Good eye. That's proper science, that is. Came out of a basement lab up top. The Depot boys brought it down last week, them and a whole crate of glass. I'll do you the lot for a hundred and fifty.
+<</sayNpc>>
+<br />
+<<you>>
+	The Depot boys?
+<</you>>
+<br />
+<<sayNpc _llTrader>>
+	Raiders. They live in the old train depot at the end of the red line. They come down every week with whatever they've picked clean. Said the woman whose stuff it was got away. Lucky her.
+<</sayNpc>>
+<br />
+<<if $player.money >= 150>>
+	<div id="ll_buy">
+		<<set _llBuyLabel = 'Buy it all back (150 caps)'>>
+		<<linkreplace _llBuyLabel>>
+			<<run $('#ll_depot, #ll_leave').hide()>>
+			<<set $player.money -= 150>>
+			<<set $characters.laura.quests.lab_left = 'bought'>>
+			<<set $characters.laura.quests.gear_back = true>>
+			He wrapped the microscope in a rag as if it were a baby and tied the notebooks back up with the same string. You carried the whole lot out of the tunnels in your arms.
+			<br /><br />
+			<strong>(Laura's microscope and notebooks. Bring them home to her lab.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Underground city'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="ll_depot">
+	<<set _llDepotLabel = 'Go to the depot and take it all back'>>
+	<<linkreplace _llDepotLabel>>
+		<<run $('#ll_buy, #ll_leave').hide()>>
+		<<addmins 60>>
+		The red line ran out into a dead depot full of rusted carriages. You heard them before you saw them: four or five voices, laughing, and the clink of bottles. They had made a camp inside the last carriage, and through the broken window you could see crates stacked to the ceiling. One of them was stencilled with the word <em>FRAGILE</em> in Laura's hand.
+		<br /><br />
+		One of them saw you in the doorway and stopped laughing.
+		<br /><br />
+		<<link 'Fight'>>
+			<<generateEnemies 4 0 1>>
+			<<fight $enemies 'Laura - What the Lab Left won' 'Laura - What the Lab Left lost'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="ll_leave">
+	<<set _llLeaveLabel = 'Leave it'>>
+	<<linkreplace _llLeaveLabel>>
+		<<run $('#ll_buy, #ll_depot').hide()>>
+		<<set $characters.laura.quests.lab_left = 'ignored'>>
+		You shook your head and walked on. When you looked back from the end of the platform he was already polishing the microscope for the next customer.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Underground city'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+
+
+:: Laura - What the Lab Left won [bg-underground]
+<h1 class="ptitle">THE DEPOT</h1>
+<br />
+<<set $characters.laura.quests.lab_left = 'fought'>>
+<<set $characters.laura.quests.gear_back = true>>
+<<set $characters.laura.quests.binder = true>>
+<<set $player.money += 60>>
+<<addmins 30>>
+When it was over, the carriage was quiet except for somebody groaning under a seat. You went through the crates one by one.
+<br /><br />
+<center>
+	<<image 'places/underground/depot_crates.jpg'>>
+</center>
+<br />
+Most of it was Laura's. Her glassware, wrapped in newspaper and mostly broken. Her microscope. Her centrifuge. And at the bottom of the last crate, wrapped in a plastic bag, a thick black binder with <em>VIAL SERIES 1 - 40</em> written on the spine. You had heard her cry about that binder once, the night she turned up at your door. She had thought it was gone for good.
+<br /><br />
+In a tin under the bunk there were 60 caps the raiders would not be needing.
+<br /><br />
+<strong>(Laura's gear and her research binder. +60 caps. Bring it home to her lab.)</strong>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Underground city'>>
+<</link>>
+
+
+:: Laura - What the Lab Left lost [bg-underground]
+<h1 class="ptitle">THE DEPOT</h1>
+<br />
+<<set $characters.laura.quests.lab_left = 'lost'>>
+<<addmins 60>>
+You came to on the tracks outside the depot with your pockets turned out and blood in your mouth. Somebody had dragged you out and dumped you there, and somebody had kicked you a few more times for good measure. From inside the carriage you could still hear them laughing.
+<br /><br />
+Laura's things were still in there. There was nothing you could do about it now.
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Underground city'>>
+<</link>>
+
+
+:: Laura - What the Lab Left home [Place bg-lab]
+<h1 class="ptitle">LAB</h1>
+<br />
+<<set $characters.laura.quests.gear_returned_day = $game.day>>
+<<set _llBinder = $characters.laura.quests.binder ?? false>>
+<<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + (_llBinder ? 15 : 10), 100)>>
+<<set $characters.laura.quests.productionDaysPerPotion = Math.max(3, ($characters.laura.quests.productionDaysPerPotion ?? 5) - 1)>>
+<<addmins 30>>
+You set the microscope down on Laura's bench without a word. She looked at it, then at you, then back at it, and then she put her hand flat on the brass base, over the letters she had scratched into it a lifetime ago.
+<br /><br />
+<center>
+	<<image 'people/laura/gear_back.jpg'>>
+</center>
+<br />
+<<laura>>
+	Where did you... This was my father's. I scratched my name on it when I was nine so the other students would stop borrowing it.
+<</laura>>
+<br />
+<<if _llBinder>>
+	Then you put the black binder down next to it, and she made a sound you had never heard her make. She opened it, and turned the pages with shaking fingers, and kept turning them.
+	<br /><br />
+	<<laura>>
+		Forty series. Two years of work. I rewrote half of it from memory and I knew I was getting it wrong. It's all here. All of it.
+	<</laura>>
+	<br />
+	When you told her where you had found it, and what had happened to the men who took it, she was quiet for a long moment.
+	<br /><br />
+	<<laura>>
+		Good. I know I shouldn't say that. Good.
+	<</laura>>
+<<else>>
+	She untied the notebooks and laid them out one by one, her hands moving faster and faster, as if she was afraid they might disappear again.
+	<br /><br />
+	<<laura>>
+		With this I can run the samples properly again. Not guess. Actually measure.
+	<</laura>>
+<</if>>
+<br />
+She put her arms around you then, quickly and hard, and let go before you could say anything, already turning back to the bench.
+<br /><br />
+<strong>(Laura relationship +<<= _llBinder ? 15 : 10>>. With her own equipment back, her samples are ready a day sooner.)</strong>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Lab'>>
+<</link>>

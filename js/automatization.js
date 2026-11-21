@@ -187,3 +187,8 @@ setup.automatization.formatNpcList = function (npcs) {
     .sort()
     .join(', ');
 };
+
+/* Item display name for the morning report, e.g. "dumbestbell" -> "barbell", "gas_mask" -> "gas mask" */
+setup.automatization.itemName = function (id) {
+  return (Item.get(id)?.name ?? String(id).replace(/_/g, ' ')).toLowerCase();
+};

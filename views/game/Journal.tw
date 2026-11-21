@@ -186,6 +186,8 @@
 				Increase Eve corruption to 30 and visit talk to Rodger after 120 days
 			<<elseif !$characters.rodger.quests.eve_pregnant && !$characters.rodger.quests.cheat_declined_day>>
 				Wait two weeks and then visit Settlement.
+			<<elseif $characters.rodger.quests.eve_pregnant && !$characters.eve?.quests?.confession_day && !$characters.eve?.quests?.new_home>>
+				Eve can't carry the secret forever. Visit the settlement in a few weeks.
 			<<else>>
 				That's all for now
 			<</if>>
@@ -420,6 +422,10 @@
 			<<else>>
 				Wait some days
 			<</if>>
+		<<elseif $characters.laura.quests.living && !$characters.laura.quests.lab_left_day>>
+			Whoever wrecked her lab took her things somewhere. Look around the underground city during the day
+		<<elseif $characters.laura.quests.gear_back && !$characters.laura.quests.gear_returned_day>>
+			Bring her things back to her in the lab
 		<<else>>
 			That's all for now
 		<</if>>
@@ -486,6 +492,20 @@
 		Progress with Dom story.
 	<</if>>
 
+	<<if setup.himari.isMet() || setup.himari.canStart()>>
+		<h2><<= setup.himari.nameKnown() ? 'Himari' : "Negan's special order">></h2>
+		<<= setup.himari.journalHint()>>
+		<<set _hmWords = setup.himari.phrasebook()>>
+		<<if _hmWords.length>>
+			<div class="hm-phrasebook">
+				<strong>Her words</strong>
+				<<for _hmW range _hmWords>>
+					<div><span class="hm-jp"><<= _hmW.jp>></span> <span class="hm-romaji">(<<= _hmW.romaji>>)</span> - <<= _hmW.en>></div>
+				<</for>>
+			</div>
+		<</if>>
+	<</if>>
+
 	<h2>Boris</h2>
 	<<if isMetChar('boris')>>
 		<<if !$characters.boris.quests.shop>>
@@ -524,6 +544,8 @@
 			Go to guest house
 		<<elseif $characters.elsa.quests.new_home && !$characters.elsa.quests.introduction_day>>
 			Wait few days and then visit her
+		<<elseif $characters.elsa.quests.introduction_day && !$characters.elsa.quests.stranger_name_day && $characters.elsa.stranger && $characters.elsa.quests.well_day>>
+			The man from the woods is still out there. Visit Elsa in her room in a few days
 		<<else>>
 			That's all for now
 		<</if>>

@@ -1,0 +1,81 @@
+:: Himari - Serving Drinks [bg-sanctuary]
+<h1 class="ptitle">NEGAN'S OFFICE</h1>
+<<run setup.himari.mark('drinks')>>
+<<addmins 60>>
+<br />
+Negan had a guest. He was an old man with a long white beard, in a worn olive army coat with a fuel convoy's patch sewn on the shoulder, and he was sitting at Negan's desk, which nobody did. Negan was letting him. They were talking about tankers and road tolls and a bridge somewhere to the east that had come down in the spring.
+<br /><br />
+Negan waved you to the wall by the door without stopping his sentence. You were the handler. You stood where handlers stand.
+<br /><br />
+Himari was pouring the drinks. They had put her in a short red dress and given her a cut-glass decanter of whiskey, and she went from glass to glass with her eyes on the decanter, and her hand was shaking so hard that the neck of the decanter chattered against the rim of the convoy boss's glass.
+<br /><br />
+<center>
+	<<image 'people/himari/drinks.jpg'>>
+</center>
+<br />
+She spilled. Not much. A splash on the desk. The convoy boss laughed and Negan did not.
+<br /><br />
+<<negan>>
+	She's still learning, Bodine. You know how it is with the good ones. They're never the handy ones.
+<</negan>>
+<br />
+<<say 'Bodine' setup.ImagePath+'/people/anonguy.png'>>
+	Don't need her handy. Where'd you find her?
+<</say>>
+<br />
+Negan smiled. He reached out, took her by the wrist and turned her around to face his guest, and pulled the red dress down off her shoulders in one easy motion, as low as it would go without falling, and left it there. She clutched the decanter to her chest and held on to it like it was the only solid thing in the room.
+<br /><br />
+<center>
+	<<image 'people/himari/drinks_reveal.jpg'>>
+</center>
+<br />
+<<negan>>
+	Look all you want. It's free to look tonight. You touch her, and you go home with one less hand than you came with. Ask Rusk.
+<</negan>>
+<br />
+Bodine looked. He took his boots off the desk to look better. After a while, without seeming to decide to, he reached out.
+<br /><br />
+Negan's bat came up off the floor and stopped an inch from his wrist. Nobody had seen Negan pick it up.
+<br /><br />
+Bodine sat back very slowly and put both his hands flat on his knees.
+<br /><br />
+<<say 'Bodine' setup.ImagePath+'/people/anonguy.png'>>
+	All right. All right. Name a price, then. Two tankers. Three.
+<</say>>
+<br />
+<<negan>>
+	She's spoken for.
+<</negan>>
+<br />
+He said it lightly, and pulled her dress back up over her shoulders, and patted her cheek, and sent her back to the decanter. She went on pouring. She did not spill again.
+<br /><br />
+<div id="hm13_step">
+	<<set _hmStepLabel = 'Take the decanter from her'>>
+	<<linkreplace _hmStepLabel>>
+		<<run $('#hm13_stay').hide()>>
+		<<run setup.himari.addTrust(4)>>
+		<<run setup.himari.addAttention(6)>>
+		You crossed the room and took the decanter out of her hands, and poured the next round yourself. Her fingers were cold. Negan watched you do it with an amused look, and then he went back to talking about the bridge.
+		<br /><br />
+		<<negan>>
+			Look at that. My handler's a waiter now. Full service on this ship.
+		<</negan>>
+		<br />
+		Himari stood by the wall where you had stood, with her hands folded the way somebody had shown her, and watched you pour.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm13_stay">
+	<<set _hmStayLabel = 'Stay by the door'>>
+	<<linkreplace _hmStayLabel>>
+		<<run $('#hm13_step').hide()>>
+		You stayed by the door, where handlers stand, and watched her pour until the decanter was empty and the men had finished talking about bridges.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

@@ -2,7 +2,9 @@
 <<energy -30>>
 <<set _nightRoll = random(1, 100)>>
 <<set _nightGo = null>>
-<<if setup.night.trip()?.mode === 'light'>>
+<<if setup.frozenCamp.roll()>>
+	<<set _nightGo = 'Night event - frozen camp'>>
+<<elseif setup.night.trip()?.mode === 'light'>>
 	/* With a light you find more, but you can be seen */
 	<<if _nightRoll <= 22>>
 		<<set _nightGo = 'Night event - dark building'>>

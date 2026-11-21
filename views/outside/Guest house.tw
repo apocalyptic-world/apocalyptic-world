@@ -200,7 +200,9 @@
 				<<run _ghAway['At the hospital'].push(setup.displayName(_guest))>>
 				<<continue>>
 			<</if>>
-			<<if setup.percentageChance(_sleepingChance)>>
+			/* A wife who lives in your room (setup.spouseRoom) sleeps there, never in the guest house */
+			<<set _ghInMcRoom = setup.spouseRoom.livesHere(_guest)>>
+			<<if !_ghInMcRoom && setup.percentageChance(_sleepingChance)>>
 				<<set _guest.sleeping = true>>
 			<</if>>
 			<<if (timeBetween('20:00', '23:59') && setup.npcInventoryHas(_guest, 'alcohol') && !(_guest.pregnancy >= 7)  && !_guest.sleeping && _guest.drunk <= (_guest.happy >= 50 ? 55 : (_guest.happy >= 0 ? 60 : 70)) && setup.percentageChance(_guest.happy >= 50 ? 5 : (_guest.happy >= 0 ? 15 : 45)))>>
@@ -209,7 +211,7 @@
 				<<set _guest.happy =  Math.min(100, _guest.happy + (_guest.drunk <= 50 ? 1 : (_guest.drunk <= 75 ? 2 : (_guest.drunk < 95 ? 0 : -5))))>>
 				<<set $guests[_realIdx].happy =  _guest.happy>>
 
-				<<if setup.percentageChance(_guest.drunk - 10)>>
+				<<if !_ghInMcRoom && setup.percentageChance(_guest.drunk - 10)>>
 					<<set _guest.sleeping = true>>
 				<</if>>
 				<<if setup.percentageChance(50)>>
@@ -298,7 +300,7 @@
 									<<set $guestId = _realIdx >>
 									<<unset $slaveId, $charId>>
 									<<set $tmpGirlViewBack = 'NPC view - guest'>>
-									<<if _guest.sleeping && !_guest.gender>>
+									<<if _guest.sleeping && !_guest.gender && !setup.spouseRoom.livesHere(_guest)>>
 										<<goto 'Guesthouse - guest sleeping'>>
 									<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
 										<<goto 'Guesthouse - guest masturbating'>>
@@ -352,7 +354,7 @@
 	<<set _npcsWithDildos = setup.filterNPCs($guests, {horny_gte: 50, 'virgin': false, race_in: ['white', 'latina'], 'inventory_has': 'sextoy'})>>
 	<<set _npcsWithDildos[0] = (_npcsWithDildos[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
 	/* The sleeping-beauty NPC can't consent, so relatives are never picked for it, whatever the noIncest policy. */
-	<<set _sleepingBeautyIds = _guests18yoWomen.filter(i => !setup.Tangle.isRelated($guests[i]))>>
+	<<set _sleepingBeautyIds = _guests18yoWomen.filter(i => !setup.Tangle.isRelated($guests[i]) && !setup.spouseRoom.livesHere($guests[i]))>>
 	<<set _ghCaughtCandidates = []>>
 	<<for _gci to 0; _gci lt $guests.length; _gci++>>
 		<<set _gcGuest = $guests[_gci]>>

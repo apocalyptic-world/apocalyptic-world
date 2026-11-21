@@ -1,0 +1,120 @@
+:: Event - The long wait [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _lwE = $game.longWaitEvent>>
+<<set _lwCg = $game.capturedGuest>>
+<<if !_lwE || !_lwCg>>
+	<<unset $game.longWaitEvent>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _lwNpc = _lwCg.npc>>
+<<set _lwDays = Math.max(1, $game.day - (_lwCg.day ?? $game.day))>>
+<<set _lwPlace = _lwCg.settlementName || 'their camp'>>
+<<addmins 30>>
+<<if _lwE.variant === 'escaped'>>
+	The dogs started up before dawn, not the angry barking they used for strangers but a confused whining. Somebody went to look and came back running.
+	<br /><br />
+	<center>
+		<<image 'places/cabin/long_wait_escaped.jpg'>>
+	</center>
+	<br />
+	<<=_lwNpc.name>> was standing at the gate, holding on to it so she would not fall down, her head hanging. <<=_lwDays>> days at <<=_lwPlace>> had taken everything out of her. She was barefoot, her feet were cut to ribbons, and the ends of a cut rope were still knotted around both wrists.
+	<br /><br />
+	<<sayNpc _lwNpc>>
+		They got drunk. All of them, the guards too. Somebody left the knot loose and I just... I didn't stop running. I didn't stop once. I didn't know if I'd find the way.
+	<</sayNpc>>
+	<br />
+	<<set _lwHome = setup.longWait.bringHome('escaped')>>
+	<<set _lwIdx = $guests.indexOf(_lwHome)>>
+	<<setNpcStats 'guest' _lwIdx 'happy' -20>>
+	She was home. She did not seem to believe it yet.
+	<br /><br />
+	<div id="lw_warm">
+		<<set _lwWarmLabel = 'Carry her inside and get her warm'>>
+		<<linkreplace _lwWarmLabel>>
+			<<run $('#lw_ask').hide()>>
+			<<setNpcStats 'guest' _lwIdx 'relationship' 8>>
+			<<setNpcStats 'guest' _lwIdx 'happy' 15>>
+			You did not ask her anything. You carried her in, wrapped her in every blanket in the house and sat by the stove with her until she stopped shaking. She fell asleep in the middle of a sentence and slept until the evening.
+			<br /><br />
+			<strong>(<<=_lwNpc.name>> is back with you. Relationship +8.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="lw_ask">
+		<<set _lwAskLabel = 'Ask her what they wanted with her'>>
+		<<linkreplace _lwAskLabel>>
+			<<run $('#lw_warm').hide()>>
+			<<setNpcStats 'guest' _lwIdx 'relationship' 3>>
+			<<setNpcStats 'guest' _lwIdx 'happy' 5>>
+			<<sayNpc _lwNpc>>
+				Money. They kept talking about the money and how you weren't going to pay it. And then they started talking about the ship. That the ship always buys. That's when I knew I had to go, whatever it cost.
+			<</sayNpc>>
+			<br />
+			She said it flatly, looking at the floor. Then she asked if she could sleep, and you let her.
+			<br /><br />
+			<strong>(<<=_lwNpc.name>> is back with you. Relationship +3.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<<else>>
+	<<newguy>>
+	<<set _lwRider = $tmpGuy>>
+	<<unset $tmpGuy>>
+	<<set _lwCost = setup.longWait.NEW_COST>>
+	A rider was waiting at the gate at first light with a white rag tied to a stick, well out of crossbow range. He was from <<=_lwPlace>>. When you came out he threw something over the fence and it landed in the mud at your feet: a strip of cloth you knew. <<=_lwNpc.name>> had been wearing it the day they took her.
+	<br /><br />
+	<center>
+		<<image 'places/cabin/long_wait_rider.jpg'>>
+	</center>
+	<br />
+	<<sayNpc _lwRider>>
+		It's been <<=_lwDays>> days and you haven't paid, so here's how it is now. Five hundred was too much for you? Fine. <<=_lwCost>> caps. You've got three days. After that she goes to the ship. Negan's people always buy, and they don't haggle.
+	<</sayNpc>>
+	<br />
+	He looked at you, waiting to see what you would do.
+	<br /><br />
+	<<if $player.money >= _lwCost>>
+		<div id="lw_pay">
+			<<set _lwPayLabel = 'Pay ' + _lwCost + ' caps now'>>
+			<<linkreplace _lwPayLabel>>
+				<<run $('#lw_wait').hide()>>
+				<<set $player.money -= _lwCost>>
+				<<set _lwHome = setup.longWait.bringHome('ransom')>>
+				<<setNpcStats 'guest' $guests.indexOf(_lwHome) 'happy' -10>>
+				You counted the caps into his hand. He whistled, and two men came down the road from the trees leading a cart with <<=_lwNpc.name>> sitting in the back, her hands tied in front of her. They had had her up there the whole time. They cut her loose, she climbed down, and she walked to you without looking back at them once.
+				<br /><br />
+				<strong>(<<=_lwNpc.name>> is back with you. -<<=_lwCost>> caps.)</strong>
+				<br /><br />
+				<<link 'Leave'>>
+					<<goto 'Wood cabin'>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</if>>
+	<div id="lw_wait">
+		<<set _lwWaitLabel = $player.money >= _lwCost ? 'Tell him you will think about it' : 'Tell him you do not have it yet'>>
+		<<linkreplace _lwWaitLabel>>
+			<<run $('#lw_pay').hide()>>
+			<<run setup.longWait.setTerms()>>
+			<<sayNpc _lwRider>>
+				Three days. Bring it to <<=_lwPlace>>, or don't. Your choice.
+			<</sayNpc>>
+			<br />
+			He turned his horse and rode off without hurrying.
+			<br /><br />
+			<strong>(You have 3 days to pay <<=_lwCost>> caps or get her out. The ransom and a rescue are on the World map at <<=_lwPlace>>.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Wood cabin'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<</if>>

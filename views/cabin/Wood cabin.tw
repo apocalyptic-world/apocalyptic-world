@@ -95,6 +95,15 @@
 	<<elseif $game.loyaltyTrial && $game.cabinName>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - Loyalty trial'>>
+	<<elseif $game.brokenGuest && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Broken guest'>>
+	<<elseif $game.fireNight && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Fire in the night'>>
+	<<elseif $game.longWaitEvent && $game.capturedGuest && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - The long wait'>>
 	<<elseif $game.firstWords && $game.cabinName>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - First words'>>
@@ -198,7 +207,7 @@
 	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
-	<<elseif ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance($game.outbreak ? 6 : 3) && setup.baseIntruderChance()>>
+	<<elseif $game.cabinName && ($backpack.count('antibiotics') || $storage.count('antibiotics')) && setup.percentageChance($game.outbreak ? 6 : 3) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<if setup.percentageChance(50)>>
 			<<goto 'Event - Medicine mob'>>

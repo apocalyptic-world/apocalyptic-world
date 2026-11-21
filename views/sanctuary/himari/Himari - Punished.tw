@@ -1,0 +1,33 @@
+:: Himari - Punished [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<set $characters.himari.quests.punished_day = $game.day>>
+<<set $characters.himari.attention = 20>>
+<<set _hmFine = Math.min($player.money, setup.himari.PUNISH_FINE)>>
+<<set $player.money -= _hmFine>>
+<<addmins 30>>
+<br />
+You knew before you were through the gate. The yard was too quiet, and the guards at the gate were grinning.
+<br /><br />
+They had her on the open deck again, on her knees by the mooring post, <<if setup.himari.done('collar')>>chained by the collar<<else>>roped to it by the waist<</if>>, in the rain again. There was a bowl of food on the deck a step out of her reach, filling up with rainwater. Someone had made sure she could see it.
+<br /><br />
+<center>
+	<<image `setup.himari.rainImage()`>>
+</center>
+<br />
+Negan was waiting for you at the bottom of the gangway with his hand out, palm up.
+<br /><br />
+<<negan>>
+	Told you, champ. Every time. Every single time. She pays for the kindness, and you pay for the food she doesn't get.
+<</negan>>
+<br />
+You paid. He counted it in front of you, slowly, and put it in his jacket.
+<br /><br />
+<<negan>>
+	She stays there till morning. You can go see her tomorrow. Bring her a nice word. See what it costs her.
+<</negan>>
+<br />
+<strong>(-<<= _hmFine>> caps. Negan's attention on you reset.)</strong>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Sanctuary'>>
+<</link>>

@@ -5,17 +5,28 @@
   	<<grid sanctuary shop 'Sanctuary shop' 'Shop' 0 _isDisabled>>
 	<<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 1)>>
   	<<grid sanctuary negan_office 'Negan office' "Negan's office" 0 _isDisabled>>
-</div> 
+	<<if setup.himari.done('errand')>>
+		<<set _isDisabled = (!timeBetween('08:00', '21:59') ? 30 : 1)>>
+		<<if setup.himari.where() === 'cabin'>>
+			<<grid sanctuary himari_cabin 'Himari - Visit' 'Below deck' 0 _isDisabled>>
+		<<else>>
+			<<grid sanctuary himari_container 'Himari - Visit' 'The container' 0 _isDisabled>>
+		<</if>>
+	<</if>>
+</div>
 <br /><br />
 
 <<link 'Leave'>>
     <<goto 'Outside'>>
 <</link>>
 
+<<set _hmNext = setup.himari.next('sanctuary')>>
 <<if $characters?.negan?.quests?.informant_day && !$characters?.negan?.quests?.barter_day && $game.day >= ($characters.negan.quests.informant_day + 5) && (setup.getAvailablePersons18yo($guests)[0] ?? []).length>>
 	<<goto 'Negan - The Barter'>>
 <<elseif $characters?.negan?.quests?.barter_day && !$characters?.negan?.quests?.remembers_day && $game.day >= ($characters.negan.quests.barter_day + 4) && setup.percentageChance(5)>>
 	<<goto 'Negan - She Remembers You'>>
+<<elseif _hmNext>>
+	<<goto _hmNext>>
 <<elseif $characters?.negan?.quests?.drunk_companion_day && !$characters?.negan?.quests?.informant_day && $game.day >= ($characters.negan.quests.drunk_companion_day + 3)>>
 	<<goto 'Negan - The Informant'>>
 <<elseif $characters.dom.quests.quest5 && !$characters?.negan?.quests.quest1>>

@@ -5,6 +5,8 @@
 <<set _breakdownRisk = (100 - $player.car.health) / 4>>
 <<if setup.percentageChance(_breakdownRisk)>>
 	<<set _nightGo = 'Car breakdown event - Engine Failure'>>
+<<elseif setup.frozenCamp.roll()>>
+	<<set _nightGo = 'Night event - frozen camp'>>
 <<elseif setup.night.trip()?.mode === 'light'>>
 	/* Headlights: you cover ground, and anyone on the road sees you coming */
 	<<if _nightRoll <= 30>>

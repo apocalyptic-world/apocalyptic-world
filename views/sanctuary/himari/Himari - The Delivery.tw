@@ -1,0 +1,95 @@
+:: Himari - The Delivery [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.ensure()>>
+<<run setup.himari.mark('delivery')>>
+<<addmins 45>>
+<br />
+You heard the truck before you saw it: a diesel cough at the outer gate, then shouting, then the long scrape of the gate chains. An old truck rolled into the yard towing a flatbed trailer, with a rusted shipping container chained down on it. Two drivers got out and walked away across the yard, faces wrapped in scarves against the dust. Neither of them looked back at the container.
+<br /><br />
+<center>
+	<<image 'people/himari/delivery.jpg'>>
+</center>
+<br />
+Negan came down the gangway himself. He did not do that for fuel or for food. He walked once around the truck with his bat over his shoulder, slow, the way a man walks around a car he has already paid for.
+<br /><br />
+<<negan>>
+	Well, would you look at that. Right on time. I love a man who's right on time.
+<</negan>>
+<br />
+He tossed a heavy bag to the older driver. The man weighed it in his hand and did not count it. Then Negan nodded at the container doors.
+<br /><br />
+<<negan>>
+	Open it. Gently. Anybody scratches the paint, I scratch him.
+<</negan>>
+<br />
+The bolt cutters went through the padlock on the third try. The doors groaned open and the smell came out first: sweat, rust, old water. Then the light went in, and you saw her.
+<br /><br />
+<center>
+	<<image 'people/himari/container_cry.jpg'>>
+</center>
+<br />
+She was in the far corner with her knees pulled up and her arms wrapped around them, a young woman with one long dark braid over her shoulder and a face gone white from days in the dark. She was crying without making a sound. She did not move when the light hit her. She only pressed herself harder into the corner, as if the steel might give.
+<br /><br />
+Negan climbed up into the container. He crouched in front of her and took her chin in his hand and turned her face toward the door, toward the light, toward you. Then he pushed her upper lip back with his thumb and looked at her teeth, the way a man looks at a horse he is buying.
+<br /><br />
+<<negan>>
+	Good teeth. Good skin. Not a mark on her. They said she'd come clean, and by God, she came clean.
+<</negan>>
+<br />
+Her lips moved. The words came out so quietly that you almost missed them.
+<br /><br />
+<<himari>>
+	<<jp 'お願い…出して…' 'Onegai… dashite…'>>
+<</himari>>
+<br />
+Negan laughed, loud enough to bounce off the steel.
+<br /><br />
+<<negan>>
+	Listen to that. Doesn't speak a word of English. That's the best kind there is, my friend. Can't talk back.
+<</negan>>
+<br />
+He let go of her chin, wiped his thumb on his jacket and jumped down. His eyes found you at the edge of the yard.
+<br /><br />
+<<negan>>
+	Nobody opens this door but me. You hear that? Nobody.
+<</negan>>
+<br />
+The guards nodded. Two of them took up places by the doors and turned their backs to the container, like men who had already been told what happened to people who looked.
+<br /><br />
+<div id="hm1_ask">
+	<<set _hmAskLabel = "Ask Negan who she is">>
+	<<linkreplace _hmAskLabel>>
+		<<run $('#hm1_quiet').hide()>>
+		<<you>>
+			Who is she?
+		<</you>>
+		<br />
+		<<negan>>
+			She's a special order, that's who she is. One of a kind. For a special client who's paying more for her than you'll see in your whole sorry life. And you don't need to know any more than that.
+		<</negan>>
+		<br />
+		He winked at you and walked back up the gangway, whistling.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm1_quiet">
+	<<set _hmQuietLabel = "Say nothing">>
+	<<linkreplace _hmQuietLabel>>
+		<<run $('#hm1_ask').hide()>>
+		<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 2, 100)>>
+		You kept your face blank. Negan watched you for a moment, then nodded, pleased.
+		<br /><br />
+		<<negan>>
+			Smart. You didn't see a thing. Well, you saw it. Now you forget it.
+		<</negan>>
+		<br />
+		Behind him, as the doors swung shut, the young woman in the corner lifted her head for the first time. Her eyes found yours for one second before the dark took her again.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

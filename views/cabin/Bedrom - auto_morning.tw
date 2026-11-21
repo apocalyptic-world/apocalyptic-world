@@ -112,7 +112,7 @@
                     <<if _itemcount > _maxAllowed>>
                         <<set _stripCount = _itemcount - _maxAllowed>>
                         <<run setup.cabinInventory.from_npc(_npc, _item, _stripCount, _managedWeapons.includes(_item))>>
-                        <<set _outDupItems.push(_item + ': ' + _stripCount)>>
+                        <<set _outDupItems.push(setup.automatization.itemName(_item) + ': ' + _stripCount)>>
                         <<set _itemcount = _maxAllowed>>
                     <</if>>
                 <</if>>
@@ -128,7 +128,7 @@
                 <<if !setup.canGetPregnant(_npc)>>
                     <<if _itemcount > 0>>
                         <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
-                        <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                        <<set _outMinusItems.push(setup.automatization.itemName(_item) + ': ' + _itemcount)>>
                     <</if>>
                 <<elseif (_job === 'streets' || _job === 'nightclub') && _itemcount == 0>>
                     <<set _want[_item] ??= []>>
@@ -146,7 +146,7 @@
                     <<set _want[_item].push(_npc)>>
                 <<elseif (_npc.strength < _bellstrength[_item].min || _npc.strength >= _bellstrength[_item].max) && _itemcount > 0>>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount, _managedWeapons.includes(_item))>>
-                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                    <<set _outMinusItems.push(setup.automatization.itemName(_item) + ': ' + _itemcount)>>
                 <</if>>
 
             /* toolbox for job */
@@ -160,7 +160,7 @@
                     <</for>>
                 <<elseif !_effectiveJobTools.includes(_item) && _itemcount > 0>>
                     <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount, _managedWeapons.includes(_item))>>
-                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                    <<set _outMinusItems.push(setup.automatization.itemName(_item) + ': ' + _itemcount)>>
                 <</if>>
             <</if>>
         <</for>>
@@ -207,10 +207,10 @@
             <<set _outItem.push(_npc)>>
         <</for>>
         <<if _outItem.length > 0>>
-            <<set _outputAutoList.push('Added ' + _item + ' to: ' + setup.automatization.formatNpcList(_outItem) + ';')>>
+            <<set _outputAutoList.push('Added ' + setup.automatization.itemName(_item) + ' to: ' + setup.automatization.formatNpcList(_outItem) + ';')>>
         <</if>>
         <<if _want[_item].length > 0>>
-            <<set _outputAutoList.push('Add failed - no ' + _item + ' in storage for: ' + setup.automatization.formatNpcList(_want[_item]) + ';')>>
+            <<set _outputAutoList.push('Add failed - no ' + setup.automatization.itemName(_item) + ' in storage for: ' + setup.automatization.formatNpcList(_want[_item]) + ';')>>
         <</if>>
     <</for>>
 
@@ -249,15 +249,15 @@
                 <<if _want.kettlebell.length > 0>>
                     <<set _npc = _want.kettlebell.pop()>>
                     <<run setup.cabinInventory.to_npc(_npc, _item)>>
-                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of kettlebell')>>
+                    <<set _outItem.push(_npc.name + ' got ' + setup.automatization.itemName(_item) + ' instead of kettlebell')>>
                 <<elseif _want.dumbbell.length > 0>>
                     <<set _npc = _want.dumbbell.pop()>>
                     <<run setup.cabinInventory.to_npc(_npc, _item)>>
-                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of dumbbell')>>
+                    <<set _outItem.push(_npc.name + ' got ' + setup.automatization.itemName(_item) + ' instead of dumbbell')>>
                 <</if>>
             <</for>>
             <<if _outItem.length > 0>>
-                <<set _outputAutoList.push(_item + ': ' + _outItem.sort().join(', ') + ';')>>
+                <<set _outputAutoList.push(setup.automatization.itemName(_item) + ': ' + _outItem.sort().join(', ') + ';')>>
             <</if>>
             <<set _outItem = []>>
         <</for>>
@@ -333,11 +333,11 @@
         <<for _item range setup.automatization.job_tools.mc.sort()>>
             <<if !$backpack.has(_item) && $storage.has(_item)>>
                 <<transfer $storage $backpack _item 1>>
-                <<set _outItem.push('Got +' + _item)>>
+                <<set _outItem.push('Got +' + setup.automatization.itemName(_item))>>
             <<elseif $backpack.has(_item)>>
                 /* keep */
             <<else>>
-                <<set _outItem.push('No -' + _item)>>
+                <<set _outItem.push('No -' + setup.automatization.itemName(_item))>>
             <</if>>
         <</for>>
     <</if>>

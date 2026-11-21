@@ -30,8 +30,30 @@
 			multi: true,
 			goto: "Workbench"
 		},
+		repair_greenhouse: {
+			show: setup.fire.isBurned('greenhouse'),
+			title: 'Repair the greenhouse',
+			description: 'The fire left the frame standing. New panes and beams, and it will grow food again.',
+			required: setup.fire.REPAIR.greenhouse,
+			energy: 30,
+			after: function() {
+				setup.fire.repair();
+			},
+			goto: 'Greenhouse'
+		},
+		repair_bathhouse: {
+			show: setup.fire.isBurned('bathhouse'),
+			title: 'Repair the bathhouse',
+			description: 'Half the walls and the roof burned. Rebuild them and your people can wash again.',
+			required: setup.fire.REPAIR.bathhouse,
+			energy: 50,
+			after: function() {
+				setup.fire.repair();
+			},
+			goto: 'Workbench'
+		},
 		greenhouse: {
-			show: !($game.location.greenhouse ?? false),
+			show: !($game.location.greenhouse ?? false) && !setup.fire.isBurned('greenhouse'),
 			title: 'Greenhouse',
 			description: 'Increase food productivity by assigning slaves here.',
 			required: {
@@ -323,7 +345,7 @@
 			}
 		},
 		bathhouse: {
-			show: !($game.location.bathhouse ?? false) && ($player.quests.bathhouse_talk || $backpack.has('blueprint_bathhouse')),
+			show: !($game.location.bathhouse ?? false) && !setup.fire.isBurned('bathhouse') && ($player.quests.bathhouse_talk || $backpack.has('blueprint_bathhouse')),
 			title: 'Bathhouse',
 			description: "Your guests will have place where to wash them self and mistress will be able to wash slaves too.",
 			required: {

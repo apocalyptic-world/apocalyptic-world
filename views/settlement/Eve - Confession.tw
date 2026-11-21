@@ -1,0 +1,112 @@
+:: Eve - Confession [bg-settlement]
+<h1 class="ptitle">SETTLEMENT</h1>
+<br />
+<<set $characters.eve.quests.confession_day = $game.day>>
+<<addmins 30>>
+Eve was waiting for you at the edge of the square, away from the others, with her hands knotted together in front of her habit. She did not say hello.
+<br /><br />
+<center>
+	<<image 'people/eve/looking.jpg'>>
+</center>
+<br />
+<<eve>>
+	He's going to consecrate the child. On Sunday, in front of everyone. He's going to stand at the altar with his hand on my belly and swear before God that it is his own blood.
+<</eve>>
+<br />
+Her voice did not shake, but her hands did.
+<br /><br />
+<<eve>>
+	I can carry a lie. I've been carrying it for months. But I won't let him swear one before God and not know it. That isn't protecting him. That's damning him. I'm going to tell him tonight, in the confessional, the way any other sinner would.
+<</eve>>
+<br />
+She looked up at you then.
+<br /><br />
+<<eve>>
+	I'm not asking your permission. I'm asking if you'll be there.
+<</eve>>
+<br />
+<div id="ev_with">
+	<<set _evWithLabel = 'Stand beside her when she tells him'>>
+	<<linkreplace _evWithLabel>>
+		<<run $('#ev_stop, #ev_alone').hide()>>
+		<<addmins 120>>
+		<<set $characters.eve.quests.confession = 'together'>>
+		<<set $characters.rodger.quests.knows = true>>
+		<<set $characters.eve.relationship = Math.min(($characters.eve.relationship ?? 0) + 15, 100)>>
+		<<set $characters.rodger.relationship = Math.max(($characters.rodger.relationship ?? 0) - 20, -100)>>
+		The church was empty after evening prayer, lit by a handful of candles. Eve did not go into the confessional. She knelt in front of Rodger in the aisle, in plain sight, and you stood behind her, and she told him all of it.
+		<br /><br />
+		<center>
+			<<image 'people/eve/confession.jpg'>>
+		</center>
+		<br />
+		Rodger did not interrupt her once. When she had finished, he stood there for so long that a candle guttered out behind him. Then he laughed, short and strange, and sat down heavily on the front pew.
+		<br /><br />
+		<<rodger>>
+			You think I didn't know? I'm a fool, but I'm not blind. And you, my friend, you saw me that night with the sisters. I saw you see me. We are all sinners in this house.
+		<</rodger>>
+		<br />
+		He rubbed his face with both hands.
+		<br /><br />
+		<<rodger>>
+			God forgives those who confess. So I will try. The child stays in this house and will be raised as mine. Before the people, it is mine. Between the three of us, it is the truth. And you will come to my church as a friend. Never again as her lover. Not under this roof.
+		<</rodger>>
+		<br />
+		Eve was crying without a sound. When you helped her up, she held on to your hand a moment longer than she should have, and Rodger watched her do it and said nothing.
+		<br /><br />
+		<strong>(Rodger knows. Eve relationship +15, Rodger relationship -20.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Settlement'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="ev_stop">
+	<<set _evStopLabel = 'Talk her out of it'>>
+	<<linkreplace _evStopLabel>>
+		<<run $('#ev_with, #ev_alone').hide()>>
+		<<set $characters.eve.quests.confession = 'silenced'>>
+		<<set $characters.eve.relationship = Math.max(($characters.eve.relationship ?? 0) - 10, -100)>>
+		<<set $characters.eve.corruption = Math.min(($characters.eve.corruption ?? 0) + 10, 100)>>
+		<<you>>
+			Think about what happens after. He throws you out, or worse, and the child grows up with nothing. This place stands because he believes. Let him believe.
+		<</you>>
+		<br />
+		She argued. You kept talking. In the end she stopped arguing, which was not the same as agreeing.
+		<br /><br />
+		<<eve>>
+			Fine. I'll stand next to him on Sunday and say amen. And God can decide which of us is worse.
+		<</eve>>
+		<br />
+		On Sunday Rodger swore his oath at the altar with his hand on her belly, loud enough for the back rows to hear. Eve stood beside him with a white face and said amen with everyone else.
+		<br /><br />
+		<strong>(The secret holds. Eve relationship -10, corruption +10.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Settlement'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="ev_alone">
+	<<set _evAloneLabel = 'Let her go to him alone'>>
+	<<linkreplace _evAloneLabel>>
+		<<run $('#ev_with, #ev_stop').hide()>>
+		<<set $characters.eve.quests.confession = 'alone'>>
+		<<set $characters.rodger.quests.knows = true>>
+		<<set $characters.eve.relationship = Math.max(($characters.eve.relationship ?? 0) - 5, -100)>>
+		<<set $characters.rodger.relationship = Math.max(($characters.rodger.relationship ?? 0) - 30, -100)>>
+		<<you>>
+			It has to be you who tells him. Not us. You.
+		<</you>>
+		<br />
+		She looked at you for a long moment, nodded once, and walked to the church without looking back.
+		<br /><br />
+		You heard the rest from the others in the square the next day. Rodger had come out of the church after midnight, taken off his collar and slept in the vestry. On Sunday he consecrated the child anyway, "a child of God's house, whoever planted it", and he did not once look at the back row, where you were standing.
+		<br /><br />
+		<strong>(Rodger knows. Eve relationship -5, Rodger relationship -30.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Settlement'>>
+		<</link>>
+	<</linkreplace>>
+</div>

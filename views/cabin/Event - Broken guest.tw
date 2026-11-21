@@ -1,0 +1,102 @@
+:: Event - Broken guest [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _bgNpc = setup.brokenGuest.npc()>>
+<<if !_bgNpc>>
+	<<run setup.brokenGuest.finish(null)>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _bgIdx = $guests.indexOf(_bgNpc)>>
+<<set _bgOthers = $guests.filter(function (g) { return g !== _bgNpc && setup.getAge(g) >= 18; })>>
+<<set _bgHurt = _bgOthers.length ? setup.getRandomElement(_bgOthers) : null>>
+<<set _bgFood = setup.brokenGuest.ruinFood()>>
+<<addmins 30>>
+A crash from the kitchen woke you before dawn, then another, and then a sound you did not recognise at first, because you had never heard <<=_bgNpc.name>> make it: a long, ragged scream.
+<br /><br />
+<center>
+	<<image 'places/cabin/broken_guest.jpg'>>
+</center>
+<br />
+By the time you got there the kitchen was wrecked. Jars lay smashed across the floor and the shelf had come down with everything on it<<if _bgFood>>; <<=_bgFood>> food was trampled into the glass and the dirt<</if>>. <<=_bgNpc.name>> stood in the middle of it in her nightshirt, barefoot on the broken glass, breathing like she had been running.
+<br /><br />
+<<if _bgHurt>>
+	<<setNpcStats 'guest' $guests.indexOf(_bgHurt) 'happy' -5>>
+	<<=_bgHurt.name>> was pressed against the wall with a dish towel wrapped around <<=setup.pronounceWhos(_bgHurt)>> hand, and the red was already soaking through.
+	<br /><br />
+	<<sayNpc _bgHurt>>
+		I only tried to take the knife off her. She didn't even see me. She just kept throwing things.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<sayNpc _bgNpc>>
+	Don't. Don't come closer. I can't do this anymore. Every day the same, every night the same, and nobody... nobody even...
+<</sayNpc>>
+<br />
+She did not finish. She slid down against the cupboard, pulled her knees up and stayed there, shaking<<if _bgOthers.length>>, with the rest of the house crowding the doorway behind you<</if>>.
+<br /><br />
+<div id="bg_talk">
+	<<set _bgTalkLabel = 'Send the others out and sit with her'>>
+	<<linkreplace _bgTalkLabel>>
+		<<run $('#bg_hold, #bg_out').hide()>>
+		<<addmins 60>>
+		<<energy -10>>
+		<<setNpcStats 'guest' _bgIdx 'happy' 35>>
+		<<setNpcStats 'guest' _bgIdx 'relationship' 6>>
+		<<run setup.brokenGuest.finish(_bgNpc)>>
+		You sent everybody back to bed, sat down on the floor next to her, on the glass, and did not say anything until she did.
+		<br /><br />
+		<<sayNpc _bgNpc>>
+			I'm sorry. I'm so sorry. I don't know what happened. It just got so loud in my head.
+		<</sayNpc>>
+		<br />
+		It came out slowly, in pieces: the crowded rooms, the work that never ended, the feeling that nobody in the house would notice if she walked into the forest and kept going. You listened to all of it. When the sun came up you were both still sitting there, and she had fallen asleep against your shoulder.
+		<br /><br />
+		<strong>(<<=_bgNpc.name>> feels a lot better. Happiness +35, relationship +6.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="bg_hold">
+	<<set _bgHoldLabel = 'Have the others hold her down until she calms down'>>
+	<<linkreplace _bgHoldLabel>>
+		<<run $('#bg_talk, #bg_out').hide()>>
+		<<addmins 30>>
+		<<setNpcStats 'guest' _bgIdx 'happy' -10>>
+		<<setNpcStats 'guest' _bgIdx 'relationship' -8>>
+		<<setNpcStats 'guest' _bgIdx 'sub' 10>>
+		<<run setup.brokenGuest.finish(_bgNpc)>>
+		Two of them held her arms while she screamed herself hoarse. Then she stopped fighting all at once, the way a fire goes out. They put her to bed and somebody sat outside her door until morning.
+		<br /><br />
+		<<sayNpc _bgNpc>>
+			Fine. Fine. I'll be quiet.
+		<</sayNpc>>
+		<br />
+		She did not look at you when she said it, and she did not look at you all day.
+		<br /><br />
+		<strong>(The house was quiet again. Her happiness -10, relationship -8, submission +10.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="bg_out">
+	<<set _bgOutLabel = 'Tell her to pack her things and go'>>
+	<<linkreplace _bgOutLabel>>
+		<<run $('#bg_talk, #bg_hold').hide()>>
+		<<you>>
+			Not in my house. Get your things. You're done here.
+		<</you>>
+		<br />
+		She looked at you for a long moment as if she had not understood. Then she got up and walked out barefoot, leaving red prints on the floorboards, and she was gone before the sun was up. Nobody went after her.
+		<br /><br />
+		<<run setup.brokenGuest.finish(null)>>
+		<<guestLeft _bgIdx 'thrown_out'>>
+		<<link 'Leave'>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<</if>>

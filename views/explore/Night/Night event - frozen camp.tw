@@ -1,0 +1,134 @@
+:: Night event - frozen camp
+<h1 class="ptitle">NIGHT</h1>
+<br /><br />
+<<set _nightBack = setup.night.backPassage()>>
+<<set _fcCar = setup.night.trip()?.vehicle === 'car'>>
+<<set _fcCold = setup.weather.isColdSnap()>>
+<<set $player.quests.frozenCampDay = $game.day>>
+<<newgirl>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(random(23, 38))>>
+<<set $tmpGirl.happy = -30>>
+<<set $tmpGirl.location = 'forest'>>
+<center>
+	<<image 'places/explore/night_frozen_camp.jpg'>>
+</center>
+<br />
+<<if _fcCold>>The cold snap had turned the night into something that could kill you if you stood still for too long.<<else>>The storm had turned to sleet, and the sleet froze where it landed.<</if>> You almost went past the camp. There was no glow and no smoke, nothing but a tarp stretched between a wall and a burned-out car, already white with frost.
+<br /><br />
+Under the tarp were three people around a fire that had gone out hours ago. Two of them lay huddled so close under one frosted blanket that they made a single shape, a man and an old woman, and you did not need to touch them to know. The third, a woman, was crouched over the dead ashes with her hands pushed into them and her face hidden in her hood, as if there might still be some warmth left in there. Her lips were blue. Then she breathed, a thin white thread of breath, and you realised she was still alive.
+<br /><br />
+<<sayNpc $tmpGirl>>
+	...is it morning...?
+<</sayNpc>>
+<br />
+She did not open her eyes. If she stayed where she was, she would not see the morning.
+<br /><br />
+<div id="fc_fire">
+	<<set _fcFireLabel = 'Get a fire going and bring her round'>>
+	<<linkreplace _fcFireLabel>>
+		<<run $('#fc_carry, #fc_loot').hide()>>
+		<<addmins 120>>
+		<<energy -20>>
+		You broke up a pallet and tore the stuffing out of the dead car's seats, and it took you a long time with your own hands going numb, but you got a fire going. You rubbed her hands and her feet, and made her drink something hot, a mouthful at a time. After two hours she could sit up on her own.
+		<br /><br />
+		She looked at the two under the blanket for a long time. She did not cry. She was too cold to cry.
+		<br /><br />
+		<<sayNpc $tmpGirl>>
+			My brother. And his mother. We were walking south. Then the snow came, and we stopped, and I don't know how long ago that was.
+		<</sayNpc>>
+		<br />
+		<<if setup.guestRoom.hasRoom()>>
+			<div id="fc_home">
+				<<set _fcHomeLabel = 'Take her home with you'>>
+				<<linkreplace _fcHomeLabel>>
+					<<run $('#fc_food').hide()>>
+					<<set $tmpGirl.relationship = 30>>
+					<<set $player.goodwill++>>
+					<<run $guests.push($tmpGirl)>>
+					<<run setup.npc.addHistory($tmpGirl, 'rescued', { place: 'a frozen camp' })>>
+					She would not leave them uncovered. You helped her pull the tarp down over them and weigh it with stones, and then she walked beside you all the way home, holding on to your sleeve.
+					<br /><br />
+					<<include 'NPC info'>>
+					<br /><br />
+					<<link 'Head back'>>
+						<<goto _nightBack>>
+					<</link>>
+				<</linkreplace>>
+			</div>
+		<</if>>
+		<div id="fc_food">
+			<<set _fcFood = Math.min(2, $backpack.count('food'))>>
+			<<set _fcFoodLabel = _fcFood ? 'Leave her by the fire with some of your food' : 'Leave her by the fire'>>
+			<<linkreplace _fcFoodLabel>>
+				<<run $('#fc_home').hide()>>
+				<<if _fcFood>>
+					<<drop $backpack 'food' _fcFood>>
+					<<set $player.goodwill++>>
+				<</if>>
+				<<sayNpc $tmpGirl>>
+					I'll stay. Somebody has to bury them when the ground lets go. Thank you. I don't even know your name, and you saved my life.
+				<</sayNpc>>
+				<br />
+				You left her sitting by the fire you had made<<if _fcFood>>, with <<=_fcFood>> food in her lap<</if>>, and when you looked back from the road she was still there, feeding it one stick at a time.
+				<br /><br />
+				<<link 'Head back'>>
+					<<unset $tmpGirl>>
+					<<goto _nightBack>>
+				<</link>>
+			<</linkreplace>>
+		</div>
+	<</linkreplace>>
+</div>
+<<if setup.guestRoom.hasRoom()>>
+	<div id="fc_carry">
+		<<set _fcCarryLabel = _fcCar ? 'Get her into the car and drive her home' : 'Carry her home now'>>
+		<<linkreplace _fcCarryLabel>>
+			<<run $('#fc_fire, #fc_loot').hide()>>
+			<<addmins 60>>
+			<<energy -20>>
+			<<if setup.percentageChance(_fcCar ? setup.frozenCamp.CARRY_CAR : setup.frozenCamp.CARRY_FOOT)>>
+				<<set $tmpGirl.relationship = 40>>
+				<<set $tmpGirl.happy = -20>>
+				<<set $player.goodwill++>>
+				<<run $guests.push($tmpGirl)>>
+				<<run setup.npc.addHistory($tmpGirl, 'rescued', { place: 'a frozen camp' })>>
+				<<if _fcCar>>You put her across the back seat under every blanket in the car and drove with the heater roaring.<<else>>You got her over your shoulders and walked, and the cold came up through your boots with every step.<</if>> By the time you reached home she was shivering hard, which was the best thing you had seen all night. Shivering meant she was still fighting.
+				<br /><br />
+				<<sayNpc $tmpGirl>>
+					Where... where are the others?
+				<</sayNpc>>
+				<br />
+				You did not answer, and after a while she stopped asking.
+				<br /><br />
+				<<include 'NPC info'>>
+				<br /><br />
+				<<link 'Head back'>>
+					<<goto _nightBack>>
+				<</link>>
+			<<else>>
+				<<if _fcCar>>You drove as fast as the road allowed, with her across the back seat.<<else>>You got her over your shoulders and walked.<</if>> For the first mile she was still shaking. Somewhere after that she stopped shaking, and when you set her down at your gate you realised she had stopped breathing too. You were too late, or the cold had been too long. Maybe both.
+				<br /><br />
+				<<link 'Head back'>>
+					<<unset $tmpGirl>>
+					<<goto _nightBack>>
+				<</link>>
+			<</if>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="fc_loot">
+	<<set _fcLootLabel = 'Take what they had and go'>>
+	<<linkreplace _fcLootLabel>>
+		<<run $('#fc_fire, #fc_carry').hide()>>
+		<<set _fcFound = setup.night.loot('camp', 2)>>
+		<<set $player.goodwill-->>
+		The dead did not need their packs anymore, and the living one was past using hers. You went through them quickly and did not look at her face.
+		<br /><br />
+		You took <strong><<=_fcFound>></strong>. She did not see you go.
+		<br /><br />
+		<<link 'Head back'>>
+			<<unset $tmpGirl>>
+			<<goto _nightBack>>
+		<</link>>
+	<</linkreplace>>
+</div>

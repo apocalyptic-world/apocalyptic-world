@@ -21,7 +21,9 @@ Samples: <strong><<=$characters.laura.quests.productionSamples>></strong>
 		<<goto 'Laura - lab talk'>>
 	<</link>>
 
-	<<if !$characters.laura.quests.explore1 && $characters.laura.quests.breeder_trait && timeBetween('08:00', '12:00')>>
+	<<if $characters.laura.quests.gear_back && !$characters.laura.quests.gear_returned_day>>
+		<<goto 'Laura - What the Lab Left home'>>
+	<<elseif !$characters.laura.quests.explore1 && $characters.laura.quests.breeder_trait && timeBetween('08:00', '12:00')>>
 		<<goto 'Laura - Explore #1'>>
 	<<elseif !$characters.laura.quests.breastsSurgery && $game.day >= 300 && setup.percentageChance(30)>>
     	<<goto 'Laura - breasts surgery'>>

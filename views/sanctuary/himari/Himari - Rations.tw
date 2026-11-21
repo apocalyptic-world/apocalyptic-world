@@ -1,0 +1,65 @@
+:: Himari - Rations [bg-sanctuary]
+<h1 class="ptitle">BELOW DECK</h1>
+<<run setup.himari.mark('rations')>>
+<<run setup.himari.learn('tabemono')>>
+<<addmins 30>>
+<br />
+The galley cook stopped you on your way down with her tray. Half a heel of bread and a spoon of beans, cold, on a tin plate. Half of what it had been yesterday.
+<br /><br />
+<<say 'Cook' setup.ImagePath+'/people/anongirl.png'>>
+	Boss's orders. Client likes them slim. Don't look at me like that, I just cook it.
+<</say>>
+<br />
+<center>
+	<<image 'people/himari/rations.jpg'>>
+</center>
+<br />
+Himari ate it sitting on the bed with the plate on her knees, slowly, making it last. It did not last. When it was gone she ran her finger around the plate and licked it, and then she saw you watching and put the plate down, ashamed.
+<br /><br />
+<<himari>>
+	<<jp 'お腹すいた…' 'Onaka suita…'>> Hungry. Food… 食べ物.
+<</himari>>
+<br />
+She said the English words carefully, one at a time, the way you had taught her. She was not asking. She was only telling you, because you were the one who asked her things.
+<br /><br />
+<<if $backpack.count('food') >= 1>>
+	<div id="hm16_feed">
+		<<set _hmFeedLabel = 'Slip her food from your pack'>>
+		<<linkreplace _hmFeedLabel>>
+			<<run $('#hm16_no').hide()>>
+			<<drop $backpack 'food' 1>>
+			<<run setup.himari.addTrust(5)>>
+			<<run setup.himari.addAttention(12)>>
+			You glanced at the corridor, took the food out of your pack and put it in her lap under a fold of the blanket. She ate it with her back to the door, fast, and wiped her mouth with the back of her hand, and hid the wrapper in the mattress.
+			<br /><br />
+			<<himari>>
+				ありがとう… Thank. Thank.
+			<</himari>>
+			<br />
+			<strong>(One food given. Trust +5. Negan's people count the plates.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+	<div id="hm16_no">
+		<<set _hmNoLabel = 'Do nothing'>>
+		<<linkreplace _hmNoLabel>>
+			<<run $('#hm16_feed').hide()>>
+			You picked up the empty plate and took it back to the galley. Behind you she lay down on the bed and pulled her knees up to her stomach.
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Sanctuary'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<<else>>
+	You had nothing in your pack to give her. You took the empty plate back to the galley. Behind you she lay down on the bed and pulled her knees up to her stomach.
+	<br /><br />
+	<strong>(From now on you can slip her extra food at the cabin. Negan's people count the plates.)</strong>
+	<br /><br />
+	<<link 'Leave'>>
+		<<goto 'Sanctuary'>>
+	<</link>>
+<</if>>

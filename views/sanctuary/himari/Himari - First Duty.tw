@@ -1,0 +1,74 @@
+:: Himari - First Duty [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.mark('water')>>
+<<run setup.himari.learn('namae')>>
+<<run setup.himari.learn('onegai')>>
+<<run setup.himari.addTrust(5)>>
+<<addmins 60>>
+<br />
+Your first duty was water. The guard on the container handed you a dented jerrycan, half full, and a tin cup, and some advice: one cup a day, by Negan's order, and if she ever got past you and out of that door, it would be your hand on the crate next. Then he unlocked the padlock, swung one door open and stood in the gap with his back to the light, watching.
+<br /><br />
+Inside it was hot already, and it smelled of rust and old sweat. She was sitting on the steel floor against the far wall with her knees drawn up, in the same clothes she had come in, and she did not get up. She looked at the jerrycan, and then at you, and held out her hands for the cup.
+<br /><br />
+You poured. She drank it in one long pull without stopping for breath, the way a person drinks who has been rationed by the cup for a week, and then held the empty cup in both hands and did not let go of it.
+<br /><br />
+<center>
+	<<image 'people/himari/water_run.jpg'>>
+</center>
+<br />
+Behind you the guard shifted his weight in the doorway. He did not look at her. Nobody on the ship looked at her any more. Rusk's bandaged stump was still the only thing anybody talked about.
+<br /><br />
+She set the cup down on the floor between you. She looked at you, and then she put her hand flat on her own chest.
+<br /><br />
+<<himari>>
+	<<jp 'ひまり' 'Himari'>>
+<</himari>>
+<br />
+She said it again, slowly, tapping her chest. Then she pointed at you and waited.
+<br /><br />
+You told her your name. She tried it twice. The second time was close.
+<br /><br />
+<<himari>>
+	<<jp '名前…' 'Namae…'>>
+<</himari>>
+<br />
+She pointed at herself, then at you, and said the word again, and you understood: <em>name</em>. You nodded. Something in her face, for one second, came unlocked.
+<br /><br />
+Negan had called her Dolly in front of the whole ship. He had never asked. Now you knew, and he never would.
+<br /><br />
+She picked the cup back up and held it out toward the jerrycan, not quite touching it. Her eyes went to the guard in the doorway, and then back to you.
+<br /><br />
+<<himari>>
+	<<jp 'お願い…' 'Onegai…'>>
+<</himari>>
+<br />
+It was the same word she had whispered in this container on the first day. Now, with the cup held out, it was easy to understand: <em>please</em>.
+<br /><br />
+<div id="hm6_drink">
+	<<set _hmDrinkLabel = 'Let her drink her fill'>>
+	<<linkreplace _hmDrinkLabel>>
+		<<run $('#hm6_move').hide()>>
+		<<run setup.himari.addTrust(3)>>
+		<<run setup.himari.addAttention(4)>>
+		You filled the cup again, and again, until the jerrycan was empty. She drank every one. The guard in the doorway watched you do it and said nothing, and you knew he would not keep saying nothing for long.
+		<br /><br />
+		<strong>(You learned her name: Himari. Negan still called her Dolly. New words: 名前 (namae) and お願い (onegai).)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm6_move">
+	<<set _hmMoveLabel = 'Stick to the ration'>>
+	<<linkreplace _hmMoveLabel>>
+		<<run $('#hm6_drink').hide()>>
+		You shook your head and took the cup out of her hands. There were eyes on both of you. She let it go without a sound, drew her knees back up and looked at the wall, and she did not look at you again while the guard locked the door.
+		<br /><br />
+		<strong>(You learned her name: Himari. Negan still called her Dolly. New words: 名前 (namae) and お願い (onegai).)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

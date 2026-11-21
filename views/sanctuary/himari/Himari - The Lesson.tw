@@ -1,0 +1,76 @@
+:: Himari - The Lesson [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.mark('lesson')>>
+<<set $characters.himari.attention = 20>>
+<<set _hmCollared = setup.himari.done('collar')>>
+<<set _hmCabin = setup.himari.where() === 'cabin'>>
+<<addmins 60>>
+<br />
+It had been raining since noon, a cold slanting rain that hammered the deck and ran off the containers in sheets. The yard should have been empty. It was not. Half the ship had come out under the overhangs and the awnings to watch.
+<br /><br />
+She was in the middle of the open deck, on her knees, in the rain. <<if _hmCollared>>A short chain ran from the ring on her collar to a mooring cleat bolted to the deck, short enough that she could not stand up.<<else>>A rope ran from a mooring bollard bolted to the deck and was knotted around her waist, short enough that she could not stand up.<</if>> <<if _hmCabin>>They had brought her up from below in nothing but the white lace underwear, and the rain had turned the lace transparent.<<else>>Her clothes were soaked through and plastered to her, and her braid hung down her back like a rope.<</if>> She was shaking so hard you could see it from the gangway.
+<br /><br />
+<center>
+	<<image `setup.himari.rainImage()`>>
+</center>
+<br />
+Negan stood under the awning of the stairs, dry, with a mug of something hot. He saw you and lifted the mug in greeting.
+<br /><br />
+<<negan>>
+	There he is. The man of the hour. Come stand with me, buddy, you'll catch your death out there.
+<</negan>>
+<br />
+You stood with him. You did not know what else to do.
+<br /><br />
+<<negan>>
+	Your kindness got noticed. Extra food in her belly. Little words. Little looks. You think my people don't count plates? You think I don't hear about every minute you spend in that box?
+<</negan>>
+<br />
+He blew on his mug.
+<br /><br />
+<<negan>>
+	Here's how this works, and I want you to listen, because I'm only going to explain it once. I don't punish you. You're useful. Every time you're nice to her, she pays. Tonight she pays all night.
+<</negan>>
+<br />
+The rain came harder. Out on the deck, Himari had stopped trying to keep her head up.
+<br /><br />
+<<negan>>
+	You can go home whenever you like. Or you can stay and watch. Up to you. Either way, she's out there until sunrise.
+<</negan>>
+<br />
+<div id="hm17_stay">
+	<<set _hmStayLabel = 'Stay where she can see you'>>
+	<<linkreplace _hmStayLabel>>
+		<<run $('#hm17_go').hide()>>
+		<<run setup.himari.addTrust(8)>>
+		<<energy -30>>
+		<<addmins 240>>
+		You walked out from under the awning and stood at the rail, in the rain, where she could see you if she lifted her head. Negan laughed and went inside.
+		<br /><br />
+		You stood there for hours. Your clothes soaked through. Your hands went numb on the rail. Every so often she lifted her head and found you, and put it down again. She never once made a sound.
+		<br /><br />
+		Near midnight the guards sent you away at the end of a crossbow. The last thing you saw from the gate was a small grey shape on the deck, kneeling, with the rain bouncing off it.
+		<br /><br />
+		<strong>(Negan's attention on you reset. Trust +8.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm17_go">
+	<<set _hmGoLabel = 'Go home'>>
+	<<linkreplace _hmGoLabel>>
+		<<run $('#hm17_stay').hide()>>
+		<<run setup.himari.addTrust(-3)>>
+		You went. Negan raised his mug to you as you passed, and you felt his smile on the back of your neck all the way across the yard.
+		<br /><br />
+		At the gate you looked back once. She had lifted her head. She was looking at the gate.
+		<br /><br />
+		<strong>(Negan's attention on you reset.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Outside'>>
+		<</link>>
+	<</linkreplace>>
+</div>

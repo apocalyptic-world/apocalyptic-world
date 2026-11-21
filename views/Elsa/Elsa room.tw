@@ -4,6 +4,8 @@
 <br />
 <<if ($characters.elsa.quests.new_home_day + 5) < $game.day && !$characters.elsa.quests.introduction_day>>
     <<goto 'Elsa - Introduction'>>
+<<elseif $characters.elsa.quests.introduction_day && !$characters.elsa.quests.stranger_name_day && $characters.elsa.stranger && $characters.elsa.quests.well_day && ($characters.elsa.quests.introduction_day + 4) < $game.day>>
+    <<goto "Elsa - The Stranger's Name">>
 <</if>>
 <<elsa>>
     <<if !$characters.elsa.canTalk>>

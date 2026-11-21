@@ -1,0 +1,108 @@
+:: Himari - The Inspection [bg-sanctuary]
+<h1 class="ptitle">THE INFIRMARY</h1>
+<<run setup.himari.mark('inspection')>>
+<<run setup.himari.learn('itai')>>
+<<addmins 60>>
+<br />
+The guard at the container had a message for you: the doc wanted her, and the handler was to bring her. You walked her to the infirmary on the chain, through the corridors of the ship, past doors that closed as you came.
+<br /><br />
+The infirmary was a white room that had stopped being white years ago. The doc was a thin man with yellow fingers and a voice like dry paper. He did not say hello. He pointed at the examination table and pulled on a pair of gloves that had been washed many times.
+<br /><br />
+Negan was already there, leaning on the wall by the medicine cabinet with his arms folded.
+<br /><br />
+<<negan>>
+	Weekly check-up. Client likes his paperwork. Doc needs to see she's still in the condition she was in when she came off the truck. You know what I mean.
+<</negan>>
+<br />
+She looked from the doc to the table to Negan, and she did not understand a word, and she understood all of it. She started to back toward the door. The chain stopped her.
+<br /><br />
+<<say 'Doc' setup.ImagePath+'/people/anonguy.png'>>
+	I need her still. If she kicks, I tear something, and then it's my hand on the crate.
+<</say>>
+<br />
+Negan nodded at you.
+<br /><br />
+<<negan>>
+	Hold her wrists, handler. That's your job.
+<</negan>>
+<br />
+<div id="hm7_hold">
+	<<set _hmHoldLabel = 'Hold her wrists'>>
+	<<linkreplace _hmHoldLabel>>
+		<<run $('#hm7_refuse').hide()>>
+		<<set $characters.himari.quests.wrists_reply = 'held'>>
+		<<run setup.himari.addTrust(-8)>>
+		<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 3, 100)>>
+		You held her wrists above her head against the table, as lightly as you could and as hard as you had to. She stopped struggling the moment your hands closed. She turned her face away from you, toward the wall, and stared at it.
+		<br /><br />
+		It did not take long. The doc was quick and impersonal and he did not hurt her more than he had to. She did not make a sound the whole time. When he was done he peeled off the gloves.
+		<br /><br />
+		<<say 'Doc' setup.ImagePath+'/people/anonguy.png'>>
+			Intact.
+		<</say>>
+		<br />
+		<<negan>>
+			Music to my ears.
+		<</negan>>
+		<br />
+		<center>
+			<<image 'people/himari/inspection.jpg'>>
+		</center>
+		<br />
+		Afterwards she sat on the edge of the table in a thin blue cotton gown, rubbing the marks on her wrists where your fingers had been.
+		<br /><br />
+		<<himari>>
+			<<jp '痛い…' 'Itai…'>>
+		<</himari>>
+		<br />
+		She did not say it to you. She said it to her wrists. You did not need it translated.
+		<br /><br />
+		<strong>(New word: 痛い (itai) - it hurts. Trust -8.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm7_refuse">
+	<<set _hmRefuseLabel = 'Refuse'>>
+	<<linkreplace _hmRefuseLabel>>
+		<<run $('#hm7_hold').hide()>>
+		<<set $characters.himari.quests.wrists_reply = 'refused'>>
+		<<run setup.himari.addTrust(4)>>
+		<<set $characters.negan.relationship = Math.max(($characters.negan.relationship ?? 0) - 5, -100)>>
+		<<you>>
+			No.
+		<</you>>
+		<br />
+		Negan looked at you for a long moment. Then he shrugged and whistled through his teeth, and one of the guards came in from the corridor.
+		<br /><br />
+		<<negan>>
+			Your call, champ. Bruises are on you.
+		<</negan>>
+		<br />
+		The guard did it the way guards do things. She fought him for one second and then stopped, because the chain and the table and the four of you made it pointless. She did not make a sound. The doc worked fast.
+		<br /><br />
+		<<say 'Doc' setup.ImagePath+'/people/anonguy.png'>>
+			Intact.
+		<</say>>
+		<br />
+		<center>
+			<<image 'people/himari/inspection.jpg'>>
+		</center>
+		<br />
+		Afterwards she sat on the edge of the table in a thin blue cotton gown. There were dark marks on her wrists where the guard had held her, bigger than any your hands would have left.
+		<br /><br />
+		<<himari>>
+			<<jp '痛い…' 'Itai…'>>
+		<</himari>>
+		<br />
+		She looked at the marks, then at you. She had seen you refuse. You were not sure she understood why it had not helped.
+		<br /><br />
+		<strong>(New word: 痛い (itai) - it hurts. Trust +4.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

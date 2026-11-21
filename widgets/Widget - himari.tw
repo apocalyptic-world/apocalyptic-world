@@ -1,0 +1,12 @@
+:: Widget - himari [widget]
+
+/* Her dialogue box. Until the player learns her name (First Duty) the box says "The girl". */
+<<widget "himari" container>>
+	<<set _hmSayName = setup.himari.nameKnown() ? 'Himari' : 'The girl'>>
+	<<say _hmSayName setup.ImagePath+'people/himari/avatar.png'>><<=_contents>><</say>>
+<</widget>>
+
+/* A Japanese line: the Japanese, then small grey romaji. No translation: the player can't understand her. */
+<<widget "jp">>
+	<span class="hm-jp"><<=_args[0]>></span><br /><span class="hm-romaji"><<=_args[1]>></span>
+<</widget>>

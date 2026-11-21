@@ -1241,6 +1241,7 @@ setup.npc = {
 			case 'grown_up':         return day + 'Grew up and joined settlement';
 			case 'released':         return day + 'Released';
 			case 'returned':         return day + 'Left, then came back';
+			case 'escaped_home':     return day + 'Escaped' + (entry.place ? ' from ' + entry.place : '') + ' and came home';
 			case 'found_words':      return day + 'Found words again';
 			default:                 return day + entry.event;
 		}

@@ -1,0 +1,153 @@
+:: Himari - The Show [bg-sanctuary]
+<h1 class="ptitle">NEGAN'S OFFICE</h1>
+<<run setup.himari.mark('show')>>
+<<newgirl>>
+<<set $tmpGirl.birthDate = setup.getBirthDate(random(22, 29))>>
+<<set $tmpGirl.likesGuys = true>>
+<<set _hmW = $tmpGirl>>
+<<unset $tmpGirl>>
+<<set _hmWName = _hmW.name>>
+<<addmins 30>>
+<br />
+Negan's office was dim and warm. He had lit the lamps instead of the electric light, and there was music playing on an old record player in the corner, something with strings. He was in a generous mood. He poured you a drink before you had sat down.
+<br /><br />
+Himari knelt on the floor beside his chair, in the white lace underwear he kept her in, with the collar on her throat. She looked at you once, with no expression at all, and then at nothing.
+<br /><br />
+On the couch across from the desk sat one of the women from his deck, <<= _hmWName>>, in a slip and nothing else, with her legs crossed and a glass in her hand. She looked at you with the patient, empty face of someone who had done this before and would do it again.
+<br /><br />
+<center>
+	<<image 'people/himari/show.jpg'>>
+</center>
+<br />
+<<negan>>
+	You've been good, handler. Hands to yourself, mostly. Did your rounds. That deserves a reward, and I'm a man who rewards.
+<</negan>>
+<br />
+He reached down without looking and took Himari's chin in his hand, and lifted her face, and turned it toward the couch.
+<br /><br />
+<<negan>>
+	And Dolly here, she needs an education before she meets her new owner. She needs to know what men are for. So you're going to show her. <<= _hmWName>> is going to help. And Dolly is going to watch every minute of it. Aren't you, Dolly?
+<</negan>>
+<br />
+Himari did not understand him. She understood his hand on her jaw, holding her face toward you, and she understood the woman on the couch getting up and walking toward you.
+<br /><br />
+<div id="hm18_do">
+	<<set _hmDoLabel = 'Do what he expects'>>
+	<<linkreplace _hmDoLabel>>
+		<<run $('#hm18_refuse').hide()>>
+		<<set $characters.himari.quests.show_reply = 'performed'>>
+		<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 5, 100)>>
+		<<run setup.himari.addTrust(-4)>>
+		<<addmins 45>>
+		<<= _hmWName>> knelt in front of you and opened your belt with practised fingers. She did not look at you. She looked past you, at a spot on the wall, the way Himari looked at walls.
+		<br /><br />
+		<<sayNpc _hmW>>
+			Just relax. He likes it slow. The slower you go, the sooner he lets us leave.
+		<</sayNpc>>
+		<br />
+		<div id="hm18_bj">
+			<<set _hmBjLabel = 'Let her suck your cock'>>
+			<<linkreplace _hmBjLabel>>
+				<<set _hmW.bj = Math.min((_hmW.bj ?? 0) + 10, 100)>>
+				<<set _hmW.statsSex ??= {}, _hmW.statsSex.bj = (_hmW.statsSex.bj ?? 0) + 1>>
+				<center>
+					<<actionImage _hmW 'bj' 'no-text'>>
+				</center>
+				<br />
+				She took your cock into her mouth and worked it slowly, wet and deep, with one hand around the base. Across the room, Negan's hand stayed on Himari's jaw. Her face was turned toward you, and her eyes were open because he had told her to keep them open, and she was not crying. She had gone somewhere else.
+				<br /><br />
+				<<negan>>
+					See, Dolly? That's what that mouth of yours is going to be for.
+				<</negan>>
+				<br />
+				<<= _hmWName>> let you go with a soft wet sound and stood up, and turned around, and bent over the end of Negan's desk, pulling her slip up over her hips.
+				<br /><br />
+				<<set _hmPussyLabel = 'Push your dick into her pussy from behind'>>
+				<<linkreplace _hmPussyLabel>>
+					<<set _hmW.pussy = Math.min((_hmW.pussy ?? 0) + 10, 100)>>
+					<<set _hmW.statsSex ??= {}, _hmW.statsSex.pussy = (_hmW.statsSex.pussy ?? 0) + 1>>
+					<center>
+						<<actionImage _hmW 'pussy' 'no-text'>>
+					</center>
+					<br />
+					You took her hips and pushed into her. She was wet; she had made sure she would be. She braced her hands on the desk and pushed back against you in a slow steady rhythm, and the desk creaked, and the strings went on playing on the record.
+					<br /><br />
+					<<sayNpc _hmW>>
+						Mmh. Like that. Don't stop.
+					<</sayNpc>>
+					<br />
+					Negan watched with his drink in one hand and Himari's face in the other, and talked to her softly the whole time, explaining, as if she could understand a word.
+					<br /><br />
+					<div id="hm18_in">
+						<<set _hmInLabel = 'Cum inside her pussy'>>
+						<<linkreplace _hmInLabel>>
+							<<run $('#hm18_out').hide()>>
+							<<horny_reset>>
+							<<if setup.pregnancyChance(_hmW)>>
+								<<set _hmW.pregnancy_father = 'mc'>>
+								<<set _hmW.pregnancy = 0>>
+								<<statsAdd 'girls_impregnated'>>
+								<<set _hmW.pregnancy_encounter_day = $game.day>>
+								<<set _hmW.pregnancy_encounter_place = 'unknown'>>
+								<<run ($pregnantStrangers ??= []).push(clone(_hmW))>>
+							<</if>>
+							<center>
+								<<actionImage _hmW 'cum_in_pussy' 'no-text'>>
+							</center>
+							<br />
+							You held her hips and came deep inside her. She made a small sound into the desk and stayed bent over it until you pulled out, and then she straightened her slip and went back to the couch and picked up her glass as if nothing had happened.
+							<br /><br />
+							<<include 'Himari - The Show end'>>
+						<</linkreplace>>
+					</div>
+					<div id="hm18_out">
+						<<set _hmOutLabel = 'Pull out and cum on her back'>>
+						<<linkreplace _hmOutLabel>>
+							<<run $('#hm18_in').hide()>>
+							<<horny_reset>>
+							<center>
+								<<actionImage _hmW 'cum_on_back' 'no-text'>>
+							</center>
+							<br />
+							You pulled out at the last moment and came across the small of her back. She stayed bent over the desk until you were done, then wiped herself with the hem of the slip, went back to the couch and picked up her glass as if nothing had happened.
+							<br /><br />
+							<<include 'Himari - The Show end'>>
+						<</linkreplace>>
+					</div>
+				<</linkreplace>>
+			<</linkreplace>>
+		</div>
+	<</linkreplace>>
+</div>
+<div id="hm18_refuse">
+	<<set _hmRefuseLabel = 'Refuse'>>
+	<<linkreplace _hmRefuseLabel>>
+		<<run $('#hm18_do').hide()>>
+		<<set $characters.himari.quests.show_reply = 'refused'>>
+		<<set $characters.negan.relationship = Math.max(($characters.negan.relationship ?? 0) - 10, -100)>>
+		<<run setup.himari.addAttention(10)>>
+		<<addmins 15>>
+		You put your glass down on the desk and stood up.
+		<br /><br />
+		The music went on. <<= _hmWName>> stopped where she was, halfway across the room, and looked at Negan to find out what she was supposed to do now. Negan did not look at her. He looked at you, and his smile did not move at all.
+		<br /><br />
+		<<set _hmNo = 1 + ($characters.himari.quests.wrists_reply === 'refused' ? 1 : 0) + ($characters.himari.quests.collar_reply === 'refused' ? 1 : 0)>>
+		<<negan>>
+			<<if _hmNo >= 3>>Three times, kid. I said I was keeping count.<<elseif _hmNo === 2>>That's twice you've told me no. I'm keeping count, champ.<<else>>Well, well. The handler has a line he won't cross. Good to know where it is.<</if>>
+		<</negan>>
+		<br />
+		He let go of Himari's chin. Her face dropped.
+		<br /><br />
+		<<negan>>
+			That's fine. She'll learn it some other way. And I'll remember who didn't want to teach her.
+		<</negan>>
+		<br />
+		He waved you out. As the door closed behind you, you heard him say something to <<= _hmWName>>, and the music got louder.
+		<br /><br />
+		<strong>(Negan's relationship -10. Negan's attention on her rose.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

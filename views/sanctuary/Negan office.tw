@@ -7,7 +7,7 @@
 <<if setup.percentageChance(40)>>
     <br />
     <center>
-            [img[setup.ImagePath+'places/sanctuary/negan_blowjob_table.webp']]
+		<<image 'places/sanctuary/negan_blowjob_table.webp'>>
     </center>
     <br />
     One of his girls are under table and sucking his dick.
@@ -24,6 +24,7 @@
         <<goto 'Negan - fuel slaves repeatable give'>>
     <</link>>
 <</if>>
+<<set _hmNext = setup.himari.next('office')>>
 <<if $characters?.negan?.quests.quest2 && !$characters?.negan?.quests.quest3 && ($characters?.negan?.quests.fuel_slaves_count >=2)>>
     <<goto 'Negan - The Puppet Master'>>
 <<elseif $characters?.negan?.quests.quest3 && !$characters?.negan?.quests?.quest4 && $game.day > ($characters?.negan?.quests.quest3_day + 4)>>
@@ -34,6 +35,8 @@
     <<goto 'Negan - The Story'>>
 <<elseif $characters?.negan?.quests.story_told_day && !$characters?.negan?.quests.new_one_day && $game.day > ($characters?.negan?.quests.story_told_day + 10)>>
     <<goto 'Negan - The New One'>>
+<<elseif _hmNext>>
+    <<goto _hmNext>>
 <</if>>
 <<link 'Leave'>>
     <<goto 'Sanctuary'>>

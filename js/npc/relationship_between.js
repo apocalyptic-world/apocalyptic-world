@@ -213,7 +213,11 @@ setup.relationshipBetween = {
     queueMilestones: function(pairs, place, via) {
         const game = variables().game;
         if (!game) return;
+        const neutral = value => this.tier(value) === 0;
         for (const { a, b, before } of pairs) {
+            // Neutral on both sides before and after: milestones() would only add an empty esTier record (a house party pairs every adult)
+            if (neutral(before.ab) && neutral(before.ba)
+                && neutral(a.relationshipBetween?.stats?.[b.id] ?? 0) && neutral(b.relationshipBetween?.stats?.[a.id] ?? 0)) continue;
             for (const msg of this.milestones(a, b, place, before, via)) (game.socialMilestones ??= []).push(msg);
         }
     },

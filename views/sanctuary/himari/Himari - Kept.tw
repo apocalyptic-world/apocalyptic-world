@@ -1,0 +1,59 @@
+:: Himari - Kept [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.mark('kept')>>
+<<addmins 60>>
+<br />
+The container was open when you got there, and empty. The blanket was gone, the bucket was gone, and the door hung wide with nobody guarding it. For a moment the yard tilted under you.
+<br /><br />
+<<say 'Guard' setup.ImagePath+'/people/anonguy.png'>>
+	Relax, handler. Boss moved her below. Wants her out of the sun before the pickup. Third deck, end of the corridor. You've still got the job.
+<</say>>
+<br />
+The third deck was the old crew quarters, a long steel corridor that smelled of diesel and mildew, with cabins on both sides. Hers was the last one. Someone had welded a new bolt onto the outside of the door.
+<br /><br />
+Inside there was a narrow iron bed with a thin mattress, a bucket, a barred window, and a chain. The chain ran from a ring welded into the floor to a pair of steel cuffs locked around her ankles. It was long enough to reach the bucket and the bed, and not one link longer.
+<br /><br />
+Someone had taken her clothes and left her in white lace underwear, new, with the shop creases still in it. Somebody had been saving it for a special order.
+<br /><br />
+<center>
+	<<image 'people/himari/kept.jpg'>>
+</center>
+<br />
+She sat on the edge of the bed with her knees pressed together and the collar on her throat and looked at you, and then at the chain, and then at you again.
+<br /><br />
+You did your rounds. You were leaving, late, when you heard boots in the corridor and stepped into a doorway to let them pass. It was Negan, alone, with a bottle in one hand and two glasses in the other. He went into her cabin and did not close the door.
+<br /><br />
+He sat down beside her on the bed. He poured two drinks and drank both. Then he reached out and stroked her face, slowly, her cheek and her jaw and her throat above the collar, the way a man strokes something he owns and likes. His hand went lower, under the white lace, over her breasts, and stayed there. He talked to her the whole time in a low, warm voice about the weather and the fuel prices and the client, about nothing. She sat completely still and watched his face the whole time, the way you watch a dog you are not sure of.
+<br /><br />
+<center>
+	<<image 'people/himari/kept_night.jpg'>>
+</center>
+<br />
+He never did more than that. He did not need to.
+<br /><br />
+<div id="hm15_wait">
+	<<set _hmWaitLabel = 'Wait in the corridor until he leaves'>>
+	<<linkreplace _hmWaitLabel>>
+		<<run $('#hm15_go').hide()>>
+		<<run setup.himari.addTrust(3)>>
+		<<addmins 60>>
+		You waited in the dark doorway until he came out, an hour later, humming, the bottle empty. He did not see you.
+		<br /><br />
+		When his boots were gone you went back to her door. She was lying on the bed with her face to the wall and the thin blanket pulled tight around her. She heard you. She said nothing. After a while, without turning over, she lifted one hand off the blanket and held it up in the air, so that you would see it, and then put it down again.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm15_go">
+	<<set _hmGoLabel = 'Go'>>
+	<<linkreplace _hmGoLabel>>
+		<<run $('#hm15_wait').hide()>>
+		You went. Behind you, all the way down the corridor, you could hear his voice, low and warm and patient, talking to her about nothing.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

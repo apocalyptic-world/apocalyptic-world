@@ -1,0 +1,68 @@
+:: Event - Fire in the night [Place]
+<h1 class="ptitle"><<=$game.cabinName ?? ''>></h1>
+<br />
+<<set _frKey = setup.fire.pickBuilding()>>
+<<set _frName = _frKey ? setup.fire.NAMES[_frKey] : ''>>
+<<set _frHelpers = $guests.filter(function (g) { return setup.getAge(g) >= 18 && typeof g.sick === 'undefined'; })>>
+<<set _frHelper = _frHelpers.length ? setup.getRandomElement(_frHelpers) : null>>
+<<run setup.fire.burn(_frKey)>>
+<<run $guests.forEach(function (g) { g.happy = Math.max(-100, (g.happy ?? 0) - 3); })>>
+<<addmins 60>>
+Somebody was hammering on your door and shouting your name, and the room was full of an orange light that had no business being there in the middle of the night.
+<br /><br />
+<center>
+	<<image 'places/cabin/fire_night.jpg'>>
+</center>
+<br />
+The storage shed was burning. By the time you got outside, the flames were already through the roof and the wind was carrying sparks across the yard<<if _frName>>, straight onto the <<=_frName>><</if>>.
+<br /><br />
+<<if _frHelper>>
+	<<sayNpc _frHelper>>
+		It started in the shed! I don't know how, I just smelled smoke! Everything's in there!
+	<</sayNpc>>
+	<br />
+<</if>>
+There was no time to wonder how it had started, only about what you were going to save and who was going to get close to it.
+<br /><br />
+<div id="fr_fight">
+	<<set _frFightLabel = _frHelpers.length ? 'Get everyone on a bucket line' : 'Fight it yourself with buckets'>>
+	<<linkreplace _frFightLabel>>
+		<<run $('#fr_back').hide()>>
+		<<set _frLost = setup.fire.burnGoods(_frHelpers.length ? 25 : 40)>>
+		<<energy -30>>
+		<<if _frHelper>>
+			<<setNpcStats 'guest' $guests.indexOf(_frHelper) 'happy' -5>>
+		<</if>>
+		<<if _frHelpers.length>>
+			You got everybody out with whatever would hold water, from the well to the shed and back, faster and faster. Somebody dragged sacks out through the smoke while the others threw water at the door frame. <<if _frHelper>><<=_frHelper.name>> burned <<=setup.pronounceWhos(_frHelper)>> hands pulling a crate out of the doorway and did not stop.<</if>>
+		<<else>>
+			You ran between the well and the shed alone until your arms shook, and dragged out what you could reach through the smoke.
+		<</if>>
+		<br /><br />
+		It was not enough to save the shed, but it kept most of what was in it out of the fire.
+		<br /><br />
+		<<include 'Event - Fire in the night end'>>
+	<</linkreplace>>
+</div>
+<div id="fr_back">
+	<<set _frBackLabel = 'Keep everyone back and let it burn'>>
+	<<linkreplace _frBackLabel>>
+		<<run $('#fr_fight').hide()>>
+		<<set _frLost = setup.fire.burnGoods(60)>>
+		<<energy -10>>
+		You kept everybody back by the cabin and made them stay there. Nobody got near the flames, and nobody got hurt. You all stood in the yard in the cold and watched it burn, and the roof came down with a sound like a long breath going out.
+		<br /><br />
+		<<include 'Event - Fire in the night end'>>
+	<</linkreplace>>
+</div>
+
+
+:: Event - Fire in the night end
+/* shared ending, included from both choices of Event - Fire in the night (needs _frLost, _frKey, _frName) */
+By grey morning the shed was a heap of black boards<<if _frName>> and the <<=_frName>> was a burned-out frame, its roof gone and its walls charred black<</if>>.
+<br /><br />
+<strong>(<<if _frLost.length>>Lost in the fire: <<=_frLost.map(function (x) { return x.lost + ' ' + x.item; }).join(', ')>>.<<else>>There was not much in the shed to lose.<</if>><<if _frKey>> The <<=_frName>> is out of use until you repair it at the workbench.<</if>>)</strong>
+<br /><br />
+<<link 'Leave'>>
+	<<goto 'Wood cabin'>>
+<</link>>

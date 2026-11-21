@@ -191,13 +191,15 @@
 	<div style="border-left: 3px solid #e09855; padding: 10px 14px; margin: 14px 0; background: rgba(224,152,85,0.07);">
 		<span style="color: #e09855; font-weight: bold;">⚠ HOLDING CAPTIVE: <<= $game.capturedGuest.npc.name>></span>
 		<br />
-		<span style="color: #888; font-size: 0.88em;">She was taken during scavenging.</span>
+		<span style="color: #888; font-size: 0.88em;"><<= $game.capturedGuest.source === 'abduction' ? 'They took her in a raid on your home.' : 'She was taken during scavenging.'>><<if $game.capturedGuest.longWait>> They will sell her on to the ship <<= $game.capturedGuest.longWait.deadline > $game.day ? 'in ' + ($game.capturedGuest.longWait.deadline - $game.day) + ' days' : 'after tonight'>>.<</if>></span>
 		<br /><br />
-		<<if $player.money >= 500>>
+		<<set _ransomCost = setup.longWait.ransom()>>
+		<<if $player.money >= _ransomCost>>
 			<div id="ransom_block">
-			<<linkreplace 'Pay ransom (500 caps)'>>
+			<<set _ransomLabel = 'Pay ransom (' + _ransomCost + ' caps)'>>
+			<<linkreplace _ransomLabel>>
 				<<run $('#rescue_block').hide()>>
-				<<set $player.money -= 500>>
+				<<set $player.money -= _ransomCost>>
 				<<run setup.settlements.modifyRelationship(_s, 5, 'Ransom paid')>>
 				<<run _s.captiveId = null; _s.captiveName = null>>
 				<<run setup.settlements.save(setup.settlements.getAll())>>
@@ -206,11 +208,11 @@
 				<<guestCaptureResolved $game.capturedGuest.npc true>>
 				<<unset $game.capturedGuest>>
 				<<addmins 60>>
-				<span style="color: #55cc88;">They handed her over at the gate. She looked rough but was breathing. 500 caps lighter.</span>
+				<span style="color: #55cc88;">They handed her over at the gate. She looked rough but was breathing. <<= _ransomCost>> caps lighter.</span>
 			<</linkreplace>>
 			</div>
 		<<else>>
-			<span style="color: #666; font-size: 0.85em;">Ransom (500 caps) — you don't have enough.</span>
+			<span style="color: #666; font-size: 0.85em;">Ransom (<<= _ransomCost>> caps) — you don't have enough.</span>
 			<br />
 		<</if>>
 		<div id="rescue_block">

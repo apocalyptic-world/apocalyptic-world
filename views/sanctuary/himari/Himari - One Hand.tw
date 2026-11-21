@@ -1,0 +1,82 @@
+:: Himari - One Hand [bg-underground]
+<h1 class="ptitle">BAR</h1>
+<<run setup.himari.mark('onehand')>>
+<<addmins 30>>
+<br />
+Negan's men drank in the corner by the stairs, the way they always did, loud and close together. One of them was not loud. He sat at the end of the bar alone with a bottle, and his right arm lay on the bar in front of him, wrapped in dirty bandage up to the elbow and ending at the wrist in a stained wad.
+<br /><br />
+<center>
+	<<image 'people/himari/one_hand_bar.jpg'>>
+</center>
+<br />
+Rusk saw you in the mirror behind the bar. He did not turn around. He lifted his glass with his left hand, clumsy with it still, and drank.
+<br /><br />
+<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+	Negan's errand boy. Look at you. Clean hands. Two of them.
+<</say>>
+<br />
+He laughed into the glass.
+<br /><br />
+<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+	You know what she is? Huh? You think she's a girl. She's a payment. Negan owes somebody. Somebody big. You ever seen Negan scared? I have. Once. The night the radio called about her.
+<</say>>
+<br />
+<div id="hm11_drink">
+	<<set _hmDrinkLabel = 'Buy him a drink (5 caps)'>>
+	<<if $player.money >= 5>>
+		<<linkreplace _hmDrinkLabel>>
+			<<run $('#hm11_threat, #hm11_leave').hide()>>
+			<<set $player.money -= 5>>
+			<<addmins 30>>
+			You put five caps on the bar. The bartender filled his glass. Rusk looked at it for a long time before he drank it.
+			<br /><br />
+			<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+				Nobody's seen the client. Not even the doc. There's a man comes on the radio every week, same night, same hour. Asks the same question. "Is she still clean?" Negan says yes. That's it. That's the whole conversation.
+			<</say>>
+			<br />
+			He turned his glass around with his one hand.
+			<br /><br />
+			<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+				And when she's gone, the boss is gonna need somebody to blame for something. He always does. Think about whose name he knows, errand boy.
+			<</say>>
+			<br />
+			He finished the drink and turned his back on you.
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Underground city'>>
+			<</link>>
+		<</linkreplace>>
+	<</if>>
+</div>
+<div id="hm11_threat">
+	<<set _hmThreatLabel = 'Tell him to stay away from her'>>
+	<<linkreplace _hmThreatLabel>>
+		<<run $('#hm11_drink, #hm11_leave').hide()>>
+		<<you>>
+			Stay away from her.
+		<</you>>
+		<br />
+		Rusk turned around then. He held up the bandaged stump between you, close to your face.
+		<br /><br />
+		<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+			Or what? You'll tell on me again? I'm already paid up, friend. Paid in full. You, though, you're still running a tab.
+		<</say>>
+		<br />
+		He spat on the floor between your boots and went back to his bottle.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Underground city'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm11_leave">
+	<<set _hmLeaveLabel = 'Leave him to his bottle'>>
+	<<linkreplace _hmLeaveLabel>>
+		<<run $('#hm11_drink, #hm11_threat').hide()>>
+		You left him there. In the mirror, he watched you all the way to the door.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Underground city'>>
+		<</link>>
+	<</linkreplace>>
+</div>

@@ -1,0 +1,82 @@
+:: Himari - The Guard [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.mark('guard')>>
+<<addmins 20>>
+<br />
+The sun was low and the yard was emptying. You were cutting between the container stacks toward the gate when you heard it: the scrape of a door hinge, and then a man's voice, low and coaxing, the voice people use on dogs.
+<br /><br />
+The container door stood open. One of Negan's guards, a big man called Rusk, had brought her out and had her pinned against the rusted outside wall, round the corner from the office windows. One of his hands was on her shoulder, pinning her to the steel, and he was leaning in close, talking low into her ear, his free hand on his belt.
+<br /><br />
+<center>
+	<<image 'people/himari/guard.jpg'>>
+</center>
+<br />
+She was not fighting him. She was not making a sound. She stood with her back flat against the steel and her eyes on nothing, and her whole body had gone still, the stillness of someone who has learned that moving makes it worse.
+<br /><br />
+Rusk saw you. He straightened up, taking his time about it, and kept his hand on her shoulder.
+<br /><br />
+<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+	Relax, friend. Nobody's gonna know. I'm not gonna break anything. Right? Right.
+<</say>>
+<br />
+He grinned at you, sure of you, the way men are sure of each other on a ship like this.
+<br /><br />
+<div id="hm3_step">
+	<<set _hmStepLabel = "Step in and pull him off her">>
+	<<linkreplace _hmStepLabel>>
+		<<run $('#hm3_tell, #hm3_walk').hide()>>
+		<<set $characters.himari.quests.guard_reply = 'stepped_in'>>
+		<<run setup.himari.addTrust(10)>>
+		<<energy -10>>
+		You crossed the gap before you had decided to. You took Rusk by the collar and the wrist and hauled him backward off her, and he hit the ground hard enough to lose his breath.
+		<br /><br />
+		<<say 'Rusk' setup.ImagePath+'/people/anonguy.png'>>
+			You're dead. You hear me? You didn't see shit, and you're dead.
+		<</say>>
+		<br />
+		He went, fast, looking over his shoulder toward the office windows the whole way.
+		<br /><br />
+		She had not moved from the wall. You took her back inside the container, and when you pushed the door to, the last thing you saw through the gap was her pulling the hem of her shirt down with both hands, again and again, as if it would not stay.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm3_tell">
+	<<set _hmTellLabel = "Walk straight to Negan's office">>
+	<<linkreplace _hmTellLabel>>
+		<<run $('#hm3_step, #hm3_walk').hide()>>
+		<<set $characters.himari.quests.guard_reply = 'told_negan'>>
+		<<run setup.himari.addTrust(5)>>
+		<<set $characters.negan.relationship = Math.min(($characters.negan.relationship ?? 0) + 5, 100)>>
+		You turned around without a word and walked toward the office stairs. Behind you, Rusk's grin went out like a light. You heard him let go of her. You heard him start to follow you, and then stop.
+		<br /><br />
+		Negan listened to you with his feet on the desk. He did not interrupt. When you were done he took his feet down, very slowly.
+		<br /><br />
+		<<negan>>
+			Rusk. Huh. Thank you, champ. You go on home. I'll take it from here.
+		<</negan>>
+		<br />
+		He was smiling. It was the worst smile you had seen on him yet.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm3_walk">
+	<<set _hmWalkLabel = "Keep walking">>
+	<<linkreplace _hmWalkLabel>>
+		<<run $('#hm3_step, #hm3_tell').hide()>>
+		<<set $characters.himari.quests.guard_reply = 'walked_away'>>
+		<<run setup.himari.addTrust(-10)>>
+		You looked away and kept walking. It was not your container. It was not your rule. Behind you, the door clanged shut.
+		<br /><br />
+		Halfway to the gate you heard a second door slam somewhere above you, the office door, and a voice you knew shouting a name. Somebody else had seen.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

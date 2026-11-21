@@ -5,7 +5,7 @@
 <center>    
     [img[setup.ImagePath+'places/garage/car_first_day.jpg']]
 </center>
-<<set _eligibleGuests = setup.getAvailablePersons18yo($guests)[0]?.filter(i => !$player?.baseManagement?.noIncest || !setup.family.isBloodToMC($guests[i])) ?? []>>
+<<set _eligibleGuests = setup.getAvailablePersons18yo($guests)[0]?.filter(i => !($guests[i].traits ?? []).includes('feral') && (!$player?.baseManagement?.noIncest || !setup.family.isBloodToMC($guests[i]))) ?? []>>
 <<set _npcId = setup.getRandomElement(_eligibleGuests)>>
 <<run _npc = $guests[_npcId]>>
 <<if _eligibleGuests.length > 0>>

@@ -7,7 +7,7 @@
  * Heat climbs every round and with how drunk the circle is: Mild -> Spicy -> Hot -> Wild. It decides which
  * dares can come up. A player does a dare when her boldness (corruption, drink, traits, and her relationship
  * with the MC for dares that involve him) reaches the dare's need; otherwise she takes a shot. At 95 drunk
- * she passes out. Pregnant women don't drink, so they take a truth instead.
+ * she passes out. Pregnant women don't drink, so they take a truth instead (once they know: day 8, see knowsPregnant).
  * Dare pictures reuse the existing generic action sets through setup.tod.showAs() - no new act images.
  * The morning after (hangovers, awkward breakfasts) runs from the sleep widget: setup.tod.nightly().
  */
@@ -34,6 +34,11 @@ setup.tod = {
         if ((g.traits ?? []).includes('feral') || typeof g.sick !== 'undefined' || g.basementVoluntary) return false;
         if (variables().player?.baseManagement?.noIncest && setup.family.isBloodToMC(g)) return false;
         return !setup.isAtWork(g, variables().weather);
+    },
+
+    /** She only knows she's pregnant once she has told the MC (the sleep tick announces it on day 8) */
+    knowsPregnant: function (g) {
+        return (g.pregnancy ?? -1) >= 8;
     },
 
     /** Guests who could join a game right now */
@@ -271,6 +276,8 @@ setup.tod = {
         if (dare.female && target.gender !== 0) return false;
         if (dare.notVirgin && (target.virgin || target.chastityBelt)) return false;
         if (dare.cum && t.mcSpent) return false;
+        // she already stripped naked this game: nothing left to take off or flash
+        if (['strip', 'flash'].includes(dare.id) && (t.naked ?? []).includes(target.id)) return false;
         if ((dare.partner === 'mc' && dare.tier !== 'mild') && t.mcSpent && (dare.horny ?? 0) >= 20) return false;
         if (dare.girls) {
             if (!settings.lesbiansEnabled || !partner || !(target.likesGirls ?? false) || !(partner.likesGirls ?? false)) return false;
@@ -322,7 +329,7 @@ setup.tod = {
     /** The target refuses: a shot (or a truth, if she's pregnant). Returns the text. */
     refuse: function (target) {
         const t = variables().tod;
-        if (typeof target.pregnancy !== 'undefined') {
+        if (this.knowsPregnant(target)) {
             return target.name + ' shook her head, a hand on her belly. "Truth instead." Nobody argued.';
         }
         setup.drink(target, 1);
@@ -344,6 +351,7 @@ setup.tod = {
     applyDare: function (dare, target, partner) {
         const t = variables().tod;
         t.dares++;
+        if (dare.id === 'strip') (t.naked ??= []).push(target.id);
         target.corruption = Math.min((target.corruption ?? 0) + (dare.corruption ?? 1), 100);
         target.happy = Math.min((target.happy ?? 0) + 2, 100);
         if (dare.herHorny) target.horny = Math.min((target.horny ?? 0) + dare.herHorny, 100);
@@ -362,7 +370,7 @@ setup.tod = {
     /** An NPC asks an NPC: she picks truth or dare and what happens. Returns { kind, dare, partner, text, done } */
     npcTurn: function (asker, target) {
         const bold = this.boldness(target, false);
-        const takesDare = typeof target.pregnancy === 'undefined' && (bold >= 40 || setup.percentageChance(Math.max(10, bold)));
+        const takesDare = !this.knowsPregnant(target) && (bold >= 40 || setup.percentageChance(Math.max(10, bold)));
         if (!takesDare) {
             return { kind: 'truth', truth: this.askTruth(asker, target) };
         }
@@ -552,7 +560,7 @@ Object.assign(setup.tod, {
         let text = this.fill(dare.ask, asker, target, partner) + ' ';
         if (!done) {
             text += this.refuse(target);
-            if (typeof target.pregnancy !== 'undefined') {
+            if (this.knowsPregnant(target)) {
                 text += '<br /><br />' + this.askTruth(asker, target);
             }
             t.result = { text: text, imgNpcId: null, img: null, cum: null };
@@ -611,7 +619,9 @@ Object.assign(setup.tod, {
     /** NPC asks the MC: truth */
     mcTargetTruth: function () {
         const t = variables().tod;
-        t.mcQuestion = this.active().length >= 2 && setup.percentageChance(60) ? 'prettiest' : 'think';
+        // a wife or lover can't ask if you've "ever" thought about her that way: she asks if you still do
+        const still = setup.npc.sleptWithMc(this.npc(t.turn.asker));
+        t.mcQuestion = this.active().length >= 2 && setup.percentageChance(60) ? 'prettiest' : (still ? 'still' : 'think');
         t.step = 'mc_truth';
     },
 
@@ -633,7 +643,7 @@ Object.assign(setup.tod, {
     answerThink: function (yes) {
         const t = variables().tod;
         const asker = this.npc(t.turn.asker);
-        let text = asker.name + ' asked if you had ever thought about her, that way. ';
+        let text = asker.name + (t.mcQuestion === 'still' ? ' asked if you still thought about her that way. ' : ' asked if you had ever thought about her, that way. ');
         if (yes) {
             asker.relationship = Math.min((asker.relationship ?? 0) + 3, 100);
             asker.corruption = Math.min((asker.corruption ?? 0) + 1, 100);

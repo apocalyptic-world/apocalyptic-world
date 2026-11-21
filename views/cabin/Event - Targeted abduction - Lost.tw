@@ -22,7 +22,7 @@ They took <<= _taData ? _taData.guestName : 'her'>> while you were down. By the 
 	<<if _taGuestIdx2 >= 0>><<guestLeft _taGuestIdx2 'captured'>><</if>>
 	<<set _taS.captiveId   = _taData.guestId>>
 	<<set _taS.captiveName = _taData.guestName>>
-	<<set $game.capturedGuest = { npc: _taGuestFull, settlementId: _taData.settlementId, settlementName: _taData.settlementName }>>
+	<<set $game.capturedGuest = { npc: _taGuestFull, settlementId: _taData.settlementId, settlementName: _taData.settlementName, day: $game.day, source: 'abduction' }>>
 	<<run setup.settlements.resolveAbduction(_taS, true)>>
 	<<run setup.settlements.modifyRelationship(_taS, -10, 'Abduction succeeded by force')>>
 	<<run setup.settlements.save(setup.settlements.getAll())>>

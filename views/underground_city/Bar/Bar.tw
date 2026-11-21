@@ -1,10 +1,10 @@
-:: Bar [Place bg-underground] {"position":"1941,1937","size":"100,100"}
+:: Bar [Place bg-underground]
 <<if !($bar_first_time ?? false)>>
 	<<goto 'Bar - first time'>>
 <</if>>
 <h1 class="ptitle">BAR</h1>
 <div id="place-head">
-[img[setup.ImagePath+'places/underground/bar_head.jpg']]
+<<image 'places/underground/bar_head.jpg' sfw>>
 </div>
 <br /><br />
 
@@ -49,7 +49,10 @@
   <</link>>
 <</if>>
 
-<<if timeBetween('20:00', '02:59') && ($characters?.negan?.quests?.new_one_day ?? 0) && !$characters?.negan?.quests?.drunk_companion_day && $player?.car && $game.day >= ($characters.negan.quests.new_one_day + 5) && setup.drunkCompanionCandidates().length>>
+<<set _hmNext = setup.himari.next('bar')>>
+<<if _hmNext>>
+	<<goto _hmNext>>
+<<elseif timeBetween('20:00', '02:59') && ($characters?.negan?.quests?.new_one_day ?? 0) && !$characters?.negan?.quests?.drunk_companion_day && $player?.car && $game.day >= ($characters.negan.quests.new_one_day + 5) && setup.drunkCompanionCandidates().length>>
 	<<goto 'Negan - Drunk Companion'>>
 <<elseif timeBetween('23:59', '03:00') && recall($suppCode) && setup.percentageChance(10) && $player.reputation > 50>>
 	<<goto 'Bar [Event] closing time'>>

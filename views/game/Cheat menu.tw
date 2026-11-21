@@ -392,6 +392,78 @@
 				<<goto 'Event - Runaway tracks'>>
 				<<script>>Dialog.close();<</script>>
 			<</link>>
+			<<link 'Event: The long wait (new terms)'>>
+				<<if !$game.capturedGuest>>
+					<<newgirl>>
+					<<set _clwS = setup.settlements.getAll()[0]>>
+					<<set $game.capturedGuest = { npc: clone($tmpGirl), settlementId: _clwS ? _clwS.id : null, settlementName: _clwS ? _clwS.name : 'a raider camp', day: $game.day - 8, source: 'abduction' }>>
+					<<unset $tmpGirl>>
+				<</if>>
+				<<run delete $game.capturedGuest.longWait>>
+				<<set $game.longWaitEvent = { variant: 'terms' }>>
+				<<goto 'Event - The long wait'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: The long wait (she escapes)'>>
+				<<if !$game.capturedGuest>>
+					<<newgirl>>
+					<<set _clwS = setup.settlements.getAll()[0]>>
+					<<set $game.capturedGuest = { npc: clone($tmpGirl), settlementId: _clwS ? _clwS.id : null, settlementName: _clwS ? _clwS.name : 'a raider camp', day: $game.day - 8, source: 'abduction' }>>
+					<<unset $tmpGirl>>
+				<</if>>
+				<<set $game.longWaitEvent = { variant: 'escaped' }>>
+				<<goto 'Event - The long wait'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Eve - Confession'>>
+				<<run delete $characters.eve.quests.confession_day>>
+				<<goto 'Eve - Confession'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Laura - What the Lab Left'>>
+				<<run delete $characters.laura.quests.lab_left_day>>
+				<<goto 'Laura - What the Lab Left'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Laura - gear back in the lab'>>
+				<<set $characters.laura.quests.gear_back = true, $characters.laura.quests.binder = true>>
+				<<run delete $characters.laura.quests.gear_returned_day>>
+				<<goto 'Laura - What the Lab Left home'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link "Event: Elsa - The Stranger's Name">>
+				<<if !$characters.elsa>><<set $characters.elsa = { quests: {} }>><</if>>
+				<<if !$characters.elsa.stranger>>
+					<<newguy>>
+					<<set $characters.elsa.stranger = $tmpGuy>>
+					<<unset $tmpGuy>>
+				<</if>>
+				<<goto "Elsa - The Stranger's Name">>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Frozen camp (night trip on foot)'>>
+				<<run setup.night.startTrip('foot', 'dark', null)>>
+				<<goto 'Night event - frozen camp'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Fire in the night'>>
+				<<set $game.fireNight = true>>
+				<<goto 'Event - Fire in the night'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<link 'Event: Broken guest'>>
+				<<set _cbg = $guests.find(function (g) { return setup.getAge(g) >= 18 && setup.pronounceWhat(g) === 'she'; })>>
+				<<if !_cbg>>
+					<<newgirl>>
+					<<run $guests.push($tmpGirl)>>
+					<<set _cbg = $tmpGirl>>
+					<<unset $tmpGirl>>
+				<</if>>
+				<<set _cbg.happy = -60, _cbg.lowMoodNights = 5>>
+				<<set $game.brokenGuest = { guestId: _cbg.id }>>
+				<<goto 'Event - Broken guest'>>
+				<<script>>Dialog.close();<</script>>
+			<</link>>
 			<<link 'Event: Loyalty trial'>>
 				<<newgirl>>
 				<<set $tmpGirl.relationship = 20>>
@@ -473,6 +545,25 @@
 				<<unset $characters.negan.quests.remembers_day>>
 				<<goto 'Negan - She Remembers You'>>
 				<<script>>Dialog.close();<</script>>
+			<</link>>
+			<<for _hmCi, _hmStep range setup.himari.STEPS>>
+				<<capture _hmStep>>
+					<<set _hmCheatLabel = 'Event: Himari ' + (_hmCi + 1) + ' - ' + _hmStep.passage.replace('Himari - ', '')>>
+					<<link _hmCheatLabel>>
+						<<set _hmCheatTo = setup.himari.cheatJump(_hmStep.id)>>
+						<<goto _hmCheatTo>>
+						<<script>>Dialog.close();<</script>>
+					<</link>>
+				<</capture>>
+			<</for>>
+			<<link 'Himari: +20 trust'>>
+				<<run setup.himari.addTrust(20)>>
+			<</link>>
+			<<link "Himari: Negan's attention +20">>
+				<<run setup.himari.addAttention(20)>>
+			<</link>>
+			<<link "Himari: Negan's attention to 0">>
+				<<run setup.himari.addAttention(-100)>>
 			<</link>>
 
 			<<set _teachers = setup.filterNPCs($guests, {'skills_inc': ['teacher'], 'gender':0})[0]>>

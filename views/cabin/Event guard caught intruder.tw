@@ -14,7 +14,8 @@
 <<if !_speakerPool.length>><<set _speakerPool = (_randomGuests[0] ?? _randomGuests[2] ?? [])>><</if>>
 <<set _speakerIdx = setup.getRandomElement(_speakerPool)>>
 <<set _speakerNpc = $guests[_speakerIdx]>>
-As you come out of your room in the morning, one of your guests comes running towards you, loudly saying that one of your guards managed to catch a woman in the morning light who was trying to enter the resource room. He was able to apprehend her, and she is currently tied up behind the house. You decide to go and see what is really happening there.
+<<set _guardNpc = $guests[setup.getRandomElement(setup.getPersonsForLocation($guests, 'guard'))]>>
+As you come out of your room in the morning, one of your guests comes running towards you, loudly saying that one of your guards managed to catch a woman in the morning light who was trying to enter the resource room. <<=_guardNpc ? setup.pronounceWhat(_guardNpc, true) : 'The guard'>> was able to apprehend her, and she is currently tied up behind the house. You decide to go and see what is really happening there.
 <br /><br />
 <<video 'cabin/intruder_caught1'>>
 <br /><br />

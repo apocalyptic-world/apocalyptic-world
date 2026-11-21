@@ -1,0 +1,166 @@
+:: Himari - Visit [bg-sanctuary]
+<<set _hm = setup.himari.ensure()>>
+<<set _hmQ = _hm.quests>>
+<<set _hmStage = setup.himari.stage()>>
+<<set _hmCabin = setup.himari.where() === 'cabin'>>
+<h1 class="ptitle"><<= _hmCabin ? 'BELOW DECK' : 'THE CONTAINER'>></h1>
+<<addmins 10>>
+<br />
+/* the standard character panel (portrait, age, trust as relationship, more info), same as other unique characters */
+<<unset $slaveId, $guestId, $childId>>
+<<set $charId = 'himari', $tmpGirl = _hm>>
+<<include 'NPC info'>>
+<<if _hmCabin>>
+	The cabin below deck was a steel box with a narrow iron bed, a barred window and a bucket in the corner. The guard in the corridor unlocked it for you and left the door open behind you, the way he had been told.
+	<br /><br />
+	<center>
+		<<image 'people/himari/kept.jpg'>>
+	</center>
+<<else>>
+	The guard on the container knew you by now. He unlocked the padlock, swung the door a hand's width open and stepped back to light a cigarette, watching you over the flame.
+	<br /><br />
+	<center>
+		<<image 'people/himari/container_cry.jpg'>>
+	</center>
+<</if>>
+<br />
+<<if (_hm.trust ?? 0) < 30>>
+	She sat against the far wall with her knees pulled up and watched your hands, not your face.
+<<elseif (_hm.trust ?? 0) < 60>>
+	She looked up when you came in. It was not a smile, but it was not fear either.
+<<else>>
+	She moved over to make room for you before you asked, and she looked at your face first, not at your hands.
+<</if>>
+<<if (_hm.attention ?? 0) >= 40>>
+	The guard was paying more attention to you than to his cigarette. Somebody had been talking.
+<</if>>
+<br /><br />
+
+<<if _hmQ.heat_day && !_hmQ.heat_cured_day>>
+	She was lying on her side on the floor, burning, her braid stuck to her neck with sweat.
+	<br /><br />
+	<<if $backpack.count('antibiotics') >= 1>>
+		<div id="hm_heal" class="hm-act">
+			<<set _hmHealLabel = 'Give her the antibiotics'>>
+			<<linkreplace _hmHealLabel>>
+				<<include 'Himari - Heat Sick cure'>>
+			<</linkreplace>>
+		</div>
+	<<else>>
+		<strong>(She needs antibiotics. You did not have any with you.)</strong>
+		<br /><br />
+	<</if>>
+<</if>>
+
+<<if _hmQ.talk_day !== $game.day>>
+	<div id="hm_talk" class="hm-act">
+		<<set _hmTalkLabel = 'Sit with her for a while'>>
+		<<linkreplace _hmTalkLabel>>
+			<<set _hmQ.talk_day = $game.day>>
+			<<run setup.himari.addTrust(2)>>
+			<<run setup.himari.addAttention(2)>>
+			<<addmins 20>>
+			You sat down on the floor, not too close, and stayed.
+			<br /><br />
+			<<if _hmStage === 0>>
+				<<set _hmLine = [
+					['ここはどこ…？', 'Koko wa doko…?'],
+					['家に帰りたい…', 'Ie ni kaeritai…'],
+					['もう嫌…', 'Mou iya…'],
+					['お腹すいた…', 'Onaka suita…']
+				].random()>>
+				<<himari>>
+					<<jp _hmLine[0] _hmLine[1]>>
+				<</himari>>
+				<br />
+				You shook your head. You did not understand. She looked at you for a long moment and then said it again, slower, as if slower might help, and then she stopped trying.
+			<<elseif _hmStage === 1>>
+				<<set _hmLine = [
+					['水… mizu. Water.', 'She pointed at the can, then at herself.'],
+					['寒い… cold.', 'She rubbed her arms. The steel floor held the night all day.'],
+					['大丈夫… okay?', 'She pointed at your hands, at the bruise on your knuckles.'],
+					['ありがとう… thank.', 'She said it to the floor, not to you.']
+				].random()>>
+				<<himari>>
+					<<= _hmLine[0]>>
+				<</himari>>
+				<br />
+				<<= _hmLine[1]>>
+			<<else>>
+				<<set _hmLine = [
+					'Today… cold. You come. Good.',
+					'Negan… always smile. Smile is… bad.',
+					'Sea. My home… near sea. You see sea?',
+					'Doctor come again. Every week. Same… same hands.'
+				].random()>>
+				<<himari>>
+					<<= _hmLine>>
+				<</himari>>
+				<br />
+				It took her a long time to put the words together, and she watched your face after each one to see whether she had got it right.
+			<</if>>
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if _hmQ.teach_day !== $game.day && setup.himari.nextTeachWord()>>
+	<div id="hm_teach" class="hm-act">
+		<<set _hmTeachLabel = 'Teach her a word'>>
+		<<linkreplace _hmTeachLabel>>
+			<<set _hmQ.teach_day = $game.day>>
+			<<set _hmWordKey = setup.himari.nextTeachWord()>>
+			<<set _hmWord = setup.himari.PHRASEBOOK[_hmWordKey]>>
+			<<run setup.himari.learn(_hmWordKey)>>
+			<<run setup.himari.addTrust(3)>>
+			<<run setup.himari.addAttention(6)>>
+			<<addmins 30>>
+			You pointed and mimed until she understood what you meant, and you said it in English: <em><<= _hmWord.en>></em>. She repeated it twice, carefully, as if the word might break. Then she gave you hers.
+			<br /><br />
+			<<himari>>
+				<<jp _hmWord.jp _hmWord.romaji>>
+			<</himari>>
+			<br />
+			<strong>(New word: <<= _hmWord.jp>> (<<= _hmWord.romaji>>) - <<= _hmWord.en>>. Trust +3.)</strong>
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if _hmQ.feed_day !== $game.day && $backpack.count('food') >= 1>>
+	<div id="hm_feed" class="hm-act">
+		<<set _hmFeedLabel = setup.himari.done('rations') ? 'Slip her extra food' : 'Give her some of your food'>>
+		<<linkreplace _hmFeedLabel>>
+			<<set _hmQ.feed_day = $game.day>>
+			<<drop $backpack 'food' 1>>
+			<<run setup.himari.addTrust(4)>>
+			<<run setup.himari.addAttention(setup.himari.done('rations') ? 14 : 10)>>
+			<<addmins 10>>
+			You took the food out of your pack and put it in her hands with your back to the door. She ate it fast, in small bites, without looking up, the way people eat when they expect it to be taken away.
+			<br /><br />
+			<<if setup.himari.stage() >= 1>>
+				<<himari>>
+					…ありがとう. Thank.
+				<</himari>>
+				<br />
+			<</if>>
+			<strong>(One food given. Trust +4. Somebody might have seen.)</strong>
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if _hmQ.job_day !== $game.day>>
+	<div id="hm_job" class="hm-act">
+		<<set _hmJobLabel = 'Do your handler rounds (1 hour, ' + setup.himari.JOB_PAY + ' caps)'>>
+		<<linkreplace _hmJobLabel>>
+			<<set _hmQ.job_day = $game.day>>
+			<<set $player.money += setup.himari.JOB_PAY>>
+			<<addmins 60>>
+			<<energy -10>>
+			You did the rounds: fresh water, the bucket, the blanket shaken out, the lock checked twice with the guard watching. She stood in the corner while you worked and did not get in your way. The guard at the gangway counted <<= setup.himari.JOB_PAY>> caps into your hand without a word.
+			<br /><br />
+		<</linkreplace>>
+	</div>
+<</if>>
+<<link 'Leave'>>
+	<<unset $tmpGirl, $charId>>
+	<<goto 'Sanctuary'>>
+<</link>>

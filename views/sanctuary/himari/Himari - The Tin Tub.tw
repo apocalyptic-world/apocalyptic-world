@@ -1,0 +1,58 @@
+:: Himari - The Tin Tub [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY</h1>
+<<run setup.himari.mark('tub')>>
+<<addmins 45>>
+<br />
+Negan's orders were waiting with the guard on the container: she was to be scrubbed. Somebody important wanted a fresh look at her, and the doc was coming in the morning, and Negan did not want the client's merchandise smelling of rust.
+<br /><br />
+They set up a tin tub in a storage hold behind a hanging tarp, and one of the laundry women filled it with water she had heated on the galley stove, bucket by bucket. The laundry woman would wash her. You would stand at the tarp with your back to it, so that nobody else walked in. That was the job.
+<br /><br />
+<center>
+	<<image 'people/himari/tin_tub.jpg'>>
+</center>
+<br />
+Behind you, you heard the water move. You heard the laundry woman's brush and her low, tired muttering, and nothing at all from Himari. Not one sound. Not when the water was too hot, not when the brush was too hard.
+<br /><br />
+The tarp did not reach the floor. There was a gap at the edge where the light from the bare bulb came through.
+<br /><br />
+<div id="hm12_back">
+	<<set _hmBackLabel = 'Keep your back turned'>>
+	<<linkreplace _hmBackLabel>>
+		<<run $('#hm12_peek').hide()>>
+		<<set $characters.himari.quests.tub_reply = 'back_turned'>>
+		<<run setup.himari.addTrust(5)>>
+		You kept your back turned and your eyes on the corridor, and when two of Negan's men came down it laughing and slowed by the tarp, you stepped into the middle of the corridor and stood there until they kept walking.
+		<br /><br />
+		When it was over, the laundry woman pulled back the tarp. Himari stood wrapped in a grey towel, her braid dripping, and looked at you. She had heard the men. She had heard them keep walking.
+		<br /><br />
+		She did not say anything. She did not need to.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm12_peek">
+	<<set _hmPeekLabel = 'Look through the gap'>>
+	<<linkreplace _hmPeekLabel>>
+		<<run $('#hm12_back').hide()>>
+		<<set $characters.himari.quests.tub_reply = 'peeked'>>
+		<<run setup.himari.addTrust(-5)>>
+		<<run setup.himari.addAttention(5)>>
+		You looked. She sat in the tin tub with her knees drawn up and her arms wrapped around them, her pale wet back bent forward, her long braid hanging down her spine, dripping. The laundry woman scrubbed her shoulders like she was scrubbing a floor. Himari did not cover herself. Captives learn quickly that covering yourself only makes it worse.
+		<br /><br />
+		Then she turned her head, very slightly, and her eyes found the gap in the tarp, and found you in it.
+		<br /><br />
+		She looked down at the water again. That was all. The laundry woman followed her look and saw you too.
+		<br /><br />
+		<<say 'Laundry woman' setup.ImagePath+'/people/anongirl.png'>>
+			Like all the rest of them.
+		<</say>>
+		<br />
+		She said it without anger, the way people say it is going to rain.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

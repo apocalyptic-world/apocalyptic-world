@@ -185,7 +185,7 @@
     <<set $locationEvents.garage = true>>
 <</if>>
 <<if !($locationEvents.garage ?? false)>>
-    <<set _eligibleGarageGuests = setup.getAvailablePersons18yo($guests)[0]?.filter(i => !$player?.baseManagement?.noIncest || !setup.family.isBloodToMC($guests[i])) ?? []>>
+    <<set _eligibleGarageGuests = setup.getAvailablePersons18yo($guests)[0]?.filter(i => !($guests[i].traits ?? []).includes('feral') && (!$player?.baseManagement?.noIncest || !setup.family.isBloodToMC($guests[i]))) ?? []>>
     <<if setup.percentageChance(5) && _eligibleGarageGuests.length>>
         <<set $locationEvents.garage = true>>
         <<goto 'Car - repair fuck'>>

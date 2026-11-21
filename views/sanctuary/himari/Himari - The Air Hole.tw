@@ -1,0 +1,77 @@
+:: Himari - The Air Hole [bg-sanctuary]
+<h1 class="ptitle">THE SANCTUARY AT NIGHT</h1>
+<<run setup.himari.mark('airhole')>>
+<<run setup.himari.learn('ie')>>
+<<run setup.himari.learn('umi')>>
+<<set _hmQ = $characters.himari.quests>>
+<<addmins 30>>
+<br />
+<<if _hmQ.heat_late_day && !_hmQ.heat_late_paid>>
+	<<set _hmQ.heat_late_paid = true>>
+	<<set _hmFine = Math.min($player.money, setup.himari.HEAT_FINE)>>
+	<<set $player.money -= _hmFine>>
+	The guard at the gate stopped you before you were through it and held out his hand.
+	<br /><br />
+	<<say 'Guard' setup.ImagePath+'/people/anonguy.png'>>
+		Boss says the doc had to open his own medicine for her, since her handler couldn't be bothered. Boss says you pay for it.
+	<</say>>
+	<br />
+	You paid. <strong>(-<<= _hmFine>> caps.)</strong>
+	<br /><br />
+<</if>>
+The yard at night was a different place. The work lights were off to save fuel, and the containers stood in rows like dark houses on a street with no windows. The guard on her door was asleep sitting up, his chin on his chest.
+<br /><br />
+You were walking past when you heard it: a scratch, very small, from the side of the container. There was a rusted vent there at head height, a small square hatch with iron bars across it. Behind the bars, pale in the dark, was her face.
+<br /><br />
+<center>
+	<<image 'people/himari/air_hole.jpg'>>
+</center>
+<br />
+You stepped up close to the bars. Her voice came through them so quietly that it was mostly breath.
+<br /><br />
+<<himari>>
+	<<jp '…あなた？' '…Anata?'>>
+<</himari>>
+<br />
+You said her name. Her face went away from the bars, and came back, and her hand came up holding something: a square of paper folded twice, the back of a ration label. She pushed it out between two bars until you took it.
+<br /><br />
+It was a drawing, done with a burnt matchstick. A coastline. A small house with a crooked roof and a tree beside it. Three figures in front of the house, holding hands: a tall one, a short one, and one in the middle with one long braid. And behind it all, filling the whole top half of the paper with careful wavy lines, the sea.
+<br /><br />
+<<himari>>
+	<<jp '家… 海…' 'Ie… umi…'>>
+<</himari>>
+<br />
+She said the words slowly through the bars, and you said them back, and you understood: <em>home</em>. <em>Sea</em>.
+<br /><br />
+<strong>(New words: 家 (ie) - home, 海 (umi) - sea.)</strong>
+<br /><br />
+<div id="hm9_keep">
+	<<set _hmKeepLabel = 'Keep it safe for her'>>
+	<<linkreplace _hmKeepLabel>>
+		<<run $('#hm9_back').hide()>>
+		<<set _hmQ.drawing_kept = true>>
+		<<run setup.himari.addTrust(6)>>
+		<<run setup.himari.addAttention(8)>>
+		You folded the drawing along its creases and put it inside your jacket, against your chest, and tapped it twice so she would hear. Behind the bars she shut her eyes and breathed out.
+		<br /><br />
+		The guard by the door did not move. You hoped he was really asleep.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm9_back">
+	<<set _hmBackLabel = 'Push it back to her'>>
+	<<linkreplace _hmBackLabel>>
+		<<run $('#hm9_keep').hide()>>
+		<<run setup.himari.addTrust(3)>>
+		You looked at it a long time. Then you folded it and pushed it back between the bars. It was hers. It was the only thing on this ship that was hers.
+		<br /><br />
+		Her fingers took it and went away. After a while you heard her whisper something to it, something you did not understand, in the voice people use to say goodnight.
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

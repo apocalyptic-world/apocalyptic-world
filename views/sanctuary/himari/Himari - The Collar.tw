@@ -1,0 +1,84 @@
+:: Himari - The Collar [bg-sanctuary]
+<h1 class="ptitle">NEGAN'S OFFICE</h1>
+<<run setup.himari.mark('collar')>>
+<<run setup.himari.learn('daijoubu')>>
+<<addmins 30>>
+<br />
+Negan was in a good mood. He had a package on the desk wrapped in an oily rag, and he was waiting for you with the expression of a man about to hand out a birthday present.
+<br /><br />
+Himari stood by the desk, brought up from the container for the occasion, in the same clothes she had arrived in.
+<br /><br />
+<<negan>>
+	Got something for our girl. Had it made special. Go on, open it.
+<</negan>>
+<br />
+Inside the rag was a steel collar, hinged at the back, with a ring at the front. Negan dropped a small padlock on the desk to go with it. On the ring hung a stamped steel tag. Somebody in the ship's workshop had punched letters into it by hand: <strong>PROPERTY OF THE SANCTUARY</strong>.
+<br /><br />
+<center>
+	<<image 'people/himari/collar.jpg'>>
+</center>
+<br />
+<<negan>>
+	Every delivery needs a label. Put it on her, handler. That's your job.
+<</negan>>
+<br />
+She looked at the collar in your hands. She did not need any English for this either.
+<br /><br />
+<div id="hm14_lock">
+	<<set _hmLockLabel = 'Lock it on her'>>
+	<<linkreplace _hmLockLabel>>
+		<<run $('#hm14_refuse').hide()>>
+		<<set $characters.himari.quests.collar_reply = 'locked'>>
+		<<run setup.himari.addTrust(-5)>>
+		You did it as gently as you could. You lifted her braid out of the way with one hand and closed the steel around her throat with the other, and checked with two fingers that it was not too tight, and closed the padlock. It made a very small sound.
+		<br /><br />
+		She lifted her chin when you were done, the way she had seen you want her to. Her eyes were wet. Her voice, when it came, was so quiet that Negan did not hear it.
+		<br /><br />
+		<<himari>>
+			<<jp '大丈夫…' 'Daijoubu…'>> O… kay.
+		<</himari>>
+		<br />
+		She was telling you it was all right. She was comforting you.
+		<br /><br />
+		<strong>(New word: 大丈夫 (daijoubu) - it's okay. Her first English word to you: "okay".)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>
+<div id="hm14_refuse">
+	<<set _hmRefuseLabel = 'Refuse'>>
+	<<linkreplace _hmRefuseLabel>>
+		<<run $('#hm14_lock').hide()>>
+		<<set $characters.himari.quests.collar_reply = 'refused'>>
+		<<run setup.himari.addTrust(3)>>
+		<<run setup.himari.addAttention(5)>>
+		<<set $characters.negan.relationship = Math.max(($characters.negan.relationship ?? 0) - 5, -100)>>
+		You put the collar back on the desk.
+		<br /><br />
+		<<negan>>
+			<<if $characters.himari.quests.wrists_reply === 'refused'>>Huh. Twice now, my friend. I'm keeping count.<<else>>Huh. That's a first. I'm going to start keeping count, my friend.<</if>>
+		<</negan>>
+		<br />
+		He did it himself. He did it fast, and too tight, and when the padlock was closed he hooked one finger through the ring and pulled her face close to his.
+		<br /><br />
+		<<negan>>
+			Say thank you, Dolly.
+		<</negan>>
+		<br />
+		She did not understand. He tugged the ring until she made a sound, any sound, and he took that as a thank you and let her go. She stood rubbing her throat where the steel bit, and when Negan turned his back she looked at you.
+		<br /><br />
+		<<himari>>
+			<<jp '大丈夫…' 'Daijoubu…'>> O… kay.
+		<</himari>>
+		<br />
+		She was telling you it was all right. She was comforting you.
+		<br /><br />
+		<strong>(New word: 大丈夫 (daijoubu) - it's okay. Her first English word to you: "okay".)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Sanctuary'>>
+		<</link>>
+	<</linkreplace>>
+</div>

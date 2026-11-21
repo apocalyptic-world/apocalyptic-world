@@ -1,0 +1,133 @@
+:: Elsa - The Stranger's Name [bg-guesthouse]
+<br />
+<h1 class="ptitle">ELSA'S ROOM</h1>
+<br />
+<<set _snM = $characters.elsa.stranger>>
+<<set $characters.elsa.quests.stranger_name_day = $game.day>>
+<<addmins 30>>
+Elsa was not alone in her room. She sat on the edge of the bed, and in the chair by the window, with a walking stick across his knees, sat the man from the woods.
+<br /><br />
+<center>
+	<<image 'people/elsa/stranger_name.jpg'>>
+</center>
+<br />
+He looked better than the last time you had seen him. The cuts on his face had closed, somebody had hacked his hair short, and he could sit up straight on his own. He still flinched when the door opened.
+<br /><br />
+<<elsa>>
+	Don't be angry. He came to the gate last night. He walked all the way from our old house on that leg. The men from the well came back twice after we left, and both times he hid in the root cellar until they were gone.
+<</elsa>>
+<br />
+<<sayNpc _snM>>
+	I'm sorry. I didn't know where else to go. She was the only one who was ever kind to me out here.
+<</sayNpc>>
+<br />
+You asked him the question nobody had asked him yet. You asked him his name.
+<br /><br />
+<<sayNpc _snM>>
+	<<=_snM.name>>. My name is <<=_snM.name>>. Nobody has said it out loud in two years. On the ship they called us by the number painted on our backs.
+<</sayNpc>>
+<br />
+It came out of him in a low, even voice, as if he had rehearsed it on the long walk. Two years on the lower deck of Negan's tanker, chained at the ankle, hauling fuel drums out of the dark and back down again. The men who had taken him there were the same kind as the ones at the well: hunters who picked people off the roads and sold them to whoever paid. One evening the guard on the lower corridor was late for his shift, the door at the end of the corridor was not chained, and he walked through it and kept walking.
+<br /><br />
+<<sayNpc _snM>>
+	The men at the well told you I stole from them and hurt a woman. The woman had the keys to the pen. I hit her with a lamp to get them. I'm not proud of it. They'll keep looking. Negan pays for every one of us they bring back, and he pays double for the ones who ran.
+<</sayNpc>>
+<br />
+<<elsa>>
+	Please let him stay. He can work, he's good with his hands, he fixed our pump. Nobody has to know he's here.
+<</elsa>>
+<br />
+Everyone in the room was looking at you.
+<br /><br />
+<<if setup.guestRoom.hasRoom()>>
+	<div id="sn_stay">
+		<<set _snStayLabel = 'Let him stay'>>
+		<<linkreplace _snStayLabel>>
+			<<run $('#sn_negan, #sn_away').hide()>>
+			<<set _snM.relationship = 40, _snM.happy = 20>>
+			<<run $guests.push(_snM)>>
+			<<run setup.npc.addHistory(_snM, 'invited')>>
+			<<set $characters.elsa.relationship = Math.min(($characters.elsa.relationship ?? 0) + 10, 100)>>
+			<<set $characters.elsa.quests.stranger_fate = 'stayed'>>
+			<<run delete $characters.elsa.stranger>>
+			Elsa threw her arms around your neck before you had finished the sentence. <<=_snM.name>> did not say anything at all. He put his face in his hands and sat like that for a long time, and when he looked up his eyes were wet.
+			<br /><br />
+			<<sayNpc _snM>>
+				I'll work. Whatever you need. You won't regret it.
+			<</sayNpc>>
+			<br />
+			<<set $tmpGirl = _snM>>
+			<<include 'NPC info'>>
+			<br /><br />
+			<strong>(<<=_snM.name>> joined your people as a guest. Elsa relationship +10.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<unset $tmpGirl>>
+				<<goto 'Guest house'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<<if isMetChar('negan')>>
+	<div id="sn_negan">
+		<<set _snNeganLabel = 'Hand him over to Negan'>>
+		<<linkreplace _snNeganLabel>>
+			<<run $('#sn_stay, #sn_away').hide()>>
+			<<addmins 180>>
+			<<set $player.money += 150>>
+			<<set $player.goodwill -= 2>>
+			<<set $characters.elsa.relationship = Math.max(($characters.elsa.relationship ?? 0) - 25, -100)>>
+			<<set $characters.elsa.quests.stranger_fate = 'sold'>>
+			<<run delete $characters.elsa.stranger>>
+			You did not let Elsa finish begging. You tied his hands with your belt, and he did not fight you. He looked as if he had known it would end like this all along. Elsa screamed at you all the way to the car, and then she stopped screaming and did not say anything at all.
+			<br /><br />
+			At the Sanctuary, Negan came down the gangway himself to look.
+			<br /><br />
+			<<negan>>
+				Well, would you look at that. Number forty-one. I was wondering where you got to. Handler, you are full of surprises.
+			<</negan>>
+			<br />
+			He counted the caps into your hand and patted your cheek, and two of his men walked <<=_snM.name>> down below deck without a word.
+			<br /><br />
+			<<negan>>
+				Anybody else wanders in off the road with chain marks on his ankles, you know where to bring him. I pay for loyalty.
+			<</negan>>
+			<br />
+			When you got home, Elsa's door was shut, and it stayed shut for two days.
+			<br /><br />
+			<strong>(+150 caps. Elsa relationship -25.)</strong>
+			<br /><br />
+			<<link 'Leave'>>
+				<<goto 'Guest house'>>
+			<</link>>
+		<</linkreplace>>
+	</div>
+<</if>>
+<div id="sn_away">
+	<<set _snAwayLabel = 'Give him supplies and send him on his way'>>
+	<<linkreplace _snAwayLabel>>
+		<<run $('#sn_stay, #sn_negan').hide()>>
+		<<set _snFood = Math.min(2, $backpack.count('food'))>>
+		<<if _snFood>>
+			<<drop $backpack 'food' _snFood>>
+		<</if>>
+		<<set $characters.elsa.relationship = Math.min(($characters.elsa.relationship ?? 0) + 3, 100)>>
+		<<set $characters.elsa.quests.stranger_fate = 'sent_off'>>
+		<<run delete $characters.elsa.stranger>>
+		<<you>>
+			Not here. Negan's people come too close to my door as it is. If they find you here, they take you and everyone who hid you.
+		<</you>>
+		<br />
+		He nodded as if he had expected nothing else. You gave him <<if _snFood>><<=_snFood>> food, <</if>>a blanket and directions north, away from the city and the ship. Elsa walked him to the gate and stood there until he was out of sight.
+		<br /><br />
+		<<elsa>>
+			You're right. I know you're right. I just wish you weren't.
+		<</elsa>>
+		<br />
+		<strong>(<<=_snM.name>> went north. Elsa relationship +3.)</strong>
+		<br /><br />
+		<<link 'Leave'>>
+			<<goto 'Guest house'>>
+		<</link>>
+	<</linkreplace>>
+</div>
