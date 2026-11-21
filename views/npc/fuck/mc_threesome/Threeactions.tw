@@ -2012,24 +2012,24 @@
 
 	<<elseif $sexAction === 'pussy' >>
 
-		<<if !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(30)>>
+		<<if setup.sexReactions.relation($tmpGirl) && setup.percentageChance(30)>>
 
-		<<if $tmpGirl.family?.father === 'mc'>>
+		<<if setup.sexReactions.relation($tmpGirl) === 'daughter'>>
 		     <<sayNpc $tmpGirl>>
 		        <<=either([
-		            "I know it's wrong, " + _partnerName + ".. but daddy feels so right....",
-		            "Mmmm, don't judge me " + _partnerName + ", Daddy feels so amazing...",
-		            "Do you like watching daddy fuck me, " + _partnerName + "?",
-		            "*whispering* It's so wrong, " + _partnerName + "... so why does daddy feel so perfect...",
-		            "Ahh, daddy... " + _partnerName + ", he goes so deep... I can't help how good it feels...",
+		            "I know it's wrong, " + _partnerName + ".. but " + setup.npc.mcName($tmpGirl) + " feels so right....",
+		            "Mmmm, don't judge me " + _partnerName + ", " + setup.npc.mcName($tmpGirl, 1) + " feels so amazing...",
+		            "Do you like watching " + setup.npc.mcName($tmpGirl) + " fuck me, " + _partnerName + "?",
+		            "*whispering* It's so wrong, " + _partnerName + "... so why does " + setup.npc.mcName($tmpGirl) + " feel so perfect...",
+		            "Ahh, " + setup.npc.mcName($tmpGirl) + "... " + _partnerName + ", he goes so deep... I can't help how good it feels...",
 		            "Don't look away, " + _partnerName + "... I want you to see how much I love this...",
-		            "*breathless* Daddy... " + _partnerName + "... having you both here feels like a dream...",
-		            "Mmmh, " + _partnerName + ", nobody fills me like daddy does... nobody...",
-		            "Daddy, don't slow down just because " + _partnerName + " is watching... especially not because of that...",
+		            "*breathless* " + setup.npc.mcName($tmpGirl, 1) + "... " + _partnerName + "... having you both here feels like a dream...",
+		            "Mmmh, " + _partnerName + ", nobody fills me like " + setup.npc.mcName($tmpGirl) + " does... nobody...",
+		            setup.npc.mcName($tmpGirl, 1) + ", don't slow down just because " + _partnerName + " is watching... especially not because of that...",
 		            "*shaking* " + _partnerName + "... I know I shouldn't want this so much... but I do..."
 		        ])>>
 		    <</sayNpc>>
-		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc') || ($player.family?.siblings ?? []).includes($tmpGirl.id)>>
+		<<elseif setup.sexReactions.relation($tmpGirl) === 'sister'>>
 		     <<sayNpc $tmpGirl>>
 		        <<=either([
 		            "Mmm... don't look shocked, " + _partnerName + "... my own brother fills me better than anyone I've ever been with...",
@@ -2077,24 +2077,24 @@
 
 	<<elseif $sexAction === 'anal'  && $tmpGirl.anal >= 20 >>
 
-		<<if !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(30)>>
+		<<if setup.sexReactions.relation($tmpGirl) && setup.percentageChance(30)>>
 
-		<<if $tmpGirl.family?.father === 'mc'>>
+		<<if setup.sexReactions.relation($tmpGirl) === 'daughter'>>
 		     <<sayNpc $tmpGirl>>
 		        <<=either([
-		           "I know it's so naughty, " + _partnerName + " but you know how good daddy feels....",
-		           "Do you like watching me take daddy in my ass, " + _partnerName + "?",
-		           "*gasping* Daddy fills me so deep back there... " + _partnerName + ", do you have any idea how good this feels?",
-		           "It's wrong, I know, " + _partnerName + "... but when daddy's inside me like this, I can't bring myself to care...",
-		           "Mmmh, daddy... " + _partnerName + ", touch me while he does this... please...",
-		           "Ahh, daddy... you always know exactly how I need it... " + _partnerName + ", don't look away...",
-		           "I've never let anyone else do this to me, " + _partnerName + "... only daddy...",
-		           "*breathless* Daddy... tell me you love me while " + _partnerName + " watches... please...",
+		           "I know it's so naughty, " + _partnerName + " but you know how good " + setup.npc.mcName($tmpGirl) + " feels....",
+		           "Do you like watching me take " + setup.npc.mcName($tmpGirl) + " in my ass, " + _partnerName + "?",
+		           "*gasping* " + setup.npc.mcName($tmpGirl, 1) + " fills me so deep back there... " + _partnerName + ", do you have any idea how good this feels?",
+		           "It's wrong, I know, " + _partnerName + "... but when " + setup.npc.mcName($tmpGirl) + "'s inside me like this, I can't bring myself to care...",
+		           "Mmmh, " + setup.npc.mcName($tmpGirl) + "... " + _partnerName + ", touch me while he does this... please...",
+		           "Ahh, " + setup.npc.mcName($tmpGirl) + "... you always know exactly how I need it... " + _partnerName + ", don't look away...",
+		           "I've never let anyone else do this to me, " + _partnerName + "... only " + setup.npc.mcName($tmpGirl) + "...",
+		           "*breathless* " + setup.npc.mcName($tmpGirl, 1) + "... tell me you love me while " + _partnerName + " watches... please...",
 		           "Nngh, he goes so deep in my ass, " + _partnerName + "... I've never felt anything like it...",
-		           "It's our secret, " + _partnerName + "... the way only daddy can take me like this..."
+		           "It's our secret, " + _partnerName + "... the way only " + setup.npc.mcName($tmpGirl) + " can take me like this..."
 		        ])>>
 		    <</sayNpc>>
-		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc') || ($player.family?.siblings ?? []).includes($tmpGirl.id)>>
+		<<elseif setup.sexReactions.relation($tmpGirl) === 'sister'>>
 		     <<sayNpc $tmpGirl>>
 		        <<=either([
 		           "We share everything, " + _partnerName + "... *breathless* ...I mean everything...",
@@ -2178,24 +2178,24 @@
 
 	<<elseif $sexAction === 'cum_in_pussy' >>
 
-		<<if !$player?.baseManagement?.noIncest && ($tmpGirl.family?.father === 'mc' || ($tmpGirl.family?.siblings ?? []).includes('mc') || ($tmpGirl.family?.kids ?? []).includes('mc') || $player.family?.mother === $tmpGirl.id || $player.family?.father === $tmpGirl.id || ($player.family?.siblings ?? []).includes($tmpGirl.id)) && setup.percentageChance(30)>>
+		<<if setup.sexReactions.relation($tmpGirl) && setup.percentageChance(30)>>
 
-		<<if $tmpGirl.family?.father === 'mc'>>
+		<<if setup.sexReactions.relation($tmpGirl) === 'daughter'>>
       <<sayNpc $tmpGirl>>
           <<=either([
-              "*gasps*  " + _partnerName + ", daddy just came inside me!  He's so naughty..",
-              "Mmmmh, " + _partnerName + ", do you like watching daddy plant his seed inside me?",
-              "Daddy!  You like letting " + _partnerName + " watch you breed your girl...?",
-              "*shaking* Daddy... I can feel every pulse inside me... " + _partnerName + ", don't look away...",
-              "Oh daddy... " + _partnerName + ", he's so warm inside me... it feels like it's just for me...",
-              "Mmmmh, daddy just filled me up, " + _partnerName + "... can you feel how he's still throbbing?",
-              "Daddy... " + _partnerName + "... I've wanted this for so long and now it's really happening...",
-              "*breathless* I love you, daddy... " + _partnerName + ", you saw that, right? He chose me...",
+              "*gasps*  " + _partnerName + ", " + setup.npc.mcName($tmpGirl) + " just came inside me!  He's so naughty..",
+              "Mmmmh, " + _partnerName + ", do you like watching " + setup.npc.mcName($tmpGirl) + " plant his seed inside me?",
+              setup.npc.mcName($tmpGirl, 1) + "!  You like letting " + _partnerName + " watch you breed your girl...?",
+              "*shaking* " + setup.npc.mcName($tmpGirl, 1) + "... I can feel every pulse inside me... " + _partnerName + ", don't look away...",
+              "Oh " + setup.npc.mcName($tmpGirl) + "... " + _partnerName + ", he's so warm inside me... it feels like it's just for me...",
+              "Mmmmh, " + setup.npc.mcName($tmpGirl) + " just filled me up, " + _partnerName + "... can you feel how he's still throbbing?",
+              setup.npc.mcName($tmpGirl, 1) + "... " + _partnerName + "... I've wanted this for so long and now it's really happening...",
+              "*breathless* I love you, " + setup.npc.mcName($tmpGirl) + "... " + _partnerName + ", you saw that, right? He chose me...",
               "Mmmh... his cum is so warm inside me, " + _partnerName + "... I never want it to leave...",
-              "*eyes closed* Daddy... breed me... " + _partnerName + ", isn't that exactly what I deserve?"
+              "*eyes closed* " + setup.npc.mcName($tmpGirl, 1) + "... breed me... " + _partnerName + ", isn't that exactly what I deserve?"
           ])>>
       <</sayNpc>>
-		<<elseif ($tmpGirl.family?.siblings ?? []).includes('mc') || ($player.family?.siblings ?? []).includes($tmpGirl.id)>>
+		<<elseif setup.sexReactions.relation($tmpGirl) === 'sister'>>
       <<sayNpc $tmpGirl>>
           <<=either([
               "*shivering* He came inside his own sister, " + _partnerName + "... we are absolutely terrible.. in the best way...",
