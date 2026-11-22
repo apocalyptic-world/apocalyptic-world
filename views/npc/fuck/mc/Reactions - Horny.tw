@@ -35,7 +35,19 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif $tmpGirl.family?.husband && $tmpGirl.family?.husband !== 'mc' && setup.percentageChance(40)>>
+	<<elseif setup.sexReactions.husbandWatching($tmpGirl) && setup.percentageChance(50)>>
+
+		<<set _watchingHusband = setup.cuckReactions.watcher($tmpGirl).name>>
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*eyes locked on " + _watchingHusband + "* Watch me, baby!  Watch him make me CUM!",
+				"YES!  " + setup.npc.mcName($tmpGirl, 1) + "!  Right in front of him...  I'm cumming so hard!",
+				"*crying out* Oh god, " + _watchingHusband + ", he's making me cum!  He's making me CUM!",
+				"Ahhh, " + setup.npc.mcName($tmpGirl) + "!  Let him see it...  let him see what you do to me!"
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.family?.husband && $tmpGirl.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching($tmpGirl) && setup.percentageChance(40)>>
 
 		<<sayNpc $tmpGirl>>
 			<<=either([
@@ -377,7 +389,18 @@
 			])>>
 		<</sayNpc>>
 
-	<<elseif $tmpGirl.family?.husband && $tmpGirl.family?.husband !== 'mc' && setup.percentageChance(40)>>
+	<<elseif setup.sexReactions.husbandWatching($tmpGirl) && setup.percentageChance(50)>>
+
+		<<set _watchingHusband = setup.cuckReactions.watcher($tmpGirl).name>>
+		<<sayNpc $tmpGirl>>
+			<<=either([
+				"*looking over at " + _watchingHusband + "* I'm so close, baby...  he's going to make me cum and you get to watch...",
+				"Mmmhh, " + setup.npc.mcName($tmpGirl) + "...  Don't stop...  I want him to see me cum on you...",
+				"*gasping* Watch, " + _watchingHusband + "...  this is what close looks like..."
+			])>>
+		<</sayNpc>>
+
+	<<elseif $tmpGirl.family?.husband && $tmpGirl.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching($tmpGirl) && setup.percentageChance(40)>>
 
 		<<sayNpc $tmpGirl>>
 			<<=either([

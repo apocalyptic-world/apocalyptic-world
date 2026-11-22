@@ -333,7 +333,7 @@
 <</if>>
 
 /* Checked here, after the list, since the events below can also send the player somewhere */
-<<set _ncEncounter = setup.previousPassage() === 'Wood cabin' ? setup.nurseryEncounters.roll('guesthouse') : null>>
+<<set _ncEncounter = setup.previousPassage() === 'Wood cabin' ? (setup.nurseryEncounters.roll('guesthouse') ?? setup.churchEncounters.roll('guesthouse')) : null>>
 <<if _ncEncounter>>
 	<<goto _ncEncounter>>
 <<elseif !($locationEvents.guesthouse ?? false)>>

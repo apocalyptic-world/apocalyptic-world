@@ -1,0 +1,98 @@
+:: Church encounter - basement expecting [bg-basement]
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+/* A kind nun looks after a slave who is expecting (base policy: nuns may include slaves). Late in the pregnancy she helps her get around too. Feral nuns too. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Basement'>>
+<<else>>
+<<set _nun = _cast.nun, _slave = _cast.slave>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun), _sName = setup.displayName(_slave)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _sHe = setup.pronounceWhat(_slave), _sHis = setup.pronounceWhos(_slave), _sHim = setup.pronounceWho(_slave)>>
+<<set _sMc = setup.npc.mcName(_slave), _nMc = setup.npc.mcName(_nun)>>
+<<set _heavy = (_slave.pregnancy ?? 0) >= _ce.HEAVY_FROM>>
+<<set _babyIsMc = _slave.pregnancy_father === 'mc'>>
+
+<<if _heavy>>
+	<<=_sName>> is trying to get up from the cot in <<=_sHis>> cell, which at this stage of <<=_sHis>> pregnancy is a project in several stages. <<=_nunName>> is already at <<=_sHis>> side, one arm around <<=_sHis>> back and the other braced under <<=_sHis>> elbow, taking most of <<=_sHis>> weight as <<=_sHe>> rocks forward onto <<=_sHis>> feet.
+<<else>>
+	<<=_sName>> is propped up on <<=_sHis>> cot with <<=_sHis>> feet up on a rolled blanket, one hand resting on the curve of <<=_sHis>> belly. <<=_nunName>> has brought a pillow down from upstairs and is fussing with it behind <<=_sHis>> back, plumping it when it doesn't need plumping.
+<</if>>
+<br /><br />
+<<if _feral>>
+	<<if _heavy>>
+		<<sayFeral _nun>>keeps a steady hold on <<=_sName>> until <<=_sHe>> is upright and balanced, then walks beside <<=_sHim>> step for step out of the cell, shoulder pressed to <<=_sHis>> side, ready to catch<</sayFeral>>
+	<<else>>
+		<<sayFeral _nun>>sets a cup of water by the cot, nudges it closer when <<=_sName>> doesn't reach for it right away, and then lays <<=_nHis>> head very gently against <<=_sHis>> belly, listening<</sayFeral>>
+	<</if>>
+	<br />
+	<<sayNpc _slave>>
+		<<=ucfirst(_sMc)>>, <<=_nHe>> comes down every day now. <<=ucfirst(_nHe)>> doesn't let me do a thing for myself. I think <<=_nHe>> knows what I need before I do.
+	<</sayNpc>>
+<<else>>
+	<<sayNpc _nun>>
+		<<if _heavy>>
+			Slowly. Lean on me, that's what I'm here for. There's no prize for doing it alone.
+		<<else>>
+			Water first, then you can have the tea. And tell me if your back starts aching again. These cots are hard enough without a baby to carry.
+		<</if>>
+	<</sayNpc>>
+	<br />
+	<<sayNpc _slave>>
+		<<=ucfirst(_sMc)>>. <<=ucfirst(_nHe)>> comes down here every day now. <<=ucfirst(_nHe)>> won't let me do a thing for myself.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _nun>>
+		The holy texts call a new life the first gift of the divine, <<=_nMc>>, and they don't say anything about which side of a door it's carried on. The least I can do is fetch the water for the one carrying the gift.
+	<</sayNpc>>
+<</if>>
+<br />
+
+<div id="ce_choices">
+	<<link 'Lend a hand (Uses 30 minutes)'>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _slave, 'happy', 2, 4)>>
+			<<run _fx.change(_slave, 'relationship', 2, 4)>>
+			<<run _fx.change(_nun, 'happy', 1, 2)>>
+			<<run _fx.change(_nun, 'relationship', 1, 2)>>
+			<<run _ce.changePlayer('goodwill', 2)>>
+			<<if _heavy>>
+				You take <<=_sName>>'s other arm, and between you and <<=_nunName>> <<=_sHe>> makes a slow lap of the basement, past the other cells and back. You fetch a stool when <<=_sHe>> needs to rest, rub the small of <<=_sHis>> back while <<=_sHe>> gets <<=_sHis>> breath back, and walk <<=_sHim>> home to <<=_sHis>> cot again at whatever pace <<=_sHe>> likes.
+			<<else>>
+				You roll up your sleeves. You refill the water, rub <<=_sName>>'s swollen feet while <<=_nunName>> brews the tea on the stove upstairs, and bring down a second blanket from storage so <<=_sHe>> won't be cold in the night.
+			<</if>>
+			<br /><br />
+			<<sayNpc _slave>>
+				<<if _babyIsMc>>
+					I like seeing you like this, <<=_sMc>>. Taking care of the both of us.
+				<<else>>
+					Thank you, <<=_sMc>>. I didn't think anyone would look after me like this down here.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			<<if _feral>>
+				<<sayFeral _nun>>watches you work with <<=_nHis>> head tilted, then copies you, rubbing <<=_sName>>'s other foot with exactly the same careful motion<</sayFeral>>
+			<<else>>
+				<<sayNpc _nun>>
+					This is what the church is for, <<=_nMc>>. Not the altar or the candles. This, wherever it's needed.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			[[Continue|Basement]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them be'>>
+		<<replace '#ce_choices'>>
+			You leave <<=_sName>> in <<=_nunName>>'s care. <<=ucfirst(_sHe)>> couldn't be in better hands.
+			<br /><br />
+			[[Continue|Basement]]
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

@@ -1,0 +1,140 @@
+:: Church encounter - power needy [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A nun of the power path urges the most worked-up guest in the house to stop fighting it. The player can help the guest relax, help satisfy them, or watch the nun do it. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _vice = _ce.vice(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justGuest = [_guest], _guestAndNun = [_guest, _nun]>>
+<<set _viceName = _vice ? _ce.itemName(_vice).toLowerCase() : ''>>
+
+<<=_gName>> is pacing the length of the dormitory, arms wrapped tight around <<=_gHim>>self, flushed to the collar. <<=_nunName>> sits on the end of a bunk watching <<=_gHim>> go back and forth, as patient as a cat.
+<br /><br />
+<<sayNpc _guest>>
+	I can't sit still. I can't sleep. I can't think about anything else. It's like my skin is too tight. I keep telling myself it'll pass.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	Why would you want it to pass? Your body is not your enemy. It's telling you what your spirit needs, as loudly as it can, and you keep covering its mouth. Stop fighting it. Let go, and listen.
+<</sayNpc>>
+<br />
+<<=_nunName>> catches sight of you over <<=_gName>>'s shoulder, and the look <<=_nHe>> gives you is an invitation all on its own.
+<br /><br />
+<<sayNpc _nun>>
+	Ah, <<=_nMc>>. Perhaps you can help me convince <<=_gHim>>.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<if _vice>>
+		<div id="ce_gift">
+			<<set _giftLabel = 'Offer ' + _gHim + ' some ' + _viceName + ' to help ' + _gHim + ' relax'>>
+			<<if setup.cabinInventory.has(_vice)>>
+				<<link _giftLabel>>
+					<<run setup.cabinInventory.drop(_vice)>>
+					<<if _vice === 'alcohol'>><<run setup.drink(_guest, 1)>><</if>>
+					<<run _fx.change(_guest, 'happy', 1, 2)>>
+					<<run _fx.change(_guest, 'corruption', 1, 2)>>
+					<<replace '#ce_gift'>>
+						<<=_gName>> takes the <<=_viceName>> gratefully. A few minutes later <<=_gHe>> has stopped pacing and sunk down next to <<=_nunName>>, loose-limbed and glassy-eyed, still flushed but no longer fighting it.
+						<br /><br />
+						<<sayNpc _guest>>
+							Thanks, <<=_gMc>>. That's... better. Much better.
+						<</sayNpc>>
+						<br />
+					<</replace>>
+					<<replace '#ce_fx'>><<nurseryEffects>><</replace>>
+				<</link>>
+			<<else>>
+				<div class="link-internal" style="background: #ccc"><<=_giftLabel>> (you have none)</div>
+			<</if>>
+		</div>
+	<</if>>
+	<<if _ce.mcOk(_guest)>>
+		<<set _offerLabel = 'Offer to help ' + _gHim + ' with that'>>
+		<<link _offerLabel>>
+			<<replace '#ce_choices'>>
+				<<addmins 5>>
+				<<you>>
+					Maybe <<=_gHe>> doesn't have to listen alone.
+				<</you>>
+				<br />
+				<<=_gName>> stops dead and stares at you.
+				<br /><br />
+				<<sayNpc _guest>>
+					You'd do that, <<=_gMc>>? For me?
+				<</sayNpc>>
+				<br />
+				<<=_nunName>> rises, takes <<=_gName>>'s hand, and places it in yours.
+				<br /><br />
+				<<sayNpc _nun>>
+					There. Do you see how the divine provides? Let <<=_nMc>> tend to you, little lamb. Unless... you'd both let me help minister to you?
+				<</sayNpc>>
+				<br />
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _trio = _ce.threesome(_guest, _nun)>>
+				<<set _soloGains = [{ npc: _guest, stat: 'happy', low: 3, high: 5 }, { npc: _guest, stat: 'corruption', low: 3, high: 5 }]>>
+				<<set _yield = _ce.nunYields(_nun, [_guest]) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+				<<set _trioGains = _ce.byNunChanges(_nun, [{ npc: _guest, stat: 'happy', low: 3, high: 5 }, { npc: _guest, stat: 'corruption', low: 5, high: 7 }, { npc: _nun, stat: 'corruption', low: 1, high: 2 }]).concat(_yield)>>
+				<<set _soloLabel = 'Take care of ' + _gHim + ' yourself'>>
+				<<set _trioLabel = 'Minister to ' + _gHim + ' together with ' + _nunName>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+					<<if _trio>><div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div><</if>>
+				<<else>>
+					<<ceSexLink _soloLabel 'solo' _justGuest _soloGains>>
+					<<if _trio>>
+						<<ceSexLink _trioLabel 'threesome' _trio _trioGains>>
+					<</if>>
+				<</if>>
+				[[Think better of it|Guest house]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<link 'Just watch'>>
+		<<replace '#ce_choices'>>
+			<<addmins 5>>
+			<<set _nunScene = _ce.pairOk(_guest, _nun, _nun) ? _ce.guestScene([_guest, _nun]) : null>>
+			You lean against the doorframe and say nothing. <<=_nunName>> doesn't seem to mind having an audience.
+			<br /><br />
+			<<sayNpc _nun>>
+				As you wish, <<=_nMc>>. Watch, then.
+			<</sayNpc>>
+			<br />
+			<<if _nunScene>>
+				<<run _ce.byNun(_nun, _guest, 'happy', 1, 2)>>
+				<<if _ce.nunYields(_nun, [_guest])>><<run _ce.byNun(_nun, _nun, 'sub', 1, 2)>><</if>>
+				<<=ucfirst(_nHe)>> turns back to <<=_gName>>, who has stopped pacing to stare at the two of you, and holds out <<=_nHis>> arms.
+				<br /><br />
+				<<sayNpc _nun>>
+					Come here. If no one else will answer that prayer, then I will.
+				<</sayNpc>>
+				<br />
+				<<=ucfirst(_nHe)>> draws <<=_gName>> down onto the bunk beside <<=_nHim>> and kisses <<=_gHim>>, and <<=_gName>> makes a small, broken sound and stops fighting at all.
+				<br /><br />
+				<div id="ce_after">
+					<<ceWatchLinks _nunScene _guestAndNun>>
+					<<nurseryEffects>>
+				</div>
+			<<else>>
+				<<=_nunName>> keeps talking, soft and steady, about the holiness of wanting and the sin of refusing a gift. After a while <<=_gName>> stops pacing and sits, still restless but a little less wound up.
+				<br /><br />
+				[[Continue|Guest house]]
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+	<span id="ce_fx"></span>
+</div>
+<</if>>

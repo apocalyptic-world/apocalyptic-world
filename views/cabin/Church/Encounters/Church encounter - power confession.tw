@@ -1,0 +1,141 @@
+:: Church encounter - power confession [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A nun of the power path hears a guest's confession and blesses the sin instead of forgiving it. The player can listen, and help them act on it. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest, _partner = _cast.partner ?? null>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justGuest = [_guest], _guestAndNun = [_guest, _nun]>>
+
+Someone has hung a blanket across the corner by the stove to make a little booth of it. From behind it comes the low murmur of a voice, and every so often a soft, breathy sound that is definitely <<=_nunName>>.
+<br /><br />
+<<sayNpc _nun>>
+	Go on. Don't stop there. Tell me all of it.
+<</sayNpc>>
+<br />
+Through the gap at the edge of the blanket you can see <<=_gName>> on <<=_gHis>> knees, and <<=_nunName>> sitting over <<=_gHim>> with <<=_nHis>> hands folded very properly in <<=_nHis>> lap and <<=_nHis>> cheeks very improperly pink.
+<br /><br />
+
+<div id="ce_choices">
+	<<link 'Listen in'>>
+		<<replace '#ce_choices'>>
+			<<addmins 15>>
+			<<run _ce.byNun(_nun, _guest, 'corruption', 1, 2)>>
+			<<run _ce.byNun(_nun, _nun, 'corruption', 1, 2)>>
+			You stay where you are, very still.
+			<br /><br />
+			<<if _partner>>
+				<<set _pName = setup.displayName(_partner), _pHe = setup.pronounceWhat(_partner), _pHis = setup.pronounceWhos(_partner), _pHim = setup.pronounceWho(_partner)>>
+				<<sayNpc _guest>>
+					It was <<=_pName>>. We were both on the late watch, and it was so cold, and <<=_pHe>> said we should share the blanket. And then <<=_pHis>> hand was on my thigh, and I didn't move it. I put mine on top of it and pushed it higher. We did it right there against the wall of the woodshed, with the fire going out, and I didn't care who heard.
+				<</sayNpc>>
+				<br />
+				<<=_nunName>> says nothing, only leans a little closer, lips parted. <<=_gName>>'s voice drops lower.
+				<br /><br />
+				<<sayNpc _guest>>
+					And the worst part is I keep thinking about it. At meals. While I'm working. I look at <<=_pHim>> across the room and I want <<=_pHim>> again. If <<=_gMc>> ever found out, I'd die.
+				<</sayNpc>>
+			<<else>>
+				<<sayNpc _guest>>
+					It was in the garden. I was picking for supper, and there was this zucchini. It was enormous, and smooth, and still warm from the sun. And I just... I took it back to my bunk. I didn't even cook it. I wasn't thinking about cooking.
+				<</sayNpc>>
+				<br />
+				There is a long pause from behind the blanket. <<=_nunName>> makes a small, strangled sound that might be a cough. <<=_gName>> plows on.
+				<br /><br />
+				<<sayNpc _guest>>
+					And then I put it back in the basket for supper. Everyone ate it. You ate it. <<=ucfirst(_gMc)>> had seconds.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			<<=_nunName>> takes a slow, unsteady breath. When <<=_nHe>> speaks, <<=_nHis>> voice is warm and low.
+			<br /><br />
+			<<sayNpc _nun>>
+				Listen to me. There's nothing here that needs forgiving. You say you sinned. I hear that you <em>felt</em>. You hungered and you let yourself be fed. The divine made that hunger in you, and it's holy. Go and give thanks for it. Every time. And don't fear <<=_nMc>>. Of everyone in this house, <<=_nMc>> would understand best of all.
+			<</sayNpc>>
+			<br />
+			<<=_gName>> looks up at <<=_nHim>> as if <<=_gHe>> can't quite believe what <<=_gHe>> is hearing. Neither of them seems to have noticed how close they are now, or how quickly they are both breathing.
+			<br /><br />
+			<<set _likesNun = _ce.pairOk(_guest, _nun, _nun)>>
+			<<set _nunScene = _likesNun ? _ce.guestScene([_guest, _nun]) : null>>
+			<<set _wantsMc = _ce.mcOk(_guest)>>
+			<<set _trio = _ce.threesome(_guest, _nun)>>
+			<<set _blocked = _ce.mcBlockedBy()>>
+			/* The nun goes along with a partner she isn't drawn to for the sake of her faith, at a little cost to her will */
+			<<set _yieldGuest = _ce.nunYields(_nun, [_guest]) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+			<<set _nunGain = _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'corruption', low: 1, high: 2 }])>>
+			<<set _soloGains = [{ npc: _guest, stat: 'corruption', low: 3, high: 5 }].concat(_nunGain)>>
+			<<set _joinGains = _ce.byNunChanges(_nun, [{ npc: _guest, stat: 'corruption', low: 4, high: 6 }]).concat(_nunGain)>>
+			<div id="ce_options">
+				<<if _nunScene>>
+					<<link `'Encourage ' + _nHim + ' to show ' + _nHis + ' devotion'`>>
+						<<run _joinGains.concat(_yieldGuest).forEach(c => _fx.change(c.npc, c.stat, c.low, c.high))>>
+						<<replace '#ce_options'>>
+							You clear your throat softly. They both jump. <<=_nunName>> sees you through the gap in the blanket, and instead of pulling away, <<=_nHe>> smiles.
+							<br /><br />
+							<<you>>
+								Don't stop on my account. Show <<=_gHim>> what you mean.
+							<</you>>
+							<br />
+							<<=_nunName>> cups <<=_gName>>'s face in both hands and kisses <<=_gHim>>, slow and deep, and <<=_gName>> melts into it with a little moan of relief. A moment later they are on their feet and stumbling toward the dormitory, already tugging at each other's clothes.
+							<br /><br />
+							<div id="ce_after">
+								<<ceWatchLinks _nunScene _guestAndNun>>
+								<<nurseryEffects>>
+							</div>
+						<</replace>>
+					<</link>>
+					<<linkdesc>><<=_ce.changesText(_joinGains.concat(_yieldGuest))>><</linkdesc>>
+					<<if _wantsMc && _trio>>
+						<<if _blocked>>
+							<div class="link-internal" style="background: #ccc">Join them (<<=_blocked>>)</div>
+						<<else>>
+							<<link 'Step behind the blanket and join them'>>
+								<<replace '#ce_options'>>
+									You draw the blanket aside and step into the little booth. <<=_gName>> starts, and for a heartbeat looks ready to bolt, caught on <<=_gHis>> knees with <<=_gHis>> confession still hanging in the air. But <<=_nunName>> only smiles up at you, unsurprised, as if <<=_nHe>> had been expecting you all along.
+									<br /><br />
+									<<sayNpc _nun>>
+										You see? The divine hears every confession. And sometimes it sends an answer.
+									<</sayNpc>>
+									<br />
+									<<=ucfirst(_nHe)>> takes <<=_gName>>'s hand and guides it up to rest against you. <<=_gName>> looks from <<=_nHim>> to you, breathing unsteadily, and then the last of the hesitation goes out of <<=_gHim>>.
+									<br /><br />
+									<<sayNpc _guest>>
+										Please, <<=_gMc>>. Don't make me wait any longer.
+									<</sayNpc>>
+									<br />
+									<<ceSexLink 'Continue' 'threesome' _trio _joinGains.concat(_yieldGuest)>>
+									<<nurseryEffects>>
+								<</replace>>
+							<</link>>
+						<</if>>
+					<</if>>
+				<<elseif _wantsMc>>
+					<<set _soloLabel = 'Invite ' + _gHim + ' to work out that excitement with you'>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+						<<if _trio>><div class="link-internal" style="background: #ccc">Invite <<=_nunName>> to join you both (<<=_blocked>>)</div><</if>>
+					<<else>>
+						<<ceSexLink _soloLabel 'solo' _justGuest _soloGains>>
+						<<if _trio>>
+							<<set _trioLabel = 'Invite ' + _nunName + ' to join you both'>>
+							<<ceSexLink _trioLabel 'threesome' _trio _joinGains.concat(_yieldGuest)>>
+						<</if>>
+					<</if>>
+				<</if>>
+				[[Leave them to their prayers|Guest house]]
+				<<nurseryEffects>>
+			</div>
+		<</replace>>
+	<</link>>
+	[[Leave them to their confession|Guest house]]
+</div>
+<</if>>

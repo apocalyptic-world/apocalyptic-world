@@ -16,7 +16,11 @@
 	<<if $tmpGirl.married  && $tmpGirl.family && $tmpGirl.family.husband !== 'mc'>>
 		You know that I am married to someone else. I don't want to do it.
 	<<else>>
-		<<=setup.displayName($tmpGirl)>> tells you that <<=setup.pronounceWhat($tmpGirl)>>'s not in the mood right now and just wants to be alone.
+		<<if ($tmpGirl.traits ?? []).includes('feral')>>
+			<<=setup.displayName($tmpGirl)>> pulls away from your touch with a warning hiss, letting you know <<=setup.pronounceWhat($tmpGirl)>>'s not in the mood right now.
+		<<else>>
+			<<=setup.displayName($tmpGirl)>> tells you that <<=setup.pronounceWhat($tmpGirl)>>'s not in the mood right now and just wants to be alone.
+		<</if>>
 	<</if>>
 <br /><br />
 <strong>Not enough relationship or <<=setup.pronounceWhat($tmpGirl)>>'s not in the mood</strong>
@@ -27,16 +31,33 @@
 <</if>>
 <br /><br />
 <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
-	<<=setup.displayName($tmpGirl)>> notices your boner and suggestions that maybe you want a quick blowjob to calm it down. 
-	<br /><br />
-	<<if [1,3].includes($tmpGirl.gender)>>
-		<<set _anon = '/people/anonguy.png'>>
+	<<if ($tmpGirl.traits ?? []).includes('feral')>>
+		<<=setup.displayName($tmpGirl)>> notices your boner and sniffs at it, making a gesture towards <<=setup.pronounceWhos($tmpGirl)>> mouth that suggests <<=setup.pronounceWhat($tmpGirl)>>'d be willing to give you a quick blowjob to calm it down.
+		<br /><br />
+		<<set _girlVisual = $tmpGirl>>
+		<div class="say npcsay">
+			<div class="npc-say-visual" @data-id="$tmpGirl.id">
+				<div class="girl_info_picture">
+					<<if _girlVisual.portrait>><div class="say_custom_portrait"><<include 'NPC visual'>></div><<else>><<include 'NPC visual'>><</if>>
+				</div>
+			</div>
+			<div class="npc-say-container">
+				<div class="npc-say-name"><strong><<=setup.displayName($tmpGirl)>></strong></div>
+				<div class="npc-say-text"><em>*from <<=setup.pronounceWhos($tmpGirl)>> body language, does not seem interested in mating, but appears willing to satisfy you with some quick oral stimulation*</em></div>
+			</div>
+		</div>
 	<<else>>
-		<<set _anon = '/people/anongirl.png'>>	
+		<<=setup.displayName($tmpGirl)>> notices your boner and suggests that maybe you want a quick blowjob to calm it down.
+		<br /><br />
+		<<if [1,3].includes($tmpGirl.gender)>>
+			<<set _anon = '/people/anonguy.png'>>
+		<<else>>
+			<<set _anon = '/people/anongirl.png'>>
+		<</if>>
+		<<say $tmpGirl.name setup.ImagePath+_anon>>
+			I am really not in the mood right now but how about I just give you a quick head?
+		<</say>>
 	<</if>>
-	<<say $tmpGirl.name setup.ImagePath+_anon>>
-		I am really not in the mood right now but how about I just give you a quick head? 
-	<</say>>
 	<br /><br />
 	<<linkreplace 'Accept blowjob'>>
 		<<run $('#option2').hide()>>

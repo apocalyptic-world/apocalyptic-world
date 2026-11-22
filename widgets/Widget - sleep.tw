@@ -306,6 +306,8 @@
 <<elseif _isOvercrowded>>
 	<<run setup.sleepMessages.addMain('<span class="warning">Your guesthouse is almost full (' + _guestCount + '/' + _guestBeds + '). Guests are getting unhappy.</span>')>>
 <</if>>
+/* Nuns' extra overnight work; before the guest loop, so a guest a nun talks into staying is kept by tonight's leave check */
+<<run setup.churchNightly.nightly($game.day)>>
 <<set _sleepGuestOpts = { type: 'guest', day: $game.day, subDecayDisabled: ($player?.quests?.subDecayDisabled ?? false), isHeatWave: _isHeatWave, isSandStorm: _isSandStorm, isColdSnap: _isColdSnap, miscarriageChance: _miscarrieageChance, hasWorkingHospital: _hasWorkingHospital, hasMilkwarden: _hasMilkwarden, hasElectricity: _hasElectricity, giveFood: _giveFood, randomScavengingItems: _randomScavengingItems, pendingRemovals: [], shouldSkip: false, scavengingDidntReturnId: null }>>
 <<for _guestI to 0; _guestI lt ($guests ?? []).length; _guestI++>>
 		<<set _npc = $guests[_guestI]>>

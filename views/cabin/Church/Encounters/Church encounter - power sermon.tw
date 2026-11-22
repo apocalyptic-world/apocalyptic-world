@@ -1,0 +1,184 @@
+:: Church encounter - power sermon
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A nun of the power path preaches to a few settlers by the church, then shows them what devotion looks like, on her knees before the player. A settler may join her. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun>>
+<<set _nunName = setup.displayName(_nun)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _nMc = setup.npc.mcName(_nun)>>
+<<set _eager = (_nun.sub ?? 0) >= _ce.SERMON_OFFER_SUB || (_nun.corruption ?? 0) >= _ce.SERMON_OFFER_CORRUPTION>>
+<<set _settlerImg = setup.ImagePath + '/people/anongirl.png'>>
+
+Out at the far end of the street, where the church stands apart from the rest of the district, <<=_nunName>> has gathered a little knot of grown settlers on the steps, a handful of men and women who stopped on their way somewhere and haven't left. <<=ucfirst(_nHe)>> stands a step above them, hands spread.
+<br /><br />
+<<sayNpc _nun>>
+	Look past the wall. What do you see out there? Ash. Hunger. Things that hunt in the dark. That is the world as it is now. And then look around you. Bread. Water. A roof. Someone keeping watch while you sleep. This settlement is not luck. It is salvation, handed to you. And a gift like that deserves nothing less than your highest devotion.
+<</sayNpc>>
+<br />
+A murmur goes through the group. A young woman near the front, thin and earnest, raises her hand.
+<br /><br />
+<<say 'Settler' _settlerImg>>
+	But how? How do we show it? We don't have anything to give.
+<</say>>
+<br />
+<<=_nunName>> opens <<=_nHis>> mouth to answer, and then sees you coming up the street. A slow light comes into <<=_nHis>> face.
+<br /><br />
+<<if _eager>>
+	<<=ucfirst(_nHe)>> comes down the steps to meet you and, without a word of warning, sinks to <<=_nHis>> knees on the packed earth in front of you, in full view of all of them. The murmuring stops dead.
+	<br /><br />
+	<<sayNpc _nun>>
+		You asked how. Let me show you. <<=ucfirst(_nMc)>>, the one who gives us all of this, is here among us. Will you let me demonstrate, <<=_nMc>>? Let me show them what true devotion looks like.
+	<</sayNpc>>
+	<br />
+<<else>>
+	<<sayNpc _nun>>
+		<<=ucfirst(_nMc)>>. You've come at the perfect moment. They want to know how to honor what you've given them. Perhaps you'd like to say a word, <<=_nMc>>?
+	<</sayNpc>>
+	<br />
+<</if>>
+
+<div id="ce_choices">
+	<<set _blocked = _ce.mcBlockedBy()>>
+	<<if _eager>>
+		<<set _actLabel = 'Let ' + _nHim + ' demonstrate'>>
+	<<else>>
+		<<set _actLabel = 'Suggest ' + _nHe + ' set the example for their faith'>>
+	<</if>>
+	<<if _blocked>>
+		<div class="link-internal" style="background: #ccc"><<=_actLabel>> (<<=_blocked>>)</div>
+	<<else>>
+		<<link _actLabel>>
+			<<replace '#ce_choices'>>
+				<<if _eager>>
+					<<run _ce.byNun(_nun, _nun, 'sub', 1, 2)>>
+					<<run _ce.byNun(_nun, _nun, 'corruption', 2, 4)>>
+				<<else>>
+					<<run _ce.byNun(_nun, _nun, 'sub', 2, 4)>>
+					<<run _ce.byNun(_nun, _nun, 'corruption', 4, 6)>>
+					<<you>>
+						Words are cheap. Show them, <<=_nunName>>. Right here.
+					<</you>>
+					<br />
+					<<=_nunName>> blinks, and for a moment <<=_nHe>> looks almost shocked. Then you watch the idea take root in <<=_nHim>>, and the shock turns into something closer to awe. <<=ucfirst(_nHe)>> comes down the steps and kneels before you on the packed earth, in full view of all of them.
+					<br /><br />
+				<</if>>
+				<<include 'Church encounter - power sermon act'>>
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<link `'Help ' + _nHim + ' up and keep it to words'`>>
+		<<replace '#ce_choices'>>
+			<<if _eager>>
+				You take <<=_nunName>>'s hands and draw <<=_nHim>> back to <<=_nHis>> feet. <<=ucfirst(_nHe)>> looks a little disappointed, but bows <<=_nHis>> head and returns to the steps.
+			<<else>>
+				You tell them to keep the wall manned and the fields tended, and that's devotion enough. <<=_nunName>> bows <<=_nHis>> head as if you had spoken scripture.
+			<</if>>
+			<br /><br />
+			<<sayNpc _nun>>
+				As you say, <<=_nMc>>. Work and gratitude, then. Those will do for a start.
+			<</sayNpc>>
+			<br />
+			<<link 'Continue' 'Youth district'>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+:: Church encounter - power sermon act
+/* Included into Church encounter - power sermon once the nun is on her knees */
+<<addmins 15>>
+<<set _joined = setup.percentageChance(_ce.SERMON_JOIN_CHANCE)>>
+<<run setup.sexActs.blowsCock(_nun, $player)>>
+<<=_nunName>> turns on <<=_nHis>> knees so that every one of the little congregation can see, and lifts <<=_nHis>> voice to them.
+<br /><br />
+<<sayNpc _nun>>
+	Watch, all of you. Devotion isn't a word. It's an act. It's giving yourself, all of yourself, to the one who keeps you safe.
+<</sayNpc>>
+<br />
+<<=ucfirst(_nHe)>> undoes your belt with reverent hands and takes you into <<=_nHis>> mouth, slowly, eyes lifted to yours the whole time. Nobody in the little congregation makes a sound. <<=_nunName>> worships you with lips and tongue as though every stroke were a line of prayer, unhurried and utterly sincere, and the quiet around you fills up with the wet, devoted sounds of it.
+<br /><br />
+<center>
+	<<actionImage `_ce.pictured(_nun, 'church')` 'bj' 'no-text'>>
+</center>
+<br />
+<<if _joined>>
+	The earnest young woman from the front of the group is the first to move. She takes one step, then another, and then she is kneeling beside <<=_nunName>> on the earth, trembling, her eyes huge.
+	<br /><br />
+	<<say 'Settler' _settlerImg>>
+		Please. May I? I want to give thanks too.
+	<</say>>
+	<br />
+	<<=_nunName>> draws back, takes her hand, and guides her mouth to you. She is clumsy at first, and then not clumsy at all. Before long they are sharing you between them, lips meeting along your length, and the settler has forgotten anyone is watching.
+	<br /><br />
+	<center>
+		<<actionImage `_ce.pictured(_nun, 'church')` 'threesome_f_bj' 'no-text'>>
+	</center>
+	<br />
+	<<sayNpc _nun>>
+		Yes. Do you feel it? That's grace, sister. That's the holy fire. Give yourself to it. Look at her, <<=_nMc>>. Look how beautifully she offers herself. There is nothing more sacred in all the world than this.
+	<</sayNpc>>
+	<br />
+<<else>>
+	A few of the settlers have sunk to their knees where they stand, as though in prayer. <<=_nunName>> moans softly around you, and the sound seems to go through every one of them.
+	<br /><br />
+<</if>>
+You can feel it building, and so can <<=_nunName>>. <<=ucfirst(_nHe)>> looks up at you, waiting for your word.
+<br /><br />
+<div id="ce_finish">
+	<<link `'Finish in ' + _nHis + ' mouth'`>>
+		<<replace '#ce_finish'>>
+			<<horny_reset>>
+			<<run setup.sexActs.cumsInMouth($player, _nun)>>
+			<<set _nun.horny = 0>>
+			You come with a groan, and <<=_nunName>> takes every drop, eyes closed, as if receiving a sacrament. When <<=_nHe>> finally lets you go, <<=_nHe>> stays kneeling, lips glistening, and turns to the congregation with a radiant smile.
+			<br /><br />
+			<center>
+				<<actionImage `_ce.pictured(_nun, 'church')` 'cum_in_mouth' 'no-text'>>
+			</center>
+			<br />
+			<<sayNpc _nun>>
+				Praise be! I have received the gift, and it is in me now, living water poured out for the faithful. This is what it means to be filled with the spirit. Thank you, <<=_nMc>>. Thank you for your blessing.
+			<</sayNpc>>
+			<br />
+			<<if _joined>>
+				The settler kneels beside <<=_nHim>>, dazed and glowing, as if she has just seen something she will be telling people about for the rest of her life.
+				<br /><br />
+			<</if>>
+			<<link 'Continue' 'Youth district'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<set _faceLabel = _joined ? 'Finish on both their faces' : 'Finish on ' + _nHis + ' face'>>
+	<<link _faceLabel>>
+		<<replace '#ce_finish'>>
+			<<horny_reset>>
+			<<run setup.sexActs.cumsOnFace($player, _nun)>>
+			<<set _nun.horny = 0>>
+			<<if _joined>>
+				They tip their faces up side by side, cheek to cheek, eyes closed and mouths open, and you paint them both. The settler gasps and laughs at the same time, and <<=_nunName>> lifts <<=_nHis>> hands to the sky.
+			<<else>>
+				<<=_nunName>> tips <<=_nHis>> face up to you, eyes closed and mouth open, and you paint it. <<=ucfirst(_nHe)>> lifts <<=_nHis>> hands to the sky.
+			<</if>>
+			<br /><br />
+			<center>
+				<<actionImage `_ce.pictured(_nun, 'church')` `_joined ? 'threesome_f_cum_on_face' : 'cum_on_face'` 'no-text'>>
+			</center>
+			<br />
+			<<sayNpc _nun>>
+				Praise be! Behold, I am baptized! Washed and anointed by the hand that keeps us. Do you see, all of you? This is the mark of the faithful. Thank you, <<=_nMc>>. Bless you for this.
+			<</sayNpc>>
+			<br />
+			Around the steps, the little congregation is very, very quiet. A couple of them look like converts.
+			<br /><br />
+			<<link 'Continue' 'Youth district'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<<nurseryEffects>>

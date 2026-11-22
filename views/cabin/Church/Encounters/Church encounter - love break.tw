@@ -1,0 +1,187 @@
+:: Church encounter - love break
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A loving nun keeps a worker company on a break by the cabin, with a tender, hands-on kind of comfort. The player can bring them something to eat, or join in with a shoulder rub that can carry on in the guest house (or the master bedroom, for a slave). Feral nuns too. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nun = _cast.nun, _worker = _cast.worker>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun), _wName = setup.displayName(_worker)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _wHe = setup.pronounceWhat(_worker), _wHis = setup.pronounceWhos(_worker), _wHim = setup.pronounceWho(_worker)>>
+<<set _wMc = setup.npc.mcName(_worker), _nMc = setup.npc.mcName(_nun)>>
+/* A guard is armed with whatever they carry: sword, crossbow or knife, best first */
+<<set _guardArm = setup.npcInventoryHas(_worker, 'sword') ? 'a sword laid across ' + _wHis + ' knees' : (setup.npcInventoryHas(_worker, 'crossbow') ? _wHis + ' crossbow propped beside ' + _wHim : (setup.npcInventoryHas(_worker, 'knife') ? 'a knife on ' + _wHis + ' belt' : ''))>>
+<<set _spot = {
+	garden: 'on the low wall by the garden, soil still on ' + _wHis + ' knees',
+	guard: 'on the bench by the gate, ' + (_guardArm ? _guardArm + ' and ' : '') + _wHis + ' shoulders stiff from hours on watch',
+	hunter: 'on the porch steps, idly checking ' + _wHis + ' snares while ' + _wHe + ' waits for dusk and the night\'s hunt',
+	garage: 'on an upturned crate outside the garage, grease to the elbows',
+	kitchen: 'on the back step outside the kitchen, apron still on and flour on ' + _wHis + ' cheek',
+	shop: 'on the bench outside the shop, the door propped open behind ' + _wHim,
+	maid: 'on the porch rail, a dust rag still hanging from ' + _wHis + ' pocket',
+	attendant: 'by the basement door, catching some fresh air before going back down',
+	mistress: 'by the basement door, catching some fresh air before going back down'
+}[_worker.assignedTo]>>
+<<set _canInvite = _ce.mcOk(_worker)>>
+/* A guest goes to the guest house; a slave is taken to the master bedroom instead */
+<<set _isSlave = ($slaves ?? []).includes(_worker)>>
+<<set _place = _isSlave ? 'the master bedroom' : 'the guest house'>>
+<<set _back = _isSlave ? 'Bedroom' : 'Guest house'>>
+
+<<=_wName>> is taking a break <<=_spot>>. <<=_nunName>> is sitting beside <<=_wHim>>, closer than the space strictly calls for, and doesn't seem to be in any hurry to be anywhere else.
+<br /><br />
+<<if _feral>>
+	<<sayFeral _nun>>has wedged <<=_nHim>>self against <<=_wName>>'s side with <<=_nHis>> head on <<=_wHis>> shoulder, combing slowly through <<=_wHis>> hair with <<=_nHis>> fingers, a low purr rumbling out of <<=_nHim>><</sayFeral>>
+	<br />
+	<<sayNpc _worker>>
+		I came out here for five quiet minutes, <<=_wMc>>. I seem to have been adopted.
+	<</sayNpc>>
+	<br />
+	<<=ucfirst(_wHe)>> is laughing, but <<=_wHe>> leans into it all the same.
+	<br /><br />
+	<<sayFeral _nun>>spots you, and without lifting <<=_nHis>> head from <<=_wName>>'s shoulder, pats the empty space on <<=_wHis>> other side<</sayFeral>>
+<<else>>
+	<<=ucfirst(_nHe)>> has one of <<=_wName>>'s hands in both of <<=_nHis>>, thumbs working slow circles into the palm and up between the knuckles.
+	<br /><br />
+	<<sayNpc _nun>>
+		You've been carrying this all morning, haven't you? Give it to me for a little while. The holy texts say a burden shared is a burden blessed, and I would very much like to share yours.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _worker>>
+		I'm only meant to be off for a few minutes, <<=_wMc>>. But I'm not going to argue with that.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _nun>>
+		<<=ucfirst(_nMc)>>. Come and sit with us a moment. There's always room for one more on a bench like this.
+	<</sayNpc>>
+<</if>>
+<br />
+
+<div id="ce_choices">
+	<<set _foodLabel = 'Bring ' + _wHim + ' something to eat (Uses 1 food)'>>
+	<<if setup.cabinInventory.has('food')>>
+		<<link _foodLabel>>
+			<<replace '#ce_choices'>>
+				<<run setup.cabinInventory.drop('food')>>
+				<<run _ce.byNun(_nun, _worker, 'happy', 2, 3)>>
+				<<run _ce.changeToward(_worker, _nun, 2, 4)>>
+				<<run _ce.changeToward(_nun, _worker, 1, 2)>>
+				<<run _fx.change(_nun, 'relationship', 1, 2)>>
+				You duck into the cabin and come back with bread and a handful of dried fruit, and press it into <<=_wName>>'s free hand. <<=ucfirst(_wHe)>> looks at it, then at you, and laughs.
+				<br /><br />
+				<<sayNpc _worker>>
+					Thank you, <<=_wMc>>. I didn't even notice how hungry I was until just now.
+				<</sayNpc>>
+				<br />
+				<<if _feral>>
+					<<sayFeral _nun>>tears off a piece of the bread and holds it up to <<=_wName>>'s mouth until <<=_wHe>> takes a bite, then looks over at you, very pleased with the both of you<</sayFeral>>
+				<<else>>
+					<<sayNpc _nun>>
+						Bread shared on a bench is as holy as bread laid on any altar, <<=_nMc>>. Thank you for bringing it.
+					<</sayNpc>>
+				<</if>>
+				<br />
+				You leave them to the rest of the break. By the time you go, <<=_wName>> has <<=_wHis>> head resting against <<=_nunName>>'s, and neither of them is talking.
+				<br /><br />
+				[[Continue|Wood cabin]]
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc"><<=_foodLabel>> (Need 1 food)</div>
+	<</if>>
+	<<link 'Help with a shoulder rub (Uses 15 minutes)'>>
+		<<replace '#ce_choices'>>
+			<<addmins 15>>
+			<<run _ce.byNun(_nun, _worker, 'happy', 3, 6)>>
+			<<run _ce.changeToward(_worker, _nun, 2, 4)>>
+			<<run _ce.changeToward(_nun, _worker, 1, 2)>>
+			<<run _fx.change(_worker, 'relationship', 2, 4)>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			You follow <<=_nunName>>'s lead, step behind <<=_wName>> and set your hands on <<=_wHis>> shoulders. They're hard as rope. You work your thumbs into the knots, slowly, and feel them start to give.
+			<br /><br />
+			<<if _feral>>
+				<<sayFeral _nun>>nuzzles into the side of <<=_wName>>'s neck, purring louder as the tension goes out of <<=_wHim>>, and laps once at the skin under <<=_wHis>> ear, as if to help<</sayFeral>>
+			<<else>>
+				<<=_nunName>> keeps hold of <<=_wName>>'s hand, and <<=_nHis>> other hand drifts up along <<=_wHis>> forearm in long, unhurried strokes, in time with yours.
+				<br /><br />
+				<<sayNpc _nun>>
+					Feel how <<=_wHe>> softens, <<=_nMc>>? The body always knows when it's being cared for. It opens up like a flower in the sun.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			<<=_wName>>'s head tips back against you. <<=ucfirst(_wHis)>> eyes are closed, and <<=_wHis>> breathing has changed, slower at first, and then not slow at all.
+			<br /><br />
+			<<if _canInvite>>
+				<<sayNpc _worker>>
+					<<=ucfirst(_wMc)>>... how long do you suppose my break could run? Because I don't think I'm going to be much use to anyone out there for a while.
+				<</sayNpc>>
+				<br />
+				<<=ucfirst(_wHe)>> glances toward <<=_place>>, then back at the two of you, and doesn't need to say anything more.
+				<br /><br />
+				<<if _feral>>
+					<<sayFeral _nun>>gets up, takes <<=_wName>> by the sleeve and tugs <<=_wHim>> a step toward <<=_place>>, then looks back over <<=_nHis>> shoulder at you, eyes bright<</sayFeral>>
+				<<else>>
+					<<sayNpc _nun>>
+						The work will keep, <<=_nMc>>. Some things shouldn't.
+					<</sayNpc>>
+				<</if>>
+				<br />
+				<div id="ce_after">
+					<<set _blocked = _ce.mcBlockedBy()>>
+					<<set _soloLabel = 'Take ' + _wHim + ' somewhere more private'>>
+					<<set _trio = _ce.threesome(_worker, _nun)>>
+					<<set _trioLabel = 'Take them both to ' + _place>>
+					<<set _justWorker = [_worker]>>
+					<<set _noChanges = []>>
+					<<set _yield = _trio && _ce.nunYields(_nun, [_worker]) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+						<<if _trio>><div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div><</if>>
+					<<else>>
+						<<ceSexLink _soloLabel 'solo' _justWorker _noChanges 'bedroom' _back>>
+						<<if _trio>>
+							<<ceSexLink _trioLabel 'threesome' _trio _yield 'bedroom' _back>>
+						<</if>>
+					<</if>>
+					<<link `'Send ' + _wHim + ' back to work'`>>
+						<<replace '#ce_after'>>
+							You give <<=_wName>>'s shoulders one last squeeze and tell <<=_wHim>> the work won't do itself. <<=ucfirst(_wHe)>> groans, laughing, and gets up, a little unsteady and very flushed. <<=_nunName>> watches <<=_wHim>> go with a fond, knowing smile.
+							<br /><br />
+							[[Continue|Wood cabin]]
+							<<nurseryEffects>>
+						<</replace>>
+					<</link>>
+					/* Under the buttons, and replaced along with them */
+					<<nurseryEffects>>
+				</div>
+			<<else>>
+				<<sayNpc _worker>>
+					I could fall asleep right here. Thank you, both of you.
+				<</sayNpc>>
+				<br />
+				You leave <<=_wHim>> to the rest of <<=_wHis>> break, <<=_nunName>> still close at <<=_wHis>> side.
+				<br /><br />
+				[[Continue|Wood cabin]]
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to it'>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _worker, 'happy', 1, 2)>>
+			<<run _ce.changeToward(_worker, _nun, 2, 4)>>
+			<<run _ce.changeToward(_nun, _worker, 1, 2)>>
+			You give them a nod and leave them be. When you glance back from the cabin door, <<=_wName>> has <<=_wHis>> eyes closed, and <<=_nunName>> is <<if _feral>>curled against <<=_wHis>> side, still purring<<else>>still holding <<=_wHis>> hand, talking to <<=_wHim>> in a low, warm voice<</if>>.
+			<br /><br />
+			[[Continue|Wood cabin]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

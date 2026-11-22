@@ -4,41 +4,66 @@
 <<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
 <<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
 <<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+<<set _isFeral = ($tmpGirl.traits ?? []).includes('feral')>>
 
  The <<=setup.displayName($tmpGirl)>>'s gaze flickers to the bottle as you approach, curiosity sparking in <<=_hisOrHer>> eyes. 
  Without a word, you offer <<=_himOrHer>> a glass, the bubbles dancing in the dim light of a flickering street lamp.
  <br /><br />
 <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
 <<if $tmpGirl.pregnancy > 10 && setup.percentageChance(50)>>
-    <<sayNpc $tmpGirl>>
-        I will have to decline as I am pregnant. I really don't want to hurt the baby.
-    <</sayNpc>>
+    <<if _isFeral>>
+        <<sayFeral $tmpGirl>>sniffs at the glass, wrinkles <<=_hisOrHer>> nose and pushes it gently back toward you, one hand resting on <<=_hisOrHer>> belly<</sayFeral>>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            I will have to decline as I am pregnant. I really don't want to hurt the baby.
+        <</sayNpc>>
+    <</if>>
     <br />
 <<else>>
     <<=setup.pronounceWhos($tmpGirl, true)>> initial surprise gives way to a cautious smile as <<=_heOrShe>> accepts the glass, the effervescence of the champagne a stark contrast to the harsh realities of their world.
     <<=setup.pronounceWhos($tmpGirl, true)>> raises bottle of champagne.
     <br /><br />
-    <<sayNpc $tmpGirl>>
-        A taste of luxury in the midst of chaos
-    <</sayNpc>>
+    <<if _isFeral>>
+        <<sayFeral $tmpGirl>>sniffs the glass and sneezes at the fizz, then takes a careful lick from the rim, eyes going wide<</sayFeral>>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            A taste of luxury in the midst of chaos
+        <</sayNpc>>
+    <</if>>
     <br />
     <center>
         <<actionImage $tmpGirl 'drink'>>
     </center>
     <br /><br />
-    Sitting together on the bench, surrounded by the sounds of the settlement's inhabitants going about their daily routines, you share stories of survival and moments of fleeting joy. 
-    The champagne serves as a reminder that even in the darkest of times, there are still moments worth savoring, connections worth forging.
-    <br /><br />
-    As the time deepens and the stars twinkle faintly through the haze of pollution, the <<=setup.displayName($tmpGirl)>> continues to drink, indulging in the rare luxury. 
-    <<=setup.pronounceWhos($tmpGirl, true)>> speech becomes slurred, and laughter spills out uncontrollably. 
-    It's evident <<=_heOrShe>>'s become quite drunk, <<=_himOrHer>> guard lowered as <<=_heOrShe>> shares tales of <<=_hisOrHer>> past with increasing openness and sentimentality.
-    <br /><br />
-    Eventually, as the champagne runs dry, <<=_heOrShe>> leans heavily on your shoulder, <<=_hisOrHer>> words now a jumble of gratitude and nostalgia for a world long lost.
-    <br /><br />
+    <<if _isFeral>>
+        Sitting together on the bench, surrounded by the sounds of the settlement's inhabitants going about their daily routines, you watch the world go by in comfortable silence. 
+        <<=setup.pronounceWhat($tmpGirl, true)>> shifts closer bit by bit, until <<=_hisOrHer>> knee rests against yours, and every so often <<=_heOrShe>> nudges your glass with <<=_hisOrHer>> own, as if to make sure you are drinking too.
+        <br /><br />
+        As the time deepens and the stars twinkle faintly through the haze of pollution, <<=setup.displayName($tmpGirl)>> keeps drinking, indulging in the rare luxury. 
+        <<=setup.pronounceWhos($tmpGirl, true)>> movements grow loose and clumsy, and soft, breathy giggles escape <<=_himOrHer>> at nothing at all. 
+        It's evident <<=_heOrShe>>'s become quite drunk, the wary tension gone from <<=_hisOrHer>> shoulders as <<=_heOrShe>> sprawls against you and plays idly with your fingers.
+        <br /><br />
+        Eventually, as the champagne runs dry, <<=_heOrShe>> leans heavily on your shoulder, nuzzling into your neck with a low, contented hum.
+        <br /><br />
+    <<else>>
+        Sitting together on the bench, surrounded by the sounds of the settlement's inhabitants going about their daily routines, you share stories of survival and moments of fleeting joy. 
+        The champagne serves as a reminder that even in the darkest of times, there are still moments worth savoring, connections worth forging.
+        <br /><br />
+        As the time deepens and the stars twinkle faintly through the haze of pollution, the <<=setup.displayName($tmpGirl)>> continues to drink, indulging in the rare luxury. 
+        <<=setup.pronounceWhos($tmpGirl, true)>> speech becomes slurred, and laughter spills out uncontrollably. 
+        It's evident <<=_heOrShe>>'s become quite drunk, <<=_himOrHer>> guard lowered as <<=_heOrShe>> shares tales of <<=_hisOrHer>> past with increasing openness and sentimentality.
+        <br /><br />
+        Eventually, as the champagne runs dry, <<=_heOrShe>> leans heavily on your shoulder, <<=_hisOrHer>> words now a jumble of gratitude and nostalgia for a world long lost.
+        <br /><br />
+    <</if>>
     <<run setup.cabinInventory.drop('champagne', 1)>>
-    <<sayNpc $tmpGirl>>
-        Wow! I am really drunk... Thank god the bottle is empty as I couldn't stop..
-    <</sayNpc>>
+    <<if _isFeral>>
+        <<sayFeral $tmpGirl>>tips the empty bottle upside down and peers into it, puzzled, then lets it roll away and curls up against your side with a sleepy sigh<</sayFeral>>
+    <<else>>
+        <<sayNpc $tmpGirl>>
+            Wow! I am really drunk... Thank god the bottle is empty as I couldn't stop..
+        <</sayNpc>>
+    <</if>>
     <br />
     <strong>You both are drunk!</strong>
     <<perkAdd 'drunk'>>

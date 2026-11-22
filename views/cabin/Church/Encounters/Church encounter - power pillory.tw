@@ -1,0 +1,177 @@
+:: Church encounter - power pillory
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A stern nun of the power path punishes a guest at a makeshift pillory for a small but real offense. Feral nuns too. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+<<set _masochist = (_guest.traits ?? []).includes('masochist')>>
+<<set _offense = _ce.offense(_guest)>>
+<<set _tool = either('a leather strap', 'a supple wooden switch')>>
+<<set _hasBasement = $game.location.basement ?? false>>
+<<set _corruptNun = (_nun.corruption ?? 0) >= _ce.CORRUPT_NUN_FROM>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justGuest = [_guest]>>
+
+Someone has knocked together a pillory at the end of the main street, out past the last of the buildings: two planks with holes cut for neck and wrists, hinged and bolted onto a post. <<=_gName>> is locked into it, bent forward, <<=_gHis>> shirt pulled down off <<=_gHis>> shoulders. <<=_nunName>> stands beside <<=_gHim>> with <<=_tool>> in <<=_nHis>> hand.
+<br /><br />
+The strokes come slow and measured, across the back of <<=_gHis>> arms and shoulders, leaving neat pink lines.<<if ($player.baseManagement?.settlers ?? 0) > 0>> A few settlers watch from a respectful distance.<</if>>
+<br /><br />
+<<if _feral>>
+	<<sayFeral _nun>>stops when <<=_nHe>> sees you, lowers <<=_tool>>, and looks at you with flat, steady eyes, as if to say that this one has earned it<</sayFeral>>
+	<br />
+	<<sayNpc _guest>>
+		<<=ucfirst(_gMc)>>! <<=ucfirst(_nHe)>> caught me <<=_offense>>. I know, I know, I shouldn't have. But <<=_nHe>> just grabbed me and dragged me out here!
+	<</sayNpc>>
+<<else>>
+	<<sayNpc _nun>>
+		<<=ucfirst(_nMc)>>. <<=_gName>> was caught <<=_offense>>. A small thing, perhaps, but small things grow if no one stops them. The body remembers a lesson the ears forget.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _guest>>
+		I'm sorry, <<=_gMc>>, I am. It was stupid.
+	<</sayNpc>>
+<</if>>
+<br />
+<<if _masochist>>
+	<<=_gName>> glances up at you, flushed in a way that has very little to do with shame, and lowers <<=_gHis>> voice.
+	<br /><br />
+	<<sayNpc _guest>>
+		<<if _hasBasement>>
+			Although... if I've really been that bad, <<=_gMc>>, maybe you should be the one to punish me. Down in the basement. Properly.
+		<<else>>
+			Although... if I've really been that bad, <<=_gMc>>, maybe it shouldn't stop just yet.
+		<</if>>
+	<</sayNpc>>
+	<br />
+<</if>>
+<<set _offersPenance = _hasBasement && _corruptNun && _ce.mcOk(_guest)>>
+<<if _offersPenance>>
+	<<if _feral>>
+		<<sayFeral _nun>>looks from <<=_gName>> to you, then toward the cabin and the basement door beneath it, and back again, with a slow, knowing tilt of <<=_nHis>> head<</sayFeral>>
+	<<else>>
+		<<sayNpc _nun>>
+			Or, <<=_nMc>>, there is another kind of penance. One that teaches surrender far better than any strap. You could take <<=_gHim>> down to the basement and give <<=_gHim>> a real lesson in penitence.
+		<</sayNpc>>
+	<</if>>
+	<br />
+<</if>>
+
+<div id="ce_choices">
+	<<link `'End the punishment and forgive ' + _gHim`>>
+		<<replace '#ce_choices'>>
+			<<if !_masochist>><<run _fx.change(_guest, 'happy', 3, 5)>><</if>>
+			<<run _fx.change(_guest, 'sub', 1, 2)>>
+			<<run _fx.change(_guest, 'relationship', 2, 4)>>
+			<<you>>
+				That's enough. Let <<=_gHim>> go.
+			<</you>>
+			<br />
+			<<=_nunName>> lowers <<=_tool>> at once and unbolts the pillory. <<=_gName>> straightens up slowly, rubbing <<=_gHis>> wrists, and looks at you with a gratitude that is almost uncomfortable to receive.
+			<br /><br />
+			<<sayNpc _guest>>
+				Thank you, <<=_gMc>>. You didn't have to do that.
+			<</sayNpc>>
+			<br />
+			<<set _wantsMc = _ce.mcOk(_guest)>>
+			<<if _feral>>
+				<<if _wantsMc>>
+					<<sayFeral _nun>>takes <<=_gName>> by the elbow, steers <<=_gHim>> a step toward the guest house, and then looks pointedly back at you<</sayFeral>>
+					<br />
+					<<=_gName>> follows the look, then glances at you and blushes.
+					<br /><br />
+				<</if>>
+			<<else>>
+				<<sayNpc _nun>>
+					<<if _wantsMc>>
+						Mercy is a gift from the one who holds the power to withhold it. Go back to the guest house with <<=_nMc>>, <<=_gName>>, and show him how grateful you are for his benevolence.
+					<<else>>
+						Mercy is a gift from the one who holds the power to withhold it. Remember who gave it to you.
+					<</if>>
+				<</sayNpc>>
+				<br />
+			<</if>>
+			<<if _wantsMc>>
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _thanksLabel = 'Let ' + _gHim + ' show you'>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc"><<=_thanksLabel>> (<<=_blocked>>)</div>
+				<<else>>
+					<<set _noChanges = []>>
+					<<ceSexLink _thanksLabel 'solo' _justGuest _noChanges 'bedroom' 'Youth district'>>
+				<</if>>
+				[[Leave it at that|Youth district]]
+			<<else>>
+				[[Continue|Youth district]]
+			<</if>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Let it continue'>>
+		<<replace '#ce_choices'>>
+			<<addmins 15>>
+			<<run _ce.byNun(_nun, _guest, 'sub', 2, 4, true)>>
+			<<if !_masochist>><<run _ce.byNun(_nun, _guest, 'happy', -4, -2)>><</if>>
+			You fold your arms and nod to <<=_nunName>> to carry on. The strokes start again, steady and unhurried, and you stay until the last of them.
+			<br /><br />
+			<<if _masochist>>
+				<<=_gName>> takes every one of them with <<=_gHis>> eyes half closed, and when it's over <<=_gHe>> sags in the pillory with a long, shaky sigh that doesn't sound unhappy at all.
+			<<else>>
+				By the end <<=_gName>> is biting <<=_gHis>> lip to keep quiet, eyes wet. When the pillory opens <<=_gHe>> stays bowed a moment longer than <<=_gHe>> needs to.
+			<</if>>
+			<br /><br />
+			<<sayNpc _guest>>
+				I understand, <<=_gMc>>. It won't happen again.
+			<</sayNpc>>
+			<br />
+			[[Continue|Youth district]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<if _hasBasement>>
+		<<set _punishChanges = [{ npc: _guest, stat: 'sub', low: 3, high: 5 }, { npc: _guest, stat: 'happy', low: _masochist ? 3 : -5, high: _masochist ? 5 : -3 }]>>
+		<<set _punishLabel = _masochist ? 'Give ' + _gHim + ' what ' + _gHe + ' is asking for, in the basement' : 'Take ' + _gHim + ' down to the basement for a harsher lesson'>>
+		<<cePunishLink _punishLabel _guest _punishChanges 'Youth district'>>
+		<<if _offersPenance>>
+			<<set _penanceLabel = 'Take ' + _gHim + ' down to the basement for a real lesson in penitence'>>
+			<<link _penanceLabel>>
+				<<replace '#ce_choices'>>
+					<<=_nunName>> sets <<=_tool>> aside and unbolts the pillory, and leads <<=_gName>> over to you by the wrist.
+					<br /><br />
+					<<if _masochist>>
+						<<=_gName>> tries very hard to look contrite, and fails completely. <<=ucfirst(_gHis)>> eyes are shining.
+						<br /><br />
+						<<sayNpc _guest>>
+							Yes, <<=_gMc>>. Whatever you think I deserve.
+						<</sayNpc>>
+					<<else>>
+						<<=_gName>> swallows, looking nervously from <<=_nunName>> to you, and then nods quickly.
+						<br /><br />
+						<<sayNpc _guest>>
+							I'd... I'd rather that than more of this, <<=_gMc>>. Yes. I'll go.
+						<</sayNpc>>
+					<</if>>
+					<br />
+					<<set _blocked = _ce.mcBlockedBy()>>
+					<<set _penanceChanges = _ce.byNunChanges(_nun, [{ npc: _guest, stat: 'sub', low: 2, high: 4 }, { npc: _guest, stat: 'corruption', low: 3, high: 5 }, { npc: _nun, stat: 'corruption', low: 1, high: 2 }])>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc">Continue (<<=_blocked>>)</div>
+					<<else>>
+						<<ceSexLink 'Continue' 'solo' _justGuest _penanceChanges 'basement' 'Youth district'>>
+					<</if>>
+					[[Think better of it|Youth district]]
+				<</replace>>
+			<</link>>
+		<</if>>
+	<</if>>
+</div>
+<</if>>

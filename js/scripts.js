@@ -800,6 +800,8 @@ setup.suicideChance = function (person) {
 
   setup.pregnancyChance = function (person, father) {
     if (father && (father.traits ?? []).includes('infertile')) return false;
+    // A feral nun sensed she is ovulating today (Church encounter - feral fertile)
+    var ovulating = setup.churchEncounters.fertileToday(person);
     var chance = 0;
     var infertile = (person.traits ?? []).includes('infertile');
     if (infertile || person.sexChanged) {
@@ -835,6 +837,10 @@ setup.suicideChance = function (person) {
     }
 
     if(setup.perkHas('fertility')) {
+        chance = Math.min(100, chance*2);
+    }
+
+    if(ovulating) {
         chance = Math.min(100, chance*2);
     }
 

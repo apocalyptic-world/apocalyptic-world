@@ -1,0 +1,88 @@
+:: Church encounter - feral bullied
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A few settlers corner a feral nun out in the district and call her names. Any focus, feral nuns only. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun>>
+<<set _nunName = setup.displayName(_nun)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _carrying = either('a basket of bread for the hospital', 'an armful of clean linen for the church', 'a bucket of water from the well')>>
+
+Halfway down the main street, you hear jeering. Three settlers have <<=_nunName>> backed up against a storehouse wall, <<=_carrying>> clutched to <<=_nHis>> chest.
+<br /><br />
+<<say 'Settler' setup.ImagePath+'/people/anonguy.png'>>
+	Look at it, all dressed up in a habit like a person. Go on, say a prayer for us. Oh, that's right. It can't talk.
+<</say>>
+<br />
+<<say 'Settler' setup.ImagePath+'/people/anongirl.png'>>
+	Savage. They should keep it chained up with the rest of the animals, not let it walk around pretending to be holy.
+<</say>>
+<br />
+One of them flicks at <<=_nHis>> veil. Another laughs.
+<br /><br />
+<<sayFeral _nun>>presses back against the boards with <<=_nHis>> shoulders hunched and <<=_nHis>> head low, teeth just showing, but holds on to <<=_carrying>> and doesn't run<</sayFeral>>
+<br />
+
+<div id="ce_choices">
+	<<link `'Stand up for ' + _nHim`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', 1, 2)>>
+			<<run _fx.change(_nun, 'relationship', 4, 6)>>
+			<<run _ce.changePlayer('goodwill', 2)>>
+			<<set _nun.churchService ??= {}>>
+			<<set _nun.churchService.bullyCooldownUntil = $game.day + _ce.BULLY_COOLDOWN>>
+			You step in between them and <<=_nunName>> and look at each of the settlers in turn until they stop laughing.
+			<br /><br />
+			<<you>>
+				<<=ucfirst(_nHe)>> serves in that church every day, for every one of you. Including the ones who don't deserve it. If I hear about this again, you'll be finding somewhere else to live.
+			<</you>>
+			<br />
+			They mutter apologies to the dirt and scatter.
+			<br /><br />
+			<<sayFeral _nun>>slowly straightens up, then steps close and presses <<=_nHis>> forehead to your shoulder, staying there a long moment before <<=_nHe>> trots off down the street with <<=_nHis>> head held high<</sayFeral>>
+			<br />
+			[[Continue|Youth district]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Ignore it'>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', -5, -3)>>
+			<<run _fx.change(_nun, 'relationship', -6, -4)>>
+			You keep walking. Behind you the jeering goes on for a while, and then stops.
+			<br /><br />
+			<<sayFeral _nun>>catches your eye across the street as you go, and you see the moment <<=_nHe>> understands that you aren't going to help<</sayFeral>>
+			<br />
+			[[Continue|Youth district]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Join in'>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', -10, -7)>>
+			<<run _fx.change(_nun, 'relationship', -10, -7)>>
+			<<run _ce.changePlayer('goodwill', -3)>>
+			<<run _ce.hide(_nun)>>
+			You wander over, and the settlers make room for you, grinning.
+			<br /><br />
+			<<you>>
+				They're right, you know. You can put a dog in a dress. It's still a dog.
+			<</you>>
+			<br />
+			The settlers howl with laughter.
+			<br /><br />
+			<<sayFeral _nun>>stares at you as if you had struck <<=_nHim>>, then drops <<=_carrying>> in the dirt and bolts, running flat out for the church without once looking back<</sayFeral>>
+			<br />
+			<<=ucfirst(_nHe)>> doesn't come out again for the rest of the day.
+			<br /><br />
+			[[Continue|Youth district]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

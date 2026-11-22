@@ -1,0 +1,120 @@
+:: Church encounter - holy hospital [bg-hospital]
+<h1 class="ptitle">HOSPITAL</h1>
+<br /><br />
+/* A kind nun sits with a patient in the hospital, helping in the ways that aren't medicine. The player can lend a hand. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast || !_cast.patient.sick>>
+	<<goto 'Hospital'>>
+<<else>>
+<<set _nun = _cast.nun, _patient = _cast.patient, _doctors = _cast.doctors>>
+<<set _nunName = setup.displayName(_nun), _pName = setup.displayName(_patient)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _pHe = setup.pronounceWhat(_patient), _pHis = setup.pronounceWhos(_patient), _pHim = setup.pronounceWho(_patient)>>
+<<set _pMc = setup.npc.mcName(_patient), _nMc = setup.npc.mcName(_nun)>>
+<<set _doctorNun = (_nun.skills ?? []).includes('doctor') ? 1 : 0>>
+<<set _kinds = { fever: 'fever', wasteland_fever: 'fever', coldsnap: 'cold', whippit_injury: 'hangover', whippit_together_injury: 'hangover', bar_drink_injury: 'hangover' }>>
+<<set _kind = _kinds[_patient.sick.id] ?? 'hurt'>>
+<<set _helpLabels = {
+	fever: 'Help ' + _nHim + ' change ' + _pHis + ' sweat-soaked sheets (Uses 30 minutes)',
+	cold: 'Help ' + _nHim + ' move ' + _pHis + ' cot nearer the stove (Uses 30 minutes)',
+	hangover: 'Help ' + _nHim + ' get ' + _pHim + ' up for some fresh air (Uses 30 minutes)',
+	hurt: 'Help ' + _nHim + ' shift ' + _pHim + ' into a more comfortable position (Uses 30 minutes)'
+}>>
+
+<<if _kind === 'fever'>>
+	<<=_pName>> lies flushed and glassy-eyed on one of the cots, hair stuck to <<=_pHis>> forehead. <<=_nunName>> sits beside <<=_pHim>> with a basin of water, wringing out a cloth and laying it across <<=_pHis>> brow, then holding a cup to <<=_pHis>> lips between turns so <<=_pHe>> can take a few small sips.
+<<elseif _kind === 'cold'>>
+	<<=_pName>> is huddled under two blankets on one of the cots, shivering and sniffling, with <<=_pHis>> hands wrapped around a cup of broth. <<=_nunName>> is tucking a third blanket in around <<=_pHis>> feet, and every so often reaches over to tip the cup up so <<=_pHe>> remembers to drink it while it's warm.
+<<elseif _kind === 'hangover'>>
+	<<=_pName>> lies very still on one of the cots with an arm over <<=_pHis>> eyes and a bucket within easy reach. <<=_nunName>> has turned the lamp down low and hung a blanket over the nearest window, and is sitting by the bed with a cup of water, waiting patiently for <<=_pHim>> to feel brave enough to sit up.
+<<else>>
+	<<=_pName>> is propped up on one of the cots, stiff and sore, moving as little as <<=_pHe>> can help. <<=_nunName>> has rolled up a blanket to cushion the worst of it, and sits beside <<=_pHim>> with a book open on <<=_nHis>> knee, reading aloud in a low, unhurried voice.
+<</if>>
+<br /><br />
+<<sayNpc _patient>>
+	<<if _kind === 'fever'>>
+		Everything's too hot and then too cold. You don't have to keep sitting here, you know.
+	<<elseif _kind === 'cold'>>
+		I can't stop shaking. Every time I get warm, somebody opens the door.
+	<<elseif _kind === 'hangover'>>
+		Please stop the room from moving. Just for a minute.
+	<<else>>
+		It only hurts when I breathe. Or move. Or think about moving.
+	<</if>>
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	<<if _kind === 'hangover'>>
+		I can't stop the room, but I can stay in it with you. The holy texts promise that every bad night ends in a morning. Have some water, and we'll wait for yours together.
+	<<else>>
+		Where else would I be? The holy texts say the sick are to be visited, and not just once. Healing belongs to the doctors. Keeping you company while it happens belongs to me.
+	<</if>>
+<</sayNpc>>
+<br />
+<<if _doctors.length>>
+	Across the room, <<=_fx.names(_doctors)>> glance<<if _doctors.length === 1>>s<</if>> up from <<=_doctors.length === 1 ? setup.pronounceWhos(_doctors[0]) : 'their'>> work, and give<<if _doctors.length === 1>>s<</if>> <<=_nunName>> a small, grateful nod. One less patient to worry about.
+	<br /><br />
+<</if>>
+<<=_pName>> turns <<=_pHis>> head on the pillow and spots you at the foot of the bed.
+<br /><br />
+<<sayNpc _patient>>
+	<<=ucfirst(_pMc)>>. Come to check on the invalid?
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	<<=ucfirst(_pHe)>>'s doing better than <<=_pHe>> lets on, <<=_nMc>>. Though I wouldn't say no to a second pair of hands.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<link _helpLabels[_kind]>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _patient, 'happy', 2, 3)>>
+			<<run _fx.change(_patient, 'relationship', 1, 3)>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			<<run _ce.heal(_patient, 2 + _doctorNun)>>
+			<<run _ce.changeToward(_nun, _patient, 2, 2)>>
+			<<run _ce.changeToward(_patient, _nun, 4, 4)>>
+			<<for _doctor range _doctors>><<run _ce.changeToward(_doctor, _nun, 1, 1)>><</for>>
+			<<if _kind === 'fever'>>
+				You lift <<=_pName>> while <<=_nunName>> strips the damp sheets out from under <<=_pHim>> and snaps clean ones into place, and between the two of you <<=_pHe>> is back down on cool, dry linen before <<=_pHe>> has time to shiver. <<=_nunName>> lays a fresh cloth across <<=_pHis>> forehead, and <<=_pName>> lets out a long, grateful sigh.
+			<<elseif _kind === 'cold'>>
+				You take one end of the cot and <<=_nunName>> the other, and together you carry it, <<=_pName>> and all, across the room to the warm corner by the stove. <<=_nunName>> wedges a folded blanket against the draft under the door while you refill <<=_pHis>> broth.
+			<<elseif _kind === 'hangover'>>
+				You get an arm around <<=_pName>> and walk <<=_pHim>> slowly out to the step, where the air is cool and the light is kind. <<=_nunName>> follows with the water and the bucket, just in case, and the three of you sit there until the color starts coming back into <<=_pHis>> face.
+			<<else>>
+				You slide an arm under <<=_pName>>'s shoulders and lift, slow and steady, while <<=_nunName>> rearranges the pillows and the rolled blanket underneath. When you lower <<=_pHim>> again, the lines in <<=_pHis>> face ease, and <<=_pHe>> lets out a breath <<=_pHe>> seems to have been holding for a while.
+			<</if>>
+			<br /><br />
+			<<sayNpc _patient>>
+				That's so much better. Thank you, <<=_pMc>>. Both of you.
+			<</sayNpc>>
+			<br />
+			<<=_nunName>> catches your eye across the bed and smiles.
+			<br /><br />
+			<<sayNpc _nun>>
+				Thank you, <<=_nMc>>. Sometimes the best medicine is just knowing someone came.
+			<</sayNpc>>
+			<br />
+			<<link 'Continue' 'Hospital'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Leave ' + _pHim + ' in ' + _nunName + "'s care"`>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _patient, 'happy', 1, 2)>>
+			<<run _ce.heal(_patient, 1 + _doctorNun)>>
+			<<run _ce.changeToward(_nun, _patient, 2, 2)>>
+			<<run _ce.changeToward(_patient, _nun, 4, 4)>>
+			<<for _doctor range _doctors>><<run _ce.changeToward(_doctor, _nun, 1, 1)>><</for>>
+			You tell <<=_pName>> to rest, and leave <<=_pHim>> to it. Behind you, <<=_nunName>> picks up where <<=_nHe>> left off, and by the time you reach the door, <<=_pName>> has closed <<=_pHis>> eyes and is listening.
+			<br /><br />
+			<<link 'Continue' 'Hospital'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

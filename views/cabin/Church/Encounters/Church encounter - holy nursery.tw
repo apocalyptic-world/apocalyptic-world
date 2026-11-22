@@ -1,0 +1,150 @@
+:: Church encounter - holy nursery [bg-nursery]
+<h1 class="ptitle">NURSERY</h1>
+<br /><br />
+/* A kind nun entertains the little ones with parables from the holy texts. A feral nun plays with them instead, like a mother cat with her cubs. The player can join in. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast || !_cast.kids.length>>
+	<<goto 'Nursery'>>
+<<else>>
+<<set _nun = _cast.nun, _kids = _cast.kids, _carers = _cast.carers>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _nMc = setup.npc.mcName(_nun)>>
+<<set _kid = _kids[0], _kidName = _kids[0].name, _kidMc = setup.npc.mcName(_kids[0])>>
+<<set _carer = _carers.length ? _carers.random() : null>>
+<<set _bonus = setup.personality.has(_nun, 'compassionate') ? 1 : 0>>
+<<set _teacher = (_nun.skills ?? []).includes('teacher') ? 1 : 0>>
+<<set _care = setup.nurseryCare.isActive()>>
+<<set _ownKids = _kids.filter(k => _fx.isOwnChild(k))>>
+<<set _parable = either('wells', 'seed', 'lantern')>>
+<<set _part = { wells: 'the man with the locked well', seed: 'the cart that keeps rattling over the seed', lantern: 'the thing in the dark' }[_parable]>>
+
+<<if _feral>>
+	The nursery is in uproar, the happy kind. <<=_nunName>> is down on all fours in the middle of the floor, stalking a shrieking cluster of <<=_kids.length>> children from behind an upturned crate, haunches up, tail end wiggling. When <<=_nHe>> pounces, they scatter in every direction, and the moment <<=_nHis>> back is turned they come charging in to chase <<=_nHim>> instead.
+	<br /><br />
+	<<sayFeral _nun>>lets the smallest of them catch <<=_nHim>>, rolls over with a great show of defeat, and lies still while three of them climb onto <<=_nHis>> back, then carries them around the room at a careful, rocking crawl, watching over <<=_nHis>> shoulder to make sure no one slips<</sayFeral>>
+	<br />
+	For all the noise, <<=_nHe>> is astonishingly gentle with them. When one of the little ones trips and wails, <<=_nunName>> is there in a heartbeat, nosing at the child's hair and licking the scraped knee clean until the crying turns to giggles, as patient as a mother with her cubs.
+	<br /><br />
+	<<=_kidName>> spots you in the doorway and comes running, red-faced and breathless.
+	<br /><br />
+	"<<=ucfirst(_kidMc)>>! We're playing cats! You can be the big cat. <<=_nunName>> picked you."
+	<br /><br />
+<<else>>
+	<<=_nunName>> is sitting cross-legged on the nursery floor with <<=_kids.length>> children gathered around <<=_nHim>> in a ragged half circle, some of them sitting, a couple lying on their stomachs with their chins in their hands, one of them very nearly in <<=_nHis>> lap.
+	<br /><br />
+	<<if _parable === 'wells'>>
+		<<=ucfirst(_nHe)>> is telling them a story from the holy texts about two neighbors who each had a well. When the dry years came, one of them shared her water with everyone who knocked, and the other locked his well and kept it for himself. Then both wells began to run low.
+	<<elseif _parable === 'seed'>>
+		<<=ucfirst(_nHe)>> is telling them a story from the holy texts about a seed that fell into a crack in a broken road, where nothing was supposed to grow. The rain didn't come for it, and the sun was too hot, and every passing cart rattled over it. But it put its roots down anyway.
+	<<else>>
+		<<=ucfirst(_nHe)>> is telling them a story from the holy texts about a girl who lived in a town with a high wall, and every night she climbed up and lit a lantern on top of it, so that anyone caught outside after dark could find their way home before the things in the dark found them.
+	<</if>>
+	<br /><br />
+	<<sayNpc _nun>>
+		<<if _parable === 'wells'>>
+			And when the man's well dried up, he had to dig a new one all by himself. But when hers did, all the neighbors she had ever shared with came with their shovels and dug beside her. So what do you think? Who was richer?
+		<<elseif _parable === 'seed'>>
+			And one day, the seed had grown into a tree so strong that it split the road right open. It didn't get to choose where it landed. Neither do we. But we can still choose to grow.
+		<<else>>
+			So the travelers always knew: when the light is lit, it's time to be inside. And she always knew: someone, somewhere, made it home because of her. That's what a light is for. It isn't for you. It's for whoever needs to find you.
+		<</if>>
+	<</sayNpc>>
+	<br />
+	<<=_kidName>> can't hold it in.
+	<br /><br />
+	<<if _parable === 'wells'>>
+		"The lady! Because she had friends with shovels."
+	<<elseif _parable === 'seed'>>
+		"Can I be a tree that breaks a road?"
+	<<else>>
+		"Can we have a lantern on our wall? So the scavengers come home?"
+	<</if>>
+	<br /><br />
+	<<=_nunName>> laughs and tells <<=setup.pronounceWho(_kid)>> that's exactly right. Then <<=_nHe>> looks up and sees you leaning in the doorway.
+	<br /><br />
+<</if>>
+<<if _carer>>
+	<<sayNpc _carer>>
+		<<if _feral>>
+			Don't let them fool you, <<=setup.npc.mcName(_carer)>>. <<=ucfirst(_nunName)>> has been at it for an hour and they still haven't tired <<=_nHim>> out. I've never seen them this happy.
+		<<else>>
+			<<=ucfirst(setup.npc.mcName(_carer))>>, you should hear <<=_nHim>>. I've been listening from the other side of the room for a while now. They'll actually sit still for these.
+		<</if>>
+	<</sayNpc>>
+	<br />
+<</if>>
+<<if _feral>>
+	<<sayFeral _nun>>sits up on <<=_nHis>> heels with a child still clinging to <<=_nHis>> back, and looks at you expectantly, head tilted, as if the only question is how long it will take you to get down on the floor<</sayFeral>>
+	<br />
+<<else>>
+	<<sayNpc _nun>>
+		<<=ucfirst(_nMc)>>! Just in time. I need someone to be <<=_part>>, and none of them will do it. Will you join us? They'd love it, <<=_nMc>>. So would I.
+	<</sayNpc>>
+	<br />
+<</if>>
+
+<div id="ce_choices">
+	<<link 'Join in (Uses 30 minutes)'>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<if _care>><<run setup.nurseryBehavior.change(2 + _teacher, 3 + _teacher)>><</if>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			<<for _k range _kids>>
+				<<run _ce.changeToward(_k, _nun, 2 + _bonus, 3 + _bonus)>>
+				<<run _ce.changeToward(_nun, _k, 0, 2)>>
+				<<run _fx.changeBond(_k, 1, 2)>>
+			<</for>>
+			<<for _c range _carers>>
+				<<run _ce.changeToward(_nun, _c, 1, 2)>>
+				<<run _ce.changeToward(_c, _nun, 2, 4)>>
+			<</for>>
+			<<if _feral>>
+				You get down on the floor, and that is the last dignified moment you have for half an hour. You are the big cat. You are chased, pounced on, climbed and ridden, and at one point buried under a dogpile of children with <<=_nunName>> sitting on top of it, looking extremely pleased with <<=_nHim>>self. When you finally crawl out, <<=_nHe>> grooms your hair back into place with great seriousness.
+			<<else>>
+				You take the part of <<=_part>>, and you play it as hammily as you can, growling and grumbling while a mob of tiny heroes sees you off. They love it. <<=_nunName>> moves on to another story, and then another, and by the end of it every child in the room has had a part at least once, and you have been defeated more times than you can count.
+			<</if>>
+			<<if _ownKids.length === 1>>
+				<<=_ownKids[0].name>> sticks to you like glue the whole time.
+			<<elseif _ownKids.length > 1>>
+				Your own children stick to you like glue the whole time.
+			<</if>>
+			<br /><br />
+			<<if _feral>>
+				<<sayFeral _nun>>presses <<=_nHis>> forehead to yours for a moment before you go, the way <<=_nHe>> does with the children, and then goes back to <<=_nHis>> cubs<</sayFeral>>
+			<<else>>
+				<<sayNpc _nun>>
+					Thank you, <<=_nMc>>. They'll remember the stories longer because you were in them. That's how the holy texts were passed on in the first place, you know. Someone acting them out on a floor.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			<<link 'Continue' 'Nursery'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Leave ' + _nHim + ' to it'`>>
+		<<replace '#ce_choices'>>
+			<<if _care>><<run setup.nurseryBehavior.change(1 + _teacher, 2 + _teacher)>><</if>>
+			<<for _k range _kids>>
+				<<run _ce.changeToward(_k, _nun, 2 + _bonus, 3 + _bonus)>>
+				<<run _ce.changeToward(_nun, _k, 0, 2)>>
+			<</for>>
+			<<for _c range _carers>>
+				<<run _ce.changeToward(_nun, _c, 1, 2)>>
+				<<run _ce.changeToward(_c, _nun, 2, 4)>>
+			<</for>>
+			<<if _feral>>
+				You shake your head with a smile and leave them to their game. Behind you a fresh round of shrieking goes up as <<=_nunName>> starts stalking the next victim.
+			<<else>>
+				You wave them on, and <<=_nunName>> takes it in good humor and goes back to the story. As you leave, <<=_nHe>> is asking who wants to be <<=_part>>, and to your surprise, every hand in the room goes up.
+			<</if>>
+			<br /><br />
+			<<link 'Continue' 'Nursery'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

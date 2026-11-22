@@ -1,0 +1,120 @@
+:: Church encounter - holy comfort [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A kind nun sits with the unhappiest guest in the house. If the guest leans on xanax, whippits or drink, they say so. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+/* Compassion was already worth +2 here before the trait table; byNun gives +1 of it, _bonus keeps the other */
+<<set _bonus = setup.personality.has(_nun, 'compassionate') ? 1 : 0>>
+<<set _vice = _ce.vice(_guest)>>
+<<set _viceName = _vice ? _ce.itemName(_vice).toLowerCase() : ''>>
+<<set _viceWords = { xanax: 'the pills', whippit: 'the whippits', alcohol: 'the bottle' }>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+
+In a quiet corner of the dormitory, <<=_gName>> sits hunched on the edge of a bed with <<=_gHis>> face in <<=_gHis>> hands. <<=_nunName>> sits beside <<=_gHim>>, close enough that their shoulders touch, saying nothing for the moment and simply staying.
+<br /><br />
+<<sayNpc _guest>>
+	I don't even know what's wrong. Nothing happened. I just wake up and it's all so heavy, every day, and I can't put it down.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	You don't have to know what it is. The holy texts say grief doesn't always have a name, and the faithful are told to sit with it anyway. So I'm sitting with you.
+<</sayNpc>>
+<br />
+<<if _vice>>
+	<<=_gName>> laughs, small and unhappy.
+	<br /><br />
+	<<sayNpc _guest>>
+		I keep reaching for <<=_viceWords[_vice]>>. It helps for a while, and then it doesn't, and then I need more of it. I think I'm leaning on it too much. I don't know what else to lean on.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<=_nunName>> looks up and sees you. <<=ucfirst(_nHe)>> doesn't ask for anything, but <<=_nHe>> doesn't look away either. <<=_gName>> follows <<=_nHis>> gaze and scrubs hastily at <<=_gHis>> eyes.
+<br /><br />
+<<sayNpc _guest>>
+	Oh. <<=ucfirst(_gMc)>>. I didn't want you to see me like this.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<if _vice>>
+		<<set _giftLabel = "Give " + _gHim + " some " + _viceName + " and tell " + _gHim + " it's okay to lean on it">>
+		<<if setup.cabinInventory.has(_vice)>>
+			<<link _giftLabel>>
+				<<replace '#ce_choices'>>
+					<<addmins 5>>
+					<<run setup.cabinInventory.to_npc(_guest, _vice)>>
+					<<run _fx.change(_guest, 'happy', 2, 3)>>
+					You crouch down in front of <<=_gName>> and press the <<=_viceName>> into <<=_gHis>> hands.
+					<br /><br />
+					<<you>>
+						This is the end of the world. Nobody gets through it without a crutch. If this one helps, use it, and don't let anyone make you feel bad about it.
+					<</you>>
+					<br />
+					<<=_gName>> closes <<=_gHis>> fingers around it and some of the tightness goes out of <<=_gHis>> shoulders.
+					<br /><br />
+					<<sayNpc _guest>>
+						Thank you, <<=_gMc>>.
+					<</sayNpc>>
+					<br /> <<=_nunName>> watches you with an expression you can't quite read, then rests a hand on <<=_gName>>'s back.
+					<br /><br />
+					<<sayNpc _nun>>
+						Just remember it isn't the only thing holding you up. I'm here too. Come and find me, before you go looking for that.
+					<</sayNpc>>
+					<br />
+					[[Continue|Guest house]]
+					<<nurseryEffects>>
+				<</replace>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				<<=_giftLabel>> (you have none)
+			</div>
+		<</if>>
+	<</if>>
+	<<set _helpLabel = 'Sit with them and help lift ' + _gHis + ' spirits (Uses 30 minutes)'>>
+	<<link _helpLabel>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _guest, 'happy', 4 + _bonus, 8 + _bonus)>>
+			You sit down on the other side of <<=_gName>>. For a while you just talk about nothing: the weather, the garden, the dog that keeps stealing boots from the porch. Then, when <<=_gHe>> is ready, you talk about the heavy things too.
+			<br /><br />
+			<<=_nunName>> knows when to speak and when to let a silence do the work, and you find yourself following <<=_nHis>> lead. You remind <<=_gName>> of things <<=_gHe>> has done here that mattered, people who would miss <<=_gHim>>, small proofs that <<=_gHe>> is not just surviving but needed.
+			<br /><br />
+			<<sayNpc _guest>>
+				I didn't think anyone noticed any of that, <<=_gMc>>.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _nun>>
+				We notice. That's what we're for.
+			<</sayNpc>>
+			<br />
+			By the time you get up to leave, <<=_gName>> has stopped hiding <<=_gHis>> face, and something like a smile is trying its luck at the corners of <<=_gHis>> mouth.
+			<br /><br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to it'>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _guest, 'happy', 1 + _bonus, 2 + _bonus)>>
+			<<sayNpc _nun>>
+				Go on, <<=_nMc>>. I'll stay with <<=_gHim>>.
+			<</sayNpc>>
+			<br />
+			You leave them in peace. Behind you, <<=_nunName>> starts to hum something soft and old, and after a while <<=_gName>> leans <<=_gHis>> head against <<=_nHis>> shoulder.
+			<br /><br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

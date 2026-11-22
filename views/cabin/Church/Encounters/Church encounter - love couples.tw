@@ -1,0 +1,133 @@
+:: Church encounter - love couples
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A loving nun holds an open session for settler couples on the church steps. A married couple from the household is next in line: they've lost their spark, and the player can help her demonstrate. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun, _a = _cast.first, _b = _cast.second>>
+<<set _nunName = setup.displayName(_nun), _aName = setup.displayName(_a), _bName = setup.displayName(_b)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _aMc = setup.npc.mcName(_a), _bMc = setup.npc.mcName(_b), _nMc = setup.npc.mcName(_nun)>>
+<<set _couple = [_a, _b]>>
+<<set _scene = _ce.guestScene(_couple)>>
+<<set _justNun = [_nun]>>
+<<set _noChanges = []>>
+
+<<set _settlerImg = setup.ImagePath + '/people/anonguy.png'>>
+Out on the main street, the steps outside the church have turned into something like an open-air meeting. <<=_nunName>> sits on the top step with a couple of dozen settlers spread out below, most of them in pairs: husbands and wives sitting shoulder to shoulder, a pair of newlyweds on a crate, an older couple who have plainly been coming for weeks and have brought their own stools. Someone has a question half ready on their lips, someone else is nudging their partner to ask theirs, and there is a low, friendly buzz of people comparing notes.
+<br /><br />
+A broad-shouldered settler stands at the foot of the steps with his cap in his hands, nodding along as <<=_nunName>> finishes answering him.
+<br /><br />
+<<sayNpc _nun>>
+	...so tonight, don't try to fix it. When she tells you about her day, just listen. Then ask her one more question about it, and mean it. You'll be amazed what she tells you on the second question that she'd never have said on the first.
+<</sayNpc>>
+<br />
+<<say 'Settler' _settlerImg>>
+	Listen, and then ask again. I can do that. Thank you, <<=_nunName>>. Really.
+<</say>>
+<br />
+He goes back to his wife on the bottom step, and she squeezes his arm and leans in to whisper something that makes him grin. A couple of the men nearby nod at each other like they're filing that one away for later. A young woman further back has her hand half raised already, but the next turn belongs to the pair who have been waiting at the front: <<=_aName>> and <<=_bName>>.
+<br /><br />
+They step up together just as you arrive at the edge of the crowd. <<=_aName>> spots you, hesitates for half a second, then decides there's no point pretending.
+<br /><br />
+<<sayNpc _a>>
+	Hi, <<=_aMc>>. Yes, we're here too. It's not that anything's wrong, exactly. It's just that by the time we're both done with work we're so tired we can barely talk, let alone... anything else.
+<</sayNpc>>
+<br />
+<<sayNpc _b>>
+	We used to be all over each other. Now we fall asleep before we've even said goodnight.
+<</sayNpc>>
+<br />
+A sympathetic murmur goes through the crowd. More than one couple glances at each other as if to say <em>that's us</em>.
+<br /><br />
+<<sayNpc _nun>>
+	You're not the only ones, I promise you. A marriage is a vow you keep making, every day, not one you made once. When did you last tell each other what you want? Not what needs doing, what you <em>want</em>?
+<</sayNpc>>
+<br />
+<<=_aName>> and <<=_bName>> look at each other, and neither of them has an answer. <<=_nunName>> looks past them to you, the beginnings of an idea in <<=_nHis>> eyes.
+<br /><br />
+
+<div id="ce_choices">
+	<<link 'Suggest a little demonstration'>>
+		<<replace '#ce_choices'>>
+			<<addmins 15>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			<<run _fx.change(_nun, 'horny', 5, 10)>>
+			<<run _ce.betweenByNun(_nun, _a, _b, 2, 4)>>
+			<<you>>
+				Sometimes it's easier to see it than to hear about it. <<=_nunName>>, would you help me show them?
+			<</you>>
+			<br />
+			<<=_nunName>> colors, but steps down off the church steps to stand in front of you without hesitating.
+			<br /><br />
+			<<you>>
+				You've had a long day. You come home exhausted. And instead of just saying goodnight...
+			<</you>>
+			<br />
+			You take <<=_nHis>> hand and turn it over, and kiss the inside of <<=_nHis>> wrist, slowly. <<=_nunName>>'s breath catches loud enough for everyone to hear.
+			<br /><br />
+			<<sayNpc _nun>>
+				And then... and then I'd tell you how much I'd missed you today, <<=_nMc>>. How I'd been thinking about your hands all afternoon.
+			<</sayNpc>>
+			<br />
+			<<=ucfirst(_nHe)>> steps in close, rests <<=_nHis>> forehead against yours and lets <<=_nHis>> fingers trail down your chest, and for a moment the whole street seems to go quiet. When you step apart, <<=_nunName>> is flushed to the roots of <<=_nHis>> hair, and so are half of the settlers watching.
+			<br /><br />
+			<<=_aName>> and <<=_bName>> are looking at each other as if they'd only just remembered they could.
+			<br /><br />
+			<<sayNpc _b>>
+				<<=ucfirst(_bMc)>>, I think we'll be... going home early. Right now, actually.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _a>>
+				Thank you, <<=_aMc>>. Both of you.
+			<</sayNpc>>
+			<br />
+			They're halfway down the street toward the guest house before anyone else has moved, <<=_aName>> tugging <<=_bName>> along by the hand. <<=_nunName>> turns back to you, still pink, still a little breathless.
+			<br /><br />
+			<<sayNpc _nun>>
+				That was... very instructive, <<=_nMc>>. I don't suppose you'd want to finish the lesson? Somewhere quieter.
+			<</sayNpc>>
+			<br />
+			<div id="ce_after">
+				<<if _scene>>
+					<<link 'Follow the couple and watch'>>
+						<<run _ce.watch(_scene)>>
+					<</link>>
+				<</if>>
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _churchLabel = 'Take ' + _nunName + ' back to the church'>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc"><<=_churchLabel>> (<<=_blocked>>)</div>
+				<<else>>
+					<<link _churchLabel>>
+						<<run _ce.offstage(_couple)>>
+						<<run _ce.prepareMc(_justNun, 'church', 'Youth district')>>
+						<<fuck $tmpGirl>>
+					<</link>>
+				<</if>>
+				<<link 'Leave them all to it'>>
+					<<run _ce.offstage(_couple)>>
+					<<replace '#ce_after'>>
+						You leave <<=_nunName>> to <<=_nHis>> flock. Somewhere in the guest house, you suspect, <<=_aName>> and <<=_bName>> are making up for lost time.
+						<br /><br />
+						[[Continue|Youth district]]
+						<<nurseryEffects>>
+					<</replace>>
+				<</link>>
+				<<nurseryEffects>>
+			</div>
+		<</replace>>
+	<</link>>
+	<<link `'Leave them to ' + _nHis + ' counsel'`>>
+		<<replace '#ce_choices'>>
+			You leave <<=_nunName>> to it. Behind you <<=_nHe>> is taking <<=_aName>> and <<=_bName>> by the hand, one in each of <<=_nHis>> own, talking to them softly.
+			<br /><br />
+			[[Continue|Youth district]]
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

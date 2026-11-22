@@ -61,3 +61,26 @@
     </div>
 <</if>>
 <</widget>>
+
+
+:: Widget sayFeral [widget]
+
+/* Body-language bubble for feral NPCs, who sayNpc skips: <<sayFeral _npc>>does something<</sayFeral>> */
+<<widget sayFeral container>>
+<div class="say npcsay">
+    <div class="npc-say-visual" @data-id="$args[0].id">
+        <div class="girl_info_picture">
+            <<set _girlVisual = $args[0]>>
+            <<if _girlVisual.portrait>>
+                <div class="say_custom_portrait"><<include 'NPC visual'>></div>
+            <<else>>
+                <<include 'NPC visual'>>
+            <</if>>
+        </div>
+    </div>
+    <div class="npc-say-container">
+        <div class="npc-say-name"><strong><<=setup.displayName($args[0])>></strong></div>
+        <div class="npc-say-text"><em>*<<=_contents.trim()>>*</em></div>
+    </div>
+</div>
+<</widget>>

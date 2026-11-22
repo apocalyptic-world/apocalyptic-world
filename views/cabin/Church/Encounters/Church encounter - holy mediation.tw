@@ -1,0 +1,170 @@
+:: Church encounter - holy mediation [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A kind nun tries to make peace between two guests who don't get along. The player can leave it to her, take a side, or help. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _a = _cast.first, _b = _cast.second>>
+<<set _nunName = setup.displayName(_nun), _aName = setup.displayName(_a), _bName = setup.displayName(_b)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _aMc = setup.npc.mcName(_a), _nMc = setup.npc.mcName(_nun)>>
+
+The common room has gone quiet in the way rooms do when everyone is pretending not to listen. Over by the window, <<=_nunName>> has pulled three chairs into a tight little circle and sits between <<=_aName>> and <<=_bName>>. <<=_aName>> is slumped back with <<=setup.pronounceWhos(_a)>> arms folded tight, glaring at nothing. <<=_bName>> sits on the edge of <<=setup.pronounceWhos(_b)>> seat, leaning in, ready to argue. Neither of them is looking at the other.
+<br /><br />
+<center>
+	<<image 'places/church/nun-holy-mediate-1.png' sfw>>
+</center>
+<br />
+<<sayNpc _nun>>
+	There is a passage in the holy texts I keep coming back to. It says a grudge is a stone you carry for someone else, and that the one who carries it is the only one it weighs down. I'm not asking either of you to say you were wrong. I'm only asking whether you're tired yet.
+<</sayNpc>>
+<br />
+<<sayNpc _a>>
+	I'm tired of <<=setup.pronounceWho(_b)>>, that's what I'm tired of.
+<</sayNpc>>
+<br />
+<<=_bName>> snorts and starts to answer, and <<=_nunName>> spreads <<=_nHis>> open hands between them, palms up, gently, the way you would calm a nervous animal. <<=ucfirst(_nHe)>> sees you standing in the doorway and gives you a small, hopeful look.
+<br /><br />
+<<sayNpc _a>>
+	Oh, wonderful. Now <<=_aMc>> gets to hear all about it too.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<for _side range [_a, _b]>>
+		<<capture _side>>
+			<<set _sideLabel = 'Side with ' + setup.displayName(_side)>>
+			<<link _sideLabel>>
+				<<replace '#ce_choices'>>
+					<<addmins 10>>
+					<<set _other = _side === _a ? _b : _a>>
+					/* Pictures: 3d then 4b when siding with the first guest (left in the art), 3c then 4a with the second */
+					<<set _sideFirst = _side === _a>>
+					<<set _sName = setup.displayName(_side), _oName = setup.displayName(_other)>>
+					<<set _oHis = setup.pronounceWhos(_other), _oHim = setup.pronounceWho(_other)>>
+					<<run _fx.change(_side, 'happy', 3, 5)>>
+					<<run _fx.change(_side, 'relationship', 2, 4)>>
+					<<run _fx.change(_other, 'happy', -5, -3)>>
+					<<run _fx.change(_other, 'relationship', -4, -2)>>
+					<<run _fx.change(_nun, 'relationship', -6, -4)>>
+					<<run _fx.changeBetween(_a, _b, -5, -3)>>
+					You step in, and before you've thought better of it you're saying what you think, and what you think is that <<=_sName>> has the right of it. All three of them are on their feet by the time you're done. You point straight at <<=_sName>>, and <<=_sName>>'s face lights up with a slow, pleased smile. <<=_oName>> stares at you with <<=_oHis>> mouth open. Behind them, <<=_nunName>> <<if _sideFirst>>clasps <<=_nHis>> hands tight in front of <<=_nHim>><<else>>lifts <<=_nHis>> hands as if to catch the words before they land<</if>>, too late.
+					<br /><br />
+					<center>
+						<<if _sideFirst>>
+							<<image 'places/church/nun-holy-mediate-3d.jpg' sfw>>
+						<<else>>
+							<<image 'places/church/nun-holy-mediate-3c.png' sfw>>
+						<</if>>
+					</center>
+					<br />
+					<<sayNpc _side>>
+						Thank you, <<=setup.npc.mcName(_side)>>. At least somebody here has some sense.
+					<</sayNpc>>
+					<br />
+					<<=_oName>> doesn't argue. <<=ucfirst(setup.pronounceWhat(_other))>> just turns away, eyes wet, and heads for the door with <<=_oHis>> head down. <<=_sName>> watches <<=_oHim>> go, still smiling. <<if _sideFirst>><<=_nunName>> presses a hand over <<=_nHis>> mouth.<<else>><<=_nunName>> reaches a hand after <<=_oName>>, pleading, but <<=_oName>> doesn't look back.<</if>>
+					<br /><br />
+					<center>
+						<<if _sideFirst>>
+							<<image 'places/church/nun-holy-mediate-4b.png' sfw>>
+						<<else>>
+							<<image 'places/church/nun-holy-mediate-4a.png' sfw>>
+						<</if>>
+					</center>
+					<br />
+					<<sayNpc _nun>>
+						I was so close, <<=_nMc>>. They were almost listening to each other.
+					<</sayNpc>>
+					<br />
+					<<=_nunName>> doesn't raise <<=_nHis>> voice, but <<=_nHe>> won't quite meet your eyes as <<=_nHe>> collects <<=_nHis>> things.
+					<br /><br />
+					[[Continue|Guest house]]
+					<<nurseryEffects>>
+				<</replace>>
+			<</link>>
+		<</capture>>
+	<</for>>
+	<<link `'Sit down and help ' + _nHim + ' bring them together (Uses 30 minutes)'`>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _a, 'happy', 2, 4)>>
+			<<run _ce.byNun(_nun, _b, 'happy', 2, 4)>>
+			<<run _ce.betweenByNun(_nun, _a, _b, 3, 5)>>
+			<<run _fx.changeBetween(_a, _nun, 2, 4)>>
+			<<run _fx.changeBetween(_b, _nun, 2, 4)>>
+			<<run [_a, _b, _nun].forEach(npc => _fx.change(npc, 'relationship', 3, 5))>>
+			<<run _ce.changePlayer('goodwill', 2)>>
+			You steer the three of them away from the window to the long table, set out tin cups of water, and take the seat facing them. You don't take a side. You ask each of them what they actually need from the other, and you make the other one say it back before they answer.
+			<br /><br />
+			<center>
+				<<image 'places/church/nun-holy-mediate-3a.png' sfw>>
+			</center>
+			<br />
+			It is slow going. <<=_nunName>> fills the gaps with small, kind things from the holy texts, and you keep steering them back to the practical: who sleeps where, whose turn it is, what was really said. Somewhere around the second cup of water, <<=_aName>> laughs at something <<=_bName>> says, and then looks annoyed at <<=setup.pronounceWho(_a)>>self for laughing.
+			<br /><br />
+			<<sayNpc _b>>
+				Fine. Fine. I'm sorry about the blanket.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _a>>
+				It wasn't about the blanket.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _b>>
+				I know. I'm still sorry.
+			<</sayNpc>>
+			<br />
+			When you all get up from the table, <<=_aName>> hesitates, and then <<=_bName>> simply steps in and hugs <<=setup.pronounceWho(_a)>>. For a moment <<=_aName>> stands stiff as a post. Then <<=setup.pronounceWhat(_a)>> hugs <<=setup.pronounceWho(_b)>> back, hard, and they stay like that with their eyes closed. <<=_nunName>> watches with <<=_nHis>> hands clasped, smiling, and lets out a long breath.
+			<br /><br />
+			<center>
+				<<image 'places/church/nun-holy-mediate-3b.png' sfw>>
+			</center>
+			<br />
+			When <<=_nHe>> turns to you, <<=_nHis>> look is full of quiet warmth.
+			<br /><br />
+			<<sayNpc _nun>>
+				Thank you, <<=_nMc>>. They needed to hear it from someone they both respect. I think the whole house will sleep easier tonight.
+			<</sayNpc>>
+			<br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Leave it in ' + _nHis + ' hands'`>>
+		<<replace '#ce_choices'>>
+			<<addmins 5>>
+			<<sayNpc _nun>>
+				Leave them with me, <<=_nMc>>. Give us a little time.
+			<</sayNpc>>
+			<br />
+			You give <<=_nunName>> a nod and leave <<=_nHim>> to it. From the corridor you can still hear <<=_nHis>> voice, low and patient, and the silences between the other two getting shorter.
+			<br /><br />
+			<<if setup.percentageChance(_ce.reconcileChance(_nun))>>
+				<<run _ce.byNun(_nun, _a, 'happy', 1, 2)>>
+				<<run _ce.byNun(_nun, _b, 'happy', 1, 2)>>
+				<<run _ce.betweenByNun(_nun, _a, _b, 1, 2)>>
+				<<run _fx.changeBetween(_a, _nun, 1, 2)>>
+				<<run _fx.changeBetween(_b, _nun, 1, 2)>>
+				When you pass back that way later, the three of them are still in their little circle of chairs, but everything about it has changed. <<=_aName>> and <<=_bName>> are leaning in toward each other, smiling, and one of them has just said something that made the other laugh. <<=_nunName>> sits between them with one hand on <<=_aName>>'s shoulder and the other resting over <<=_bName>>'s hands. They are not exactly friends yet, but they are looking at each other again.
+				<br /><br />
+				<center>
+					<<image 'places/church/nun-holy-mediate-2a.png' sfw>>
+				</center>
+			<<else>>
+				Then a chair scrapes, and the voices rise. When you look back in, all three of them are on their feet. <<=_aName>> has turned away with <<=setup.pronounceWhos(_a)>> arms folded tight, and <<=_bName>> is already heading for the door, glaring back over <<=setup.pronounceWhos(_b)>> shoulder. <<=_nunName>> stands between them with <<=_nHis>> hands clasped, looking stricken. Some stones take longer to set down.
+				<br /><br />
+				<center>
+					<<image 'places/church/nun-holy-mediate-2b.png' sfw>>
+				</center>
+			<</if>>
+			<br /><br />
+			[[Continue|Guest house]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
