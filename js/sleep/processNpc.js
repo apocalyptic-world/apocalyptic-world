@@ -129,6 +129,7 @@ setup.sleep.processNpc = function(npc, opts) {
         const job = npc.assignedTo;
         const sv  = State.variables;
         const tmp = State.temporary;
+        let scavengerMissing = false;
 
         // Kitchen: stat + cook skill
         if (job === 'kitchen' && !isSick) {
@@ -455,6 +456,7 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.cabinInventory.pickup(lateItem, lateCount);
                 setup.sleepMessages.addMain(npc.name + ' didn\'t come home from scavenging last night, but walked through the gate at dawn, tired and dusty, with <strong>' + lateCount + ' ' + Item.get(lateItem).name + '</strong>. ' + setup.pronounceWhat(npc, true) + ' had to hole up somewhere and wait out the trouble.');
             } else if (missing) {
+                scavengerMissing = true;
                 // Store ID so SC can recompute the correct index after deferred removals
                 opts.scavengingDidntReturnId = npc.id;
             } else {
@@ -487,7 +489,10 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // A kind nun's welcome at the gate (Church encounter - holy welcome), slaves too under the nuns policy
-        setup.churchEncounters.payWorkBoost(npc, day, randomScavengingItems);
+        const workedTonight = !isSick && !isDayOff && !privilegeExempt
+            && !(job === 'garden' && isHeatWave)
+            && !(job === 'scavenging' && (!isGuest || isSandStorm || scavengerStayedHome || scavengerMissing));
+        setup.churchEncounters.payWorkBoost(npc, day, randomScavengingItems, workedTonight);
     }
 
     // ── Sick tick ─────────────────────────────────────────────────────────────

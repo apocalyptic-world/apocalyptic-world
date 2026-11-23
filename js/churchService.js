@@ -90,6 +90,9 @@ setup.churchService = {
     inviteBlockedBy: function (npc) {
         const v = variables();
         if (!(npc.likesGuys ?? true)) return 'hidden';
+        if (setup.getAge(npc) < 18 || npc.chastityBelt) return 'hidden';
+        if (npc.gender === 1 && !settings.gaysEnabled) return 'hidden';
+        if ([2, 3].includes(npc.gender) && !settings.transEnabled) return 'hidden';
         if (v.player?.baseManagement?.noIncest && setup.family.getRelationToMC(npc)) return 'hidden';
         if ((v.player.energy ?? 0) <= 30) return 'Not enough energy';
         return '';

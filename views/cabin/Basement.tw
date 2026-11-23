@@ -544,18 +544,17 @@
 
 <<if _showSlavesCount &&  !$locationEvents.basement>>
 	<<set _randomNumber = randomInteger(0, 10)>>
-	<<if _randomNumber === 0 && _lowSubmissionSlaves.length>>
-		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
-		<<if setup.getAge($slaves[$eventSlaveId]) >= 18 && !$slaves[$eventSlaveId].gender>>
-			<<set $locationEvents.basement = true>>
-			<<set $tmpEvent = {
-				id: $eventSlaveId
-			}>>
-			<<if setup.percentageChance(50)>>
-				<<goto 'Basement event - try escape'>>
-			<<else>>
-				<<goto 'Basement event - try escape 2'>>
-			<</if>>
+	<<set _escapeSlaveId = _lowSubmissionSlaves.length ? setup.getRandomElement(_lowSubmissionSlaves) : null>>
+	<<if _randomNumber === 0 && _escapeSlaveId !== null && setup.getAge($slaves[_escapeSlaveId]) >= 18 && !$slaves[_escapeSlaveId].gender>>
+		<<set $eventSlaveId = _escapeSlaveId>>
+		<<set $locationEvents.basement = true>>
+		<<set $tmpEvent = {
+			id: $eventSlaveId
+		}>>
+		<<if setup.percentageChance(50)>>
+			<<goto 'Basement event - try escape'>>
+		<<else>>
+			<<goto 'Basement event - try escape 2'>>
 		<</if>>
 	<<elseif _randomNumber === 1 && _hornySlaveId !== null && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender && !$slaves[_hornySlaveId].virgin>>
 		<<set $hornySlaveId = _hornySlaveId>>

@@ -799,9 +799,9 @@ setup.suicideChance = function (person) {
   }
 
   setup.pregnancyChance = function (person, father) {
-    if (father && (father.traits ?? []).includes('infertile')) return false;
-    // A feral nun sensed she is ovulating today (Church encounter - feral fertile)
+    // A feral nun sensed she is ovulating today (Church encounter - feral fertile); noted before any early return
     var ovulating = setup.churchEncounters.fertileToday(person);
+    if (father && (father.traits ?? []).includes('infertile')) return false;
     var chance = 0;
     var infertile = (person.traits ?? []).includes('infertile');
     if (infertile || person.sexChanged) {

@@ -46,7 +46,7 @@ setup.cuckReactions = {
 		if (typeof husband.sick !== 'undefined' && (V.game?.location?.hospital ?? false)) return false;
 		const atWork = setup.isAtWork(husband, V.weather);
 		if (wife.location === 'bedroom' && V.tmpGirlBack === 'Guest house') {
-			return isGuest && !atWork && husband.location !== 'school';
+			return isGuest && !atWork && husband.location !== 'school' && setup.churchEncounters.awake(husband);
 		}
 		return !!husband.assignedTo && husband.assignedTo === wife.location && atWork;
 	},

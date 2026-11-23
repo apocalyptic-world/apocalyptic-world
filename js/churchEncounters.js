@@ -568,10 +568,12 @@ setup.churchEncounters = {
             && (!entry.settlers || hasSettlers)
             && (!entry.slaves || setup.churchService.servesSlaves()))) {
             const fits = this.nunsFor(item, ctx);
-            if (fits.length) {
-                const cast = item.cast(fits.random(), ctx);
+            // Try the fitting nuns in random order: one without a cast (nobody to pair her with) shouldn't drop the encounter
+            for (const nun of fits.slice().shuffle()) {
+                const cast = item.cast(nun, ctx);
                 if (cast) {
                     options.push({ encounter: item, cast: cast });
+                    break;
                 }
             }
         }
@@ -953,15 +955,15 @@ setup.churchEncounters = {
         npc.churchBoostDay = variables().game.day;
     },
 
-    /** Called from the nightly tick (day is the new day): pays out boostWork */
-    payWorkBoost: function (npc, day, scavengingItems) {
+    /** Called from the nightly tick (day is the new day): pays out boostWork, only if the worker actually worked that night */
+    payWorkBoost: function (npc, day, scavengingItems, worked = true) {
         if (npc.churchBoostDay === undefined) {
             return;
         }
         const boosted = npc.churchBoostDay === day - 1;
         delete npc.churchBoostDay;
         const made = { garden: 'food', forest: 'wood', quarry: either('coal', 'stone'), scavenging: (scavengingItems ?? []).length ? scavengingItems.random() : null }[npc.assignedTo];
-        if (!boosted || !made) {
+        if (!boosted || !made || !worked) {
             return;
         }
         setup.cabinInventory.pickup(made, 1);

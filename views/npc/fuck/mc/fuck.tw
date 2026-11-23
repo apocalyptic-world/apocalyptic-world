@@ -78,8 +78,8 @@
                 $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
                 $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
             >>
-            /* $sexSubGain: a scene the NPC entered as an act of submission; cleared when the scene ends */
-            <<if ($tmpGirl.basementVoluntary ?? false) || ($sexSubGain ?? false)>>
+            /* $sexSubGain: id of the NPC who entered this scene as an act of submission; cleared when the scene ends */
+            <<if ($tmpGirl.basementVoluntary ?? false) || ($sexSubGain !== undefined && $sexSubGain === $tmpGirl.id)>>
                 <<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 1, 100)>>
                 <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1, Submission + 1)</strong>
             <<else>>
