@@ -1,4 +1,9 @@
 :: Shop [Place bg-shop] {"position":"1098,766","size":"100,100"}
+/* Nun encounters (js/churchEncounters.js) ahead of the shop's random events, with their own daily limits */
+<<set _ceEncounter = setup.previousPassage() === 'Wood cabin' ? setup.churchEncounters.roll('shop') : null>>
+<<if _ceEncounter>>
+	<<goto _ceEncounter>>
+<</if>>
 <h1 class="ptitle">
 	SHOP
 </h1>

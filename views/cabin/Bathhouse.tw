@@ -147,6 +147,10 @@
 	}>>
 	<<goto 'Bathhouse - hot tub talk'>>
 	<<pickup $backpack 'blueprint_hot_tub' 1>>
+/* Nun encounters (js/churchEncounters.js) after the hot tub talk and before the random events below, with their own daily limits */
+<<elseif ['Wood cabin', 'Bathhouse'].includes(setup.previousPassage()) && setup.churchEncounters.roll('bathhouse')>>
+	<<set _ceFired = true>>
+	<<goto setup.churchEncounters.rolled>>
 <</if>>
 <<if !$player.showered>>
 	<<link 'Take a shower'>>
@@ -154,7 +158,7 @@
 		<<goto 'Shower-action'>>
 	<</link>>
 <</if>>
-<<if !($locationEvents.bathhouse ?? false)>>
+<<if !($locationEvents.bathhouse ?? false) && !_ceFired>>
 	<<set _hornyNpcsBlackHair = setup.filterNPCs($guests, { hair: 'black', horny_gte: 50, 'virgin': false, race_in: ['white', 'latina']})>>
 	<<set _hornyNpcsBlackHair[0] = (_hornyNpcsBlackHair[0] ?? []).filter(id => !($guests[id]?.traits ?? []).includes('feral') && setup.Tangle.eligible($guests[id]))>>
 	<<if  (_hornyNpcsBlackHair[0] ?? []).length && setup.percentageChance(10) && recall($suppCode)>>

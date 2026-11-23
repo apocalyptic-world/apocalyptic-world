@@ -574,6 +574,9 @@
 		<<unset $charId, $slaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave party introduction'>>
+	/* Nun encounters (js/churchEncounters.js, with their own daily limits), coming down from the cabin */
+	<<elseif setup.previousPassage() === 'Wood cabin' && setup.churchEncounters.roll('basement')>>
+		<<goto setup.churchEncounters.rolled>>
 	<<elseif _slavesForFuck.length && _guestsLikesGirls.length && setup.percentageChance(_guestFuckChance)>>
 		<<set $locationEvents.basement = true>>
 		<<set $tmpEvent = {
@@ -582,6 +585,9 @@
 		}>>
 		<<goto 'Basement - guest asks to fuck slave'>>
 	<</if>>
+/* The basement's own event already happened today: nun encounters still get their roll, with their own daily limits */
+<<elseif _showSlavesCount && setup.previousPassage() === 'Wood cabin' && setup.churchEncounters.roll('basement')>>
+	<<goto setup.churchEncounters.rolled>>
 <</if>>
 [[Back|Wood cabin]]
 

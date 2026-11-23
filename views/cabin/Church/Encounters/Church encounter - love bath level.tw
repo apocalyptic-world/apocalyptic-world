@@ -1,0 +1,157 @@
+:: Church encounter - love bath level
+/* One step of Church encounter - love bath. Uses _level (1 to 3), _role ('watch' or 'join'), _mode ('feet' or 'shoulders') and the cast set up there.
+   Each step's text stays on the page: only its choices and stat changes (#ce_lvl1, #ce_lvl2, ...) are replaced by the next step, so the scene reads as it builds. */
+<<run _ce.byNun(_nun, _guest, 'happy', 1, 1)>>
+<<run _fx.change(_nun, 'happy', 1, 1)>>
+<<run _fx.changeBetween(_guest, _nun, 1, 1)>>
+<<if _role === 'join'>>
+	<<run _fx.change(_guest, 'relationship', 1, 1)>>
+	<<run _fx.change(_nun, 'relationship', 1, 1)>>
+<</if>>
+<<if _level === 1>>
+	<<if _role === 'join'>>
+		<<if _mode === 'feet'>>
+			You kneel down on the boards beside <<=_nunName>>, and <<=_nHe>> hands you the soap without a word. You take <<=_gName>>'s other foot, and between the two of you, <<=_gHe>> doesn't have a single care left to hold on to.
+		<<else>>
+			You kneel on the other side of the bench, and <<=_nunName>> tips a little oil into your palms. You take one shoulder and <<=_nHe>> takes the other, and <<=_gName>> lets out a groan of pure contentment into the towel.
+		<</if>>
+	<<else>>
+		You settle onto the bench by the door. <<=_nunName>> gives you a glance, pleased, and goes back to <<=_nHis>> work with a little more ceremony than before, as if <<=_nHe>> knows <<=_nHe>> is being watched and doesn't mind it at all.
+	<</if>>
+	<br /><br />
+	<<if _feral>>
+		<<sayFeral _nun>>leans in and nuzzles at <<=_gName>>'s <<=_mode === 'feet' ? 'ankle' : 'neck'>>, purring loud enough to hear over the dripping taps, and presses gently until <<=_gHe>> lets the last of the tension go<</sayFeral>>
+		<br />
+	<<else>>
+		<<sayNpc _nun>>
+			<<if _mode === 'feet'>>
+				Think of all the ground these feet have carried you over. The divine made them to carry you, and made hands to care for them. There's nothing more holy than one body thanking another.
+			<<else>>
+				Breathe out. Slower. The holy texts teach that touch is a prayer the body already knows how to say. You don't have to find the words. Just let yourself feel them.
+			<</if>>
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<sayNpc _guest>>
+		<<if _role === 'join'>>
+			Two of you? <<=ucfirst(_gMc)>>, this is a little unfair. In the best possible way.
+		<<else>>
+			Mm. Is it strange that I like having you watch, <<=_gMc>>?
+		<</if>>
+	<</sayNpc>>
+	<br />
+<<elseif _level === 2>>
+	<<if _mode === 'feet'>>
+		The soapy hands move higher: up over the ankle, along the calf, slow circles behind the knee. <<=_gName>> parts <<=_gHis>> knees a little without seeming to notice, and the hands keep climbing, smoothing up the inside of <<=_gHis>> thighs.
+	<<else>>
+		The hands slide lower: down the long muscles either side of the spine, out along the ribs, and down the curve of <<=_gHis>> sides to the hips, unhurried, until <<=_gName>> is arching very slightly into every stroke.
+	<</if>>
+	<<if _role === 'join'>>
+		Your hands follow <<=_nunName>>'s, mirroring every stroke on the other side.
+	<</if>>
+	<br /><br />
+	<<if _feral>>
+		<<sayFeral _nun>>starts to lick where <<=_nHis>> hands have been, slow and rough-tongued, petting <<=_gName>> all over with open, adoring strokes, eyes half closed, purring like <<=_nHe>> has forgotten anything else exists<</sayFeral>>
+		<br />
+	<<else>>
+		<<sayNpc _nun>>
+			Do you feel that warmth rising? That's the divine, waking up in you. It was never meant to be hidden away. It was meant to be shared, and celebrated, and touched. Every shiver is a hymn. Let it sing.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<sayNpc _guest>>
+		I don't... I don't think I want you to stop. Either of you.
+	<</sayNpc>>
+	<br />
+<<else>>
+	<<if _mode === 'feet'>>
+		The hands slip higher still, over the curve of <<=_gName>>'s backside and in, tracing the soft skin between <<=_gHis>> thighs, coming closer and closer without ever quite arriving. <<=_gName>> is gripping the edge of the bench with both hands, breathing hard.
+	<<else>>
+		<<=_nunName>> coaxes <<=_gName>> over onto <<=_gHis>> back, and the hands begin again from the top: over <<=_gHis>> <<=_chest>>, slick with oil, then down across <<=_gHis>> belly, lower and lower, while <<=_gName>> trembles under them.
+	<</if>>
+	<<if _role === 'join'>>
+		You and <<=_nunName>> explore <<=_gHim>> together, and every time your hands meet on <<=_gHis>> skin, <<=_nunName>> catches your eye and smiles.
+	<</if>>
+	<br /><br />
+	<<if _feral>>
+		<<sayFeral _nun>>presses <<=_nHis>> face into <<=_gName>>'s skin and breathes <<=_gHim>> in, reverent and wild at once, making soft little sounds of wonder, as if <<=_gName>>'s body were the most sacred thing <<=_nHe>> has ever found<</sayFeral>>
+		<br />
+	<<else>>
+		<<sayNpc _nun>>
+			Look at you. Look at what the divine made. This is what worship is, <<=_nMc>>. Not kneeling on cold stone. This. Every inch of you is holy, <<=_gName>>, and I mean to give thanks for all of it.
+		<</sayNpc>>
+		<br />
+	<</if>>
+<</if>>
+
+<<if _level === 3 && _role === 'join'>>
+	<<sayNpc _guest>>
+		<<=ucfirst(_gMc)>>, please. I can't take much more of this.
+	<</sayNpc>>
+	<br />
+<<elseif _level === 3>>
+	<<set _guest.horny = 0>>
+	<<=_nunName>>'s hands find the last of the way, and <<=_gName>> comes apart under them with a long, shaking cry that echoes off the tiles. <<=_nunName>> holds <<=_gHim>> through every wave of it, and when <<=_gHe>> finally goes still, <<=_nHe>> rests <<=_nHis>> forehead against <<=_gHis>> and closes <<=_nHis>> eyes.
+	<br /><br />
+	<<if _feral>>
+		<<sayFeral _nun>>curls up against <<=_gName>>'s side, purring softly, and licks <<=_gHis>> cheek once, slowly, in something that looks very much like a blessing<</sayFeral>>
+	<<else>>
+		<<sayNpc _nun>>
+			Thank you, for the gift of this pleasure, and for the body that carried it. Let it be remembered. Let it be repeated.
+		<</sayNpc>>
+	<</if>>
+	<br />
+<</if>>
+<<set _choiceId = 'ce_lvl' + _level>>
+<div @id="_choiceId">
+<<capture _choiceId>>
+<<if _level < 3>>
+	<<set _onLabel = _role === 'join' ? 'Keep going' : 'Encourage ' + _nunName + ' to go on'>>
+	<<link _onLabel>>
+		<<set _level += 1>>
+		<<replace `'#' + _choiceId`>><<include 'Church encounter - love bath level'>><</replace>>
+	<</link>>
+	<<link 'Leave things there'>>
+		<<replace `'#' + _choiceId`>>
+			<<if _role === 'join'>>
+				You sit back on your heels and let your hands fall away. <<=_nunName>> follows your lead, and <<=_gName>> lies there a moment longer, flushed and smiling, before reaching for <<=_gHis>> towel.
+			<<else>>
+				You get up from the bench. <<=_nunName>> takes it as the signal it is and lets <<=_nHis>> touch soften back to something gentle, and <<=_gName>> sighs, flushed and smiling.
+			<</if>>
+			<br /><br />
+			<<link 'Continue' 'Bathhouse'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+<<elseif _role === 'join'>>
+	<<set _blocked = _ce.mcBlockedBy()>>
+	<<set _soloLabel = 'Take ' + _gHim + ' the rest of the way yourself'>>
+	<<set _trio = _ce.threesome(_guest, _nun)>>
+	<<set _trioLabel = 'Take them both'>>
+	<<set _justGuest = [_guest]>>
+	<<set _yield = _ce.nunYields(_nun, [_guest]) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+	<<if _blocked>>
+		<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+		<<if _trio>><div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div><</if>>
+	<<else>>
+		<<set _noChanges = []>>
+		<<ceSexLink _soloLabel 'solo' _justGuest _noChanges 'bathhouse' 'Bathhouse'>>
+		<<if _trio>>
+			<<ceSexLink _trioLabel 'threesome' _trio _yield 'bathhouse' 'Bathhouse'>>
+		<</if>>
+	<</if>>
+	<<link 'Leave things there'>>
+		<<replace `'#' + _choiceId`>>
+			You lean down, kiss <<=_gName>>'s forehead, and leave <<=_gHim>> to <<=_nunName>>, who takes up the rest with a look of pure devotion.
+			<br /><br />
+			<<link 'Continue' 'Bathhouse'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+<<else>>
+	<<link 'Continue' 'Bathhouse'>><</link>>
+<</if>>
+/* Under the buttons, and replaced along with them by the next step */
+<<nurseryEffects>>
+<</capture>>
+</div>

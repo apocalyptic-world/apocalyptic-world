@@ -1,0 +1,146 @@
+:: Church encounter - love offense
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A loving nun brings the player a guest she caught in a small offense. He can forgive them, or punish them in the basement. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest, _stern = _cast.stern ?? null>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+<<set _meek = (_guest.sub ?? 0) >= _ce.MEEK_FROM>>
+<<set _offense = _ce.offense(_guest)>>
+<<set _noChanges = []>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justGuest = [_guest]>>
+
+<<if _meek>>
+	<<=_nunName>> comes across the yard toward you with <<=_gName>> a step behind <<=_nHim>>, head down and hands clasped, the picture of someone who knows exactly what they did.
+<<else>>
+	<<=_nunName>> comes across the yard toward you with a hand on <<=_gName>>'s arm. <<=_gName>> is walking under protest, jaw set, glaring at nothing in particular.
+<</if>>
+<br /><br />
+<<sayNpc _nun>>
+	<<=ucfirst(_nMc)>>, I'm sorry to trouble you. I caught <<=_gName>> <<=_offense>>. I've already had a word with <<=_gHim>>, but I thought it should come to you.
+<</sayNpc>>
+<br />
+<<if _stern>>
+	<<if _meek>>
+		<<=_nunName>> rests a hand on <<=_gName>>'s bowed head, gentle but firm.
+	<<else>>
+		<<=_gName>> rolls <<=_gHis>> eyes. <<=_nunName>> doesn't so much as blink.
+	<</if>>
+	<br /><br />
+	<<sayNpc _nun>>
+		<<if _meek>>
+			And you should count yourself lucky that it was me who found you, and not <<=setup.displayName(_stern)>>. <<=ucfirst(setup.pronounceWhat(_stern))>> wouldn't have been nearly so gentle about it.
+		<<else>>
+			You can scowl at me all you like. You're lucky it was me who caught you and not <<=setup.displayName(_stern)>>.
+		<</if>>
+	<</sayNpc>>
+	<br />
+<</if>>
+<<sayNpc _guest>>
+	<<if _meek>>
+		I'm sorry, <<=_gMc>>. Really. I don't know what I was thinking. It won't happen again.
+	<<else>>
+		Oh, come on, <<=_gMc>>. It was nothing. Half the people here have done worse, they just didn't get caught.
+	<</if>>
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<link `'Forgive ' + _gHim`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_guest, 'happy', 3, 5)>>
+			<<run _fx.change(_guest, 'relationship', 4, 6)>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			<<you>>
+				It's done. Put it right, don't do it again, and we'll say no more about it.
+			<</you>>
+			<br />
+			<<if _meek>>
+				<<=_gName>> looks up at you, so relieved <<=_gHe>> seems close to tears.
+			<<else>>
+				<<=_gName>> opens <<=_gHis>> mouth to argue, realizes there is nothing to argue with, and shuts it again. All the fight goes out of <<=_gHis>> shoulders.
+			<</if>>
+			<br /><br />
+			<<=_nunName>> positively lights up. <<=ucfirst(_nHe)>> claps <<=_nHis>> hands together and beams at the two of you as if you'd just performed a miracle.
+			<br /><br />
+			<<sayNpc _nun>>
+				Do you see? That's what grace looks like, <<=_gName>>. Not a punishment, a second chance. Something like that deserves to be thanked properly, don't you think?
+			<</sayNpc>>
+			<br />
+			<<set _wantsMc = _ce.mcOk(_guest)>>
+			<<set _trio = _ce.threesome(_guest, _nun)>>
+			<<if _wantsMc>>
+				<<=_gName>> blinks at <<=_nHim>>, not quite following. <<=_nunName>>'s smile turns a little sly, and <<=_nHe>> leans in to murmur the rest.
+				<br /><br />
+				<<sayNpc _nun>>
+					Somewhere private, I mean. Just the two of you... or the three of us, if you'd let me share in it.
+				<</sayNpc>>
+				<br />
+				<<sayNpc _guest>>
+					I... yes. I'd like that, <<=_gMc>>. If you would.
+				<</sayNpc>>
+				<br />
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _soloLabel = 'Take ' + _gHim + ' somewhere private'>>
+				<<set _trioLabel = 'Take them both somewhere private'>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+					<<if _trio>><div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div><</if>>
+				<<else>>
+					<<ceSexLink _soloLabel 'solo' _justGuest _noChanges 'bedroom' 'Wood cabin'>>
+					<<if _trio>>
+						<<set _trioChanges = _ce.nunYields(_nun, _justGuest) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+						<<ceSexLink _trioLabel 'threesome' _trio _trioChanges 'bedroom' 'Wood cabin'>>
+					<</if>>
+				<</if>>
+				[[Leave it at that|Wood cabin]]
+				<<nurseryEffects>>
+			<<else>>
+				<<=_gName>> settles for throwing <<=_gHis>> arms around you, then, after a moment, around <<=_nunName>> too.
+				<br /><br />
+				<<sayNpc _guest>>
+					Thank you, <<=_gMc>>. I mean it.
+				<</sayNpc>>
+				<br />
+				[[Continue|Wood cabin]]
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+	<<if $game.location.basement ?? false>>
+		<<set _punishLabel = 'Take ' + _gHim + ' down to the basement to be punished'>>
+		<<link _punishLabel>>
+			<<replace '#ce_choices'>>
+				<<you>>
+					Forgiveness has to be earned. Come with me.
+				<</you>>
+				<br />
+				<<if _meek>>
+					<<=_gName>> goes pale, but <<=_gHe>> nods and follows without a word.
+				<<else>>
+					<<=_gName>> starts to protest, then sees your face and thinks better of it.
+				<</if>>
+				<br /><br />
+				<<=_nunName>> doesn't argue. <<=ucfirst(_nHe)>> only folds <<=_nHis>> hands, gives <<=_gName>>'s arm a last small squeeze, and steps back.
+				<br /><br />
+				<<sayNpc _nun>>
+					As you think best, <<=_nMc>>. I'll pray it does <<=_gHim>> some good.
+				<</sayNpc>>
+				<br />
+				<<=ucfirst(_nHe)>> turns back toward the church, and you notice that <<=_nHe>> doesn't look back.
+				<br /><br />
+				<<cePunishLink 'Continue' _guest _noChanges 'Wood cabin'>>
+			<</replace>>
+		<</link>>
+	<</if>>
+</div>
+<</if>>

@@ -1,0 +1,82 @@
+:: Church encounter - love bath [bg-bathhouse]
+<h1 class="ptitle">BATHHOUSE</h1>
+<br /><br />
+/* A loving nun tends to a guest in the bathhouse, washing feet or rubbing shoulders, and lets it grow into something more if the player watches or joins in. Feral nuns too. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Bathhouse'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+<<set _mode = either('feet', 'shoulders')>>
+<<set _chest = [0, 2].includes(_guest.gender) ? 'breasts' : 'chest'>>
+<<set _level = 0, _role = null>>
+
+<<if _mode === 'feet'>>
+	<<=_gName>> sits on the edge of the bench by the tubs with <<=_gHis>> feet in a basin of warm water and a towel around <<=_gHis>> shoulders. <<=_nunName>> kneels on the wet boards in front of <<=_gHim>>, sleeves pushed up, working a cake of soap between <<=_nHis>> hands and then over one of <<=_gName>>'s feet, slow and thorough, heel to toe.
+<<else>>
+	<<=_gName>> lies face down on a towel spread over the bench by the tubs, still damp from the bath, while <<=_nunName>> kneels beside <<=_gHim>> and works the knots out of <<=_gHis>> shoulders, oil glistening on <<=_nHis>> palms.
+<</if>>
+<br /><br />
+<<if _feral>>
+	<<sayFeral _nun>>pauses now and then to rub <<=_nHis>> cheek against <<=_gName>>'s <<=_mode === 'feet' ? 'knee' : 'shoulder blade'>>, a low, contented sound rumbling in <<=_nHis>> chest, before going back to work<</sayFeral>>
+	<br />
+<<else>>
+	<<sayNpc _nun>>
+		The holy texts say the body is the first temple, and every temple deserves to be tended. There. Feel how much you were carrying? Let me take some of it.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<sayNpc _guest>>
+	Mmm. I could get used to this. I think I'm melting.
+<</sayNpc>>
+<br />
+They both look completely at ease, and there is a warmth between them that goes a little past professional. <<=_nunName>> notices you first, and looks up with a slow, welcoming smile, as if you'd arrived exactly on time.
+<br /><br />
+<<sayNpc _guest>>
+	Oh. Hi, <<=_gMc>>. Don't stop on my account, <<=_nunName>>. Please don't stop.
+<</sayNpc>>
+<br />
+<<if !_feral>>
+	<<sayNpc _nun>>
+		There's room for one more, <<=_nMc>>. Or a seat by the door, if you'd only like to watch. The divine loves an audience as much as anyone.
+	<</sayNpc>>
+	<br />
+<</if>>
+
+<div id="ce_scene">
+	<<link 'Sit down and watch'>>
+		<<run _ce.byNun(_nun, _guest, 'happy', 2, 4)>>
+		<<run _fx.change(_nun, 'happy', 1, 2)>>
+		<<run _fx.changeBetween(_guest, _nun, 2, 4)>>
+		<<set _role = 'watch', _level = 1>>
+		<<replace '#ce_scene'>><<include 'Church encounter - love bath level'>><</replace>>
+	<</link>>
+	<<if _ce.mcOk(_guest)>>
+		<<link 'Join them'>>
+			<<run _ce.byNun(_nun, _guest, 'happy', 2, 4)>>
+			<<run _fx.change(_nun, 'happy', 1, 2)>>
+			<<run _fx.changeBetween(_guest, _nun, 2, 4)>>
+			<<set _role = 'join', _level = 1>>
+			<<replace '#ce_scene'>><<include 'Church encounter - love bath level'>><</replace>>
+		<</link>>
+	<</if>>
+	<<link 'Leave them to it'>>
+		<<run _ce.byNun(_nun, _guest, 'happy', 2, 4)>>
+		<<run _fx.change(_nun, 'happy', 1, 2)>>
+		<<run _fx.changeBetween(_guest, _nun, 2, 4)>>
+		<<replace '#ce_scene'>>
+			You leave them to it. The last thing you hear on your way out is <<=_gName>> sighing happily, and <<=_nunName>> <<=_feral ? 'purring' : 'laughing softly'>>.
+			<br /><br />
+			<<link 'Continue' 'Bathhouse'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

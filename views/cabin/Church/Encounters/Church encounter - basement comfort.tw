@@ -1,0 +1,120 @@
+:: Church encounter - basement comfort [bg-basement]
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+/* A kind nun sits with the unhappiest slave in the basement (base policy: nuns may include slaves). If the slave leans on xanax, whippits or drink, they say so. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Basement'>>
+<<else>>
+<<set _nun = _cast.nun, _slave = _cast.slave>>
+<<set _nunName = setup.displayName(_nun), _sName = setup.displayName(_slave)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _sHe = setup.pronounceWhat(_slave), _sHis = setup.pronounceWhos(_slave), _sHim = setup.pronounceWho(_slave)>>
+/* Same as the guest house scene: compassion is worth +2 here, byNun gives +1 of it, _bonus keeps the other */
+<<set _bonus = setup.personality.has(_nun, 'compassionate') ? 1 : 0>>
+<<set _vice = _ce.vice(_slave)>>
+<<set _viceName = _vice ? _ce.itemName(_vice).toLowerCase() : ''>>
+<<set _viceWords = { xanax: 'the pills', whippit: 'the whippits', alcohol: 'the bottle' }>>
+<<set _sMc = setup.npc.mcName(_slave), _nMc = setup.npc.mcName(_nun)>>
+
+The door of the last cell stands open. Inside, <<=_sName>> sits curled on the edge of the cot with <<=_sHis>> knees drawn up and <<=_sHis>> face pressed into them. <<=_nunName>> sits beside <<=_sHim>> on the thin mattress, close enough that their shoulders touch, saying nothing for the moment and simply staying.
+<br /><br />
+<<sayNpc _slave>>
+	It's the walls. Every day it's the same four walls, and the same bit of light from the stairs, and I can't remember what it felt like to want anything.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	Then let me remember it for you for a while. The holy texts say no one is ever out of the divine's sight, not in the deepest place, not behind any door. You haven't been forgotten down here. I came, didn't I?
+<</sayNpc>>
+<br />
+<<if _vice>>
+	<<=_sName>> laughs, small and unhappy.
+	<br /><br />
+	<<sayNpc _slave>>
+		I keep thinking about <<=_viceWords[_vice]>>. It's the only thing that makes the days go faster. I think I'm leaning on it too much. There's nothing else down here to lean on.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<=_nunName>> looks up and sees you at the bars. <<=ucfirst(_nHe)>> doesn't ask for anything, but <<=_nHe>> doesn't look away either. <<=_sName>> follows <<=_nHis>> gaze and scrambles to sit up straight, scrubbing at <<=_sHis>> eyes.
+<br /><br />
+<<sayNpc _slave>>
+	<<=ucfirst(_sMc)>>. I'm sorry. I didn't mean for you to see me like this.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<if _vice>>
+		<<set _giftLabel = "Give " + _sHim + " some " + _viceName + " and tell " + _sHim + " it's okay to lean on it">>
+		<<if setup.cabinInventory.has(_vice)>>
+			<<link _giftLabel>>
+				<<replace '#ce_choices'>>
+					<<addmins 5>>
+					<<run setup.cabinInventory.to_npc(_slave, _vice)>>
+					<<run _fx.change(_slave, 'happy', 2, 3)>>
+					You step into the cell, crouch down in front of <<=_sName>> and press the <<=_viceName>> into <<=_sHis>> hands.
+					<br /><br />
+					<<you>>
+						Nobody gets through the end of the world without a crutch, down here or up there. If this one helps, use it.
+					<</you>>
+					<br />
+					<<=_sName>> closes <<=_sHis>> fingers around it and some of the tightness goes out of <<=_sHis>> shoulders.
+					<br /><br />
+					<<sayNpc _slave>>
+						Thank you, <<=_sMc>>.
+					<</sayNpc>>
+					<br /> <<=_nunName>> watches you with an expression you can't quite read, then rests a hand on <<=_sName>>'s back.
+					<br /><br />
+					<<sayNpc _nun>>
+						Just remember it isn't the only thing holding you up. I'll come down again tomorrow. Wait for me, before you reach for that.
+					<</sayNpc>>
+					<br />
+					[[Continue|Basement]]
+					<<nurseryEffects>>
+				<</replace>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				<<=_giftLabel>> (you have none)
+			</div>
+		<</if>>
+	<</if>>
+	<<set _helpLabel = 'Sit with them and help lift ' + _sHis + ' spirits (Uses 30 minutes)'>>
+	<<link _helpLabel>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _slave, 'happy', 4 + _bonus, 8 + _bonus)>>
+			You duck into the cell and sit on the floor with your back against the wall. For a while you just talk about whatever is going on upstairs: the weather, the garden, the dog that keeps stealing boots from the porch. <<=_sName>> listens like someone hearing news from a far country. Then, when <<=_sHe>> is ready, you talk about the heavy things too.
+			<br /><br />
+			<<=_nunName>> knows when to speak and when to let a silence do the work, and you find yourself following <<=_nHis>> lead. You remind <<=_sName>> of the work <<=_sHe>> has done that kept this house running, the meals and the warmth <<=_sHe>> is part of, and that whatever else the basement is, it is out of reach of the things that roam the wasteland.
+			<br /><br />
+			<<sayNpc _slave>>
+				I didn't think you ever noticed any of that, <<=_sMc>>.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _nun>>
+				We notice. Down here as much as anywhere. That's what we're for.
+			<</sayNpc>>
+			<br />
+			By the time you get up to leave, <<=_sName>> has let go of <<=_sHis>> knees, and something like a smile is trying its luck at the corners of <<=_sHis>> mouth.
+			<br /><br />
+			[[Continue|Basement]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to it'>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _slave, 'happy', 1 + _bonus, 2 + _bonus)>>
+			<<sayNpc _nun>>
+				Go on, <<=_nMc>>. I'll stay with <<=_sHim>> a while.
+			<</sayNpc>>
+			<br />
+			You leave them in peace. Behind you, <<=_nunName>> starts to hum something soft and old that carries along the row of cells, and after a while <<=_sName>> leans <<=_sHis>> head against <<=_nHis>> shoulder.
+			<br /><br />
+			[[Continue|Basement]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

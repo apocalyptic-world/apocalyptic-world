@@ -1,0 +1,108 @@
+:: Church encounter - holy night worker [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A kind nun looks after a guest just home from a night at the strip club, the nightclub or on the streets, without a word of judgement. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gHe = setup.pronounceWhat(_guest), _gHis = setup.pronounceWhos(_guest), _gHim = setup.pronounceWho(_guest)>>
+<<set _gMc = setup.npc.mcName(_guest), _nMc = setup.npc.mcName(_nun)>>
+<<set _job = _guest.assignedTo>>
+<<set _noKnife = _job === 'streets' && !setup.npcInventoryHas(_guest, 'knife')>>
+<<set _where = { strip_club: 'the strip club', nightclub: 'the nightclub', streets: 'the streets' }[_job]>>
+<<set _care = either('refreshment', 'changing', 'hair', 'feet', 'shoulders')>>
+
+<<=_gName>> is sitting on the edge of <<=_gHis>> bunk, still in last night's work clothes, too tired to do anything about it. <<if _job === 'strip_club'>>There is glitter on <<=_gHis>> collarbones and a pair of impossible heels kicked off on the floor.<<elseif _job === 'nightclub'>><<=ucfirst(_gHe)>> smells of smoke and spilled drinks, and keeps working <<=_gHis>> jaw like <<=_gHis>> ears are still ringing.<<else>><<=ucfirst(_gHe)>> is pale with cold, <<=_gHis>> makeup smudged, and <<=_gHe>> sits with <<=_gHis>> back to the wall, the way people do when they've spent the night watching every shadow.<</if>>
+<br /><br />
+<<if _care === 'refreshment'>>
+	<<=_nunName>> comes in from the kitchen with a mug of something hot and a heel of bread on a plate, and puts the mug into <<=_gName>>'s hands, folding <<=_gHis>> fingers around it until <<=_gHe>> holds it on <<=_gHis>> own.
+<<elseif _care === 'changing'>>
+	<<=_nunName>> kneels in front of <<=_gHim>> and works the stubborn fastenings of <<=_gHis>> work clothes loose, one by one, then helps <<=_gHim>> out of them and into a soft, shapeless old shirt that has never been anywhere near a stage or a street corner.
+<<elseif _care === 'hair'>>
+	<<=_nunName>> sits behind <<=_gHim>> on the bunk with a comb and a damp cloth, wiping away the last of the night's makeup and then working patiently through <<=_gHis>> tangled hair, a little at a time, so it never pulls.
+<<elseif _care === 'feet'>>
+	<<=_nunName>> sets a basin of warm water on the floor, eases <<=_gName>>'s aching feet down into it, and kneels there rubbing the cramps out of them with both thumbs while <<=_gName>> groans in relief.
+<<else>>
+	<<=_nunName>> sits behind <<=_gHim>> on the bunk, working the knots out of <<=_gHis>> neck and shoulders with slow, firm hands, and every so often <<=_gName>>'s head droops forward as if <<=_gHe>> could fall asleep right there.
+<</if>>
+<br /><br />
+<<sayNpc _guest>>
+	<<if _job === 'streets'>>
+		Long night. Cold. A couple of them got rough. I don't want to talk about it.
+	<<else>>
+		Long night. My face hurts from smiling. And everyone wants something.
+	<</if>>
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	Then don't talk. Let me do the work for a while. You spent all night giving, and the holy texts say the one who gives must be given to in turn, or the well runs dry. There's no shame in what you carry for this house. Only weight, and I can help with that.
+	<<if _noKnife>>
+		But promise me one thing. Next time you go out, you take a knife. I want you coming home to me every morning.
+	<</if>>
+<</sayNpc>>
+<br />
+There is no judgement anywhere in <<=_nunName>>'s face, only a quiet, steady kindness, and something close to worry for whatever <<=_gName>> has been through out there. <<=_gName>> lets out a long breath and looks up, and only then notices you in the doorway.
+<br /><br />
+<<sayNpc _guest>>
+	Morning, <<=_gMc>>. Don't mind me. I'm being spoiled.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	<<=ucfirst(_gHe)>> has earned it, <<=_nMc>>. Every one of them who goes out to <<=_where>> has.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<set _rationLabel = 'Offer ' + _gHim + ' an extra food ration for ' + _gHis + ' break'>>
+	<<if setup.cabinInventory.has('food')>>
+		<<link _rationLabel>>
+			<<replace '#ce_choices'>>
+				<<run setup.cabinInventory.drop('food')>>
+				<<run _ce.byNun(_nun, _guest, 'happy', 3, 5)>>
+				<<run _fx.change(_guest, 'relationship', 3, 5)>>
+				<<run _fx.change(_nun, 'relationship', 2, 4)>>
+				<<run _fx.changeBetween(_guest, _nun, 3, 5)>>
+				<<run _ce.changePlayer('goodwill', 2)>>
+				You fetch an extra ration from the stores and put it in <<=_gName>>'s lap.
+				<br /><br />
+				<<you>>
+					Here. Eat something real, then sleep as long as you want. Nobody's going to bother you today.
+				<</you>>
+				<br />
+				<<=_gName>> stares at it, then at you, and <<=_gHis>> eyes go suspiciously bright.
+				<br /><br />
+				<<sayNpc _guest>>
+					You didn't have to do that, <<=_gMc>>. Thank you. Really.
+				<</sayNpc>>
+				<br />
+				Over <<=_gName>>'s head, <<=_nunName>> is looking at you with open admiration, as if you had just done something far bigger than handing over a meal.
+				<br /><br />
+				<<sayNpc _nun>>
+					That's the holy texts in a single gesture, <<=_nMc>>. Seeing the person, not the work.
+				<</sayNpc>>
+				<br />
+				<<link 'Continue' 'Guest house'>><</link>>
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc"><<=_rationLabel>> (you have no food)</div>
+	<</if>>
+	<<link 'Leave them to it'>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _guest, 'happy', 2, 4)>>
+			<<run _fx.changeBetween(_guest, _nun, 3, 5)>>
+			You give <<=_gName>> a nod and leave <<=_gHim>> in <<=_nunName>>'s hands. When you glance back from the door, <<=_gHe>> has finally lain down, and <<=_nunName>> is drawing a blanket up over <<=_gHis>> shoulders.
+			<br /><br />
+			<<link 'Continue' 'Guest house'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

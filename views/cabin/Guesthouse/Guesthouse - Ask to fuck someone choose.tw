@@ -7,7 +7,7 @@
 	_nymphoGuests = setup.propertyMatchIndexes($guests, 'traits', 'nymphomaniac', 'includes'),
 	_interestedGuests = setup.distinctValues([_hornyGuests, _nymphoGuests]),
 	_prospects = 0,
-	_k = setup.propertyMatchIndexes($guests, 'id', $tmpGirl.id),
+	_k = $guests.findIndex(g => g.id === $tmpGirl.id),
 	_girlsLikingGirls = [],
 	_girlsLikingGuys = [],
 	_girlsLikingBoth = [],
@@ -171,7 +171,7 @@
 									wifeGuestIdxs: _intercedingSpouseIdxs.length > 0 ? _intercedingSpouseIdxs : undefined,
 									husbandGuestIdxs: _targetSpouseIdxs.length > 0 ? _targetSpouseIdxs : undefined,
 									isEx: _isEx || undefined,
-									exProtestorIdx: _isEx ? _k[0] : undefined,
+									exProtestorIdx: _isEx ? _k : undefined,
 									exIdx: _isEx ? _j : undefined
 								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>
@@ -182,7 +182,7 @@
 									husbandGuestIdxs: _intercedingSpouseIdxs.length > 0 ? _intercedingSpouseIdxs : undefined,
 									wifeGuestIdxs: _targetSpouseIdxs.length > 0 ? _targetSpouseIdxs : undefined,
 									isEx: _isEx || undefined,
-									exProtestorIdx: _isEx ? _k[0] : undefined,
+									exProtestorIdx: _isEx ? _k : undefined,
 									exIdx: _isEx ? _j : undefined
 								}>>
 								<<goto 'Guesthouse [Event] - male on female'>>

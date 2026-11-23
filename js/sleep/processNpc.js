@@ -25,7 +25,8 @@ setup.sleep.processNpc = function(npc, opts) {
 
     // ── Guest: should they leave? (checked before flag resets) ──────────────
     // Mothers of a newborn without a bed leave by the guest room rule instead (setup.guestRoom.nightlyBedless)
-    if (isGuest && setup.sleep.guestWouldLeave(npc)) {
+    // A nun may have talked them into one more day (setup.churchNightly)
+    if (isGuest && setup.sleep.guestWouldLeave(npc) && !setup.churchNightly.keptTonight(npc, day)) {
         // Some leavers take something with them, sell what they know or leave a note (Event - Gone in the night)
         const betrayalKind = setup.betrayal.depart(npc);
         // A quiet leaver leaves fresh tracks (Event - Runaway tracks, js/sleep/runaways.js)
@@ -254,16 +255,21 @@ setup.sleep.processNpc = function(npc, opts) {
         }
 
         // Church: boosts all other guests' happy
-        if (job === 'church' && isGuest && !isSick) {
+        if (job === 'church' && isGuest && !isSick && setup.churchEncounters.skipsWork(npc, day)) {
+            setup.sleepMessages.addJob(npc.name + ' stayed hidden in the church all evening and did no work.', 'church');
+        } else if (job === 'church' && isGuest && !isSick) {
             npc.stats.church = (npc.stats.church ?? 0) + 1;
             const guests = sv.guests;
-            const lift = setup.personality.has(npc, 'compassionate') ? 2 : 1;
+            // 1, shaded by her temperament (setup.churchEncounters.NUN_TRAITS: compassionate and friendly lift more, critical, sadistic and extravagant less)
+            const lift = Math.max(0, 1 + setup.churchEncounters.nunBonus(npc, 'happy'));
             for (let ci = 0; ci < guests.length; ci++) {
                 if (guests[ci].id !== npc.id) {
                     guests[ci].happy = Math.min(100, (guests[ci].happy ?? 0) + lift);
                 }
             }
-            setup.sleepMessages.addJob(npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+' + lift + ' happy to all guests</strong>.', 'church');
+            setup.sleepMessages.addJob(lift
+                ? npc.name + ' spent the day at the church, lifting the spirits of those around <strong>+' + lift + ' happy to all guests</strong>.'
+                : npc.name + ' spent the day at the church, but did little to lift anyone\'s spirits.', 'church');
         }
 
         // Librarian: keeps the library in order - everyone learns skills a bit faster (setup.library)
@@ -479,6 +485,9 @@ setup.sleep.processNpc = function(npc, opts) {
                 setup.sleepMessages.addJob(npc.name + ' managed to find a mushroom among the debris while scavenging. <strong class="iitem">+1 glowing mushroom</strong>', 'scavenging');
             }
         }
+
+        // A kind nun's welcome at the gate (Church encounter - holy welcome), slaves too under the nuns policy
+        setup.churchEncounters.payWorkBoost(npc, day, randomScavengingItems);
     }
 
     // ── Sick tick ─────────────────────────────────────────────────────────────

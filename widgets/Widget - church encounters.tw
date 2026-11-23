@@ -1,0 +1,67 @@
+:: Widget - church encounters [widget]
+
+/*
+ * <<ceSexLink label kind npcs [changes] [place] [back]>>: link that starts the MC's scene with npcs.
+ * kind is 'solo', 'threesome' or 'foursome'; for a threesome, npcs in the order setup.churchEncounters.threesome() gave them.
+ * changes, optional: [{ npc, stat, low, high }] or { npc, other, low, high } (setup.churchEncounters.applyChanges), made when the
+ * link is picked and listed under it, since the scene follows at once.
+ * place, optional: 'bedroom' (the default), 'church' or 'basement'. back, optional: where the player ends up, 'Guest house' by default.
+ */
+<<widget ceSexLink>>
+	<<set _ceGo = { label: _args[0], kind: _args[1], npcs: _args[2], changes: _args[3] ?? [], place: _args[4] ?? 'bedroom', back: _args[5] ?? 'Guest house' }>>
+	<<capture _ceGo>>
+		<<link _ceGo.label>>
+			<<run setup.churchEncounters.applyChanges(_ceGo.changes)>>
+			<<run setup.churchEncounters.prepareMc(_ceGo.npcs, _ceGo.place, _ceGo.back)>>
+			<<if _ceGo.kind === 'foursome'>>
+				<<foursome $tmpGirl $tmpGirl2 $tmpGirl3>>
+			<<elseif _ceGo.kind === 'threesome'>>
+				<<threesome $tmpGirl $tmpGirl2>>
+			<<else>>
+				<<fuck $tmpGirl>>
+			<</if>>
+		<</link>>
+		<<if _ceGo.changes.length>>
+			<<linkdesc>><<=setup.churchEncounters.changesText(_ceGo.changes)>><</linkdesc>>
+		<</if>>
+	<</capture>>
+<</widget>>
+
+/*
+ * <<ceWatchLinks scene npcs [back]>>: the two ways to end a scene where guests go off together, from setup.churchEncounters.guestScene():
+ * follow and watch, or leave them be. Put it inside <div id="ce_after">. back, optional: where Continue goes, 'Guest house' by default.
+ */
+<<widget ceWatchLinks>>
+	<<set _ceWatch = { scene: _args[0], npcs: _args[1], back: _args[2] ?? 'Guest house' }>>
+	<<capture _ceWatch>>
+		<<link 'Follow them and watch'>>
+			<<run setup.churchEncounters.watch(_ceWatch.scene)>>
+		<</link>>
+		<<link 'Leave them to it'>>
+			<<run setup.churchEncounters.offstage(_ceWatch.npcs)>>
+			<<replace '#ce_after'>>
+				You leave them to their privacy. Whatever happens behind that door, they come out of it later looking very pleased with each other.
+				<br /><br />
+				<<link 'Continue' _ceWatch.back>><</link>>
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<</capture>>
+<</widget>>
+
+/*
+ * <<cePunishLink label npc [changes] [back]>>: link that takes npc down to the basement to be punished (NPC punish).
+ * changes as for ceSexLink, made when the link is picked and listed under it.
+ */
+<<widget cePunishLink>>
+	<<set _cePunish = { label: _args[0], npc: _args[1], changes: _args[2] ?? [], back: _args[3] ?? 'Guest house' }>>
+	<<capture _cePunish>>
+		<<link _cePunish.label>>
+			<<run setup.churchEncounters.applyChanges(_cePunish.changes)>>
+			<<run setup.churchEncounters.punish(_cePunish.npc, _cePunish.back)>>
+		<</link>>
+		<<if _cePunish.changes.length>>
+			<<linkdesc>><<=setup.churchEncounters.changesText(_cePunish.changes)>><</linkdesc>>
+		<</if>>
+	<</capture>>
+<</widget>>

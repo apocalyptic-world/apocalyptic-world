@@ -306,10 +306,13 @@ setup.nurseryEncounters = {
         return setup.nurseryOvernight.burnoutChance(npc, ctx.care, setup.nurseryCare.kids().length, ctx.carers.length);
     },
 
-    /** Relationship between two NPCs, both ways, rolled separately */
+    /** Relationship between two NPCs, both ways, rolled separately. A nun's warmth or coolness shades a gain with her (setup.churchEncounters.tieBonus). */
     changeBetween: function (first, second, low, high) {
+        const bonus = setup.churchEncounters.tieBonus(first, second, low);
+        [low, high] = [low + bonus, high + bonus].map(n => bonus < 0 ? Math.max(0, n) : n);
         const shift = (from, to) => {
             from.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+            from.relationshipBetween.stats ??= {};
             const before = from.relationshipBetween.stats[to.id] ?? 0;
             from.relationshipBetween.stats[to.id] = Math.clamp(before + random(low, high), -100, 100);
             const amount = from.relationshipBetween.stats[to.id] - before;
@@ -405,7 +408,7 @@ setup.nurseryEncounters = {
      * More than CHILD_LINES children are summed up on one line.
      */
     CHILD_LINES: 3,
-    STAT_LABELS: { happy: 'Happiness', relationship: 'Relationship', sub: 'Submission', endurance: 'Endurance', behavior: 'Behavior', toys: 'Toys', snacks: 'Snacks' },
+    STAT_LABELS: { happy: 'Happiness', relationship: 'Relationship', sub: 'Submission', endurance: 'Endurance', behavior: 'Behavior', toys: 'Toys', snacks: 'Snacks', sick: 'Days sick', settlementReputation: 'Settlement reputation' },
     effectLines: function () {
         const log = (this.log ?? []).slice(this.logShown);
         this.logShown = (this.log ?? []).length;

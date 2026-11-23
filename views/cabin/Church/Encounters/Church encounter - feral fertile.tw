@@ -1,0 +1,114 @@
+:: Church encounter - feral fertile [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A feral nun of the love path can smell that a guest is ovulating, and herds her toward the player. Her chance of pregnancy is doubled for the day. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _guest = _cast.guest>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gMc = setup.npc.mcName(_guest)>>
+<<run _ce.markFertile(_guest)>>
+
+<<=_nunName>> has been circling <<=_gName>> for a while now. Every time <<=_gName>> moves to a different bunk or sets down a cup, <<=_nunName>> drifts after her, nose lifted, breathing her in with slow, deep sniffs, as if she were carrying some scent nobody else in the room can pick up.
+<br /><br />
+<<sayNpc _guest>>
+	What is it? Do I smell? I washed this morning, I swear. You've been following me around like I'm a fresh loaf of bread.
+<</sayNpc>>
+<br />
+Then <<=_nunName>> catches sight of you, and <<=_nHis>> whole body goes alert.
+<br /><br />
+<<sayFeral _nun>>bounds over, takes your wrist in both hands and tugs, insistent, towing you across the room to <<=_gName>>. <<=ucfirst(_nHe)>> presses <<=_nHis>> nose to the side of her neck, then dips to breathe in just below her navel, and looks up at you with shining eyes, chirping, as if <<=_nHe>> were bursting to share the best news in the world<</sayFeral>>
+<br />
+It takes you a moment, and then it dawns on you what <<=_nunName>> is trying to tell you: <<=_gName>> is ripe. Ovulating, today, right now, and somehow <<=_nunName>> can smell it on her.
+<br /><br />
+And <<=_gName>> doesn't seem immune to it either. Her cheeks are flushed, her eyes keep drifting to you and away again, and she is chewing on her lower lip in a way that has nothing to do with embarrassment.
+<br /><br />
+<<sayNpc _guest>>
+	<<=ucfirst(_gMc)>>. I don't know what's gotten into me today. I've been thinking about you since I woke up. Like my whole body is asking for something.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<link 'Lean into it with her'>>
+		<<replace '#ce_choices'>>
+			<<addmins 5>>
+			<<run _fx.change(_nun, 'happy', 3, 5)>>
+			<<run _fx.change(_nun, 'relationship', 3, 5)>>
+			You step in close and put your hands on <<=_gName>>'s hips. She melts against you at once, with a small, relieved sigh, as if her body had been waiting all day for permission.
+			<br /><br />
+			<<sayFeral _nun>>makes a delighted, rumbling purr, circling the two of you and nudging you both toward the bedroom with <<=_nHis>> head, eager and impatient, like <<=_nHe>> can't wait to see you mate<</sayFeral>>
+			<br />
+			<<sayNpc _guest>>
+				I think <<=_nHe>> has made <<=_nHis>> opinion very clear, <<=_gMc>>. And so has mine.
+			<</sayNpc>>
+			<br />
+			<<set _blocked = _ce.mcBlockedBy()>>
+			<<if _blocked>>
+				<div class="link-internal" style="background: #ccc">Take her to bed (<<=_blocked>>)</div>
+			<<else>>
+				<<link 'Take her to bed'>>
+					<<run _ce.markFertile(_guest)>>
+					<<run _ce.prepareMc([_guest], 'bedroom', 'Church encounter - feral fertile after')>>
+					<<set $ceAfter = { nun: _nun.id, guest: _guest.id }>>
+					<<fuck $tmpGirl>>
+				<</link>>
+			<</if>>
+			<<link 'Think better of it' 'Guest house'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Gently say no'>>
+		<<replace '#ce_choices'>>
+			You give <<=_gName>> a kind smile and step back. She lets out a breath, half disappointed and half relieved.
+			<br /><br />
+			<<sayFeral _nun>>stares at you in open disbelief, looks from you to <<=_gName>> and back again, and then flops down at <<=_gName>>'s feet with a huff, clearly of the opinion that you have both made a terrible mistake<</sayFeral>>
+			<br />
+			<<link 'Continue' 'Guest house'>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+:: Church encounter - feral fertile after [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* Back from Church encounter - feral fertile: how the guest feels, and how pleased the nun is if the player finished inside her */
+<<run setup.nurseryEncounters.startLog()>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _nun = setup.getNpcById($ceAfter?.nun), _guest = setup.getNpcById($ceAfter?.guest)>>
+<<unset $ceAfter>>
+<<if !_nun || !_guest>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nunName = setup.displayName(_nun), _gName = setup.displayName(_guest)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _gMc = setup.npc.mcName(_guest)>>
+<<set _inside = _guest.churchFertile?.inside ?? false>>
+<<run setup.churchEncounters.byNun(_nun, _guest, 'happy', 3, 5)>>
+<<run _fx.change(_guest, 'relationship', 4, 6)>>
+<<run _fx.changeBetween(_guest, _nun, 3, 5)>>
+
+<<=_gName>> lies tangled in the sheets afterwards, glowing and boneless, one hand resting low on her belly.
+<br /><br />
+<<sayNpc _guest>>
+	<<if _inside>>
+		I can still feel you, <<=_gMc>>. All of you. I don't think I've ever wanted anything as much as I wanted that.
+	<<else>>
+		I needed that so badly, <<=_gMc>>. I don't know what came over me, but I'm not sorry.
+	<</if>>
+<</sayNpc>>
+<br />
+<<if _inside>>
+	<<sayFeral _nun>>slips in through the door as if <<=_nHe>> had been waiting just outside, sniffs once at <<=_gName>>, and then lets out a long, rapturous purr. <<=ucfirst(_nHe)>> curls up against her side with <<=_nHis>> cheek pressed to her belly, eyes closed, radiating a deep and holy contentment, as if <<=_nHe>> has just helped bring a blessing into the settlement<</sayFeral>>
+<<else>>
+	<<sayFeral _nun>>slips in through the door, sniffs at <<=_gName>>, and tilts <<=_nHis>> head at you, faintly puzzled, as if you had stopped a prayer one word short of the end. Still, <<=_nHe>> curls up at the foot of the bed, content enough<</sayFeral>>
+<</if>>
+<br />
+<<link 'Continue' 'Guest house'>><</link>>
+<<nurseryEffects>>
+<</if>>

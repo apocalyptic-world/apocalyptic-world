@@ -1,0 +1,134 @@
+:: Church encounter - power lesson [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A nun of the power path learns the trade's techniques from one or two of the guests who work the strip club, the nightclub or the streets, and they offer to teach her on the player. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast || !_cast.workers.length>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _workers = _cast.workers>>
+<<set _nunName = setup.displayName(_nun)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _nMc = setup.npc.mcName(_nun)>>
+<<set _first = _workers[0], _fName = setup.displayName(_workers[0]), _fMc = setup.npc.mcName(_workers[0])>>
+<<set _names = _fx.names(_workers)>>
+<<set _lessons = [
+	{ job: 'strip_club', act: 'lap', label: 'Ask for a lesson in lap dancing' },
+	{ job: 'nightclub', act: 'blind', label: 'Ask for the blindfolded lesson, the way it works at the nightclub' },
+	{ job: 'streets', act: 'butt', label: 'Ask for the lesson bent over the bunk' }
+].filter(l => _workers.some(w => w.assignedTo === l.job))>>
+
+<<=_nunName>> is sitting cross-legged on a bunk with <<=_names>>, leaning in close, hanging on every word. It takes you a moment to realize that the conversation is not about the weather. <<=_fName>> is demonstrating something with <<=setup.pronounceWhos(_first)>> hands, and <<=_nunName>> is watching with the absorbed concentration of a novice at prayer.
+<br /><br />
+<<sayNpc _nun>>
+	It grieves me that you have to sell it. Pleasure is sacred, and desire is one of the holiest things in us, and it seems wrong to put a price on it. But I understand. You do it in service to <<=_nMc>>, and every cap you bring home feeds this house. And the skill of it... the way you know a body. That is a gift. I want to learn it.
+<</sayNpc>>
+<br />
+<<sayNpc _first>>
+	Then the first thing you learn is that it's never about you. It's about what they feel. Slow is always better than fast. Make them wait for it.
+<</sayNpc>>
+<br />
+<<=_nunName>> nods, very seriously, as though committing it to memory. Then <<=_fName>> glances past <<=_nHim>> and sees you in the doorway, and a slow, wicked smile spreads across <<=setup.pronounceWhos(_first)>> face.
+<br /><br />
+<<sayNpc _first>>
+	Well, look who it is. You know, <<=_fMc>>, there's only so much you can learn by talking. We could give <<=_nHim>> a real lesson. On you.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	Would you, <<=_nMc>>? I'd be honored. And I would so like to learn it properly.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<for _lesson range _lessons>>
+		<<capture _lesson>>
+			<<link _lesson.label>>
+				<<set _guide = _workers.find(w => w.assignedTo === _lesson.job)>>
+				<<set _act = _lesson.act>>
+				<<run _fx.change(_nun, 'happy', 3, 5)>>
+				<<run _ce.byNun(_nun, _nun, 'corruption', 3, 5)>>
+				<<run _fx.change(_nun, 'relationship', 4, 6)>>
+				<<for _w range _workers>>
+					<<run _fx.changeBetween(_nun, _w, _w === _guide ? 5 : 3, _w === _guide ? 7 : 5)>>
+				<</for>>
+				<<replace '#ce_choices'>><<include 'Church encounter - power lesson act'>><</replace>>
+			<</link>>
+		<</capture>>
+	<</for>>
+	<<link 'Leave them to their studies'>>
+		<<replace '#ce_choices'>>
+			You tell them to carry on without you. <<=_fName>> laughs, and <<=_nunName>> looks faintly disappointed, but by the time you reach the door they have their heads together again.
+			<br /><br />
+			<<link 'Continue' 'Guest house'>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+:: Church encounter - power lesson act
+/* Included into Church encounter - power lesson: the lesson itself, with _guide teaching and _act 'lap', 'blind' or 'butt' */
+<<addmins 20>>
+<<set _gName = setup.displayName(_guide), _gHe = setup.pronounceWhat(_guide), _gHis = setup.pronounceWhos(_guide), _gHim = setup.pronounceWho(_guide)>>
+<<set _gMc = setup.npc.mcName(_guide)>>
+<<if _act === 'lap'>>
+	<<if _nun.gender === 0>><<run setup.sexActs.grinds(_nun, $player)>><</if>>
+	<<=_gName>> pulls a chair into the middle of the floor and pushes you down into it, then turns <<=_nunName>> to face you with both hands on <<=_nHis>> hips.
+	<br /><br />
+	<<sayNpc _guide>>
+		Hands on <<=_gMc>>'s shoulders. Not in his lap, never there, not yet. Now feel the rhythm and move with it. Slow. Let him see everything and touch nothing.
+	<</sayNpc>>
+	<br />
+	<<=_nunName>> climbs into your lap and begins to move. <<=ucfirst(_nHe)>> is clumsy for the first few beats, and then <<=_nHe>> finds it, rolling <<=_nHis>> hips in slow circles just above you, close enough that you can feel the heat of <<=_nHim>> through your clothes. <<=ucfirst(_nHis)>> eyes are wide with wonder, as though every brush of <<=_nHis>> body against yours were a small revelation.
+<<elseif _act === 'blind'>>
+	<<run setup.sexActs.blowsCock(_nun, $player)>>
+	<<=_gName>> pulls a scarf from <<=_gHis>> bag and ties it over <<=_nunName>>'s eyes, then kneels <<=_nHim>> down in front of you and guides <<=_nHis>> hands to your belt.
+	<br /><br />
+	<<sayNpc _guide>>
+		At the club, you never see who's on the other side. You learn them by touch and taste. Take your time. Find out what <<=_gMc>> likes without being told.
+	<</sayNpc>>
+	<br />
+	<<=_nunName>> frees you with careful, searching fingers and finds you blind, first with <<=_nHis>> hands and then with <<=_nHis>> lips, exploring you inch by inch with a kind of reverent curiosity. Every time you groan, <<=_nHe>> pauses, and then does exactly that again.
+<<else>>
+	<<run setup.sexActs.givesAssJob(_nun, $player)>>
+	<<=_gName>> bends <<=_nunName>> over the frame of the bunk and hikes <<=_nHis>> habit up around <<=_nHis>> waist, then beckons you in behind <<=_nHim>>.
+	<br /><br />
+	<<sayNpc _guide>>
+		Not inside. Out on the street, half of them just want this. Between the cheeks, and you do the work. Squeeze, and grind back into <<=_gMc>>. Make him feel how much you want it.
+	<</sayNpc>>
+	<br />
+	<<=_nunName>> presses back against you, your cock nestled between <<=_nHis>> cheeks, and begins to grind. Slowly at first, then with growing hunger, gasping at the feel of you sliding against <<=_nHim>>, rocking back to meet every movement as though <<=_nHe>> were discovering something holy in it.
+<</if>>
+<br /><br />
+<center>
+	<<actionImage `_ce.pictured(_nun)` `{ lap: 'grind', blind: 'bj', butt: 'assjob' }[_act]` 'no-text'>>
+</center>
+<br />
+<<sayNpc _nun>>
+	Oh... oh, <<=_nMc>>. I can feel you. I can feel what it does to you. Is this what they mean, when they say the body can pray?
+<</sayNpc>>
+<br />
+<<=_gName>> leans in close behind <<=_nHim>>, one hand flat on the small of <<=_nHis>> back, and murmurs in <<=_nHis>> ear.
+<br /><br />
+<<sayNpc _guide>>
+	That's it. Don't think. Just follow what you feel. You're a natural, sweetheart. Look at <<=_gMc>>'s face. That's all the proof you need.
+<</sayNpc>>
+<br />
+<<=_nunName>> moves faster, breathing hard, and you can tell <<=_nHe>> is right at the edge, as lost in it as you are. Then <<=_nHe>> stops, trembling, and looks back at you with a desperate, shining hunger.
+<br /><br />
+<<sayNpc _nun>>
+	Please, <<=_nMc>>. I don't want the lesson to end here. I want more. I want all of it.
+<</sayNpc>>
+<br />
+<<set _blocked = _ce.mcBlockedBy()>>
+<<set _justNun = [_nun]>>
+<<set _noChanges = []>>
+<<if _blocked>>
+	<div class="link-internal" style="background: #ccc">Give <<=_nHim>> the rest of the lesson (<<=_blocked>>)</div>
+<<else>>
+	<<set _moreLabel = 'Give ' + _nHim + ' the rest of the lesson'>>
+	<<ceSexLink _moreLabel 'solo' _justNun _noChanges>>
+<</if>>
+<<link 'Leave it there' 'Guest house'>><</link>>
+<<nurseryEffects>>

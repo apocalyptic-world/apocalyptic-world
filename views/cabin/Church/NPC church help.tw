@@ -1,0 +1,810 @@
+:: NPC church help - faith
+/* Acts of faith with the nun (30 minutes), themed by her focus; included into #cs_choices by NPC church service - talk */
+<<set _fx = setup.nurseryEncounters>>
+<<set _mcName = setup.npc.mcName(_nun)>>
+<<run _help.mark(_nun, 'faith')>>
+<<run _fx.startLog()>>
+<<addmins 30>>
+<<set _themeStat = _help.faithStat(_focus)>>
+<<run _fx.change(_nun, 'happy', 1, 3)>>
+<<run _fx.change(_nun, 'relationship', 3, 5)>>
+<<run setup.churchEncounters.byNun(_nun, _nun, _themeStat, 2, 4)>>
+<<if _focus === 'kind'>>
+	<<if _isFeral>>
+		You kneel before the altar and fold your hands, and <<=_name>> drops down beside you, copying your pose. Together you light the candles one by one, <<=_heOrShe>> watching each flame catch as if it might answer, and then you sit in the quiet with <<=_hisOrHer>> shoulder resting against yours.
+		<br /><br />
+		<<sayFeral _nun>>stays perfectly still for a long while, eyes half closed, then lets out a slow, contented breath and presses closer<</sayFeral>>
+		<br />
+		When you finally stand, <<=_heOrShe>> stands with you, looking calmer and more settled than you have seen <<=_himOrHer>> in days.
+	<<else>>
+		You kneel beside <<=_name>> at the altar. <<=ucfirst(_heOrShe)>> opens a worn copy of the holy texts between you and reads aloud, a passage about a traveler who stopped on the road for a stranger everyone else had passed by, and then hands the book to you to read the next. Afterwards you sit in silence for a while, and <<=_heOrShe>> leads a short prayer for the sick, for the hungry, and for everyone who came here with nothing.
+		<br /><br />
+		<<sayNpc _nun>>
+			Thank you, <<=_mcName>>. Praying beside someone is a different thing. The words feel less like they're going up into an empty sky.
+		<</sayNpc>>
+		<br />
+		<<you>>
+			I should come more often.
+		<</you>>
+		<br />
+		<<=ucfirst(_heOrShe)>> smiles and lights one more candle before closing the book.
+		<br /><br />
+		<<sayNpc _nun>>
+			Then come whenever you like, <<=_mcName>>. There's always a place beside me at this altar.
+		<</sayNpc>>
+	<</if>>
+	<br />
+	<<link 'Continue' 'NPC view - guest'>><</link>>
+	<<nurseryEffects>>
+<<elseif _focus === 'love'>>
+	<<if _isFeral>>
+		You sit together on the front pew. <<=_name>> takes your hands, turns them over and studies them, then presses <<=_hisOrHer>> forehead to yours. You stay like that, breathing together, until your breaths fall into the same slow rhythm and the rest of the church seems very far away.
+		<br /><br />
+		<<sayFeral _nun>>rubs <<=_hisOrHer>> cheek along your jaw with a low, happy rumble, then curls into your side and stays there<</sayFeral>>
+		<br />
+	<<else>>
+		<<=_name>> leads you to the front pew with a book of holy texts and opens it to a page of old poetry: two lovers calling to each other across a garden, each one answering the other. <<=ucfirst(_heOrShe)>> reads the first verse aloud and hands the book to you for the reply, and you go back and forth until the poem runs out.
+		<br /><br />
+		<<sayNpc _nun>>
+			They wrote it as a prayer, <<=_mcName>>. I think the people who wrote it knew something we forgot.
+		<</sayNpc>>
+		<br />
+		Then <<=_heOrShe>> takes a little vial of oil from the altar, touches a drop to the inside of each of your wrists, then to <<=_hisOrHer>> own, and laces <<=_hisOrHer>> fingers through yours. You sit with your eyes closed and your hands joined, and <<=_heOrShe>> murmurs thanks for warmth, for touch, for the people who choose each other.
+		<br /><br />
+		<<sayNpc _nun>>
+			There. Now whenever you smell it, <<=_mcName>>, you'll think of this.
+		<</sayNpc>>
+		<br />
+		<<=ucfirst(_heOrShe)>> doesn't let go of your hand.
+		<br /><br />
+	<</if>>
+	<<set _inviteFocus = 'love'>>
+	<<include 'NPC church service - invite'>>
+	<<nurseryEffects>>
+<<else>>
+	<<if _isFeral>>
+		<<if _themeStat === 'sub'>>
+			You lay your hand on <<=_name>>'s head and guide <<=_himOrHer>> down to kneel at your feet, facing you, with the altar at <<=_hisOrHer>> back. <<=ucfirst(_heOrShe)>> goes down willingly and stays there, perfectly still under your palm, through the whole long hush of the candles burning.
+			<br /><br />
+			<<sayFeral _nun>>presses <<=_hisOrHer>> lips to your knee and keeps <<=_hisOrHer>> head bowed until you lift it<</sayFeral>>
+		<<else>>
+			You kneel with <<=_name>> before the altar, but <<=_heOrShe>> can't keep still for long. <<=ucfirst(_heOrShe)>> keeps edging closer, pressing <<=_hisOrHer>> body against your side, breathing in your scent, and by the time the candles have burned down a finger's width <<=_heOrShe>> is practically in your lap.
+			<br /><br />
+			<<sayFeral _nun>>looks up at you with dark, wide eyes, restless and wanting, and does not look away<</sayFeral>>
+		<</if>>
+		<br />
+	<<else>>
+		<<if _themeStat === 'sub'>>
+			<<=_name>> does not kneel beside you before the altar. <<=ucfirst(_heOrShe)>> kneels at your feet, facing you, and recites a litany of obedience, one line at a time, waiting after each one for you to answer it. <i>I lay down my pride.</i> You answer. <i>I lay down my will.</i> You answer. When it is done, you rest your hand on <<=_hisOrHer>> head like a blessing, and <<=_heOrShe>> shivers.
+			<br /><br />
+			<<sayNpc _nun>>
+				Thank you, <<=_mcName>>. Every time I kneel to you, it gets easier to stay down.
+			<</sayNpc>>
+		<<else>>
+			<<=_name>> leads you through a meditation on temptation. <<=ucfirst(_heOrShe)>> reads passages from the holy texts about desire and the flesh, then closes the book and, eyes shut, describes aloud the things that tempt <<=_himOrHer>> most, in slow and careful detail, while you listen. By the end <<=_hisOrHer>> voice has gone low and unsteady.
+			<br /><br />
+			<<sayNpc _nun>>
+				The texts say to name a temptation is to rob it of its power, <<=_mcName>>. I don't think it's working.
+			<</sayNpc>>
+		<</if>>
+		<br />
+		<<you>>
+			Again tomorrow, then.
+		<</you>>
+		<br />
+		<<sayNpc _nun>>
+			<<=_themeStat === 'sub' ? 'Yes' : 'Please'>>, <<=_mcName>>.
+		<</sayNpc>>
+		<br />
+	<</if>>
+	<<set _inviteFocus = 'power'>>
+	<<include 'NPC church service - invite'>>
+	<<nurseryEffects>>
+<</if>>
+
+
+:: NPC church help - donate
+/* A donation to the church in caps; Eve comes down to thank him. Included into #cs_choices by NPC church service - talk */
+<<set _fx = setup.nurseryEncounters>>
+<<set _donation = Math.min(20, $player.money)>>
+<<if _isFeral>>
+	You take out your purse and start counting caps onto the altar. <<=_name>> watches with <<=_hisOrHer>> head tilted, plainly unsure what you are doing, but sure it is important.
+<<else>>
+	<<you>>
+		I'd like to give something to the church.
+	<</you>>
+	<br />
+	<<=_name>>'s eyes go wide, and <<=_heOrShe>> presses <<=_hisOrHer>> hands together.
+<</if>>
+<br /><br />
+How many caps will you give? <small>(At least <<=_help.DONATION_MIN>>; you have <<=$player.money>>)</small>
+<br />
+<<numberbox "_donation" _donation>>
+<br /><br />
+<span id="cs_donate_note"></span>
+<<link 'Make the donation'>>
+	<<set _donation = Math.floor(Number(_donation))>>
+	<<set _donateBlocked = _help.donationBlockedBy(_donation)>>
+	<<if _donateBlocked>>
+		<<replace '#cs_donate_note'>><span style="color: orange"><<=_donateBlocked>></span><br /><br /><</replace>>
+	<<else>>
+		<<run _help.mark(_nun, 'donate')>>
+		<<run _fx.startLog()>>
+		<<addmins 15>>
+		<<set $player.money -= _donation>>
+		<<run _fx.change(_nun, 'happy', 2, 4)>>
+		<<run _help.thankEve(3, 5)>>
+		<<run setup.churchEncounters.changePlayer('goodwill', _help.donationGoodwill(_donation))>>
+		<<replace '#cs_choices'>>
+			<<include 'NPC church help - donated'>>
+		<</replace>>
+	<</if>>
+<</link>>
+<<link 'Never mind' 'NPC view - guest'>><</link>>
+
+
+:: NPC church help - donated
+/* After the donation: the nun's thanks, then Eve's, and perhaps more (setup.churchHelp.gratitude) */
+<<set _generous = _donation >= _help.GENEROUS>>
+<<set _eve = $characters.eve>>
+<<set _thanks = _help.gratitude(_nun, _donation)>>
+<<set _focus = setup.churchService.focus(_nun)>>
+<<set _eveMc = setup.npc.mcName(_eve), _nunMc = setup.npc.mcName(_nun)>>
+You set <<=_donation>> caps on the altar.
+<br /><br />
+<<if _isFeral>>
+	<<sayFeral _nun>>stares at the pile, then at you, then gathers the caps up in both hands as carefully as if they were eggs and carries them off toward the back of the church<</sayFeral>>
+<<else>>
+	<<set _mcName = setup.npc.mcName(_nun)>>
+	<<sayNpc _nun>>
+		<<if _generous>>
+			<<=ucfirst(_mcName)>>, that's... that's more than we've ever had. Do you know how many people that will feed?
+		<<else>>
+			Thank you, <<=_mcName>>. Every cap of it will go where it's needed. I'll see to that myself.
+		<</if>>
+	<</sayNpc>>
+<</if>>
+<br />
+Footsteps sound on the stairs at the back of the sanctuary, and Eve comes down from her chamber, drawn by the voices. She takes in the caps<<if _isFeral>> in <<=_name>>'s arms<<else>> on the altar<</if>>, and then you, and her face softens.
+<br /><br />
+<<eve>>
+	<<if _generous>>
+		I heard. I could hardly believe it. You've given this church a roof, walls, and now this. I don't know how we'll ever thank you properly.
+	<<else>>
+		I heard. Thank you. Not just for the caps, though they'll help. For showing people that the man who leads this place cares about it.
+	<</if>>
+<</eve>>
+<br />
+<<you>>
+	Use it well.
+<</you>>
+<br />
+<<if !(_thanks.eve || _thanks.nun)>>
+	Eve takes your hand in both of hers and holds it for a moment. Then she draws <<=_name>> to her side and the two of them thank you together, Eve with a quiet blessing and <<=_name>> <<if _isFeral>>with a bump of <<=_hisOrHer>> head against your shoulder<<else>>with a deep, grateful bow<</if>>, before Eve heads back up the stairs.
+	<br /><br />
+	<<link 'Continue' 'NPC view - guest'>><</link>>
+	<<nurseryEffects>>
+<<else>>
+	<<include 'NPC church help - gratitude'>>
+<</if>>
+
+
+:: NPC church help - gratitude
+/*
+ * Included into NPC church help - donated when the donation moved Eve, the nun or both (_thanks from setup.churchHelp.gratitude).
+ * Eve open to the MC: her chamber, the same as approaching her there. A love or power nun: the church. Both: a threesome
+ * in Eve's chamber, also when a nun who wasn't moved herself follows Eve's lead. Eve not yet open but stirred by a power nun: a threesome
+ * only, raising her corruption, without making her open (quests.sex).
+ */
+Eve takes your hand in both of hers and holds it a moment longer than she needs to.
+<br /><br />
+<<if _thanks.eve>>
+	<<eve>>
+		A gift like this deserves more than words, <<=_eveMc>>. The holy texts say gratitude should be offered with the whole self, body as well as soul. Such kindness calls for a holy display of gratitude. Don't you think?
+	<</eve>>
+	<br />
+	<<if _thanks.nun || _thanks.follows>>
+		Beside her, <<=_name>> <<if _isFeral>>has gone very still, watching the two of you<<else>>has heard every word<</if>>.
+		<br /><br />
+	<</if>>
+<</if>>
+<<if _thanks.nun>>
+	<<if _isFeral>>
+		<<if _focus === 'love'>>
+			<<sayFeral _nun>>presses close against your side and nuzzles into your hand, eyes shining, humming low in <<=_hisOrHer>> throat as if something in <<=_himOrHer>> has found its way home to you<</sayFeral>>
+		<<else>>
+			<<sayFeral _nun>>sinks to <<=_hisOrHer>> knees at your feet and gazes up at you, trembling all over, eyes blazing with a fierce, wordless awe<</sayFeral>>
+		<</if>>
+	<<else>>
+		<<sayNpc _nun>>
+			<<if _focus === 'love'>>
+				I can feel it, <<=_nunMc>>. What you just gave... it's drawing my spirit toward yours, closer than I've ever let anyone come. I want to be near you. As near as I can be.
+			<<else>>
+				Seeing you give like that... it fills me with awe, <<=_nunMc>>. With passion. I'm burning with it. Let me show you what that devotion feels like.
+			<</if>>
+		<</sayNpc>>
+	<</if>>
+	<br />
+<<elseif _thanks.follows>>
+	<<if _isFeral>>
+		<<sayFeral _nun>>looks from Eve to you and back again, then steps up to Eve's side and copies her, laying a hand on your arm just as she does<</sayFeral>>
+	<<else>>
+		<<sayNpc _nun>>
+			If Eve says it's right, then it's right. I'll give my thanks beside her, <<=_nunMc>>.
+		<</sayNpc>>
+	<</if>>
+	<br />
+<</if>>
+<<if _thanks.stirred>>
+	Eve goes very still. She looks at <<=_name>>, at the open hunger in <<=_hisOrHer>> face, and something unfamiliar moves behind her eyes.
+	<br /><br />
+	<<eve>>
+		Is that... what your devotion feels like? I've read those texts all my life, and I never once read them that way. Maybe I've been reading them too narrowly. If this is what our church is becoming, <<=_eveMc>>, then I want to understand it. All of it.
+	<</eve>>
+	<br />
+<</if>>
+
+<div id="cs_gratitude">
+	<<set _blocked = setup.churchEncounters.mcBlockedBy()>>
+	<<if _thanks.eve>>
+		<<if _blocked || !_eve.canFuck>>
+			<div class="link-internal" style="background: #ccc">Go up to Eve's chamber with her (<<=_blocked || 'Not now'>>)</div>
+		<<else>>
+			/* The same as approaching Eve in her room and asking (NPC view - character) */
+			<<link "Go up to Eve's chamber with her">>
+				<<set $charId = 'eve'>>
+				<<unset $slaveId, $guestId, $childId, $slaveId2, $guestId2, $charId2>>
+				<<set $tmpGirl = $characters.eve>>
+				<<set $tmpGirl.location = 'bedroom'>>
+				<<set $tmpGirl.rape = false>>
+				<<set $tmpGirlBack = 'Eve room'>>
+				<<set $tmpGirlViewBack = 'NPC view - character'>>
+				<<if setup.npc.isExOfMc($tmpGirl)>>
+					<<goto 'Mc fuck - ex'>>
+				<<elseif setup.percentageChance(setup.sexChance($tmpGirl))>>
+					<<fuck $tmpGirl>>
+				<<else>>
+					<<goto 'Mc fuck - no'>>
+				<</if>>
+			<</link>>
+		<</if>>
+	<</if>>
+	<<if _thanks.nun>>
+		<<if _blocked>>
+			<div class="link-internal" style="background: #ccc">Take <<=_name>> somewhere quiet in the church (<<=_blocked>>)</div>
+		<<else>>
+			<<set _justNun = [_nun]>>
+			<<set _noChanges = []>>
+			<<ceSexLink `'Take ' + _name + ' somewhere quiet in the church'` 'solo' _justNun _noChanges 'church' 'Church'>>
+		<</if>>
+	<</if>>
+	<<if _thanks.pair>>
+		<<set _bothLabel = "Take them both up to Eve's chamber">>
+		<<if _blocked>>
+			<div class="link-internal" style="background: #ccc"><<=_bothLabel>> (<<=_blocked>>)</div>
+		<<else>>
+			<<set _bothChanges = _thanks.stirred ? [{ npc: _eve, stat: 'corruption', low: _help.EVE_STIRRED_CORRUPTION[0], high: _help.EVE_STIRRED_CORRUPTION[1] }] : []>>
+			<<ceSexLink _bothLabel 'threesome' _thanks.pair _bothChanges 'bedroom' 'Church'>>
+		<</if>>
+	<</if>>
+	<<link 'Thank them, and leave it there'>>
+		<<replace '#cs_gratitude'>>
+			You thank them both and tell them the caps are thanks enough. Eve smiles, <<if _thanks.eve || _thanks.stirred>>a little rueful, <</if>>and squeezes your hand once more before she heads back up the stairs.
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<<nurseryEffects>>
+
+
+:: NPC church help - mercy
+/* A mission of mercy with a kind nun: a visit to a settler in need, with the option of bringing aid. Included into #cs_choices. */
+<<set _fx = setup.nurseryEncounters>>
+<<set _ce = setup.churchEncounters>>
+<<run _help.mark(_nun, 'mercy')>>
+<<run _fx.startLog()>>
+<<addmins 60>>
+<<set _case = _help.mercyCase()>>
+<<set _aid = _case.aid>>
+<<set _aidBlocked = _help.aidBlockedBy(_aid)>>
+<<set _girlImg = setup.ImagePath + '/people/anongirl.png', _guyImg = setup.ImagePath + '/people/anonguy.png'>>
+<<run _fx.change(_nun, 'relationship', 2, 4)>>
+<<run _ce.changePlayer('goodwill', _help.MERCY_GOODWILL)>>
+<<if _isFeral>>
+	<<=_name>> tugs at your sleeve and leads you out of the church and into the district, glancing back every few steps to make sure you are following.
+<<else>>
+	<<set _mcName = setup.npc.mcName(_nun)>>
+	<<sayNpc _nun>>
+		Would you come with me, <<=_mcName>>? There's someone in the district I've been meaning to look in on, and I think your help would mean more than mine.
+	<</sayNpc>>
+	<br />
+	<<=ucfirst(_heOrShe)>> leads you out of the church and down the street.
+<</if>>
+<br /><br />
+<<switch _case.id>>
+<<case 'sick'>>
+	The house is small and close, and it smells of fever. A settler woman lies on the bed under every blanket they own, shivering, while her husband hovers in the doorway with the look of a man who has run out of things to try.
+	<br /><br />
+	<<say 'Settler' _guyImg>>
+		She's been like this three days. I don't know what else to do for her.
+	<</say>>
+	<br />
+	You fetch water and cool cloths, open a window to let the stale air out, and show him how to keep her drinking.
+<<case 'injured'>>
+	A settler woman meets you at her door with a toddler on her hip. Her son is on a pallet inside, his leg wrapped in rags, from where he fell from the roof he was helping to patch.
+	<br /><br />
+	<<say 'Settler' _girlImg>>
+		He won't let me look at it. He's trying so hard to be brave.
+	<</say>>
+	<br />
+	You kneel by the boy, talk to him until he is laughing, and while he's distracted you set the splint properly and bind it firm.
+<<case 'raiders'>>
+	The woman who answers the door is hollow-eyed, with two small children clinging to her skirt. Raiders took her husband on the road two weeks ago.
+	<br /><br />
+	<<say 'Settler' _girlImg>>
+		Everyone was so kind at first. And then they all went back to their lives, and I'm still here, and he's still gone.
+	<</say>>
+	<br />
+	You split a week's worth of firewood for her and stack it by the door, and you listen while she tells you about him.
+<<case 'blight'>>
+	Behind a cluster of houses, a settler stands in a little plot of withered, blackened plants, holding a rotten stalk in his hand. Blight took the whole crop in a week.
+	<br /><br />
+	<<say 'Settler' _guyImg>>
+		That was the winter's food. All of it.
+	<</say>>
+	<br />
+	You help him pull up the rot and burn it before it can spread, and you turn the soil over together so it's ready to plant again.
+<<default>>
+	Last night's storm tore half the roof off a settler family's house. The mother is picking through the wet ruin of their things while the kids hand her whatever they can still save.
+	<br /><br />
+	<<say 'Settler' _girlImg>>
+		We were lucky nobody was hurt. That's what I keep telling myself.
+	<</say>>
+	<br />
+	You haul the fallen beams out of the way, rig a tarp over the worst of the hole, and help carry what's dry to a neighbor's.
+<</switch>>
+<br /><br />
+<<if _isFeral>>
+	<<sayFeral _nun>>never leaves their side the whole time, pressing close, holding a hand, curling up beside whoever needs it most, a quiet, wordless comfort that does more than any speech could<</sayFeral>>
+<<else>>
+	All the while, <<=_name>> is beside them: holding a hand, saying a quiet prayer, finding the right words from the holy texts when there are any, and simply listening when there aren't.
+<</if>>
+<br />
+<div id="cs_aid">
+	<<switch _case.id>>
+	<<case 'sick'>><<set _aidLabel = 'Leave them antibiotics'>>
+	<<case 'injured'>><<set _aidLabel = 'Leave them proper bandages'>>
+	<<case 'raiders'>><<set _aidLabel = 'Leave her some caps to get by'>>
+	<<case 'blight'>><<set _aidLabel = 'Leave them food to see them through'>>
+	<<default>><<set _aidLabel = 'Stay and patch the roof properly'>>
+	<</switch>>
+	<<set _aidLabel += ' (Uses ' + _help.aidText(_aid) + ')'>>
+	<<if _aidBlocked>>
+		<div><<=_aidLabel>> [<<=_aidBlocked>>]</div>
+	<<else>>
+		<<link _aidLabel>>
+			<<run _help.giveAid(_aid)>>
+			<<if _aid.minutes>><<addmins _aid.minutes>><</if>>
+			<<run _ce.changePlayer('goodwill', _help.AID_GOODWILL)>>
+			<<replace '#cs_aid'>>
+				<<if _aid.minutes>>
+					You send for tools and spend the next hour up on the roof, fitting new boards and sealing the seams, until the house is dry again.
+				<<else>>
+					Before you leave, you press <<=_help.aidText(_aid)>> into their hands. They stare at it for a long moment, unable to speak.
+				<</if>>
+				<br /><br />
+				<<include 'NPC church help - mercy end'>>
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<link 'Head back to the church'>>
+		<<replace '#cs_aid'>>
+			<<include 'NPC church help - mercy end'>>
+		<</replace>>
+	<</link>>
+	<<nurseryEffects>>
+</div>
+
+
+:: NPC church help - mercy end
+/* Walking back from the mission of mercy */
+<<if _isFeral>>
+	On the walk back, <<=_name>> keeps close against your side, and every so often <<=_heOrShe>> looks up at you with an expression you could almost call pride.
+<<else>>
+	<<sayNpc _nun>>
+		Did you see their faces, <<=_mcName>>? That's what this is for. Not the candles, not the singing. That.
+	<</sayNpc>>
+<</if>>
+<br />
+<<link 'Continue' 'NPC view - guest'>><</link>>
+<<nurseryEffects>>
+
+
+:: NPC church help - flock
+/* A loving nun talks about the people whose hearts she tends, and maybe her own. Included into #cs_choices. */
+<<set _fx = setup.nurseryEncounters>>
+<<set _ce = setup.churchEncounters>>
+<<set _mcName = setup.npc.mcName(_nun)>>
+<<run _help.mark(_nun, 'flock')>>
+<<run _fx.startLog()>>
+<<addmins 20>>
+<<run _fx.change(_nun, 'happy', 2, 4)>>
+<<run _fx.change(_nun, 'relationship', 2, 4)>>
+/* The guests she feels most for, to talk about */
+<<set _flock = ($guests ?? []).filter(g => g !== _nun && (_nun.relationshipBetween?.stats?.[g.id] ?? 0) > 0)
+	.sort((a, b) => _nun.relationshipBetween.stats[b.id] - _nun.relationshipBetween.stats[a.id]).slice(0, 2)>>
+<<you>>
+	Tell me about your flock. Who have you been looking after?
+<</you>>
+<br />
+<<=_name>> sits down on the front pew and pats the space beside <<=_himOrHer>>.
+<br /><br />
+<<sayNpc _nun>>
+	<<if _flock.length === 2>>
+		Oh, where to start, <<=_mcName>>? <<=_flock[0].name>> has been carrying something heavy lately, and I've been trying to get <<=setup.pronounceWho(_flock[0])>> to set it down. And <<=_flock[1].name>>... I worry about <<=setup.pronounceWho(_flock[1])>>. Always giving, never asking for anything back.
+	<<elseif _flock.length === 1>>
+		Oh, where to start, <<=_mcName>>? <<=_flock[0].name>> has been carrying something heavy lately, and I've been trying to get <<=setup.pronounceWho(_flock[0])>> to set it down. I think <<=setup.pronounceWhat(_flock[0])>> is nearly there.
+	<<else>>
+		Oh, where to start, <<=_mcName>>? I'm still getting to know them all. Everyone here carries something, and most of them won't say what.
+	<</if>>
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> talks for a long time, about who is lonely, who has finally made a friend, who you might not have noticed is in love. You realize <<=_heOrShe>> knows the household's heart better than anyone in it.
+<br /><br />
+<div id="cs_flock">
+	<<link `'Ask how ' + _hisOrHer + ' own heart could use tending'`>>
+		<<set _heart = _help.heart(_nun)>>
+		<<replace '#cs_flock'>>
+			<<include 'NPC church help - heart'>>
+		<</replace>>
+	<</link>>
+	<<link 'Leave it there' 'NPC view - guest'>><</link>>
+	<<nurseryEffects>>
+</div>
+
+
+:: NPC church help - heart
+/* What the loving nun's own heart wants: _heart from setup.churchHelp.heart, or null */
+<<you>>
+	And what about you? Who tends your heart?
+<</you>>
+<br />
+<<if !_heart>>
+	<<=_name>> laughs softly and shakes <<=_hisOrHer>> head.
+	<br /><br />
+	<<sayNpc _nun>>
+		My heart is full, <<=_mcName>>. Truly. Thank you for asking, though. Hardly anyone does.
+	<</sayNpc>>
+	<br />
+	<<link 'Continue' 'NPC view - guest'>><</link>>
+<<else>>
+	<<set _g = _heart.guest, _gName = setup.displayName(_heart.guest)>>
+	<<set _gHe = setup.pronounceWhat(_g), _gHis = setup.pronounceWhos(_g), _gHim = setup.pronounceWho(_g)>>
+	<<=ucfirst(_heOrShe)>> is quiet for a moment, looking down at <<=_hisOrHer>> hands.
+	<br /><br />
+	<<sayNpc _nun>>
+		<<if _heart.kind === 'closer'>>
+			<<if _heart.desire>>
+				It's <<=_gName>>. I think about <<=_gHim>> more than I should. The way <<=_gHe>> laughs, the way <<=_gHe>> looks in the morning light. I would give a great deal to be closer to <<=_gHim>>, <<=_mcName>>. Much closer. But I don't think <<=_gHe>> sees me that way at all.
+			<<else>>
+				It's <<=_gName>>. I've grown so fond of <<=_gHim>>, and I'd love to be a real friend to <<=_gHim>>. But I don't think <<=_gHe>> feels the same. I'm just the one from the church, to <<=_gHim>>.
+			<</if>>
+		<<elseif _heart.kind === 'stranger'>>
+			<<if _heart.desire>>
+				It's <<=_gName>>. I see the two of you together, how easy it is between you, and I find myself wondering what <<=_gHe>> is like when <<=_gHe>> smiles like that. I've never even really spoken to <<=_gHim>>. I wish I had the chance to know <<=_gHim>> the way you do. In every way you do, if I'm honest.
+			<<else>>
+				It's <<=_gName>>. I see the two of you together, how easy it is between you, and I wish I knew <<=_gHim>> like that. I've hardly ever spoken to <<=_gHim>>. I'd like the chance.
+			<</if>>
+		<<else>>
+			<<if _heart.desire>>
+				It's <<=_gName>>. We're close, the two of us, but there's never enough time. Our days pull us apart, and when I do see <<=_gHim>>, I can't stop looking at <<=_gHis>> mouth. I want more time with <<=_gHim>>, <<=_mcName>>. Time alone.
+			<<else>>
+				It's <<=_gName>>. We're close, the two of us, but there's never enough time. Our days pull us apart, and I miss <<=_gHim>>. I wish we had more time together, that's all.
+			<</if>>
+		<</if>>
+	<</sayNpc>>
+	<br />
+	<<=ucfirst(_heOrShe)>> colors and looks away, as if <<=_heOrShe>> has said too much.
+	<br /><br />
+	<<link `'Bring ' + _gName + ' to the church for a tour (Uses 30 minutes)'`>>
+		<<replace '#cs_flock'>>
+			<<include 'NPC church help - tour'>>
+		<</replace>>
+	<</link>>
+	<<link `'Leave it with ' + _himOrHer` 'NPC view - guest'>><</link>>
+<</if>>
+<<nurseryEffects>>
+
+
+:: NPC church help - tour
+/* The player brings the guest the nun longs for to the church, giving them the day off if they were working */
+<<addmins 30>>
+<<set _dayOff = _help.freeForTour(_g)>>
+<<set _gMc = setup.npc.mcName(_g)>>
+<<run _fx.change(_nun, 'happy', 3, 5)>>
+<<run _fx.change(_nun, 'relationship', 3, 5)>>
+<<run _ce.changeToward(_nun, _g, 5, 10)>>
+<<run _ce.changeToward(_g, _nun, 5, 10)>>
+You go and find <<=_gName>><<if _dayOff>> and tell <<=_gHim>> to put down <<=_gHis>> work, <<=_gHe>> has the rest of the day off<</if>>, and bring <<=_gHim>> back to the church.
+<br /><br />
+<<sayNpc _g>>
+	A tour of the church, <<=_gMc>>? I've walked past it a hundred times. I suppose I've never really looked.
+<</sayNpc>>
+<br />
+<<=_name>> is waiting at the door, and when <<=_heOrShe>> sees who you've brought, <<=_hisOrHer>> face lights up like a lamp.
+<br /><br />
+<<if _heart.desire>>
+	<<=ucfirst(_heOrShe)>> takes <<=_gName>> around the sanctuary, showing <<=_gHim>> the altar, the carved candle rack, the jars of wildflowers on the windowsills, and somewhere along the way <<=_hisOrHer>> hand finds <<=_gName>>'s arm and stays there. They laugh at each other's jokes a beat too quickly. By the time they reach the little alcove behind the altar, they are standing very close, and neither of them seems to want to move away.
+	<br /><br />
+	<<sayNpc _nun>>
+		Thank you, <<=_mcName>>. You have no idea what this means to me.
+	<</sayNpc>>
+	<br />
+	<<=_gName>> glances from <<=_name>> to you, cheeks flushed.
+	<br /><br />
+	<<set _trio = _ce.threesome(_nun, _g)>>
+	<<set _blocked = _ce.mcBlockedBy()>>
+	<<if _trio>>
+		<<set _alcoveLabel = 'Bring them even closer, in a quiet alcove'>>
+		<<set _noChanges = []>>
+		<<if _blocked>>
+			<div class="link-internal" style="background: #ccc"><<=_alcoveLabel>> (<<=_blocked>>)</div>
+		<<else>>
+			<<ceSexLink _alcoveLabel 'threesome' _trio _noChanges 'church' 'Church'>>
+		<</if>>
+	<</if>>
+<<else>>
+	<<=ucfirst(_heOrShe)>> takes <<=_gName>> around the sanctuary, showing <<=_gHim>> the altar, the carved candle rack, the jars of wildflowers on the windowsills, and the two of them fall into easy conversation as if they've known each other for years. By the end they are sitting together on the front pew, trading stories, and you slip away without either of them noticing.
+	<br /><br />
+	<<sayNpc _nun>>
+		Thank you, <<=_mcName>>. You have no idea what this means to me.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<link 'Leave them to it' 'NPC view - guest'>><</link>>
+<<nurseryEffects>>
+
+
+:: NPC church help - confession
+/* A nun of the power path gives the player her confession; he can coax out more, then grant indulgence or have her earn absolution. Included into #cs_choices. */
+<<set _fx = setup.nurseryEncounters>>
+<<set _mcName = setup.npc.mcName(_nun)>>
+<<run _help.mark(_nun, 'confession')>>
+<<run _fx.startLog()>>
+<<addmins 30>>
+<<run _fx.change(_nun, 'relationship', 5, 7)>>
+<<run setup.churchEncounters.byNun(_nun, _nun, 'sub', 3, 5)>>
+<<you>>
+	I'd like to hear your confession.
+<</you>>
+<br />
+<<=_name>> goes very still. Then <<=_heOrShe>> takes your hand and leads you through the narrow door behind the altar into the little vestry, where nobody can hear, and kneels at your feet on the bare boards.
+<br /><br />
+<<sayNpc _nun>>
+	Forgive me, <<=_mcName>>, for I have sinned. I have been proud. I have been impatient with the ones who won't let go. I have looked at the flock and wanted them to kneel faster, for my sake and not for yours. And I have doubted. Not you. Never you. But myself, and whether I'm worthy of serving you.
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> says it all with <<=_hisOrHer>> eyes lowered, and when <<=_heOrShe>> is done <<=_heOrShe>> stays there, waiting, as if your judgment were the only thing holding <<=_himOrHer>> up.
+<br /><br />
+<div id="cs_confession">
+	<<link `'Absolve ' + _himOrHer + ' and let ' + _himOrHer + ' rise'`>>
+		<<replace '#cs_confession'>>
+			You lay your hand on <<=_hisOrHer>> head and tell <<=_himOrHer>> that <<=_heOrShe>> is forgiven. <<=ucfirst(_heOrShe)>> lets out a long, shaking breath, and when <<=_heOrShe>> rises <<=_heOrShe>> looks at you the way a lost traveler looks at a lit window.
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Coax ' + _himOrHer + ' to reach deeper'`>>
+		<<run setup.churchEncounters.byNun(_nun, _nun, 'sub', 3, 5)>>
+		<<run setup.churchEncounters.byNun(_nun, _nun, 'corruption', 4, 6)>>
+		<<replace '#cs_confession'>>
+			<<include 'NPC church help - confession deeper'>>
+		<</replace>>
+	<</link>>
+	<<nurseryEffects>>
+</div>
+
+
+:: NPC church help - confession deeper
+<<you>>
+	That isn't everything. Go deeper. What are you really ashamed of?
+<</you>>
+<br />
+A flush climbs <<=_name>>'s throat. For a long moment <<=_heOrShe>> doesn't answer, and then it comes out of <<=_himOrHer>> in a rush, barely above a whisper.
+<br /><br />
+<<sayNpc _nun>>
+	I dream of you, <<=_mcName>>. Of being taken on the altar in front of the whole congregation. Of being chained in the dark below the cabin and kept there for your use, and being grateful for it. I lie awake wanting it until I can't breathe. I pray, and halfway through the prayer it turns into you. Forgive me. Or don't. Punish me. I don't know which I want more.
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> is trembling, eyes shining, caught somewhere between rapture and shame, and it is plain that <<=_heOrShe>> would welcome either one from you.
+<br /><br />
+<<if _inviteBlocked === 'hidden'>>
+<<elseif _inviteBlocked>>
+	<div>Offer <<=_himOrHer>> indulgence, on the altar [<<=_inviteBlocked>>]</div>
+	<div>Have <<=_himOrHer>> earn <<=_hisOrHer>> absolution, in the basement [<<=_inviteBlocked>>]</div>
+<<else>>
+	<<link `'Offer ' + _himOrHer + ' indulgence, on the altar'`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $sexForced = false>>
+		<<fuck $tmpGirl>>
+	<</link>>
+	<<link `'Have ' + _himOrHer + ' earn ' + _hisOrHer + ' absolution, in the basement'`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<set $tmpGirl.location = 'basement'>>
+		<<set $sexForced = false>>
+		<<set $sexSubGain = true>>
+		<<fuck $tmpGirl>>
+	<</link>>
+<</if>>
+<<link `'Absolve ' + _himOrHer + ' with words alone'`>>
+	<<replace '#cs_confession'>>
+		You lay your hand on <<=_hisOrHer>> head and tell <<=_himOrHer>> that <<=_heOrShe>> is forgiven, for all of it. <<=_name>> presses <<=_hisOrHer>> face against your knee and stays there a long time.
+		<br /><br />
+		<<link 'Continue' 'NPC view - guest'>><</link>>
+	<</replace>>
+<</link>>
+<<nurseryEffects>>
+
+
+:: NPC church help - communion
+/* A communion meal with a feral nun: an offering of simple food before the altar, half for those in need and half to share. Included into #cs_choices. */
+<<set _fx = setup.nurseryEncounters>>
+<<run _help.mark(_nun, 'communion')>>
+<<run _fx.startLog()>>
+<<addmins 30>>
+<<run setup.cabinInventory.drop('food')>>
+<<set _moreFood = setup.cabinInventory.has('food')>>
+You spread a clean cloth on the floor before the altar, and you and <<=_name>> lay out a small offering on it together: a heel of bread, a handful of dried fruit, a strip of smoked meat. <<=ucfirst(_heOrShe)>> arranges each piece with great care, nudging them into place until they sit just so.
+<br /><br />
+You break it all in two. One half goes into the basket by the door, for those in need. The other half stays on the cloth between you, to share.
+<br /><br />
+<div id="cs_communion">
+<<if _focus === 'kind'>>
+	<<sayFeral _nun>>looks at <<=_hisOrHer>> share for a long moment, then gathers it up and carries it to the basket by the door, sets it in with the rest, and comes back to sit beside you, looking pleased<</sayFeral>>
+	<br />
+	<<if _moreFood>>
+		<<link 'Add more to the basket (Uses 1 more food)'>>
+			<<run setup.cabinInventory.drop('food')>>
+			<<run _fx.change(_nun, 'relationship', 3, 5)>>
+			<<replace '#cs_communion'>>
+				You take another ration from your pack and set it in the basket beside <<=_hisOrHer>> share. <<=_name>> watches you do it, then bumps <<=_hisOrHer>> head against your shoulder and leaves it there.
+				<br /><br />
+				<<link 'Continue' 'NPC view - guest'>><</link>>
+				<<nurseryEffects>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div>Add more to the basket [Need 1 more food]</div>
+	<</if>>
+	<<link `'Give ' + _himOrHer + ' your portion'`>>
+		<<run _fx.change(_nun, 'happy', 1, 2)>>
+		<<run _fx.change(_nun, 'relationship', 2, 4)>>
+		<<replace '#cs_communion'>>
+			You push your own portion across the cloth to <<=_himOrHer>>. <<=_name>> looks from the food to you, puzzled, then understands, and eats it slowly, savoring every bite, glancing up at you between mouthfuls as if to make sure you really meant it.
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Eat your portion and give thanks'>>
+		<<replace '#cs_communion'>>
+			You eat your share and say a few words of thanks over the rest. <<=_name>> listens with <<=_hisOrHer>> head tilted, content to sit beside you until you are done.
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+<<elseif _focus === 'love'>>
+	<<sayFeral _nun>>picks up a piece of fruit from your share and holds it out to you, right up to your lips, watching your face with soft, expectant eyes<</sayFeral>>
+	<br />
+	<<link 'Take it with your hand'>>
+		<<replace '#cs_communion'>>
+			You take the fruit from <<=_hisOrHer>> fingers and eat it. <<=_name>> doesn't seem to mind, and just picks up a piece for <<=_himOrHer>>self. You finish the meal side by side.
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+	<<link `'Eat it from ' + _hisOrHer + ' hand'`>>
+		<<run _fx.change(_nun, 'relationship', 2, 4)>>
+		<<set _fedEachOther = false>>
+		<<replace '#cs_communion'>><<include 'NPC church help - communion fed'>><</replace>>
+	<</link>>
+	<<if _moreFood>>
+		<<link `'Eat from ' + _hisOrHer + ' hand while you feed ' + _himOrHer + ' from yours (Uses 1 more food)'`>>
+			<<run setup.cabinInventory.drop('food')>>
+			<<run _fx.change(_nun, 'happy', 1, 3)>>
+			<<run _fx.change(_nun, 'relationship', 3, 5)>>
+			<<set _fedEachOther = true>>
+			<<replace '#cs_communion'>><<include 'NPC church help - communion fed'>><</replace>>
+		<</link>>
+	<<else>>
+		<div>Eat from <<=_hisOrHer>> hand while you feed <<=_himOrHer>> from yours [Need 1 more food]</div>
+	<</if>>
+<<else>>
+	<<sayFeral _nun>>sits back on <<=_hisOrHer>> heels with <<=_hisOrHer>> hands in <<=_hisOrHer>> lap and doesn't touch <<=_hisOrHer>> share, waiting, eyes on you, for you to eat first and for your permission<</sayFeral>>
+	<br />
+	<<link `'Feed ' + _himOrHer + ' by hand'`>>
+		<<run _fx.change(_nun, 'happy', 1, 2)>>
+		<<run setup.churchEncounters.byNun(_nun, _nun, 'sub', 2, 4)>>
+		<<replace '#cs_communion'>>
+			You eat a few bites of your own, then pick up a piece of <<=_hisOrHer>> share and hold it out. <<=_name>> leans in and takes it from your fingers, and the next, and the next, never once reaching for the food <<=_himOrHer>>self, until the cloth is bare.
+			<br /><br />
+			<<include 'NPC church help - communion presents'>>
+		<</replace>>
+	<</link>>
+	<<link `'Make ' + _himOrHer + ' wait until you have finished'`>>
+		<<run setup.churchEncounters.byNun(_nun, _nun, 'sub', 3, 5)>>
+		<<replace '#cs_communion'>>
+			You eat slowly, taking your time over every bite, while <<=_name>> kneels and watches. When you have finished, you let <<=_himOrHer>> wait a little longer still. <<=ucfirst(_heOrShe)>> trembles with the effort of it, but <<=_heOrShe>> doesn't move until you nod, and then <<=_heOrShe>> eats <<=_hisOrHer>> share with quiet, fierce gratitude.
+			<br /><br />
+			<<include 'NPC church help - communion presents'>>
+		<</replace>>
+	<</link>>
+	<<link `'Eat ' + _hisOrHer + ' portion in front of ' + _himOrHer`>>
+		<<set _masochist = (_nun.traits ?? []).includes('masochist')>>
+		<<if !_masochist>><<run _fx.change(_nun, 'happy', -4, -2)>><</if>>
+		<<run setup.churchEncounters.byNun(_nun, _nun, 'sub', 4, 6)>>
+		<<replace '#cs_communion'>>
+			You eat your share, and then you reach over and eat <<=_hisOrHer>> share too, piece by piece, while <<=_heOrShe>> watches.
+			<<if _masochist>>
+				<<=_name>> makes a small, shivering sound, and <<=_hisOrHer>> eyes go dark and glassy. Whatever <<=_heOrShe>> feels about going without, it is very plainly not unhappiness.
+			<<else>>
+				<<=_name>> lets out a small whine and lowers <<=_hisOrHer>> head, but <<=_heOrShe>> doesn't reach for the food, and <<=_heOrShe>> doesn't look away.
+			<</if>>
+			<br /><br />
+			<<include 'NPC church help - communion presents'>>
+		<</replace>>
+	<</link>>
+<</if>>
+<<nurseryEffects>>
+</div>
+
+
+:: NPC church help - communion fed
+/* A loving feral nun feeds the player from her hand (and he her, if _fedEachOther), and it turns sensual */
+<<if _fedEachOther>>
+	You lean in and take the fruit from <<=_hisOrHer>> fingers with your lips, and at the same time you lift a piece from <<=_hisOrHer>> share and hold it to <<=_hisOrHer>> mouth. <<=ucfirst(_heOrShe)>> takes it with a delighted little hum, and for a while you feed each other, bite for bite, until the cloth between you is bare.
+<<else>>
+	You lean in and take the fruit from <<=_hisOrHer>> fingers with your lips. <<=_name>> lets out a delighted little hum and reaches for another piece, and another, feeding you one bite at a time until your share is gone.
+<</if>>
+<br /><br />
+<<sayFeral _nun>>doesn't take <<=_hisOrHer>> hand back when the food is gone, but licks a smear of juice from your fingers, slowly, then from the corner of your mouth, and leans in closer, eyes heavy, breath warm against your skin<</sayFeral>>
+<br />
+<<set _inviteFocus = 'love'>>
+<<include 'NPC church service - invite'>>
+<<nurseryEffects>>
+
+
+:: NPC church help - communion presents
+/* After the meal, a power-focused feral nun presents herself; the player can reward her in the church or take the rest of his offering in the basement */
+<<sayFeral _nun>>turns, drops low on <<=_hisOrHer>> elbows before the altar with <<=_hisOrHer>> hips raised, and looks back at you over <<=_hisOrHer>> shoulder, offering <<=_himOrHer>>self<</sayFeral>>
+<br />
+<<set _rewardChanges = setup.churchEncounters.byNunChanges(_nun, [{ npc: _nun, stat: 'corruption', low: 2, high: 4 }])>>
+<<set _fleshChanges = setup.churchEncounters.byNunChanges(_nun, [{ npc: _nun, stat: 'corruption', low: 3, high: 5 }])>>
+<<if _inviteBlocked === 'hidden'>>
+<<elseif _inviteBlocked>>
+	<div>Reward <<=_himOrHer>> for <<=_hisOrHer>> offering [<<=_inviteBlocked>>]</div>
+	<div>Take the rest of your offering in <<=_hisOrHer>> flesh, in the basement [<<=_inviteBlocked>>]</div>
+<<else>>
+	<<link `'Reward ' + _himOrHer + ' for ' + _hisOrHer + ' offering'`>>
+		<<run setup.churchEncounters.applyChanges(_rewardChanges)>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $sexForced = false>>
+		<<fuck $tmpGirl>>
+	<</link>>
+	<<linkdesc>><<=setup.churchEncounters.changesText(_rewardChanges)>><</linkdesc>>
+	<<link `'Take the rest of your offering in ' + _hisOrHer + ' flesh, in the basement'`>>
+		<<run setup.churchEncounters.applyChanges(_fleshChanges)>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<set $tmpGirl.location = 'basement'>>
+		<<set $sexForced = false>>
+		<<set $sexSubGain = true>>
+		<<fuck $tmpGirl>>
+	<</link>>
+	<<linkdesc>><<=setup.churchEncounters.changesText(_fleshChanges)>><</linkdesc>>
+<</if>>
+<<link 'Leave it there for now' 'NPC view - guest'>><</link>>
+<<nurseryEffects>>

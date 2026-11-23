@@ -78,7 +78,8 @@
                 $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
                 $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
             >>
-            <<if ($tmpGirl.basementVoluntary ?? false)>>
+            /* $sexSubGain: a scene the NPC entered as an act of submission; cleared when the scene ends */
+            <<if ($tmpGirl.basementVoluntary ?? false) || ($sexSubGain ?? false)>>
                 <<set $tmpGirl.sub = Math.min(($tmpGirl.sub ?? 0) + 1, 100)>>
                 <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1, Submission + 1)</strong>
             <<else>>
@@ -113,13 +114,25 @@
 	<<if (SugarCube?.settings?.sexReactions ?? true) && !$sexForced &&  ($tmpGirl.relationship >= 40 || $tmpGirl.location === 'nightclub') && setup.percentageChance(30) && _showSex>>
 	    <br />
 	    <<include 'Reactions'>>
+	    <<set _reactionShown = true>>
 
 	    <br />
 	<<elseif (SugarCube?.settings?.sexReactions ?? true) && $sexForced && setup.percentageChance(25) && _showSex>>
 	    <br />
 	    <<include 'badReactions'>>
+	    <<set _reactionShown = true>>
 
 	    <br />
+	<</if>>
+	/* Her husband watching, when he's where the scene is (js/cuckReactions.js) */
+	<<if (SugarCube?.settings?.sexReactions ?? true) && !$sexForced && _showSex>>
+	    <<set _cuckHusband = setup.cuckReactions.watcher($tmpGirl)>>
+	    <<if _cuckHusband && setup.percentageChance(setup.cuckReactions.CHANCE)>>
+	        /* right under a Reactions bubble its trailing break is enough */
+	        <<if !_reactionShown>><br /><</if>>
+	        <<include 'cuckReactions'>>
+	        <br />
+	    <</if>>
 	<</if>>
 
     <<if _sexActions[$sexAction]?.stats>>

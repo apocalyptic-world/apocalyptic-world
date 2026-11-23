@@ -1,4 +1,9 @@
 :: Hospital [Place bg-hospital]
+/* Nun encounters (js/churchEncounters.js), with their own daily limits */
+<<set _ceEncounter = setup.previousPassage() === 'Youth district' ? setup.churchEncounters.roll('hospital') : null>>
+<<if _ceEncounter>>
+	<<goto _ceEncounter>>
+<</if>>
 <h1 class="ptitle">HOSPITAL</h1>
 <br />
 

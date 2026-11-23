@@ -1,0 +1,77 @@
+:: Church encounter - feral bare
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A feral nun of the power path wears as little as she can get away with, and some of the settler women have started to copy her. The player can make her cover up, or reward it where everyone can see. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun>>
+<<set _nunName = setup.displayName(_nun)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _settlerImg = setup.ImagePath + '/people/anongirl.png'>>
+
+You've noticed it for a while now. <<=_nunName>> treats clothing as more of a suggestion than a rule, and the habit that came with <<=_nHis>> place in the church spends most of its time draped over a pew. And lately, some of the settler women have started to follow <<=_nHis>> lead: a shirt left open in the sun, a skirt that got shorter, one or two who have simply stopped bothering.
+<br /><br />
+Today <<=_nunName>> is stretched out on the church steps at the quiet far end of the street, wearing little more than a scrap of cloth around <<=_nHis>> hips, soaking up the warmth like a cat on a windowsill. Two settler women sit on the low wall nearby, both of them barefoot and bare-shouldered, and one of them topless and entirely unbothered about it.
+<br /><br />
+<<say 'Settler' _settlerImg>>
+	It's freeing, honestly. <<=ucfirst(_nHe)>> doesn't care who looks, so why should we?
+<</say>>
+<br />
+<<sayFeral _nun>>lifts <<=_nHis>> head at the sound of your steps and rolls onto <<=_nHis>> side to watch you come, stretching long and slow, entirely pleased with <<=_nHim>>self and making no move whatsoever to cover up<</sayFeral>>
+<br />
+
+<div id="ce_choices">
+	<<link `'Send ' + _nHim + ' inside to put on a proper habit'`>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _nun, 'sub', 1, 2)>>
+			<<run _fx.change(_nun, 'happy', -3, -1)>>
+			<<run _fx.change(_nun, 'corruption', -3, -1)>>
+			You point at the church door and tell <<=_nHim>>, firmly, to go and get dressed.
+			<br /><br />
+			<<sayFeral _nun>>flattens <<=_nHis>> ears, gives you a long, wounded look, and slinks inside with <<=_nHis>> head low<</sayFeral>>
+			<br />
+			A few minutes later <<=_nHe>> comes back out in the full habit, tugging at the collar and sulking magnificently. On the wall, the two settler women exchange a glance and quietly pull their shirts back on.
+			<br /><br />
+			<<link 'Continue' 'Youth district'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link `'Encourage it, and reward ' + _nHim + ' where everyone can see'`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', 2, 4)>>
+			<<run _ce.byNun(_nun, _nun, 'corruption', 2, 4)>>
+			You sit down on the steps beside <<=_nHim>> and run a hand down <<=_nHis>> bare back, slow and approving, and then again. <<=_nunName>> arches into it at once. You scratch behind <<=_nHis>> ears, stroke <<=_nHis>> sides, tell <<=_nHim>> out loud how good <<=_nHe>> looks, and let every settler on the street see exactly how much you approve.
+			<br /><br />
+			On the wall, the topless woman grins, and her friend reaches up, a little shyly, and unbuttons her own shirt.
+			<br /><br />
+			<<sayFeral _nun>>presses close against you, purring, then turns and arches <<=_nHis>> back with <<=_nHis>> hips raised, looking over <<=_nHis>> shoulder at you with unmistakable intent, every line of <<=_nHis>> body asking to be mounted<</sayFeral>>
+			<br />
+			<<if _ce.mcOk(_nun)>>
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _justNun = [_nun]>>
+				<<set _noChanges = []>>
+				<<set _outsideChanges = _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'corruption', low: 3, high: 5 }])>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc">Take <<=_nHim>> inside the church (<<=_blocked>>)</div>
+					<div class="link-internal" style="background: #ccc">Mount <<=_nHim>> right here on the steps (<<=_blocked>>)</div>
+				<<else>>
+					<<set _insideLabel = 'Take ' + _nHim + ' inside the church'>>
+					<<set _outsideLabel = 'Mount ' + _nHim + ' right here on the steps'>>
+					<<ceSexLink _insideLabel 'solo' _justNun _noChanges 'church' 'Youth district'>>
+					<<ceSexLink _outsideLabel 'solo' _justNun _outsideChanges 'forest' 'Youth district'>>
+				<</if>>
+				<<link 'Leave it at that' 'Youth district'>><</link>>
+			<<else>>
+				You give <<=_nHim>> a last scratch and get up. <<=ucfirst(_nHe)>> settles back into the sun, smug as anything.
+				<br /><br />
+				<<link 'Continue' 'Youth district'>><</link>>
+			<</if>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

@@ -5,7 +5,8 @@
 	<<elseif setup.nurseryBirthday.start()>>
 		<<goto 'Nursery encounter - birthday'>>
 	<<else>>
-		<<set _ncEncounter = setup.nurseryEncounters.roll()>>
+		/* Caretaker scenes first, then nun encounters (js/churchEncounters.js) with their own daily limits */
+		<<set _ncEncounter = setup.nurseryEncounters.roll() ?? setup.churchEncounters.roll('nursery')>>
 		<<if _ncEncounter>>
 			<<goto _ncEncounter>>
 		<</if>>

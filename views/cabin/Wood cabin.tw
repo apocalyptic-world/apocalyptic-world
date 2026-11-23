@@ -62,6 +62,8 @@
 	<</if>>
 <</if>>
 
+/* Nun encounters wait for a wedding due tonight */
+<<set _ceOk = !($tmpEventWedding && timeBetween('18:00', '22:00'))>>
 <<if !($locationEvents.cabin ?? false)>>
 	<<if $game.pendingUltimatumRaid && $game.cabinName>>
 		<<set $tmpSettlement = $game.pendingUltimatumRaid>>
@@ -158,6 +160,24 @@
 	<<elseif $guests.filter(function(g) { return setup.getAge(g) >= 18 && [0,2].includes(g.gender) && !(g.traits ?? []).includes('feral'); }).length >= 4 && setup.percentageChance(30) && !$player.quests.bathhouse_talk && $game.day > 80>>
 		<<set $player.quests.bathhouse_talk = true>>
 		<<goto 'Event: Bathhouse talk'>>
+	<<elseif $game.refugeeEvent && $game.cabinName>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Refugee influx'>>
+	<<elseif isMetChar('laura') && !$characters.laura.quests.successful_test && $characters.laura.quests.metOnDay < ($game.day - 3)>>
+		<<goto 'Laura - successful test'>>
+	<<elseif isMetChar('laura') && $characters.laura.quests.successful_test && !$characters.laura.quests.first_vials && $characters.laura.quests.lastTestDay < ($game.day - 5)>>
+		<<goto 'Laura - first vials'>>
+	<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && !$characters.laura.quests.lab_workbench && $characters.laura.quests.lastTestDay < ($game.day - 7)>>
+		<<goto 'Laura story - The shattered lab'>>
+	<<elseif isMetChar('laura') && ($game.location.lab ?? false) && !$characters.laura.quests.living>>
+		<<goto 'Laura story - New home'>>
+	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
+		<<goto 'Vincent - Strange note'>>
+	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && !$player.quests?.settlement_burned &&  (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
+		<<goto 'Eve - shower visit'>>
+	/* Story and triggered events above, nun encounters next (js/churchEncounters.js, with their own daily limits), the cabin's random events below */
+	<<elseif _ceOk && setup.churchEncounters.roll('cabin')>>
+		<<goto setup.churchEncounters.rolled>>
 	<<elseif setup.assignedToCount('garden') >= 4 && setup.percentageChance(($game.location.freezer && setup.baseManagement.electricity.hasElectricity()) ? 2 : 5) && ($backpack.count('food') + $storage.count('food') ) > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
 		<<set _kitchenAssigned = setup.getPersonsForLocation($guests, 'kitchen')>>
 		<<set _rottenFoodChance = 100>>
@@ -180,9 +200,6 @@
 	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.virgin_merchant_day || ($game.virgin_merchant_day + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - virgin merchant'>>
-	<<elseif $game.refugeeEvent && $game.cabinName>>
-		<<set $locationEvents.cabin = true>>
-		<<goto 'Event - Refugee influx'>>
 	<<elseif $game.cabinName && setup.percentageChance(4) && setup.settlements.getRaidableByCandidates($game.day).length>>
 		<<set _srCands = setup.settlements.getRaidableByCandidates($game.day)>>
 		<<set _srPick = _srCands[randomInteger(0, _srCands.length - 1)]>>
@@ -220,14 +237,6 @@
 	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(3) && timeBetween('08:00', '11:00') && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: guard caught intruder'>>
-	<<elseif isMetChar('laura') && !$characters.laura.quests.successful_test && $characters.laura.quests.metOnDay < ($game.day - 3)>>
-		<<goto 'Laura - successful test'>>
-	<<elseif isMetChar('laura') && $characters.laura.quests.successful_test && !$characters.laura.quests.first_vials && $characters.laura.quests.lastTestDay < ($game.day - 5)>>
-		<<goto 'Laura - first vials'>>
-	<<elseif isMetChar('laura') && $characters.laura.quests.first_vials && !$characters.laura.quests.lab_workbench && $characters.laura.quests.lastTestDay < ($game.day - 7)>>
-		<<goto 'Laura story - The shattered lab'>>
-	<<elseif isMetChar('laura') && ($game.location.lab ?? false) && !$characters.laura.quests.living>>
-		<<goto 'Laura story - New home'>>
 	<<elseif !$locationEvents.cabin && (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 1 && setup.percentageChance(30) && recall($suppCode) && timeBetween('22:00', '00:00')>>
 		<<set _npcs = setup.filterNPCs($guests, { gender: 0, horny_gte: 50, 'virgin': false, chasityBelt: 0, race_in: ['white', 'latina']})>>
 		<<set _npcs[0] = (_npcs[0] ?? []).filter(i => setup.Tangle.eligible($guests[i]))>>
@@ -238,10 +247,6 @@
 			<<set $locationEvents.cabin = true>>
 			<<goto 'Event: Late dance'>>
 		<</if>>
-	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
-		<<goto 'Vincent - Strange note'>>
-	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && !$player.quests?.settlement_burned &&  (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
-		<<goto 'Eve - shower visit'>>
 	<<elseif timeBetween('20:00', '24:00') && $game.lone_survivor && setup.percentageChance(50) && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event - A lone survivor fuck'>>
@@ -255,6 +260,9 @@
 		<<set $locationEvents.cabin = true>>
 		<<goto "Event: Settler can't pay tax">>
 	<</if>>
+<<elseif _ceOk && setup.churchEncounters.roll('cabin')>>
+	/* The cabin's own events are done for today, but nun encounters keep their own limits */
+	<<goto setup.churchEncounters.rolled>>
 <</if>>
 
 

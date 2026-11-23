@@ -1,0 +1,115 @@
+:: Church encounter - holy donation
+/* A kind nun and the cook or shopkeeper talk over what the settlers are short of, and ask the player to send a donation on the household's behalf. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<set _isKitchen = _cast && _cast.host.assignedTo === 'kitchen'>>
+<<set _back = _isKitchen ? 'Kitchen-room' : 'Shop'>>
+<<if !_cast>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nun = _cast.nun, _host = _cast.host>>
+<<set _nunName = setup.displayName(_nun), _hName = setup.displayName(_host)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _hHe = setup.pronounceWhat(_host), _hHis = setup.pronounceWhos(_host), _hHim = setup.pronounceWho(_host)>>
+<<set _hMc = setup.npc.mcName(_host), _nMc = setup.npc.mcName(_nun)>>
+<h1 class="ptitle"><<=_isKitchen ? 'KITCHEN' : 'SHOP'>></h1>
+<br /><br />
+
+<<if _isKitchen>>
+	<<=_hName>> and <<=_nunName>> are bent over the kitchen table with a stub of pencil and the back of an old label, adding up a column of numbers that neither of them seems to like. A pot simmers on the stove, ignored.
+	<br /><br />
+	<<sayNpc _host>>
+		The family by the well is down to one meal a day so the little ones can have two. And the old man past the fence says he isn't hungry, which means he's run out. That's just the ones we know about.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _nun>>
+		The holy texts say a full pot is a blessing only until the neighbor's is empty. After that it becomes a question we have to answer.
+	<</sayNpc>>
+<<else>>
+	<<=_hName>> has the ledger open on the counter, and <<=_nunName>> is reading down it over <<=_hHis>> shoulder, one finger tracing the lines. Neither of them looks happy with what they find.
+	<br /><br />
+	<<sayNpc _host>>
+		Firewood's what everybody asks for. Half the settlement is burning furniture at night. Then blankets, then anything to patch clothes with. And they haven't got the caps to trade for any of it.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _nun>>
+		A coat in a storeroom keeps no one warm. The holy texts are very plain about that. What sits unused is only waiting for the person who needs it.
+	<</sayNpc>>
+<</if>>
+<br />
+<<=_hName>> catches sight of you in the doorway and straightens up, and <<=_nunName>> turns with <<=_nHis>> hands folded, as if the two of them had been hoping you would come by.
+<br /><br />
+<<sayNpc _host>>
+	Oh, good timing, <<=_hMc>>. We were just talking about you. Well, about the stores.
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	<<=ucfirst(_nMc)>>, the household has been blessed with more than many around us. Would you let me carry an offering out to those in need, in the household's name? Whatever you think is right. I'll see it into the hands that need it most.
+<</sayNpc>>
+<br />
+
+/* The kitchen only has food to give; the shop can send any of them */
+<<set _gifts = _isKitchen ? _ce.DONATIONS.filter(gift => gift.item === 'food') : _ce.DONATIONS>>
+<div id="ce_choices">
+	<<for _gift range _gifts>>
+		<<capture _gift>>
+			<<set _giftLabel = 'Donate ' + _ce.donationText(_gift)>>
+			<<set _giftBlocked = _ce.donationBlockedBy(_gift)>>
+			<<if _giftBlocked>>
+				<div class="link-internal" style="background: #ccc"><<=_giftLabel>> (<<=_giftBlocked>>)</div>
+			<<else>>
+				<<link _giftLabel>>
+					<<replace '#ce_choices'>>
+						<<run _ce.donate(_gift)>>
+						<<run _ce.changePlayer('goodwill', 5)>>
+						<<run _ce.changeSettlementReputation(2)>>
+						<<set _giftText = _ce.donationText(_gift)>>
+						<<you>>
+							Take <<=_giftText>>. Tell them it's from all of us.
+						<</you>>
+						<br />
+						<<=_nunName>>'s face lights up. <<=ucfirst(_nHe)>> takes your hand in both of <<=_nHis>> and holds it a moment longer than a handshake.
+						<br /><br />
+						<<sayNpc _nun>>
+							Thank you, <<=_nMc>>. This will be remembered, and not only by the ones who receive it. A settlement learns what kind of place it is from moments like this.
+						<</sayNpc>>
+						<br />
+						<<=_hName>> is already pulling a sack down from the shelf to pack it in.
+						<br /><br />
+						<<sayNpc _host>>
+							<<if _isKitchen>>
+								I'll help <<=_nHim>> carry it out. That family by the well is going to cry, <<=_hMc>>, I'm warning you now.
+							<<else>>
+								I'll help <<=_nHim>> carry it out. A few people are going to sleep warm tonight because of this, <<=_hMc>>.
+							<</if>>
+						<</sayNpc>>
+						<br />
+						<<link 'Continue' _back>><</link>>
+						<<nurseryEffects>>
+					<</replace>>
+				<</link>>
+			<</if>>
+		<</capture>>
+	<</for>>
+	<<set _hasSettlers = ($player.baseManagement?.settlers ?? 0) > 0>>
+	<<set _declineLabel = _hasSettlers ? 'Decline, and let the settlers take care of their own' : 'Decline, and let them take care of their own'>>
+	<<link _declineLabel>>
+		<<replace '#ce_choices'>>
+			<<you>>
+				Not this time. We can't carry <<=_hasSettlers ? 'the whole settlement' : 'everyone out there'>>, and they'll manage better on their own than leaning on us.
+			<</you>>
+			<br />
+			<<=_nunName>> lowers <<=_nHis>> eyes and nods, without argument.
+			<br /><br />
+			<<sayNpc _nun>>
+				As you say, <<=_nMc>>. Then I'll go and help them stretch what they have. That much costs nothing.
+			<</sayNpc>>
+			<br />
+			<<=_hName>> folds up the list and tucks it into <<=_hHis>> pocket without a word, but <<=_hHe>> doesn't throw it away.
+			<br /><br />
+			<<link 'Continue' _back>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

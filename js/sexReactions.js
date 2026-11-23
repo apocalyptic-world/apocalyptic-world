@@ -5,7 +5,8 @@
  * REACTIONS[action] is a list of branches tried in order; the first one that applies is used:
  *   when(npc, V)  condition (V = story variables); may roll its own setup.percentageChance
  *   chance        percent roll, only made when `when` is true
- *   lines         one is picked at random; %mcName% / %McName% become setup.npc.mcName(npc) (capitalised)
+ *   lines         one is picked at random; %mcName% / %McName% become setup.npc.mcName(npc) (capitalised),
+ *                 %husband% her watching husband's name (husbandWatching branches)
  *   branches      a nested list, same rules (nothing applies: no reaction)
  *   use           the branches of another action (sn: half bj, half pussy_lick)
  * Actions that say the same as another one are in ALIASES ('_fisting', '_cum_oral', … are shared by several actions).
@@ -48,6 +49,11 @@ setup.sexReactions = {
 		return (npc.family?.husband === 'mc' && setup.percentageChance(chance)) || (npc.location === 'wedding' && setup.percentageChance(80));
 	},
 
+	/** Her husband is watching this scene (setup.cuckReactions.watcher): her "he can't know" lines get a watched variant */
+	husbandWatching(npc) {
+		return !!setup.cuckReactions.watcher(npc);
+	},
+
 	/** A reaction line for npc after action ('generic' when the action has none), or '' when no branch applies. */
 	line(npc, action, V = variables()) {
 		const key = this.has(action) ? (this.ALIASES[action] ?? action) : 'generic';
@@ -56,7 +62,8 @@ setup.sexReactions = {
 		if (!lines) return '';
 		return lines[Math.floor(Math.random() * lines.length)]
 			.replace(/%McName%/g, setup.npc.mcName(npc, true))
-			.replace(/%mcName%/g, setup.npc.mcName(npc, false));
+			.replace(/%mcName%/g, setup.npc.mcName(npc, false))
+			.replace(/%husband%/g, () => setup.cuckReactions.watcher(npc)?.name ?? 'him');
 	},
 
 	/** The lines of the first branch that applies (following branches / use), or null. */
@@ -87,7 +94,14 @@ setup.sexReactions = {
 				"Mmmhh, %mcName%...  Nobody else gets this, only you, only ever you.",
 				"*wrapping around you* %McName%...  My husband feels so perfect inside me..."
 			] },
-			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*looking past you at %husband%* Are you watching, baby?  Look how deep he gets...",
+				"Mmmhh, %mcName%...  He's right there...  *biting her lip* and I don't even care.",
+				"*gasping* %husband% can see everything...  Let him see how good you fuck me, %mcName%.",
+				"Ahh, %mcName%...  Don't stop just because he's watching...  *glancing at him* especially not because he's watching.",
+				"*eyes on %husband%* This is what it's supposed to feel like, honey...  Watch closely."
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"Mmmmh, %mcName%...  I know I shouldn't...  but you feel so much better than he does...",
 				"*biting her lip* He can never know about this, %mcName%...  But I can't stop...",
 				"Ahh, %mcName%...  This is so wrong...  so why does it feel so right?",
@@ -288,7 +302,12 @@ setup.sexReactions = {
 					"Ahh, %mcName%...  I love giving my husband everything...  Take it, it's yours.",
 					"*gripping the sheets* This is my gift to you, %mcName%...  No part of me is off limits."
 				] },
-				{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+				{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+					"*glancing at %husband%* Yes, baby, he's in my ass...  the thing I never let you do.",
+					"Mmmhh, %mcName%...  Let him watch you take me there...",
+					"*gasping* %husband%'s staring, %mcName%...  Give him something to stare at."
+				] },
+				{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 					"*gasping* He's never brave enough to take me like this...  you are, %mcName%...",
 					"Mmmhh, %mcName%...  My husband doesn't even know I like this...  you figured it out immediately.",
 					"Ahh, %mcName%...  He'd never dare...  That's the difference between you two right there.",
@@ -516,7 +535,12 @@ setup.sexReactions = {
 				"Ohh, %mcName%...  I love feeling your essence filling me, reminding me that I belong to you...",
 				"*trembling* Yes, fill me, %mcName%...  Your wife loves every second of this..."
 			] },
-			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*holding %husband%'s gaze as you fill her* Watch, baby...  watch him fill me up.",
+				"Ohhh, %mcName%...  Right in front of him...  every drop...",
+				"*shivering* %husband% saw all of it...  *softly* I hope he liked it as much as I did."
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"*gasping* He never cums this deep, %mcName%...  What am I doing...",
 				"Ohhh, %mcName%!  He'll never know, and I'll never forget this...",
 				"Mmmm, %mcName%, you'r'e playing with fire.  I shouldn't love the danger this much, but it feels so good...",
@@ -681,7 +705,12 @@ setup.sexReactions = {
 				"*kissing up and down* I love you, %mcName%...  Every part of you...",
 				"Mmmhh, I love how you taste, %mcName%...  Don't rush, I want to enjoy this."
 			] },
-			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*pulling off to look at %husband%* See how big he is, baby?  I can barely fit him.",
+				"Mmmhh, %mcName%...  *glancing sideways* Let him watch me do this right for once.",
+				"*muffled, eyes on %husband%* Mmmhh...  *popping off* I never suck yours like this, do I?"
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"*muffled* Mmmhh, %mcName%...  I shouldn't be doing this...  but I can't stop.",
 				"Mmm, %mcName%...  My husband doesn't know how I get on my knees for you...",
 				"*kissing up the shaft* You taste different from him, %mcName%...  Better...",
@@ -809,7 +838,11 @@ setup.sexReactions = {
 				"*muffled* Nng, %mcName%...  My husband knows exactly how to use every inch of me...",
 				"Mmmmhh, I love giving you everything, %mcName%!"
 			] },
-			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*muffled, eyes watering, glancing at %husband%* Gulck...  *gasp* ...See how deep he goes, baby?",
+				"Mmmmhh, %mcName%!  *wiping her chin* He's watching me take all of you...  I've never even tried with him."
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"*muffled* Gulck! Nng, %mcName%...  I'm doing things with you my husband doesn't even know exist...",
 				"Mmmmhh, %mcName%!  He'd never dare, but you go right to the edge..."
 			] },
@@ -833,7 +866,12 @@ setup.sexReactions = {
 				"Mmmmhh, %mcName%...  I could kiss you forever and never get tired of it.",
 				"*melting into you* %McName%...  You make me feel so safe..."
 			] },
-			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc', chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*breaking the kiss to glance at %husband%* ...He's watching us, %mcName%.  *pulling you back in* Good.",
+				"Mmmm, %mcName%...  *whispering* I can feel him staring...  kiss me harder.",
+				"*melting into you* Let him see how I kiss someone I want, %mcName%..."
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"*whispering* %McName%...  I shouldn't be kissing you like this...",
 				"Mmmm, %mcName%...  His kisses never felt like yours do...",
 				"*melting against you* %McName%... Kissing you makes me feel like I belong...",
@@ -1173,7 +1211,11 @@ setup.sexReactions = {
 				"Ahh, %mcName%...  My husband torturing me with his cock...  I love it...",
 				"*grinding back* Mmmhh, %mcName%...  You're going to make me beg, aren't you..."
 			] },
-			{ when: npc => (npc.family?.husband && npc.family?.husband !== 'mc'), chance: 40, lines: [
+			{ when: npc => setup.sexReactions.husbandWatching(npc), chance: 50, lines: [
+				"*grinding slowly, eyes on %husband%* Look how hard he is against me, baby...  should I let him in?",
+				"Mmmhh, %mcName%...  Tease me in front of him...  make him watch me beg."
+			] },
+			{ when: npc => npc.family?.husband && npc.family?.husband !== 'mc' && !setup.sexReactions.husbandWatching(npc), chance: 40, lines: [
 				"*gasping* He never teases me like this, %mcName%...  You're already making me wetter than he ever does...",
 				"Mmmhh, %mcName%...  Rubbing against me like that...  *quietly*  ...this is already better than anything he does...",
 				"*biting her lip* I shouldn't want to pull you inside...  *exhaling*  ...but I do, %mcName%..."

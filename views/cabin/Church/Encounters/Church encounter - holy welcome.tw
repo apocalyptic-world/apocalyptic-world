@@ -1,0 +1,141 @@
+:: Church encounter - holy welcome
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A kind nun meets a worker at the gate as they come back from an outside job, with water and a cool cloth. Feral nuns too. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nun = _cast.nun, _worker = _cast.worker>>
+<<set _feral = _ce.isFeral(_nun)>>
+<<set _nunName = setup.displayName(_nun), _wName = setup.displayName(_worker)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _wHe = setup.pronounceWhat(_worker), _wHis = setup.pronounceWhos(_worker), _wHim = setup.pronounceWho(_worker)>>
+<<set _wMc = setup.npc.mcName(_worker), _nMc = setup.npc.mcName(_nun)>>
+<<set _jobs = { garden: 'the garden', forest: 'the woods', quarry: 'the quarry', scavenging: 'a long day of scavenging' }>>
+<<set _labor = { garden: 'dirt under every fingernail and the sun still hot on the back of ' + _wHis + ' neck', forest: 'sawdust in ' + _wHis + ' hair and sap on ' + _wHis + ' hands', quarry: 'grey with stone dust from head to toe', scavenging: 'dusty and footsore, a heavy pack dragging at ' + _wHis + ' shoulders' }>>
+<<set _likesSoda = (_worker.likes ?? []).includes('soda'), _sodaOk = !(_worker.dislikes ?? []).includes('soda') && !_worker.offeredSoda>>
+
+<<=_wName>> trudges in through the gate from <<=_jobs[_worker.assignedTo]>>, <<=_labor[_worker.assignedTo]>>. <<=_nunName>> is waiting just inside, a bucket of water at <<=_nHis>> feet and a folded cloth over <<=_nHis>> arm.
+<br /><br />
+<<if _feral>>
+	<<sayFeral _nun>>trots to meet <<=_wName>>, takes the pack off <<=_wHis>> shoulders before <<=_wHe>> can protest, and pushes a dipper of water into <<=_wHis>> hands, watching until <<=_wHe>> drinks<</sayFeral>>
+	<br />
+	<<=_nunName>> soaks the cloth, wrings it out and presses it to the back of <<=_wName>>'s neck, then sniffs critically at <<=_wHis>> hands and starts scrubbing them clean as well, with great seriousness and no regard at all for <<=_wName>>'s dignity.
+	<br /><br />
+	<<sayNpc _worker>>
+		Alright, alright! I can wash my own hands. <<=ucfirst(_wMc)>>, is <<=_nHe>> always like this?
+	<</sayNpc>>
+	<br />
+	<<=ucfirst(_wHe)>> is laughing, though, and <<=_wHe>> doesn't pull away.
+<<else>>
+	<<sayNpc _nun>>
+		Welcome home. Here, drink this first, slowly. Then sit for a minute, the rest of the evening can wait for you.
+	<</sayNpc>>
+	<br />
+	<<=_nunName>> lifts the pack from <<=_wName>>'s shoulders, puts a dipper of water in <<=_wHis>> hands and lays the cool, wet cloth across the back of <<=_wHis>> neck. <<=_wName>> closes <<=_wHis>> eyes and sighs.
+	<br /><br />
+	<<sayNpc _worker>>
+		You have no idea how good that feels. <<=ucfirst(_wMc)>>, whoever thought of this deserves a medal.
+	<</sayNpc>>
+	<br />
+	<<sayNpc _nun>>
+		It's no more than the holy texts ask of us, <<=_nMc>>. The ones who carry the heaviest loads should be the first ones cared for.
+	<</sayNpc>>
+<</if>>
+<br />
+
+<div id="ce_choices">
+	<<if _sodaOk>>
+		<<set _sodaLabel = 'Offer ' + _wHim + ' a soda'>>
+		<<if setup.cabinInventory.has('soda')>>
+			<<link _sodaLabel>>
+				<<replace '#ce_choices'>>
+					<<run setup.cabinInventory.drop('soda')>>
+					<<set _worker.offeredSoda = true>>
+					<<set _sodaGain = _likesSoda ? 2 : 1>>
+					<<run _ce.byNun(_nun, _worker, 'happy', 1 + _sodaGain, 2 + _sodaGain)>>
+					<<run _fx.change(_worker, 'relationship', 2, 4)>>
+					<<run _fx.change(_nun, 'relationship', 1, 2)>>
+					<<run _ce.changeToward(_nun, _worker, 2, 2)>>
+					<<run _ce.changeToward(_worker, _nun, 4, 4)>>
+					<<if _likesSoda>><<run _ce.boostWork(_worker)>><</if>>
+					You fish a soda out of your pack and hand it over. <<=_wName>> cracks it open and drinks half of it in one go<<if _likesSoda>>, and then grins at you like you've handed <<=_wHim>> treasure<</if>>.
+					<br /><br />
+					<<sayNpc _worker>>
+						<<if _likesSoda>>
+							Oh, that's the good stuff. Thank you, <<=_wMc>>. I feel like I could go back out there and do it all again.
+						<<else>>
+							Thanks, <<=_wMc>>. That hits the spot.
+						<</if>>
+					<</sayNpc>>
+					<br />
+					<<if _feral>>
+						<<sayFeral _nun>>looks from the can to you, then bumps <<=_nHis>> head against your shoulder, the way <<=_nHe>> does when <<=_nHe>> approves of something<</sayFeral>>
+					<<else>>
+						<<sayNpc _nun>>
+							Thank you, <<=_nMc>>. It means more coming from you. People learn kindness by watching it done.
+						<</sayNpc>>
+					<</if>>
+					<br />
+					[[Continue|Wood cabin]]
+					<<nurseryEffects>>
+					<<if _likesSoda>><<linkdesc>><<=_wName>> will bring in a little extra from <<=_jobs[_worker.assignedTo]>> tonight<</linkdesc>><</if>>
+				<</replace>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc"><<=_sodaLabel>> (you have none)</div>
+		<</if>>
+	<</if>>
+	<<set _drinkLabel = 'Offer ' + _wHim + ' an energy drink'>>
+	<<if setup.cabinInventory.has('energy_drink')>>
+		<<link _drinkLabel>>
+			<<replace '#ce_choices'>>
+				<<run setup.cabinInventory.drop('energy_drink')>>
+				<<run _ce.byNun(_nun, _worker, 'happy', 3, 4)>>
+				<<run _fx.change(_worker, 'relationship', 2, 4)>>
+				<<run _fx.change(_nun, 'relationship', 1, 2)>>
+				<<run _ce.changeToward(_nun, _worker, 2, 2)>>
+				<<run _ce.changeToward(_worker, _nun, 4, 4)>>
+				<<run _ce.boostWork(_worker)>>
+				You hand <<=_wName>> an energy drink. <<=ucfirst(_wHe)>> makes a face at the first sip, then drains the rest, and you can practically watch the life come back into <<=_wHim>>.
+				<br /><br />
+				<<sayNpc _worker>>
+					Whoa. Okay. That's working. Thanks, <<=_wMc>>, I think I just got my second wind.
+				<</sayNpc>>
+				<br />
+				<<if _feral>>
+					<<sayFeral _nun>>looks from the empty can to you, then bumps <<=_nHis>> head against your shoulder, the way <<=_nHe>> does when <<=_nHe>> approves of something<</sayFeral>>
+				<<else>>
+					<<sayNpc _nun>>
+						Thank you, <<=_nMc>>. It means more coming from you. People learn kindness by watching it done.
+					<</sayNpc>>
+				<</if>>
+				<br />
+				[[Continue|Wood cabin]]
+				<<nurseryEffects>>
+				<<linkdesc>><<=_wName>> will bring in a little extra from <<=_jobs[_worker.assignedTo]>> tonight<</linkdesc>>
+			<</replace>>
+		<</link>>
+	<<else>>
+		<div class="link-internal" style="background: #ccc"><<=_drinkLabel>> (you have none)</div>
+	<</if>>
+	<<link 'Leave them to it'>>
+		<<replace '#ce_choices'>>
+			<<run _ce.byNun(_nun, _worker, 'happy', 1, 2)>>
+			<<run _ce.changeToward(_nun, _worker, 2, 2)>>
+			<<run _ce.changeToward(_worker, _nun, 4, 4)>>
+			<<sayNpc _worker>>
+				Evening, <<=_wMc>>. Don't worry about me, I'm in good hands.
+			<</sayNpc>>
+			<br />
+			You give them a nod and leave them to it. When you look back from the cabin door, <<=_wName>> is sitting on an upturned crate with the cloth over <<=_wHis>> face, and <<=_nunName>> is <<if _feral>>curled at <<=_wHis>> feet, keeping watch<<else>>refilling <<=_wHis>> water<</if>>.
+			<br /><br />
+			[[Continue|Wood cabin]]
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

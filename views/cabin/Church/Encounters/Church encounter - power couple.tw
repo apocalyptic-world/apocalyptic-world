@@ -1,0 +1,162 @@
+:: Church encounter - power couple [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A nun of the power path counsels a married couple who've lost their spark, and defers to the player. He can join them, or show the husband what really pleases his wife. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _wife = _cast.wife, _husband = _cast.husband>>
+<<set _nunName = setup.displayName(_nun), _wName = setup.displayName(_wife), _hName = setup.displayName(_husband)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _wMc = setup.npc.mcName(_wife), _hMc = setup.npc.mcName(_husband), _nMc = setup.npc.mcName(_nun)>>
+<<set _husbandBalks = (_husband.sub ?? 0) < _ce.PROTEST_SUB, _wifeBalks = (_wife.corruption ?? 0) < _ce.PROTEST_CORRUPTION>>
+<<set _trio = setup.sex.isThreesomeImplemented(_wife, _husband) ? [_wife, _husband] : null>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justWife = [_wife]>>
+/* What the experience does for the two of them and their nun, either way */
+<<set _closer = _ce.byNunChanges(_nun, [
+	{ npc: _wife, other: _husband, low: 3, high: 5 }, { npc: _husband, other: _wife, low: 3, high: 5 },
+	{ npc: _wife, other: _nun, low: 2, high: 4 }, { npc: _husband, other: _nun, low: 2, high: 4 },
+	{ npc: _nun, other: _wife, low: 1, high: 2 }, { npc: _nun, other: _husband, low: 1, high: 2 }
+])>>
+<<set _trioChanges = _ce.byNunChanges(_nun, [
+	{ npc: _wife, stat: 'sub', low: 2, high: 4 }, { npc: _wife, stat: 'corruption', low: 2, high: 4 },
+	{ npc: _husband, stat: 'sub', low: 2, high: 4 }, { npc: _husband, stat: 'corruption', low: 2, high: 4 }
+]).concat(_closer)>>
+<<set _watchChanges = _ce.byNunChanges(_nun, [
+	{ npc: _wife, stat: 'sub', low: 2, high: 4 }, { npc: _wife, stat: 'corruption', low: 5, high: 7 },
+	{ npc: _husband, stat: 'sub', low: 7, high: 9 }, { npc: _husband, stat: 'corruption', low: 5, high: 7 }
+]).concat(_closer)>>
+
+In the common room, <<=_wName>> and <<=_hName>> sit side by side on a bench with a careful handspan of space between them. <<=_nunName>> has pulled a stool up in front of them and is leaning in, elbows on <<=_nHis>> knees.
+<br /><br />
+<<sayNpc _wife>>
+	It isn't that we don't love each other. We do. But he works until he can barely stand, and I'm not much better, and by the time we get to bed...
+<</sayNpc>>
+<br />
+<<sayNpc _husband>>
+	We just sleep. Every night. I can't remember the last time I even made her laugh, let alone anything else.
+<</sayNpc>>
+<br />
+<<=_nunName>> looks up, sees you in the doorway, and rises at once, bowing <<=_nHis>> head.
+<br /><br />
+<<sayNpc _nun>>
+	<<=ucfirst(_nMc)>>. Your timing is a blessing in itself. These two have lost their way to each other, and my words can only take them so far. What would you have them do? Your wisdom is inspired. I would sooner trust it than my own.
+<</sayNpc>>
+<br />
+<<=_wName>> and <<=_hName>> both turn to look at you.
+<br /><br />
+
+<div id="ce_choices">
+	<<if _trio>>
+		<<link 'Suggest that you join them'>>
+			<<replace '#ce_choices'>>
+				<<you>>
+					Sometimes a fire needs a little help to catch again. Let me join you, both of you, and remind you how it's done.
+				<</you>>
+				<br />
+				<<set _protestKind = 'join'>>
+				<<include 'Church encounter - power couple persuasion'>>
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<if _blocked>>
+					<div class="link-internal" style="background: #ccc">Continue (<<=_blocked>>)</div>
+				<<else>>
+					<<ceSexLink 'Continue' 'threesome' _trio _trioChanges 'bedroom' 'Guest house'>>
+				<</if>>
+				[[Think better of it|Guest house]]
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<set _watchLabel = 'Suggest that ' + _hName + ' could learn what really pleases his wife'>>
+	<<link _watchLabel>>
+		<<replace '#ce_choices'>>
+			<<you>>
+				<<=_hName>>, I don't think you've forgotten how. I think you never really learned what she likes. Sit, and watch, and I'll show you.
+			<</you>>
+			<br />
+			<<set _protestKind = 'watch'>>
+			<<include 'Church encounter - power couple persuasion'>>
+			<<set _blocked = _ce.mcBlockedBy()>>
+			<<if _blocked>>
+				<div class="link-internal" style="background: #ccc">Continue (<<=_blocked>>)</div>
+			<<else>>
+				<<ceSexLink 'Continue' 'solo' _justWife _watchChanges 'bedroom' 'Guest house'>>
+			<</if>>
+			[[Think better of it|Guest house]]
+		<</replace>>
+	<</link>>
+	<<link `'Leave them to ' + _nHis + ' counsel'`>>
+		<<replace '#ce_choices'>>
+			<<you>>
+				I think you're doing fine, <<=_nunName>>. Carry on.
+			<</you>>
+			<br />
+			<<=_nunName>> looks faintly disappointed, but bows again and turns back to the couple.
+			<br /><br />
+			[[Continue|Guest house]]
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+
+:: Church encounter - power couple persuasion
+/* The couple's doubts and the nun talking them round; included from Church encounter - power couple. _protestKind is 'join' or 'watch'. */
+<<if _husbandBalks>>
+	<<sayNpc _husband>>
+		<<if _protestKind === 'watch'>>
+			Wait. You want me to just sit there while you... with my wife? <<=ucfirst(_hMc)>>, I can't do that.
+		<<else>>
+			All three of us? <<=ucfirst(_hMc)>>, I don't know. She's my wife.
+		<</if>>
+	<</sayNpc>>
+	<br />
+<</if>>
+<<if _wifeBalks>>
+	<<sayNpc _wife>>
+		<<if _protestKind === 'watch'>>
+			In front of him? <<=ucfirst(_wMc)>>, I couldn't. What would he think of me?
+		<<else>>
+			I don't... I'm not that kind of woman, <<=_wMc>>. I never have been.
+		<</if>>
+	<</sayNpc>>
+	<br />
+<</if>>
+<<if _husbandBalks || _wifeBalks>>
+	<<=_nunName>> kneels in front of them and takes one of each of their hands, and when <<=_nHe>> speaks <<=_nHis>> voice is low and fervent, every word pressed home.
+	<br /><br />
+	<<sayNpc _nun>>
+		Listen to me. You came here because your marriage is starving, and you were too proud to say so to anyone but me. That pride is the wall between you. The divine has sent you an answer, here, now, in the person of the one who gave you this home. Will you turn it away because it doesn't look the way you expected? Or will you be humble, for once, and let yourselves be helped?
+	<</sayNpc>>
+	<br />
+	<<=ucfirst(_nHe)>> lets that settle, then looks from one of them to the other, holding each of their eyes in turn.
+	<br /><br />
+	<<sayNpc _nun>>
+		<<if _protestKind === 'watch'>>
+			<<=_hName>>, there is no shame in learning at the feet of someone wiser. And <<=_wName>>, there is no sin in being shown how you deserve to be loved.
+		<<else>>
+			Love that is shared is not love lost. It is love multiplied. Let it flow through all of you, and see how much stronger you are for it.
+		<</if>>
+	<</sayNpc>>
+	<br />
+	A long silence. Then <<=_wName>> squeezes <<=_hName>>'s hand, and <<=_hName>> lets out a slow breath and nods.
+	<br /><br />
+<<else>>
+	<<=_wName>> and <<=_hName>> look at each other for a long moment. Then <<=_wName>> smiles, slow and a little wicked, and <<=_hName>> swallows hard and nods.
+	<br /><br />
+	<<sayNpc _nun>>
+		You see? The divine provides. All you had to do was let it.
+	<</sayNpc>>
+	<br />
+<</if>>
+<<sayNpc _wife>>
+	<<if _protestKind === 'watch'>>
+		Alright, <<=_wMc>>. Show him.
+	<<else>>
+		Alright, <<=_wMc>>. Both of us, then.
+	<</if>>
+<</sayNpc>>
+<br />

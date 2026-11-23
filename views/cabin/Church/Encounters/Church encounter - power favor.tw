@@ -1,0 +1,158 @@
+:: Church encounter - power favor
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A nun of the power path commends a worker coming back through the gate for their loyal service, and asks the player whether they've earned his favor. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Wood cabin'>>
+<<else>>
+<<set _nun = _cast.nun, _worker = _cast.worker>>
+<<set _nunName = setup.displayName(_nun), _wName = setup.displayName(_worker)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _wHe = setup.pronounceWhat(_worker), _wHis = setup.pronounceWhos(_worker), _wHim = setup.pronounceWho(_worker)>>
+<<set _wMc = setup.npc.mcName(_worker), _nMc = setup.npc.mcName(_nun)>>
+<<set _jobs = { garden: 'the garden', forest: 'the woods', quarry: 'the quarry', scavenging: 'the ruins' }>>
+<<set _gift = _ce.likedGift(_worker)>>
+<<set _giftName = _gift ? _ce.itemName(_gift).toLowerCase() : ''>>
+<<set _forward = (_worker.sub ?? 0) >= _ce.FORWARD_SUB || (_worker.corruption ?? 0) >= _ce.FORWARD_CORRUPTION>>
+<<set _wantsMc = _ce.mcOk(_worker)>>
+<<set _trio = _ce.threesome(_worker, _nun)>>
+/* Widget arguments can't start with [, which SugarCube reads as link markup */
+<<set _justWorker = [_worker]>>
+<<set _trioChanges = _ce.nunYields(_nun, _justWorker) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+
+<<=_wName>> comes in through the gate from <<=_jobs[_worker.assignedTo]>>, filthy and bone-tired, and finds <<=_nunName>> waiting for <<=_wHim>>. <<=_nunName>> takes <<=_wHis>> face in both hands as if <<=_wHe>> were something precious.
+<br /><br />
+<<sayNpc _nun>>
+	Look at you. Every drop of sweat you spent out there today was an offering. To this settlement, and to the one who keeps it standing. Your service is seen. Your loyalty is seen.
+<</sayNpc>>
+<br />
+<<=_wName>> flushes under the praise, standing a little straighter. Then <<=_nunName>> sees you, and <<=_nHis>> face lights up.
+<br /><br />
+<<sayNpc _nun>>
+	<<=ucfirst(_nMc)>>. You come at the perfect moment. Tell us, has <<=_wName>> earned your favor today?
+<</sayNpc>>
+<br />
+<<=_wName>> looks at you, suddenly very nervous about the answer.
+<br /><br />
+
+<div id="ce_choices">
+	<<link `'Tell ' + _wHim + ' ' + _wHe + ' has'`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_worker, 'happy', 1, 2)>>
+			<<run _fx.change(_worker, 'relationship', 1, 2)>>
+			<<you>>
+				<<=ucfirst(_wHe)>> has. I see how hard <<=_wHe>> works, every day. This place stands because of people like <<=_wHim>>.
+			<</you>>
+			<br />
+			<<include 'Church encounter - power favor gratitude'>>
+		<</replace>>
+	<</link>>
+	<<if _gift>>
+		<<set _giftLabel = 'Show your favor with a gift (' + _giftName + ')'>>
+		<<link _giftLabel>>
+			<<replace '#ce_choices'>>
+				<<run setup.cabinInventory.to_npc(_worker, _gift)>>
+				<<run _fx.change(_worker, 'happy', 1, 2)>>
+				<<run _fx.change(_worker, 'relationship', 1, 2)>>
+				You take the <<=_giftName>> from your pack and press it into <<=_wName>>'s hands. <<=ucfirst(_wHe)>> stares at it, and then at you.
+				<br /><br />
+				<<you>>
+					For the work you do. Don't think I don't notice.
+				<</you>>
+				<br />
+				<<include 'Church encounter - power favor gratitude'>>
+			<</replace>>
+		<</link>>
+	<</if>>
+	<<link `'Tell ' + _wHim + ' it is only what is expected'`>>
+		<<replace '#ce_choices'>>
+			<<you>>
+				<<=ucfirst(_wHe)>> did <<=_wHis>> job. That's what <<=_wHe>> is here for.
+			<</you>>
+			<br />
+			<<=_wName>>'s face falls. <<=_nunName>> doesn't miss a beat, though. <<=ucfirst(_nHe)>> turns <<=_wName>> gently toward the guest house.
+			<br /><br />
+			<<sayNpc _nun>>
+				Do you hear? <<=ucfirst(_nMc)>> expects great things of you. Favor is something you have to keep earning. Tomorrow you'll try harder.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _worker>>
+				Yes, <<=_wMc>>. I will.
+			<</sayNpc>>
+			<br />
+			[[Continue|Wood cabin]]
+		<</replace>>
+	<</link>>
+</div>
+<</if>>
+
+
+:: Church encounter - power favor gratitude
+/* The rest of the favor scene once the player has shown his favor; included from Church encounter - power favor */
+<<=_wName>> lights up like a lamp.
+<br /><br />
+<<sayNpc _worker>>
+	Thank you, <<=_wMc>>. That means... more than you know.
+<</sayNpc>>
+<br />
+<<if _wantsMc>>
+	<<sayNpc _nun>>
+		Favor is a gift. And gifts should be answered with gratitude, for the privilege of serving at all. I think you could earn a great deal more of it tonight, <<=_wName>>, if you showed <<=_nMc>> just how grateful you are.
+	<</sayNpc>>
+	<br />
+	<div id="ce_favor">
+		<<if _forward>>
+			<<=_wName>> doesn't need telling twice. <<=ucfirst(_wHe)>> steps in close, eyes on yours, and slides a hand down your chest and over the front of your trousers, stroking you slowly through the fabric.
+			<br /><br />
+			<<sayNpc _worker>>
+				Let me show you, <<=_wMc>>.
+			<</sayNpc>>
+			<br />
+			<<include 'Church encounter - power favor links'>>
+		<<else>>
+			<<=_wName>> hesitates, coloring, plainly wanting to and not quite daring.
+			<br /><br />
+			<<link 'Show the full extent of your favor'>>
+				<<replace '#ce_favor'>>
+					<<run _fx.change(_worker, 'corruption', 1, 2)>>
+					You close the distance yourself. You tip <<=_wName>>'s chin up, kiss <<=_wHim>> slowly, and draw <<=_wHis>> hand down to where you want it, so <<=_wHe>> can feel for <<=_wHim>>self just how pleased with <<=_wHim>> you are.
+					<br /><br />
+					<<=_wName>> lets out a shaky breath, and <<=_wHis>> fingers close around you through the fabric.
+					<br /><br />
+					<<include 'Church encounter - power favor links'>>
+				<</replace>>
+			<</link>>
+			[[Leave it at kind words|Wood cabin]]
+			<<nurseryEffects>>
+		<</if>>
+	</div>
+<<else>>
+	<<sayNpc _nun>>
+		Remember this, <<=_wName>>. Remember how it feels to be favored, and give thanks for it.
+	<</sayNpc>>
+	<br />
+	[[Continue|Wood cabin]]
+	<<nurseryEffects>>
+<</if>>
+
+
+:: Church encounter - power favor links
+/* The ways to finish the favor scene; included from Church encounter - power favor gratitude */
+<<set _blocked = _ce.mcBlockedBy()>>
+<<set _soloLabel = 'Take ' + _wHim + ' to your room'>>
+<<set _trioLabel = 'Take ' + _wHim + ' to your room, and ' + _nunName + ' too'>>
+<<set _noChanges = []>>
+<<if _blocked>>
+	<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+	<<if _trio>><div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div><</if>>
+<<else>>
+	<<ceSexLink _soloLabel 'solo' _justWorker _noChanges 'bedroom' 'Wood cabin'>>
+	<<if _trio>>
+		<<ceSexLink _trioLabel 'threesome' _trio _trioChanges 'bedroom' 'Wood cabin'>>
+	<</if>>
+<</if>>
+[[Not tonight|Wood cabin]]
+<<nurseryEffects>>

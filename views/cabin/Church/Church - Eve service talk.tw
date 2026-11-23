@@ -1,0 +1,110 @@
+:: Church - Eve service talk [bg-church]
+<h1 class="ptitle">CHURCH</h1>
+<br /><br />
+<<set _nuns = setup.churchService.nuns()>>
+<<set _nunNames = setup.churchService.nunNames()>>
+<<set _oneNun = _nuns.length === 1>>
+<<set _nunHe = _oneNun ? setup.pronounceWhat(_nuns[0]) : 'they'>>
+<<set _nunHim = _oneNun ? setup.pronounceWho(_nuns[0]) : 'them'>>
+<<set _eveIsOpen = setup.churchService.eveIsOpen()>>
+You step through the church doors and stop for a moment just inside. It isn't the same building you finished not so long ago. The pews have been sanded and oiled, the cracked panes patched with scavenged glass, and someone has set wildflowers in old jars along the windowsills. The place smells of candle smoke and cut wood, and it feels lived in now.
+<br /><br />
+<center>
+	<<image 'places/church/intro1.jpg' sfw>>
+</center>
+<br />
+Eve is near the front, straightening a stack of worn books on the end of a pew. She looks up at the sound of the door, and her face brightens.
+<br /><br />
+<<eve>>
+	There you are. I was hoping you'd come by. Do you have a moment? Walk with me.
+<</eve>>
+<br />
+She takes your arm and leads you slowly down the aisle, pointing things out as she goes: a new hinge on the side door, a bench rebuilt from salvaged planks, a rack of candles that someone carved by hand.
+<br /><br />
+<<eve>>
+	Not long ago this was four walls and a roof. Now look at it. People come here. Not all of them, and not every day, but they come. They sit, they pray, sometimes they just need somewhere quiet to cry. And they leave a little lighter than they arrived.
+<</eve>>
+<br />
+<<you>>
+	That's your doing, not mine.
+<</you>>
+<br />
+She shakes her head.
+<br /><br />
+<<eve>>
+	I filled it, like I promised I would. But you built it. You gave the wood and the time and the hands, and you keep giving. I don't think you understand how much it means to people that the man who runs this place made room for something like this.
+<</eve>>
+<br />
+She stops at the front pew and nods across the sanctuary, where <<=_nunNames>> <<=_oneNun ? 'is' : 'are'>> at work.
+<br /><br />
+<center>
+	<<image 'people/eve/church_talk.jpg' sfw>>
+</center>
+<br />
+<<eve>>
+	<<if _oneNun>>
+		And <<=_nunNames>> has been a blessing. Patient, gentle, tireless. People open up to <<=_nunHim>> in ways they never would with me.
+	<<else>>
+		And the sisters have been a blessing. Patient, gentle, tireless. People open up to them in ways they never would with me.
+	<</if>>
+<</eve>>
+<br />
+<<you>>
+	But?
+<</you>>
+<br />
+Eve smiles, a little caught out.
+<br /><br />
+<<eve>>
+	But kindness without direction only goes so far. <<=ucfirst(_nunHe)>> <<=_oneNun ? 'serves' : 'serve'>> the flock the best way <<=_nunHe>> <<=_oneNun ? 'knows' : 'know'>> how, one person at a time. With some guidance, <<=_nunHe>> could do so much more. Not just comfort this settlement, but shape it.
+<</eve>>
+<br />
+<<you>>
+	Guidance from you, you mean.
+<</you>>
+<br />
+<<eve>>
+	From you. You're the patron of this church, and you built this community. Everything in it stands because you chose to put it here, and no one understands the needs of this settlement as much as you. When you speak about what faith should mean in this place, <<=_nunHe>> will listen. Whatever you believe the divine to be, <<=_nunHe>> will carry it out into the flock.
+<</eve>>
+<br />
+<<if _eveIsOpen>>
+	She glances toward the altar, and when she looks back at you there is color in her cheeks. Her hand slides down your arm until her fingers rest against yours.
+	<br /><br />
+	<<eve>>
+		And it doesn't have to be only quiet prayers and folded hands. You of all people know that. You showed me.
+	<</eve>>
+	<br />
+	Her voice drops, though there's no one close enough to hear.
+	<br /><br />
+	<<eve>>
+		There are older ways to feel close to something greater. Through the body. Through love, or through surrender. If you wanted to open their hearts and their souls to that... I don't think <<=_nunHe>> would resist you. I certainly didn't.
+	<</eve>>
+	<br />
+	She holds your gaze a moment longer than she needs to, then lets go of your hand and smooths her dress.
+	<br /><br />
+<<else>>
+	<<eve>>
+		Charity, comfort, mercy. All of it means more when it's done in the name of someone the people already look up to.
+	<</eve>>
+	<br />
+<</if>>
+<<you>>
+	So what do you need from me? Supplies? Another building?
+<</you>>
+<br />
+She laughs softly.
+<br /><br />
+<<eve>>
+	Nothing like that this time. No blueprints, no materials. Just go and talk to <<=_nunHim>>. Tell <<=_nunHim>> what you believe. <<=ucfirst(_nunHe)>> will take it from there.
+<</eve>>
+<br />
+She squeezes your hand once, then goes back to her stack of books, leaving you standing at the front of the church you built.
+<br /><br />
+<<link 'Continue'>>
+	<<set $characters.eve.quests.church_service_day = $game.day>>
+	<<addmins 20>>
+	<<notify 6s>>
+		You can now offer to help with church service from a nun's profile while she is working in the church.
+	<</notify>>
+	<<goto 'Church'>>
+<</link>>

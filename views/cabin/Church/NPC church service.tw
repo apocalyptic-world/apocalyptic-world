@@ -1,0 +1,423 @@
+:: NPC church service [bg-church]
+<h1 class="ptitle">CHURCH</h1>
+<br /><br />
+/* Opened from a nun's NPC view while she works in the church. The first visit sets her divine focus; later ones can change it. */
+/* The NPC view works on $tmpGirl and saves it over the real record on the way out, so both have to be the same object here */
+<<set $guests[$guestId] = $tmpGirl>>
+<<set _nun = $tmpGirl>>
+<<set _cs = setup.churchService>>
+<<set _name = setup.displayName(_nun)>>
+<<set _heOrShe = setup.pronounceWhat(_nun)>>
+<<set _hisOrHer = setup.pronounceWhos(_nun)>>
+<<set _himOrHer = setup.pronounceWho(_nun)>>
+<<set _isFeral = (_nun.traits ?? []).includes('feral')>>
+<<set _inviteBlocked = _cs.inviteBlockedBy(_nun)>>
+<div id="cs_scene">
+<<if _cs.hasFocus(_nun)>>
+	<<include 'NPC church service - talk'>>
+<<elseif _isFeral>>
+	<<include 'NPC church service - feral first talk'>>
+<<else>>
+	<<include 'NPC church service - first talk'>>
+<</if>>
+</div>
+
+
+:: NPC church service - altar
+/* The altar as the MC sees it on the first visit */
+At the front of the sanctuary stands the altar. It was put together from whatever the settlement could spare: a slab of salvaged oak laid across two blocks of dressed stone, its edges sanded smooth, a runner of bleached cloth down the middle and a row of candles in mismatched holders of brass and glass. None of it was made for this. And yet it carries itself with a quiet dignity that makes you lower your voice without meaning to.
+<br /><br />
+<center>
+	<<image 'places/church/intro1.jpg' sfw>>
+</center>
+<br />
+
+
+:: NPC church service - invite
+/* Ends of the love and power talks. _inviteFocus is 'love' or 'power'. */
+<<if _inviteBlocked === 'hidden'>>
+<<elseif _inviteBlocked>>
+	<<if _inviteFocus === 'love'>>
+		<div>Invite <<=_himOrHer>> to show you <<=_hisOrHer>> devotion [<<=_inviteBlocked>>]</div>
+	<<else>>
+		<div>Claim <<=_himOrHer>> before the altar [<<=_inviteBlocked>>]</div>
+		<div>Take <<=_himOrHer>> down to the basement [<<=_inviteBlocked>>]</div>
+	<</if>>
+<<elseif _inviteFocus === 'love'>>
+	<<link `'Invite ' + _himOrHer + ' to show you ' + _hisOrHer + ' devotion'`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $sexForced = false>>
+		<<fuck $tmpGirl>>
+	<</link>>
+<<else>>
+	<<link `'Claim ' + _himOrHer + ' before the altar'`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $sexForced = false>>
+		<<fuck $tmpGirl>>
+	<</link>>
+	<<link `'Take ' + _himOrHer + ' down to the basement'`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<set $tmpGirl.location = 'basement'>>
+		<<set $sexForced = false>>
+		<<set $sexSubGain = true>>
+		<<fuck $tmpGirl>>
+	<</link>>
+<</if>>
+<<link 'Leave it there for now' 'NPC view - guest'>><</link>>
+
+
+:: NPC church service - first talk
+<<set _mcName = setup.npc.mcName(_nun)>>
+/* Nights served at the church; newer nuns answer more tentatively */
+<<set _days = _nun.stats?.church ?? 0>>
+<<include 'NPC church service - altar'>>
+<<=_name>> is kneeling in front of it, trimming the candle wicks one by one. When <<=_heOrShe>> hears your footsteps <<=_heOrShe>> sets the knife down, rises and bows <<=_hisOrHer>> head to you.
+<br /><br />
+<center>
+	<<actionImage _nun working>>
+</center>
+<br />
+<<sayNpc _nun>>
+	<<=ucfirst(_mcName)>>. I'm glad you came. I've wanted to thank you for a while now. For this place, and for letting me serve here. Not many people get to spend their days doing something that matters anymore.
+<</sayNpc>>
+<br />
+<<you>>
+	Eve tells me you've been doing a lot of good.
+<</you>>
+<br />
+<<sayNpc _nun>>
+	I try. I help where I can, and I listen when people need someone to listen. But Eve says you might help me do more than that.
+<</sayNpc>>
+<br />
+<<=ucfirst(_heOrShe)>> hesitates, folding <<=_hisOrHer>> hands in front of <<=_himOrHer>>, and glances at the altar before meeting your eyes again.
+<br /><br />
+<<sayNpc _nun>>
+	May I ask you something? As the patron of this church.
+<</sayNpc>>
+<br />
+<<you>>
+	Go ahead.
+<</you>>
+<br />
+<<sayNpc _nun>>
+	What do you believe the divine should mean for this settlement? Not the stories, and not the words in the holy texts. What it truly means in your eyes. I would like to serve it the way you see it.
+<</sayNpc>>
+<br />
+<div id="cs_choices">
+	<<link '"The divine is holy and kind."'>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'kind')>>
+			<<you>>
+				Holy and kind. It's in every hungry person who gets fed, every wound that gets tended, every stranger who gets a place by the fire. Show people that, and you're showing them the divine.
+			<</you>>
+			<br />
+			<<=_name>> closes <<=_hisOrHer>> eyes as you speak, and when <<=_heOrShe>> opens them again they are bright and steady.
+			<br /><br />
+			<<sayNpc _nun>>
+				<<if _days < 10>>
+					Then that is what I'll try to be. Its hands. I'm still so new to this, and I don't always know the right thing to say, or when to say nothing at all. But I'll learn. I'll carry that kindness to everyone who needs it, in your name, and I'll pray that I find the right ways to serve.
+				<<else>>
+					Then that is what I'll be. Its hands. I'll carry that kindness to everyone who needs it, in your name, and I'll make sure they know where it comes from.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			<<=ucfirst(_heOrShe)>> kneels before the altar and you kneel beside <<=_himOrHer>>. <<=ucfirst(_hisOrHer)>> prayer is quiet, barely above a whisper: for the sick, for the hungry, for the ones who arrived with nothing. When you both rise, <<=_heOrShe>> seems lighter somehow, and more certain.
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+	<<link '"The divine is like sex, based on love."'>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'love')>>
+			<<set _inviteFocus = 'love'>>
+			<<you>>
+				I believe we reach the divine through connection, much like sex. Not just the act, but what's behind it. Two people giving themselves to each other completely, love made into something you can touch. Every time someone in this house reaches for another out of affection, that's the divine moving through them.
+			<</you>>
+			<br />
+			<<if _days < 20>>
+				Color floods into <<=_name>>'s cheeks, and for a moment <<=_heOrShe>> doesn't seem to know where to look. Then, slowly, <<=_hisOrHer>> eyes come back to yours.
+				<br /><br />
+				<<sayNpc _nun>>
+					That... isn't anything like what I've been reading in the holy texts. But I've seen it. Everywhere in this house. The way people look at each other here, the way they hold each other after a hard day. I always felt there was something sacred in it. I suppose I was too shy to call it that.
+				<</sayNpc>>
+				<br />
+				<<=ucfirst(_heOrShe)>> looks down at <<=_hisOrHer>> folded hands, turning the thought over. When <<=_heOrShe>> looks up again, <<=_hisOrHer>> voice is quieter, but steady.
+				<br /><br />
+				<<sayNpc _nun>>
+					I don't know that I'm ready to teach anyone about this. But if this is the way, then I'll trust it. I'll encourage it. I'll help them find each other, and help them open up to the love they're afraid to give. And I'll learn to teach by example, if that's what it takes.
+				<</sayNpc>>
+			<<else>>
+				Color rises in <<=_name>>'s cheeks, but <<=_heOrShe>> doesn't look away. If anything, <<=_hisOrHer>> eyes light up.
+				<br /><br />
+				<<sayNpc _nun>>
+					Yes. Yes, I've seen it. Everywhere in this house. The way people look at each other here, the way they hold each other after a hard day. I always felt there was something sacred in it, and I never had the words for it.
+				<</sayNpc>>
+				<br />
+				<<=ucfirst(_heOrShe)>> glances back toward the pews, where the settlers so often sit in pairs, and then turns to you with sudden conviction.
+				<br /><br />
+				<<sayNpc _nun>>
+					I'll encourage it. I'll help them find each other, and help them open up to the love they're afraid to give. And I'll teach by example, if that's what it takes.
+				<</sayNpc>>
+			<</if>>
+			<br />
+			You kneel together before the altar. Partway through, <<=_hisOrHer>> hand finds yours and <<=_hisOrHer>> fingers lace between your own. <<=ucfirst(_hisOrHer)>> prayer is whispered thanks: for warmth, for touch, for the people who share their beds and their hearts. When you open your eyes, <<=_heOrShe>> is looking at you, not at the altar.
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<include 'NPC church service - invite'>>
+		<</replace>>
+	<</link>>
+	<<link '"The divine is like sex, based on power."'>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'power')>>
+			<<set _inviteFocus = 'power'>>
+			<<you>>
+				I believe the divine moves through you like sex. Consuming, not soft. The divine is power. Being taken, being claimed, surrendering everything you are to something greater than yourself. There's an ecstasy in that surrender no prayer can match.
+			<</you>>
+			<br />
+			<<=_name>>'s breath catches. <<=ucfirst(_hisOrHer)>> lips part and <<=_hisOrHer>> pupils widen, and you watch <<=_himOrHer>> press <<=_hisOrHer>> thighs together beneath <<=_hisOrHer>> habit.
+			<br /><br />
+			/* Under 30 nights she balks at how far this strays from the holy texts she has begun studying; under 100 she accepts it but keeps the divine above the MC; past that, the MC is the object of her devotion */
+			<<sayNpc _nun>>
+				<<if _days < 30>>
+					Surrender... That's nothing like what I've been studying. The holy texts would call it blasphemy, to speak of the divine and of... that, in the same breath. And yet. Ecstasy and obedience as one and the same thing. To kneel, and to be used, and to find the divine there.
+				<<elseif _days < 100>>
+					Surrender... Ecstasy and obedience as one and the same thing. To kneel, and to be used, and to find the divine there.
+				<<else>>
+					Surrender... I've felt it for so long, and now you've given it a name. Ecstasy and obedience as one and the same thing. To kneel, and to be used, and to find the divine there. To find it in you.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			A shiver runs through <<=_himOrHer>>, and when <<=_heOrShe>> speaks again <<=_hisOrHer>> voice is lower.
+			<br /><br />
+			<<sayNpc _nun>>
+				<<if _days < 30>>
+					But you are the patron of this church, and I have to believe the divine brought me here for a reason. If this is the path you've been shown, then I'll trust you to guide me along it. They hold so much back. Pride, shame, fear. I'll help them let go of all of it, until there's nothing left standing between them and their surrender. I'll lead them there, with my words and with my body.
+				<<elseif _days < 100>>
+					They hold so much back. Pride, shame, fear. I'll help them let go of all of it, until there's nothing left standing between them and their surrender. To the divine, and to the one who shows us the way to it. I'll lead them there, with my words and with my body.
+				<<else>>
+					They hold so much back. Pride, shame, fear. I'll help them let go of all of it, until there's nothing left standing between them and their surrender. To you. You were sent to us, I'm certain of it now. I'll lead them to you, with my words and with my body.
+				<</if>>
+			<</sayNpc>>
+			<br />
+			<<if _days < 30>>
+				<<=ucfirst(_heOrShe)>> doesn't kneel beside you before the altar. After a moment's uncertainty, <<=_heOrShe>> kneels at your feet instead, facing you, head bowed and hands folded, and murmurs a prayer for guidance, and for the courage to follow where it leads.
+			<<elseif _days < 100>>
+				<<=ucfirst(_heOrShe)>> doesn't kneel beside you before the altar. <<=ucfirst(_heOrShe)>> kneels at your feet, facing you, head bowed and hands folded. The prayer <<=_heOrShe>> murmurs is still addressed to the divine, but <<=_heOrShe>> offers it kneeling before you, as the one who showed <<=_himOrHer>> the way.
+			<<else>>
+				<<=ucfirst(_heOrShe)>> doesn't kneel beside you before the altar. <<=ucfirst(_heOrShe)>> kneels at your feet, facing you, head bowed and hands folded, and the prayer <<=_heOrShe>> murmurs is not addressed to anything carved or painted. It is addressed to you.
+			<</if>>
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<include 'NPC church service - invite'>>
+		<</replace>>
+	<</link>>
+	<<link 'Maybe another time' 'NPC view - guest'>><</link>>
+</div>
+
+
+:: NPC church service - feral first talk
+<<include 'NPC church service - altar'>>
+<<=_name>> is crouched beside it, sorting candle stubs into neat little rows by size. <<=ucfirst(_heOrShe)>> catches your scent before you're halfway down the aisle, lifts <<=_hisOrHer>> head, and comes over to meet you.
+<br /><br />
+<center>
+	<<actionImage _nun working>>
+</center>
+<br />
+<<sayFeral _nun>>circles you once, sniffing at your sleeve, then settles back on <<=_hisOrHer>> heels at the foot of the altar and looks up at you, waiting<</sayFeral>>
+<br />
+Words have never meant much to <<=_himOrHer>>, and you are never sure how much of what Eve tells <<=_himOrHer>> actually lands. Eve has been showing <<=_himOrHer>> what to do here, and <<=_heOrShe>> copies it faithfully: lighting the candles, sweeping the floor, sitting close to the settlers who come in looking lost.
+<br /><br />
+But watching <<=_himOrHer>>, you can't shake the feeling that it goes deeper than imitation. When <<=_heOrShe>> sits beside someone in tears, <<=_heOrShe>> goes quiet in a way that is almost reverent. When <<=_heOrShe>> lights the candles, <<=_heOrShe>> stays to watch each flame catch, as if <<=_heOrShe>> is waiting for it to answer. <<=ucfirst(_heOrShe)>> could not tell you what faith is, or name a single passage from the holy texts, but whatever this place means, <<=_heOrShe>> seems to feel it somewhere words have never reached. If you want <<=_himOrHer>> to serve differently, you will have to show <<=_himOrHer>>, and trust <<=_himOrHer>> to feel the rest.
+<br /><br />
+<div id="cs_choices">
+	<<link `'Show ' + _himOrHer + ' kindness'`>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'kind')>>
+			An old settler is sitting alone in the back pew, hands knotted in his lap. You take a heel of bread from your pack, break it in two, and give one half to <<=_name>>. Then you walk the other half back to the old man, press it into his hands, and rest your hand on his shoulder for a moment.
+			<br /><br />
+			<<sayFeral _nun>>watches closely, head tilted, then trots after you and presses <<=_hisOrHer>> half of the bread into the old man's other hand, and looks back at you for approval<</sayFeral>>
+			<br />
+			You nod and scratch <<=_himOrHer>> gently behind the ear, and <<=_heOrShe>> leans into your hand, pleased with <<=_himOrHer>>self.
+			<br /><br />
+			Back at the altar you kneel and fold your hands. <<=_name>> drops down beside you and copies your pose exactly, peering sideways now and then to check that <<=_heOrShe>> has it right. Then <<=_heOrShe>> stops checking, and <<=_hisOrHer>> eyes drift closed, and for a long moment <<=_heOrShe>> is simply still. When you rise, <<=_heOrShe>> rises with you, and the look <<=_heOrShe>> gives you says <<=_heOrShe>> understood something you never had to explain.
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<link 'Continue' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+	<<link `'Show ' + _himOrHer + ' love'`>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'love')>>
+			<<set _inviteFocus = 'love'>>
+			You take <<=_hisOrHer>> hands and draw <<=_himOrHer>> close, wrapping your arms around <<=_himOrHer>> and stroking <<=_hisOrHer>> hair. <<=ucfirst(_heOrShe)>> stiffens for a heartbeat, then melts against you with a low, pleased hum and nuzzles into your neck.
+			<br /><br />
+			A couple of settlers are sitting together a few pews back, shoulders touching. You look at them, then back at <<=_name>>, and pull <<=_himOrHer>> in again.
+			<br /><br />
+			<<sayFeral _nun>>looks from the couple to you, then presses <<=_hisOrHer>> forehead to yours and rubs <<=_hisOrHer>> cheek along your jaw, a slow, contented rumble in <<=_hisOrHer>> chest<</sayFeral>>
+			<br />
+			You kneel before the altar, and <<=_heOrShe>> curls up against your side instead of kneeling, one hand resting on your thigh and <<=_hisOrHer>> head on your shoulder. It may not be how the holy texts describe prayer, but it feels like one, and from the slow, peaceful way <<=_heOrShe>> breathes against you, <<=_heOrShe>> feels it too.
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<include 'NPC church service - invite'>>
+		<</replace>>
+	<</link>>
+	<<link `'Show ' + _himOrHer + ' power'`>>
+		<<replace '#cs_choices'>>
+			<<addmins 30>>
+			<<set _effects = _cs.firstFocus(_nun, 'power')>>
+			<<set _inviteFocus = 'power'>>
+			You slide your hand into <<=_hisOrHer>> hair and close your fingers, firm but unhurried, and guide <<=_himOrHer>> down onto <<=_hisOrHer>> knees in front of you. <<=ucfirst(_heOrShe)>> resists for a heartbeat, then sinks, <<=_hisOrHer>> breath coming quicker. You tilt <<=_hisOrHer>> face up and hold <<=_himOrHer>> there.
+			<br /><br />
+			<<sayFeral _nun>>goes still beneath your hand, eyes dark and wide, then lowers <<=_hisOrHer>> head and presses <<=_hisOrHer>> lips to your knee<</sayFeral>>
+			<br />
+			When you let go, <<=_heOrShe>> stays exactly where you put <<=_himOrHer>>: kneeling, facing you, with the altar at <<=_hisOrHer>> back. Whatever <<=_heOrShe>> understood of the lesson, it was not that the altar is the thing to kneel to. But there is a hush about <<=_himOrHer>> now, a kind of awe, as though something sacred passed between you that no sermon could have put into words.
+			<br /><br />
+			<strong><<=_effects>></strong>
+			<br /><br />
+			<<include 'NPC church service - invite'>>
+		<</replace>>
+	<</link>>
+	<<link 'Maybe another time' 'NPC view - guest'>><</link>>
+</div>
+
+
+:: NPC church service - talk
+/* Later visits: change the nun's focus with less ceremony */
+<<set _focus = _cs.focus(_nun)>>
+<<if _isFeral>>
+	You find <<=_name>> at the altar. <<=ucfirst(_heOrShe)>> spots you right away and comes to meet you.
+	<br /><br />
+	<<sayFeral _nun>>bumps <<=_hisOrHer>> head against your shoulder in greeting, then looks up at you expectantly<</sayFeral>>
+	<br />
+<<else>>
+	<<set _mcName = setup.npc.mcName(_nun)>>
+	You find <<=_name>> at the altar. <<=ucfirst(_heOrShe)>> looks up as you approach and smiles.
+	<br /><br />
+	<<sayNpc _nun>>
+		<<=ucfirst(_mcName)>>. Is there something you need?
+	<</sayNpc>>
+	<br />
+<</if>>
+<div id="cs_choices">
+	<<link 'Talk about the nature of the divine'>>
+		<<replace '#cs_choices'>>
+			<<if _isFeral>>
+				You take <<=_hisOrHer>> hands, and <<=_heOrShe>> watches you closely, ready to be shown something new.
+			<<else>>
+				<<you>>
+					I've been thinking about what I told you before, about the divine.
+				<</you>>
+				<br />
+				<<sayNpc _nun>>
+					Oh? Tell me.
+				<</sayNpc>>
+			<</if>>
+			<br /><br />
+			<<for _option range _cs.FOCUSES>>
+				<<capture _option>>
+					<<if _isFeral>>
+						<<set _optionLabel = 'Show ' + _himOrHer + ' ' + { kind: 'kindness', love: 'love', power: 'power' }[_option]>>
+					<<else>>
+						<<set _optionLabel = 'The divine is ' + _cs.FOCUS_LABELS[_option].toLowerCase()>>
+					<</if>>
+					<<if _option === _focus>>
+						<div><<=_optionLabel>> [Current focus]</div>
+					<<else>>
+						<<link _optionLabel>>
+							<<addmins 15>>
+							<<run _cs.setFocus(_nun, _option)>>
+							<<replace '#cs_choices'>>
+								<<include 'NPC church service - changed'>>
+								<br /><br />
+								<<link 'Continue' 'NPC view - guest'>><</link>>
+							<</replace>>
+						<</link>>
+					<</if>>
+				<</capture>>
+			<</for>>
+			<<link 'Never mind' 'NPC view - guest'>><</link>>
+		<</replace>>
+	<</link>>
+	/* Other ways to help, once a day each with each nun (setup.churchHelp); the confession and the flock talk need words, the communion meal is for feral nuns */
+	<<set _help = setup.churchHelp>>
+	<<set _helpOptions = [
+		{ id: 'faith', passage: 'NPC church help - faith', label: (_isFeral ? 'Join ' + _himOrHer + ' in ' + _hisOrHer + ' devotions' : 'Join ' + _himOrHer + ' in acts of faith') + ' (Uses 30 minutes)' },
+		{ id: 'donate', passage: 'NPC church help - donate', label: 'Make a donation to the church' },
+		{ id: 'mercy', passage: 'NPC church help - mercy', label: 'Go with ' + _himOrHer + ' on a mission of mercy (Uses 1 hour)', focus: 'kind' },
+		{ id: 'flock', passage: 'NPC church help - flock', label: 'Talk with ' + _himOrHer + ' about ' + _hisOrHer + ' flock (Uses 20 minutes)', focus: 'love', words: true },
+		{ id: 'confession', passage: 'NPC church help - confession', label: 'Hear ' + _hisOrHer + ' confession (Uses 30 minutes)', focus: 'power', words: true },
+		{ id: 'communion', passage: 'NPC church help - communion', label: 'Share a communion meal with ' + _himOrHer + ' (Uses 1 food and 30 minutes)', feral: true }
+	].filter(o => (!o.focus || o.focus === _focus) && !(o.words && _isFeral) && !(o.feral && !_isFeral))>>
+	<<for _helpOption range _helpOptions>>
+		<<capture _helpOption>>
+			<<set _helpBlocked = _help.blockedBy(_nun, _helpOption.id)>>
+			<<if _helpBlocked>>
+				<div><<=_helpOption.label>> [<<=_helpBlocked>>]</div>
+			<<else>>
+				<<link _helpOption.label>>
+					<<replace '#cs_choices'>><<include _helpOption.passage>><</replace>>
+				<</link>>
+			<</if>>
+		<</capture>>
+	<</for>>
+	<<link 'Never mind' 'NPC view - guest'>><</link>>
+</div>
+
+
+:: NPC church service - changed
+/* Reaction to a new focus; _option holds it */
+<<if _isFeral>>
+	<<if _option === 'kind'>>
+		You walk <<=_himOrHer>> to a settler in the pews and share your water with them, and <<=_name>> copies you, carefully offering the cup.
+		<br /><br />
+		<<sayFeral _nun>>looks back at you with a small, pleased tilt of <<=_hisOrHer>> head, settling into the gentler rhythm<</sayFeral>>
+	<<elseif _option === 'love'>>
+		You draw <<=_himOrHer>> into a slow embrace and hold <<=_himOrHer>> there, stroking <<=_hisOrHer>> back.
+		<br /><br />
+		<<sayFeral _nun>>melts against you with a contented rumble, nuzzling into your neck<</sayFeral>>
+	<<else>>
+		You take a firm hold of <<=_hisOrHer>> hair and guide <<=_himOrHer>> down to <<=_hisOrHer>> knees.
+		<br /><br />
+		<<sayFeral _nun>>goes still and looks up at you with dark, wide eyes, then presses <<=_hisOrHer>> lips to your knee<</sayFeral>>
+	<</if>>
+<<else>>
+	<<if _option === 'kind'>>
+		<<you>>
+			I want you to serve with kindness. Feed the hungry, tend the sick, comfort the lost. That's where the divine lives.
+		<</you>>
+		<br />
+		<<sayNpc _nun>>
+			Then I'll be its hands. Thank you for reminding me.
+		<</sayNpc>>
+	<<elseif _option === 'love'>>
+		<<you>>
+			The divine is love, made into something you can touch. Help them find it in each other.
+		<</you>>
+		<br />
+		<<sayNpc _nun>>
+			Love... Yes. I can do that. I'll help them open their hearts, and show them how.
+		<</sayNpc>>
+	<<else>>
+		<<you>>
+			The divine is surrender. Teach them to let go of everything that holds them back, and to give themselves over. To me.
+		<</you>>
+		<br />
+		<<=ucfirst(_hisOrHer)>> breath catches, and <<=_heOrShe>> lowers <<=_hisOrHer>> eyes.
+		<br /><br />
+		<<sayNpc _nun>>
+			Yes. I'll lead them there. By word, and by example.
+		<</sayNpc>>
+	<</if>>
+<</if>>

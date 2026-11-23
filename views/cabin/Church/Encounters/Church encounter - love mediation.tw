@@ -1,0 +1,196 @@
+:: Church encounter - love mediation [bg-guesthouse]
+<h1 class="ptitle">GUEST HOUSE</h1>
+<br /><br />
+/* A loving nun helps two guests who are drawn to each other past a rough patch, and encourages them to make up the way lovers do. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Guest house'>>
+<<else>>
+<<set _nun = _cast.nun, _a = _cast.first, _b = _cast.second>>
+<<set _nunName = setup.displayName(_nun), _aName = setup.displayName(_a), _bName = setup.displayName(_b)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _couple = setup.npc.areMarriedToEachOther(_a, _b)>>
+<<set _aMc = setup.npc.mcName(_a), _bMc = setup.npc.mcName(_b), _nMc = setup.npc.mcName(_nun)>>
+
+You come in to find <<=_aName>> and <<=_bName>> on opposite ends of a bench, both pointedly studying the floor, with <<=_nunName>> kneeling on the boards in front of them and holding one of each of their hands.
+<br /><br />
+<<sayNpc _a>>
+	<<if _couple>>
+		I just want to feel like my <<=_b.gender === 1 ? 'husband' : 'wife'>> actually sees me. Is that too much?
+	<<else>>
+		I thought we had something. Then <<=setup.pronounceWhat(_b)>> spends the whole evening laughing with everyone else and barely looks at me.
+	<</if>>
+<</sayNpc>>
+<br />
+<<sayNpc _b>>
+	Because every time I do, you look away first! How am I supposed to know what you want?
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	Do you hear that? You're both afraid of the same thing. The holy texts tell us that love is a door you have to open from your own side. Neither of you can do it for the other. But you can both reach for the handle at the same time.
+<</sayNpc>>
+<br />
+<<=_nunName>> glances over at you, a little flushed, as if <<=_nHe>> isn't sure whether <<=_nHe>> has said too much or not quite enough.
+<br /><br />
+<<sayNpc _b>>
+	Oh, good, <<=_bMc>> is here. Now everyone gets to watch.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<link `'Let ' + _nHim + ' guide them'`>>
+		<<replace '#ce_choices'>>
+			<<addmins 5>>
+			<<sayNpc _nun>>
+				Let me try, <<=_nMc>>. I think they're closer than they look.
+			<</sayNpc>>
+			<br />
+			<<if setup.percentageChance(_ce.reconcileChance(_nun))>>
+				<<run _ce.byNun(_nun, _a, 'happy', 1, 2)>>
+				<<run _ce.byNun(_nun, _b, 'happy', 1, 2)>>
+				<<run _ce.betweenByNun(_nun, _a, _b, 1, 2)>>
+				<<run _fx.changeBetween(_a, _nun, 1, 2)>>
+				<<run _fx.changeBetween(_b, _nun, 1, 2)>>
+				You hang back and let <<=_nunName>> work. It doesn't take long. <<=_bName>> says something too quiet for you to hear, <<=_aName>> finally looks up, and then they are both talking at once, apologising over each other.
+				<br /><br />
+				<<sayNpc _nun>>
+					There. Now, don't let it go cold again. Words are a start, but the body remembers things the mind forgets. Go and remind each other.
+				<</sayNpc>>
+				<br />
+				<<if _ce.pairOk(_a, _b)>>
+					<<set _trio = [_a, _b, _nun]>>
+					<<set _nunJoins = _ce.pairOk(_nun, _a, _nun) && _ce.pairOk(_nun, _b, _nun) && !!_ce.guestScene(_trio) && setup.percentageChance(50)>>
+					<<set _together = _nunJoins ? _trio : [_a, _b]>>
+					<<set _scene = _ce.guestScene(_together)>>
+					<<if _scene>>
+						<<if _nunJoins>>
+							<<if _ce.nunYields(_nun, [_a, _b])>><<run _ce.byNun(_nun, _nun, 'sub', 1, 2)>><</if>>
+							<<=_aName>> takes <<=_bName>> by the hand and pulls <<=setup.pronounceWho(_b)>> toward the dormitory. At the door, <<=_bName>> looks back and holds out <<=setup.pronounceWhos(_b)>> other hand to <<=_nunName>>, and after only a moment's hesitation, <<=_nHe>> takes it.
+						<<else>>
+							<<=_aName>> takes <<=_bName>> by the hand and pulls <<=setup.pronounceWho(_b)>> toward the dormitory. <<=_nunName>> watches them go with a soft, satisfied smile.
+						<</if>>
+						<br /><br />
+						<div id="ce_after">
+							<<ceWatchLinks _scene _together>>
+							<<nurseryEffects>>
+						</div>
+					<<else>>
+						They leave arm in arm, heads bent close together.
+						<br /><br />
+						[[Continue|Guest house]]
+						<<nurseryEffects>>
+					<</if>>
+				<<else>>
+					They don't go quite as far as <<=_nunName>> would like, but they leave sitting close, their knees touching, and that is something.
+					<br /><br />
+					[[Continue|Guest house]]
+					<<nurseryEffects>>
+				<</if>>
+			<<else>>
+				You hang back and let <<=_nunName>> work, but this one is too raw. <<=_bName>> gets up first, then <<=_aName>>, and they go off in different directions. <<=_nunName>> sits back on <<=_nHis>> heels and lets out a long sigh.
+				<br /><br />
+				<<sayNpc _nun>>
+					Not today, then. But the door is still there.
+				<</sayNpc>>
+				<br />
+				[[Continue|Guest house]]
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+	<<for _side range [_a, _b]>>
+		<<capture _side>>
+			<<set _sideLabel = 'Side with ' + setup.displayName(_side)>>
+			<<link _sideLabel>>
+				<<replace '#ce_choices'>>
+					<<addmins 10>>
+					<<set _other = _side === _a ? _b : _a>>
+					<<set _sName = setup.displayName(_side)>>
+					<<run _fx.change(_side, 'happy', 1, 3)>>
+					<<run _fx.change(_side, 'relationship', 2, 4)>>
+					You tell them how it looks from where you're standing, and how it looks is that <<=_sName>> has a point. <<=setup.displayName(_other)>> throws up <<=setup.pronounceWhos(_other)>> hands and stalks off. <<=_nunName>> sighs and goes after <<=setup.pronounceWho(_other)>>, and <<=_sName>> is left on the bench, looking up at you with something warm and grateful in <<=setup.pronounceWhos(_side)>> eyes.
+					<br /><br />
+					<<if _ce.mcOk(_side)>>
+						<<sayNpc _side>>
+							Thank you for being on my side, <<=setup.npc.mcName(_side)>>. Nobody else ever is. Let me thank you properly?
+						<</sayNpc>>
+						<br />
+						<<set _blocked = _ce.mcBlockedBy()>>
+						<<set _thanksLabel = 'Let ' + setup.pronounceWho(_side) + ' thank you'>>
+						<<if _blocked>>
+							<div class="link-internal" style="background: #ccc"><<=_thanksLabel>> (<<=_blocked>>)</div>
+						<<else>>
+							<<set _sideOnly = [_side]>>
+							<<ceSexLink _thanksLabel 'solo' _sideOnly>>
+						<</if>>
+						[[Leave it at that|Guest house]]
+						<<nurseryEffects>>
+					<<else>>
+						<<sayNpc _side>>
+							Thank you, <<=setup.npc.mcName(_side)>>. It means a lot that somebody sees it my way.
+						<</sayNpc>>
+						<br />
+						[[Continue|Guest house]]
+						<<nurseryEffects>>
+					<</if>>
+				<</replace>>
+			<</link>>
+		<</capture>>
+	<</for>>
+	<<link `'Help ' + _nHim + ' bring them back together (Uses 30 minutes)'`>>
+		<<replace '#ce_choices'>>
+			<<addmins 30>>
+			<<run _ce.byNun(_nun, _a, 'happy', 2, 4)>>
+			<<run _ce.byNun(_nun, _b, 'happy', 2, 4)>>
+			<<run _ce.betweenByNun(_nun, _a, _b, 3, 5)>>
+			<<run _fx.changeBetween(_a, _nun, 2, 4)>>
+			<<run _fx.changeBetween(_b, _nun, 2, 4)>>
+			<<run [_a, _b, _nun].forEach(npc => _fx.change(npc, 'relationship', 3, 5))>>
+			You crouch down beside <<=_nunName>>. Between the two of you, you coax it out of them: the small hurts, the things each of them wanted to say and didn't. You make <<=_aName>> say the kind thing first, and <<=_bName>> has to bite <<=setup.pronounceWhos(_b)>> lip to keep from smiling.
+			<br /><br />
+			<<sayNpc _a>>
+				Alright, alright, <<=_aMc>>. I'm saying it. I missed you, okay?
+			<</sayNpc>>
+			<br />
+			<<=_nunName>> lays their joined hands together in <<=_nHis>> lap and closes <<=_nHis>> eyes.
+			<br /><br />
+			<<sayNpc _nun>>
+				Bless what has been mended here. Let it grow stronger where it was broken.
+			<</sayNpc>>
+			<br />
+			When <<=_nHe>> opens <<=_nHis>> eyes again, <<=_aName>> and <<=_bName>> are looking at each other the way they clearly wanted to all along, and then, together, they look at you.
+			<br /><br />
+			<<set _pair = _ce.threesome(_a, _b)>>
+			<<set _four = [_a, _b, _nun]>>
+			<<set _fourOk = _ce.foursomeOk(_four)>>
+			<<if _pair || _fourOk>>
+				<<sayNpc _nun>>
+					They want to thank you. And to celebrate. I think love this new should be shared, don't you?
+				<</sayNpc>>
+				<br />
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<if _blocked>>
+					<<if _pair>><div class="link-internal" style="background: #ccc">Celebrate with them both (<<=_blocked>>)</div><</if>>
+					<<if _fourOk>><div class="link-internal" style="background: #ccc">Celebrate with all three of them (<<=_blocked>>)</div><</if>>
+				<<else>>
+					<<if _pair>>
+						<<ceSexLink 'Celebrate with them both' 'threesome' _pair>>
+					<</if>>
+					<<if _fourOk>>
+						<<set _fourLabel = 'Celebrate with all three of them, ' + _nunName + ' included'>>
+						<<set _fourChanges = _ce.nunYields(_nun, [_a, _b]) ? _ce.byNunChanges(_nun, [{ npc: _nun, stat: 'sub', low: 1, high: 2 }]) : []>>
+						<<ceSexLink _fourLabel 'foursome' _four _fourChanges>>
+					<</if>>
+				<</if>>
+				[[Let them celebrate on their own|Guest house]]
+				<<nurseryEffects>>
+			<<else>>
+				[[Continue|Guest house]]
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

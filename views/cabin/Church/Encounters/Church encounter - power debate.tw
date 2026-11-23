@@ -1,0 +1,199 @@
+:: Church encounter - power debate
+<h1 class="ptitle"><<cabinName>></h1>
+<br /><br />
+/* A power nun and a doctor, the librarian or an evening school instructor, out on a walk on their break (or before class), are deep in a friendly argument outside the church: absolute faith against knowledge and reason. The player can take the nun's side, the scholar's, or bring the two together, which the nun suggests they explore in the church. */
+<<set _ce = setup.churchEncounters>>
+<<set _fx = setup.nurseryEncounters>>
+<<set _cast = _ce.cast()>>
+<<if !_cast>>
+	<<goto 'Youth district'>>
+<<else>>
+<<set _nun = _cast.nun, _scholar = _cast.scholar>>
+<<set _nunName = setup.displayName(_nun), _sName = setup.displayName(_scholar)>>
+<<set _nHe = setup.pronounceWhat(_nun), _nHis = setup.pronounceWhos(_nun), _nHim = setup.pronounceWho(_nun)>>
+<<set _sHe = setup.pronounceWhat(_scholar), _sHis = setup.pronounceWhos(_scholar), _sHim = setup.pronounceWho(_scholar)>>
+<<set _sMc = setup.npc.mcName(_scholar), _nMc = setup.npc.mcName(_nun)>>
+/* An evening school instructor's class ('doctor', 'teacher', 'mechanic', 'shopkeeper' or 'cook'), or null */
+<<set _class = setup.eveningSchool.instructorClass(_scholar)>>
+<<set _isDoctor = _scholar.assignedTo === 'hospital' || _class === 'doctor'>>
+<<set _sWork = _class ? 'the schoolroom' : (_isDoctor ? 'the hospital' : 'the library')>>
+<<set _sRole = _class ? 'a teacher' : (_isDoctor ? 'a doctor' : 'a scholar')>>
+
+Out by the church, where the street runs quiet, <<=_nunName>> and <<=_sName>> are walking slow circles around the well, too caught up in each other to notice anyone else. <<if _class>><<=_sName>> must be out stretching <<=_sHis>> legs before evening class<<else>><<=_sName>> must have stepped out of <<=_sWork>> for some air<</if>>, and found a great deal more than air waiting.
+<br /><br />
+<<sayNpc _scholar>>
+	<<if _isDoctor>>
+		Faith didn't set the bone I set this morning. Knowledge did. Somebody studied how a body heals, wrote it down, and I read it. That's how anything gets better.
+	<<elseif _class === 'mechanic'>>
+		Faith never got an engine running. Knowing what every part does, and why, and what happens when it fails? That's what gets the truck out the gate. And it's what I teach.
+	<<elseif _class === 'shopkeeper'>>
+		Faith doesn't balance a ledger. You can pray over the numbers all night and they still won't add up. Somebody has to check them, and that's what I teach people to do.
+	<<elseif _class === 'cook'>>
+		Faith never made a pot of stew any better. Knowing what's in it, what goes with what, how long to cook it? That's what feeds people. That's what I teach.
+	<<else>>
+		Every book in that library is somebody refusing to just accept what they were told. That's what kept anything worth knowing alive through the end of the world. Questions.
+	<</if>>
+<</sayNpc>>
+<br />
+<<sayNpc _nun>>
+	And how many of those somebodies died miserable, still asking? Knowledge is a ladder with no top to it. Faith is the ground you stand on. You climb all your life, <<=_sName>>. I've already arrived.
+<</sayNpc>>
+<br />
+<<sayNpc _scholar>>
+	Arrived where? You can't tell me where, because you've never looked!
+<</sayNpc>>
+<br />
+They are both smiling, and neither of them is giving an inch. Then <<=_nunName>> catches sight of you, and <<=_nHis>> smile changes into something slower.
+<br /><br />
+<<sayNpc _nun>>
+	<<=ucfirst(_nMc)>>. Settle this for us. <<=ucfirst(_sHe)>> thinks a mind should never stop questioning. I think there is nothing sweeter than someone who gives themselves over completely, without a single question. *stepping closer, laying a hand on your arm* You know that feeling, <<=_nMc>>. Someone kneeling to you, wanting nothing but to please. Tell <<=_sHim>> which is worth more.
+<</sayNpc>>
+<br />
+
+<div id="ce_choices">
+	<<link `'Side with ' + _nunName + ': devotion holds a settlement together'`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', 1, 2)>>
+			<<run _fx.change(_nun, 'relationship', 2, 4)>>
+			<<run _ce.byNun(_nun, _scholar, 'sub', 1, 2)>>
+			<<you>>
+				Questions are a luxury. A settlement where people trust each other and do what's asked, without arguing every point, is a settlement that's still standing in the spring.
+			<</you>>
+			<br />
+			<<=_sName>> opens <<=_sHis>> mouth, closes it again, and looks at the ground.
+			<br /><br />
+			<<sayNpc _scholar>>
+				I suppose... somebody does have to be told what to do, <<=_sMc>>. I'll think about it.
+			<</sayNpc>>
+			<br />
+			<<=_nunName>> watches <<=_sHim>> head off toward <<=_sWork>>, very pleased with <<=_nHim>>self, and then turns the whole of that pleasure on you.
+			<br /><br />
+			<<if _ce.mcOk(_nun)>>
+				<<sayNpc _nun>>
+					Thank you, <<=_nMc>>. Come inside with me. I'd like to show you what devotion looks like when nothing at all is held back.
+				<</sayNpc>>
+				<br />
+				<div id="ce_after">
+					<<set _blocked = _ce.mcBlockedBy()>>
+					<<set _nunLabel = 'Follow ' + _nunName + ' into the church'>>
+					<<set _justNun = [_nun], _noChanges = []>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc"><<=_nunLabel>> (<<=_blocked>>)</div>
+					<<else>>
+						<<ceSexLink _nunLabel 'solo' _justNun _noChanges 'church' 'Church'>>
+					<</if>>
+					<<link 'Another time'>>
+						<<replace '#ce_after'>>
+							You tell <<=_nHim>> another time. <<=ucfirst(_nHe)>> bows <<=_nHis>> head, still smiling, as if <<=_nHe>> has all the patience in the world and intends to use it on you.
+							<br /><br />
+							<<link 'Continue' 'Youth district'>><</link>>
+							<<nurseryEffects>>
+						<</replace>>
+					<</link>>
+					<<nurseryEffects>>
+				</div>
+			<<else>>
+				<<sayNpc _nun>>
+					Thank you, <<=_nMc>>. That will be a good lesson for <<=_sHim>>, and for me, a good day.
+				<</sayNpc>>
+				<br />
+				<<link 'Continue' 'Youth district'>><</link>>
+				<<nurseryEffects>>
+			<</if>>
+		<</replace>>
+	<</link>>
+	<<link `'Side with ' + _sName + ': a mind is for using'`>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_scholar, 'happy', 1, 2)>>
+			<<run _fx.change(_scholar, 'relationship', 2, 4)>>
+			<<run _ce.byNun(_nun, _nun, 'sub', 1, 2)>>
+			<<you>>
+				<<=_sName>>'s right. Faith that can't stand up to a question isn't worth much. And nobody in this settlement kneels because they've been told not to think, <<=_nunName>>. Not while I'm running it.
+			<</you>>
+			<br />
+			<<=_nunName>>'s hand slides from your arm. <<=ucfirst(_nHe)>> lowers <<=_nHis>> eyes, and after a moment, <<=_nHis>> head too.
+			<br /><br />
+			<<sayNpc _nun>>
+				As you say, <<=_nMc>>. I spoke out of turn.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _scholar>>
+				Ha! Thank you, <<=_sMc>>. I'm going to be insufferable about this for a week. <<=ucfirst(_nunName)>>, same time tomorrow? I've got another book you won't like.
+			<</sayNpc>>
+			<br />
+			<<link 'Continue' 'Youth district'>><</link>>
+			<<nurseryEffects>>
+		<</replace>>
+	<</link>>
+	<<link 'Suggest the two of them are closer than they think'>>
+		<<replace '#ce_choices'>>
+			<<run _fx.change(_nun, 'happy', 2, 4)>>
+			<<run _fx.change(_scholar, 'happy', 2, 4)>>
+			<<run _fx.change(_nun, 'relationship', 3, 5)>>
+			<<run _fx.change(_scholar, 'relationship', 3, 5)>>
+			<<run _ce.byNun(_nun, _nun, 'corruption', 2, 4)>>
+			<<run _ce.byNun(_nun, _scholar, 'corruption', 2, 4)>>
+			<<you>>
+				You're both describing the same thing from opposite ends. <<=ucfirst(_sRole)>> knows the body and the mind, every nerve and what it answers to. <<=_nunName>> knows how to let go of all of it. Put that knowledge in the service of that surrender, and I'd guess you'd find an ecstasy neither of you could reach alone.
+			<</you>>
+			<br />
+			There is a long pause. <<=_sName>> is the first to blush. <<=_nunName>> is the first to smile.
+			<br /><br />
+			<<sayNpc _scholar>>
+				That's... actually a testable hypothesis, <<=_sMc>>.
+			<</sayNpc>>
+			<br />
+			<<sayNpc _nun>>
+				Then let us test it. The church is right here, and it is very quiet at this hour. Come inside, both of you. I think we should explore just how well these ideas can be entwined.
+			<</sayNpc>>
+			<br />
+			<div id="ce_after">
+				<<set _blocked = _ce.mcBlockedBy()>>
+				<<set _trio = _ce.threesome(_scholar, _nun)>>
+				<<set _trioLabel = 'Explore it with them both in the church'>>
+				<<set _noChanges = []>>
+				/* Without a threesome, whichever of them is drawn to the MC */
+				<<set _solos = _trio ? [] : [_nun, _scholar].filter(npc => _ce.mcOk(npc))>>
+				<<if _trio>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc"><<=_trioLabel>> (<<=_blocked>>)</div>
+					<<else>>
+						<<ceSexLink _trioLabel 'threesome' _trio _noChanges 'church' 'Church'>>
+					<</if>>
+				<</if>>
+				<<for _solo range _solos>>
+					<<set _soloLabel = 'Explore it with ' + setup.displayName(_solo) + ' in the church'>>
+					<<set _justSolo = [_solo]>>
+					<<if _blocked>>
+						<div class="link-internal" style="background: #ccc"><<=_soloLabel>> (<<=_blocked>>)</div>
+					<<else>>
+						<<ceSexLink _soloLabel 'solo' _justSolo _noChanges 'church' 'Church'>>
+					<</if>>
+				<</for>>
+				<<if !_trio && !_solos.length>>
+					The two of them disappear into the church together, still talking, heads close, and you have a feeling the debate has been settled to everyone's satisfaction.
+					<br /><br />
+					<<link 'Continue' 'Youth district'>><</link>>
+				<<else>>
+					<<link 'Leave them to their research'>>
+						<<replace '#ce_after'>>
+							You leave them to it. The two of them disappear into the church together, heads close, and you have a feeling the debate has been settled to everyone's satisfaction.
+							<br /><br />
+							<<link 'Continue' 'Youth district'>><</link>>
+							<<nurseryEffects>>
+						<</replace>>
+					<</link>>
+				<</if>>
+				<<nurseryEffects>>
+			</div>
+		<</replace>>
+	<</link>>
+	<<link 'Leave them to their debate'>>
+		<<replace '#ce_choices'>>
+			You hold up your hands and leave them to it. Halfway down the street you can still hear them, and by the sound of it, neither of them is anywhere near done.
+			<br /><br />
+			<<link 'Continue' 'Youth district'>><</link>>
+		<</replace>>
+	<</link>>
+</div>
+<</if>>

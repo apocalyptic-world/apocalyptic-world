@@ -1,4 +1,9 @@
 :: Kitchen-room [Place bg-kitchen]
+/* Nun encounters (js/churchEncounters.js) ahead of the kitchen's random events, with their own daily limits */
+<<set _ceEncounter = setup.previousPassage() === 'Wood cabin' ? setup.churchEncounters.roll('kitchen') : null>>
+<<if _ceEncounter>>
+	<<goto _ceEncounter>>
+<</if>>
 <h1 class="ptitle">KITCHEN</h1>
 <br /><br />
 <<set _girlGuest = setup.getPersonsForLocation($guests, 'kitchen')>>
