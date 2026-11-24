@@ -22,6 +22,27 @@
         </div>
     <</if>>
 <</if>>
+<<if recall($suppCode)>>
+    <<if timeBetween('18:00', '21:00')>>
+        <<link 'Party night'>>
+            <<set $player.companionsHome = $player.companions>>
+            <<run setup.companions.clear()>>
+            <<goto 'Laura - date \[party\]'>>
+        <</link>>
+    <<else>>
+        <div class="link-internal" style="background: #ccc">
+            Party night
+        </div>
+    <</if>>
+    <<linkdesc>>
+        Time between 18:00-21:00
+    <</linkdesc>>
+<<else>>
+    <div class="link-internal disabled" style="background: #ccc">
+        Party night
+        <<notPatreonIcon>>
+    </div>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Laura - lab talk'>>
 <</link>>

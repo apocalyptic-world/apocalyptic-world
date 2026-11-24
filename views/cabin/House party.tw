@@ -1,20 +1,27 @@
-:: House party {"position":"456,841","size":"100,100"}
+:: House party
 <h1 class="ptitle"><<cabinName>></h1>
 <br /><br />
 <center>						
-	[img[setup.ImagePath+'places/cabin/house_party_table.webp']]
+	<<image 'places/cabin/house_party_table.webp'>>
 </center>
 <br /><br />
 The house party starts slowly. The table is set and guests begin to arrive slowly. There is food on the table that is not usually eaten on a daily basis, so everyone sits down at the table with an elevated mood. You open a champagne bottle and pour a glass for each guest.
 <br /><br />
+<<if isMetChar('laura') && ($characters.laura.quests?.party_date_day ?? -1) === $game.day>>
+	Laura sits next to you in her blue glitter dress, and every head at the table turns when she raises her glass. By the end of the night there is glitter on your hands, on your neck and on half the guests, and she can't stop laughing about it.
+	<<if ($characters.laura.quests.party_after_day ?? -1) === $game.day>>
+		Every time she catches your eye she leans in and whispers the same thing: the rest of her surprise is waiting for you after the party.
+	<</if>>
+	<br /><br />
+<</if>>
 <center>						
-	[img[setup.ImagePath+'places/cabin/house_party_champagne.webp']]
+	<<image 'places/cabin/house_party_champagne.webp'>>
 </center>
 <br /><br />
 Champagne is such a rare thing in this world that only a few have ever tasted it. For most people, this is the first time and their bodies are not accustomed to it, so they get drunk very quickly.
 <br /><br />
 <center>						
-	[img[setup.ImagePath+'places/cabin/house_party_champagne_mouth.webp']]
+	<<image 'places/cabin/house_party_champagne_mouth.webp'>>
 </center>
 <br /><br />
 The bottle is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
@@ -116,19 +123,19 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 			You bring another bottle and pour a glass for each of the guests, they thank you with a smile and flirtatiously look at you until one sits down in front of you and spreads her legs with the text "Thank you!"
 			<br /><br />
 			<center>						
-				[img[setup.ImagePath+'places/cabin/house_party_champagne_skirt.webp']]
+				<<image 'places/cabin/house_party_champagne_skirt.webp'>>
 			</center>
 			<br /><br />
 			Meanwhile, another girl is playfully teasing with the first bottle and starts to put it in her mouth to show how deep she can take it inside.
 			<br /><br />
 			<center>						
-				[img[setup.ImagePath+'places/cabin/house_party_champagne_bj.webp']]
+				<<image 'places/cabin/house_party_champagne_bj.webp'>>
 			</center>
 			<br /><br />
 			The girls applaud and cheer as the girl with the empty champagne bottle approaches, until one of the girls pushes you towards her and without hesitation, she pulls down your pants and takes your hard penis into her mouth.
 			<br /><br />
 			<center>						
-				[img[setup.ImagePath+'places/cabin/house_party_champagne_bj2.webp']]
+				<<image 'places/cabin/house_party_champagne_bj2.webp'>>
 			</center>
 			<br /><br />
 			<<for _guestI, _guest range $guests>>
@@ -153,7 +160,7 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 				In this moment of shared joy and camaraderie, <<=setup.displayName(_npc1)>>, <<=setup.displayName(_npc2)>> and <<=setup.displayName(_npc3)>> clearly in high spirits from the bubbly, approached you.
 				<br /><br />
 				<center>
-					[img[setup.ImagePath+'places/cabin/house_party_foursome.jpg']]
+					<<image 'places/cabin/house_party_foursome.jpg'>>
 				</center>
 				<br /><br />
 				<<sayNpc _npc1>>
@@ -280,6 +287,14 @@ The bottle is almost empty and the girls are so drunk that they decide to pour t
 	<<link 'Play Truth or Dare with the girls'>>
 		<<set $todWhere = 'party'>>
 		<<goto 'Truth or dare - setup'>>
+	<</link>>
+<</if>>
+<<if isMetChar('laura') && ($characters.laura.quests?.party_after_day ?? -1) === $game.day>>
+	<<link 'Go back to your room with Laura'>>
+		<<if $characters.blair.quests.house_party>>
+			<<set $characters.blair.quests.house_party_finished = true>>
+		<</if>>
+		<<goto 'Laura - date \[party\] after'>>
 	<</link>>
 <</if>>
 <<link 'Leave party'>>

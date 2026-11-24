@@ -1,0 +1,346 @@
+:: Laura - date \[party\] [bg-bedroom]
+<h1 class="ptitle">PARTY NIGHT</h1>
+<br />
+<<set _lpParty = isMetChar('blair') && ($characters.blair.quests.house_party ?? false) && setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && (setup.getAvailablePersons18yo($guests)[0] ?? []).length > 0>>
+<<addmins 30>>
+<<if _lpParty>>
+	You told Laura there would be a party at the fire place tonight. Food on the table, champagne, every girl from the guest house. She put down the pipette she was holding and looked at you over her glasses.
+	<br /><br />
+	<<laura>>
+		A party. A real one. Give me half an hour. And put on something that isn't covered in engine grease.
+	<</laura>>
+<<else>>
+	You asked Laura what she wanted to do tonight. She put down the pipette she was holding and thought about it for longer than you expected.
+	<br /><br />
+	<<laura>>
+		I want a party. Nobody throws parties anymore, so I'm throwing one. The guest list is you. Give me half an hour. And put on something that isn't covered in engine grease.
+	<</laura>>
+<</if>>
+<br />
+You went back to your room, sat down on the bed with the list of everything the settlement still needed, and the half hour went by without you noticing. You were still in the old grey shorts you wore around the cabin.
+<br /><br />
+<<video 'laura/dressup1'>>
+<br /><br />
+Then the door opened and Laura walked in. For a second you didn't recognise her. She was wearing a short pale blue dress that glittered every time she moved, with thin straps over her shoulders and a skirt that stopped high on her thighs. Clear high heels you had never seen before. Her hair was down. She stopped in front of you and spread her arms.
+<br /><br />
+<<laura>>
+	Honey? Why aren't you dressed?
+<</laura>>
+<br />
+<<you>>
+	I... thought I was.
+<</you>>
+<br />
+<<video 'laura/dressup2'>>
+<br /><br />
+She took the list out of your hands, looked at your face and crouched down in front of the bed so her eyes were level with yours. The last of the evening light came in through the window and the dress threw little sparks across the wall.
+<br /><br />
+<<if _lpParty>>
+	<<laura>>
+		I know that look. The fences, the food, whoever is angry at you this week. Just forget about it. For one night. You can enjoy the evening, enjoy the party and have fun with your friends. It will all still be here tomorrow.
+	<</laura>>
+<<else>>
+	<<laura>>
+		I know that look. The fences, the food, whoever is angry at you this week. Just forget about it. For one night. You can enjoy the evening and enjoy the party, even if it's only the two of us. It will all still be here tomorrow.
+	<</laura>>
+<</if>>
+<br />
+<<you>>
+	Yeah.
+<</you>>
+<br />
+<<laura>>
+	Good. Now. I have a surprise for you. Are you ready?
+<</laura>>
+<br />
+<div id="lpd_show">
+<<set _lpShowLabel = 'Let her show you the surprise'>>
+<<linkreplace _lpShowLabel>>
+	<<run $('#lpd_wait').hide()>>
+	<<video 'laura/dressup3'>>
+	<br /><br />
+	She stood up, stepped back into the middle of the room and turned once on her heels so the skirt flared out and the whole dress sparkled. Then she turned her back to you, lifted the skirt up over her hips and bent forward. She wasn't wearing anything underneath. She spread her cheeks with both hands, and between them sat a jewelled butt plug.
+	<br /><br />
+	<<you>>
+		What is that?
+	<</you>>
+	<br />
+	<<laura>>
+		It's a butt plug. And before you ask, I traded a box of bandages for it at the market and boiled it twice. That's for later. After the party.
+	<</laura>>
+	<br />
+	<<video 'laura/dressup4'>>
+	<br /><br />
+	Before you could say anything she climbed into your lap and sat astride you, the skirt bunched over her thighs. She hooked her thumbs under the thin straps, pulled the top of the dress down below her tits and cupped them in her hands, smiling at you.
+	<br /><br />
+	<<if _lpParty>>
+		<<laura>>
+			A little teaser. Every one of them out there is going to look at this dress tonight. Only you get what's under it. And after that we have the whole night to ourselves.
+		<</laura>>
+	<<else>>
+		<<laura>>
+			A little teaser. Of what you're getting tonight. The whole night, just the two of us.
+		<</laura>>
+	<</if>>
+	<br />
+	<div id="lpd_bj">
+	<<set _lpAfter = false>>
+	<<include 'Laura - date \[party\] sex'>>
+	</div>
+	<div id="lpd_later">
+	<<set _lpLaterLabel = 'Kiss her and save the rest for after the party'>>
+	<<linkreplace _lpLaterLabel>>
+		<<run $('#lpd_bj').hide()>>
+		You kissed her, slowly, and pulled the straps of her dress back up over her shoulders. She raised an eyebrow at you.
+		<br /><br />
+		<<laura>>
+			Patience. I didn't know you had any. Fine. Then it will be even better later.
+		<</laura>>
+		<br />
+		<<set _lpSexDone = false>>
+		<<include 'Laura - date \[party\] end'>>
+	<</linkreplace>>
+	</div>
+<</linkreplace>>
+</div>
+<div id="lpd_wait">
+<<set _lpWaitLabel = 'Tell her the surprise can wait'>>
+<<linkreplace _lpWaitLabel>>
+	<<run $('#lpd_show').hide()>>
+	You stood up, kissed her on the forehead and told her the surprise could wait. She looked a little disappointed, then fixed her hair and smiled.
+	<br /><br />
+	<<laura>>
+		Fine. Your loss. For now.
+	<</laura>>
+	<br />
+	<<set _lpSexDone = false>>
+	<<include 'Laura - date \[party\] end'>>
+<</linkreplace>>
+</div>
+
+
+:: Laura - date \[party\] sex
+<<set _lpBjLabel = 'Lean back and watch her unzip you and suck your cock'>>
+<<linkreplace _lpBjLabel>>
+	/* After the party (or staying in) the scene can sit inside #lpd_later, so only hide the goodnight link then */
+	<<if _lpAfter>>
+		<<run $('#lpd_sleep').hide()>>
+	<<else>>
+		<<run $('#lpd_later').hide()>>
+	<</if>>
+	<<video 'laura/dressup5'>>
+	<br /><br />
+	You leaned back on your elbows and just watched her. She slid off your lap, stretched out on her stomach between your legs and unzipped your shorts without taking her eyes off you. She pulled them down, wrapped her hand around your cock and took it into her mouth, looking up at you over her glasses.
+	<br /><br />
+	<<set $characters.laura.bj = Math.min(($characters.laura.bj ?? 0) + 10, 100)>>
+	<<run setup.sexActs.blowsCock($characters.laura, $player)>>
+	<<laura>>
+		Mmm...
+	<</laura>>
+	<br />
+	<<set _lpBj2Label = 'Lie back and let her keep sucking your cock'>>
+	<<linkreplace _lpBj2Label>>
+		<<video 'laura/dressup6'>>
+		<br /><br />
+		You lay back and let her take her time. Her hand stayed wrapped around the base while her lips slid up and down your shaft, slow and wet, until her eyes closed and she was humming around your cock.
+		<br /><br />
+		<<run setup.sexActs.blowsCock($characters.laura, $player)>>
+		<<set _lpRideLabel = 'Pull her up on top and let her ride your cock'>>
+		<<linkreplace _lpRideLabel>>
+			<<set $characters.laura.pussy = Math.min(($characters.laura.pussy ?? 0) + 10, 100)>>
+			<<run setup.sexActs.fucksPussy($player, $characters.laura)>>
+			<<if $characters.laura.virgin>><<run setup.npc.addHistory($characters.laura, 'virgin_lost', { with: 'mc' })>><</if>>
+			<<set $characters.laura.virgin = false>>
+			<<video 'laura/dressup7'>>
+			<br /><br />
+			She crawled up over you, pulled the top of the dress down off her tits and sat astride your hips with the skirt bunched up around her waist. She took your cock in her hand and rubbed the head along her wet pussy, looking down at you, then guided it in and sank down on it.
+			<br /><br />
+			<<laura>>
+				Every one of those was a little teaser. This is what you get.
+			<</laura>>
+			<br />
+			<<set _lpRide2Label = 'Hold her hips and let her keep riding your cock'>>
+			<<linkreplace _lpRide2Label>>
+				<<video 'laura/dressup8'>>
+				<br /><br />
+				She rode you slowly, the dress pushed into a crumpled band around her middle. She held it up out of the way with one hand and ran the other over her tits and her stomach. The glitter had come off the dress and was everywhere, on her skin, on your chest, on the sheets. She looked down at it and laughed.
+				<br /><br />
+				<<laura>>
+					Mmm, there's glitter everywhere. I like it. It's like you're fucking a stripper, isn't it?
+				<</laura>>
+				<br />
+				<<run setup.sexActs.fucksPussy($player, $characters.laura)>>
+				<<set _lpRide3Label = 'Thrust up into her pussy and make her ride you harder'>>
+				<<linkreplace _lpRide3Label>>
+					<<video 'laura/dressup9'>>
+					<br /><br />
+					You grabbed her hips and thrust up into her. She rode you harder, bouncing on your cock with her thighs spread wide, the dress bunched up at her chest, and threw her head back. Her moans got louder and louder until her whole body tensed and she came on your cock, shaking on top of you.
+					<br /><br />
+					<<run setup.sexActs.fucksPussy($player, $characters.laura)>>
+					<<set $characters.laura.horny = 0>>
+					<<set $characters.laura.orgasms ??= 0>>
+					<<set $characters.laura.orgasms++>>
+					<div id="lpd_cum_in">
+					<<set _lpInLabel = 'Hold her down on your cock and cum inside her pussy'>>
+					<<linkreplace _lpInLabel>>
+						<<run $('#lpd_cum_out').hide()>>
+						<<horny_reset>>
+						<<if setup.pregnancyChance($characters.laura)>>
+							<<set $characters.laura.pregnancy_father = 'mc'>>
+							<<set $characters.laura.pregnancy = 0>>
+						<</if>>
+						<center>
+							<<image 'game/misc/creampie_cowgirl.webp'>>
+						</center>
+						<br />
+						You held her hips down, pushed up as deep as you could and came inside her. She stayed sitting on your cock and rocked slowly through every pulse, her hands flat on your chest.
+						<br /><br />
+						<<laura>>
+							Oh... I can feel all of it.
+						<</laura>>
+						<br />
+						When she finally climbed off you she sat on the edge of the bed, pulled the straps back over her shoulders and looked at the sheets. They sparkled.
+						<br /><br />
+						<<include 'Laura - date \[party\] sex end'>>
+					<</linkreplace>>
+					</div>
+					<div id="lpd_cum_out">
+					<<set _lpOutLabel = 'Pull out and cum on her stomach'>>
+					<<linkreplace _lpOutLabel>>
+						<<run $('#lpd_cum_in').hide()>>
+						<<horny_reset>>
+						<center>
+							<<image 'game/misc/cum_on_stomach.webp'>>
+						</center>
+						<br />
+						You lifted her off your cock, rolled her onto her back and came all over her stomach. Your cum ran down her skin and mixed with the glitter.
+						<br /><br />
+						<<laura>>
+							Now that's going to be fun to wash off.
+						<</laura>>
+						<br />
+						She wiped herself clean with the corner of the sheet, pulled the straps back over her shoulders and looked at the bed. It sparkled.
+						<br /><br />
+						<<include 'Laura - date \[party\] sex end'>>
+					<</linkreplace>>
+					</div>
+				<</linkreplace>>
+			<</linkreplace>>
+		<</linkreplace>>
+	<</linkreplace>>
+<</linkreplace>>
+<<if _lpAfter>>
+	<div id="lpd_sleep">
+	<<link 'Kiss her goodnight and go to sleep'>>
+		<<if $player.companionsHome>>
+			<<set $player.companions = $player.companionsHome>>
+			<<run delete $player.companionsHome>>
+		<</if>>
+		<<goto 'Bedroom'>>
+	<</link>>
+	</div>
+<</if>>
+
+
+:: Laura - date \[party\] sex end
+<<set $characters.laura.happy = Math.min(($characters.laura.happy ?? 0) + 10, 100)>>
+<<set $characters.laura.relationship = Math.min(($characters.laura.relationship ?? 0) + 5, 100)>>
+<<addmins 60>>
+<<laura>>
+	You'll be finding that for a week.
+<</laura>>
+<br />
+<<if _lpAfter>>
+	She curled up next to you, glitter and all, and was asleep before you had pulled the blanket over the two of you.
+	<br /><br />
+	<<link 'Leave'>>
+		<<if $player.companionsHome>>
+			<<set $player.companions = $player.companionsHome>>
+			<<run delete $player.companionsHome>>
+		<</if>>
+		<<goto 'Bedroom'>>
+	<</link>>
+<<else>>
+	<<set _lpSexDone = true>>
+	<<include 'Laura - date \[party\] end'>>
+<</if>>
+
+
+:: Laura - date \[party\] end
+<<if _lpParty>>
+	Outside the window the first guests were already laughing at the tables by the fire place.
+	<br /><br />
+	<div id="lpd_go">
+	<<link 'Take her to the party'>>
+		<<set $characters.laura.quests.party_date_day = $game.day>>
+		<<if !_lpSexDone>>
+			<<set $characters.laura.quests.party_after_day = $game.day>>
+		<</if>>
+		<<set $player.companions = $player.companionsHome ?? new Set()>>
+		<<run delete $player.companionsHome>>
+		<<goto 'House party'>>
+	<</link>>
+	<<linkdesc>>
+		-20 food, -1 champagne
+	<</linkdesc>>
+	</div>
+	<div id="lpd_stay">
+	<<set _lpStayLabel = 'Stay in with her'>>
+	<<linkreplace _lpStayLabel>>
+		<<run $('#lpd_go').hide()>>
+		<<addmins 60>>
+		You never made it to the fire place. The two of you sat by the window instead, listening to the party outside, and Laura told you about the parties she used to go to before the collapse. Every one of them had been worse than this one.
+		<br /><br />
+		<<if _lpSexDone>>
+			<<link 'Leave'>>
+				<<set $player.companions = $player.companionsHome ?? new Set()>>
+				<<run delete $player.companionsHome>>
+				<<goto 'Bedroom'>>
+			<</link>>
+		<<else>>
+			When the music outside finally died down, she pulled you back to the bed, pushed you down onto the edge of it and climbed into your lap.
+			<br /><br />
+			<<laura>>
+				The party's over. Now you get the rest of your surprise.
+			<</laura>>
+			<br />
+			<<set _lpAfter = true>>
+			<<include 'Laura - date \[party\] sex'>>
+		<</if>>
+	<</linkreplace>>
+	</div>
+<<else>>
+	<<addmins 60>>
+	She poured two glasses of something from her lab that she swore was drinkable, and the two of you had your party for two by the window until it got dark.
+	<br /><br />
+	<<if _lpSexDone>>
+		<<link 'Leave'>>
+			<<set $player.companions = $player.companionsHome ?? new Set()>>
+			<<run delete $player.companionsHome>>
+			<<goto 'Bedroom'>>
+		<</link>>
+	<<else>>
+		When the glasses were empty she took yours out of your hand, pulled you back to the bed, pushed you down onto the edge of it and climbed into your lap.
+		<br /><br />
+		<<laura>>
+			The party's over. Now you get the rest of your surprise.
+		<</laura>>
+		<br />
+		<<set _lpAfter = true>>
+		<<include 'Laura - date \[party\] sex'>>
+	<</if>>
+<</if>>
+
+
+:: Laura - date \[party\] after [bg-bedroom]
+<h1 class="ptitle">PARTY NIGHT</h1>
+<br />
+<<run delete $characters.laura.quests.party_after_day>>
+When the last of the champagne was gone, Laura caught your hand and pulled you away from the fire place. Her cheeks were red, and there was glitter in her hair, on her neck and on her hands. Back in your room she pushed you down onto the edge of the bed and climbed into your lap.
+<br /><br />
+<<laura>>
+	I promised you after the party. The party's over.
+<</laura>>
+<br />
+<<set _lpAfter = true>>
+<<include 'Laura - date \[party\] sex'>>

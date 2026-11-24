@@ -372,6 +372,8 @@ Save.onLoad.add(function (save) {
     if (save.state.history[save.state.index].variables.characters.laura?.name) {
         save.state.history[save.state.index].variables.characters.laura.race ??= 'white';
         save.state.history[save.state.index].variables.characters.laura.gender ??= 0;
+        /* Laura is always into men (she was rolled like a random girl, so some saves have her as a lesbian) */
+        save.state.history[save.state.index].variables.characters.laura.likesGuys = true;
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
