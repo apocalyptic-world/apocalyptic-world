@@ -162,7 +162,7 @@ setup.settlements = {
 			traits:            ['fanatical', 'isolationist', 'charismatic_leader'],
 			production:        { food: 3, cloth: 1, flower: 1 },
 			tradeGoods:        ['food', 'cloth', 'flower'],
-			wantsGoods:        ['book', 'food', 'cloth', 'candle', 'flower'],
+			wantsGoods:        ['book', 'food', 'cloth', 'flower'],
 			defenseMultiplier: 1.1,
 			description:       'A cult compound led by a charismatic figure. Outsiders are viewed with deep suspicion — or as potential converts.',
 			canSlaveTrade:     false,
