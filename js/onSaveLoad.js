@@ -700,7 +700,9 @@ Save.onLoad.add(function (save) {
         }
     });
 
-    /* sex act counters: statsSex (acts with anyone) → generalSexStats, sexStats (acts with the MC) → mainCharSexStats,
+    /* sex act counters: statsSex (acts with anyone) → mainCharSexStats if other proof shows the MC slept with her, else generalSexStats (
+       saves converted when it all went to generalSexStats are moved over once, setup.sexActs.reattributeLegacy),
+       sexStats (acts with the MC) → mainCharSexStats,
        in every NPC of every history moment (best effort, see setup.sexActs.migrateLegacyCounters); the per-scene
        $sexStats flags became $sexActsThisScene.
        Then the counters are made sparse (setup.sexActs.compactCounters): older saves held all 39 metrics at 0.
@@ -716,6 +718,7 @@ Save.onLoad.add(function (save) {
             seen.add(value);
             if (typeof value.gender !== 'undefined') {
                 setup.sexActs.migrateLegacyCounters(value);
+                setup.sexActs.reattributeLegacy(value);
                 setup.sexActs.compactCounters(value);
                 if (!setup.humans.has(Number(value.gender), 'pussy')) {
                     delete value.pussy;

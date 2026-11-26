@@ -384,7 +384,7 @@ setup.sexActs = (function () {
     // best effort: only what has a clear meaning; anything else (and anything the NPC's anatomy rules out) is dropped
     const LEGACY = {
         statsSex: {
-            counter: COUNTERS.others,   // mixed the MC with everyone else, so it can't be split
+            counter: null,              // mixed the MC with everyone else, so it can't be split: see legacyMixedCounter
             metrics: {
                 bj: 'givenBlowJob', sn: 'mutualSixtyNine', dp: 'givenDeepThroatCock',
                 pussy: 'receivedPussyFucked', pussy_fisting: 'receivedPussyFisting',
@@ -406,6 +406,17 @@ setup.sexActs = (function () {
         if (metric.startsWith('received') && NEEDS_PUSSY.test(metric)) return hasPussy(npc);
         if (NEEDS_COCK_RECEIVED.test(metric)) return hasCock(npc);
         return true;
+    }
+
+    /** Where the mixed old counter (statsSex) goes. It held acts with the MC and with anyone else (street clients,
+        kidnappers, guest house scenes), so it goes "with the MC" only when something else shows he slept with her: old
+        acts with him (sexStats), or the proof setup.npc.sleptWithMc reads (history, a marriage to him, a pregnancy by
+        him). Otherwise "with others", and npc.legacySexUnknown keeps the doubt. Children aren't looked up: on load the
+        save isn't in State yet. */
+    function legacyMixedCounter(npc) {
+        const oldWithMc = !!npc?.sexStats && typeof npc.sexStats === 'object'
+            && Object.values(npc.sexStats).some(value => Number(value) > 0);
+        return oldWithMc || setup.npc.sleptWithMc(npc, () => null) ? COUNTERS.mc : COUNTERS.others;
     }
 
     return Object.freeze({
@@ -520,21 +531,24 @@ setup.sexActs = (function () {
         },
 
         /**
-         * Converts an NPC from an old save: statsSex → generalSexStats, sexStats → mainCharSexStats (best effort, see
-         * LEGACY), then deletes the old counters. Returns true if anything was converted.
+         * Converts an NPC from an old save: statsSex → mainCharSexStats when other proof shows the MC slept with her, else
+         * generalSexStats (see legacyMixedCounter), sexStats → mainCharSexStats (best effort, see LEGACY), then deletes
+         * the old counters. Returns true if anything was converted.
          * statsSex mixed acts with the MC and with anyone else, so when it held any act, npc.legacySexUnknown is set:
-         * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour;
-         * setup.npc.sleptWithMc stays precise.
+         * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour.
          */
         migrateLegacyCounters: function (npc) {
             let changed = false;
-            for (const [oldKey, { counter: newKey, metrics }] of Object.entries(LEGACY)) {
+            const mixedKey = npc?.statsSex ? legacyMixedCounter(npc) : null;   // before sexStats is converted and deleted
+            for (const [oldKey, { counter, metrics }] of Object.entries(LEGACY)) {
                 const old = npc?.[oldKey];
                 if (!old || typeof old !== 'object') {
                     continue;
                 }
+                const newKey = counter ?? mixedKey;
                 if (oldKey === 'statsSex' && Object.values(old).some(value => Number(value) > 0)) {
                     npc.legacySexUnknown = true;
+                    npc.legacySexReattributed = true;   // already in the right counter, see reattributeLegacy
                 }
                 for (const [oldMetric, newMetric] of Object.entries(metrics)) {
                     const value = Number(old[oldMetric]) || 0;
@@ -544,6 +558,36 @@ setup.sexActs = (function () {
                 }
                 delete npc[oldKey];
                 changed = true;
+            }
+            return changed;
+        },
+
+        /**
+         * Saves converted before statsSex could go "with the MC" put it all in generalSexStats. Once per NPC, when other
+         * proof shows the MC slept with her (legacyMixedCounter), moves the metrics statsSex could have filled
+         * (LEGACY.statsSex) from generalSexStats to mainCharSexStats. NPCs without that proof keep everything "with
+         * others". Acts with others in those metrics since the conversion (0.92) move too: the counter can't tell them
+         * apart, and she slept with the MC either way. Returns true if anything was moved.
+         */
+        reattributeLegacy: function (npc) {
+            if (npc?.legacySexUnknown !== true || npc.legacySexReattributed) {
+                return false;
+            }
+            npc.legacySexReattributed = true;
+            if (legacyMixedCounter(npc) !== COUNTERS.mc) {
+                return false;
+            }
+            let changed = false;
+            for (const metric of Object.values(LEGACY.statsSex.metrics)) {
+                const value = countIn(npc, COUNTERS.others, metric);
+                if (value > 0) {
+                    add(npc, COUNTERS.mc, metric, value);
+                    delete npc[COUNTERS.others][metric];
+                    changed = true;
+                }
+            }
+            if (npc[COUNTERS.others] && Object.keys(npc[COUNTERS.others]).length === 0) {
+                delete npc[COUNTERS.others];
             }
             return changed;
         },

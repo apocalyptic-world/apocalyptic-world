@@ -63,8 +63,9 @@ Object.assign(setup.npc ??= {}, {
 
 	/* True when the MC has had sex with npc: an act with the MC in her counters (setup.sexActs.hadSexWithMc), or proof
 	   kept elsewhere: her history (first intimate moment, virginity lost to the MC), a marriage to the MC (current or
-	   past), a pregnancy by him or a child by him. Old saves converted their mixed sex counter to "with others" (it
-	   can't be split), so for them the history and family are what show it. findNpc resolves the kids' ids. */
+	   past), a pregnancy by him or a child by him. Old saves' mixed sex counter (it can't be split) went "with you" only
+	   when this proof or old acts with the MC showed it, else "with others" (setup.sexActs.migrateLegacyCounters).
+	   findNpc resolves the kids' ids. */
 	sleptWithMc: function(npc, findNpc = setup.getNpcById) {
 		if (!npc) return false;
 		if (setup.sexActs.hadSexWithMc(npc)) return true;
