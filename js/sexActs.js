@@ -384,7 +384,7 @@ setup.sexActs = (function () {
     // best effort: only what has a clear meaning; anything else (and anything the NPC's anatomy rules out) is dropped
     const LEGACY = {
         statsSex: {
-            counter: COUNTERS.others,   // mixed the MC with everyone else, so it can't be split
+            counter: null,              // mixed the MC with everyone else, so it can't be split: see legacyMixedCounter
             metrics: {
                 bj: 'givenBlowJob', sn: 'mutualSixtyNine', dp: 'givenDeepThroatCock',
                 pussy: 'receivedPussyFucked', pussy_fisting: 'receivedPussyFisting',
@@ -406,6 +406,14 @@ setup.sexActs = (function () {
         if (metric.startsWith('received') && NEEDS_PUSSY.test(metric)) return hasPussy(npc);
         if (NEEDS_COCK_RECEIVED.test(metric)) return hasCock(npc);
         return true;
+    }
+
+    /** Where the mixed old counter (statsSex) goes: most of it came from the MC's sex scenes, so "with the MC", unless
+        the NPC is married to someone else, whose acts it then most likely was. */
+    function legacyMixedCounter(npc) {
+        const fam = npc?.family ?? {};
+        const spouses = [...(fam.wives ?? []), ...(fam.husband ? [fam.husband] : [])];
+        return spouses.some(id => id && id !== 'mc') ? COUNTERS.others : COUNTERS.mc;
     }
 
     return Object.freeze({
@@ -520,21 +528,23 @@ setup.sexActs = (function () {
         },
 
         /**
-         * Converts an NPC from an old save: statsSex → generalSexStats, sexStats → mainCharSexStats (best effort, see
-         * LEGACY), then deletes the old counters. Returns true if anything was converted.
+         * Converts an NPC from an old save: statsSex → mainCharSexStats (or generalSexStats when the NPC is married to
+         * someone else, see legacyMixedCounter), sexStats → mainCharSexStats (best effort, see LEGACY), then deletes the
+         * old counters. Returns true if anything was converted.
          * statsSex mixed acts with the MC and with anyone else, so when it held any act, npc.legacySexUnknown is set:
-         * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour;
-         * setup.npc.sleptWithMc stays precise.
+         * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour.
          */
         migrateLegacyCounters: function (npc) {
             let changed = false;
-            for (const [oldKey, { counter: newKey, metrics }] of Object.entries(LEGACY)) {
+            for (const [oldKey, { counter, metrics }] of Object.entries(LEGACY)) {
                 const old = npc?.[oldKey];
                 if (!old || typeof old !== 'object') {
                     continue;
                 }
+                const newKey = counter ?? legacyMixedCounter(npc);
                 if (oldKey === 'statsSex' && Object.values(old).some(value => Number(value) > 0)) {
                     npc.legacySexUnknown = true;
+                    npc.legacySexReattributed = true;   // already in the right counter, see reattributeLegacy
                 }
                 for (const [oldMetric, newMetric] of Object.entries(metrics)) {
                     const value = Number(old[oldMetric]) || 0;
@@ -544,6 +554,35 @@ setup.sexActs = (function () {
                 }
                 delete npc[oldKey];
                 changed = true;
+            }
+            return changed;
+        },
+
+        /**
+         * Saves converted before statsSex went "with the MC" put it all in generalSexStats. Once per NPC, moves the
+         * metrics statsSex could have filled (LEGACY.statsSex) from generalSexStats to mainCharSexStats, unless the NPC is
+         * married to someone else. Acts with others counted since the conversion move too: the counter can't tell them
+         * apart. Returns true if anything was moved.
+         */
+        reattributeLegacy: function (npc) {
+            if (npc?.legacySexUnknown !== true || npc.legacySexReattributed) {
+                return false;
+            }
+            npc.legacySexReattributed = true;
+            if (legacyMixedCounter(npc) !== COUNTERS.mc) {
+                return false;
+            }
+            let changed = false;
+            for (const metric of Object.values(LEGACY.statsSex.metrics)) {
+                const value = countIn(npc, COUNTERS.others, metric);
+                if (value > 0) {
+                    add(npc, COUNTERS.mc, metric, value);
+                    delete npc[COUNTERS.others][metric];
+                    changed = true;
+                }
+            }
+            if (npc[COUNTERS.others] && Object.keys(npc[COUNTERS.others]).length === 0) {
+                delete npc[COUNTERS.others];
             }
             return changed;
         },

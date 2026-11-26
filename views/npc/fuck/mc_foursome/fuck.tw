@@ -85,7 +85,10 @@
             $tmpGirl2.happy = Math.min($tmpGirl2.happy + 1, 100),
             $tmpGirl3.happy = Math.min($tmpGirl3.happy + 1, 100)
         >>
-        <<=setup.displayName($tmpGirl, true)>>, <<=setup.displayName($tmpGirl2, true)>> and <<=setup.displayName($tmpGirl3, true)>> are enjoying themselves. <strong>(Happy / Relationship +1)</strong>
+        /* They bond with each other on every action, and more when the other two helped bring her to climax (setup.relationshipBetween.afterGroupAction) */
+        <<set _groupClimax = !!_sexActions[$sexAction]?.positive && $tmpGirl.horny >= 100>>
+        <<set _groupClimaxBond = setup.relationshipBetween.afterGroupAction([$tmpGirl, $tmpGirl2, $tmpGirl3], 'foursome', $sexAction, _groupClimax)>>
+        <<=setup.displayName($tmpGirl, true)>>, <<=setup.displayName($tmpGirl2, true)>> and <<=setup.displayName($tmpGirl3, true)>> are enjoying themselves. <strong>(Happy / Relationship +1, with each other +1)</strong>
         <br />
 
         /* corruption for all 3 */
@@ -100,7 +103,7 @@
         <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
             <<if $tmpGirl.horny >= 100>>
                 <<include 'Mc fuck orgasm'>>
-                <<=setup.displayName($tmpGirl, true)>> has an orgasm! <strong>(Happy / Relationship +5)</strong>
+                <<=setup.displayName($tmpGirl, true)>> has an orgasm! <strong>(Happy / Relationship +5<<if _groupClimaxBond>>, with <<=setup.displayName($tmpGirl2, true)>> and <<=setup.displayName($tmpGirl3, true)>> +<<=_groupClimaxBond>><</if>>)</strong>
                 <br />
                 <<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100)>>
                 <<set $tmpGirl.happy        = Math.min($tmpGirl.happy        + 5, 100)>>

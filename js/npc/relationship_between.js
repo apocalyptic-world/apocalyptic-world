@@ -125,6 +125,47 @@ setup.relationshipBetween = {
         this.queueMilestones(pairs, ' in the guest house', 'the guest house');
     },
 
+    /* The MC's threesomes and foursomes (Mc threesome fuck, Mc foursome fuck): every action bonds the partners GROUP_ACTION_BOND
+       with each other, and a climax adds SEX_CLIMAX_BOND from her toward each partner who took part in the action that did it */
+    GROUP_ACTION_BOND: 1,
+    /* Threesome actions with no partner in them: the single acts (most are the MC alone with her) and the MC's own finishes.
+       Every combined action ('pussy_a_pussy_lick', 'bj_anal_reverse', ...) has both partners in it. */
+    GROUP_SOLO_ACTIONS: ['handjob', 'footjob', 'titjob', 'bj', 'dp', 'pussy_lick', 'pussy_fingering', 'pussy', 'anal_fingering', 'anal',
+        'anal_fisting', 'bj_reverse', 'anal_reverse'],
+    /* Foursome actions are all single acts; in these the other two are on her (the texts in Texts/female/foursome.js) */
+    FOURSOME_JOINED: ['kissing', 'pussy', 'anal'],
+
+    /* Did the other partners take part in this action with her? (only $tmpGirl climaxes in these scenes) */
+    groupJoined: function(kind, action) {
+        if (!action) return false;
+        if (kind === 'foursome') return this.FOURSOME_JOINED.includes(action);
+        if (action === 'double_cum') return true;
+        return !this.GROUP_SOLO_ACTIONS.includes(action) && !/^cum_|_cum$/.test(action);
+    },
+
+    /* After one action: npcs = [$tmpGirl, $tmpGirl2, ...]; climaxed = $tmpGirl climaxed on it. Returns the climax bond given, or 0. */
+    afterGroupAction: function(npcs, kind, action, climaxed) {
+        const group = npcs.filter(npc => npc && npc.id !== undefined);
+        if (group.length < 2) return 0;
+        const pairs = this.pairsBefore(group);
+        const like = (from, to, amount) => {
+            from.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
+            from.relationshipBetween.stats ??= {};
+            from.relationshipBetween.stats[to.id] = Math.clamp((from.relationshipBetween.stats[to.id] ?? 0) + amount, -100, 100);
+        };
+        for (const { a, b } of pairs) {
+            like(a, b, this.GROUP_ACTION_BOND);
+            like(b, a, this.GROUP_ACTION_BOND);
+        }
+        let climaxBond = 0;
+        if (climaxed && group[0] === npcs[0] && this.groupJoined(kind, action)) {
+            for (const partner of group.slice(1)) like(group[0], partner, this.SEX_CLIMAX_BOND);
+            climaxBond = this.SEX_CLIMAX_BOND;
+        }
+        this.queueMilestones(pairs, ' after sharing your bed', 'sharing your bed');
+        return climaxBond;
+    },
+
     /* Milestone tier of one side's value: 2 close friends, 1 friends, -1 rivals, -2 enemies (thresholds from night school) */
     tier: function(value) {
         const T = setup.eveningSchoolSocial.TUNING;
