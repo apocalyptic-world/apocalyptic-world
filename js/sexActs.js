@@ -408,12 +408,15 @@ setup.sexActs = (function () {
         return true;
     }
 
-    /** Where the mixed old counter (statsSex) goes: most of it came from the MC's sex scenes, so "with the MC", unless
-        the NPC is married to someone else, whose acts it then most likely was. */
+    /** Where the mixed old counter (statsSex) goes. It held acts with the MC and with anyone else (street clients,
+        kidnappers, guest house scenes), so it goes "with the MC" only when something else shows he slept with her: old
+        acts with him (sexStats), or the proof setup.npc.sleptWithMc reads (history, a marriage to him, a pregnancy by
+        him). Otherwise "with others", and npc.legacySexUnknown keeps the doubt. Children aren't looked up: on load the
+        save isn't in State yet. */
     function legacyMixedCounter(npc) {
-        const fam = npc?.family ?? {};
-        const spouses = [...(fam.wives ?? []), ...(fam.husband ? [fam.husband] : [])];
-        return spouses.some(id => id && id !== 'mc') ? COUNTERS.others : COUNTERS.mc;
+        const oldWithMc = !!npc?.sexStats && typeof npc.sexStats === 'object'
+            && Object.values(npc.sexStats).some(value => Number(value) > 0);
+        return oldWithMc || setup.npc.sleptWithMc(npc, () => null) ? COUNTERS.mc : COUNTERS.others;
     }
 
     return Object.freeze({
@@ -528,20 +531,21 @@ setup.sexActs = (function () {
         },
 
         /**
-         * Converts an NPC from an old save: statsSex → mainCharSexStats (or generalSexStats when the NPC is married to
-         * someone else, see legacyMixedCounter), sexStats → mainCharSexStats (best effort, see LEGACY), then deletes the
-         * old counters. Returns true if anything was converted.
+         * Converts an NPC from an old save: statsSex → mainCharSexStats when other proof shows the MC slept with her, else
+         * generalSexStats (see legacyMixedCounter), sexStats → mainCharSexStats (best effort, see LEGACY), then deletes
+         * the old counters. Returns true if anything was converted.
          * statsSex mixed acts with the MC and with anyone else, so when it held any act, npc.legacySexUnknown is set:
          * "may have slept with the MC, can't tell". Only setup.blair.guestIntimate reads it, to keep its old behaviour.
          */
         migrateLegacyCounters: function (npc) {
             let changed = false;
+            const mixedKey = npc?.statsSex ? legacyMixedCounter(npc) : null;   // before sexStats is converted and deleted
             for (const [oldKey, { counter, metrics }] of Object.entries(LEGACY)) {
                 const old = npc?.[oldKey];
                 if (!old || typeof old !== 'object') {
                     continue;
                 }
-                const newKey = counter ?? legacyMixedCounter(npc);
+                const newKey = counter ?? mixedKey;
                 if (oldKey === 'statsSex' && Object.values(old).some(value => Number(value) > 0)) {
                     npc.legacySexUnknown = true;
                     npc.legacySexReattributed = true;   // already in the right counter, see reattributeLegacy
@@ -559,10 +563,11 @@ setup.sexActs = (function () {
         },
 
         /**
-         * Saves converted before statsSex went "with the MC" put it all in generalSexStats. Once per NPC, moves the
-         * metrics statsSex could have filled (LEGACY.statsSex) from generalSexStats to mainCharSexStats, unless the NPC is
-         * married to someone else. Acts with others counted since the conversion move too: the counter can't tell them
-         * apart. Returns true if anything was moved.
+         * Saves converted before statsSex could go "with the MC" put it all in generalSexStats. Once per NPC, when other
+         * proof shows the MC slept with her (legacyMixedCounter), moves the metrics statsSex could have filled
+         * (LEGACY.statsSex) from generalSexStats to mainCharSexStats. NPCs without that proof keep everything "with
+         * others". Acts with others in those metrics since the conversion (0.92) move too: the counter can't tell them
+         * apart, and she slept with the MC either way. Returns true if anything was moved.
          */
         reattributeLegacy: function (npc) {
             if (npc?.legacySexUnknown !== true || npc.legacySexReattributed) {

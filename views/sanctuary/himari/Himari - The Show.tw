@@ -49,7 +49,7 @@ Himari did not understand him. She understood his hand on her jaw, holding her f
 			<<set _hmBjLabel = 'Let her suck your cock'>>
 			<<linkreplace _hmBjLabel>>
 				<<set _hmW.bj = Math.min((_hmW.bj ?? 0) + 10, 100)>>
-				<<set _hmW.statsSex ??= {}, _hmW.statsSex.bj = (_hmW.statsSex.bj ?? 0) + 1>>
+				<<run setup.sexActs.blowsCock(_hmW, $player)>>
 				<center>
 					<<actionImage _hmW 'bj' 'no-text'>>
 				</center>
@@ -65,7 +65,7 @@ Himari did not understand him. She understood his hand on her jaw, holding her f
 				<<set _hmPussyLabel = 'Push your dick into her pussy from behind'>>
 				<<linkreplace _hmPussyLabel>>
 					<<set _hmW.pussy = Math.min((_hmW.pussy ?? 0) + 10, 100)>>
-					<<set _hmW.statsSex ??= {}, _hmW.statsSex.pussy = (_hmW.statsSex.pussy ?? 0) + 1>>
+					<<run setup.sexActs.fucksPussy($player, _hmW)>>
 					<center>
 						<<actionImage _hmW 'pussy' 'no-text'>>
 					</center>

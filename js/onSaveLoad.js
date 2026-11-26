@@ -700,7 +700,7 @@ Save.onLoad.add(function (save) {
         }
     });
 
-    /* sex act counters: statsSex (acts with anyone) → mainCharSexStats (generalSexStats if married to someone else;
+    /* sex act counters: statsSex (acts with anyone) → mainCharSexStats if other proof shows the MC slept with her, else generalSexStats (
        saves converted when it all went to generalSexStats are moved over once, setup.sexActs.reattributeLegacy),
        sexStats (acts with the MC) → mainCharSexStats,
        in every NPC of every history moment (best effort, see setup.sexActs.migrateLegacyCounters); the per-scene

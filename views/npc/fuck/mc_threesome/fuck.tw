@@ -71,10 +71,12 @@
             $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100),
             $tmpGirl2.happy = Math.min($tmpGirl2.happy + 1, 100)
         >>
-        /* They bond with each other on every action, and more when $tmpGirl2 helped bring her to climax (setup.relationshipBetween.afterGroupAction) */
+        /* They bond with each other on actions one of them enjoys (capped per scene), and more when $tmpGirl2 helped bring her to climax (setup.relationshipBetween.afterGroupAction) */
+        <<set _groupEnjoyed = !!(_sexActions[$sexAction]?.positive || _sexActions[$sexAction]?.positive2)>>
         <<set _groupClimax = !!_sexActions[$sexAction]?.positive && $tmpGirl.horny >= 100>>
-        <<set _groupClimaxBond = setup.relationshipBetween.afterGroupAction([$tmpGirl, $tmpGirl2], 'threesome', $sexAction, _groupClimax)>>
-        <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> are enjoying themselves.<strong> (Happy / Relationship + 1, with each other + 1)</strong>
+        <<set _groupBond = setup.relationshipBetween.afterGroupAction([$tmpGirl, $tmpGirl2], 'threesome', $sexAction, _groupEnjoyed, _groupClimax)>>
+        <<set _groupClimaxBond = _groupBond.climax>>
+        <<=setup.displayName($tmpGirl, true)>> and <<=setup.displayName($tmpGirl2, true)>> are enjoying themselves.<strong> (Happy / Relationship + 1<<if _groupBond.bond>>, with each other + <<=_groupBond.bond>><</if>>)</strong>
          <br />
 
         <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption && $tmpGirl2.corruption < _sexActions[$sexAction].maxCorruption>>

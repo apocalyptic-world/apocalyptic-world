@@ -254,7 +254,7 @@ setup.blair.houseRulesFavorite = function () {
 
 /** True when this guest has been intimate with the player (setup.npc.sleptWithMc). Blair only resents what she can plausibly see.
     Saves from before setup.sexActs can't tell: their mixed counter (statsSex) held acts with the MC and with anyone else,
-    and moved to "with you" (or "with others" when married to someone else). For those, any old act counts, as it did before (legacySexUnknown, set by
+    and moved to "with you" when other proof showed the MC slept with them, else to "with others". For those, any old act counts, as it did before (legacySexUnknown, set by
     setup.sexActs.migrateLegacyCounters). */
 setup.blair.guestIntimate = function (npc) {
     return setup.npc.sleptWithMc(npc) || npc?.legacySexUnknown === true;

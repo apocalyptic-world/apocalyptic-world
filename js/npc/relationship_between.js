@@ -125,9 +125,11 @@ setup.relationshipBetween = {
         this.queueMilestones(pairs, ' in the guest house', 'the guest house');
     },
 
-    /* The MC's threesomes and foursomes (Mc threesome fuck, Mc foursome fuck): every action bonds the partners GROUP_ACTION_BOND
-       with each other, and a climax adds SEX_CLIMAX_BOND from her toward each partner who took part in the action that did it */
+    /* The MC's threesomes and foursomes (Mc threesome fuck, Mc foursome fuck): every action one of them enjoys bonds the
+       partners GROUP_ACTION_BOND with each other, up to GROUP_SCENE_MAX per group in one scene (as much as a guest house
+       scene, SEX_BOND), and a climax adds SEX_CLIMAX_BOND from her toward each partner who took part in the action that did it */
     GROUP_ACTION_BOND: 1,
+    GROUP_SCENE_MAX: 5,
     /* Threesome actions with no partner in them: the single acts (most are the MC alone with her) and the MC's own finishes.
        Every combined action ('pussy_a_pussy_lick', 'bj_anal_reverse', ...) has both partners in it. */
     GROUP_SOLO_ACTIONS: ['handjob', 'footjob', 'titjob', 'bj', 'dp', 'pussy_lick', 'pussy_fingering', 'pussy', 'anal_fingering', 'anal',
@@ -143,27 +145,41 @@ setup.relationshipBetween = {
         return !this.GROUP_SOLO_ACTIONS.includes(action) && !/^cum_|_cum$/.test(action);
     },
 
-    /* After one action: npcs = [$tmpGirl, $tmpGirl2, ...]; climaxed = $tmpGirl climaxed on it. Returns the climax bond given, or 0. */
-    afterGroupAction: function(npcs, kind, action, climaxed) {
-        const group = npcs.filter(npc => npc && npc.id !== undefined);
-        if (group.length < 2) return 0;
+    /* After one action: npcs = [$tmpGirl, $tmpGirl2, ...]; enjoyed = at least one of them liked the action (its positive
+       flags); climaxed = $tmpGirl climaxed on it. Returns { bond, climax }: what each pair gained with each other, and the
+       climax bond given (0 when none). The per-scene tally lives in $sexActsThisScene, reset by setup.sexActs.startScene. */
+    afterGroupAction: function(npcs, kind, action, enjoyed, climaxed) {
+        const result = { bond: 0, climax: 0 };
+        const group = npcs.filter(npc => npc && npc.id != null);
+        if (group.length < 2) return result;
         const pairs = this.pairsBefore(group);
         const like = (from, to, amount) => {
             from.relationshipBetween ??= { stats: {}, likes: null, dislikes: [] };
             from.relationshipBetween.stats ??= {};
             from.relationshipBetween.stats[to.id] = Math.clamp((from.relationshipBetween.stats[to.id] ?? 0) + amount, -100, 100);
         };
-        for (const { a, b } of pairs) {
-            like(a, b, this.GROUP_ACTION_BOND);
-            like(b, a, this.GROUP_ACTION_BOND);
+        if (enjoyed) {
+            const tally = ((variables().sexActsThisScene ??= {})['~groupBond'] ??= {});
+            const key = group.map(npc => String(npc.id)).sort().join('|');
+            const bond = Math.min(this.GROUP_ACTION_BOND, this.GROUP_SCENE_MAX - (tally[key] ?? 0));
+            if (bond > 0) {
+                tally[key] = (tally[key] ?? 0) + bond;
+                for (const { a, b } of pairs) {
+                    like(a, b, bond);
+                    like(b, a, bond);
+                }
+                result.bond = bond;
+            }
         }
-        let climaxBond = 0;
         if (climaxed && group[0] === npcs[0] && this.groupJoined(kind, action)) {
             for (const partner of group.slice(1)) like(group[0], partner, this.SEX_CLIMAX_BOND);
-            climaxBond = this.SEX_CLIMAX_BOND;
+            result.climax = this.SEX_CLIMAX_BOND;
         }
-        this.queueMilestones(pairs, ' after sharing your bed', 'sharing your bed');
-        return climaxBond;
+        if (result.bond || result.climax) {
+            const what = kind === 'foursome' ? 'a foursome with you' : 'a threesome with you';
+            this.queueMilestones(pairs, ' after ' + what, what);
+        }
+        return result;
     },
 
     /* Milestone tier of one side's value: 2 close friends, 1 friends, -1 rivals, -2 enemies (thresholds from night school) */
